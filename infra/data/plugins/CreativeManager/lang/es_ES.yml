@@ -1,0 +1,23 @@
+permission:
+  container: '&cNo puedes utilizar contenedores en &4Creativo&c.'
+  ignite: '&cNo puedes incendiar bloques en &4Creativo&c.'
+  spawn: '&cNo puedes generar animales o monstruos en &4Creativo&c.'
+  drop: '&cNo puedes soltar objetos en &4Creativo&c.'
+  build: '&cNo tienes permiso para construir en &4Creativo&c.'
+  entity: '&cNo puedes interactuar en &4Creativo&c.'
+  throw: '&cNo puedes lanzar proyectiles en &4Creativo&c.'
+  general: '&cNo tienes permiso para hacer esto.'
+  gui: '&4You don''t have permission to open GUI in Creative'
+  hit:
+    player: '&cNo puedes golpear a otros jugadores en &4Creativo&c.'
+    monster: '&cNo puedes matar monstruos en &4Creativo&c.'
+  plugins: '&cNo tienes permiso para interactuar con el plugin {PLUGIN}'
+blacklist:
+  place: '&cNo puedes colocar este bloque (&4{BLOCK}&c) en &4Creativo&c.'
+  use: '&cNo puedes utilizar éste objeto &a({ITEM}) &cen &4Creativo&c.'
+  get: '&cNo puedes obtener éste objeto &a({ITEM}) &cen &4Creativo&c.'
+  commands: '&cNo puedes usar este comando en &4Creativo&c.'
+  useblock: '&cNo puedes usar este bloque en &4Creativo&c.'
+inventory:
+  change: '&eEstás usando el inventario del modo de juego &6{GAMEMODE}&e.'
+

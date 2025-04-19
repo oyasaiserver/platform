@@ -1,0 +1,53 @@
+# #Plugin configuration
+tag: '&r[&cCreativeManager&r] '
+lang: en_EN
+log: true
+save-interval: 300
+save-log: true
+send-player-messages: true
+# # Protection module
+protections:
+  container: true # Bypass : creativemanager.container
+  spawn: false # Bypass : creativemanager.spawner
+  drop: true # Bypass : creativemanager.drop
+  pickup: true # Bypass : creativemanager.pickup
+  build: false # Bypass : creativemanager.build
+  entity: true # Bypass : creativemanager.entity
+  pvp: false # Bypass : creativemanager.hit.player
+  pve: false # Bypass : creativemanager.hit.monster
+  lore: true # Bypass : creativemanager.bypass.lore
+  loot: true
+  spawn-build: true
+  throw: true
+  commands: true
+  useblock: true
+  blockcopy: true
+  gui: false
+  plugins:
+    slimefun: true
+# # Multi inventory
+inventory:
+  adventure: true # Bypass : cm.bypass.inventory
+  creative: true # Bypass : cm.bypass.inventory
+  spectator: true # Bypass : cm.bypass.inventory
+# # Black List
+blacklist:
+  place: # Bypass : creativemanager.bypass.blacklist.place
+    - tnt
+  use: # Bypass : creativemanager.bypass.blacklist.use
+    - lava_bucket
+    - flint_and_steel
+    - fire_charge
+  get: # Bypass : creativemanager.bypass.blacklist.get
+    - diamond
+  break:
+  - bedrock
+  commands:
+  - somecommandtoblacklist optionnaly with some argument
+  useblock:
+  - CRAFTING_TABLE
+# # Lore settings
+creative-lore:
+- '&5Creative {ITEM}'
+- '&7Generate by {PLAYER}'
+- '&7{UUID}'

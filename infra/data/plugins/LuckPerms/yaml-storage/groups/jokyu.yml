@@ -1,0 +1,9 @@
+name: jokyu
+permissions:
+- essentials.fly
+- weight.400
+parents:
+- chukyu
+prefixes:
+- '&3上級者&f ':
+    priority: 300

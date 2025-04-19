@@ -1,0 +1,81 @@
+# DO NOT EDIT THIS VALUE!
+config-version: 9
+
+# If enabled, a notification and the download link will be printed on console whenever an update is available.
+check-for-updates: true
+
+# Allows you to force set the plugin's mode to online/offline/automatic.
+# If you run a cracked server but the plugin detects it as online and saves UUID instead of name, set the value below to 'false'.
+# Available modes: true, false, auto (default)
+online-mode: auto
+
+# Prevents players from sending token to a player who has the same ip address as the sender.
+alt-prevention: false
+
+# The default token balance of a first-time joiner.
+default-balance: 25
+
+# Sets a min/max limit on the amount specified in /token send command. To disable, set the value to -1.
+send-amount-limit:
+  min: 1
+  max: -1
+
+shop:
+  # When the command '/token shop' is executed, enabling this option will open the specified shop below. (Even if a shop name is provided)
+  open-selected:
+    enabled: false
+    shop: test
+
+  # Settings for the confirm purchase gui.
+  confirm-purchase-gui:
+    title: 'Confirm Your Purchase'
+    # Use the placeholder %price% in the name or the lore of the confirm-button to display the price of the item to be purchased.
+    # NOTE: In Minecraft 1.13, stained glass panes were assigned their own material name. If buttons below won't load, use the new material name.
+    confirm-button: 'STAINED_CLAY:5 1 name:&a&lBUY lore:&7Price:_&a%price%_tokens'
+    cancel-button: 'STAINED_CLAY:14 1 name:&c&lCANCEL'
+
+  # Set a delay between purchases. 0 for no delay.
+  click-delay: 0
+
+  # If enabled, players with full inventory will not be able to purchase from token shops.
+  check-inventory-full: false
+
+  # If enabled, all shop purchases will be logged to console in the following format: <uuid> (<username>) purchased <shop>:<slot> for <cost> tokens.
+  log-purchases: false
+
+# [WARNING: DANGER ZONE]
+data:
+  # If enabled, the plugin will use selected MySQL database as the token balance storage.
+  # Note: To transfer all data from data.yml to the MySQL database, use the command '/tm transfer'. (MySQL must be enabled below!)
+  mysql:
+    enabled: false
+    hostname: '127.0.0.1'
+    port: '3306'
+    username: 'root'
+    password: 'password'
+    database: 'database'
+    table: 'tokenmanager'
+    url: 'jdbc:mysql://%hostname%:%port%/%database%'
+
+    # This section is optional. Using mysql database for a single server will work just fine even if no redis server is provided.
+    # If mysql is enabled, a redis server can be used to synchronize balances as they are modified.
+    redis:
+      enabled: true
+      server: '127.0.0.1'
+      port: '6379'
+      password: ''
+
+  # WARNING
+  #
+  # 1. Enabling this will set TokenManager's economy as your server's main economy.
+  # Your old economy data will most likely RESET, and commands related to Economy
+  # such as Essentials' /eco won't function properly if target player is offline.
+  #
+  # 2. If you're using Essentials Economy, make sure to reset everyone's balance
+  # before enabling this option! Otherwise, the old Essentials balance of the players
+  # might act as a token balance.
+  #
+  register-economy: false
+
+  # /token top will be updated every x minutes. Value must be higher than 0!
+  balance-top-update-interval: 5

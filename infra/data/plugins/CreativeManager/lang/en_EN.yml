@@ -1,0 +1,22 @@
+permission:
+  container: '&4You don''t have permission to open this container in Creative'
+  ignite: '&4You don''t have permission to ignite block in Creative'
+  spawn: '&4You don''t have permission use Spawn Egg in Creative'
+  drop: '&4You don''t have permission to drop item in Creative'
+  build: '&4You don''t have permission to build in Creative'
+  entity: '&4You don''t have permission to interact with entity in Creative'
+  throw: '&4You don''t have permission to throw projectile'
+  general: '&4You don''t have permission'
+  gui: '&4You don''t have permission to open GUI in Creative'
+  hit:
+    player: '&cYou don''t have permission to hit player'
+    monster: '&cYou don''t have permission to hit monster'
+  plugins: '&cYou don''t have permission to interact with {PLUGIN}'
+blacklist:
+  place: '&4You don''t have permission to place {BLOCK} in Creative'
+  use: '&4You don''t have permission to use {ITEM} in Creative'
+  get: '&4You don''t have permission to get {ITEM} into your inventory in Creative'
+  commands: '&4You don''t have permission to use this command in Creative'
+  useblock: '&4You don''t have permission to use this block in Creative'
+inventory:
+  change: '&dYour inventory switch to {GAMEMODE} inventory !'

@@ -1,0 +1,8 @@
+name: white
+permissions:
+- weight.800
+parents:
+- blue
+prefixes:
+- '&7&l匠&f ':
+    priority: 700

@@ -1,0 +1,6 @@
+name: dev
+permissions:
+- weight.10100
+prefixes:
+- '&e開発&f':
+    priority: 140

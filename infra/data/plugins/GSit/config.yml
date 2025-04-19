@@ -1,0 +1,140 @@
+Lang:
+
+  # Plugin language
+  lang: en_us
+
+  # Send messages to clients in their own language, if available
+  client-lang: true
+
+Options:
+
+  # Plugin sends update notifications
+  check-for-update: true
+
+  # Force players to stand up after taking damage
+  get-up-damage: false
+
+  # Allow standing up by sneaking
+  get-up-sneak: true
+
+  # Return players to their original position upon standing up
+  get-up-return: false
+
+  # Force players to stand up when the block beneath breaks
+  get-up-break: true
+
+  # Allow sitting or posing in unsafe locations
+  allow-unsafe: false
+
+  # Allow only one player per block to sit or pose
+  same-block-rest: false
+
+  # Center the player on the block when sitting or posing
+  center-block: true
+
+  # Show a custom message when a player begins sitting or posing
+  custom-message: true
+
+  Sit:
+
+    # Blocks where a player can sit by clicking (materials & tags) ('*' for every block)
+    # Create a height-offset by separating the material or tag with a ';' character
+    SitMaterials:
+    - "#stairs"
+    - "#slabs"
+    - "#carpets"
+    - "#wool_carpets"
+    - "moss_carpet"
+    - "pale_moss_carpet"
+    - "snow"
+
+    # Allow sitting only on the bottom part of stairs and slabs
+    bottom-part-only: true
+
+    # Require an empty main hand to sit by clicking
+    empty-hand-only: true
+
+    # Maximum distance from the block to allow sitting by clicking (0 means unlimited)
+    max-distance: 0.0
+
+    # Allow sitting by default without using 'sit toggle'
+    default-sit-mode: true
+
+  PlayerSit:
+
+    # Allow players to sit on other players by clicking
+    allow-sit: true
+
+    # Allow players to sit on NPCs by clicking
+    allow-sit-npc: true
+
+    # Maximum number of players that can be stacked (0 means unlimited)
+    max-stack: 0
+
+    # Force eject passengers when sneaking
+    sneak-ejects: true
+
+    # Place the player at the bottom of the stack upon dismounting
+    bottom-return: false
+
+    # Require an empty main hand to sit on other players
+    empty-hand-only: true
+
+    # Maximum distance for sitting on other players (0 means unlimited)
+    max-distance: 0.0
+
+    # Allow sitting on other players by default without using 'sit playertoggle'
+    default-sit-mode: true
+
+  Pose:
+
+    # Allow interactions with the environment or other players while posing
+    interact: false
+
+    # Reset the time since a player's last rest when lying down (affects phantom spawn timer)
+    lay-rest: true
+
+    # Emit snoring sounds when lying down
+    lay-snoring-sounds: false
+
+    # Emit snoring sounds only at night
+    lay-snoring-night-only: true
+
+    # Count lying players for skipping the night (at least one player must sleep in a bed)
+    lay-night-skip: true
+
+  Crawl:
+
+    # Allow standing up from crawling by sneaking
+    get-up-sneak: true
+
+    # Enable double-sneak to start crawling (requires looking straight down)
+    double-sneak: false
+
+    # Allow crawling by default without using 'crawl toggle'
+    default-crawl-mode: true
+
+  # Restrict all features to be only available to trusted players in a region (supported: PlotSquared & GriefPrevention)
+  trusted-region-only: false
+
+  # List of worlds where all features are disabled
+  WorldBlacklist:
+  - "blocked_world"
+
+  # List of worlds where all features are enabled (other worlds are blocked when the list is not empty)
+  WorldWhitelist: []
+
+  # Materials where sitting or posing is disabled
+  MaterialBlacklist:
+  - "lava"
+
+  # Commands that cannot be executed while using a feature
+  CommandBlacklist:
+  - "skin"
+  - "nick"
+
+  # Enable extended compatibility mode for all features (use only if necessary, e.g., to resolve false feedback from anti-cheat plugins)
+  enhanced-compatibility: false
+
+  # List of active feature flags (primarily for unofficial features for individual use)
+  FeatureFlags: []
