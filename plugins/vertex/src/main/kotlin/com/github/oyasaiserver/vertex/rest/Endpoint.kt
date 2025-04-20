@@ -20,7 +20,8 @@ enum class Endpoint(val url: Url) {
                         .apply { params.forEach { (key, value) -> parameters.append(key, value) } }
                         .build()
                 )
-            val text = response.bodyAsText()
-            Json.decodeFromString<T>(text)
+            response.bodyAsText().let {
+                Json.decodeFromString<T>(it)
+            }
         }
 }
