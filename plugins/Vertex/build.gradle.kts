@@ -5,10 +5,6 @@ plugins {
     id("com.diffplug.spotless") version "7.0.3"
 }
 
-group = "com.github.oyasaiserver"
-
-version = "1.0-SNAPSHOT"
-
 repositories {
     mavenCentral()
     maven("https://repo.purpurmc.org/snapshots")
@@ -40,9 +36,23 @@ spotless {
 }
 
 tasks.run {
-    build { dependsOn("shadowJar") }
+    build {
+        dependsOn(shadowJar)
+        doLast {
+            copy {
+                from(
+                    layout.buildDirectory
+                        .file("libs/Vertex-1.0-SNAPSHOT-all.jar")
+                        .get()
+                        .asFile,
+                )
+                into("../../infra/data/plugins")
+            }
+        }
+    }
 
     processResources {
+        val version: String by project
         val properties = mapOf("version" to version)
         inputs.properties(properties)
         filteringCharset = Charsets.UTF_8.name()
