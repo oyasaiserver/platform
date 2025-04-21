@@ -7,45 +7,52 @@ import com.github.oyasaiserver.vertex.rest.Endpoint
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLBuilder
-import java.util.Locale
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
+import java.util.Locale
 
 object Language {
     fun romanToHiragana(input: String): String {
-        tailrec fun go(rem: String, acc: String): String =
+        tailrec fun go(
+            rem: String,
+            acc: String,
+        ): String {
             if (rem.isEmpty()) {
                 acc
-            } else {
-                romajiMap.keys
-                    .firstOrNone { rem.startsWith(it) }
-                    .fold(
-                        {
-                            return go(rem.drop(1), acc + rem.first())
-                        },
-                        {
-                            return go(rem.drop(it.length), acc + romajiMap.getValue(it))
-                        },
-                    )
             }
+            romajiMap.keys
+                .firstOrNone { rem.startsWith(it) }
+                .fold(
+                    {
+                        return go(rem.drop(1), acc + rem.first())
+                    },
+                    {
+                        return go(rem.drop(it.length), acc + romajiMap.getValue(it))
+                    },
+                )
+        }
         return go(input.lowercase(Locale.JAPANESE), emptyString())
     }
 
-    suspend fun transliterateWithGoogleApi(input: String) = catch {
-        val jsonString =
+    suspend fun transliterateWithGoogleApi(input: String) =
+        catch {
             URLBuilder(Endpoint.GOOGLE_TRANSLITERATE.url)
                 .apply {
                     parameters.append("langpair", "ja-Hira|ja")
                     parameters.append("text", input)
+                }.build()
+                .let { httpClient.get(it).bodyAsText() }
+                .let { Json.parseToJsonElement(it) }
+                .jsonArray
+                .joinToString(emptyString()) {
+                    it.jsonArray
+                        .last()
+                        .jsonArray
+                        .first()
+                        .jsonPrimitive.content
                 }
-                .build()
-                .let { httpClient.get(it) }
-                .bodyAsText()
-        Json.parseToJsonElement(jsonString).jsonArray.joinToString(emptyString()) {
-            it.jsonArray.last().jsonArray.first().jsonPrimitive.content
         }
-    }
 
     private val romajiMap =
         sortedMapOf(

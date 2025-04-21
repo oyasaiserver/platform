@@ -9,8 +9,11 @@ import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import kotlinx.serialization.json.Json
 
-enum class Endpoint(val url: Url) {
-    GOOGLE_TRANSLITERATE(Url("https://www.google.com/transliterate"));
+enum class Endpoint(
+    val url: Url,
+) {
+    GOOGLE_TRANSLITERATE(Url("https://www.google.com/transliterate")),
+    ;
 
     suspend inline fun <reified T> get(params: Map<String, String>): Either<Throwable, T> =
         Either.catch {
@@ -18,7 +21,7 @@ enum class Endpoint(val url: Url) {
                 httpClient.get(
                     URLBuilder(url)
                         .apply { params.forEach { (key, value) -> parameters.append(key, value) } }
-                        .build()
+                        .build(),
                 )
             response.bodyAsText().let {
                 Json.decodeFromString<T>(it)
