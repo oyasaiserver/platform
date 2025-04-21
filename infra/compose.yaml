@@ -1,5 +1,12 @@
 services:
-  purpur:
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    volumes:
+      - ./mongo:/data/db
+    ports:
+      - "27017:27017"
+  minecraft:
     image: itzg/minecraft-server:java21
     restart: unless-stopped
     tty: true

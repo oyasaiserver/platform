@@ -1,6 +1,5 @@
-### envfile
-.env
-!.env.example
+# Database
+/mongo
 
 # Ignore everything under /data
 /data/**
@@ -52,3 +51,7 @@ data/plugins/LuckPerms/editor-keystore.json
 data/plugins/*.json
 data/plugins/LuckPerms/translations/repository/status.json
 data/plugins/TAB/users.yml
+
+### envfile
+.env
+!.env.example
