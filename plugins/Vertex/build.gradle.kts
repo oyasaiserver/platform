@@ -26,6 +26,9 @@ dependencies {
     implementation(platform("io.ktor:ktor-bom:3.1.2"))
     implementation("io.ktor:ktor-client-core")
     implementation("io.ktor:ktor-client-cio")
+    implementation(platform("org.mongodb:mongodb-driver-bom:5.4.0"))
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine")
+    implementation("org.mongodb:bson-kotlinx")
 }
 
 kotlin { jvmToolchain(21) }
