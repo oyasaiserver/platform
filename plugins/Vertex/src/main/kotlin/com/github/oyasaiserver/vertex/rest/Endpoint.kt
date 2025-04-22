@@ -1,7 +1,8 @@
 package com.github.oyasaiserver.vertex.rest
 
 import arrow.core.Either
-import com.github.oyasaiserver.vertex.Vertex.Companion.httpClient
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
@@ -27,4 +28,8 @@ enum class Endpoint(
                 Json.decodeFromString<T>(it)
             }
         }
+
+    companion object {
+        val httpClient = HttpClient(CIO)
+    }
 }

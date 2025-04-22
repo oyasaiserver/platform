@@ -32,6 +32,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao")
     implementation("org.jetbrains.exposed:exposed-jdbc")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime")
+    implementation("org.jetbrains.exposed:exposed-migration")
 }
 
 kotlin { jvmToolchain(21) }

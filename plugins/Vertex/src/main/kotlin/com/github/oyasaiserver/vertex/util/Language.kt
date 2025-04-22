@@ -2,8 +2,8 @@ package com.github.oyasaiserver.vertex.util
 
 import arrow.core.Either.Companion.catch
 import arrow.core.firstOrNone
-import com.github.oyasaiserver.vertex.Vertex.Companion.httpClient
 import com.github.oyasaiserver.vertex.rest.Endpoint
+import com.github.oyasaiserver.vertex.rest.Endpoint.Companion.httpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLBuilder
