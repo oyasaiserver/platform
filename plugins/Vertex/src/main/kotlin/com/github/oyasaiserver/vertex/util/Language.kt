@@ -17,21 +17,21 @@ object Language {
         tailrec fun go(
             rem: String,
             acc: String,
-        ): String {
+        ): String =
             if (rem.isEmpty()) {
                 acc
+            } else {
+                romajiMap.keys
+                    .firstOrNone { rem.startsWith(it) }
+                    .fold(
+                        {
+                            return go(rem.drop(1), acc + rem.first())
+                        },
+                        {
+                            return go(rem.drop(it.length), acc + romajiMap.getValue(it))
+                        },
+                    )
             }
-            romajiMap.keys
-                .firstOrNone { rem.startsWith(it) }
-                .fold(
-                    {
-                        return go(rem.drop(1), acc + rem.first())
-                    },
-                    {
-                        return go(rem.drop(it.length), acc + romajiMap.getValue(it))
-                    },
-                )
-        }
         return go(input.lowercase(Locale.JAPANESE), emptyString())
     }
 

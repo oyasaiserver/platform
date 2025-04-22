@@ -18,9 +18,8 @@ object Parrot : Listener {
             .message()
             .asPlainText()
             .let { romanToHiragana(it) }
-            .runBlocking {
-                transliterateWithGoogleApi(this)
-            }.fold(
+            .runBlocking { transliterateWithGoogleApi(this) }
+            .fold(
                 { plugin.logger.log(Level.SEVERE, it.message) },
                 { event.message(Component.text(it)) },
             )
