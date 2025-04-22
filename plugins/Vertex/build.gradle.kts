@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.20-R0.1-SNAPSHOT")
     implementation("com.google.genai:google-genai:0.4.0")
+    implementation("org.postgresql:postgresql:42.7.1")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.2.0-Beta1"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -25,6 +26,11 @@ dependencies {
     implementation(platform("org.mongodb:mongodb-driver-bom:5.4.0"))
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine")
     implementation("org.mongodb:bson-kotlinx")
+    implementation(platform("org.jetbrains.exposed:exposed-bom:0.61.0"))
+    implementation("org.jetbrains.exposed:exposed-core")
+    implementation("org.jetbrains.exposed:exposed-dao")
+    implementation("org.jetbrains.exposed:exposed-jdbc")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime")
 }
 
 kotlin { jvmToolchain(21) }
