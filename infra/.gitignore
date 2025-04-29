@@ -23,27 +23,23 @@
 # Plugins file
 !data/plugins.txt
 
-# URL not available
-!data/plugins/TokenManager-3.2.8.jar
-
 # Data (should be backed up)
 data/ops.json
 data/main/**/*.json
 data/plugins/WorldGuard/worlds/*
 data/plugins/Essentials/userdata/*
 data/plugins/LuckPerms/yaml-storage/users/*.yml
-data/plugins/TokenManager/data.yml
 data/plugins/CreativeManager/data/*.yml
 data/plugins/Multiverse-Portals/portals.yml
 data/plugins/Multiverse-Core/worlds.yml
 
 # Handled by plugins
-data/plugins/TokenManager/lang-*.yml
 data/whitelist.json
 data/banned-ips.json
 data/banned-players.json
 
 # Caches / Temp files
+data/plugins/.paper-remapped
 data/.rcon-cli.yaml
 data/.purpur-manifest.json
 data/version_history.json

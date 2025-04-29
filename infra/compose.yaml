@@ -29,7 +29,7 @@ services:
     environment:
       EULA: TRUE
       TYPE: PURPUR
-      VERSION: 1.20.1
+      VERSION: "1.21"
       MEMORY: 2560M
       MAX_PLAYERS: 70
       MOTD: \u00A72\u00A7lおやさい鯖

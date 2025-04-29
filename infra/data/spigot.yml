@@ -24,6 +24,8 @@ settings:
   moved-too-quickly-multiplier: 10.0
   netty-threads: 4
   attribute:
+    maxAbsorption:
+      max: 2048.0
     maxHealth:
       max: 2048.0
     movementSpeed:
@@ -45,6 +47,8 @@ advancements:
   - minecraft:story/disabled
 world-settings:
   default:
+    unload-frozen-chunks: false
+    seed-trialchambers: 94251327
     below-zero-generation-in-existing-chunks: true
     merge-radius:
       item: 2.5
@@ -156,6 +160,8 @@ world-settings:
     max-tick-time:
       tile: 50
       entity: 50
+    verbose: false
+  worldeditregentempworld:
     verbose: false
 commands:
   log: true
