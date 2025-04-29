@@ -18,7 +18,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.8.1"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation(platform("io.arrow-kt:arrow-stack:2.0.1"))
     implementation("io.arrow-kt:arrow-core")
     implementation(platform("io.ktor:ktor-bom:3.1.2"))
@@ -35,7 +37,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-migration")
 }
 
-kotlin { jvmToolchain(21) }
+kotlin {
+    jvmToolchain(21)
+}
 
 spotless {
     kotlin {
@@ -48,12 +52,7 @@ tasks.run {
         dependsOn(shadowJar)
         doLast {
             copy {
-                from(
-                    layout.buildDirectory
-                        .file("libs/Vertex-1.0-SNAPSHOT-all.jar")
-                        .get()
-                        .asFile,
-                )
+                from(shadowJar.get().archiveFile)
                 into("../../infra/data/plugins")
             }
         }
@@ -64,6 +63,8 @@ tasks.run {
         val properties = mapOf("version" to version)
         inputs.properties(properties)
         filteringCharset = Charsets.UTF_8.name()
-        filesMatching("plugin.yml") { expand(properties) }
+        filesMatching("plugin.yml") {
+            expand(properties)
+        }
     }
 }
