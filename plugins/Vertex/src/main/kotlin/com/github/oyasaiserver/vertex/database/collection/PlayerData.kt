@@ -1,24 +1,21 @@
 package com.github.oyasaiserver.vertex.database.collection
 
 import org.bson.codecs.pojo.annotations.BsonId
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 data class PlayerData(
-    @param:BsonId
-    val uuid: Uuid,
-    val config: Config,
-    val vault: Vault,
+    @param:BsonId val uuid: Uuid,
+    val config: Config = Config(),
+    val vault: Vault = Vault(),
 )
 
 data class Config(
-    val vertex: Vertex,
-    val discord: Discord,
+    val vertex: Vertex = Vertex(),
+    val discord: Discord = Discord(),
 )
 
 data class Vertex(
-    val parrot: Parrot,
+    val parrot: Parrot = Parrot(),
 )
 
 data class Parrot(

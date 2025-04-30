@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT")
     implementation("com.google.genai:google-genai:0.4.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
     implementation("org.postgresql:postgresql:42.7.5")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.2.0-Beta1"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
@@ -43,6 +44,7 @@ kotlin {
 
 spotless {
     kotlin {
+        ktfmt().kotlinlangStyle()
         ktlint()
     }
 }
@@ -53,6 +55,9 @@ tasks.run {
     }
 
     build {
+        compileKotlin.get().compilerOptions.optIn.addAll(
+            "kotlin.uuid.ExperimentalUuidApi",
+        )
         dependsOn(shadowJar)
         doLast {
             copy {

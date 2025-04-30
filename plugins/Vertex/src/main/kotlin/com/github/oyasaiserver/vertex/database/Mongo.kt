@@ -7,9 +7,7 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 class Mongo(
     private val client: MongoClient,
 ) {
-    val database by lazy {
-        client.getDatabase(Database.Mongo.DB)
-    }
+    val database by lazy { client.getDatabase(Database.Mongo.DB) }
 
     inline fun <reified T : Any> getCollection(): MongoCollection<T> = database.getCollection<T>(T::class.java.simpleName)
 }

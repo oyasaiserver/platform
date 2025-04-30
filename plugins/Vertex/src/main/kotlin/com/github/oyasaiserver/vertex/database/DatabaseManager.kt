@@ -1,5 +1,6 @@
 package com.github.oyasaiserver.vertex.database
 
+import MigrationUtils
 import com.github.oyasaiserver.vertex.Config.Database.Mongo
 import com.github.oyasaiserver.vertex.Config.Database.Postgres
 import com.github.oyasaiserver.vertex.database.codec.MongoKotlinUuidCodec
@@ -35,12 +36,10 @@ object DatabaseManager {
             .applyConnectionString(connectionString)
             .codecRegistry(codeRegistry)
             .build()
-            .run { MongoClient.create(this) }
+            .let { MongoClient.create(it) }
     }
 
-    val mongo by lazy {
-        Mongo(mongoClient)
-    }
+    val mongo by lazy { Mongo(mongoClient) }
 
     fun initialize() {
         val postgresSchemaDatabase =
@@ -57,15 +56,9 @@ object DatabaseManager {
             connection.autoCommit = false
         }
         transaction(postgres) {
-            MigrationUtils
-                .statementsRequiredForDatabaseMigration(
-                    Buildings,
-                    Likes,
-                ).forEach {
-                    runCatching {
-                        exec(it)
-                    }
-                }
+            MigrationUtils.statementsRequiredForDatabaseMigration(Buildings, Likes).forEach {
+                runCatching { exec(it) }
+            }
         }
         TransactionManager.closeAndUnregister(postgresSchemaDatabase)
     }

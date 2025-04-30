@@ -23,7 +23,6 @@ object BukkitDispatcher : CoroutineDispatcher() {
 
 suspend fun <T> runOnMain(block: suspend CoroutineScope.() -> T): T = withContext(BukkitDispatcher, block)
 
-fun launchAsync(block: suspend CoroutineScope.() -> Unit): Job =
-    CoroutineScope(Dispatchers.IO).launch {
-        block()
-    }
+fun launchAsync(block: suspend CoroutineScope.() -> Unit): Job = CoroutineScope(Dispatchers.IO).launch { block() }
+
+fun <T> T.launchAsync(block: suspend (T) -> Unit): Job = CoroutineScope(Dispatchers.IO).launch { block(this@launchAsync) }

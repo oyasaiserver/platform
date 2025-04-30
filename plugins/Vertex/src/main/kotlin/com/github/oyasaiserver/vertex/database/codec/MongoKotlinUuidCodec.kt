@@ -5,10 +5,8 @@ import org.bson.BsonWriter
 import org.bson.codecs.Codec
 import org.bson.codecs.DecoderContext
 import org.bson.codecs.EncoderContext
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 class MongoKotlinUuidCodec : Codec<Uuid> {
     override fun encode(
         writer: BsonWriter,

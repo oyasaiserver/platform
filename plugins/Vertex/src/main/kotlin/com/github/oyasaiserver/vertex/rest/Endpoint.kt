@@ -24,9 +24,7 @@ enum class Endpoint(
                         .apply { params.forEach { (key, value) -> parameters.append(key, value) } }
                         .build(),
                 )
-            response.bodyAsText().let {
-                Json.decodeFromString<T>(it)
-            }
+            response.bodyAsText().let { Json.decodeFromString<T>(it) }
         }
 
     companion object {
