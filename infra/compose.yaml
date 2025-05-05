@@ -8,13 +8,6 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-  mongo:
-    image: mongo
-    restart: always
-    volumes:
-      - ./mongo:/data/db
-    ports:
-      - "27017:27017"
   minecraft:
     image: itzg/minecraft-server:java24
     restart: unless-stopped

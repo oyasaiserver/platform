@@ -19,7 +19,7 @@ object Kanban : Service() {
         plugin.server.onlinePlayers.forEach { updateKanbanForPlayer(it) }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         updateKanbanForPlayer(event.player)
     }

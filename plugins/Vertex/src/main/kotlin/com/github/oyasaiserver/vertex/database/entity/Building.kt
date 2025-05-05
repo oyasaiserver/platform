@@ -4,9 +4,7 @@ import com.github.oyasaiserver.vertex.database.table.Buildings
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import kotlin.uuid.ExperimentalUuidApi
 
-@OptIn(ExperimentalUuidApi::class)
 class Building(
     id: EntityID<Int>,
 ) : IntEntity(id) {

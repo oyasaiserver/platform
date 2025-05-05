@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.0-Beta1"
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("jvm") version "2.2.0-Beta2"
+    kotlin("plugin.serialization") version "2.2.0-Beta2"
     id("com.gradleup.shadow") version "9.0.0-beta12"
     id("com.diffplug.spotless") version "7.0.3"
 }
@@ -12,19 +12,19 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT")
-    implementation(kotlin("reflect"))
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT")
     implementation("com.google.genai:google-genai:0.4.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.reflections:reflections:0.10.2")
     implementation("org.postgresql:postgresql:42.7.5")
     implementation("com.frengor:ultimateadvancementapi-shadeable:2.5.0")
+    implementation(kotlin("reflect"))
     implementation(platform("net.kyori:adventure-bom:4.21.0"))
     implementation("net.kyori:adventure-api")
     implementation("net.kyori:adventure-text-serializer-plain")
     implementation("net.kyori:adventure-text-minimessage")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.2.0-Beta1"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.2.0-Beta2"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
