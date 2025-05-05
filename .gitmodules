@@ -1,0 +1,3 @@
+[submodule "plugins/CoreProtect"]
+	path = plugins/CoreProtect
+	url = https://github.com/PlayPro/CoreProtect

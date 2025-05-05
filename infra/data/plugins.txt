@@ -22,6 +22,3 @@ https://github.com/KevinDaGame/VoxelSniper-Reimagined/releases/download/v8.14.0/
 # Temporary disable
 # https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar
 # https://dev.bukkit.org/projects/worldguard/files/4675318/download
-
-# CoreProtect
-https://www.patreon.com/file?h=104200466&i=18902237
