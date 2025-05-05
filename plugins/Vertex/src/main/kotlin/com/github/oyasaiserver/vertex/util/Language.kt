@@ -1,7 +1,6 @@
 package com.github.oyasaiserver.vertex.util
 
 import arrow.core.Either.Companion.catch
-import arrow.core.firstOrNone
 import com.github.oyasaiserver.vertex.rest.Endpoint
 import com.github.oyasaiserver.vertex.rest.Endpoint.Companion.httpClient
 import io.ktor.client.request.get
@@ -10,37 +9,15 @@ import io.ktor.http.URLBuilder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
-import java.util.Locale
+import org.apache.commons.lang3.StringUtils.replaceEach
 
 object Language {
-    fun romanToHiragana(input: String): String {
-        tailrec fun go(
-            rem: String,
-            acc: String,
-        ): String =
-            if (rem.isEmpty()) {
-                acc
-            } else {
-                romajiMap.keys
-                    .firstOrNone { rem.startsWith(it) }
-                    .fold(
-                        {
-                            return go(rem.drop(1), acc + rem.first())
-                        },
-                        {
-                            return go(rem.drop(it.length), acc + romajiMap.getValue(it))
-                        },
-                    )
-            }
-        return go(input.lowercase(Locale.JAPANESE), emptyString())
-    }
-
     suspend fun transliterateWithGoogleApi(input: String) =
         catch {
             URLBuilder(Endpoint.GOOGLE_TRANSLITERATE.url)
                 .apply {
-                    parameters.append("langpair", "ja-Hira|ja")
-                    parameters.append("text", input)
+                    parameters.append(LANGPAIR_ATTR, LANGPAIR)
+                    parameters.append(TEXT_ATTR, input)
                 }.build()
                 .let { httpClient.get(it).bodyAsText() }
                 .let { Json.parseToJsonElement(it) }
@@ -54,9 +31,29 @@ object Language {
                 }
         }
 
-    private val romajiMap =
-        sortedMapOf(
-            compareByDescending { it },
+    fun romajiToHiragana(input: String): String = replaceEach(input, romajiMap.keys.toTypedArray(), romajiMap.values.toTypedArray())
+
+    private val romajiMap by lazy {
+        buildMap<String, String> {
+            putAll(conversionMap)
+            conversionMap
+                .filter { it.key.firstOrNull() !in prefixes }
+                .forEach { (k, v) -> put("${k.first()}$k", "っ$v") }
+        }.toSortedMap(compareByDescending { it })
+    }
+
+    private const val LANGPAIR_ATTR = "langpair"
+    private const val LANGPAIR = "ja-Hira|ja"
+    private const val TEXT_ATTR = "text"
+
+    val japaneseRegex =
+        Regex(
+            """[\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FF\uFF66-\uFF9F\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A]""",
+        )
+
+    private val prefixes = setOf('a', 'i', 'u', 'e', 'o', 'n')
+    private val conversionMap =
+        mapOf(
             "a" to "あ",
             "i" to "い",
             "yi" to "い",

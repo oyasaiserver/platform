@@ -16,7 +16,7 @@ services:
     ports:
       - "27017:27017"
   minecraft:
-    image: itzg/minecraft-server:java21
+    image: itzg/minecraft-server:java24
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -29,7 +29,7 @@ services:
     environment:
       EULA: TRUE
       TYPE: PURPUR
-      VERSION: "1.21"
+      VERSION: "1.21.5"
       MEMORY: 2560M
       MAX_PLAYERS: 70
       MOTD: \u00A72\u00A7lおやさい鯖

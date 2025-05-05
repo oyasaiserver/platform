@@ -1,8 +1,8 @@
 package com.github.oyasaiserver.vertex.database
 
 import MigrationUtils
-import com.github.oyasaiserver.vertex.Config.Database.Mongo
-import com.github.oyasaiserver.vertex.Config.Database.Postgres
+import com.github.oyasaiserver.vertex.Env.Database.Mongo
+import com.github.oyasaiserver.vertex.Env.Database.Postgres
 import com.github.oyasaiserver.vertex.database.codec.MongoKotlinUuidCodec
 import com.github.oyasaiserver.vertex.database.table.Buildings
 import com.github.oyasaiserver.vertex.database.table.Likes

@@ -10,6 +10,7 @@
 
 verbose: false
 settings:
+  generate-end-void-rings: false
   register-minecraft-debug-commands: false
   bee-count-payload: false
   startup-commands: []
@@ -96,6 +97,8 @@ settings:
       second: '%02d second'
       seconds: '%02d seconds'
   blocks:
+    snow:
+      smooth-accumulation-step: 0
     magma-block:
       reverse-bubble-column-flow: false
     soul-sand:
@@ -132,10 +135,9 @@ settings:
     allow-infinity-on-crossbow: false
     allow-looting-on-shears: false
     anvil:
-      allow-unsafe-enchants: false
-      allow-inapplicable-enchants: true
-      allow-incompatible-enchants: true
-      allow-higher-enchants-levels: true
+      allow-inapplicable-enchants: false
+      allow-incompatible-enchants: false
+      allow-higher-enchants-levels: false
       replace-incompatible-enchants: false
     allow-unsafe-enchant-command: false
     clamp-levels: true
@@ -192,7 +194,7 @@ settings:
       distance: 0.5
     minecraft:light_gray_bed:
       distance: 0.5
-config-version: 35
+config-version: 42
 world-settings:
   default:
     blocks:
@@ -409,6 +411,12 @@ world-settings:
           minecraft:acacia_wood:
             drops: {}
             into: minecraft:stripped_acacia_wood
+          minecraft:pale_oak_wood:
+            into: minecraft:stripped_pale_oak_wood
+            drops: {}
+          minecraft:pale_oak_log:
+            into: minecraft:stripped_pale_oak_log
+            drops: {}
         waxables:
           minecraft:waxed_oxidized_copper:
             drops: {}
@@ -546,6 +554,13 @@ world-settings:
       use-night-vision: false
       use-dismounts-underwater-tag: true
     mobs:
+      creaking:
+        ridable: false
+        ridable-in-water: true
+        controllable: true
+        attributes:
+          max_health: 1.0
+          scale: 1.0
       armadillo:
         ridable: false
         ridable-in-water: true
@@ -596,6 +611,7 @@ world-settings:
         takes-damage-from-water: false
         always-drop-exp: false
       bee:
+        can-instantly-start-drowning: true
         ridable: false
         ridable-in-water: true
         controllable: true
@@ -1356,6 +1372,7 @@ world-settings:
         ridable-in-water: true
         controllable: true
         attributes:
+          tempt_range: 10.0
           scale: 1.0
           max_health: 20.0
         follow-emerald-blocks: false
@@ -1393,6 +1410,7 @@ world-settings:
         ridable-in-water: true
         controllable: true
         attributes:
+          tempt_range: 10.0
           scale: 1.0
           max_health: 20.0
         follow-emerald-blocks: false
@@ -1605,6 +1623,7 @@ world-settings:
           fire: []
           lightning: []
         shears:
+          damage-if-sprinting-item-model: purpurmc:scissors
           damage-if-sprinting: false
           ignore-in-water: false
           ignore-in-lava: false
