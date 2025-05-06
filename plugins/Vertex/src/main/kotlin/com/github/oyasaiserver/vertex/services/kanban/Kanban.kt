@@ -1,5 +1,6 @@
 package com.github.oyasaiserver.vertex.services.kanban
 
+import com.github.oyasaiserver.vertex.Vertex.Companion.essentials
 import com.github.oyasaiserver.vertex.Vertex.Companion.plugin
 import com.github.oyasaiserver.vertex.database.CacheManager.recievedLikesCache
 import com.github.oyasaiserver.vertex.services.Service
@@ -8,6 +9,7 @@ import com.github.oyasaiserver.vertex.util.format
 import com.github.oyasaiserver.vertex.util.launchAsync
 import com.github.oyasaiserver.vertex.util.noShadow
 import com.github.oyasaiserver.vertex.util.plus
+import kotlinx.coroutines.delay
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.empty
 import net.kyori.adventure.text.Component.text
@@ -19,14 +21,18 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerJoinEvent
+import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.toKotlinUuid
 
 object Kanban : Service() {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        event.player.uniqueId
-            .toKotlinUuid()
-            .launchAsync { updateKanbanForPlayer(event.player) }
+        launchAsync {
+            // essentialsの読み込みを待つために1秒待機
+            delay(1.seconds)
+            event.player.also { it.playerListName(text(essentials.getUser(it).displayName)) }
+            plugin.server.onlinePlayers.forEach { updateKanbanForPlayer(it) }
+        }
     }
 
     private fun updateKanbanForPlayer(player: Player) {

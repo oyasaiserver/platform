@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.util.substitute
+
 plugins {
     kotlin("jvm") version "2.2.0-Beta2"
     kotlin("plugin.serialization") version "2.2.0-Beta2"
@@ -8,11 +10,13 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://repo.purpurmc.org/snapshots")
+    maven("https://repo.essentialsx.net/snapshots/")
     maven("https://nexus.frengor.com/repository/public/")
 }
 
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("net.essentialsx:EssentialsX:2.21.1-SNAPSHOT")
     implementation("com.google.genai:google-genai:0.4.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
     implementation("org.apache.commons:commons-lang3:3.17.0")
@@ -45,6 +49,13 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime")
     implementation("org.jetbrains.exposed:exposed-migration")
+}
+
+configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("org.spigotmc:spigot-api"))
+            .using(module("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT"))
+    }
 }
 
 kotlin {
