@@ -9,7 +9,7 @@ object Vertex : Command("vertex") {
         p1: String,
         p2: Array<out String>,
     ): Boolean {
-        p0.sendMessage("Vertex command executed")
+        p0.sendMessage("Vertex command")
         return true
     }
 }

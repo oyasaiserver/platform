@@ -26,7 +26,7 @@ class Vertex : JavaPlugin() {
         reflections.getSubKotlinObjectsOf<Command>().forEach { command ->
             server.commandMap.run {
                 knownCommands.values.removeIf { it.name == command.name }
-                register(command.name, command)
+                register(name, command)
             }
         }
     }

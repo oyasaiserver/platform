@@ -8,12 +8,7 @@ class Cache<K : Any, V : Any>(
     private val loader: (K) -> V,
 ) {
     private val cache =
-        Caffeine.newBuilder().maximumSize(5_000).expireAfterWrite(2.hours.toJavaDuration()).build<
-            K,
-            V,
-        > {
-            loader(it)
-        }
+        Caffeine.newBuilder().expireAfterWrite(2.hours.toJavaDuration()).build<K, V> { loader(it) }
 
     operator fun get(k: K): V = cache[k]
 
