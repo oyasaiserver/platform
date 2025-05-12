@@ -35,8 +35,8 @@ object Language {
 
     private val romajiMap by lazy {
         buildMap<String, String> {
-            putAll(conversionMap)
             conversionMap
+                .also { putAll(it) }
                 .filter { it.key.firstOrNull() !in prefixes }
                 .forEach { (k, v) -> put("${k.first()}$k", "っ$v") }
         }.toSortedMap(compareByDescending { it })

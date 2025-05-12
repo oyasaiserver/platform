@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres
+    container_name: postgres
     restart: always
     volumes:
       - ./postgres:/var/lib/postgresql/data
@@ -8,8 +9,10 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+
   minecraft:
     image: itzg/minecraft-server:java24
+    container_name: minecraft
     restart: unless-stopped
     tty: true
     stdin_open: true
