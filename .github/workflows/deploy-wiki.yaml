@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - apps/wiki/**
-      - .github/workflows/deploy-wiki.yml
+      - .github/workflows/deploy-wiki.yaml
 
 permissions:
   contents: read
