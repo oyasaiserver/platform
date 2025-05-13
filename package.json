@@ -2,15 +2,31 @@
   "name": "platform",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check": "biome check --write && sort-package-json --quiet",
+    "precommit": "pnpm check & pnpm typecheck",
+    "commit": "git add --all && cz",
+    "start": "tsx src",
+    "test": "tsx --test",
+    "typecheck": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.15.17",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "sort-package-json": "^3.2.1",
     "typescript": "^5.8.3"
-  }
+  },
+  "packageManager": "pnpm@10.10.0"
 }
