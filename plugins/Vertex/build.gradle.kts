@@ -59,7 +59,10 @@ configurations.configureEach {
 }
 
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+        vendor = JvmVendorSpec.ORACLE
+    }
 }
 
 spotless {

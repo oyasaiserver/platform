@@ -1,8 +1,0 @@
-name: blue
-permissions:
-- weight.700
-parents:
-- takumi
-prefixes:
-- '&9匠&f ':
-    priority: 600

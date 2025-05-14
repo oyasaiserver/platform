@@ -1,8 +1,0 @@
-name: shokyu
-permissions:
-- weight.200
-parents:
-- default
-prefixes:
-- '&a初級者&f ':
-    priority: 100

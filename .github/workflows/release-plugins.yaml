@@ -1,0 +1,56 @@
+name: Release Plugins
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - plugins/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 24
+          distribution: oracle
+      - name: Find plugin directories
+        id: find-plugins
+        #language=bash
+        run: |
+          echo "dirs=$(find plugins -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | jq -R -s -c 'split("\n") | map(select(length > 0))')" >> $GITHUB_OUTPUT
+
+      - name: Build all plugins
+        #language=bash
+        run: |
+          mkdir -p output
+          for dir in $(echo '${{ steps.find-plugins.outputs.dirs }}' | jq -r '.[]'); do
+            cd plugins/$dir
+            if [ -f "gradlew" ] || [ -f "build.gradle" ]; then
+              ./gradlew build || ./gradlew build || true
+              find build/libs -name '*.jar' -exec cp {} ../../output/ \;
+            elif [ -f "pom.xml" ]; then
+              mvn package -DskipTests
+              find target -name '*.jar' -exec cp {} ../../output/ \;
+            else
+              echo "Skipping $dir: No recognized build file"
+            fi
+            cd ../../
+          done
+
+      - name: Archive JARs
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-jars
+          path: output/*.jar
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: output/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

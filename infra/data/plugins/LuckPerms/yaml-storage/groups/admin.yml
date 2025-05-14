@@ -1,4 +1,0 @@
-name: admin
-permissions:
-- '*'
-- weight.10000
