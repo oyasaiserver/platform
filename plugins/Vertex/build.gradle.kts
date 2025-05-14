@@ -22,7 +22,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.reflections:reflections:0.10.2")
     implementation("org.postgresql:postgresql:42.7.5")
-    implementation("com.frengor:ultimateadvancementapi-shadeable:2.5.0")
+    implementation("com.frengor:ultimateadvancementapi:2.5.0")
     implementation(kotlin("reflect"))
     implementation(platform("net.kyori:adventure-bom:4.21.0"))
     implementation("net.kyori:adventure-api")
