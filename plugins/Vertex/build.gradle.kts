@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.konan.util.substitute
-
 plugins {
     kotlin("jvm") version "2.2.0-Beta2"
     kotlin("plugin.serialization") version "2.2.0-Beta2"
@@ -11,7 +9,6 @@ repositories {
     mavenCentral()
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://repo.essentialsx.net/snapshots/")
-    maven("https://nexus.frengor.com/repository/public/")
 }
 
 dependencies {
@@ -22,7 +19,6 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.reflections:reflections:0.10.2")
     implementation("org.postgresql:postgresql:42.7.5")
-    implementation("com.frengor:ultimateadvancementapi:2.5.0")
     implementation(kotlin("reflect"))
     implementation(platform("net.kyori:adventure-bom:4.21.0"))
     implementation("net.kyori:adventure-api")
@@ -75,10 +71,6 @@ spotless {
 tasks.apply {
     shadowJar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        relocate(
-            "com.fren_gor.ultimateAdvancementAPI",
-            "com.github.oyasaiserver.ultimateAdvancementAPI",
-        )
     }
 
     build {
@@ -86,12 +78,6 @@ tasks.apply {
             "kotlin.uuid.ExperimentalUuidApi",
         )
         dependsOn(shadowJar)
-        doLast {
-            copy {
-                from(shadowJar.get().archiveFile)
-                into("../../infra/data/plugins")
-            }
-        }
     }
 
     processResources {
