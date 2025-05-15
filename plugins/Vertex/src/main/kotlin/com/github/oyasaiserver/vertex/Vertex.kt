@@ -1,8 +1,6 @@
 package com.github.oyasaiserver.vertex
 
 import com.earth2me.essentials.Essentials
-import com.fren_gor.ultimateAdvancementAPI.AdvancementMain
-import com.fren_gor.ultimateAdvancementAPI.UltimateAdvancementAPI
 import com.github.oyasaiserver.vertex.database.DatabaseManager
 import com.github.oyasaiserver.vertex.services.Service
 import com.github.oyasaiserver.vertex.util.getSubKotlinObjectsOf
@@ -14,12 +12,10 @@ import org.reflections.Reflections
 class Vertex : JavaPlugin() {
     override fun onLoad() {
         launchAsync { DatabaseManager.initialize() }
-        advancementMain.load()
         services.forEach { it.onLoad() }
     }
 
     override fun onEnable() {
-        advancementMain.enableInMemory()
         services.forEach {
             server.pluginManager.registerEvents(it, this)
             it.onEnable()
@@ -34,14 +30,11 @@ class Vertex : JavaPlugin() {
 
     override fun onDisable() {
         services.forEach { it.onDisable() }
-        advancementMain.disable()
         DatabaseManager.close()
     }
 
     companion object {
         val plugin by lazy { getPlugin(Vertex::class.java) }
-        val ultimateAdvancementApi by lazy { UltimateAdvancementAPI.getInstance(plugin) }
-        val advancementMain by lazy { AdvancementMain(plugin) }
         val essentials by lazy { getPlugin(Essentials::class.java) }
         val reflections = Reflections(Vertex::class.java.packageName)
         val services = reflections.getSubKotlinObjectsOf<Service>()
