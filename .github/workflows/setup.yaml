@@ -1,4 +1,4 @@
-name: Setup Java and Gradle
+name: Setup
 
 on:
   workflow_call:
@@ -15,3 +15,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.14"
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+      - run: npm install
