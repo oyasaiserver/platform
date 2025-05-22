@@ -10,20 +10,21 @@ env:
   PLUGIN_ARTIFACTS_DIR: flat-artifacts
 
 jobs:
+  setup:
+    uses: ./.github/workflows/setup.yaml
+
   check:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/setup.yaml
       - run: ./gradlew spotlessCheck --parallel
       - run: npm run check
       - run: npm run typecheck
 
   build-and-upload-plugins:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/setup.yaml
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |
