@@ -33,8 +33,5 @@
       "arrowParentheses": "asNeeded",
       "trailingCommas": "none"
     }
-  },
-  "files": {
-    "ignore": ["infra/data", "infra/postgres"]
   }
 }
