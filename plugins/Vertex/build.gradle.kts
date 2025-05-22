@@ -69,6 +69,10 @@ spotless {
 }
 
 tasks.apply {
+    jar {
+        enabled = false
+    }
+
     shadowJar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }

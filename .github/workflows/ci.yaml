@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-upload-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: '24'
+          cache: 'gradle'
+      - run: ./gradlew build --parallel
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugins
+          path: plugins/**/build/libs/*.jar
