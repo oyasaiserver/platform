@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/setup-java-gradle.yaml
+      - uses: ./.github/workflows/setup.yaml
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |
