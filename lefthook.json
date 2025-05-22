@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/lefthook/schema.json",
+  "pre-commit": {
+    "parallel": true,
+    "jobs": [
+      {
+        "run": "npm run check",
+        "stage_fixed": true
+      },
+      {
+        "run": "npm run typecheck"
+      }
+    ]
+  }
+}
