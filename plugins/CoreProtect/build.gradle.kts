@@ -1,18 +1,12 @@
 plugins {
     java
     id("com.gradleup.shadow") version "9.0.0-beta12"
+    id("com.diffplug.spotless") version "7.0.3"
 }
 
 group = "net.coreprotect"
 version = "22.4"
 description = "CoreProtect"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-        vendor = JvmVendorSpec.ORACLE
-    }
-}
 
 repositories {
     mavenCentral()
@@ -37,31 +31,40 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.19.0")
 }
 
-tasks.jar {
-    manifest {
-        attributes["paperweight-mappings-namespace"] = "mojang"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+        vendor = JvmVendorSpec.ORACLE
     }
 }
 
-tasks.shadowJar {
-    archiveClassifier.set("")
+tasks.apply {
+    jar {
+        manifest {
+            attributes["paperweight-mappings-namespace"] = "mojang"
+        }
+    }
 
-    // Relocations
-    relocate("org.bstats", "net.coreprotect.org.bstats")
-    relocate("com.zaxxer", "net.coreprotect.com.zaxxer")
+    shadowJar {
+        archiveClassifier.set("")
 
-    // Filters
-    exclude("**/*.java")
-    exclude("**/*.c")
-    exclude("META-INF/maven/**")
-    exclude("META-INF/services/**")
+        // Relocations
+        relocate("org.bstats", "net.coreprotect.org.bstats")
+        relocate("com.zaxxer", "net.coreprotect.com.zaxxer")
 
-    dependencies {
-        exclude(dependency("com.google.code.gson:.*"))
-        exclude(dependency("org.intellij:.*"))
-        exclude(dependency("org.jetbrains:.*"))
-        exclude(dependency("org.slf4j:.*"))
-        exclude(dependency("org.apache.logging.log4j:.*"))
-        exclude(dependency("net.java.dev.jna:.*"))
+        // Filters
+        exclude("**/*.java")
+        exclude("**/*.c")
+        exclude("META-INF/maven/**")
+        exclude("META-INF/services/**")
+
+        dependencies {
+            exclude(dependency("com.google.code.gson:.*"))
+            exclude(dependency("org.intellij:.*"))
+            exclude(dependency("org.jetbrains:.*"))
+            exclude(dependency("org.slf4j:.*"))
+            exclude(dependency("org.apache.logging.log4j:.*"))
+            exclude(dependency("net.java.dev.jna:.*"))
+        }
     }
 }
