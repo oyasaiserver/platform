@@ -1,0 +1,9 @@
+name: takumi
+permissions:
+- essentials.gamemode.*
+- weight.600
+parents:
+- kenchikushi
+prefixes:
+- '&c匠&f ':
+    priority: 500
