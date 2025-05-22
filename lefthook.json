@@ -1,5 +1,13 @@
 {
   "$schema": "node_modules/lefthook/schema.json",
+  "prepare-commit-msg": {
+    "commands": {
+      "commitizen": {
+        "interactive": true,
+        "run": "cz --hook"
+      }
+    }
+  },
   "pre-commit": {
     "parallel": true,
     "jobs": [

@@ -4,10 +4,7 @@
   "type": "module",
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
-    "commit": "git add --all && cz",
-    "start": "tsx src",
-    "test": "tsx --test",
-    "typecheck": "tsc --build"
+    "typecheck": "tsc --build --noEmit"
   },
   "config": {
     "commitizen": {
