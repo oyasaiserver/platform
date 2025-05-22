@@ -321,6 +321,7 @@ buildNumber.properties
 .gradle
 **/build/
 !src/**/build/
+!gradle/wrapper/gradle-wrapper.jar
 
 # Ignore Gradle GUI config
 gradle-app.setting
