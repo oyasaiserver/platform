@@ -37,7 +37,7 @@ public final class EntityPickupItemListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onEntityPickupItem(EntityPickupItemEvent event) {
+    private void onEntityPickupItem(EntityPickupItemEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) {
             return;
         }

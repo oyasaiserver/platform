@@ -195,7 +195,7 @@ public class ConfigFile extends Config {
 
             if (lines.size() > 0) {
                 String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
-                Files.write(path, (lines.remove(lines.size() - 1).isEmpty() ? lines : lines), StandardCharsets.UTF_8);
+                Files.write(path, (lines), StandardCharsets.UTF_8);
                 Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
                 lines.clear();
             }
@@ -216,7 +216,7 @@ public class ConfigFile extends Config {
 
             if (lines.size() > 0) {
                 String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
-                Files.write(path, (lines.remove(lines.size() - 1).isEmpty() ? lines : lines), StandardCharsets.UTF_8);
+                Files.write(path, (lines), StandardCharsets.UTF_8);
                 Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
                 lines.clear();
             }

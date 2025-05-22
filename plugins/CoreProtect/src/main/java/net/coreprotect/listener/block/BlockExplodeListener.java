@@ -62,8 +62,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
 
                             // Properly log double blocks, such as doors
                             BlockData blockData = scanBlock.getBlockData();
-                            if (blockData instanceof Bisected) {
-                                Bisected bisected = (Bisected) blockData;
+                            if (blockData instanceof Bisected bisected) {
                                 Location bisectLocation = location.clone();
                                 if (bisected.getHalf() == Half.TOP) {
                                     bisectLocation.setY(bisectLocation.getY() - 1);
@@ -145,7 +144,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockExplode(BlockExplodeEvent event) {
+    private void onBlockExplode(BlockExplodeEvent event) {
         Block eventBlock = event.getBlock();
         World world = eventBlock.getLocation().getWorld();
         String user = "";
@@ -162,10 +161,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
             user = "#explosion";
         }
 
-        boolean log = false;
-        if (Config.getConfig(world).EXPLOSIONS) {
-            log = true;
-        }
+        boolean log = Config.getConfig(world).EXPLOSIONS;
 
         if (!event.isCancelled() && log) {
             processBlockExplode(user, world, event.blockList());

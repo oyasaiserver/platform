@@ -9,8 +9,7 @@ import net.coreprotect.database.logger.PlayerSessionLogger;
 class PlayerLogoutProcess {
 
     static void process(PreparedStatement preparedStmt, int batchCount, Object object, int time, String user) {
-        if (object instanceof Location) {
-            Location location = (Location) object;
+        if (object instanceof Location location) {
             PlayerSessionLogger.log(preparedStmt, batchCount, user, location, time, 0);
         }
     }

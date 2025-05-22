@@ -67,7 +67,7 @@ public class InteractionLookup {
             results.close();
             int totalPages = (int) Math.ceil(count / (limit + 0.0));
 
-            query = "SELECT time,user,action,type,data,rolled_back FROM " + ConfigHandler.prefix + "block " + WorldUtils.getWidIndex("block") + "WHERE wid = '" + worldId + "' AND x = '" + x + "' AND z = '" + z + "' AND y = '" + y + "' AND action='2' AND time >= '" + checkTime + "' ORDER BY rowid DESC LIMIT " + pageStart + ", " + limit + "";
+            query = "SELECT time,user,action,type,data,rolled_back FROM " + ConfigHandler.prefix + "block " + WorldUtils.getWidIndex("block") + "WHERE wid = '" + worldId + "' AND x = '" + x + "' AND z = '" + z + "' AND y = '" + y + "' AND action='2' AND time >= '" + checkTime + "' ORDER BY rowid DESC LIMIT " + pageStart + ", " + limit;
             results = statement.executeQuery(query);
 
             StringBuilder resultBuilder = new StringBuilder();
@@ -103,7 +103,7 @@ public class InteractionLookup {
                 String target = resultMaterial.name().toLowerCase(Locale.ROOT);
                 target = StringUtils.nameFilter(target, resultData);
                 if (target.length() > 0) {
-                    target = "minecraft:" + target.toLowerCase(Locale.ROOT) + "";
+                    target = "minecraft:" + target.toLowerCase(Locale.ROOT);
                 }
 
                 // Hide "minecraft:" for now.

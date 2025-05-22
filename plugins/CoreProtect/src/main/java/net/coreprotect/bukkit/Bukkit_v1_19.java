@@ -145,18 +145,15 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
         }
 
         try {
-            if (entity instanceof Frog) {
-                Frog frog = (Frog) entity;
+            if (entity instanceof Frog frog) {
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(frog.getVariant()));
                 return true;
             }
-            else if (entity instanceof Tadpole) {
-                Tadpole tadpole = (Tadpole) entity;
+            else if (entity instanceof Tadpole tadpole) {
                 info.add(tadpole.getAge());
                 return true;
             }
-            else if (entity instanceof Goat) {
-                Goat goat = (Goat) entity;
+            else if (entity instanceof Goat goat) {
                 info.add(goat.isScreaming());
                 info.add(goat.hasLeftHorn());
                 info.add(goat.hasRightHorn());
@@ -191,8 +188,7 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
         }
 
         try {
-            if (entity instanceof Frog) {
-                Frog frog = (Frog) entity;
+            if (entity instanceof Frog frog) {
                 if (count == 0) {
                     // Convert string registry key to variant if needed
                     if (value instanceof String) {
@@ -202,15 +198,13 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
                     return true;
                 }
             }
-            else if (entity instanceof Tadpole) {
-                Tadpole tadpole = (Tadpole) entity;
+            else if (entity instanceof Tadpole tadpole) {
                 if (count == 0) {
                     tadpole.setAge((int) value);
                     return true;
                 }
             }
-            else if (entity instanceof Goat) {
-                Goat goat = (Goat) entity;
+            else if (entity instanceof Goat goat) {
                 boolean boolValue = (Boolean) value;
 
                 switch (count) {

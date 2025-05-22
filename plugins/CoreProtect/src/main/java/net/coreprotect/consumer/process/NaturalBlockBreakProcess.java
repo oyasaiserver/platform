@@ -17,8 +17,7 @@ import net.coreprotect.utility.Util;
 class NaturalBlockBreakProcess {
 
     static void process(Statement statement, PreparedStatement preparedStmt, int batchCount, int processId, int id, String user, Object object, Material blockType, int blockData, String overrideData) {
-        if (object instanceof BlockState) {
-            BlockState block = (BlockState) object;
+        if (object instanceof BlockState block) {
             Map<Integer, List<BlockState>> blockLists = Consumer.consumerBlockList.get(processId);
             if (blockLists.get(id) != null) {
                 List<BlockState> blockStateList = blockLists.get(id);

@@ -17,7 +17,7 @@ import net.coreprotect.consumer.Queue;
 public final class PlayerDeathListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onPlayerDeath(PlayerDeathEvent event) {
+    private void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getKeepInventory()) {
             return;
         }
@@ -32,7 +32,7 @@ public final class PlayerDeathListener extends Queue implements Listener {
             return;
         }
 
-        String user = ((Player) entity).getName();
+        String user = entity.getName();
         List<ItemStack> items = event.getDrops();
         if (items == null || items.size() == 0) {
             return;

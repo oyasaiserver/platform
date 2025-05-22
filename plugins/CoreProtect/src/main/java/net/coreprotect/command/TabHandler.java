@@ -74,7 +74,7 @@ public class TabHandler implements TabCompleter {
             return handleGenericLookupCompletions(argument0, currentArg, paramState);
         }
 
-        return Arrays.asList("");
+        return List.of("");
     }
 
     private List<String> getFirstLevelCompletions(CommandSender sender, String argument) {
@@ -397,8 +397,8 @@ public class TabHandler implements TabCompleter {
 
     private void initializeMaterialsIfNeeded() {
         if (materials == null) {
-            List<Material> addList = Arrays.asList(Material.ARMOR_STAND);
-            List<Material> excludeList = Arrays.asList();
+            List<Material> addList = List.of(Material.ARMOR_STAND);
+            List<Material> excludeList = List.of();
             Set<String> materialList = new HashSet<>();
 
             Material[] materialValues = Material.values();
@@ -453,10 +453,10 @@ public class TabHandler implements TabCompleter {
             return StringUtil.copyPartialMatches(argument2, completions, new ArrayList<>(completions.size()));
         }
         else if (argument1.startsWith("r:") || argument1.startsWith("i:")) {
-            List<String> completions = new ArrayList<>(Arrays.asList("t:"));
+            List<String> completions = new ArrayList<>(List.of("t:"));
             return StringUtil.copyPartialMatches(argument2, completions, new ArrayList<>(completions.size()));
         }
-        return Arrays.asList("");
+        return List.of("");
     }
 
     private List<String> handleGenericLookupCompletions(String cmd, String currentArg, ParamState paramState) {

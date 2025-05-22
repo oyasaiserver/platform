@@ -93,7 +93,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
 
         // Add signs (except wall signs) to top-tracked blocks
         for (Material value : Tag.SIGNS.getValues()) {
-            if (!Tag.WALL_SIGNS.isTagged(value) && !BlockGroup.TRACK_TOP.contains(value)) {
+            if (!Tag.WALL_SIGNS.isTagged(value)) {
                 BlockGroup.TRACK_TOP.add(value);
             }
         }
@@ -109,9 +109,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
      */
     private void addMissingTaggedBlocks(Iterable<Material> taggedBlocks, Set<Material> targetGroup) {
         for (Material value : taggedBlocks) {
-            if (!targetGroup.contains(value)) {
-                targetGroup.add(value);
-            }
+            targetGroup.add(value);
         }
     }
 

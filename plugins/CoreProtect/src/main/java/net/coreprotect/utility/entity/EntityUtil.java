@@ -99,12 +99,11 @@ public class EntityUtil {
 
                 int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
                 int wid = WorldUtils.getWorldId(block.getWorld().getName());
-                String token = "" + block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid + "." + type.name() + "";
+                String token = block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid + "." + type.name();
                 CacheHandler.entityCache.put(token, new Object[] { unixtimestamp, entity.getEntityId() });
 
-                if (entity instanceof Ageable) {
+                if (entity instanceof Ageable ageable) {
                     int count = 0;
-                    Ageable ageable = (Ageable) entity;
                     for (Object value : age) {
                         if (count == 0) {
                             int set = (Integer) value;
@@ -135,9 +134,8 @@ public class EntityUtil {
                         count++;
                     }
                 }
-                if (entity instanceof Tameable) {
+                if (entity instanceof Tameable tameable) {
                     int count = 0;
-                    Tameable tameable = (Tameable) entity;
                     for (Object value : tame) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
@@ -161,8 +159,7 @@ public class EntityUtil {
                         count++;
                     }
                 }
-                if (entity instanceof Attributable && list.size() >= 6) {
-                    Attributable attributable = (Attributable) entity;
+                if (entity instanceof Attributable attributable && list.size() >= 6) {
                     @SuppressWarnings("unchecked")
                     List<Object> attributes = (List<Object>) list.get(5);
                     for (Object value : attributes) {
@@ -194,8 +191,7 @@ public class EntityUtil {
                     }
                 }
 
-                if (entity instanceof LivingEntity && list.size() >= 7) {
-                    LivingEntity livingEntity = (LivingEntity) entity;
+                if (entity instanceof LivingEntity livingEntity && list.size() >= 7) {
                     @SuppressWarnings("unchecked")
                     List<Object> details = (List<Object>) list.get(6);
                     int count = 0;
@@ -214,30 +210,26 @@ public class EntityUtil {
 
                 int count = 0;
                 for (Object value : data) {
-                    if (entity instanceof Creeper) {
-                        Creeper creeper = (Creeper) entity;
+                    if (entity instanceof Creeper creeper) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             creeper.setPowered(set);
                         }
                     }
-                    else if (entity instanceof Enderman) {
-                        Enderman enderman = (Enderman) entity;
+                    else if (entity instanceof Enderman enderman) {
                         if (count == 1) {
                             String blockDataString = (String) value;
                             BlockData blockData = Bukkit.getServer().createBlockData(blockDataString);
                             enderman.setCarriedBlock(blockData);
                         }
                     }
-                    else if (entity instanceof IronGolem) {
-                        IronGolem irongolem = (IronGolem) entity;
+                    else if (entity instanceof IronGolem irongolem) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             irongolem.setPlayerCreated(set);
                         }
                     }
-                    else if (entity instanceof Cat) {
-                        Cat cat = (Cat) entity;
+                    else if (entity instanceof Cat cat) {
                         if (count == 0) {
                             if (value instanceof String) {
                                 value = BukkitAdapter.ADAPTER.getRegistryValue((String) value, Cat.Type.class);
@@ -254,8 +246,7 @@ public class EntityUtil {
                             cat.setSitting(set);
                         }
                     }
-                    else if (entity instanceof Fox) {
-                        Fox fox = (Fox) entity;
+                    else if (entity instanceof Fox fox) {
                         if (count == 0) {
                             Fox.Type set = (Fox.Type) value;
                             fox.setFoxType(set);
@@ -265,8 +256,7 @@ public class EntityUtil {
                             fox.setSitting(set);
                         }
                     }
-                    else if (entity instanceof Panda) {
-                        Panda panda = (Panda) entity;
+                    else if (entity instanceof Panda panda) {
                         if (count == 0) {
                             Gene set = (Gene) value;
                             panda.setMainGene(set);
@@ -276,15 +266,13 @@ public class EntityUtil {
                             panda.setHiddenGene(set);
                         }
                     }
-                    else if (entity instanceof Pig) {
-                        Pig pig = (Pig) entity;
+                    else if (entity instanceof Pig pig) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             pig.setSaddle(set);
                         }
                     }
-                    else if (entity instanceof Sheep) {
-                        Sheep sheep = (Sheep) entity;
+                    else if (entity instanceof Sheep sheep) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             sheep.setSheared(set);
@@ -294,29 +282,25 @@ public class EntityUtil {
                             sheep.setColor(set);
                         }
                     }
-                    else if (entity instanceof MushroomCow) {
-                        MushroomCow mushroomCow = (MushroomCow) entity;
+                    else if (entity instanceof MushroomCow mushroomCow) {
                         if (count == 0) {
                             MushroomCow.Variant set = (MushroomCow.Variant) value;
                             mushroomCow.setVariant(set);
                         }
                     }
-                    else if (entity instanceof Slime) {
-                        Slime slime = (Slime) entity;
+                    else if (entity instanceof Slime slime) {
                         if (count == 0) {
                             int set = (Integer) value;
                             slime.setSize(set);
                         }
                     }
-                    else if (entity instanceof Parrot) {
-                        Parrot parrot = (Parrot) entity;
+                    else if (entity instanceof Parrot parrot) {
                         if (count == 0) {
                             Variant set = (Variant) value;
                             parrot.setVariant(set);
                         }
                     }
-                    else if (entity instanceof TropicalFish) {
-                        TropicalFish tropicalFish = (TropicalFish) entity;
+                    else if (entity instanceof TropicalFish tropicalFish) {
                         if (count == 0) {
                             DyeColor set = (DyeColor) value;
                             tropicalFish.setBodyColor(set);
@@ -330,18 +314,15 @@ public class EntityUtil {
                             tropicalFish.setPatternColor(set);
                         }
                     }
-                    else if (entity instanceof Phantom) {
-                        Phantom phantom = (Phantom) entity;
+                    else if (entity instanceof Phantom phantom) {
                         if (count == 0) {
                             int set = (Integer) value;
                             phantom.setSize(set);
                         }
                     }
-                    else if (entity instanceof AbstractVillager) {
-                        AbstractVillager abstractVillager = (AbstractVillager) entity;
+                    else if (entity instanceof AbstractVillager abstractVillager) {
                         if (count == 0) {
-                            if (abstractVillager instanceof Villager) {
-                                Villager villager = (Villager) abstractVillager;
+                            if (abstractVillager instanceof Villager villager) {
                                 if (value instanceof String) {
                                     value = BukkitAdapter.ADAPTER.getRegistryValue((String) value, Profession.class);
                                 }
@@ -350,8 +331,7 @@ public class EntityUtil {
                             }
                         }
                         else if (count == 1) {
-                            if (abstractVillager instanceof Villager && (value instanceof Villager.Type || value instanceof String)) {
-                                Villager villager = (Villager) abstractVillager;
+                            if (abstractVillager instanceof Villager villager && (value instanceof Villager.Type || value instanceof String)) {
                                 if (value instanceof String) {
                                     value = BukkitAdapter.ADAPTER.getRegistryValue((String) value, Villager.Type.class);
                                 }
@@ -417,21 +397,18 @@ public class EntityUtil {
                             }
                         }
                     }
-                    else if (entity instanceof Raider) {
-                        Raider raider = (Raider) entity;
+                    else if (entity instanceof Raider raider) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             raider.setPatrolLeader(set);
                         }
 
-                        if (entity instanceof Spellcaster && count == 1) {
-                            Spellcaster spellcaster = (Spellcaster) entity;
+                        if (entity instanceof Spellcaster spellcaster && count == 1) {
                             Spell set = (Spell) value;
                             spellcaster.setSpell(set);
                         }
                     }
-                    else if (entity instanceof Wolf) {
-                        Wolf wolf = (Wolf) entity;
+                    else if (entity instanceof Wolf wolf) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             wolf.setSitting(set);
@@ -444,8 +421,7 @@ public class EntityUtil {
                             BukkitAdapter.ADAPTER.setWolfVariant(wolf, value);
                         }
                     }
-                    else if (entity instanceof ZombieVillager) {
-                        ZombieVillager zombieVillager = (ZombieVillager) entity;
+                    else if (entity instanceof ZombieVillager zombieVillager) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             zombieVillager.setBaby(set);
@@ -458,28 +434,24 @@ public class EntityUtil {
                             zombieVillager.setVillagerProfession(set);
                         }
                     }
-                    else if (entity instanceof Zombie) {
-                        Zombie zombie = (Zombie) entity;
+                    else if (entity instanceof Zombie zombie) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             zombie.setBaby(set);
                         }
                     }
-                    else if (entity instanceof AbstractHorse) {
-                        AbstractHorse abstractHorse = (AbstractHorse) entity;
+                    else if (entity instanceof AbstractHorse abstractHorse) {
                         if (count == 0 && value != null) {
                             // deprecated
                             boolean set = (Boolean) value;
-                            if (entity instanceof ChestedHorse) {
-                                ChestedHorse chestedHorse = (ChestedHorse) entity;
+                            if (entity instanceof ChestedHorse chestedHorse) {
                                 chestedHorse.setCarryingChest(set);
                             }
                         }
                         else if (count == 1 && value != null) {
                             // deprecated
                             org.bukkit.entity.Horse.Color set = (org.bukkit.entity.Horse.Color) value;
-                            if (entity instanceof Horse) {
-                                Horse horse = (Horse) entity;
+                            if (entity instanceof Horse horse) {
                                 horse.setColor(set);
                             }
                         }
@@ -501,8 +473,7 @@ public class EntityUtil {
                             Horse horse = (Horse) entity;
                             horse.setStyle(set);
                         }
-                        if (entity instanceof Horse) {
-                            Horse horse = (Horse) entity;
+                        if (entity instanceof Horse horse) {
                             if (count == 8) {
                                 if (value != null) {
                                     @SuppressWarnings("unchecked")
@@ -531,8 +502,7 @@ public class EntityUtil {
                                 ItemStack armor = horse.getInventory().getArmor();
                                 if (armor != null) {
                                     ItemMeta itemMeta = armor.getItemMeta();
-                                    if (itemMeta instanceof LeatherArmorMeta) {
-                                        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
+                                    if (itemMeta instanceof LeatherArmorMeta leatherArmorMeta) {
                                         leatherArmorMeta.setColor(set);
                                         armor.setItemMeta(leatherArmorMeta);
                                     }
@@ -545,8 +515,7 @@ public class EntityUtil {
                                 boolean set = (Boolean) value;
                                 chestedHorse.setCarryingChest(set);
                             }
-                            if (entity instanceof Llama) {
-                                Llama llama = (Llama) entity;
+                            if (entity instanceof Llama llama) {
                                 if (count == 8) {
                                     if (value != null) {
                                         @SuppressWarnings("unchecked")
@@ -561,8 +530,7 @@ public class EntityUtil {
                             }
                         }
                     }
-                    else if (entity instanceof Bee) {
-                        Bee bee = (Bee) entity;
+                    else if (entity instanceof Bee bee) {
                         if (count == 0) {
                             int set = (int) value;
                             bee.setAnger(set);
@@ -576,15 +544,13 @@ public class EntityUtil {
                             bee.setHasStung(set);
                         }
                     }
-                    else if (entity instanceof Piglin) {
-                        Piglin piglin = (Piglin) entity;
+                    else if (entity instanceof Piglin piglin) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             piglin.setBaby(set);
                         }
                     }
-                    else if (entity instanceof Zoglin) {
-                        Zoglin zoglin = (Zoglin) entity;
+                    else if (entity instanceof Zoglin zoglin) {
                         if (count == 0) {
                             boolean set = (Boolean) value;
                             zoglin.setBaby(set);

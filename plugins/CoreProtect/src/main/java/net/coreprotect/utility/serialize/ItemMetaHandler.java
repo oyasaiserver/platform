@@ -87,8 +87,7 @@ public class ItemMetaHandler {
             return null;
         }
 
-        if (itemMeta instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta enchantmentStorageEngine = (EnchantmentStorageMeta) itemMeta;
+        if (itemMeta instanceof EnchantmentStorageMeta enchantmentStorageEngine) {
             return enchantmentStorageEngine.getStoredEnchants();
         }
 
@@ -136,8 +135,7 @@ public class ItemMetaHandler {
                 }
             }
 
-            if (itemMeta instanceof LeatherArmorMeta) {
-                LeatherArmorMeta meta = (LeatherArmorMeta) itemMeta;
+            if (itemMeta instanceof LeatherArmorMeta meta) {
                 LeatherArmorMeta subMeta = meta.clone();
 
                 meta.setColor(Bukkit.getServer().getItemFactory().getDefaultLeatherColor());
@@ -148,8 +146,7 @@ public class ItemMetaHandler {
                 list.add(subMeta.getColor().serialize());
                 metadata.add(list);
             }
-            else if (itemMeta instanceof PotionMeta) {
-                PotionMeta meta = (PotionMeta) itemMeta;
+            else if (itemMeta instanceof PotionMeta meta) {
                 PotionMeta subMeta = meta.clone();
                 meta.setColor(null);
                 meta.clearCustomEffects();
@@ -168,8 +165,7 @@ public class ItemMetaHandler {
                     }
                 }
             }
-            else if (itemMeta instanceof FireworkMeta) {
-                FireworkMeta meta = (FireworkMeta) itemMeta;
+            else if (itemMeta instanceof FireworkMeta meta) {
                 FireworkMeta subMeta = meta.clone();
                 meta.clearEffects();
                 list.add(meta.serialize());
@@ -181,8 +177,7 @@ public class ItemMetaHandler {
                     }
                 }
             }
-            else if (itemMeta instanceof FireworkEffectMeta) {
-                FireworkEffectMeta meta = (FireworkEffectMeta) itemMeta;
+            else if (itemMeta instanceof FireworkEffectMeta meta) {
                 FireworkEffectMeta subMeta = meta.clone();
                 meta.setEffect(null);
                 list.add(meta.serialize());
@@ -193,8 +188,7 @@ public class ItemMetaHandler {
                     deserializeFireworkEffect(effect, metadata);
                 }
             }
-            else if (itemMeta instanceof BannerMeta) {
-                BannerMeta meta = (BannerMeta) itemMeta;
+            else if (itemMeta instanceof BannerMeta meta) {
                 BannerMeta subMeta = (BannerMeta) meta.clone();
                 meta.setPatterns(new ArrayList<>());
                 list.add(meta.serialize());
@@ -206,8 +200,7 @@ public class ItemMetaHandler {
                     metadata.add(list);
                 }
             }
-            else if (itemMeta instanceof CrossbowMeta) {
-                CrossbowMeta meta = (CrossbowMeta) itemMeta;
+            else if (itemMeta instanceof CrossbowMeta meta) {
                 CrossbowMeta subMeta = (CrossbowMeta) meta.clone();
                 meta.setChargedProjectiles(null);
                 list.add(meta.serialize());
@@ -226,8 +219,7 @@ public class ItemMetaHandler {
                     metadata.add(list);
                 }
             }
-            else if (itemMeta instanceof MapMeta) {
-                MapMeta meta = (MapMeta) itemMeta;
+            else if (itemMeta instanceof MapMeta meta) {
                 MapMeta subMeta = meta.clone();
                 meta.setColor(null);
                 list.add(meta.serialize());
@@ -239,8 +231,7 @@ public class ItemMetaHandler {
                     metadata.add(list);
                 }
             }
-            else if (itemMeta instanceof SuspiciousStewMeta) {
-                SuspiciousStewMeta meta = (SuspiciousStewMeta) itemMeta;
+            else if (itemMeta instanceof SuspiciousStewMeta meta) {
                 SuspiciousStewMeta subMeta = meta.clone();
                 meta.clearCustomEffects();
                 list.add(meta.serialize());

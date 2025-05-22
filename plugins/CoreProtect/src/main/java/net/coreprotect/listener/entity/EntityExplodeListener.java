@@ -22,7 +22,7 @@ import net.coreprotect.listener.block.BlockExplodeListener;
 public final class EntityExplodeListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntityExplode(EntityExplodeEvent event) {
+    private void onEntityExplode(EntityExplodeEvent event) {
         Entity entity = event.getEntity();
         if (entity.getType().name().equals("WIND_CHARGE") || entity.getType().name().equals("BREEZE_WIND_CHARGE")) {
             return;
@@ -53,10 +53,7 @@ public final class EntityExplodeListener extends Queue implements Listener {
             user = "#end_crystal";
         }
 
-        boolean log = false;
-        if (Config.getConfig(world).EXPLOSIONS) {
-            log = true;
-        }
+        boolean log = Config.getConfig(world).EXPLOSIONS;
 
         if ((user.equals("#enderdragon") || user.equals("#wither")) && !Config.getConfig(world).ENTITY_CHANGE) {
             log = false;

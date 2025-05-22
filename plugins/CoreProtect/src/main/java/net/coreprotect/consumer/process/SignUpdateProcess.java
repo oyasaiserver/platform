@@ -18,8 +18,7 @@ class SignUpdateProcess {
          * This block could already be removed again by the time the server tries to modify it.
          * Ignore any errors.
          */
-        if (object instanceof BlockState) {
-            BlockState block = (BlockState) object;
+        if (object instanceof BlockState block) {
             int x = block.getX();
             int y = block.getY();
             int z = block.getZ();

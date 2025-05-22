@@ -195,7 +195,7 @@ public class Database extends Queue {
                     }
                 }
 
-                String database = "jdbc:sqlite:" + ConfigHandler.path + ConfigHandler.sqlite + "";
+                String database = "jdbc:sqlite:" + ConfigHandler.path + ConfigHandler.sqlite;
                 connection = DriverManager.getConnection(database);
 
                 ConfigHandler.databaseReachable = true;
@@ -430,7 +430,7 @@ public class Database extends Queue {
 
             identifyExistingTablesAndIndexes(statement, attachDatabase, tableData, indexData);
             createSQLiteTableStructures(prefix, statement, tableData);
-            createSQLiteIndexes(forcePrefix == true ? prefix : ConfigHandler.prefix, statement, indexData, attachDatabase, purge);
+            createSQLiteIndexes(forcePrefix ? prefix : ConfigHandler.prefix, statement, indexData, attachDatabase, purge);
 
             if (!purge && forceConnection == null) {
                 initializeTables(prefix, statement);

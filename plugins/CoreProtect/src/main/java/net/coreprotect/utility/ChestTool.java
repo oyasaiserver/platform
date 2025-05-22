@@ -17,11 +17,10 @@ public class ChestTool {
     }
 
     public static void updateDoubleChest(Block block, BlockData blockData, boolean forceValidation) {
-        if (!(blockData instanceof Chest) || ((Chest) blockData).getType() == Type.SINGLE) {
+        if (!(blockData instanceof Chest directional) || ((Chest) blockData).getType() == Type.SINGLE) {
             return;
         }
 
-        Directional directional = (Directional) blockData;
         BlockFace blockFace = directional.getFacing();
         BlockFace newFace = null;
 

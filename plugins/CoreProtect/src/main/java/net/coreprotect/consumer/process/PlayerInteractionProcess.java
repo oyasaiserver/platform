@@ -10,8 +10,7 @@ import net.coreprotect.database.logger.PlayerInteractLogger;
 class PlayerInteractionProcess {
 
     static void process(PreparedStatement preparedStmt, int batchCount, String user, Object object, Material type) {
-        if (object instanceof BlockState) {
-            BlockState block = (BlockState) object;
+        if (object instanceof BlockState block) {
             PlayerInteractLogger.log(preparedStmt, batchCount, user, block, type);
         }
     }

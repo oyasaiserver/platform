@@ -22,7 +22,7 @@ import net.coreprotect.consumer.Queue;
 public final class EntityChangeBlockListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntityChangeBlock(EntityChangeBlockEvent event) {
+    private void onEntityChangeBlock(EntityChangeBlockEvent event) {
         World world = event.getBlock().getWorld();
         if (!event.isCancelled() && Config.getConfig(world).ENTITY_CHANGE) {
             Entity entity = event.getEntity(); // Can be sand/gravel

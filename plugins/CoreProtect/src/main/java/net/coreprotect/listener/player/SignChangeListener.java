@@ -17,7 +17,7 @@ import net.coreprotect.paper.PaperAdapter;
 public final class SignChangeListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onSignChange(SignChangeEvent event) {
+    private void onSignChange(SignChangeEvent event) {
         Block block = event.getBlock();
         if (event.isCancelled() || !Config.getConfig(block.getWorld()).SIGN_TEXT) {
             return;
@@ -47,8 +47,7 @@ public final class SignChangeListener extends Queue implements Listener {
         boolean isFront = BukkitAdapter.ADAPTER.isSignFront(event);
         boolean existingText = false;
 
-        if (blockState instanceof Sign) {
-            Sign sign = (Sign) blockState;
+        if (blockState instanceof Sign sign) {
             line1 = PaperAdapter.ADAPTER.getLine(sign, 0);
             line2 = PaperAdapter.ADAPTER.getLine(sign, 1);
             line3 = PaperAdapter.ADAPTER.getLine(sign, 2);

@@ -112,7 +112,7 @@ public final class EntityDeathListener extends Queue implements Listener {
         }
     }
 
-    protected static void logEntityDeath(LivingEntity entity, String e) {
+    private static void logEntityDeath(LivingEntity entity, String e) {
         if (!Config.getConfig(entity.getWorld()).ENTITY_KILLS) {
             return;
         }
@@ -139,20 +139,16 @@ public final class EntityDeathListener extends Queue implements Listener {
             skip = false;
         }
 
-        if (damage instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent attack = (EntityDamageByEntityEvent) damage;
+        if (damage instanceof EntityDamageByEntityEvent attack) {
             Entity attacker = attack.getDamager();
 
-            if (attacker instanceof Player) {
-                Player player = (Player) attacker;
+            if (attacker instanceof Player player) {
                 e = player.getName();
             }
-            else if (attacker instanceof AbstractArrow) {
-                AbstractArrow arrow = (AbstractArrow) attacker;
+            else if (attacker instanceof AbstractArrow arrow) {
                 ProjectileSource shooter = arrow.getShooter();
 
-                if (shooter instanceof Player) {
-                    Player player = (Player) shooter;
+                if (shooter instanceof Player player) {
                     e = player.getName();
                 }
                 else if (shooter instanceof LivingEntity) {
@@ -163,12 +159,10 @@ public final class EntityDeathListener extends Queue implements Listener {
                     }
                 }
             }
-            else if (attacker instanceof ThrownPotion) {
-                ThrownPotion potion = (ThrownPotion) attacker;
+            else if (attacker instanceof ThrownPotion potion) {
                 ProjectileSource shooter = potion.getShooter();
 
-                if (shooter instanceof Player) {
-                    Player player = (Player) shooter;
+                if (shooter instanceof Player player) {
                     e = player.getName();
                 }
                 else if (shooter instanceof LivingEntity) {
@@ -271,8 +265,7 @@ public final class EntityDeathListener extends Queue implements Listener {
             details.add(entity.getRemoveWhenFarAway());
             details.add(entity.getCanPickupItems());
 
-            if (entity instanceof Ageable) {
-                Ageable ageable = (Ageable) entity;
+            if (entity instanceof Ageable ageable) {
                 age.add(ageable.getAge());
                 age.add(ageable.getAgeLock());
                 age.add(ageable.isAdult());
@@ -280,8 +273,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                 age.add(null);
             }
 
-            if (entity instanceof Tameable) {
-                Tameable tameable = (Tameable) entity;
+            if (entity instanceof Tameable tameable) {
                 tame.add(tameable.isTamed());
                 if (tameable.isTamed()) {
                     if (tameable.getOwner() != null) {
@@ -310,12 +302,10 @@ public final class EntityDeathListener extends Queue implements Listener {
                 }
             }
 
-            if (entity instanceof Creeper) {
-                Creeper creeper = (Creeper) entity;
+            if (entity instanceof Creeper creeper) {
                 info.add(creeper.isPowered());
             }
-            else if (entity instanceof Enderman) {
-                Enderman enderman = (Enderman) entity;
+            else if (entity instanceof Enderman enderman) {
                 info.add(null);
 
                 try {
@@ -324,62 +314,50 @@ public final class EntityDeathListener extends Queue implements Listener {
                 catch (Exception endermanException) {
                 }
             }
-            else if (entity instanceof IronGolem) {
-                IronGolem irongolem = (IronGolem) entity;
+            else if (entity instanceof IronGolem irongolem) {
                 info.add(irongolem.isPlayerCreated());
             }
-            else if (entity instanceof Cat) {
-                Cat cat = (Cat) entity;
+            else if (entity instanceof Cat cat) {
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(cat.getCatType()));
                 info.add(cat.getCollarColor());
                 info.add(cat.isSitting());
             }
-            else if (entity instanceof Fox) {
-                Fox fox = (Fox) entity;
+            else if (entity instanceof Fox fox) {
                 info.add(fox.getFoxType());
                 info.add(fox.isSitting());
             }
-            else if (entity instanceof Panda) {
-                Panda panda = (Panda) entity;
+            else if (entity instanceof Panda panda) {
                 info.add(panda.getMainGene());
                 info.add(panda.getHiddenGene());
             }
-            else if (entity instanceof Pig) {
-                Pig pig = (Pig) entity;
+            else if (entity instanceof Pig pig) {
                 info.add(pig.hasSaddle());
             }
-            else if (entity instanceof Sheep) {
-                Sheep sheep = (Sheep) entity;
+            else if (entity instanceof Sheep sheep) {
                 info.add(sheep.isSheared());
                 info.add(sheep.getColor());
             }
-            else if (entity instanceof MushroomCow) {
-                MushroomCow mushroomCow = (MushroomCow) entity;
+            else if (entity instanceof MushroomCow mushroomCow) {
                 info.add(mushroomCow.getVariant());
             }
             else if (entity instanceof Skeleton) {
                 info.add(null);
             }
-            else if (entity instanceof Slime) {
-                Slime slime = (Slime) entity;
+            else if (entity instanceof Slime slime) {
                 info.add(slime.getSize());
             }
-            else if (entity instanceof Parrot) {
-                Parrot parrot = (Parrot) entity;
+            else if (entity instanceof Parrot parrot) {
                 info.add(parrot.getVariant());
             }
-            else if (entity instanceof TropicalFish) {
-                TropicalFish tropicalFish = (TropicalFish) entity;
+            else if (entity instanceof TropicalFish tropicalFish) {
                 info.add(tropicalFish.getBodyColor());
                 info.add(tropicalFish.getPattern());
                 info.add(tropicalFish.getPatternColor());
             }
-            else if (entity instanceof Phantom) {
-                Phantom phantom = (Phantom) entity;
+            else if (entity instanceof Phantom phantom) {
                 info.add(phantom.getSize());
             }
-            else if (entity instanceof AbstractVillager) {
-                AbstractVillager abstractVillager = (AbstractVillager) entity;
+            else if (entity instanceof AbstractVillager abstractVillager) {
                 List<Object> recipes = new ArrayList<>();
                 for (MerchantRecipe merchantRecipe : abstractVillager.getRecipes()) {
                     List<Object> recipe = new ArrayList<>();
@@ -411,8 +389,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                     recipes.add(recipe);
                 }
 
-                if (abstractVillager instanceof Villager) {
-                    Villager villager = (Villager) abstractVillager;
+                if (abstractVillager instanceof Villager villager) {
                     info.add(BukkitAdapter.ADAPTER.getRegistryKey(villager.getProfession()));
                     info.add(BukkitAdapter.ADAPTER.getRegistryKey(villager.getVillagerType()));
                     info.add(recipes);
@@ -425,34 +402,28 @@ public final class EntityDeathListener extends Queue implements Listener {
                     info.add(recipes);
                 }
             }
-            else if (entity instanceof Raider) {
-                Raider raider = (Raider) entity;
+            else if (entity instanceof Raider raider) {
                 info.add(raider.isPatrolLeader());
 
-                if (entity instanceof Spellcaster) {
-                    Spellcaster spellcaster = (Spellcaster) entity;
+                if (entity instanceof Spellcaster spellcaster) {
                     info.add(spellcaster.getSpell());
                 }
             }
-            else if (entity instanceof Wolf) {
-                Wolf wolf = (Wolf) entity;
+            else if (entity instanceof Wolf wolf) {
                 info.add(wolf.isSitting());
                 info.add(wolf.getCollarColor());
                 BukkitAdapter.ADAPTER.getWolfVariant(wolf, info);
             }
-            else if (entity instanceof ZombieVillager) {
-                ZombieVillager zombieVillager = (ZombieVillager) entity;
+            else if (entity instanceof ZombieVillager zombieVillager) {
                 info.add(zombieVillager.isBaby());
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(zombieVillager.getVillagerProfession()));
             }
-            else if (entity instanceof Zombie) {
-                Zombie zombie = (Zombie) entity;
+            else if (entity instanceof Zombie zombie) {
                 info.add(zombie.isBaby());
                 info.add(null);
                 info.add(null);
             }
-            else if (entity instanceof AbstractHorse) {
-                AbstractHorse abstractHorse = (AbstractHorse) entity;
+            else if (entity instanceof AbstractHorse abstractHorse) {
                 info.add(null);
                 info.add(null);
                 info.add(abstractHorse.getDomestication());
@@ -461,8 +432,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                 info.add(null);
                 info.add(null);
 
-                if (entity instanceof Horse) {
-                    Horse horse = (Horse) entity;
+                if (entity instanceof Horse horse) {
                     info.add(null);
 
                     ItemStack saddle = horse.getInventory().getSaddle();
@@ -481,8 +451,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                         ItemStack armor = horseArmor.clone();
                         ItemMeta itemMeta = armor.getItemMeta();
                         Color color = null;
-                        if (itemMeta instanceof LeatherArmorMeta) {
-                            LeatherArmorMeta meta = (LeatherArmorMeta) itemMeta;
+                        if (itemMeta instanceof LeatherArmorMeta meta) {
                             color = meta.getColor();
                             meta.setColor(null);
                             armor.setItemMeta(meta);
@@ -500,12 +469,10 @@ public final class EntityDeathListener extends Queue implements Listener {
                         info.add(null);
                     }
                 }
-                else if (entity instanceof ChestedHorse) {
-                    ChestedHorse chestedHorse = (ChestedHorse) entity;
+                else if (entity instanceof ChestedHorse chestedHorse) {
                     info.add(chestedHorse.isCarryingChest());
 
-                    if (entity instanceof Llama) {
-                        Llama llama = (Llama) entity;
+                    if (entity instanceof Llama llama) {
                         ItemStack decor = llama.getInventory().getDecor();
                         if (decor != null) {
                             info.add(decor.serialize());
@@ -517,18 +484,15 @@ public final class EntityDeathListener extends Queue implements Listener {
                     }
                 }
             }
-            else if (entity instanceof Bee) {
-                Bee bee = (Bee) entity;
+            else if (entity instanceof Bee bee) {
                 info.add(bee.getAnger());
                 info.add(bee.hasNectar());
                 info.add(bee.hasStung());
             }
-            else if (entity instanceof Piglin) {
-                Piglin piglin = (Piglin) entity;
+            else if (entity instanceof Piglin piglin) {
                 info.add(piglin.isBaby());
             }
-            else if (entity instanceof Zoglin) {
-                Zoglin zoglin = (Zoglin) entity;
+            else if (entity instanceof Zoglin zoglin) {
                 info.add(zoglin.isBaby());
             }
             else {

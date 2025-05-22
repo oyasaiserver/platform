@@ -447,6 +447,7 @@ public class LookupRaw extends Queue {
             for (Integer value : actionList) {
                 if (validActions.contains(value)) {
                     validAction = true;
+                    break;
                 }
             }
 
@@ -537,8 +538,8 @@ public class LookupRaw extends Queue {
 
             String baseQuery = ((!includeEntity.isEmpty() || !excludeEntity.isEmpty()) ? queryEntity : queryBlock);
             if (limitOffset > -1 && limitCount > -1) {
-                queryLimit = " LIMIT " + limitOffset + ", " + limitCount + "";
-                unionLimit = " ORDER BY time DESC, id DESC LIMIT " + (limitOffset + limitCount) + "";
+                queryLimit = " LIMIT " + limitOffset + ", " + limitCount;
+                unionLimit = " ORDER BY time DESC, id DESC LIMIT " + (limitOffset + limitCount);
             }
 
             String rows = "rowid as id,time,user,wid,x,y,z,action,type,data,meta,blockdata,rolled_back";
@@ -672,7 +673,7 @@ public class LookupRaw extends Queue {
                 query = "SELECT " + "'0' as tbl," + rows + " FROM " + ConfigHandler.prefix + queryTable + " " + index + "WHERE" + baseQuery;
             }
 
-            query = query + queryOrder + queryLimit + "";
+            query = query + queryOrder + queryLimit;
             results = statement.executeQuery(query);
         }
         catch (Exception e) {

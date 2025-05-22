@@ -22,7 +22,7 @@ import net.coreprotect.listener.player.PlayerInteractEntityListener;
 public final class EntityDamageByBlockListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
+    private void onEntityDamageByBlock(EntityDamageByBlockEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof ItemFrame) && !(entity instanceof ArmorStand) && !(entity instanceof EnderCrystal)) {
             return;
@@ -43,8 +43,7 @@ public final class EntityDamageByBlockListener extends Queue implements Listener
             user = "#tnt";
         }
 
-        if (entity instanceof ItemFrame && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS) {
-            ItemFrame frame = (ItemFrame) entity;
+        if (entity instanceof ItemFrame frame && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS) {
             if (frame.getItem().getType() != Material.AIR) {
                 ItemStack[] oldState = new ItemStack[] { frame.getItem().clone() };
                 ItemStack[] newState = new ItemStack[] { new ItemStack(Material.AIR) };

@@ -17,7 +17,7 @@ import net.coreprotect.consumer.Queue;
 
 public final class PlayerItemBreakListener extends Queue implements Listener {
 
-    protected static void playerBreakItem(Location location, String user, ItemStack itemStack) {
+    private static void playerBreakItem(Location location, String user, ItemStack itemStack) {
         if (!Config.getConfig(location.getWorld()).ITEM_TRANSACTIONS || itemStack == null) {
             return;
         }
@@ -34,7 +34,7 @@ public final class PlayerItemBreakListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onPlayerItemBreak(PlayerItemBreakEvent event) {
+    private void onPlayerItemBreak(PlayerItemBreakEvent event) {
         ItemStack itemStack = event.getBrokenItem();
         playerBreakItem(event.getPlayer().getLocation(), event.getPlayer().getName(), itemStack);
     }

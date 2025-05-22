@@ -21,7 +21,7 @@ import net.coreprotect.utility.SystemUtils;
 import net.coreprotect.utility.VersionUtils;
 
 public class StatusCommand {
-    private static ConcurrentHashMap<String, Boolean> alert = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Boolean> alert = new ConcurrentHashMap<>();
 
     protected static void runCommand(CommandSender player, boolean permission, String[] args) {
         if (!permission) {

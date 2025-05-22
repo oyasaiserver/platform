@@ -78,7 +78,7 @@ public class ContainerLogger extends Queue {
                     int z = Integer.parseInt(parts[3]);
 
                     // Create the location key
-                    String locationKey = location.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
+                    String locationKey = location.getWorld().getUID() + "." + x + "." + y + "." + z;
 
                     // Check if we have pending event details for this dispenser
                     Object[] pendingEvent = ConfigHandler.dispenserPending.remove(locationKey);
@@ -102,7 +102,7 @@ public class ContainerLogger extends Queue {
                     int y = Integer.parseInt(parts[2]);
                     int z = Integer.parseInt(parts[3]);
 
-                    String locationKey = location.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
+                    String locationKey = location.getWorld().getUID() + "." + x + "." + y + "." + z;
 
                     // Remove the pending event since it resulted in changes
                     ConfigHandler.dispenserPending.remove(locationKey);
@@ -124,7 +124,7 @@ public class ContainerLogger extends Queue {
                 }
             }
             else {
-                String transactingChestId = location.getWorld().getUID().toString() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
+                String transactingChestId = location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
                 if (ConfigHandler.transactingChest.get(transactingChestId) != null) {
                     List<Object> list = Collections.synchronizedList(new ArrayList<>(ConfigHandler.transactingChest.get(transactingChestId)));
                     if (list.size() > 0) {

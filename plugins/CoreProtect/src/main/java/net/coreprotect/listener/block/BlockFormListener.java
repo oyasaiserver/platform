@@ -18,7 +18,7 @@ import net.coreprotect.utility.WorldUtils;
 public final class BlockFormListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockForm(BlockFormEvent event) {
+    private void onBlockForm(BlockFormEvent event) {
         // random form, snow/ice
         Block block = event.getBlock();
         World world = block.getWorld();
@@ -35,16 +35,16 @@ public final class BlockFormListener extends Queue implements Listener {
                 for (int i = 0; i < 4; i++) {
                     switch (i) {
                         case 0:
-                            coords = "" + (x + 1) + "." + y + "." + z + "." + wid + "";
+                            coords = (x + 1) + "." + y + "." + z + "." + wid;
                             break;
                         case 1:
-                            coords = "" + (x - 1) + "." + y + "." + z + "." + wid + "";
+                            coords = (x - 1) + "." + y + "." + z + "." + wid;
                             break;
                         case 2:
-                            coords = "" + x + "." + y + "." + (z + 1) + "." + wid + "";
+                            coords = x + "." + y + "." + (z + 1) + "." + wid;
                             break;
                         case 3:
-                            coords = "" + x + "." + y + "." + (z - 1) + "." + wid + "";
+                            coords = x + "." + y + "." + (z - 1) + "." + wid;
                             break;
                     }
                     Object[] data = CacheHandler.lookupCache.get(coords);

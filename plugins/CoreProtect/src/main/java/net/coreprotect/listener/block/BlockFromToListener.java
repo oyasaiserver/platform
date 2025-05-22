@@ -22,13 +22,12 @@ import net.coreprotect.utility.WorldUtils;
 public final class BlockFromToListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockFromTo(BlockFromToEvent event) {
+    private void onBlockFromTo(BlockFromToEvent event) {
         Block block = event.getBlock();
         Material type = block.getType(); // old block type
         if (!event.isCancelled()) {
             BlockData blockData = block.getBlockData();
-            if (blockData instanceof Waterlogged) {
-                Waterlogged waterlogged = (Waterlogged) blockData;
+            if (blockData instanceof Waterlogged waterlogged) {
                 if (waterlogged.isWaterlogged()) {
                     type = Material.WATER;
                     blockData = type.createBlockData();
@@ -40,8 +39,7 @@ public final class BlockFromToListener extends Queue implements Listener {
                 Block toBlock = event.getToBlock();
                 BlockState toBlockState = toBlock.getState();
 
-                if (blockData instanceof Levelled) {
-                    Levelled levelled = (Levelled) blockData;
+                if (blockData instanceof Levelled levelled) {
                     int waterLevel = levelled.getLevel() + 1;
                     if (waterLevel > 8) {
                         waterLevel = waterLevel - 8;
@@ -79,12 +77,12 @@ public final class BlockFromToListener extends Queue implements Listener {
                     int timestamp = (int) (System.currentTimeMillis() / 1000L);
                     Object[] cacheData = CacheHandler.spreadCache.get(cacheId);
                     CacheHandler.spreadCache.put(cacheId, new Object[] { timestamp, type });
-                    if (toBlockState == null && cacheData != null && ((Material) cacheData[1]) == type) {
+                    if (toBlockState == null && cacheData != null && cacheData[1] == type) {
                         return;
                     }
                 }
 
-                CacheHandler.lookupCache.put("" + x + "." + y + "." + z + "." + wid + "", new Object[] { unixtimestamp, f, type });
+                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[] { unixtimestamp, f, type });
                 Queue.queueBlockPlace(f, toBlock.getState(), block.getType(), toBlockState, type, -1, 0, blockData.getAsString());
             }
             else if (type.equals(Material.DRAGON_EGG)) {

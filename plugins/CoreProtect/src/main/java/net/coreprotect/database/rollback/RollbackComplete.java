@@ -31,7 +31,7 @@ public class RollbackComplete {
             StringBuilder usersBuilder = new StringBuilder();
             for (String value : checkUsers) {
                 if (usersBuilder.length() == 0) {
-                    usersBuilder = usersBuilder.append("" + value + "");
+                    usersBuilder = usersBuilder.append(value);
                 }
                 else {
                     usersBuilder.append(", ").append(value);
@@ -130,7 +130,7 @@ public class RollbackComplete {
                     }
 
                     if (targetCount == 0) {
-                        restrictTargets = restrictTargets.append("" + targetName + "");
+                        restrictTargets = restrictTargets.append(targetName);
                     }
                     else {
                         restrictTargets.append(", ").append(targetName);
@@ -188,7 +188,7 @@ public class RollbackComplete {
                     }
 
                     if (excludeCount == 0) {
-                        excludeTargets = excludeTargets.append("" + targetName + "");
+                        excludeTargets = excludeTargets.append(targetName);
                     }
                     else {
                         excludeTargets.append(", ").append(targetName);
@@ -226,7 +226,7 @@ public class RollbackComplete {
                     }
 
                     if (excludeCount == 0) {
-                        excludeUsers = excludeUsers.append("" + excludeUser + "");
+                        excludeUsers = excludeUsers.append(excludeUser);
                     }
                     else {
                         excludeUsers.append(", ").append(excludeUser);

@@ -69,7 +69,7 @@ public class BlockUtil {
                         bottomfound = 1;
                     }
                     else {
-                        String cords = "" + x + "." + yc + "." + z + "." + wid + "";
+                        String cords = x + "." + yc + "." + z + "." + wid;
                         Object[] data = CacheHandler.lookupCache.get(cords);
                         if (data != null) {
                             Material t = (Material) data[2];
@@ -82,7 +82,7 @@ public class BlockUtil {
                     yc--;
                 }
             }
-            CacheHandler.lookupCache.put("" + x + "." + block.getY() + "." + z + "." + wid + "", new Object[] { timestamp, player, type });
+            CacheHandler.lookupCache.put(x + "." + block.getY() + "." + z + "." + wid, new Object[] { timestamp, player, type });
         }
 
         return block;

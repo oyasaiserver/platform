@@ -100,8 +100,7 @@ public class Queue {
     }
 
     protected static void queueBlockBreak(String user, BlockState block, Material type, String blockData, Material breakType, int extraData, int blockNumber) {
-        if (type == Material.SPAWNER && block instanceof CreatureSpawner) { // Mob spawner
-            CreatureSpawner mobSpawner = (CreatureSpawner) block;
+        if (type == Material.SPAWNER && block instanceof CreatureSpawner mobSpawner) { // Mob spawner
             extraData = EntityUtils.getSpawnerType(mobSpawner.getSpawnedType());
         }
         else if (type == Material.IRON_DOOR || BlockGroup.DOORS.contains(type) || type.equals(Material.SUNFLOWER) || type.equals(Material.LILAC) || type.equals(Material.TALL_GRASS) || type.equals(Material.LARGE_FERN) || type.equals(Material.ROSE_BUSH) || type.equals(Material.PEONY)) { // Double plant
@@ -141,8 +140,7 @@ public class Queue {
         Material replaceType = null;
         int replaceData = 0;
 
-        if (type == Material.SPAWNER && blockLocation instanceof CreatureSpawner) { // Mob spawner
-            CreatureSpawner mobSpawner = (CreatureSpawner) blockLocation;
+        if (type == Material.SPAWNER && blockLocation instanceof CreatureSpawner mobSpawner) { // Mob spawner
             data = EntityUtils.getSpawnerType(mobSpawner.getSpawnedType());
             forceData = 1;
         }

@@ -20,7 +20,7 @@ import net.coreprotect.utility.WorldUtils;
 public final class BlockSpreadListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockSpread(BlockSpreadEvent event) {
+    private void onBlockSpread(BlockSpreadEvent event) {
         // mushrooms, fire
 
         /* To-do: Improve configuration
@@ -88,10 +88,6 @@ public final class BlockSpreadListener extends Queue implements Listener {
         int timestamp = (int) (System.currentTimeMillis() / 1000L);
         Object[] cacheData = CacheHandler.spreadCache.get(cacheId);
         CacheHandler.spreadCache.put(cacheId, new Object[] { timestamp, type });
-        if (cacheData != null && ((Material) cacheData[1]) == type) {
-            return true;
-        }
-
-        return false;
+        return cacheData != null && cacheData[1] == type;
     }
 }

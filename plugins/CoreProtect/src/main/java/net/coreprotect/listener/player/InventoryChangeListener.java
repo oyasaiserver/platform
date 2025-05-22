@@ -40,13 +40,13 @@ import us.lynuxcraft.deadsilenceiv.advancedchests.chest.AdvancedChest;
 
 public final class InventoryChangeListener extends Queue implements Listener {
 
-    protected static AtomicLong tasksStarted = new AtomicLong();
-    protected static AtomicLong tasksCompleted = new AtomicLong();
-    private static ConcurrentHashMap<String, Boolean> inventoryProcessing = new ConcurrentHashMap<>();
+    static AtomicLong tasksStarted = new AtomicLong();
+    private static AtomicLong tasksCompleted = new AtomicLong();
+    private static final ConcurrentHashMap<String, Boolean> inventoryProcessing = new ConcurrentHashMap<>();
     private static final Object taskCompletionLock = new Object();
     private static final long TASK_WAIT_MAX_MS = 50; // Maximum wait time in milliseconds
 
-    protected static void checkTasks(long taskStarted) {
+    static void checkTasks(long taskStarted) {
         try {
             // Skip checking if this is the first task or we're already caught up
             if (taskStarted <= 1 || tasksCompleted.get() >= (taskStarted - 1L)) {
@@ -79,8 +79,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
                 BlockState blockState = location.getBlock().getState();
                 Material type = blockState.getType();
 
-                if (BlockGroup.CONTAINERS.contains(type) && blockState instanceof InventoryHolder) {
-                    InventoryHolder inventoryHolder = (InventoryHolder) blockState;
+                if (BlockGroup.CONTAINERS.contains(type) && blockState instanceof InventoryHolder inventoryHolder) {
                     return onInventoryInteract(user, inventoryHolder.getInventory(), inventoryData, null, location, false);
                 }
             }
@@ -118,15 +117,13 @@ public final class InventoryChangeListener extends Queue implements Listener {
                             return false;
                         }
                     }
-                    if (inventoryHolder instanceof BlockState) {
-                        BlockState state = (BlockState) inventoryHolder;
+                    if (inventoryHolder instanceof BlockState state) {
                         type = state.getType();
                         if (BlockGroup.CONTAINERS.contains(type)) {
                             playerLocation = state.getLocation();
                         }
                     }
-                    else if (inventoryHolder instanceof DoubleChest) {
-                        DoubleChest state = (DoubleChest) inventoryHolder;
+                    else if (inventoryHolder instanceof DoubleChest state) {
                         playerLocation = state.getLocation();
                     }
                 }
@@ -140,7 +137,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
                     int y = playerLocation.getBlockY();
                     int z = playerLocation.getBlockZ();
 
-                    String transactingChestId = playerLocation.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
+                    String transactingChestId = playerLocation.getWorld().getUID() + "." + x + "." + y + "." + z;
                     String loggingChestId = user.toLowerCase(Locale.ROOT) + "." + x + "." + y + "." + z;
                     for (String loggingChestIdViewer : ConfigHandler.oldContainer.keySet()) {
                         if (loggingChestIdViewer.equals(loggingChestId) || !loggingChestIdViewer.endsWith("." + x + "." + y + "." + z)) {
@@ -277,7 +274,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
         final long taskStarted = InventoryChangeListener.tasksStarted.incrementAndGet();
         Scheduler.runTaskAsynchronously(CoreProtect.getInstance(), () -> {
             try {
-                Material containerType = (enderChest != true ? null : Material.ENDER_CHEST);
+                Material containerType = (!enderChest ? null : Material.ENDER_CHEST);
                 InventoryChangeListener.checkTasks(taskStarted);
                 inventoryProcessing.remove(loggingChestId);
                 onInventoryInteract(player.getName(), inventory, containerState, containerType, inventoryLocation, true);
@@ -343,7 +340,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    protected void onInventoryClick(InventoryClickEvent event) {
+    private void onInventoryClick(InventoryClickEvent event) {
         InventoryAction inventoryAction = event.getAction();
         if (inventoryAction == InventoryAction.NOTHING) {
             return;
@@ -407,7 +404,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    protected void onInventoryDragEvent(InventoryDragEvent event) {
+    private void onInventoryDragEvent(InventoryDragEvent event) {
         boolean movedItem = false;
         boolean enderChest = false;
 
@@ -431,7 +428,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
+    private void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -482,7 +479,7 @@ public final class InventoryChangeListener extends Queue implements Listener {
             return;
         }
 
-        List<Object> list = ConfigHandler.transactingChest.get(location.getWorld().getUID().toString() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ());
+        List<Object> list = ConfigHandler.transactingChest.get(location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ());
         if (list == null) {
             return;
         }

@@ -14,7 +14,7 @@ import net.coreprotect.consumer.Queue;
 public final class LeavesDecayListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onLeavesDecay(LeavesDecayEvent event) {
+    private void onLeavesDecay(LeavesDecayEvent event) {
         World world = event.getBlock().getWorld();
         if (!event.isCancelled() && Config.getConfig(world).LEAF_DECAY) {
             String player = "#decay";

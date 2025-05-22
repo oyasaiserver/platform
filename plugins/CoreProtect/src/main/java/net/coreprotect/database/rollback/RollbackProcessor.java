@@ -244,7 +244,7 @@ public class RollbackProcessor {
             data.clear();
 
             // Apply cached block changes
-            RollbackBlockHandler.applyBlockChanges(chunkChanges, preview, finalUser instanceof Player ? (Player) finalUser : null);
+            RollbackBlockHandler.applyBlockChanges(chunkChanges, preview, finalUser instanceof Player ? finalUser : null);
 
             // Process container items
             Map<Player, List<Integer>> sortPlayers = new HashMap<>();
@@ -372,7 +372,7 @@ public class RollbackProcessor {
                                         else if (entity instanceof ItemFrame) {
                                             container = entity;
                                             containerType = Material.ITEM_FRAME;
-                                            if (faceData.length() > 0 && (BlockFace.valueOf(faceData) == ((ItemFrame) entity).getFacing())) {
+                                            if (faceData.length() > 0 && (BlockFace.valueOf(faceData) == entity.getFacing())) {
                                                 break;
                                             }
                                         }

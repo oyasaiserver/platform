@@ -16,7 +16,7 @@ import net.coreprotect.consumer.Queue;
 public final class EntityBlockFormListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntityBlockForm(EntityBlockFormEvent event) {
+    private void onEntityBlockForm(EntityBlockFormEvent event) {
         World world = event.getBlock().getWorld();
         if (!event.isCancelled() && Config.getConfig(world).ENTITY_CHANGE) {
             Entity entity = event.getEntity();

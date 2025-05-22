@@ -59,7 +59,7 @@ public final class ProjectileLaunchListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onProjectileLaunch(ProjectileLaunchEvent event) {
+    private void onProjectileLaunch(ProjectileLaunchEvent event) {
         Location location = event.getEntity().getLocation();
         String key = location.getWorld().getName() + "-" + location.getBlockX() + "-" + location.getBlockY() + "-" + location.getBlockZ();
         Iterator<Entry<String, Object[]>> it = ConfigHandler.entityBlockMapper.entrySet().iterator();

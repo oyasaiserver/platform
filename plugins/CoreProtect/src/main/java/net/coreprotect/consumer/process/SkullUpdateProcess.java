@@ -16,8 +16,7 @@ class SkullUpdateProcess {
          * This block could already be removed again by the time the server tries to modify it.
          * Ignore any errors.
          */
-        if (object instanceof BlockState) {
-            BlockState block = (BlockState) object;
+        if (object instanceof BlockState block) {
             String query = "SELECT owner, skin FROM " + ConfigHandler.prefix + "skull WHERE rowid='" + rowId + "' LIMIT 0, 1";
             SkullStatement.getData(statement, block, query);
             BlockUtils.updateBlock(block);

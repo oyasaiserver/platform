@@ -10,20 +10,20 @@ import org.bukkit.inventory.InventoryHolder;
 
 public interface PaperInterface {
 
-    public InventoryHolder getHolder(Inventory holder, boolean useSnapshot);
+    InventoryHolder getHolder(Inventory holder, boolean useSnapshot);
 
-    public boolean isStopping(Server server);
+    boolean isStopping(Server server);
 
-    public String getLine(Sign sign, int line);
+    String getLine(Sign sign, int line);
 
-    public void teleportAsync(Entity entity, Location location);
+    void teleportAsync(Entity entity, Location location);
 
-    public String getSkullOwner(Skull skull);
+    String getSkullOwner(Skull skull);
 
-    public String getSkullSkin(Skull skull);
+    String getSkullSkin(Skull skull);
 
-    public void setSkullOwner(Skull skull, String owner);
+    void setSkullOwner(Skull skull, String owner);
 
-    public void setSkullSkin(Skull skull, String skin);
+    void setSkullSkin(Skull skull, String skin);
 
 }

@@ -67,9 +67,7 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
      *            The group to add the block to
      */
     private void addToBlockGroupIfMissing(Material block, Set<Material> group) {
-        if (!group.contains(block)) {
-            group.add(block);
-        }
+        group.add(block);
     }
 
     /**

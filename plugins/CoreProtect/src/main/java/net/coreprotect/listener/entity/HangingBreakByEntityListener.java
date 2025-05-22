@@ -91,15 +91,14 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
+    private void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity remover = event.getRemover();
         BlockState blockEvent = event.getEntity().getLocation().getBlock().getState();
         boolean logDrops = true;
 
         boolean inspecting = false;
-        if (event.getRemover() instanceof Player) {
-            Player player = (Player) event.getRemover();
+        if (event.getRemover() instanceof Player player) {
 
             if (ConfigHandler.inspecting.get(player.getName()) != null) {
                 if (ConfigHandler.inspecting.get(player.getName())) {
@@ -114,8 +113,7 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
         if (entity instanceof ItemFrame || entity instanceof Painting) {
             String culprit = "#entity";
             if (remover != null) {
-                if (remover instanceof Player) {
-                    Player player = (Player) remover;
+                if (remover instanceof Player player) {
                     culprit = player.getName();
                     logDrops = player.getGameMode() != GameMode.CREATIVE;
                 }
@@ -127,9 +125,8 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
             String blockData = null;
             Material material;
             int itemData = 0;
-            if (entity instanceof ItemFrame) {
+            if (entity instanceof ItemFrame itemframe) {
                 material = BukkitAdapter.ADAPTER.getFrameType(entity);
-                ItemFrame itemframe = (ItemFrame) entity;
                 blockData = "FACING=" + itemframe.getFacing().name();
 
                 if (!event.isCancelled() && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS && !inspecting) {

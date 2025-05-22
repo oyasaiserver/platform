@@ -135,7 +135,7 @@ public final class HopperPushListener {
             ConfigHandler.hopperSuccess.put(loggingChestId, new Object[] { destinationContainer, movedItem });
         }
 
-        List<Object> list = ConfigHandler.transactingChest.get(location.getWorld().getUID().toString() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ());
+        List<Object> list = ConfigHandler.transactingChest.get(location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ());
         if (list != null) {
             list.add(movedItem);
         }

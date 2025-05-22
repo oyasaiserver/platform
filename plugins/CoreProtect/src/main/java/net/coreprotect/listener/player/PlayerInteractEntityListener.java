@@ -29,15 +29,14 @@ import net.coreprotect.utility.ItemUtils;
 public final class PlayerInteractEntityListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (event instanceof PlayerArmorStandManipulateEvent) {
             return;
         }
 
         Player player = event.getPlayer();
         final Entity entity = event.getRightClicked(); // change item in ItemFrame, etc
-        if (entity instanceof ItemFrame) {
-            ItemFrame frame = (ItemFrame) entity;
+        if (entity instanceof ItemFrame frame) {
             ItemStack handItem = new ItemStack(Material.AIR);
             ItemStack mainHand = player.getInventory().getItemInMainHand();
             ItemStack offHand = player.getInventory().getItemInOffHand();
@@ -119,7 +118,7 @@ public final class PlayerInteractEntityListener extends Queue implements Listene
         int y = location.getBlockY();
         int z = location.getBlockZ();
 
-        String transactingChestId = location.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
+        String transactingChestId = location.getWorld().getUID() + "." + x + "." + y + "." + z;
         String loggingChestId = user.toLowerCase(Locale.ROOT) + "." + x + "." + y + "." + z;
         int chestId = Queue.getChestId(loggingChestId);
         if (chestId > 0) {

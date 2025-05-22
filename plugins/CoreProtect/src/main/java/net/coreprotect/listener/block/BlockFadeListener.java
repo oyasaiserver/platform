@@ -13,7 +13,7 @@ import net.coreprotect.consumer.Queue;
 public final class BlockFadeListener extends Queue implements Listener {
 
     @EventHandler
-    protected void onBlockFade(BlockFadeEvent event) {
+    private void onBlockFade(BlockFadeEvent event) {
         // snow/ice fading
         if (event.isCancelled()) {
             return;

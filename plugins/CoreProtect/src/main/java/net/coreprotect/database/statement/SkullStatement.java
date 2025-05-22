@@ -37,11 +37,10 @@ public class SkullStatement {
 
     public static void getData(Statement statement, BlockState block, String query) {
         try {
-            if (!(block instanceof Skull)) {
+            if (!(block instanceof Skull skull)) {
                 return;
             }
 
-            Skull skull = (Skull) block;
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {

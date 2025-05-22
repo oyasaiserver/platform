@@ -22,7 +22,7 @@ import net.coreprotect.utility.WorldUtils;
 
 public final class BlockPistonListener extends Queue implements Listener {
 
-    protected void onBlockPiston(BlockPistonEvent event) {
+    private void onBlockPiston(BlockPistonEvent event) {
         List<Block> event_blocks = null;
         if (event instanceof BlockPistonExtendEvent) {
             event_blocks = ((BlockPistonExtendEvent) event).getBlocks();
@@ -64,7 +64,7 @@ public final class BlockPistonListener extends Queue implements Listener {
                     int y = n.getY();
                     int z = n.getZ();
                     Material t = n.getType();
-                    String cords = "" + x + "." + y + "." + z + "." + wid + "." + t.name() + "";
+                    String cords = x + "." + y + "." + z + "." + wid + "." + t.name();
                     if (CacheHandler.pistonCache.get(cords) == null) {
                         log = 1;
                     }
@@ -90,12 +90,12 @@ public final class BlockPistonListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockPistonExtend(BlockPistonExtendEvent event) {
+    private void onBlockPistonExtend(BlockPistonExtendEvent event) {
         onBlockPiston(event);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockPistonRetract(BlockPistonRetractEvent event) {
+    private void onBlockPistonRetract(BlockPistonRetractEvent event) {
         onBlockPiston(event);
     }
 

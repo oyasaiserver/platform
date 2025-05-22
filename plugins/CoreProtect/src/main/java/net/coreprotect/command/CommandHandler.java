@@ -17,7 +17,7 @@ import net.coreprotect.utility.VersionUtils;
 
 public class CommandHandler implements CommandExecutor {
     private static CommandHandler instance;
-    private static ConcurrentHashMap<String, Boolean> versionAlert = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Boolean> versionAlert = new ConcurrentHashMap<>();
 
     public static CommandHandler getInstance() {
         if (instance == null) {

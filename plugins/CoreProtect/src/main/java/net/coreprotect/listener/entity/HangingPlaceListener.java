@@ -20,7 +20,7 @@ import net.coreprotect.utility.MaterialUtils;
 public final class HangingPlaceListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void onHangingPlace(HangingPlaceEvent event) {
+    private void onHangingPlace(HangingPlaceEvent event) {
         Entity entity = event.getEntity();
         Player player = event.getPlayer();
 
@@ -30,9 +30,8 @@ public final class HangingPlaceListener extends Queue implements Listener {
             Material material;
             int artId;
 
-            if (entity instanceof ItemFrame) {
+            if (entity instanceof ItemFrame itemFrame) {
                 material = BukkitAdapter.ADAPTER.getFrameType(entity);
-                ItemFrame itemFrame = (ItemFrame) entity;
                 blockData = "FACING=" + itemFrame.getFacing().name();
                 artId = 0;
             }

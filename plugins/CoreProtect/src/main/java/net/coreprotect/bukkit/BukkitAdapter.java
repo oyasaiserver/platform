@@ -181,9 +181,7 @@ public class BukkitAdapter implements BukkitInterface {
 
     @Override
     public boolean isAttached(Block block, Block scanBlock, BlockData blockData, int scanMin) {
-        if (blockData instanceof Directional && blockData instanceof FaceAttachable) {
-            Directional directional = (Directional) blockData;
-            FaceAttachable faceAttachable = (FaceAttachable) blockData;
+        if (blockData instanceof Directional directional && blockData instanceof FaceAttachable faceAttachable) {
 
             boolean scanButton = false;
             switch (faceAttachable.getAttachedFace()) {

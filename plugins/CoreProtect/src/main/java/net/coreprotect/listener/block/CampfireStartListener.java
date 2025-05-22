@@ -18,7 +18,7 @@ public final class CampfireStartListener extends Queue implements Listener {
     public static boolean useCampfireStartEvent = true;
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onCampfireStart(CampfireStartEvent event) {
+    private void onCampfireStart(CampfireStartEvent event) {
         Block block = event.getBlock();
         Location location = block.getLocation();
         int worldId = WorldUtils.getWorldId(location.getWorld().getName());

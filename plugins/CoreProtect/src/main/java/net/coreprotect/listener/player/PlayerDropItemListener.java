@@ -35,7 +35,7 @@ public final class PlayerDropItemListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onPlayerDropItem(PlayerDropItemEvent event) {
+    private void onPlayerDropItem(PlayerDropItemEvent event) {
         Item item = event.getItemDrop();
         ItemStack itemStack = item.getItemStack();
         playerDropItem(item.getLocation(), event.getPlayer().getName(), itemStack);

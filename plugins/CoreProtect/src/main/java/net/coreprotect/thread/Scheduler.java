@@ -19,8 +19,7 @@ public class Scheduler {
 
     public static void scheduleSyncDelayedTask(CoreProtect plugin, Runnable task, Object regionData, int delay) {
         if (ConfigHandler.isFolia) {
-            if (regionData instanceof Location) {
-                Location location = (Location) regionData;
+            if (regionData instanceof Location location) {
                 if (delay == 0) {
                     Bukkit.getServer().getRegionScheduler().run(plugin, location, value -> task.run());
                 }
@@ -28,8 +27,7 @@ public class Scheduler {
                     Bukkit.getServer().getRegionScheduler().runDelayed(plugin, location, value -> task.run(), delay);
                 }
             }
-            else if (regionData instanceof Entity) {
-                Entity entity = (Entity) regionData;
+            else if (regionData instanceof Entity entity) {
                 if (delay == 0) {
                     entity.getScheduler().run(plugin, value -> task.run(), task);
                 }
@@ -58,12 +56,10 @@ public class Scheduler {
 
     public static Object scheduleSyncRepeatingTask(CoreProtect plugin, Runnable task, Object regionData, int delay, int period) {
         if (ConfigHandler.isFolia) {
-            if (regionData instanceof Location) {
-                Location location = (Location) regionData;
+            if (regionData instanceof Location location) {
                 return Bukkit.getServer().getRegionScheduler().runAtFixedRate(plugin, location, value -> task.run(), delay, period);
             }
-            else if (regionData instanceof Entity) {
-                Entity entity = (Entity) regionData;
+            else if (regionData instanceof Entity entity) {
                 return entity.getScheduler().runAtFixedRate(plugin, value -> task.run(), task, delay, period);
             }
             else {
@@ -116,13 +112,11 @@ public class Scheduler {
 
     public static void cancelTask(Object task) {
         if (ConfigHandler.isFolia) {
-            if (task instanceof ScheduledTask) {
-                ScheduledTask scheduledTask = (ScheduledTask) task;
+            if (task instanceof ScheduledTask scheduledTask) {
                 scheduledTask.cancel();
             }
         }
-        else if (task instanceof BukkitTask) {
-            BukkitTask bukkitTask = (BukkitTask) task;
+        else if (task instanceof BukkitTask bukkitTask) {
             bukkitTask.cancel();
         }
     }

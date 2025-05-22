@@ -70,7 +70,7 @@ public class BlockLookup {
             results.close();
             int totalPages = (int) Math.ceil(count / (limit + 0.0));
 
-            query = "SELECT time,user,action,type,data,rolled_back FROM " + ConfigHandler.prefix + "block " + WorldUtils.getWidIndex("block") + "WHERE wid = '" + worldId + "' AND x = '" + x + "' AND z = '" + z + "' AND y = '" + y + "' AND action IN(0,1) AND time >= '" + checkTime + "' ORDER BY rowid DESC LIMIT " + page_start + ", " + limit + "";
+            query = "SELECT time,user,action,type,data,rolled_back FROM " + ConfigHandler.prefix + "block " + WorldUtils.getWidIndex("block") + "WHERE wid = '" + worldId + "' AND x = '" + x + "' AND z = '" + z + "' AND y = '" + y + "' AND action IN(0,1) AND time >= '" + checkTime + "' ORDER BY rowid DESC LIMIT " + page_start + ", " + limit;
             results = statement.executeQuery(query);
 
             StringBuilder resultTextBuilder = new StringBuilder();
@@ -127,7 +127,7 @@ public class BlockLookup {
                     target = "minecraft:" + target.toLowerCase(Locale.ROOT);
                 }
                 if (target.length() > 0) {
-                    target = "" + target + "";
+                    target = target;
                 }
 
                 // Hide "minecraft:" for now.

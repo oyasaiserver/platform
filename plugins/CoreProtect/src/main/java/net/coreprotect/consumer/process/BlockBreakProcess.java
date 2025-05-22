@@ -15,8 +15,7 @@ import net.coreprotect.utility.MaterialUtils;
 class BlockBreakProcess {
 
     static void process(PreparedStatement preparedStmt, PreparedStatement preparedStmtSkulls, int batchCount, int processId, int id, Material blockType, int blockDataId, Material replaceType, int forceData, String user, Object object, String blockData) {
-        if (object instanceof BlockState) {
-            BlockState block = (BlockState) object;
+        if (object instanceof BlockState block) {
             List<Object> meta = BlockUtils.processMeta(block);
             if (block instanceof Skull) {
                 SkullBreakLogger.log(preparedStmt, preparedStmtSkulls, batchCount, user, block);

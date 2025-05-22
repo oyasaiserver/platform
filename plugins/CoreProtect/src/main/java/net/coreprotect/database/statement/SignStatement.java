@@ -51,11 +51,10 @@ public class SignStatement {
 
     public static void getData(Statement statement, BlockState block, String query) {
         try {
-            if (!(block instanceof Sign)) {
+            if (!(block instanceof Sign sign)) {
                 return;
             }
 
-            Sign sign = (Sign) block;
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {

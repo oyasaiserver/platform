@@ -19,7 +19,7 @@ import net.coreprotect.utility.WorldUtils;
 public final class PlayerBucketEmptyListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void onPlayerBucketEmpty(org.bukkit.event.player.PlayerBucketEmptyEvent event) {
+    private void onPlayerBucketEmpty(org.bukkit.event.player.PlayerBucketEmptyEvent event) {
         String player = event.getPlayer().getName();
         World world = event.getPlayer().getWorld();
         int inspect = 0;
@@ -63,7 +63,7 @@ public final class PlayerBucketEmptyListener extends Queue implements Listener {
                 }
             }
 
-            CacheHandler.lookupCache.put("" + block.getX() + "." + block.getY() + "." + block.getZ() + "." + worldId + "", new Object[] { unixTimestamp, player, type });
+            CacheHandler.lookupCache.put(block.getX() + "." + block.getY() + "." + block.getZ() + "." + worldId, new Object[] { unixTimestamp, player, type });
             queueBlockPlace(player, block.getState(), block.getType(), blockState, type, 1, 1, null);
         }
     }

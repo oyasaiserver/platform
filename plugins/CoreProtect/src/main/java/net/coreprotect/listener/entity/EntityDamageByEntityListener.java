@@ -41,7 +41,7 @@ public final class EntityDamageByEntityListener extends Queue implements Listene
 
     // EntityPickupItemEvent resulting from this event can trigger BEFORE this event if both are set to MONITOR
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
 
         if (event.getEntity() instanceof ItemFrame || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof EnderCrystal) {
@@ -54,8 +54,7 @@ public final class EntityDamageByEntityListener extends Queue implements Listene
                 Block block = entityLocation.getBlock();
                 boolean logDrops = true;
 
-                if (damager instanceof Player) {
-                    Player player = (Player) damager;
+                if (damager instanceof Player player) {
                     user = player.getName();
                     logDrops = player.getGameMode() != GameMode.CREATIVE;
 
@@ -71,12 +70,10 @@ public final class EntityDamageByEntityListener extends Queue implements Listene
                         }
                     }
                 }
-                else if (damager instanceof AbstractArrow) {
-                    AbstractArrow arrow = (AbstractArrow) damager;
+                else if (damager instanceof AbstractArrow arrow) {
                     ProjectileSource source = arrow.getShooter();
 
-                    if (source instanceof Player) {
-                        Player player = (Player) source;
+                    if (source instanceof Player player) {
                         user = player.getName();
                     }
                     else if (source instanceof LivingEntity) {
@@ -110,8 +107,7 @@ public final class EntityDamageByEntityListener extends Queue implements Listene
                 }
 
                 if (!event.isCancelled() && !inspecting) {
-                    if (entity instanceof ItemFrame && Config.getConfig(entityLocation.getWorld()).ITEM_TRANSACTIONS) {
-                        ItemFrame frame = (ItemFrame) entity;
+                    if (entity instanceof ItemFrame frame && Config.getConfig(entityLocation.getWorld()).ITEM_TRANSACTIONS) {
                         if (frame.getItem().getType() != Material.AIR) {
                             ItemStack[] oldState = new ItemStack[] { frame.getItem().clone() };
                             ItemStack[] newState = new ItemStack[] { new ItemStack(Material.AIR) };

@@ -30,14 +30,13 @@ import net.coreprotect.thread.CacheHandler;
 public final class BlockDispenseListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockDispense(BlockDispenseEvent event) {
+    private void onBlockDispense(BlockDispenseEvent event) {
         Block block = event.getBlock();
         World world = block.getWorld();
         if (!event.isCancelled() && Config.getConfig(world).BLOCK_PLACE) {
             BlockData blockData = block.getBlockData();
             ItemStack item = event.getItem();
-            if (item != null && blockData instanceof Dispenser) {
-                Dispenser dispenser = (Dispenser) blockData;
+            if (item != null && blockData instanceof Dispenser dispenser) {
                 Material material = item.getType();
                 Material type = Material.AIR;
                 String user = "#dispenser";

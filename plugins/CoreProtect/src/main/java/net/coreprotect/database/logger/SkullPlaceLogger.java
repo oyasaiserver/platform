@@ -28,8 +28,7 @@ public class SkullPlaceLogger {
             Material type = block.getType();
             int skullKey = 0;
 
-            if (block instanceof Skull) {
-                Skull skull = (Skull) block;
+            if (block instanceof Skull skull) {
                 String skullOwner = "";
                 String skullSkin = null;
                 if (skull.hasOwner()) {

@@ -22,7 +22,7 @@ import net.coreprotect.consumer.Queue;
 public final class StructureGrowListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onStructureGrow(StructureGrowEvent event) {
+    private void onStructureGrow(StructureGrowEvent event) {
         // Event that is called when an organic structure attempts to grow (Sapling -> Tree), (Mushroom -> Huge Mushroom), naturally or using bonemeal.
         TreeType treeType = event.getSpecies();
         String user = "#tree";

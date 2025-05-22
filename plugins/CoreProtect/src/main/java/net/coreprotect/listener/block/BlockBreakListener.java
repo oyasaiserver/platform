@@ -44,16 +44,14 @@ public final class BlockBreakListener extends Queue implements Listener {
 
     private static boolean isAttached(Block block, Block scanBlock, int scanMin) {
         BlockData blockData = scanBlock.getBlockData();
-        if (blockData instanceof Directional && !(blockData instanceof Bisected) && scanMin != BlockUtil.BOTTOM && scanMin != BlockUtil.TOP) {
-            Directional directional = (Directional) blockData;
+        if (blockData instanceof Directional directional && !(blockData instanceof Bisected) && scanMin != BlockUtil.BOTTOM && scanMin != BlockUtil.TOP) {
             BlockFace blockFace = directional.getFacing();
             if (blockData instanceof Bed) {
                 blockFace = ((Bed) blockData).getPart() == Bed.Part.FOOT ? blockFace.getOppositeFace() : blockFace;
             }
             return scanBlock.getRelative(blockFace.getOppositeFace()).getLocation().equals(block.getLocation());
         }
-        else if (blockData instanceof MultipleFacing) {
-            MultipleFacing multipleFacing = (MultipleFacing) blockData;
+        else if (blockData instanceof MultipleFacing multipleFacing) {
             for (BlockFace blockFace : multipleFacing.getFaces()) {
                 boolean adjacent = scanBlock.getRelative(blockFace).getLocation().equals(block.getLocation());
                 if (adjacent) {
@@ -78,14 +76,10 @@ public final class BlockBreakListener extends Queue implements Listener {
 
             return scan;
         }
-        else if (!BukkitAdapter.ADAPTER.isAttached(block, scanBlock, blockData, scanMin)) {
-            return false;
-        }
-
-        return true;
+        else return BukkitAdapter.ADAPTER.isAttached(block, scanBlock, blockData, scanMin);
     }
 
-    protected static void processBlockBreak(Player player, String user, Block block, boolean logBreak, int skipScan) {
+    static void processBlockBreak(Player player, String user, Block block, boolean logBreak, int skipScan) {
         List<Block> placementMap = new ArrayList<>();
         Material type = block.getType();
         World world = block.getWorld();
@@ -313,8 +307,7 @@ public final class BlockBreakListener extends Queue implements Listener {
                 }
 
                 BlockData blockDataB1 = blockState.getBlockData();
-                if (blockDataB1 instanceof Waterlogged) {
-                    Waterlogged waterlogged = (Waterlogged) blockDataB1;
+                if (blockDataB1 instanceof Waterlogged waterlogged) {
                     if (waterlogged.isWaterlogged()) {
                         Queue.queueBlockPlace(user, blockState, blockLog.getType(), null, Material.WATER, -1, 0, null);
                     }
@@ -333,7 +326,7 @@ public final class BlockBreakListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockBreak(BlockBreakEvent event) {
+    private void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled()) {
             String user = event.getPlayer().getName();
             Block block = event.getBlock();

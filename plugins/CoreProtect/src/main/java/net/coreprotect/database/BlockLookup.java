@@ -42,7 +42,7 @@ public class BlockLookup {
                 result = ConfigHandler.playerIdCacheReversed.get(resultUserId);
                 if (result.length() > 0) {
                     Material resultMaterial = MaterialUtils.getType(resultType);
-                    CacheHandler.lookupCache.put("" + x + "." + y + "." + z + "." + worldId + "", new Object[] { time, result, resultMaterial });
+                    CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + worldId, new Object[] { time, result, resultMaterial });
                 }
             }
             results.close();
@@ -75,7 +75,7 @@ public class BlockLookup {
             int z = block.getZ();
             int worldId = WorldUtils.getWorldId(block.getWorld().getName());
 
-            String cords = "" + x + "." + y + "." + z + "." + worldId + "";
+            String cords = x + "." + y + "." + z + "." + worldId;
             Object[] data = CacheHandler.lookupCache.get(cords);
 
             if (data != null) {
@@ -102,7 +102,7 @@ public class BlockLookup {
                 int z = block.getZ();
                 int worldId = WorldUtils.getWorldId(block.getWorld().getName());
 
-                String cords = "" + x + "." + y + "." + z + "." + worldId + "";
+                String cords = x + "." + y + "." + z + "." + worldId;
                 Object[] data = CacheHandler.breakCache.get(cords);
 
                 if (data != null) {

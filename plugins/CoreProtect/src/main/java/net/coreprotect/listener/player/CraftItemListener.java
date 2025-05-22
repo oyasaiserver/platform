@@ -33,7 +33,7 @@ import net.coreprotect.database.logger.ItemLogger;
 
 public final class CraftItemListener extends Queue implements Listener {
 
-    protected static void logCraftedItem(Location location, String user, ItemStack itemStack, int action) {
+    static void logCraftedItem(Location location, String user, ItemStack itemStack, int action) {
         if (!Config.getConfig(location.getWorld()).ITEM_TRANSACTIONS || itemStack == null) {
             return;
         }
@@ -66,7 +66,7 @@ public final class CraftItemListener extends Queue implements Listener {
         Queue.queueItemTransaction(user, location.clone(), time, 0, itemId);
     }
 
-    protected static void playerCraftItem(InventoryClickEvent event, boolean isTrade) {
+    static void playerCraftItem(InventoryClickEvent event, boolean isTrade) {
         if (event.getResult() == Result.DENY || event.getSlotType() != SlotType.RESULT) {
             return;
         }
@@ -190,7 +190,7 @@ public final class CraftItemListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onCraftItem(CraftItemEvent event) {
+    private void onCraftItem(CraftItemEvent event) {
         playerCraftItem(event, false);
     }
 

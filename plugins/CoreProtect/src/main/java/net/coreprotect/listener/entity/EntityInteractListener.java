@@ -17,7 +17,7 @@ import net.coreprotect.consumer.Queue;
 public final class EntityInteractListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntityInteractEntity(EntityInteractEvent event) {
+    private void onEntityInteractEntity(EntityInteractEvent event) {
         Block block = event.getBlock();
         World world = block.getWorld();
         if (event.isCancelled() || !Config.getConfig(world).ENTITY_CHANGE) {

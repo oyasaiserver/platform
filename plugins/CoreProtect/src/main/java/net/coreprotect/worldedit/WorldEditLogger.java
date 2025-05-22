@@ -76,7 +76,7 @@ public class WorldEditLogger extends Queue {
                             String line4 = getSignText(compoundTag.getString("Text4"));
                             int color = DyeColor.valueOf(baseBlock.getNbtData().getString("Color").toUpperCase()).getColor().asRGB();
                             int colorSecondary = 0;
-                            boolean frontGlowing = (compoundTag.getInt("GlowingText") == 1 ? true : false);
+                            boolean frontGlowing = (compoundTag.getInt("GlowingText") == 1);
                             boolean backGlowing = false;
                             boolean isWaxed = false;
                             boolean isFront = true;
@@ -129,14 +129,12 @@ public class WorldEditLogger extends Queue {
                 // removed a block
                 Queue.queueBlockBreak(actor.getName(), oldBlock, oldBlock.getType(), oldBlockDataString, null, oldBlockExtraData, 0);
 
-                if (oldBlockData instanceof Waterlogged) {
-                    Waterlogged waterlogged = (Waterlogged) oldBlockData;
+                if (oldBlockData instanceof Waterlogged waterlogged) {
                     if (waterlogged.isWaterlogged()) {
                         Queue.queueBlockPlace(actor.getName(), newBlock, newType, null, Material.WATER, -1, 0, null);
                     }
                 }
-                else if (oldBlockData instanceof Bisected) {
-                    Bisected bisected = (Bisected) oldBlockData;
+                else if (oldBlockData instanceof Bisected bisected) {
                     Location bisectLocation = location.clone();
                     if (bisected.getHalf() == Half.TOP) {
                         bisectLocation.setY(bisectLocation.getY() - 1);

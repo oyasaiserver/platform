@@ -68,7 +68,7 @@ public class HelpCommand {
                 }
                 else if (helpcommand.equals("purge") || helpcommand.equals("purges")) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "/co purge t:<time> " + Color.WHITE + "- " + Phrase.build(Phrase.HELP_PURGE_1));
-                    Chat.sendMessage(player, Color.GREY + Color.ITALIC + "" + Phrase.build(Phrase.HELP_PURGE_2, "/co purge t:30d"));
+                    Chat.sendMessage(player, Color.GREY + Color.ITALIC + Phrase.build(Phrase.HELP_PURGE_2, "/co purge t:30d"));
                 }
                 else if (helpcommand.equals("reload")) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "/co reload " + Color.WHITE + "- " + Phrase.build(Phrase.HELP_RELOAD_COMMAND));

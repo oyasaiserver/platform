@@ -44,7 +44,7 @@ public class PurgeCommand extends Consumer {
         final List<String> argExcludeUsers = CommandParser.parseExcludedUsers(player, args);
         final long[] argTime = CommandParser.parseTime(args);
         final int argWid = CommandParser.parseWorld(args, false, false);
-        final List<Integer> supportedActions = Arrays.asList();
+        final List<Integer> supportedActions = List.of();
         long startTime = argTime[1] > 0 ? argTime[0] : 0;
         long endTime = argTime[1] > 0 ? argTime[1] : argTime[0];
 
@@ -145,7 +145,7 @@ public class PurgeCommand extends Consumer {
                 }
 
                 if (restrictCount == 0) {
-                    restrict = restrict.append("" + targetName + "");
+                    restrict = restrict.append(targetName);
                 }
                 else {
                     restrict.append(", ").append(targetName);
@@ -247,7 +247,7 @@ public class PurgeCommand extends Consumer {
                     if (!Config.getGlobal().MYSQL) {
                         for (String table : ConfigHandler.databaseTables) {
                             try {
-                                query = "DROP TABLE IF EXISTS " + purgePrefix + table + "";
+                                query = "DROP TABLE IF EXISTS " + purgePrefix + table;
                                 preparedStmt = connection.prepareStatement(query);
                                 preparedStmt.execute();
                                 preparedStmt.close();
@@ -262,8 +262,8 @@ public class PurgeCommand extends Consumer {
 
                     List<String> purgeTables = Arrays.asList("sign", "container", "item", "skull", "session", "chat", "command", "entity", "block");
                     List<String> worldTables = Arrays.asList("sign", "container", "item", "session", "chat", "command", "block");
-                    List<String> restrictTables = Arrays.asList("block");
-                    List<String> excludeTables = Arrays.asList("database_lock"); // don't insert data into these tables
+                    List<String> restrictTables = List.of("block");
+                    List<String> excludeTables = List.of("database_lock"); // don't insert data into these tables
                     for (String table : ConfigHandler.databaseTables) {
                         String tableName = table.replaceAll("_", " ");
                         Chat.sendGlobalMessage(player, Phrase.build(Phrase.PURGE_PROCESSING, tableName));
@@ -461,7 +461,7 @@ public class PurgeCommand extends Consumer {
                     if (Config.getGlobal().MYSQL && optimize) {
                         Chat.sendGlobalMessage(player, Phrase.build(Phrase.PURGE_OPTIMIZING));
                         for (String table : ConfigHandler.databaseTables) {
-                            query = "OPTIMIZE LOCAL TABLE " + ConfigHandler.prefix + table + "";
+                            query = "OPTIMIZE LOCAL TABLE " + ConfigHandler.prefix + table;
                             preparedStmt = connection.prepareStatement(query);
                             preparedStmt.execute();
                             preparedStmt.close();

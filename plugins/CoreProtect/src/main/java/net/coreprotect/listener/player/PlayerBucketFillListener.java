@@ -17,7 +17,7 @@ import net.coreprotect.consumer.Queue;
 public final class PlayerBucketFillListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void onPlayerBucketFill(PlayerBucketFillEvent event) {
+    private void onPlayerBucketFill(PlayerBucketFillEvent event) {
         String player = event.getPlayer().getName();
         Block block = event.getBlockClicked();
         World world = block.getWorld();
@@ -33,8 +33,7 @@ public final class PlayerBucketFillListener extends Queue implements Listener {
 
         if (!event.isCancelled() && Config.getConfig(world).BUCKETS && inspect == 0) {
             BlockData blockData = block.getBlockData();
-            if (blockData instanceof Waterlogged) {
-                Waterlogged waterlogged = (Waterlogged) blockData;
+            if (blockData instanceof Waterlogged waterlogged) {
                 if (waterlogged.isWaterlogged()) {
                     type = Material.WATER;
                 }

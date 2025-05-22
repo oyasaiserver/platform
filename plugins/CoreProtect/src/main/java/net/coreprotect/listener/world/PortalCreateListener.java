@@ -16,7 +16,7 @@ import net.coreprotect.utility.BlockUtils;
 public final class PortalCreateListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onPortalCreate(PortalCreateEvent event) {
+    private void onPortalCreate(PortalCreateEvent event) {
         World world = event.getWorld();
         if (event.isCancelled() || !Config.getConfig(world).PORTALS) {
             return;

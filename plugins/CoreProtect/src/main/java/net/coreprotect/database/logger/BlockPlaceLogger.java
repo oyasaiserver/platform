@@ -95,7 +95,7 @@ public class BlockPlaceLogger {
             int time = (int) (System.currentTimeMillis() / 1000L);
 
             if (event.getUser().length() > 0) {
-                CacheHandler.lookupCache.put("" + x + "." + y + "." + z + "." + wid + "", new Object[] { time, event.getUser(), type });
+                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[] { time, event.getUser(), type });
             }
 
             if (event.isCancelled()) {

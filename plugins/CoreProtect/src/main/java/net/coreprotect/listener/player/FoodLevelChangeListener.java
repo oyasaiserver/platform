@@ -20,7 +20,7 @@ import net.coreprotect.utility.WorldUtils;
 public final class FoodLevelChangeListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onFoodLevelChangeEvent(FoodLevelChangeEvent event) {
+    private void onFoodLevelChangeEvent(FoodLevelChangeEvent event) {
         if (event.isCancelled() || event.getEntityType() != EntityType.PLAYER) {
             return;
         }

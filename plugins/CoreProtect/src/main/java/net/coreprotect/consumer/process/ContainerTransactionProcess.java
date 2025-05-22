@@ -22,12 +22,11 @@ import net.coreprotect.database.logger.ContainerLogger;
 class ContainerTransactionProcess {
 
     static void process(PreparedStatement preparedStmtContainer, PreparedStatement preparedStmtItems, int batchCount, int processId, int id, Material type, int forceData, String user, Object object) {
-        if (object instanceof Location) {
-            Location location = (Location) object;
+        if (object instanceof Location location) {
             Map<Integer, Object> inventories = Consumer.consumerInventories.get(processId);
             if (inventories.get(id) != null) {
                 Object inventory = inventories.get(id);
-                String transactingChestId = location.getWorld().getUID().toString() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
+                String transactingChestId = location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
                 String loggingChestId = user.toLowerCase(Locale.ROOT) + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
                 if (ConfigHandler.loggingChest.get(loggingChestId) != null) {
                     int current_chest = ConfigHandler.loggingChest.get(loggingChestId);

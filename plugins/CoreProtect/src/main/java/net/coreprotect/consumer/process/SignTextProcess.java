@@ -11,8 +11,7 @@ import net.coreprotect.database.logger.SignTextLogger;
 class SignTextProcess {
 
     static void process(PreparedStatement preparedStmt, int batchCount, int processId, int id, int forceData, String user, Object object, int action, int color) {
-        if (object instanceof Location) {
-            Location location = (Location) object;
+        if (object instanceof Location location) {
             Map<Integer, Object[]> signs = Consumer.consumerSigns.get(processId);
             if (signs.get(id) != null) {
                 Object[] SIGN_DATA = signs.get(id);

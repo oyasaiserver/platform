@@ -153,10 +153,7 @@ public class StandardLookupThread implements Runnable {
                     }
 
                     int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
-                    boolean restrict_world = false;
-                    if (radius != null) {
-                        restrict_world = true;
-                    }
+                    boolean restrict_world = radius != null;
                     if (finalLocation == null) {
                         restrict_world = false;
                     }
@@ -233,7 +230,7 @@ public class StandardLookupThread implements Runnable {
 
                                 String tag = (action != 0 ? Color.GREEN + "+" : Color.RED + "-");
                                 Chat.sendComponent(player, timeago + " " + tag + " " + Color.DARK_AQUA + Phrase.build(Phrase.LOOKUP_LOGIN, Color.DARK_AQUA + dplayer + Color.WHITE, (action != 0 ? Selector.FIRST : Selector.SECOND)));
-                                Chat.sendComponent(player, Color.WHITE + leftPadding + Color.GREY + "^ " + ChatUtils.getCoordinates(command.getName(), wid, dataX, dataY, dataZ, true, true) + "");
+                                Chat.sendComponent(player, Color.WHITE + leftPadding + Color.GREY + "^ " + ChatUtils.getCoordinates(command.getName(), wid, dataX, dataY, dataZ, true, true));
                                 PluginChannelListener.getInstance().sendInfoData(player, Integer.parseInt(time), Phrase.LOOKUP_LOGIN, (action != 0 ? Selector.FIRST : Selector.SECOND), dplayer, -1, dataX, dataY, dataZ, wid);
                             }
                         }
@@ -267,7 +264,7 @@ public class StandardLookupThread implements Runnable {
                                 }
 
                                 Chat.sendComponent(player, timeago + " " + Color.WHITE + "- " + Color.DARK_AQUA + dplayer + ": " + Color.WHITE, message);
-                                Chat.sendComponent(player, Color.WHITE + leftPadding + Color.GREY + "^ " + ChatUtils.getCoordinates(command.getName(), wid, dataX, dataY, dataZ, true, true) + "");
+                                Chat.sendComponent(player, Color.WHITE + leftPadding + Color.GREY + "^ " + ChatUtils.getCoordinates(command.getName(), wid, dataX, dataY, dataZ, true, true));
                                 PluginChannelListener.getInstance().sendMessageData(player, Integer.parseInt(time), dplayer, message, true, dataX, dataY, dataZ, wid);
                             }
                         }
@@ -370,7 +367,7 @@ public class StandardLookupThread implements Runnable {
                                     dname = StringUtils.nameFilter(dname, ddata);
                                 }
                                 if (dname.length() > 0 && !isPlayer) {
-                                    dname = "minecraft:" + dname.toLowerCase(Locale.ROOT) + "";
+                                    dname = "minecraft:" + dname.toLowerCase(Locale.ROOT);
                                 }
 
                                 // Hide "minecraft:" for now.

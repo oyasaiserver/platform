@@ -13,8 +13,7 @@ import net.coreprotect.database.logger.ContainerBreakLogger;
 class ContainerBreakProcess {
 
     static void process(PreparedStatement preparedStmt, int batchCount, int processId, int id, Material type, String user, Object object) {
-        if (object instanceof Location) {
-            Location location = (Location) object;
+        if (object instanceof Location location) {
             Map<Integer, ItemStack[]> containers = Consumer.consumerContainers.get(processId);
             if (containers.get(id) != null) {
                 ItemStack[] container = containers.get(id);

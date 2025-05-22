@@ -382,10 +382,7 @@ public class RollbackRestoreCommand {
                                             }
                                         }
                                         if (exists) {
-                                            boolean restrictWorld = false;
-                                            if (radius != null) {
-                                                restrictWorld = true;
-                                            }
+                                            boolean restrictWorld = radius != null;
                                             if (location == null) {
                                                 restrictWorld = false;
                                             }
@@ -393,15 +390,12 @@ public class RollbackRestoreCommand {
                                                 restrictWorld = true;
                                                 location = new Location(Bukkit.getServer().getWorld(WorldUtils.getWorldName(finalArgWid)), 0, 0, 0);
                                             }
-                                            boolean verbose = false;
-                                            if (noisy == 1) {
-                                                verbose = true;
-                                            }
+                                            boolean verbose = noisy == 1;
 
                                             String users = "";
                                             for (String value : rollbackusers2) {
                                                 if (users.length() == 0) {
-                                                    users = "" + value + "";
+                                                    users = value;
                                                 }
                                                 else {
                                                     users = users + ", " + value;

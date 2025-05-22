@@ -18,9 +18,9 @@ import org.bukkit.plugin.Plugin;
 
 public final class WorldEditBlockState implements BlockState {
 
-    protected Location location;
-    protected Material material;
-    protected BlockData blockData;
+    private Location location;
+    private Material material;
+    private BlockData blockData;
 
     public WorldEditBlockState(Location loc) {
         location = loc;

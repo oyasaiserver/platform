@@ -47,7 +47,7 @@ public class HangingUtil {
                 if ((BukkitAdapter.ADAPTER.isItemFrame(rowType) && e instanceof ItemFrame) || (rowType.equals(Material.PAINTING) && e instanceof Painting)) {
                     Location el = e.getLocation();
                     if (el.getBlockX() == x && el.getBlockY() == y && el.getBlockZ() == z) {
-                        if (hangingFace == null || ((Hanging) e).getFacing() == hangingFace) {
+                        if (hangingFace == null || e.getFacing() == hangingFace) {
                             e.remove();
                             break;
                         }
@@ -146,8 +146,7 @@ public class HangingUtil {
                         }
                         Class itemFrame = BukkitAdapter.ADAPTER.getFrameClass(rowType);
                         Entity entity = block.getWorld().spawn(spawnBlock.getLocation(), itemFrame);
-                        if (entity instanceof ItemFrame) {
-                            ItemFrame hanging = (ItemFrame) entity;
+                        if (entity instanceof ItemFrame hanging) {
                             hanging.teleport(block.getWorld().getBlockAt(x, y, z).getLocation());
                             hanging.setFacingDirection(faceSet, true);
 
@@ -184,7 +183,7 @@ public class HangingUtil {
                 if (e instanceof ItemFrame || e instanceof Painting) {
                     Location el = e.getLocation();
                     if (el.getBlockX() == block.getX() && el.getBlockY() == block.getY() && el.getBlockZ() == block.getZ()) {
-                        if (hangingFace == null || ((Hanging) e).getFacing() == hangingFace) {
+                        if (hangingFace == null || e.getFacing() == hangingFace) {
                             e.remove();
                         }
                     }

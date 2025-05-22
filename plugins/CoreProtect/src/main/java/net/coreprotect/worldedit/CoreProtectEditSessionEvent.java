@@ -17,7 +17,7 @@ import net.coreprotect.utility.Chat;
 public class CoreProtectEditSessionEvent {
     private static boolean initialized = false;
     private static boolean isFAWE = false;
-    private static CoreProtectEditSessionEvent event = new CoreProtectEditSessionEvent();
+    private static final CoreProtectEditSessionEvent event = new CoreProtectEditSessionEvent();
 
     public static boolean isInitialized() {
         return initialized;

@@ -29,7 +29,7 @@ public class ChatUtils {
         message.append("|/" + command + " teleport wid:" + worldId + " " + decimalFormat.format(x + 0.50) + " " + y + " " + decimalFormat.format(z + 0.50) + "|");
 
         // chat output
-        message.append(Color.GREY + (italic ? Color.ITALIC : "") + "(x" + x + "/y" + y + "/z" + z + worldDisplay.toString() + ")");
+        message.append(Color.GREY + (italic ? Color.ITALIC : "") + "(x" + x + "/y" + y + "/z" + z + worldDisplay + ")");
 
         return message.append(Chat.COMPONENT_TAG_CLOSE).toString();
     }
@@ -161,7 +161,7 @@ public class ChatUtils {
             Date logDate = new Date(resultTime * 1000L);
             String formattedTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").format(logDate);
 
-            return Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_POPUP + "|" + Color.GREY + formattedTimestamp + "|" + Color.GREY + message.toString() + Chat.COMPONENT_TAG_CLOSE;
+            return Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_POPUP + "|" + Color.GREY + formattedTimestamp + "|" + Color.GREY + message + Chat.COMPONENT_TAG_CLOSE;
         }
 
         return message.toString();
@@ -172,15 +172,15 @@ public class ChatUtils {
             return phrase;
         }
 
-        StringBuilder message = new StringBuilder(Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_POPUP);
-
         // tooltip
-        message.append("|" + tooltip.replace("|", Chat.COMPONENT_PIPE) + "|");
 
-        // chat output
-        message.append(phrase);
+        String message = Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_POPUP + "|" + tooltip.replace("|", Chat.COMPONENT_PIPE) + "|" +
 
-        return message.append(Chat.COMPONENT_TAG_CLOSE).toString();
+                // chat output
+                phrase +
+                Chat.COMPONENT_TAG_CLOSE;
+
+        return message;
     }
 
     // This theoretically initializes the component code, to prevent gson adapter errors

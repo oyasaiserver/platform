@@ -12,8 +12,7 @@ import net.coreprotect.database.logger.ItemLogger;
 class ItemTransactionProcess extends Queue {
 
     static void process(PreparedStatement preparedStmt, int batchCount, int processId, int id, int forceData, int time, int offset, String user, Object object) {
-        if (object instanceof Location) {
-            Location location = (Location) object;
+        if (object instanceof Location location) {
             String loggingItemId = user.toLowerCase(Locale.ROOT) + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
 
             if (ConfigHandler.loggingItem.get(loggingItemId) != null) {

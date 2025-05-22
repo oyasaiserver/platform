@@ -48,7 +48,7 @@ public final class BlockPreDispenseListener extends Queue implements Listener {
             }
 
             // Create a basic location key for this dispenser
-            String locationKey = block.getWorld().getUID().toString() + "." + block.getX() + "." + block.getY() + "." + block.getZ();
+            String locationKey = block.getWorld().getUID() + "." + block.getX() + "." + block.getY() + "." + block.getZ();
 
             // Create a detailed event key that includes item details
             String eventKey = event.getSlot() + "." + item.getType().name() + ":" + item.getAmount();

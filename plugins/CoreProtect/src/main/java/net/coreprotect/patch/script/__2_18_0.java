@@ -114,13 +114,11 @@ public class __2_18_0 {
                                     // unable to generate block data
                                 }
                                 if (newBlockData != null) {
-                                    if (validatedMaterial == Material.OAK_WALL_SIGN && newBlockData instanceof Directional) {
-                                        Directional directional = (Directional) newBlockData;
+                                    if (validatedMaterial == Material.OAK_WALL_SIGN && newBlockData instanceof Directional directional) {
                                         BlockFace newDirection = getLegacyDirection(blockData);
                                         directional.setFacing(newDirection);
                                     }
-                                    if (validatedMaterial == Material.SKELETON_SKULL && newBlockData instanceof Rotatable) {
-                                        Rotatable rotatable = (Rotatable) newBlockData;
+                                    if (validatedMaterial == Material.SKELETON_SKULL && newBlockData instanceof Rotatable rotatable) {
                                         BlockFace newRotation = getLegacyRotation(blockData);
                                         rotatable.setRotation(newRotation);
                                     }

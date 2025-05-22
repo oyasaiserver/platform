@@ -81,7 +81,7 @@ public class RollbackEntityHandler {
                         boolean removed = false;
                         int entityId = -1;
                         String entityName = EntityUtils.getEntityType(oldTypeRaw).name();
-                        String token = "" + rowX + "." + rowY + "." + rowZ + "." + rowWorldId + "." + entityName + "";
+                        String token = rowX + "." + rowY + "." + rowZ + "." + rowWorldId + "." + entityName;
                         Object[] cachedEntity = CacheHandler.entityCache.get(token);
 
                         if (cachedEntity != null) {

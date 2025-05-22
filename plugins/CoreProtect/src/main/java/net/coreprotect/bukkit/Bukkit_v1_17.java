@@ -66,7 +66,7 @@ public class Bukkit_v1_17 extends BukkitAdapter {
 
         BlockGroup.NON_ATTACHABLE = new HashSet<>(Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.BARRIER, Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE, Material.SWEET_BERRY_BUSH, Material.OAK_SAPLING, Material.SPRUCE_SAPLING, Material.BIRCH_SAPLING, Material.JUNGLE_SAPLING, Material.ACACIA_SAPLING, Material.DARK_OAK_SAPLING, Material.WATER, Material.LAVA, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.FERN, Material.DEAD_BUSH, Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.AZURE_BLUET, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY, Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.TORCH, Material.WALL_TORCH, Material.REDSTONE_WIRE, Material.LADDER, Material.RAIL, Material.LEVER, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH, Material.SNOW, Material.SUGAR_CANE, Material.NETHER_PORTAL, Material.REPEATER, Material.KELP, Material.CHORUS_FLOWER, Material.CHORUS_PLANT, Material.SOUL_TORCH, Material.SOUL_WALL_TORCH, Material.LIGHT, Material.SMALL_DRIPLEAF, Material.BIG_DRIPLEAF, Material.BIG_DRIPLEAF_STEM, Material.GLOW_LICHEN, Material.HANGING_ROOTS));
 
-        BlockGroup.VERTICAL_TOP_BOTTOM = new HashSet<>(Arrays.asList(Material.BIG_DRIPLEAF_STEM));
+        BlockGroup.VERTICAL_TOP_BOTTOM = new HashSet<>(List.of(Material.BIG_DRIPLEAF_STEM));
     }
 
     @Override
@@ -91,13 +91,11 @@ public class Bukkit_v1_17 extends BukkitAdapter {
 
     @Override
     public boolean getEntityMeta(LivingEntity entity, List<Object> info) {
-        if (entity instanceof Axolotl) {
-            Axolotl axolotl = (Axolotl) entity;
+        if (entity instanceof Axolotl axolotl) {
             info.add(axolotl.getVariant());
             return true;
         }
-        else if (entity instanceof Goat) {
-            Goat goat = (Goat) entity;
+        else if (entity instanceof Goat goat) {
             info.add(goat.isScreaming());
             return true;
         }
@@ -107,16 +105,14 @@ public class Bukkit_v1_17 extends BukkitAdapter {
 
     @Override
     public boolean setEntityMeta(Entity entity, Object value, int count) {
-        if (entity instanceof Axolotl) {
-            Axolotl axolotl = (Axolotl) entity;
+        if (entity instanceof Axolotl axolotl) {
             if (count == 0) {
                 org.bukkit.entity.Axolotl.Variant variant = (org.bukkit.entity.Axolotl.Variant) value;
                 axolotl.setVariant(variant);
                 return true;
             }
         }
-        else if (entity instanceof Goat) {
-            Goat goat = (Goat) entity;
+        else if (entity instanceof Goat goat) {
             if (count == 0) {
                 boolean isScreaming = (Boolean) value;
                 goat.setScreaming(isScreaming);
@@ -129,8 +125,7 @@ public class Bukkit_v1_17 extends BukkitAdapter {
 
     @Override
     public boolean getItemMeta(ItemMeta itemMeta, List<Map<String, Object>> list, List<List<Map<String, Object>>> metadata, int slot) {
-        if (itemMeta instanceof BundleMeta) {
-            BundleMeta meta = (BundleMeta) itemMeta;
+        if (itemMeta instanceof BundleMeta meta) {
             BundleMeta subMeta = (BundleMeta) meta.clone();
             meta.setItems(null);
             list.add(meta.serialize());
@@ -171,8 +166,7 @@ public class Bukkit_v1_17 extends BukkitAdapter {
 
     @Override
     public boolean isAttached(Block block, Block scanBlock, BlockData blockData, int scanMin) {
-        if (blockData instanceof PointedDripstone) {
-            PointedDripstone pointedDripstone = (PointedDripstone) blockData;
+        if (blockData instanceof PointedDripstone pointedDripstone) {
             BlockFace blockFace = pointedDripstone.getVerticalDirection();
             boolean adjacent = scanBlock.getRelative(blockFace.getOppositeFace()).getLocation().equals(block.getLocation());
             return adjacent;

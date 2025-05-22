@@ -26,8 +26,7 @@ public final class PlayerPickupArrowListener extends Queue implements Listener {
                 break;
         }
 
-        if (arrow instanceof Arrow) {
-            Arrow arrowEntity = (Arrow) arrow;
+        if (arrow instanceof Arrow arrowEntity) {
             itemStack = BukkitAdapter.ADAPTER.getArrowMeta(arrowEntity, itemStack);
         }
 
@@ -35,7 +34,7 @@ public final class PlayerPickupArrowListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    protected void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
+    private void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
         ItemStack itemStack = getArrowType(event.getArrow());
         EntityPickupItemListener.onItemPickup(event.getPlayer(), event.getArrow().getLocation(), itemStack);
     }

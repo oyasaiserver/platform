@@ -65,7 +65,7 @@ public class BlockBreakLogger {
             int x = location.getBlockX();
             int y = location.getBlockY();
             int z = location.getBlockZ();
-            CacheHandler.breakCache.put("" + x + "." + y + "." + z + "." + wid + "", new Object[] { time, event.getUser(), type });
+            CacheHandler.breakCache.put(x + "." + y + "." + z + "." + wid, new Object[] { time, event.getUser(), type });
 
             if (event.isCancelled()) {
                 return;

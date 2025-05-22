@@ -69,7 +69,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
     private final InteractionInspector interactionInspector = new InteractionInspector();
 
     @EventHandler(priority = EventPriority.LOWEST)
-    protected void onPlayerInspect(PlayerInteractEvent event) {
+    private void onPlayerInspect(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
@@ -97,8 +97,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                 }
             }
             /* Check if clicking top half of bed */
-            if (checkBlockData instanceof Bed) {
-                Bed bed = (Bed) checkBlockData;
+            if (checkBlockData instanceof Bed bed) {
                 if (bed.getPart().equals(Part.HEAD)) {
                     checkBlock = event.getClickedBlock().getRelative(bed.getFacing().getOppositeFace()).getState();
                 }
@@ -149,8 +148,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                             Chest chest = (Chest) clickedBlock.getState();
                             InventoryHolder inventoryHolder = chest.getInventory().getHolder();
 
-                            if (inventoryHolder instanceof DoubleChest) {
-                                DoubleChest doubleChest = (DoubleChest) inventoryHolder;
+                            if (inventoryHolder instanceof DoubleChest doubleChest) {
                                 location = doubleChest.getLocation();
                             }
                             else {
@@ -235,7 +233,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerInteract(PlayerInteractEvent event) {
         /* Logging for players punching out fire blocks. */
         if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             World world = event.getClickedBlock().getWorld();
@@ -298,8 +296,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                             if (!oldIsWaxed) {
                                 Scheduler.runTask(CoreProtect.getInstance(), () -> {
                                     BlockState newState = block.getState();
-                                    if (newState instanceof Sign) {
-                                        Sign newSign = (Sign) newState;
+                                    if (newState instanceof Sign newSign) {
                                         int newColor = BukkitAdapter.ADAPTER.getColor(newSign, isFront);
                                         int newColorSecondary = BukkitAdapter.ADAPTER.getColor(newSign, !isFront);
                                         boolean newFrontGlowing = BukkitAdapter.ADAPTER.isGlowing(newSign, isFront);
@@ -387,8 +384,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                     }
                     else if (type == Material.JUKEBOX) {
                         BlockState blockState = block.getState();
-                        if (blockState instanceof Jukebox) {
-                            Jukebox jukebox = (Jukebox) blockState;
+                        if (blockState instanceof Jukebox jukebox) {
                             ItemStack jukeboxRecord = jukebox.isPlaying() ? jukebox.getRecord() : new ItemStack(Material.AIR);
                             ItemStack oldItemState = jukeboxRecord.clone();
                             ItemStack newItemState = new ItemStack(Material.AIR);
@@ -592,8 +588,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                                     int showingBottom = 0;
 
                                     for (Entity entity : locationFinal.getChunk().getEntities()) {
-                                        if (entity instanceof EnderCrystal && entity.getLocation().getBlockX() == locationFinal.getBlockX() && entity.getLocation().getBlockY() == locationFinal.getBlockY() && entity.getLocation().getBlockZ() == locationFinal.getBlockZ()) {
-                                            EnderCrystal enderCrystal = (EnderCrystal) entity;
+                                        if (entity instanceof EnderCrystal enderCrystal && entity.getLocation().getBlockX() == locationFinal.getBlockX() && entity.getLocation().getBlockY() == locationFinal.getBlockY() && entity.getLocation().getBlockZ() == locationFinal.getBlockZ()) {
                                             showingBottom = enderCrystal.isShowingBottom() ? 1 : 0;
                                             blockExists = true;
                                             break;

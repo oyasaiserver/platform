@@ -118,18 +118,15 @@ public class RollbackBlockHandler extends Queue {
         try {
             if (changeBlock) {
                 /* If modifying the head of a piston, update the base piston block to prevent it from being destroyed */
-                if (changeBlockData instanceof PistonHead) {
-                    PistonHead pistonHead = (PistonHead) changeBlockData;
+                if (changeBlockData instanceof PistonHead pistonHead) {
                     Block pistonBlock = block.getRelative(pistonHead.getFacing().getOppositeFace());
                     BlockData pistonData = pistonBlock.getBlockData();
-                    if (pistonData instanceof Piston) {
-                        Piston piston = (Piston) pistonData;
+                    if (pistonData instanceof Piston piston) {
                         piston.setExtended(false);
                         pistonBlock.setBlockData(piston, false);
                     }
                 }
-                else if (rowType == Material.MOVING_PISTON && blockData instanceof TechnicalPiston && !(blockData instanceof PistonHead)) {
-                    TechnicalPiston technicalPiston = (TechnicalPiston) blockData;
+                else if (rowType == Material.MOVING_PISTON && blockData instanceof TechnicalPiston technicalPiston && !(blockData instanceof PistonHead)) {
                     rowType = (technicalPiston.getType() == org.bukkit.block.data.type.TechnicalPiston.Type.STICKY ? Material.STICKY_PISTON : Material.PISTON);
                     blockData = rowType.createBlockData();
                     ((Piston) blockData).setFacing(technicalPiston.getFacing());
@@ -183,8 +180,7 @@ public class RollbackBlockHandler extends Queue {
                     }
                 }
                 else if ((rowType == Material.AIR) && ((oldTypeMaterial == Material.WATER))) {
-                    if (pendingChangeData instanceof Waterlogged) {
-                        Waterlogged waterlogged = (Waterlogged) pendingChangeData;
+                    if (pendingChangeData instanceof Waterlogged waterlogged) {
                         waterlogged.setWaterlogged(false);
                         BlockUtils.prepareTypeAndData(chunkChanges, block, null, waterlogged, false);
                     }
@@ -240,16 +236,14 @@ public class RollbackBlockHandler extends Queue {
 
                     boolean remove = true;
                     if ((rowType == Material.AIR)) {
-                        if (pendingChangeData instanceof Waterlogged) {
-                            Waterlogged waterlogged = (Waterlogged) pendingChangeData;
+                        if (pendingChangeData instanceof Waterlogged waterlogged) {
                             if (waterlogged.isWaterlogged()) {
                                 BlockUtils.prepareTypeAndData(chunkChanges, block, Material.WATER, Material.WATER.createBlockData(), true);
                                 remove = false;
                             }
                         }
                         else if ((pendingChangeType == Material.WATER)) {
-                            if (rawBlockData instanceof Waterlogged) {
-                                Waterlogged waterlogged = (Waterlogged) rawBlockData;
+                            if (rawBlockData instanceof Waterlogged waterlogged) {
                                 if (waterlogged.isWaterlogged()) {
                                     remove = false;
                                 }
@@ -262,8 +256,7 @@ public class RollbackBlockHandler extends Queue {
                         if ((changeType == Material.NETHER_PORTAL) || changeBlockData instanceof MultipleFacing || changeBlockData instanceof Snow || changeBlockData instanceof Stairs || changeBlockData instanceof RedstoneWire || changeBlockData instanceof Chest) {
                             physics = true;
                         }
-                        else if (changeBlockData instanceof Bisected && !(changeBlockData instanceof TrapDoor)) {
-                            Bisected bisected = (Bisected) changeBlockData;
+                        else if (changeBlockData instanceof Bisected bisected && !(changeBlockData instanceof TrapDoor)) {
                             Location bisectLocation = block.getLocation().clone();
                             if (bisected.getHalf() == Half.TOP) {
                                 bisectLocation.setY(bisectLocation.getY() - 1);
@@ -283,8 +276,7 @@ public class RollbackBlockHandler extends Queue {
                                 }
                             }
                         }
-                        else if (changeBlockData instanceof Bed) {
-                            Bed bed = (Bed) changeBlockData;
+                        else if (changeBlockData instanceof Bed bed) {
                             if (bed.getPart() == Part.FOOT) {
                                 Block adjacentBlock = block.getRelative(bed.getFacing());
                                 BlockUtils.prepareTypeAndData(chunkChanges, adjacentBlock, rowType, null, false);
@@ -348,8 +340,7 @@ public class RollbackBlockHandler extends Queue {
                     if (meta != null) {
                         CommandBlock commandBlock = (CommandBlock) block.getState();
                         for (Object value : meta) {
-                            if (value instanceof String) {
-                                String string = (String) value;
+                            if (value instanceof String string) {
                                 commandBlock.setCommand(string);
                                 commandBlock.update();
                             }
@@ -358,8 +349,7 @@ public class RollbackBlockHandler extends Queue {
                     return false;
                 }
                 else if ((rowType == Material.WATER)) {
-                    if (pendingChangeData instanceof Waterlogged) {
-                        Waterlogged waterlogged = (Waterlogged) pendingChangeData;
+                    if (pendingChangeData instanceof Waterlogged waterlogged) {
                         waterlogged.setWaterlogged(true);
                         BlockUtils.prepareTypeAndData(chunkChanges, block, null, waterlogged, false);
                     }
@@ -482,8 +472,7 @@ public class RollbackBlockHandler extends Queue {
                     ChestTool.updateDoubleChest(block, blockData, true);
                     return countBlock;
                 }
-                else if (rowType != Material.AIR && rawBlockData instanceof Bisected && !(rawBlockData instanceof Stairs || rawBlockData instanceof TrapDoor)) {
-                    Bisected bisected = (Bisected) rawBlockData;
+                else if (rowType != Material.AIR && rawBlockData instanceof Bisected bisected && !(rawBlockData instanceof Stairs || rawBlockData instanceof TrapDoor)) {
                     Bisected bisectData = (Bisected) rawBlockData.clone();
                     Location bisectLocation = block.getLocation().clone();
                     if (bisected.getHalf() == Half.TOP) {
@@ -508,8 +497,7 @@ public class RollbackBlockHandler extends Queue {
                     }
                     return false;
                 }
-                else if (rowType != Material.AIR && rawBlockData instanceof Bed) {
-                    Bed bed = (Bed) rawBlockData;
+                else if (rowType != Material.AIR && rawBlockData instanceof Bed bed) {
                     if (bed.getPart() == Part.FOOT) {
                         Block adjacentBlock = block.getRelative(bed.getFacing());
                         Bed bedData = (Bed) rawBlockData.clone();

@@ -28,7 +28,7 @@ import net.coreprotect.utility.WorldUtils;
 public final class BlockIgniteListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockIgnite(BlockIgniteEvent event) {
+    private void onBlockIgnite(BlockIgniteEvent event) {
         World world = event.getBlock().getWorld();
         if (!event.isCancelled() && Config.getConfig(world).BLOCK_IGNITE) {
             Block block = event.getBlock();
@@ -64,8 +64,7 @@ public final class BlockIgniteListener extends Queue implements Listener {
                 // Set block as lit campfire, rather than as fire block
                 blockIgnited = blockType;
                 replacedBlock = block.getState();
-                if (forceBlockData instanceof Lightable) {
-                    Lightable lightable = (Lightable) forceBlockData;
+                if (forceBlockData instanceof Lightable lightable) {
                     lightable.setLit(true);
                 }
             }
@@ -138,7 +137,7 @@ public final class BlockIgniteListener extends Queue implements Listener {
                 Queue.queueBlockPlace(player.getName(), block.getState(), block.getType(), replacedBlock, blockIgnited, -1, 0, forceBlockData.getAsString());
                 int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
                 int world_id = WorldUtils.getWorldId(block.getWorld().getName());
-                CacheHandler.lookupCache.put("" + block.getX() + "." + block.getY() + "." + block.getZ() + "." + world_id + "", new Object[] { unixtimestamp, player.getName(), block.getType() });
+                CacheHandler.lookupCache.put(block.getX() + "." + block.getY() + "." + block.getZ() + "." + world_id, new Object[] { unixtimestamp, player.getName(), block.getType() });
             }
         }
     }

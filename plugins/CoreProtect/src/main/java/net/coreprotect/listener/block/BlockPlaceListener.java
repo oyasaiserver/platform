@@ -34,7 +34,7 @@ import net.coreprotect.utility.MaterialUtils;
 public final class BlockPlaceListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onBlockPlace(BlockPlaceEvent event) {
+    private void onBlockPlace(BlockPlaceEvent event) {
         World world = event.getBlockPlaced().getWorld();
         if (!event.isCancelled() && Config.getConfig(world).BLOCK_PLACE) {
             Player player = event.getPlayer();

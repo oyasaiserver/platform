@@ -23,7 +23,7 @@ import net.coreprotect.utility.MaterialUtils;
 public final class HangingBreakListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onHangingBreak(HangingBreakEvent event) {
+    private void onHangingBreak(HangingBreakEvent event) {
         HangingBreakEvent.RemoveCause cause = event.getCause();
         Entity entity = event.getEntity();
         Block blockEvent = event.getEntity().getLocation().getBlock();
@@ -55,9 +55,8 @@ public final class HangingBreakListener extends Queue implements Listener {
                 String blockData = null;
                 Material material;
                 int itemData = 0;
-                if (entity instanceof ItemFrame) {
+                if (entity instanceof ItemFrame itemframe) {
                     material = BukkitAdapter.ADAPTER.getFrameType(entity);
-                    ItemFrame itemframe = (ItemFrame) entity;
                     blockData = "FACING=" + itemframe.getFacing().name();
 
                     if (!event.isCancelled() && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS) {

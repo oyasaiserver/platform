@@ -153,16 +153,12 @@ public class VersionUtils {
             // Minor version
             return true;
         }
-        else if (oldVersion.length < 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && 0 < currentVersion[2]) {
+        else // Revision version (#.#.# vs #.#.#)
+            if (oldVersion.length < 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && 0 < currentVersion[2]) {
             // Revision version (#.# vs #.#.#)
             return true;
         }
-        else if (oldVersion.length >= 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && oldVersion[2] < currentVersion[2]) {
-            // Revision version (#.#.# vs #.#.#)
-            return true;
-        }
-
-        return false;
+        else return oldVersion.length >= 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && oldVersion[2] < currentVersion[2];
     }
 
     public static boolean newVersion(Integer[] oldVersion, String currentVersion) {

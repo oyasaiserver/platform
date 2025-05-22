@@ -142,7 +142,7 @@ public class BlockUtils {
         if (type.equals(Material.ICE)) { // Ice block
             int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
             int wid = WorldUtils.getWorldId(block.getWorld().getName());
-            net.coreprotect.thread.CacheHandler.lookupCache.put("" + block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid + "", new Object[] { unixtimestamp, user, Material.WATER });
+            net.coreprotect.thread.CacheHandler.lookupCache.put(block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid, new Object[] { unixtimestamp, user, Material.WATER });
             return true;
         }
         return false;
@@ -227,23 +227,20 @@ public class BlockUtils {
     public static List<Object> processMeta(BlockState block) {
         List<Object> meta = new ArrayList<>();
         try {
-            if (block instanceof CommandBlock) {
-                CommandBlock commandBlock = (CommandBlock) block;
+            if (block instanceof CommandBlock commandBlock) {
                 String command = commandBlock.getCommand();
                 if (command.length() > 0) {
                     meta.add(command);
                 }
             }
-            else if (block instanceof Banner) {
-                Banner banner = (Banner) block;
+            else if (block instanceof Banner banner) {
                 meta.add(banner.getBaseColor());
                 List<Pattern> patterns = banner.getPatterns();
                 for (Pattern pattern : patterns) {
                     meta.add(pattern.serialize());
                 }
             }
-            else if (block instanceof ShulkerBox) {
-                ShulkerBox shulkerBox = (ShulkerBox) block;
+            else if (block instanceof ShulkerBox shulkerBox) {
                 ItemStack[] inventory = shulkerBox.getSnapshotInventory().getStorageContents();
                 int slot = 0;
                 for (ItemStack itemStack : inventory) {

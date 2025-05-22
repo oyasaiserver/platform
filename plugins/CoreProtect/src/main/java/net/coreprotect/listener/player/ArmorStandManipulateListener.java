@@ -80,7 +80,7 @@ public final class ArmorStandManipulateListener extends Queue implements Listene
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onPlayerArmorStandManipulateEvent(PlayerArmorStandManipulateEvent event) {
+    private void onPlayerArmorStandManipulateEvent(PlayerArmorStandManipulateEvent event) {
         Player player = event.getPlayer();
         final ArmorStand armorStand = event.getRightClicked();
         EntityEquipment equipment = armorStand.getEquipment();
@@ -131,7 +131,6 @@ public final class ArmorStandManipulateListener extends Queue implements Listene
         // 0: BOOTS, 1: LEGGINGS, 2: CHESTPLATE, 3: HELMET, 4: MAINHAND, 5: OFFHAND
 
         if (item.getType() == playerItem.getType()) {
-            return;
         }
         else if (item.getType() != Material.AIR && playerItem.getType() == Material.AIR) {
             oldContents[slot] = item.clone();
