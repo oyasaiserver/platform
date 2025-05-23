@@ -4,7 +4,7 @@
     "get": "cdktf get",
     "synth": "cdktf synth",
     "deploy": "cdktf deploy",
-    "deploy:auto-approve": "cdktf deploy --auto-approve",
+    "deploy:ci": "cdktf deploy --auto-approve",
     "start": "tsx src/index.ts"
   },
   "dependencies": {

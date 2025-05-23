@@ -15,6 +15,6 @@ jobs:
       - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
       - name: Deploy CDKTF stack
-        run: dotenvx run -f envs/ci/.env -- npm run deploy:auto-approve -w infra/cdktf
+        run: dotenvx run -f envs/ci/.env -- npm run deploy:ci -w infra/cdktf
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
