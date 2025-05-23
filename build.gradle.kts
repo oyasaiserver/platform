@@ -17,9 +17,4 @@ spotless {
         ktfmt().kotlinlangStyle()
         ktlint()
     }
-
-    yaml {
-        target("**/*.yaml")
-        jackson()
-    }
 }
