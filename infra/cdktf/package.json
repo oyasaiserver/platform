@@ -12,6 +12,7 @@
   "devDependencies": {
     "cdktf": "^0.20.12",
     "cdktf-cli": "^0.20.12",
-    "tsx": "^4.19.4"
+    "tsx": "^4.19.4",
+    "wrangler": "^4.16.1"
   }
 }
