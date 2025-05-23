@@ -235,8 +235,9 @@ public class EntityUtil {
                 }
               } else if (entity instanceof Sheep sheep) {
                 if (count == 0) {
-                  boolean set = (Boolean) value;
-                  sheep.setSheared(set);
+                  if ((Boolean) value) {
+                    sheep.shear();
+                  }
                 } else if (count == 1) {
                   DyeColor set = (DyeColor) value;
                   sheep.setColor(set);

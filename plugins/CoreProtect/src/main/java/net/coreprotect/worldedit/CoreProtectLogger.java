@@ -37,17 +37,12 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
       throws WorldEditException {
     org.bukkit.World world = BukkitAdapter.adapt(eventWorld);
     if (!Config.getConfig(world).WORLDEDIT) {
-      if (CoreProtectEditSessionEvent.isFAWE()) {
-        return eventExtent.setBlock(position.getX(), position.getY(), position.getZ(), block);
-      } else {
-        return eventExtent.setBlock(position, block);
-      }
+      return eventExtent.setBlock(position.x(), position.y(), position.z(), block);
     }
 
     BlockState oldBlock = eventExtent.getBlock(position);
     Material oldType = BukkitAdapter.adapt(oldBlock.getBlockType());
-    Location location =
-        new Location(world, position.getBlockX(), position.getBlockY(), position.getBlockZ());
+    Location location = new Location(world, position.x(), position.y(), position.z());
     BaseBlock baseBlock =
         WorldEditLogger.getBaseBlock(eventExtent, position, location, oldType, oldBlock);
 
@@ -60,7 +55,7 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
             : ItemUtils.getContainerContents(oldType, null, location);
 
     if (CoreProtectEditSessionEvent.isFAWE()) {
-      if (eventExtent.setBlock(position.getX(), position.getY(), position.getZ(), block)) {
+      if (eventExtent.setBlock(position.x(), position.y(), position.z(), block)) {
         WorldEditLogger.postProcess(
             eventExtent,
             eventActor,
@@ -74,7 +69,7 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
         return true;
       }
     } else {
-      if (eventExtent.setBlock(position, block)) {
+      if (eventExtent.setBlock(position.x(), position.y(), position.z(), block)) {
         WorldEditLogger.postProcess(
             eventExtent,
             eventActor,
@@ -123,8 +118,7 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
     for (BlockVector3 position : region.clone()) {
       BlockState oldBlock = eventExtent.getBlock(position);
       Material oldType = BukkitAdapter.adapt(oldBlock.getBlockType());
-      Location location =
-          new Location(world, position.getBlockX(), position.getBlockY(), position.getBlockZ());
+      Location location = new Location(world, position.x(), position.y(), position.z());
       BaseBlock baseBlock =
           WorldEditLogger.getBaseBlock(eventExtent, position, location, oldType, oldBlock);
 
