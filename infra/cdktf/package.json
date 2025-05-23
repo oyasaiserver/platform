@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "cdktf": "^0.20.12",
+    "cdktf-cli": "^0.20.12",
     "tsx": "^4.19.4"
   }
 }
