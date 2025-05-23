@@ -14,21 +14,28 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 
 public final class EntityBlockFormListener extends Queue implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void onEntityBlockForm(EntityBlockFormEvent event) {
-        World world = event.getBlock().getWorld();
-        if (!event.isCancelled() && Config.getConfig(world).ENTITY_CHANGE) {
-            Entity entity = event.getEntity();
-            Block block = event.getBlock();
-            BlockState newState = event.getNewState();
-            String e = "";
-            if (entity instanceof Snowman) {
-                e = "#snowman";
-            }
-            if (e.length() > 0) {
-                Queue.queueBlockPlace(e, block.getState(), block.getType(), null, newState.getType(), -1, 0, newState.getBlockData().getAsString());
-            }
-        }
+  @EventHandler(priority = EventPriority.MONITOR)
+  private void onEntityBlockForm(EntityBlockFormEvent event) {
+    World world = event.getBlock().getWorld();
+    if (!event.isCancelled() && Config.getConfig(world).ENTITY_CHANGE) {
+      Entity entity = event.getEntity();
+      Block block = event.getBlock();
+      BlockState newState = event.getNewState();
+      String e = "";
+      if (entity instanceof Snowman) {
+        e = "#snowman";
+      }
+      if (e.length() > 0) {
+        Queue.queueBlockPlace(
+            e,
+            block.getState(),
+            block.getType(),
+            null,
+            newState.getType(),
+            -1,
+            0,
+            newState.getBlockData().getAsString());
+      }
     }
-
+  }
 }

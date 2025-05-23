@@ -12,15 +12,16 @@ import org.bukkit.event.block.LeavesDecayEvent;
 
 public final class LeavesDecayListener extends Queue implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void onLeavesDecay(LeavesDecayEvent event) {
-        World world = event.getBlock().getWorld();
-        if (!event.isCancelled() && Config.getConfig(world).LEAF_DECAY) {
-            String player = "#decay";
-            Block block = event.getBlock();
-            Material type = event.getBlock().getType();
+  @EventHandler(priority = EventPriority.MONITOR)
+  private void onLeavesDecay(LeavesDecayEvent event) {
+    World world = event.getBlock().getWorld();
+    if (!event.isCancelled() && Config.getConfig(world).LEAF_DECAY) {
+      String player = "#decay";
+      Block block = event.getBlock();
+      Material type = event.getBlock().getType();
 
-            Queue.queueBlockBreak(player, block.getState(), type, event.getBlock().getBlockData().getAsString(), 0);
-        }
+      Queue.queueBlockBreak(
+          player, block.getState(), type, event.getBlock().getBlockData().getAsString(), 0);
     }
+  }
 }

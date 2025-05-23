@@ -4,10 +4,9 @@ import org.bukkit.command.CommandSender;
 
 public interface SpigotInterface {
 
-    void addHoverComponent(Object message, String[] data);
+  void addHoverComponent(Object message, String[] data);
 
-    void setHoverEvent(Object message, String text);
+  void setHoverEvent(Object message, String text);
 
-    void sendComponent(CommandSender sender, String string, String bypass);
-
+  void sendComponent(CommandSender sender, String string, String bypass);
 }

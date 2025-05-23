@@ -10,12 +10,12 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 
 public final class PlayerTakeLecternBookListener extends Queue implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerTakeLecternBook(PlayerTakeLecternBookEvent event) {
-        Player player = event.getPlayer();
-        if (Config.getConfig(player.getWorld()).ITEM_TRANSACTIONS) {
-            InventoryChangeListener.inventoryTransaction(player.getName(), event.getLectern().getLocation(), null);
-        }
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onPlayerTakeLecternBook(PlayerTakeLecternBookEvent event) {
+    Player player = event.getPlayer();
+    if (Config.getConfig(player.getWorld()).ITEM_TRANSACTIONS) {
+      InventoryChangeListener.inventoryTransaction(
+          player.getName(), event.getLectern().getLocation(), null);
     }
-
+  }
 }

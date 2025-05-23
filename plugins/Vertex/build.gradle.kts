@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version "2.2.0-Beta2"
     kotlin("plugin.serialization") version "2.2.0-Beta2"
     id("com.gradleup.shadow") version "9.0.0-beta12"
-    id("com.diffplug.spotless") version "7.0.3"
 }
 
 repositories {
@@ -55,13 +54,6 @@ kotlin {
     jvmToolchain {
         languageVersion = JavaLanguageVersion.of(24)
         vendor = JvmVendorSpec.ORACLE
-    }
-}
-
-spotless {
-    kotlin {
-        ktfmt().kotlinlangStyle()
-        ktlint()
     }
 }
 

@@ -12,41 +12,43 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public final class EntityExplodeListener extends Queue implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void onEntityExplode(EntityExplodeEvent event) {
-        Entity entity = event.getEntity();
-        if (entity.getType().name().equals("WIND_CHARGE") || entity.getType().name().equals("BREEZE_WIND_CHARGE")) {
-            return;
-        }
-
-        World world = event.getLocation().getWorld();
-        String user = "#explosion";
-
-        if (entity instanceof TNTPrimed) {
-            user = "#tnt";
-        } else if (entity instanceof Minecart) {
-            String name = entity.getType().name();
-            if (name.contains("TNT")) {
-                user = "#tnt";
-            }
-        } else if (entity instanceof Creeper) {
-            user = "#creeper";
-        } else if (entity instanceof EnderDragon || entity instanceof EnderDragonPart) {
-            user = "#enderdragon";
-        } else if (entity instanceof Wither || entity instanceof WitherSkull) {
-            user = "#wither";
-        } else if (entity instanceof EnderCrystal) {
-            user = "#end_crystal";
-        }
-
-        boolean log = Config.getConfig(world).EXPLOSIONS;
-
-        if ((user.equals("#enderdragon") || user.equals("#wither")) && !Config.getConfig(world).ENTITY_CHANGE) {
-            log = false;
-        }
-
-        if (!event.isCancelled() && log) {
-            BlockExplodeListener.processBlockExplode(user, world, event.blockList());
-        }
+  @EventHandler(priority = EventPriority.MONITOR)
+  private void onEntityExplode(EntityExplodeEvent event) {
+    Entity entity = event.getEntity();
+    if (entity.getType().name().equals("WIND_CHARGE")
+        || entity.getType().name().equals("BREEZE_WIND_CHARGE")) {
+      return;
     }
+
+    World world = event.getLocation().getWorld();
+    String user = "#explosion";
+
+    if (entity instanceof TNTPrimed) {
+      user = "#tnt";
+    } else if (entity instanceof Minecart) {
+      String name = entity.getType().name();
+      if (name.contains("TNT")) {
+        user = "#tnt";
+      }
+    } else if (entity instanceof Creeper) {
+      user = "#creeper";
+    } else if (entity instanceof EnderDragon || entity instanceof EnderDragonPart) {
+      user = "#enderdragon";
+    } else if (entity instanceof Wither || entity instanceof WitherSkull) {
+      user = "#wither";
+    } else if (entity instanceof EnderCrystal) {
+      user = "#end_crystal";
+    }
+
+    boolean log = Config.getConfig(world).EXPLOSIONS;
+
+    if ((user.equals("#enderdragon") || user.equals("#wither"))
+        && !Config.getConfig(world).ENTITY_CHANGE) {
+      log = false;
+    }
+
+    if (!event.isCancelled() && log) {
+      BlockExplodeListener.processBlockExplode(user, world, event.blockList());
+    }
+  }
 }

@@ -14,28 +14,28 @@ import org.bukkit.inventory.ItemStack;
 
 public final class PlayerPickupArrowListener extends Queue implements Listener {
 
-    public static ItemStack getArrowType(AbstractArrow arrow) {
-        ItemStack itemStack = null;
-        switch (arrow.getType()) {
-            case SPECTRAL_ARROW:
-                itemStack = new ItemStack(Material.SPECTRAL_ARROW);
-                break;
-            default:
-                itemStack = new ItemStack(Material.ARROW);
-                break;
-        }
-
-        if (arrow instanceof Arrow arrowEntity) {
-            itemStack = BukkitAdapter.ADAPTER.getArrowMeta(arrowEntity, itemStack);
-        }
-
-        return itemStack;
+  public static ItemStack getArrowType(AbstractArrow arrow) {
+    ItemStack itemStack = null;
+    switch (arrow.getType()) {
+      case SPECTRAL_ARROW:
+        itemStack = new ItemStack(Material.SPECTRAL_ARROW);
+        break;
+      default:
+        itemStack = new ItemStack(Material.ARROW);
+        break;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
-        ItemStack itemStack = getArrowType(event.getArrow());
-        EntityPickupItemListener.onItemPickup(event.getPlayer(), event.getArrow().getLocation(), itemStack);
+    if (arrow instanceof Arrow arrowEntity) {
+      itemStack = BukkitAdapter.ADAPTER.getArrowMeta(arrowEntity, itemStack);
     }
 
+    return itemStack;
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  private void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
+    ItemStack itemStack = getArrowType(event.getArrow());
+    EntityPickupItemListener.onItemPickup(
+        event.getPlayer(), event.getArrow().getLocation(), itemStack);
+  }
 }

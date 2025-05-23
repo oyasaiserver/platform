@@ -1,5 +1,9 @@
 package net.coreprotect.listener.channel;
 
+import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.language.Phrase;
@@ -12,92 +16,91 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 public class PluginChannelHandshakeListener implements PluginMessageListener, Listener {
 
-    public static final String pluginChannel = "coreprotect:handshake";
-    private static PluginChannelHandshakeListener instance;
-    private final int networkingProtocolVersion = 1;
-    private final Set<UUID> pluginChannelPlayers;
+  public static final String pluginChannel = "coreprotect:handshake";
+  private static PluginChannelHandshakeListener instance;
+  private final int networkingProtocolVersion = 1;
+  private final Set<UUID> pluginChannelPlayers;
 
-    public PluginChannelHandshakeListener() {
-        instance = this;
-        pluginChannelPlayers = new HashSet<>();
+  public PluginChannelHandshakeListener() {
+    instance = this;
+    pluginChannelPlayers = new HashSet<>();
+  }
+
+  public static PluginChannelHandshakeListener getInstance() {
+    return instance;
+  }
+
+  public Set<UUID> getPluginChannelPlayers() {
+    return pluginChannelPlayers;
+  }
+
+  public boolean isPluginChannelPlayer(CommandSender commandSender) {
+    if (!(commandSender instanceof Player)) {
+      return false;
     }
 
-    public static PluginChannelHandshakeListener getInstance() {
-        return instance;
+    return getPluginChannelPlayers().contains(((Player) commandSender).getUniqueId());
+  }
+
+  @EventHandler
+  public void onPlayerQuit(PlayerQuitEvent event) {
+    getPluginChannelPlayers().remove(event.getPlayer().getUniqueId());
+  }
+
+  @Override
+  public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+    handleHandshake(s, player, bytes);
+  }
+
+  private void handleHandshake(String channel, Player player, byte[] bytes) {
+    if (!player.hasPermission("coreprotect.networking")) {
+      return;
     }
 
-    public Set<UUID> getPluginChannelPlayers() {
-        return pluginChannelPlayers;
+    if (!channel.equals(pluginChannel)) {
+      return;
     }
 
-    public boolean isPluginChannelPlayer(CommandSender commandSender) {
-        if (!(commandSender instanceof Player)) {
-            return false;
-        }
+    ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+    DataInputStream dis = new DataInputStream(in);
 
-        return getPluginChannelPlayers().contains(((Player) commandSender).getUniqueId());
+    try {
+      String modVersion = dis.readUTF();
+      String modId = dis.readUTF();
+      int protocolVersion = dis.readInt();
+      if (Config.getGlobal().NETWORK_DEBUG) {
+        Chat.console(new String(bytes));
+        Chat.console(modVersion);
+        Chat.console(modId);
+        Chat.console(String.valueOf(protocolVersion));
+      }
+
+      if (protocolVersion != networkingProtocolVersion) {
+        Chat.console(
+            Phrase.build(
+                Phrase.NETWORK_CONNECTION, player.getName(), modId, modVersion, Selector.SECOND));
+        return;
+      }
+
+      getPluginChannelPlayers().add(player.getUniqueId());
+      Chat.console(
+          Phrase.build(
+              Phrase.NETWORK_CONNECTION, player.getName(), modId, modVersion, Selector.FIRST));
+
+      player.sendPluginMessage(CoreProtect.getInstance(), pluginChannel, sendRegistered());
+    } catch (Exception exception) {
+      Chat.console(exception.toString());
+      exception.printStackTrace();
     }
+  }
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        getPluginChannelPlayers().remove(event.getPlayer().getUniqueId());
-    }
+  private byte[] sendRegistered() throws IOException {
+    ByteArrayOutputStream msgBytes = new ByteArrayOutputStream();
+    DataOutputStream msgOut = new DataOutputStream(msgBytes);
+    msgOut.writeBoolean(true);
 
-    @Override
-    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
-        handleHandshake(s, player, bytes);
-    }
-
-    private void handleHandshake(String channel, Player player, byte[] bytes) {
-        if (!player.hasPermission("coreprotect.networking")) {
-            return;
-        }
-
-        if (!channel.equals(pluginChannel)) {
-            return;
-        }
-
-        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-        DataInputStream dis = new DataInputStream(in);
-
-        try {
-            String modVersion = dis.readUTF();
-            String modId = dis.readUTF();
-            int protocolVersion = dis.readInt();
-            if (Config.getGlobal().NETWORK_DEBUG) {
-                Chat.console(new String(bytes));
-                Chat.console(modVersion);
-                Chat.console(modId);
-                Chat.console(String.valueOf(protocolVersion));
-            }
-
-            if (protocolVersion != networkingProtocolVersion) {
-                Chat.console(Phrase.build(Phrase.NETWORK_CONNECTION, player.getName(), modId, modVersion, Selector.SECOND));
-                return;
-            }
-
-            getPluginChannelPlayers().add(player.getUniqueId());
-            Chat.console(Phrase.build(Phrase.NETWORK_CONNECTION, player.getName(), modId, modVersion, Selector.FIRST));
-
-            player.sendPluginMessage(CoreProtect.getInstance(), pluginChannel, sendRegistered());
-        } catch (Exception exception) {
-            Chat.console(exception.toString());
-            exception.printStackTrace();
-        }
-    }
-
-    private byte[] sendRegistered() throws IOException {
-        ByteArrayOutputStream msgBytes = new ByteArrayOutputStream();
-        DataOutputStream msgOut = new DataOutputStream(msgBytes);
-        msgOut.writeBoolean(true);
-
-        return msgBytes.toByteArray();
-    }
+    return msgBytes.toByteArray();
+  }
 }

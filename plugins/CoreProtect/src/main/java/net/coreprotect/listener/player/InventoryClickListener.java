@@ -8,9 +8,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public final class InventoryClickListener extends Queue implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onVillagerTrade(InventoryClickEvent event) {
-        CraftItemListener.playerCraftItem(event, true);
-    }
-
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  private void onVillagerTrade(InventoryClickEvent event) {
+    CraftItemListener.playerCraftItem(event, true);
+  }
 }

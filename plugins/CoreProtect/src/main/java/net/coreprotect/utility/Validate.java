@@ -9,21 +9,21 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class Validate {
 
-    private Validate() {
-        throw new IllegalStateException("Utility class");
-    }
+  private Validate() {
+    throw new IllegalStateException("Utility class");
+  }
 
-    public static boolean isHopper(InventoryHolder inventoryHolder) {
-        return (inventoryHolder instanceof Hopper || inventoryHolder instanceof HopperMinecart);
-    }
+  public static boolean isHopper(InventoryHolder inventoryHolder) {
+    return (inventoryHolder instanceof Hopper || inventoryHolder instanceof HopperMinecart);
+  }
 
-    public static boolean isDropper(InventoryHolder inventoryHolder) {
-        return (inventoryHolder instanceof Dropper);
-    }
+  public static boolean isDropper(InventoryHolder inventoryHolder) {
+    return (inventoryHolder instanceof Dropper);
+  }
 
-    /* check if valid hopper destination */
-    public static boolean isContainer(InventoryHolder inventoryHolder) {
-        return (inventoryHolder instanceof BlockInventoryHolder || inventoryHolder instanceof DoubleChest);
-    }
-
+  /* check if valid hopper destination */
+  public static boolean isContainer(InventoryHolder inventoryHolder) {
+    return (inventoryHolder instanceof BlockInventoryHolder
+        || inventoryHolder instanceof DoubleChest);
+  }
 }

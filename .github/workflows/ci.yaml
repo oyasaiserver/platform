@@ -1,37 +1,31 @@
-name: CI
-
-on:
+---
+name: "CI"
+"on":
   push:
     branches:
-      - main
-
+    - "main"
 env:
-  PLUGIN_ARTIFACT_NAME: plugins
-  PLUGIN_ARTIFACTS_DIR: flat-plugins
-
+  PLUGIN_ARTIFACT_NAME: "plugins"
+  PLUGIN_ARTIFACTS_DIR: "flat-plugins"
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-env
-      - run: ./gradlew spotlessCheck --parallel
-      - run: |
-          npm run check
-          npm run typecheck
-
+    - uses: "actions/checkout@v4"
+    - uses: "./.github/actions/setup-env"
+    - run: "./gradlew spotlessCheck --parallel"
+    - run: "npm run check\nnpm run typecheck\n"
   build-and-upload-plugins:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-env
-      - run: ./gradlew build --parallel
-      - name: Flatten and collect JARs
-        run: |
-          mkdir -p ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          find plugins -name "*.jar" -exec cp {} ${{ env.PLUGIN_ARTIFACTS_DIR }}/ \;
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.PLUGIN_ARTIFACT_NAME }}
-          path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          retention-days: 2
+    - uses: "actions/checkout@v4"
+    - uses: "./.github/actions/setup-env"
+    - run: "./gradlew build --parallel"
+    - name: "Flatten and collect JARs"
+      run: "mkdir -p ${{ env.PLUGIN_ARTIFACTS_DIR }}\nfind plugins -name \"*.jar\"\
+        \ -exec cp {} ${{ env.PLUGIN_ARTIFACTS_DIR }}/ \\;\n"
+    - uses: "actions/upload-artifact@v4"
+      with:
+        name: "${{ env.PLUGIN_ARTIFACT_NAME }}"
+        path: "${{ env.PLUGIN_ARTIFACTS_DIR }}"
+        retention-days: 2

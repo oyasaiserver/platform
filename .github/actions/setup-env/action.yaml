@@ -1,20 +1,20 @@
-name: Setup Shared Environment
-
+---
+name: "Setup Shared Environment"
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - uses: actions/setup-java@v4
-      with:
-        cache: gradle
-        distribution: oracle
-        java-version: "24"
-    - uses: gradle/actions/setup-gradle@v4
-      with:
-        gradle-version: "8.14"
-    - uses: actions/setup-node@v4
-      with:
-        node-version-file: package.json
-        cache: npm
-        cache-dependency-path: package-lock.json
-    - run: npm ci
-      shell: bash
+  - uses: "actions/setup-java@v4"
+    with:
+      cache: "gradle"
+      distribution: "oracle"
+      java-version: "24"
+  - uses: "gradle/actions/setup-gradle@v4"
+    with:
+      gradle-version: "8.14"
+  - uses: "actions/setup-node@v4"
+    with:
+      node-version-file: "package.json"
+      cache: "npm"
+      cache-dependency-path: "package-lock.json"
+  - run: "npm ci"
+    shell: "bash"

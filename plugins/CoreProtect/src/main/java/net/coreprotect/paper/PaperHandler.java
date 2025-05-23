@@ -8,19 +8,18 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class PaperHandler extends PaperAdapter {
 
-    @Override
-    public boolean isStopping(Server server) {
-        return server.isStopping();
-    }
+  @Override
+  public boolean isStopping(Server server) {
+    return server.isStopping();
+  }
 
-    @Override
-    public void teleportAsync(Entity entity, Location location) {
-        entity.teleportAsync(location);
-    }
+  @Override
+  public void teleportAsync(Entity entity, Location location) {
+    entity.teleportAsync(location);
+  }
 
-    @Override
-    public InventoryHolder getHolder(Inventory holder, boolean useSnapshot) {
-        return holder.getHolder(useSnapshot);
-    }
-
+  @Override
+  public InventoryHolder getHolder(Inventory holder, boolean useSnapshot) {
+    return holder.getHolder(useSnapshot);
+  }
 }
