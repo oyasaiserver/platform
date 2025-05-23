@@ -10,39 +10,21 @@ env:
   PLUGIN_ARTIFACTS_DIR: flat-plugins
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          cache: gradle
-          distribution: oracle
-          java-version: "24"
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.14"
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
-          cache: npm
-          cache-dependency-path: package-lock.json
-
   check:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-env
       - run: ./gradlew spotlessCheck --parallel
-      - run: npm install
-      - run: npm run check
-      - run: npm run typecheck
+      - run: |
+          npm run check
+          npm run typecheck
 
   build-and-upload-plugins:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-env
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |
@@ -52,4 +34,4 @@ jobs:
         with:
           name: ${{ env.PLUGIN_ARTIFACT_NAME }}
           path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          retention-days: 1
+          retention-days: 2
