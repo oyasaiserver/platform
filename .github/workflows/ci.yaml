@@ -7,7 +7,7 @@ on:
 
 env:
   PLUGIN_ARTIFACT_NAME: plugins
-  PLUGIN_ARTIFACTS_DIR: flat-artifacts
+  PLUGIN_ARTIFACTS_DIR: flat-plugins
 
 jobs:
   setup:
@@ -27,7 +27,6 @@ jobs:
           node-version-file: package.json
           cache: npm
           cache-dependency-path: package-lock.json
-      - run: npm install
 
   check:
     needs: setup
@@ -35,6 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: ./gradlew spotlessCheck --parallel
+      - run: npm install
       - run: npm run check
       - run: npm run typecheck
 

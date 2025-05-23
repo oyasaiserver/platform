@@ -1,7 +1,6 @@
 plugins {
     java
     id("com.gradleup.shadow") version "9.0.0-beta12"
-    id("com.diffplug.spotless") version "7.0.3"
 }
 
 group = "net.coreprotect"
@@ -31,13 +30,6 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.19.0")
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-        vendor = JvmVendorSpec.ORACLE
-    }
-}
-
 tasks.apply {
     jar {
         manifest {
@@ -48,11 +40,9 @@ tasks.apply {
     shadowJar {
         archiveClassifier.set("")
 
-        // Relocations
         relocate("org.bstats", "net.coreprotect.org.bstats")
         relocate("com.zaxxer", "net.coreprotect.com.zaxxer")
 
-        // Filters
         exclude("**/*.java")
         exclude("**/*.c")
         exclude("META-INF/maven/**")
