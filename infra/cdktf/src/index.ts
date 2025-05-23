@@ -10,7 +10,7 @@ export class D1Stack extends TerraformStack {
     new CloudflareProvider(this, id)
 
     new D1Database(this, 'd1', {
-      accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+      accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '',
       name: 'my-d1-db',
       readReplication: {
         mode: 'disabled'

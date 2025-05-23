@@ -1,3 +1,4 @@
 {
-  "references": [{ "path": "apps/wiki" }]
+  "files": [],
+  "references": [{ "path": "apps/wiki" }, { "path": "infra/cdktf" }]
 }
