@@ -1,28 +1,7 @@
 package net.coreprotect.config;
 
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.consumer.Queue;
 import net.coreprotect.database.Database;
@@ -37,17 +16,35 @@ import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Color;
 import net.coreprotect.utility.SystemUtils;
 import net.coreprotect.utility.VersionUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import oshi.hardware.CentralProcessor;
 
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class ConfigHandler extends Queue {
-    public static int SERVER_VERSION = 0;
     public static final int EDITION_VERSION = 2;
     public static final String EDITION_BRANCH = VersionUtils.getBranch();
-    public static final String EDITION_NAME = VersionUtils.getPluginName();
     public static final String COMMUNITY_EDITION = "Community Edition";
+    public static final String EDITION_NAME = VersionUtils.getPluginName();
     public static final String JAVA_VERSION = "11.0";
     public static final String MINECRAFT_VERSION = "1.16";
     public static final String LATEST_VERSION = "1.21";
+    public static final CentralProcessor processorInfo = SystemUtils.getProcessorInfo();
+    public static final boolean isSpigot = VersionUtils.isSpigot();
+    public static final boolean isPaper = VersionUtils.isPaper();
+    public static final boolean isFolia = VersionUtils.isFolia();
+    public static int SERVER_VERSION = 0;
     public static String path = "plugins/CoreProtect/";
     public static String sqlite = "database.db";
     public static String host = "127.0.0.1";
@@ -58,12 +55,7 @@ public class ConfigHandler extends Queue {
     public static String prefix = "co_";
     public static String prefixConfig = "co_";
     public static int maximumPoolSize = 10;
-
     public static HikariDataSource hikariDataSource = null;
-    public static final CentralProcessor processorInfo = SystemUtils.getProcessorInfo();
-    public static final boolean isSpigot = VersionUtils.isSpigot();
-    public static final boolean isPaper = VersionUtils.isPaper();
-    public static final boolean isFolia = VersionUtils.isFolia();
     public static volatile boolean serverRunning = false;
     public static volatile boolean converterRunning = false;
     public static volatile boolean purgeRunning = false;
@@ -76,11 +68,6 @@ public class ConfigHandler extends Queue {
     public static volatile int blockdataId = 0;
     public static volatile int entityId = 0;
     public static volatile int artId = 0;
-
-    private static <K, V> Map<K, V> syncMap() {
-        return Collections.synchronizedMap(new HashMap<>());
-    }
-
     public static Map<String, Integer> worlds = syncMap();
     public static Map<Integer, String> worldsReversed = syncMap();
     public static Map<String, Integer> materials = syncMap();
@@ -136,6 +123,10 @@ public class ConfigHandler extends Queue {
     public static ConcurrentHashMap<String, String> language = new ConcurrentHashMap<>();
     public static List<String> databaseTables = new ArrayList<>();
 
+    private static <K, V> Map<K, V> syncMap() {
+        return Collections.synchronizedMap(new HashMap<>());
+    }
+
     public static void checkPlayers(Connection connection) {
         ConfigHandler.playerIdCache.clear();
         ConfigHandler.playerIdCacheReversed.clear();
@@ -164,8 +155,7 @@ public class ConfigHandler extends Queue {
                 }
                 blfile.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -191,8 +181,7 @@ public class ConfigHandler extends Queue {
             ConfigHandler.prefix = Config.getGlobal().PREFIX;
 
             ConfigHandler.loadBlacklist(); // Load the blacklist file if it exists.
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -209,8 +198,7 @@ public class ConfigHandler extends Queue {
                 boolean canExecute = false;
                 try {
                     canExecute = tempFile.canExecute();
-                }
-                catch (Exception exception) {
+                } catch (Exception exception) {
                     // execute access denied by security manager
                 }
 
@@ -226,18 +214,15 @@ public class ConfigHandler extends Queue {
                 tempFile.delete();
 
                 Class.forName("org.sqlite.JDBC");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             HikariConfig config = new HikariConfig();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 config.setDriverClassName("com.mysql.jdbc.Driver");
             }
 
@@ -337,8 +322,7 @@ public class ConfigHandler extends Queue {
                 }
             }
             rs.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -373,8 +357,7 @@ public class ConfigHandler extends Queue {
                     Queue.queueWorldInsert(id, worldname);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -399,8 +382,7 @@ public class ConfigHandler extends Queue {
                                 lockMessage = true;
                             }
                             Thread.sleep(1000);
-                        }
-                        else {
+                        } else {
                             Chat.sendConsoleMessage(Color.RED + "[CoreProtect] " + Phrase.build(Phrase.DATABASE_LOCKED_2));
                             Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.DATABASE_LOCKED_3));
                             Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.DATABASE_LOCKED_4));
@@ -412,8 +394,7 @@ public class ConfigHandler extends Queue {
                     rs.close();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -433,8 +414,7 @@ public class ConfigHandler extends Queue {
             if (startup) {
                 ListenerHandler.registerNetworking(); // Register channels for networking API
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -452,8 +432,7 @@ public class ConfigHandler extends Queue {
                 if (worldEditPlugin != null && worldEditPlugin.isEnabled()) {
                     VersionUtils.loadWorldEdit();
                 }
-            }
-            else if (ConfigHandler.worldeditEnabled) {
+            } else if (ConfigHandler.worldeditEnabled) {
                 VersionUtils.unloadWorldEdit();
             }
 
@@ -468,8 +447,7 @@ public class ConfigHandler extends Queue {
             statement.close();
 
             return validVersion && databaseLock;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -480,8 +458,7 @@ public class ConfigHandler extends Queue {
         try {
             Database.closeConnection();
             ListenerHandler.unregisterNetworking(); // Unregister channels for networking API
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

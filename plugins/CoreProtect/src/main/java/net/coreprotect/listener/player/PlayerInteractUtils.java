@@ -1,13 +1,12 @@
 package net.coreprotect.listener.player;
 
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.utility.WorldUtils;
 
 public final class PlayerInteractUtils {
 
@@ -23,7 +22,7 @@ public final class PlayerInteractUtils {
         int y = location.getBlockY();
         int z = location.getBlockZ();
         String coordinates = x + "." + y + "." + z + "." + wid + "." + Material.DRAGON_EGG.name();
-        CacheHandler.interactCache.put(coordinates, new Object[] { time, Material.DRAGON_EGG, player.getName() });
+        CacheHandler.interactCache.put(coordinates, new Object[]{time, Material.DRAGON_EGG, player.getName()});
     }
 
     public static void handleBisectedBlockVisualization(Player player, Block block, World world) {

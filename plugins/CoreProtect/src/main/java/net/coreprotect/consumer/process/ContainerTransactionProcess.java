@@ -1,23 +1,15 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Consumer;
+import net.coreprotect.database.logger.ContainerLogger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Consumer;
-import net.coreprotect.database.logger.ContainerLogger;
+import java.sql.PreparedStatement;
+import java.util.*;
 
 class ContainerTransactionProcess {
 
@@ -45,8 +37,7 @@ class ContainerTransactionProcess {
                             ConfigHandler.loggingChest.remove(loggingChestId);
                             ConfigHandler.transactingChest.remove(transactingChestId);
                         }
-                    }
-                    else if (loggingChestId.startsWith("#hopper")) {
+                    } else if (loggingChestId.startsWith("#hopper")) {
                         List<Object> transactingChest = ConfigHandler.transactingChest.get(transactingChestId);
                         if (force_size == 0 && ConfigHandler.oldContainer.getOrDefault(loggingChestId, Collections.synchronizedList(new ArrayList<>())).size() == 1 && transactingChest != null && transactingChest.isEmpty()) {
                             int loopCount = ConfigHandler.loggingChest.getOrDefault(loggingChestId, 0);
@@ -54,8 +45,7 @@ class ContainerTransactionProcess {
                             try {
                                 Inventory checkInventory = (Inventory) inventory;
                                 maxInventorySize = checkInventory.getSize() * checkInventory.getMaxStackSize();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 // use default of 5,346
                             }
 
@@ -77,7 +67,7 @@ class ContainerTransactionProcess {
                                         ((Set<?>) lastAbort[0]).forEach(itemStack -> movedItems.add((ItemStack) itemStack));
                                     }
                                     movedItems.add(movedItem);
-                                    ConfigHandler.hopperAbort.put(hopperPush, new Object[] { movedItems, destinationContents });
+                                    ConfigHandler.hopperAbort.put(hopperPush, new Object[]{movedItems, destinationContents});
                                 }
                             }
                         }

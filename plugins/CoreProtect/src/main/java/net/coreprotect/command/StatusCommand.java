@@ -1,11 +1,5 @@
 package net.coreprotect.command;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -19,6 +13,11 @@ import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Color;
 import net.coreprotect.utility.SystemUtils;
 import net.coreprotect.utility.VersionUtils;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StatusCommand {
     private static final ConcurrentHashMap<String, Boolean> alert = new ConcurrentHashMap<>();
@@ -50,8 +49,7 @@ public class StatusCommand {
                     String donationKey = NetworkHandler.donationKey();
                     if (donationKey != null) {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_LICENSE, Color.WHITE, Phrase.build(Phrase.VALID_DONATION_KEY)) + " (" + donationKey + ")");
-                    }
-                    else {
+                    } else {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_LICENSE, Color.WHITE, Phrase.build(Phrase.INVALID_DONATION_KEY)) + Color.GREY + Color.ITALIC + " (" + Phrase.build(Phrase.CHECK_CONFIG) + ")");
                     }
 
@@ -68,15 +66,13 @@ public class StatusCommand {
                     }
                     if (Config.getGlobal().MYSQL) {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_DATABASE, Color.WHITE, "MySQL") + firstVersion);
-                    }
-                    else {
+                    } else {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_DATABASE, Color.WHITE, "SQLite") + firstVersion);
                     }
 
                     if (ConfigHandler.worldeditEnabled) {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_INTEGRATION, Color.WHITE, "WorldEdit", Selector.FIRST));
-                    }
-                    else if (instance.getServer().getPluginManager().getPlugin("WorldEdit") != null) {
+                    } else if (instance.getServer().getPluginManager().getPlugin("WorldEdit") != null) {
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_INTEGRATION, Color.WHITE, "WorldEdit", Selector.SECOND));
                     }
 
@@ -85,8 +81,7 @@ public class StatusCommand {
                         int currentConsumerSize = Process.getCurrentConsumerSize();
                         if (currentConsumerSize == 0) {
                             consumerCount = Consumer.getConsumerSize(0) + Consumer.getConsumerSize(1);
-                        }
-                        else {
+                        } else {
                             int consumerId = (Consumer.currentConsumer == 1) ? 1 : 0;
                             consumerCount = Consumer.getConsumerSize(consumerId) + currentConsumerSize;
                         }
@@ -98,8 +93,7 @@ public class StatusCommand {
                         }
 
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_CONSUMER, Color.WHITE, String.format("%,d", consumerCount), (consumerCount == 1 ? Selector.FIRST : Selector.SECOND)));
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -110,8 +104,7 @@ public class StatusCommand {
                             if (modelName.contains(" CPU")) {
                                 String[] split = modelName.split(" CPU")[0].split(" ");
                                 modelName = split[split.length - 1];
-                            }
-                            else if (modelName.contains(" Processor")) {
+                            } else if (modelName.contains(" Processor")) {
                                 String[] split = modelName.split(" Processor")[0].split(" ");
                                 modelName = split[split.length - 1];
                             }
@@ -129,8 +122,7 @@ public class StatusCommand {
 
                             cpuSpeed = String.format("%.2f", speedVal);
                             cpuInfo = "x" + Runtime.getRuntime().availableProcessors() + " " + cpuSpeed + "GHz " + modelName + ".";
-                        }
-                        else {
+                        } else {
                             cpuInfo = "x" + Runtime.getRuntime().availableProcessors() + " " + Phrase.build(Phrase.CPU_CORES);
                         }
 
@@ -144,8 +136,7 @@ public class StatusCommand {
                         }
 
                         Chat.sendMessage(player, Color.DARK_AQUA + Phrase.build(Phrase.STATUS_SYSTEM, Color.WHITE, systemInformation));
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -167,8 +158,7 @@ public class StatusCommand {
                             */
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

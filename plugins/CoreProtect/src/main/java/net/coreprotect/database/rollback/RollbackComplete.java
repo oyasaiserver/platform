@@ -1,21 +1,20 @@
 package net.coreprotect.database.rollback;
 
+import net.coreprotect.language.Phrase;
+import net.coreprotect.language.Selector;
+import net.coreprotect.utility.Chat;
+import net.coreprotect.utility.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-
-import net.coreprotect.language.Phrase;
-import net.coreprotect.language.Selector;
-import net.coreprotect.utility.Chat;
-import net.coreprotect.utility.Color;
 
 public class RollbackComplete {
 
@@ -32,8 +31,7 @@ public class RollbackComplete {
             for (String value : checkUsers) {
                 if (usersBuilder.length() == 0) {
                     usersBuilder = usersBuilder.append(value);
-                }
-                else {
+                } else {
                     usersBuilder.append(", ").append(value);
                 }
             }
@@ -45,11 +43,9 @@ public class RollbackComplete {
 
             if (preview > 0) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_COMPLETED, users, Selector.THIRD)); // preview
-            }
-            else if (rollbackType == 0) {
+            } else if (rollbackType == 0) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_COMPLETED, users, Selector.FIRST)); // rollback
-            }
-            else if (rollbackType == 1) {
+            } else if (rollbackType == 1) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_COMPLETED, users, Selector.SECOND)); // restore
             }
 
@@ -62,8 +58,7 @@ public class RollbackComplete {
                 if (worldedit == 0) {
                     Integer rollbackRadius = radius[0];
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_RADIUS, rollbackRadius.toString(), (rollbackRadius == 1 ? Selector.FIRST : Selector.SECOND)));
-                }
-                else {
+                } else {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_SELECTION, "#worldedit"));
                 }
             }
@@ -77,35 +72,26 @@ public class RollbackComplete {
             if (actionList.contains(4) && actionList.contains(11)) {
                 if (actionList.contains(0)) {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "+inventory", Selector.SECOND));
-                }
-                else if (actionList.contains(1)) {
+                } else if (actionList.contains(1)) {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "-inventory", Selector.SECOND));
-                }
-                else {
+                } else {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "inventory", Selector.SECOND));
                 }
-            }
-            else if (actionList.contains(4)) {
+            } else if (actionList.contains(4)) {
                 if (actionList.contains(0)) {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "-container", Selector.SECOND));
-                }
-                else if (actionList.contains(1)) {
+                } else if (actionList.contains(1)) {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "+container", Selector.SECOND));
-                }
-                else {
+                } else {
                     Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "container", Selector.SECOND));
                 }
-            }
-            else if (actionList.contains(0) && actionList.contains(1)) {
+            } else if (actionList.contains(0) && actionList.contains(1)) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "block", Selector.SECOND));
-            }
-            else if (actionList.contains(0)) {
+            } else if (actionList.contains(0)) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "-block", Selector.SECOND));
-            }
-            else if (actionList.contains(1)) {
+            } else if (actionList.contains(1)) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "+block", Selector.SECOND));
-            }
-            else if (actionList.contains(3)) {
+            } else if (actionList.contains(3)) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.ROLLBACK_WORLD_ACTION, "kill", Selector.SECOND));
             }
 
@@ -123,16 +109,14 @@ public class RollbackComplete {
                         targetName = ((Material) restrictTarget).name().toLowerCase(Locale.ROOT);
                         item = (!item ? !(((Material) restrictTarget).isBlock()) : item);
                         material = true;
-                    }
-                    else if (restrictTarget instanceof EntityType) {
+                    } else if (restrictTarget instanceof EntityType) {
                         targetName = ((EntityType) restrictTarget).name().toLowerCase(Locale.ROOT);
                         entity = true;
                     }
 
                     if (targetCount == 0) {
                         restrictTargets = restrictTargets.append(targetName);
-                    }
-                    else {
+                    } else {
                         restrictTargets.append(", ").append(targetName);
                     }
 
@@ -142,11 +126,9 @@ public class RollbackComplete {
                 String targetType = Selector.THIRD;
                 if (material && !item && !entity) {
                     targetType = Selector.FIRST;
-                }
-                else if (material && item && !entity) {
+                } else if (material && item && !entity) {
                     targetType = Selector.THIRD;
-                }
-                else if (entity && !material) {
+                } else if (entity && !material) {
                     targetType = Selector.SECOND;
                 }
 
@@ -181,16 +163,14 @@ public class RollbackComplete {
                         targetName = ((Material) excludeTarget).name().toLowerCase(Locale.ROOT);
                         item = (!item ? !(((Material) excludeTarget).isBlock()) : item);
                         material = true;
-                    }
-                    else if (excludeTarget instanceof EntityType) {
+                    } else if (excludeTarget instanceof EntityType) {
                         targetName = ((EntityType) excludeTarget).name().toLowerCase(Locale.ROOT);
                         entity = true;
                     }
 
                     if (excludeCount == 0) {
                         excludeTargets = excludeTargets.append(targetName);
-                    }
-                    else {
+                    } else {
                         excludeTargets.append(", ").append(targetName);
                     }
 
@@ -200,11 +180,9 @@ public class RollbackComplete {
                 String targetType = Selector.THIRD;
                 if (material && !item && !entity) {
                     targetType = Selector.FIRST;
-                }
-                else if (material && item && !entity) {
+                } else if (material && item && !entity) {
                     targetType = Selector.THIRD;
-                }
-                else if (entity && !material) {
+                } else if (entity && !material) {
                     targetType = Selector.SECOND;
                 }
 
@@ -227,8 +205,7 @@ public class RollbackComplete {
 
                     if (excludeCount == 0) {
                         excludeUsers = excludeUsers.append(excludeUser);
-                    }
-                    else {
+                    } else {
                         excludeUsers.append(", ").append(excludeUser);
                     }
 
@@ -245,8 +222,7 @@ public class RollbackComplete {
             if (actionList.contains(5)) {
                 modifiedData = modifiedData.append(Phrase.build(Phrase.AMOUNT_ITEM, NumberFormat.getInstance().format(blockCount), (blockCount == 1 ? Selector.FIRST : Selector.SECOND)));
                 modifyCount++;
-            }
-            else {
+            } else {
                 if (itemCount > 0 || actionList.contains(4)) {
                     modifiedData = modifiedData.append(Phrase.build(Phrase.AMOUNT_ITEM, NumberFormat.getInstance().format(itemCount), (itemCount == 1 ? Selector.FIRST : Selector.SECOND)));
                     modifyCount++;
@@ -277,8 +253,7 @@ public class RollbackComplete {
                     }
                     modifiedData.append(Phrase.build(Phrase.AMOUNT_CHUNK, NumberFormat.getInstance().format(chunkCount), (chunkCount == 1 ? Selector.FIRST : Selector.SECOND)));
                     modifyCount++;
-                }
-                else if (chunkCount > 1) {
+                } else if (chunkCount > 1) {
                     modifiedDataVerbose.append(Phrase.build(Phrase.AMOUNT_CHUNK, NumberFormat.getInstance().format(chunkCount), (chunkCount == 1 ? Selector.FIRST : Selector.SECOND)));
                 }
             }
@@ -297,8 +272,7 @@ public class RollbackComplete {
             if (preview > 0) {
                 Chat.sendMessage(user, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.PLEASE_SELECT, "/co apply", "/co cancel"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -1,13 +1,5 @@
 package net.coreprotect.api;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.block.Block;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
@@ -15,6 +7,13 @@ import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.utility.BlockUtils;
 import net.coreprotect.utility.StringUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.block.Block;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides API methods for block-related lookups in the CoreProtect database.
@@ -31,11 +30,9 @@ public class BlockAPI {
 
     /**
      * Performs a lookup of block-related actions at the specified block.
-     * 
-     * @param block
-     *            The block to look up
-     * @param offset
-     *            Time constraint in seconds (0 means no time constraint)
+     *
+     * @param block  The block to look up
+     * @param offset Time constraint in seconds (0 means no time constraint)
      * @return List of results in a String array format
      */
     public static List<String[]> performLookup(Block block, int offset) {
@@ -85,14 +82,13 @@ public class BlockAPI {
                         String resultUser = ConfigHandler.playerIdCacheReversed.get(resultUserId);
                         String blockData = BlockUtils.byteDataToString(resultBlockData, resultType);
 
-                        String[] lookupData = new String[] { resultTime, resultUser, String.valueOf(x), String.valueOf(y), String.valueOf(z), String.valueOf(resultType), resultData, resultAction, resultRolledBack, String.valueOf(worldId), blockData };
+                        String[] lookupData = new String[]{resultTime, resultUser, String.valueOf(x), String.valueOf(y), String.valueOf(z), String.valueOf(resultType), resultData, resultAction, resultRolledBack, String.valueOf(worldId), blockData};
 
                         result.add(StringUtils.toStringArray(lookupData));
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

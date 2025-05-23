@@ -1,13 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.Config;
@@ -18,6 +10,13 @@ import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.thread.CacheHandler;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+
+import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Locale;
 
 public class BlockPlaceLogger {
 
@@ -43,12 +42,10 @@ public class BlockPlaceLogger {
                 type = forceType;
                 if (BukkitAdapter.ADAPTER.isItemFrame(type) || type.equals(Material.SPAWNER) || type.equals(Material.PAINTING) || type.equals(Material.SKELETON_SKULL) || type.equals(Material.SKELETON_WALL_SKULL) || type.equals(Material.WITHER_SKELETON_SKULL) || type.equals(Material.WITHER_SKELETON_WALL_SKULL) || type.equals(Material.ZOMBIE_HEAD) || type.equals(Material.ZOMBIE_WALL_HEAD) || type.equals(Material.PLAYER_HEAD) || type.equals(Material.PLAYER_WALL_HEAD) || type.equals(Material.CREEPER_HEAD) || type.equals(Material.CREEPER_WALL_HEAD) || type.equals(Material.DRAGON_HEAD) || type.equals(Material.DRAGON_WALL_HEAD) || type.equals(Material.ARMOR_STAND) || type.equals(Material.END_CRYSTAL)) {
                     data = forceData; // mob spawner, skull
-                }
-                else if (user.startsWith("#")) {
+                } else if (user.startsWith("#")) {
                     data = forceData;
                 }
-            }
-            else if (forceType != null && !type.equals(forceType)) {
+            } else if (forceType != null && !type.equals(forceType)) {
                 type = forceType;
                 data = forceData;
             }
@@ -79,8 +76,7 @@ public class BlockPlaceLogger {
                     if (timeSincePopulation > 240) {
                         ConfigHandler.populatedChunks.remove(chunkKey);
                     }
-                }
-                else if (type == Material.WATER || type == Material.LAVA) {
+                } else if (type == Material.WATER || type == Material.LAVA) {
                     ConfigHandler.populatedChunks.remove(chunkKey);
                 }
             }
@@ -95,7 +91,7 @@ public class BlockPlaceLogger {
             int time = (int) (System.currentTimeMillis() / 1000L);
 
             if (event.getUser().length() > 0) {
-                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[] { time, event.getUser(), type });
+                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[]{time, event.getUser(), type});
             }
 
             if (event.isCancelled()) {
@@ -108,8 +104,7 @@ public class BlockPlaceLogger {
             }
 
             BlockStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, internalType, data, meta, blockData, 1, 0);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -1,14 +1,13 @@
 package net.coreprotect.utility;
 
+import net.coreprotect.language.Phrase;
+import org.bukkit.command.ConsoleCommandSender;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.bukkit.command.ConsoleCommandSender;
-
-import net.coreprotect.language.Phrase;
 
 public class ChatUtils {
 
@@ -58,8 +57,7 @@ public class ChatUtils {
                 pagination.append(Color.WHITE + Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_COMMAND + "|/" + command + " l " + 1 + "|" + "1 " + Chat.COMPONENT_TAG_CLOSE);
                 if (page > 4 && totalPages > 7) {
                     pagination.append(Color.GREY + "... ");
-                }
-                else {
+                } else {
                     pagination.append(Color.GREY + "| ");
                 }
             }
@@ -72,8 +70,7 @@ public class ChatUtils {
                 if (displayStart > (totalPages - 3)) {
                     displayStart = (totalPages - 3) < 1 ? 1 : (totalPages - 3);
                 }
-            }
-            else { // display at least 7 page numbers
+            } else { // display at least 7 page numbers
                 if (displayStart > (totalPages - 5)) {
                     displayStart = (totalPages - 5) < 1 ? 1 : (totalPages - 5);
                 }
@@ -100,8 +97,7 @@ public class ChatUtils {
             for (int displayPage = displayStart; displayPage <= displayEnd; displayPage++) {
                 if (page != displayPage) {
                     pagination.append(Color.WHITE + Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_COMMAND + "|/" + command + " l " + displayPage + "|" + displayPage + (displayPage < totalPages ? " " : "") + Chat.COMPONENT_TAG_CLOSE);
-                }
-                else {
+                } else {
                     pagination.append(Color.WHITE + Color.UNDERLINE + displayPage + Color.RESET + (displayPage < totalPages ? " " : ""));
                 }
                 if (displayPage < displayEnd) {
@@ -112,14 +108,12 @@ public class ChatUtils {
             if (displayEnd < totalPages) {
                 if (displayEnd < (totalPages - 1)) {
                     pagination.append(Color.GREY + "... ");
-                }
-                else {
+                } else {
                     pagination.append(Color.GREY + "| ");
                 }
                 if (page != totalPages) {
                     pagination.append(Color.WHITE + Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_COMMAND + "|/" + command + " l " + totalPages + "|" + totalPages + Chat.COMPONENT_TAG_CLOSE);
-                }
-                else {
+                } else {
                     pagination.append(Color.WHITE + Color.UNDERLINE + totalPages);
                 }
             }

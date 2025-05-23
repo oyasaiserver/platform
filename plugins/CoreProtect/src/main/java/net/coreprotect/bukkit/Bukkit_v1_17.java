@@ -1,11 +1,8 @@
 package net.coreprotect.bukkit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.utility.ItemUtils;
+import net.coreprotect.utility.MaterialUtils;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -13,20 +10,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.PointedDripstone;
-import org.bukkit.entity.Axolotl;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.GlowItemFrame;
-import org.bukkit.entity.Goat;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.utility.ItemUtils;
-import net.coreprotect.utility.MaterialUtils;
+import java.util.*;
 
 /**
  * Bukkit adapter implementation for Minecraft 1.17.
@@ -94,8 +83,7 @@ public class Bukkit_v1_17 extends BukkitAdapter {
         if (entity instanceof Axolotl axolotl) {
             info.add(axolotl.getVariant());
             return true;
-        }
-        else if (entity instanceof Goat goat) {
+        } else if (entity instanceof Goat goat) {
             info.add(goat.isScreaming());
             return true;
         }
@@ -111,8 +99,7 @@ public class Bukkit_v1_17 extends BukkitAdapter {
                 axolotl.setVariant(variant);
                 return true;
             }
-        }
-        else if (entity instanceof Goat goat) {
+        } else if (entity instanceof Goat goat) {
             if (count == 0) {
                 boolean isScreaming = (Boolean) value;
                 goat.setScreaming(isScreaming);

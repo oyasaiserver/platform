@@ -1,11 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -13,6 +7,11 @@ import net.coreprotect.database.statement.CommandStatement;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+
+import java.sql.PreparedStatement;
+import java.util.Locale;
 
 public class CommandLogger {
 
@@ -44,8 +43,7 @@ public class CommandLogger {
             int y = location.getBlockY();
             int z = location.getBlockZ();
             CommandStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, message);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

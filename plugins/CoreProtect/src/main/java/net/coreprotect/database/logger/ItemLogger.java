@@ -1,15 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -21,6 +11,15 @@ import net.coreprotect.utility.ItemUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
 import net.coreprotect.utility.serialize.ItemMetaHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
+
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ItemLogger {
 
@@ -113,8 +112,7 @@ public class ItemLogger {
             logTransaction(preparedStmt, batchCount, offset, user, location, itemCreates, ITEM_CREATE);
             logTransaction(preparedStmt, batchCount, offset, user, location, itemSells, ITEM_SELL);
             logTransaction(preparedStmt, batchCount, offset, user, location, itemBuys, ITEM_BUY);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -149,8 +147,7 @@ public class ItemLogger {
                     ItemStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, typeId, data, amount, action);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

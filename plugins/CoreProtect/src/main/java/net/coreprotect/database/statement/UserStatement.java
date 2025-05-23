@@ -1,15 +1,11 @@
 package net.coreprotect.database.statement;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Locale;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
+
+import java.sql.*;
+import java.util.Locale;
 
 public class UserStatement {
 
@@ -26,8 +22,7 @@ public class UserStatement {
             PreparedStatement preparedStmt = null;
             if (Database.hasReturningKeys()) {
                 preparedStmt = connection.prepareStatement("INSERT INTO " + ConfigHandler.prefix + "user (time, user) VALUES (?, ?) RETURNING rowid");
-            }
-            else {
+            } else {
                 preparedStmt = connection.prepareStatement("INSERT INTO " + ConfigHandler.prefix + "user (time, user) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
             }
 
@@ -39,8 +34,7 @@ public class UserStatement {
                 resultSet.next();
                 id = resultSet.getInt(1);
                 resultSet.close();
-            }
-            else {
+            } else {
                 preparedStmt.executeUpdate();
                 ResultSet keys = preparedStmt.getGeneratedKeys();
                 keys.next();
@@ -49,8 +43,7 @@ public class UserStatement {
             }
 
             preparedStmt.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return id;
@@ -105,8 +98,7 @@ public class UserStatement {
                 ConfigHandler.uuidCache.put(user.toLowerCase(Locale.ROOT), uuid);
                 ConfigHandler.uuidCacheReversed.put(uuid, user);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -141,8 +133,7 @@ public class UserStatement {
 
             resultSet.close();
             statement.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

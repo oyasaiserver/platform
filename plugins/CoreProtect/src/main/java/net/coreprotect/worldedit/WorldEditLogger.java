@@ -1,7 +1,18 @@
 package net.coreprotect.worldedit;
 
-import java.util.Locale;
-
+import com.sk89q.jnbt.CompoundTag;
+import com.sk89q.jnbt.NBTUtils;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.extension.platform.Actor;
+import com.sk89q.worldedit.extent.Extent;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockStateHolder;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.utility.BlockUtils;
+import net.coreprotect.utility.EntityUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,20 +28,7 @@ import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.sk89q.jnbt.CompoundTag;
-import com.sk89q.jnbt.NBTUtils;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.extension.platform.Actor;
-import com.sk89q.worldedit.extent.Extent;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.world.block.BaseBlock;
-import com.sk89q.worldedit.world.block.BlockStateHolder;
-
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.utility.BlockUtils;
-import net.coreprotect.utility.EntityUtils;
+import java.util.Locale;
 
 public class WorldEditLogger extends Queue {
 
@@ -90,8 +88,7 @@ public class WorldEditLogger extends Queue {
                             try {
                                 EntityType entityType = EntityType.valueOf(mobType);
                                 oldBlockExtraData = EntityUtils.getSpawnerType(entityType);
-                            }
-                            catch (IllegalArgumentException exception) {
+                            } catch (IllegalArgumentException exception) {
                                 // mobType isn't a valid enum (EntityType.class)
                             }
                         }
@@ -100,20 +97,17 @@ public class WorldEditLogger extends Queue {
                 if (containerContents != null) {
                     Queue.queueContainerBreak(actor.getName(), location, oldType, containerContents);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             if (newType.equals(Material.SKELETON_SKULL) || newType.equals(Material.SKELETON_WALL_SKULL) || newType.equals(Material.WITHER_SKELETON_SKULL) || newType.equals(Material.WITHER_SKELETON_WALL_SKULL) || newType.equals(Material.ZOMBIE_HEAD) || newType.equals(Material.ZOMBIE_WALL_HEAD) || newType.equals(Material.PLAYER_HEAD) || newType.equals(Material.PLAYER_WALL_HEAD) || newType.equals(Material.CREEPER_HEAD) || newType.equals(Material.CREEPER_WALL_HEAD) || newType.equals(Material.DRAGON_HEAD) || newType.equals(Material.DRAGON_WALL_HEAD)) {
                 // skull
                 Queue.queueBlockPlaceDelayed(actor.getName(), location, newType, newBlockDataString, oldBlock, 0);
-            }
-            else if ((oldType.equals(Material.AIR) || oldType.equals(Material.CAVE_AIR)) && (!newType.equals(Material.AIR) && !newType.equals(Material.CAVE_AIR))) {
+            } else if ((oldType.equals(Material.AIR) || oldType.equals(Material.CAVE_AIR)) && (!newType.equals(Material.AIR) && !newType.equals(Material.CAVE_AIR))) {
                 // placed a block
                 Queue.queueBlockPlace(actor.getName(), newBlock, newType, null, newType, newBlockExtraData, 0, newBlockDataString);
-            }
-            else if ((!oldType.equals(Material.AIR) && !oldType.equals(Material.CAVE_AIR)) && (!newType.equals(Material.AIR) && !newType.equals(Material.CAVE_AIR))) {
+            } else if ((!oldType.equals(Material.AIR) && !oldType.equals(Material.CAVE_AIR)) && (!newType.equals(Material.AIR) && !newType.equals(Material.CAVE_AIR))) {
                 // replaced a block
                 Waterlogged waterlogged = BlockUtils.checkWaterlogged(newBlockData, oldBlock);
                 if (waterlogged != null) {
@@ -124,8 +118,7 @@ public class WorldEditLogger extends Queue {
                     Queue.queueBlockBreak(actor.getName(), oldBlock, oldBlock.getType(), oldBlockDataString, null, oldBlockExtraData, 0);
                 }
                 Queue.queueBlockPlace(actor.getName(), newBlock, newType, null, newType, newBlockExtraData, 0, newBlockDataString);
-            }
-            else if ((!oldType.equals(Material.AIR) && !oldType.equals(Material.CAVE_AIR)) && (newType.equals(Material.AIR) || newType.equals(Material.CAVE_AIR))) {
+            } else if ((!oldType.equals(Material.AIR) && !oldType.equals(Material.CAVE_AIR)) && (newType.equals(Material.AIR) || newType.equals(Material.CAVE_AIR))) {
                 // removed a block
                 Queue.queueBlockBreak(actor.getName(), oldBlock, oldBlock.getType(), oldBlockDataString, null, oldBlockExtraData, 0);
 
@@ -133,13 +126,11 @@ public class WorldEditLogger extends Queue {
                     if (waterlogged.isWaterlogged()) {
                         Queue.queueBlockPlace(actor.getName(), newBlock, newType, null, Material.WATER, -1, 0, null);
                     }
-                }
-                else if (oldBlockData instanceof Bisected bisected) {
+                } else if (oldBlockData instanceof Bisected bisected) {
                     Location bisectLocation = location.clone();
                     if (bisected.getHalf() == Half.TOP) {
                         bisectLocation.setY(bisectLocation.getY() - 1);
-                    }
-                    else {
+                    } else {
                         bisectLocation.setY(bisectLocation.getY() + 1);
                     }
 
@@ -164,8 +155,7 @@ public class WorldEditLogger extends Queue {
                 String[] mobTypeSplit = mobType.split(":");
                 mobType = mobTypeSplit[1];
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -182,8 +172,7 @@ public class WorldEditLogger extends Queue {
         try {
             JSONObject json = (JSONObject) new JSONParser().parse(line);
             return (String) json.get("text");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -1,8 +1,8 @@
 package net.coreprotect.listener.block;
 
-import java.util.List;
-import java.util.Locale;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.thread.CacheHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -14,9 +14,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFertilizeEvent;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.thread.CacheHandler;
+import java.util.List;
+import java.util.Locale;
 
 public final class BlockFertilizeListener extends Queue implements Listener {
 
@@ -48,8 +47,7 @@ public final class BlockFertilizeListener extends Queue implements Listener {
         Player player = event.getPlayer();
         if (player != null) {
             user = player.getName();
-        }
-        else {
+        } else {
             Object[] data = CacheHandler.redstoneCache.get(location);
             if (data != null) {
                 long newTime = System.currentTimeMillis();

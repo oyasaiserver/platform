@@ -1,13 +1,6 @@
 package net.coreprotect.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import net.coreprotect.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,16 +10,17 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import net.coreprotect.config.ConfigHandler;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TabHandler implements TabCompleter {
 
     // private static String[] COMMANDS = new String[] { "help", "inspect", "rollback", "restore", "lookup", "purge", "reload", "status", "near", "undo" }; // max 10!
-    private static final String[] HELP = new String[] { "inspect", "rollback", "restore", "lookup", "purge", "teleport", "status", "params", "users", "time", "radius", "action", "include", "exclude" };
-    private static final String[] PARAMS = new String[] { "user:", "time:", "radius:", "action:", "include:", "exclude:", "#container" };
-    private static final String[] ACTIONS = new String[] { "block", "+block", "-block", "click", "kill", "+container", "-container", "container", "chat", "command", "+inventory", "-inventory", "inventory", "item", "+item", "-item", "sign", "session", "+session", "-session", "username" };
-    private static final String[] NUMBERS = new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-    private static final String[] TIMES = new String[] { "w", "d", "h", "m", "s" };
+    private static final String[] HELP = new String[]{"inspect", "rollback", "restore", "lookup", "purge", "teleport", "status", "params", "users", "time", "radius", "action", "include", "exclude"};
+    private static final String[] PARAMS = new String[]{"user:", "time:", "radius:", "action:", "include:", "exclude:", "#container"};
+    private static final String[] ACTIONS = new String[]{"block", "+block", "-block", "click", "kill", "+container", "-container", "container", "chat", "command", "+inventory", "-inventory", "inventory", "item", "+item", "-item", "sign", "session", "+session", "-session", "username"};
+    private static final String[] NUMBERS = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    private static final String[] TIMES = new String[]{"w", "d", "h", "m", "s"};
     private static ArrayList<String> materials = null;
 
     @Override
@@ -48,29 +42,21 @@ public class TabHandler implements TabCompleter {
         // Handle param-specific completions
         if (isActionParam(lastArg, currentArg) && hasLookupPermission(sender)) {
             return handleActionParamCompletions(currentArg, lastArg);
-        }
-        else if (isUserParam(lastArg, currentArg) && hasLookupPermission(sender)) {
+        } else if (isUserParam(lastArg, currentArg) && hasLookupPermission(sender)) {
             return handleUserParamCompletions(currentArg, lastArg);
-        }
-        else if (isTimeParam(lastArg, currentArg) && hasTimePermission(sender)) {
+        } else if (isTimeParam(lastArg, currentArg) && hasTimePermission(sender)) {
             return handleTimeParamCompletions(currentArg, lastArg);
-        }
-        else if (isPageParam(lastArg, currentArg) && hasPagePermission(sender)) {
+        } else if (isPageParam(lastArg, currentArg) && hasPagePermission(sender)) {
             return handlePageParamCompletions(currentArg, lastArg);
-        }
-        else if (isRadiusParam(lastArg, currentArg) && hasRadiusPermission(sender)) {
+        } else if (isRadiusParam(lastArg, currentArg) && hasRadiusPermission(sender)) {
             return handleRadiusParamCompletions(currentArg, lastArg, argument0);
-        }
-        else if (isMaterialParam(lastArg, currentArg) && hasLookupPermission(sender)) {
+        } else if (isMaterialParam(lastArg, currentArg) && hasLookupPermission(sender)) {
             return handleMaterialParamCompletions(currentArg, lastArg);
-        }
-        else if (args.length == 2) {
+        } else if (args.length == 2) {
             return handleSecondArgCompletions(sender, argument0, args[1], paramState);
-        }
-        else if (args.length == 3 && argument0.equals("purge") && sender.hasPermission("coreprotect.purge")) {
+        } else if (args.length == 3 && argument0.equals("purge") && sender.hasPermission("coreprotect.purge")) {
             return handlePurgeThirdArgCompletions(args[1], args[2]);
-        }
-        else if (hasLookupCommand(argument0, sender) && (!argument0.equals("l") && !argument0.equals("lookup") || !paramState.hasPage)) {
+        } else if (hasLookupCommand(argument0, sender) && (!argument0.equals("l") && !argument0.equals("lookup") || !paramState.hasPage)) {
             return handleGenericLookupCompletions(argument0, currentArg, paramState);
         }
 
@@ -145,21 +131,6 @@ public class TabHandler implements TabCompleter {
         return lastArg.equals("i:") || lastArg.equals("include:") || lastArg.equals("item:") || lastArg.equals("items:") || lastArg.equals("b:") || lastArg.equals("block:") || lastArg.equals("blocks:") || currentArg.startsWith("i:") || currentArg.startsWith("include:") || currentArg.startsWith("item:") || currentArg.startsWith("items:") || currentArg.startsWith("b:") || currentArg.startsWith("block:") || currentArg.startsWith("blocks:") || lastArg.equals("e:") || lastArg.equals("exclude:") || currentArg.startsWith("e:") || currentArg.startsWith("exclude:");
     }
 
-    private static class ParamState {
-        boolean hasUser;
-        boolean hasAction;
-        boolean hasInclude;
-        boolean hasExclude;
-        boolean hasRadius;
-        boolean hasTime;
-        boolean hasContainer;
-        boolean hasCount;
-        boolean hasPreview;
-        boolean hasPage;
-        boolean validContainer;
-        boolean pageLookup;
-    }
-
     private ParamState getParamState(String[] args) {
         ParamState state = new ParamState();
 
@@ -171,32 +142,23 @@ public class TabHandler implements TabCompleter {
             String arg = args[i].toLowerCase(Locale.ROOT);
             if (arg.equals("#container")) {
                 state.hasContainer = true;
-            }
-            else if (arg.equals("#count") || arg.equals("#sum")) {
+            } else if (arg.equals("#count") || arg.equals("#sum")) {
                 state.hasCount = true;
-            }
-            else if (arg.equals("#preview")) {
+            } else if (arg.equals("#preview")) {
                 state.hasPreview = true;
-            }
-            else if ((!arg.contains(":") && !args[i - 1].contains(":") && args.length > (i + 1)) || arg.contains("u:") || arg.contains("user:") || arg.contains("users:") || arg.contains("p:")) {
+            } else if ((!arg.contains(":") && !args[i - 1].contains(":") && args.length > (i + 1)) || arg.contains("u:") || arg.contains("user:") || arg.contains("users:") || arg.contains("p:")) {
                 state.hasUser = true;
-            }
-            else if (arg.contains("page:")) {
+            } else if (arg.contains("page:")) {
                 state.hasPage = true;
-            }
-            else if (arg.contains("a:") || arg.contains("action:")) {
+            } else if (arg.contains("a:") || arg.contains("action:")) {
                 state.hasAction = true;
-            }
-            else if (arg.contains("i:") || arg.contains("include:") || arg.contains("item:") || arg.contains("items:") || arg.contains("b:") || arg.contains("block:") || arg.contains("blocks:")) {
+            } else if (arg.contains("i:") || arg.contains("include:") || arg.contains("item:") || arg.contains("items:") || arg.contains("b:") || arg.contains("block:") || arg.contains("blocks:")) {
                 state.hasInclude = true;
-            }
-            else if (arg.contains("t:") || arg.contains("time:")) {
+            } else if (arg.contains("t:") || arg.contains("time:")) {
                 state.hasTime = true;
-            }
-            else if (arg.contains("e:") || arg.contains("exclude:")) {
+            } else if (arg.contains("e:") || arg.contains("exclude:")) {
                 state.hasExclude = true;
-            }
-            else if (arg.contains("r:") || arg.contains("radius:")) {
+            } else if (arg.contains("r:") || arg.contains("radius:")) {
                 state.hasRadius = true;
             }
         }
@@ -206,8 +168,7 @@ public class TabHandler implements TabCompleter {
                 int lookupType = ConfigHandler.lookupType.get(args[0]);
                 if (lookupType == 1) {
                     state.validContainer = true;
-                }
-                else if (lookupType == 5) {
+                } else if (lookupType == 5) {
                     if (ConfigHandler.lookupUlist.get(args[0]).contains("#container")) {
                         state.validContainer = true;
                     }
@@ -267,8 +228,7 @@ public class TabHandler implements TabCompleter {
             if (split.length > 1) {
                 arg = split[1];
             }
-        }
-        else {
+        } else {
             filter = "";
             arg = currentArg;
         }
@@ -305,8 +265,7 @@ public class TabHandler implements TabCompleter {
             if (split.length > 1) {
                 arg = split[1];
             }
-        }
-        else {
+        } else {
             filter = "";
             arg = currentArg;
         }
@@ -336,8 +295,7 @@ public class TabHandler implements TabCompleter {
             if (split.length > 1) {
                 arg = split[1];
             }
-        }
-        else {
+        } else {
             filter = "";
             arg = currentArg;
         }
@@ -350,8 +308,7 @@ public class TabHandler implements TabCompleter {
                 }
             }
             return StringUtil.copyPartialMatches(filter + arg, completions, new ArrayList<>(completions.size()));
-        }
-        else if (baseCommand.equals("purge") || arg.startsWith("#")) {
+        } else if (baseCommand.equals("purge") || arg.startsWith("#")) {
             ArrayList<String> params = new ArrayList<>();
             params.add("#global");
             if (!baseCommand.equals("purge") && Bukkit.getServer().getPluginManager().getPlugin("WorldEdit") != null) {
@@ -380,8 +337,7 @@ public class TabHandler implements TabCompleter {
             if (split.length > 1) {
                 arg = split[1];
             }
-        }
-        else {
+        } else {
             filter = "";
             arg = currentArg;
         }
@@ -430,12 +386,10 @@ public class TabHandler implements TabCompleter {
         if (argument0.equals("help") && sender.hasPermission("coreprotect.help")) {
             List<String> completions = new ArrayList<>(Arrays.asList(HELP));
             return StringUtil.copyPartialMatches(argument1, completions, new ArrayList<>(completions.size()));
-        }
-        else if (argument0.equals("purge") && sender.hasPermission("coreprotect.purge")) {
+        } else if (argument0.equals("purge") && sender.hasPermission("coreprotect.purge")) {
             List<String> completions = new ArrayList<>(Arrays.asList("t:", "r:", "i:"));
             return StringUtil.copyPartialMatches(argument1, completions, new ArrayList<>(completions.size()));
-        }
-        else if (hasLookupCommand(argument0, sender)) {
+        } else if (hasLookupCommand(argument0, sender)) {
             List<String> completions = new ArrayList<>(filterParams(true, argument0, argument1, paramState));
             completions.addAll(Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase(Locale.ROOT).startsWith(argument1)).map(Player::getName).collect(Collectors.toList()));
             return StringUtil.copyPartialMatches(argument1, completions, new ArrayList<>(completions.size()));
@@ -451,8 +405,7 @@ public class TabHandler implements TabCompleter {
         if (argument1.startsWith("t:")) {
             List<String> completions = new ArrayList<>(Arrays.asList("r:", "i:"));
             return StringUtil.copyPartialMatches(argument2, completions, new ArrayList<>(completions.size()));
-        }
-        else if (argument1.startsWith("r:") || argument1.startsWith("i:")) {
+        } else if (argument1.startsWith("r:") || argument1.startsWith("i:")) {
             List<String> completions = new ArrayList<>(List.of("t:"));
             return StringUtil.copyPartialMatches(argument2, completions, new ArrayList<>(completions.size()));
         }
@@ -470,30 +423,23 @@ public class TabHandler implements TabCompleter {
         for (String param : PARAMS) {
             if (param.equals("user:") && !state.hasUser) {
                 params.add(param);
-            }
-            else if (param.equals("action:") && !state.hasAction) {
+            } else if (param.equals("action:") && !state.hasAction) {
                 params.add(param);
-            }
-            else if (param.equals("include:") && !state.hasInclude) {
+            } else if (param.equals("include:") && !state.hasInclude) {
                 params.add(param);
-            }
-            else if (param.equals("exclude:") && !state.hasExclude) {
+            } else if (param.equals("exclude:") && !state.hasExclude) {
                 params.add(param);
-            }
-            else if (param.equals("radius:") && !state.hasRadius) {
+            } else if (param.equals("radius:") && !state.hasRadius) {
                 params.add(param);
-            }
-            else if (param.equals("time:") && !state.hasTime) {
+            } else if (param.equals("time:") && !state.hasTime) {
                 params.add(param);
-            }
-            else if (param.equals("#container") && !state.hasContainer && !state.hasRadius && state.validContainer) {
+            } else if (param.equals("#container") && !state.hasContainer && !state.hasRadius && state.validContainer) {
                 params.add(param);
             }
         }
         if (firstParam && state.pageLookup && (lastArgument.equals("l") || lastArgument.equals("lookup"))) {
             params.add("page:");
-        }
-        else if (!firstParam && argument.startsWith("#")) {
+        } else if (!firstParam && argument.startsWith("#")) {
             if (!state.hasCount) {
                 params.add("#count");
             }
@@ -503,5 +449,20 @@ public class TabHandler implements TabCompleter {
         }
 
         return params;
+    }
+
+    private static class ParamState {
+        boolean hasUser;
+        boolean hasAction;
+        boolean hasInclude;
+        boolean hasExclude;
+        boolean hasRadius;
+        boolean hasTime;
+        boolean hasContainer;
+        boolean hasCount;
+        boolean hasPreview;
+        boolean hasPage;
+        boolean validContainer;
+        boolean pageLookup;
     }
 }

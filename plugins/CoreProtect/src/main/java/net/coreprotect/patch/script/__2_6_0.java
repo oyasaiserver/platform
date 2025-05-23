@@ -1,9 +1,9 @@
 package net.coreprotect.patch.script;
 
-import java.sql.Statement;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
+
+import java.sql.Statement;
 
 public class __2_6_0 {
 
@@ -18,8 +18,7 @@ public class __2_6_0 {
                 statement.executeUpdate("INSERT INTO " + ConfigHandler.prefix + "version SELECT rowid,time,version FROM " + ConfigHandler.prefix + "version_tmp;");
                 statement.executeUpdate("DROP TEMPORARY TABLE " + ConfigHandler.prefix + "version_tmp;");
                 statement.executeUpdate("COMMIT");
-            }
-            else {
+            } else {
                 statement.executeUpdate("BEGIN TRANSACTION");
                 statement.executeUpdate("CREATE TEMPORARY TABLE " + ConfigHandler.prefix + "version_tmp (time INTEGER, version TEXT);");
                 statement.executeUpdate("INSERT INTO " + ConfigHandler.prefix + "version_tmp SELECT time,version FROM " + ConfigHandler.prefix + "version;");
@@ -29,8 +28,7 @@ public class __2_6_0 {
                 statement.executeUpdate("DROP TABLE " + ConfigHandler.prefix + "version_tmp;");
                 statement.executeUpdate("COMMIT TRANSACTION");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

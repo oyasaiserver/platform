@@ -1,9 +1,5 @@
 package net.coreprotect.worldedit;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -18,9 +14,11 @@ import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.utility.ItemUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class CoreProtectLogger extends AbstractDelegateExtent {
     private final Actor eventActor;
@@ -40,8 +38,7 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
         if (!Config.getConfig(world).WORLDEDIT) {
             if (CoreProtectEditSessionEvent.isFAWE()) {
                 return eventExtent.setBlock(position.getX(), position.getY(), position.getZ(), block);
-            }
-            else {
+            } else {
                 return eventExtent.setBlock(position, block);
             }
         }
@@ -61,8 +58,7 @@ public class CoreProtectLogger extends AbstractDelegateExtent {
                 WorldEditLogger.postProcess(eventExtent, eventActor, position, location, block, baseBlock, oldType, oldBlock, containerData);
                 return true;
             }
-        }
-        else {
+        } else {
             if (eventExtent.setBlock(position, block)) {
                 WorldEditLogger.postProcess(eventExtent, eventActor, position, location, block, baseBlock, oldType, oldBlock, containerData);
                 return true;

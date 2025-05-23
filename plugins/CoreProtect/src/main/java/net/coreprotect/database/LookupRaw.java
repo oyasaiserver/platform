@@ -1,18 +1,5 @@
 package net.coreprotect.database;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -24,6 +11,14 @@ import net.coreprotect.listener.channel.PluginChannelHandshakeListener;
 import net.coreprotect.utility.EntityUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
 
 public class LookupRaw extends Queue {
 
@@ -56,17 +51,16 @@ public class LookupRaw extends Queue {
                     int resultUserId = results.getInt("user");
                     String resultMessage = results.getString("message");
 
-                    Object[] dataArray = new Object[] { resultId, resultTime, resultUserId, resultMessage };
+                    Object[] dataArray = new Object[]{resultId, resultTime, resultUserId, resultMessage};
                     if (PluginChannelHandshakeListener.getInstance().isPluginChannelPlayer(user)) {
                         int resultWorldId = results.getInt("wid");
                         int resultX = results.getInt("x");
                         int resultY = results.getInt("y");
                         int resultZ = results.getInt("z");
-                        dataArray = new Object[] { resultId, resultTime, resultUserId, resultMessage, resultWorldId, resultX, resultY, resultZ };
+                        dataArray = new Object[]{resultId, resultTime, resultUserId, resultMessage, resultWorldId, resultX, resultY, resultZ};
                     }
                     list.add(dataArray);
-                }
-                else if (actionList.contains(8)) {
+                } else if (actionList.contains(8)) {
                     long resultId = results.getLong("id");
                     int resultTime = results.getInt("time");
                     int resultUserId = results.getInt("user");
@@ -76,19 +70,17 @@ public class LookupRaw extends Queue {
                     int resultZ = results.getInt("z");
                     int resultAction = results.getInt("action");
 
-                    Object[] dataArray = new Object[] { resultId, resultTime, resultUserId, resultWorldId, resultX, resultY, resultZ, resultAction };
+                    Object[] dataArray = new Object[]{resultId, resultTime, resultUserId, resultWorldId, resultX, resultY, resultZ, resultAction};
                     list.add(dataArray);
-                }
-                else if (actionList.contains(9)) {
+                } else if (actionList.contains(9)) {
                     long resultId = results.getLong("id");
                     int resultTime = results.getInt("time");
                     String resultUuid = results.getString("uuid");
                     String resultUser = results.getString("user");
 
-                    Object[] dataArray = new Object[] { resultId, resultTime, resultUuid, resultUser };
+                    Object[] dataArray = new Object[]{resultId, resultTime, resultUuid, resultUser};
                     list.add(dataArray);
-                }
-                else if (actionList.contains(10)) {
+                } else if (actionList.contains(10)) {
                     long resultId = results.getLong("id");
                     int resultTime = results.getInt("time");
                     int resultUserId = results.getInt("user");
@@ -156,10 +148,9 @@ public class LookupRaw extends Queue {
                         }
                     }
 
-                    Object[] dataArray = new Object[] { resultId, resultTime, resultUserId, resultWorldId, resultX, resultY, resultZ, message.toString() };
+                    Object[] dataArray = new Object[]{resultId, resultTime, resultUserId, resultWorldId, resultX, resultY, resultZ, message.toString()};
                     list.add(dataArray);
-                }
-                else {
+                } else {
                     int resultData = 0;
                     int resultAmount = -1;
                     int resultTable = 0;
@@ -183,8 +174,7 @@ public class LookupRaw extends Queue {
                         resultMeta = results.getBytes("metadata");
                         resultTable = results.getInt("tbl");
                         hasTbl = true;
-                    }
-                    else {
+                    } else {
                         resultData = results.getInt("data");
                         resultMeta = results.getBytes("meta");
                         resultBlockData = results.getBytes("blockdata");
@@ -199,19 +189,17 @@ public class LookupRaw extends Queue {
 
                     if (valid) {
                         if (hasTbl) {
-                            Object[] dataArray = new Object[] { resultId, resultTime, resultUserId, resultX, resultY, resultZ, resultType, resultData, resultAction, resultRolledBack, resultWorldId, resultAmount, resultMeta, resultBlockData, resultTable };
+                            Object[] dataArray = new Object[]{resultId, resultTime, resultUserId, resultX, resultY, resultZ, resultType, resultData, resultAction, resultRolledBack, resultWorldId, resultAmount, resultMeta, resultBlockData, resultTable};
                             list.add(dataArray);
-                        }
-                        else {
-                            Object[] dataArray = new Object[] { resultId, resultTime, resultUserId, resultX, resultY, resultZ, resultType, resultData, resultAction, resultRolledBack, resultWorldId, resultAmount, resultMeta, resultBlockData };
+                        } else {
+                            Object[] dataArray = new Object[]{resultId, resultTime, resultUserId, resultX, resultY, resultZ, resultType, resultData, resultAction, resultRolledBack, resultWorldId, resultAmount, resultMeta, resultBlockData};
                             list.add(dataArray);
                         }
                     }
                 }
             }
             results.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -253,8 +241,7 @@ public class LookupRaw extends Queue {
                 for (String value : checkUuids) {
                     if (list.length() == 0) {
                         list = "'" + value + "'";
-                    }
-                    else {
+                    } else {
                         list = list + ",'" + value + "'";
                     }
                 }
@@ -274,8 +261,7 @@ public class LookupRaw extends Queue {
                         int userId = ConfigHandler.playerIdCache.get(checkUser.toLowerCase(Locale.ROOT));
                         if (checkUserText.length() == 0) {
                             checkUserText = checkUserText.append(userId);
-                        }
-                        else {
+                        } else {
                             checkUserText.append(",").append(userId);
                         }
                     }
@@ -294,8 +280,7 @@ public class LookupRaw extends Queue {
                         targetName = ((Material) restrictTarget).name();
                         if (includeListMaterial.length() == 0) {
                             includeListMaterial = includeListMaterial.append(MaterialUtils.getBlockId(targetName, false));
-                        }
-                        else {
+                        } else {
                             includeListMaterial.append(",").append(MaterialUtils.getBlockId(targetName, false));
                         }
 
@@ -304,13 +289,11 @@ public class LookupRaw extends Queue {
                         if (legacyId > 0) {
                             includeListMaterial.append(",").append(legacyId);
                         }
-                    }
-                    else if (restrictTarget instanceof EntityType) {
+                    } else if (restrictTarget instanceof EntityType) {
                         targetName = ((EntityType) restrictTarget).name();
                         if (includeListEntity.length() == 0) {
                             includeListEntity = includeListEntity.append(EntityUtils.getEntityId(targetName, false));
-                        }
-                        else {
+                        } else {
                             includeListEntity.append(",").append(EntityUtils.getEntityId(targetName, false));
                         }
                     }
@@ -331,8 +314,7 @@ public class LookupRaw extends Queue {
                         targetName = ((Material) restrictTarget).name();
                         if (excludeListMaterial.length() == 0) {
                             excludeListMaterial = excludeListMaterial.append(MaterialUtils.getBlockId(targetName, false));
-                        }
-                        else {
+                        } else {
                             excludeListMaterial.append(",").append(MaterialUtils.getBlockId(targetName, false));
                         }
 
@@ -341,13 +323,11 @@ public class LookupRaw extends Queue {
                         if (legacyId > 0) {
                             excludeListMaterial.append(",").append(legacyId);
                         }
-                    }
-                    else if (restrictTarget instanceof EntityType) {
+                    } else if (restrictTarget instanceof EntityType) {
                         targetName = ((EntityType) restrictTarget).name();
                         if (excludeListEntity.length() == 0) {
                             excludeListEntity = excludeListEntity.append(EntityUtils.getEntityId(targetName, false));
-                        }
-                        else {
+                        } else {
                             excludeListEntity.append(",").append(EntityUtils.getEntityId(targetName, false));
                         }
                     }
@@ -368,8 +348,7 @@ public class LookupRaw extends Queue {
                     int userId = ConfigHandler.playerIdCache.get(excludeTarget.toLowerCase(Locale.ROOT));
                     if (excludeUserText.length() == 0) {
                         excludeUserText = excludeUserText.append(userId);
-                    }
-                    else {
+                    } else {
                         excludeUserText.append(",").append(userId);
                     }
                 }
@@ -396,16 +375,14 @@ public class LookupRaw extends Queue {
                         if (actionList.contains(11) && !actionList.contains(4)) {
                             if (actionTarget == ItemLogger.ITEM_REMOVE && !actionList.contains(ItemLogger.ITEM_DROP)) {
                                 actionTarget = ItemLogger.ITEM_DROP;
-                            }
-                            else if (actionTarget == ItemLogger.ITEM_ADD && !actionList.contains(ItemLogger.ITEM_PICKUP)) {
+                            } else if (actionTarget == ItemLogger.ITEM_ADD && !actionList.contains(ItemLogger.ITEM_PICKUP)) {
                                 actionTarget = ItemLogger.ITEM_PICKUP;
                             }
                         }
 
                         if (actionText.length() == 0) {
                             actionText = actionText.append(actionTarget);
-                        }
-                        else {
+                        } else {
                             actionText.append(",").append(actionTarget);
                         }
 
@@ -470,8 +447,7 @@ public class LookupRaw extends Queue {
                 }
 
                 queryBlock = queryBlock + " x >= '" + xmin + "' AND x <= '" + xmax + "' AND z >= '" + zmin + "' AND z <= '" + zmax + "' AND" + queryY;
-            }
-            else if (actionList.contains(5)) {
+            } else if (actionList.contains(5)) {
                 int worldId = WorldUtils.getWorldId(location.getWorld().getName());
                 int x = (int) Math.floor(location.getX());
                 int z = (int) Math.floor(location.getZ());
@@ -483,8 +459,7 @@ public class LookupRaw extends Queue {
 
             if (validAction) {
                 queryBlock = queryBlock + " action IN(" + action + ") AND";
-            }
-            else if (inventoryQuery || actionExclude.length() > 0 || includeBlock.length() > 0 || includeEntity.length() > 0 || excludeBlock.length() > 0 || excludeEntity.length() > 0) {
+            } else if (inventoryQuery || actionExclude.length() > 0 || includeBlock.length() > 0 || includeEntity.length() > 0 || excludeBlock.length() > 0 || excludeEntity.length() > 0) {
                 queryBlock = queryBlock + " action NOT IN(-1) AND";
             }
 
@@ -548,8 +523,7 @@ public class LookupRaw extends Queue {
             if (actionList.contains(4) || actionList.contains(5)) {
                 queryTable = "container";
                 rows = "rowid as id,time,user,wid,x,y,z,action,type,data,rolled_back,amount,metadata";
-            }
-            else if (actionList.contains(6) || actionList.contains(7)) {
+            } else if (actionList.contains(6) || actionList.contains(7)) {
                 queryTable = "chat";
                 rows = "rowid as id,time,user,message";
                 if (PluginChannelHandshakeListener.getInstance().isPluginChannelPlayer(user)) {
@@ -559,20 +533,16 @@ public class LookupRaw extends Queue {
                 if (actionList.contains(7)) {
                     queryTable = "command";
                 }
-            }
-            else if (actionList.contains(8)) {
+            } else if (actionList.contains(8)) {
                 queryTable = "session";
                 rows = "rowid as id,time,user,wid,x,y,z,action";
-            }
-            else if (actionList.contains(9)) {
+            } else if (actionList.contains(9)) {
                 queryTable = "username_log";
                 rows = "rowid as id,time,uuid,user";
-            }
-            else if (actionList.contains(10)) {
+            } else if (actionList.contains(10)) {
                 queryTable = "sign";
                 rows = "rowid as id,time,user,wid,x,y,z,face,line_1,line_2,line_3,line_4,line_5,line_6,line_7,line_8";
-            }
-            else if (actionList.contains(11)) {
+            } else if (actionList.contains(11)) {
                 queryTable = "item";
                 rows = "rowid as id,time,user,wid,x,y,z,type,data as metadata,0 as data,amount,action,0 as rolled_back";
             }
@@ -602,8 +572,7 @@ public class LookupRaw extends Queue {
                 }
 
                 unionSelect = "(";
-            }
-            else {
+            } else {
                 if (queryTable.equals("block")) {
                     if (includeBlock.length() > 0 || includeEntity.length() > 0) {
                         index = "INDEXED BY block_type_index ";
@@ -629,8 +598,7 @@ public class LookupRaw extends Queue {
                 if (inventoryQuery) {
                     if (validAction) {
                         baseQuery = baseQuery.replace("action IN(" + action + ")", "action IN(1)");
-                    }
-                    else {
+                    } else {
                         baseQuery = baseQuery.replace("action NOT IN(-1)", "action IN(1)");
                     }
 
@@ -675,8 +643,7 @@ public class LookupRaw extends Queue {
 
             query = query + queryOrder + queryLimit;
             results = statement.executeQuery(query);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

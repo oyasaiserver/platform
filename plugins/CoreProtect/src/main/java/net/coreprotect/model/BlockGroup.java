@@ -1,12 +1,12 @@
 package net.coreprotect.model;
 
+import org.bukkit.Material;
+import org.bukkit.Tag;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.bukkit.Material;
-import org.bukkit.Tag;
 
 public final class BlockGroup {
 

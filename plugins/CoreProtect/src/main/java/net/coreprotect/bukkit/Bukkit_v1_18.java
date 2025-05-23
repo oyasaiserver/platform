@@ -23,10 +23,8 @@ public class Bukkit_v1_18 extends Bukkit_v1_17 {
      * Adjusts an ingredient in a merchant recipe for version 1.18+.
      * This handles changes to the MerchantRecipe API introduced in Bukkit 1.18.1.
      *
-     * @param recipe
-     *            The merchant recipe
-     * @param itemStack
-     *            The item stack to adjust
+     * @param recipe    The merchant recipe
+     * @param itemStack The item stack to adjust
      * @return The adjusted item stack, or null if adjustment not supported or fails
      */
     @Override
@@ -51,8 +49,7 @@ public class Bukkit_v1_18 extends Bukkit_v1_17 {
             ItemStack adjustedStack = itemStack.clone();
             recipe.adjust(adjustedStack);
             return adjustedStack;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Method doesn't exist or failed, mark it for future calls
             hasAdjustMethod = false;
             return super.adjustIngredient(recipe, itemStack);

@@ -1,9 +1,10 @@
 package net.coreprotect.database.rollback;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.Map;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Lookup;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.utility.ItemUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Material;
@@ -20,24 +21,13 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.CrossbowMeta;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.io.BukkitObjectInputStream;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Lookup;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.utility.ItemUtils;
+import java.io.ByteArrayInputStream;
+import java.util.List;
+import java.util.Map;
 
 public class RollbackUtil extends Lookup {
 
@@ -51,8 +41,7 @@ public class RollbackUtil extends Lookup {
                 if (equipment != null) {
                     if (action == 1) {
                         itemstack.setAmount(1);
-                    }
-                    else {
+                    } else {
                         itemstack.setType(Material.AIR);
                         itemstack.setAmount(0);
                     }
@@ -63,8 +52,7 @@ public class RollbackUtil extends Lookup {
                             contents[slot] = itemstack;
                         }
                         equipment.setArmorContents(contents);
-                    }
-                    else {
+                    } else {
                         ArmorStand armorStand = (ArmorStand) equipment.getHolder();
                         armorStand.setArms(true);
                         switch (slot) {
@@ -77,28 +65,24 @@ public class RollbackUtil extends Lookup {
                         }
                     }
                 }
-            }
-            else if (type != null && type.equals(Material.ITEM_FRAME)) {
+            } else if (type != null && type.equals(Material.ITEM_FRAME)) {
                 ItemFrame frame = (ItemFrame) container;
                 if (frame != null) {
                     if (action == 1) {
                         itemstack.setAmount(1);
-                    }
-                    else {
+                    } else {
                         itemstack.setType(Material.AIR);
                         itemstack.setAmount(0);
                     }
 
                     frame.setItem(itemstack);
                 }
-            }
-            else if (type != null && type.equals(Material.JUKEBOX)) {
+            } else if (type != null && type.equals(Material.JUKEBOX)) {
                 Jukebox jukebox = (Jukebox) container;
                 if (jukebox != null) {
                     if (action == 1 && itemstack.getType().name().startsWith("MUSIC_DISC")) {
                         itemstack.setAmount(1);
-                    }
-                    else {
+                    } else {
                         itemstack.setType(Material.AIR);
                         itemstack.setAmount(0);
                     }
@@ -106,8 +90,7 @@ public class RollbackUtil extends Lookup {
                     jukebox.setRecord(itemstack);
                     jukebox.update();
                 }
-            }
-            else {
+            } else {
                 Inventory inventory = (Inventory) container;
                 if (inventory != null) {
                     boolean isPlayerInventory = (inventory instanceof PlayerInventory);
@@ -137,12 +120,10 @@ public class RollbackUtil extends Lookup {
                                     }
                                     if (addedItem) {
                                         inventory.setStorageContents(inventoryContents);
-                                    }
-                                    else {
+                                    } else {
                                         addedItem = (inventory.addItem(itemstack).size() == 0);
                                     }
-                                }
-                                else {
+                                } else {
                                     addedItem = (inventory.addItem(itemstack).size() == 0);
                                 }
                             }
@@ -160,8 +141,7 @@ public class RollbackUtil extends Lookup {
                             }
                             count++;
                         }
-                    }
-                    else {
+                    } else {
                         int removeAmount = itemstack.getAmount();
                         ItemStack removeMatch = itemstack.clone();
                         removeMatch.setAmount(1);
@@ -180,20 +160,17 @@ public class RollbackUtil extends Lookup {
                                             currentAmount--;
                                             itemStack.setAmount(currentAmount);
                                             removeAmount--;
-                                        }
-                                        else {
+                                        } else {
                                             break;
                                         }
                                     }
-                                }
-                                else {
+                                } else {
                                     itemStack.setAmount(maxAmount);
                                 }
 
                                 if (itemStack.getAmount() == 0) {
                                     inventoryContents[i] = null;
-                                }
-                                else {
+                                } else {
                                     inventoryContents[i] = itemStack;
                                 }
                             }
@@ -205,8 +182,7 @@ public class RollbackUtil extends Lookup {
 
                         if (isPlayerInventory) {
                             inventory.setContents(inventoryContents);
-                        }
-                        else {
+                        } else {
                             inventory.setStorageContents(inventoryContents);
                         }
 
@@ -218,8 +194,7 @@ public class RollbackUtil extends Lookup {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -249,8 +224,7 @@ public class RollbackUtil extends Lookup {
 
             inventory.setArmorContents(armorContents);
             inventory.setStorageContents(storageContents);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -262,14 +236,12 @@ public class RollbackUtil extends Lookup {
                 FireworkMeta meta = (FireworkMeta) itemstack.getItemMeta();
                 meta.addEffect(effect);
                 itemstack.setItemMeta(meta);
-            }
-            else if ((rowType == Material.FIREWORK_STAR)) {
+            } else if ((rowType == Material.FIREWORK_STAR)) {
                 FireworkEffectMeta meta = (FireworkEffectMeta) itemstack.getItemMeta();
                 meta.setEffect(effect);
                 itemstack.setItemMeta(meta);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -301,8 +273,7 @@ public class RollbackUtil extends Lookup {
                         }
                     }
                     itemstack.setItemMeta(meta);
-                }
-                else if (BlockGroup.SHULKER_BOXES.contains(rowType)) {
+                } else if (BlockGroup.SHULKER_BOXES.contains(rowType)) {
                     BlockStateMeta meta = (BlockStateMeta) itemstack.getItemMeta();
                     ShulkerBox shulkerBox = (ShulkerBox) meta.getBlockState();
                     for (Object value : metaList) {
@@ -315,7 +286,7 @@ public class RollbackUtil extends Lookup {
                     itemstack.setItemMeta(meta);
                 }
 
-                return new Object[] { slot, faceData, itemstack };
+                return new Object[]{slot, faceData, itemstack};
             }
 
             int itemCount = 0;
@@ -334,11 +305,9 @@ public class RollbackUtil extends Lookup {
 
                 if (mapData.get("slot") != null) {
                     slot = (Integer) mapData.get("slot");
-                }
-                else if (mapData.get("facing") != null) {
+                } else if (mapData.get("facing") != null) {
                     faceData = (String) mapData.get("facing");
-                }
-                else if (mapData.get("modifiers") != null) {
+                } else if (mapData.get("modifiers") != null) {
                     ItemMeta itemMeta = itemstack.getItemMeta();
                     if (itemMeta.hasAttributeModifiers()) {
                         for (Map.Entry<Attribute, AttributeModifier> entry : itemMeta.getAttributeModifiers().entries()) {
@@ -355,23 +324,20 @@ public class RollbackUtil extends Lookup {
                                 Attribute attribute = null;
                                 if (entry.getKey() instanceof Attribute) {
                                     attribute = (Attribute) entry.getKey();
-                                }
-                                else {
+                                } else {
                                     attribute = (Attribute) BukkitAdapter.ADAPTER.getRegistryValue((String) entry.getKey(), Attribute.class);
                                 }
 
                                 AttributeModifier modifier = AttributeModifier.deserialize(entry.getValue());
                                 itemMeta.addAttributeModifier(attribute, modifier);
-                            }
-                            catch (IllegalArgumentException e) {
+                            } catch (IllegalArgumentException e) {
                                 // AttributeModifier already exists
                             }
                         }
                     }
 
                     itemstack.setItemMeta(itemMeta);
-                }
-                else if (itemCount == 0) {
+                } else if (itemCount == 0) {
                     ItemMeta meta = ItemUtils.deserializeItemMeta(itemstack.getItemMeta().getClass(), map.get(0));
                     itemstack.setItemMeta(meta);
 
@@ -381,8 +347,7 @@ public class RollbackUtil extends Lookup {
                         subMeta.setColor(color);
                         itemstack.setItemMeta(subMeta);
                     }
-                }
-                else {
+                } else {
                     if ((rowType == Material.LEATHER_HORSE_ARMOR) || (rowType == Material.LEATHER_HELMET) || (rowType == Material.LEATHER_CHESTPLATE) || (rowType == Material.LEATHER_LEGGINGS) || (rowType == Material.LEATHER_BOOTS)) { // leather armor
                         for (Map<String, Object> colorData : map) {
                             LeatherArmorMeta meta = (LeatherArmorMeta) itemstack.getItemMeta();
@@ -390,24 +355,21 @@ public class RollbackUtil extends Lookup {
                             meta.setColor(color);
                             itemstack.setItemMeta(meta);
                         }
-                    }
-                    else if ((rowType == Material.POTION)) { // potion
+                    } else if ((rowType == Material.POTION)) { // potion
                         for (Map<String, Object> potionData : map) {
                             PotionMeta meta = (PotionMeta) itemstack.getItemMeta();
                             PotionEffect effect = new PotionEffect(potionData);
                             meta.addCustomEffect(effect, true);
                             itemstack.setItemMeta(meta);
                         }
-                    }
-                    else if (rowType.name().endsWith("_BANNER")) {
+                    } else if (rowType.name().endsWith("_BANNER")) {
                         for (Map<String, Object> patternData : map) {
                             BannerMeta meta = (BannerMeta) itemstack.getItemMeta();
                             Pattern pattern = new Pattern(patternData);
                             meta.addPattern(pattern);
                             itemstack.setItemMeta(meta);
                         }
-                    }
-                    else if ((rowType == Material.CROSSBOW)) {
+                    } else if ((rowType == Material.CROSSBOW)) {
                         CrossbowMeta meta = (CrossbowMeta) itemstack.getItemMeta();
                         for (Map<String, Object> itemData : map) {
                             ItemStack crossbowItem = ItemUtils.unserializeItemStack(itemData);
@@ -416,16 +378,14 @@ public class RollbackUtil extends Lookup {
                             }
                         }
                         itemstack.setItemMeta(meta);
-                    }
-                    else if (rowType == Material.MAP || rowType == Material.FILLED_MAP) {
+                    } else if (rowType == Material.MAP || rowType == Material.FILLED_MAP) {
                         for (Map<String, Object> colorData : map) {
                             MapMeta meta = (MapMeta) itemstack.getItemMeta();
                             org.bukkit.Color color = org.bukkit.Color.deserialize(colorData);
                             meta.setColor(color);
                             itemstack.setItemMeta(meta);
                         }
-                    }
-                    else if ((rowType == Material.FIREWORK_ROCKET) || (rowType == Material.FIREWORK_STAR)) {
+                    } else if ((rowType == Material.FIREWORK_ROCKET) || (rowType == Material.FIREWORK_STAR)) {
                         if (itemCount == 1) {
                             effectBuilder = FireworkEffect.builder();
                             for (Map<String, Object> fireworkData : map) {
@@ -436,14 +396,12 @@ public class RollbackUtil extends Lookup {
                                 effectBuilder.flicker(hasFlicker);
                                 effectBuilder.trail(hasTrail);
                             }
-                        }
-                        else if (itemCount == 2) {
+                        } else if (itemCount == 2) {
                             for (Map<String, Object> colorData : map) {
                                 org.bukkit.Color color = org.bukkit.Color.deserialize(colorData);
                                 effectBuilder.withColor(color);
                             }
-                        }
-                        else if (itemCount == 3) {
+                        } else if (itemCount == 3) {
                             for (Map<String, Object> colorData : map) {
                                 org.bukkit.Color color = org.bukkit.Color.deserialize(colorData);
                                 effectBuilder.withFade(color);
@@ -451,27 +409,24 @@ public class RollbackUtil extends Lookup {
                             buildFireworkEffect(effectBuilder, rowType, itemstack);
                             itemCount = 0;
                         }
-                    }
-                    else if ((rowType == Material.SUSPICIOUS_STEW)) {
+                    } else if ((rowType == Material.SUSPICIOUS_STEW)) {
                         for (Map<String, Object> suspiciousStewData : map) {
                             SuspiciousStewMeta meta = (SuspiciousStewMeta) itemstack.getItemMeta();
                             PotionEffect effect = new PotionEffect(suspiciousStewData);
                             meta.addCustomEffect(effect, true);
                             itemstack.setItemMeta(meta);
                         }
-                    }
-                    else {
+                    } else {
                         BukkitAdapter.ADAPTER.setItemMeta(rowType, itemstack, map);
                     }
                 }
 
                 itemCount++;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Object[] { slot, faceData, itemstack };
+        return new Object[]{slot, faceData, itemstack};
     }
 
     public static Object[] populateItemStack(ItemStack itemstack, byte[] metadata) {
@@ -484,20 +439,18 @@ public class RollbackUtil extends Lookup {
                 metaByteStream.close();
 
                 return populateItemStack(itemstack, metaList);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return new Object[] { 0, "", itemstack };
+        return new Object[]{0, "", itemstack};
     }
 
     /**
      * Deserializes metadata from a byte array into a list of objects.
      *
-     * @param metadata
-     *            The byte array containing serialized metadata
+     * @param metadata The byte array containing serialized metadata
      * @return The deserialized list of objects or null if deserialization fails
      */
     public static List<Object> deserializeMetadata(byte[] metadata) {
@@ -513,8 +466,7 @@ public class RollbackUtil extends Lookup {
             metaObjectStream.close();
             metaByteStream.close();
             return metaList;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -523,14 +475,10 @@ public class RollbackUtil extends Lookup {
     /**
      * Queues an entity spawn operation for processing.
      *
-     * @param user
-     *            The username of the player
-     * @param block
-     *            The block state where the entity should be spawned
-     * @param type
-     *            The type of entity to spawn
-     * @param data
-     *            Additional data for the entity
+     * @param user  The username of the player
+     * @param block The block state where the entity should be spawned
+     * @param type  The type of entity to spawn
+     * @param data  Additional data for the entity
      */
     public static void queueEntitySpawn(String user, BlockState block, EntityType type, int data) {
         Queue.queueEntitySpawn(user, block, type, data);
@@ -539,12 +487,9 @@ public class RollbackUtil extends Lookup {
     /**
      * Queues a skull update operation for processing.
      *
-     * @param user
-     *            The username of the player
-     * @param block
-     *            The block state to update
-     * @param rowId
-     *            The row ID for the skull data
+     * @param user  The username of the player
+     * @param block The block state to update
+     * @param rowId The row ID for the skull data
      */
     public static void queueSkullUpdate(String user, BlockState block, int rowId) {
         Queue.queueSkullUpdate(user, block, rowId);
@@ -553,14 +498,10 @@ public class RollbackUtil extends Lookup {
     /**
      * Queues a sign update operation for processing.
      *
-     * @param user
-     *            The username of the player
-     * @param block
-     *            The block state to update
-     * @param action
-     *            The action type
-     * @param time
-     *            The time of the update
+     * @param user   The username of the player
+     * @param block  The block state to update
+     * @param action The action type
+     * @param time   The time of the update
      */
     public static void queueSignUpdate(String user, BlockState block, int action, int time) {
         Queue.queueSignUpdate(user, block, action, time);

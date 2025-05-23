@@ -1,9 +1,6 @@
 package net.coreprotect.bukkit;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import net.coreprotect.model.BlockGroup;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -20,7 +17,9 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
-import net.coreprotect.model.BlockGroup;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Bukkit adapter implementation for Minecraft 1.20.
@@ -101,11 +100,9 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
 
     /**
      * Helper method to add missing blocks from a tag to a block group.
-     * 
-     * @param taggedBlocks
-     *            The collection of blocks from a tag
-     * @param targetGroup
-     *            The block group to add missing blocks to
+     *
+     * @param taggedBlocks The collection of blocks from a tag
+     * @param targetGroup  The block group to add missing blocks to
      */
     private void addMissingTaggedBlocks(Iterable<Material> taggedBlocks, Set<Material> targetGroup) {
         for (Material value : taggedBlocks) {
@@ -215,8 +212,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
                 hasClickedPosition = true;
                 // Check if getClickedPosition method exists (Bukkit 1.20.1+)
                 PlayerInteractEvent.class.getMethod("getClickedPosition");
-            }
-            else if (Boolean.FALSE.equals(hasClickedPosition)) {
+            } else if (Boolean.FALSE.equals(hasClickedPosition)) {
                 return null; // Method doesn't exist, return null
             }
 
@@ -225,8 +221,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
             ItemStack book = bookshelf.getInventory().getItem(slot);
 
             return book == null ? new ItemStack(Material.AIR) : book;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             hasClickedPosition = false;
             return null;
         }
@@ -236,8 +231,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
     public String getLine(Sign sign, int line) {
         if (line < 4) {
             return sign.getSide(Side.FRONT).getLine(line);
-        }
-        else {
+        } else {
             return sign.getSide(Side.BACK).getLine(line - 4);
         }
     }
@@ -248,8 +242,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
 
         if (line < 4) {
             sign.getSide(Side.FRONT).setLine(line, string);
-        }
-        else {
+        } else {
             sign.getSide(Side.BACK).setLine(line - 4, string);
         }
     }
@@ -266,8 +259,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
                 hasBasePotionType = true;
                 // Check if getBasePotionType method exists (Bukkit 1.20.2+)
                 Arrow.class.getMethod("getBasePotionType");
-            }
-            else if (Boolean.FALSE.equals(hasBasePotionType)) {
+            } else if (Boolean.FALSE.equals(hasBasePotionType)) {
                 return super.getArrowMeta(arrow, itemStack);
             }
 
@@ -289,8 +281,7 @@ public class Bukkit_v1_20 extends Bukkit_v1_19 {
             }
 
             return itemStack;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             hasBasePotionType = false;
             return super.getArrowMeta(arrow, itemStack);
         }

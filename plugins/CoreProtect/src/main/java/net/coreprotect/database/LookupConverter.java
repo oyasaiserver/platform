@@ -1,13 +1,13 @@
 package net.coreprotect.database;
 
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.database.statement.UserStatement;
+import net.coreprotect.utility.BlockUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.database.statement.UserStatement;
-import net.coreprotect.utility.BlockUtils;
 
 public class LookupConverter {
 
@@ -33,27 +33,21 @@ public class LookupConverter {
                             }
                             String userResult = ConfigHandler.playerIdCacheReversed.get(userId);
                             results[newId] = userResult;
-                        }
-                        else {
+                        } else {
                             results[newId] = (String) map[i];
                         }
-                    }
-                    else if (i == 13 && map[i] instanceof byte[]) {
+                    } else if (i == 13 && map[i] instanceof byte[]) {
                         results[newId] = BlockUtils.byteDataToString((byte[]) map[i], (int) map[6]);
-                    }
-                    else if (i > 0) { // skip rowid
+                    } else if (i > 0) { // skip rowid
                         if (map[i] instanceof Integer) {
                             results[newId] = map[i].toString();
-                        }
-                        else if (map[i] instanceof String) {
+                        } else if (map[i] instanceof String) {
                             results[newId] = (String) map[i];
-                        }
-                        else if (map[i] instanceof byte[]) {
+                        } else if (map[i] instanceof byte[]) {
                             results[newId] = new String((byte[]) map[i], StandardCharsets.ISO_8859_1);
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

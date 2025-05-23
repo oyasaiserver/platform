@@ -1,16 +1,15 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
-
 import net.coreprotect.database.logger.BlockBreakLogger;
 import net.coreprotect.database.logger.SkullBreakLogger;
 import net.coreprotect.utility.BlockUtils;
 import net.coreprotect.utility.MaterialUtils;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
+
+import java.sql.PreparedStatement;
+import java.util.List;
 
 class BlockBreakProcess {
 
@@ -19,8 +18,7 @@ class BlockBreakProcess {
             List<Object> meta = BlockUtils.processMeta(block);
             if (block instanceof Skull) {
                 SkullBreakLogger.log(preparedStmt, preparedStmtSkulls, batchCount, user, block);
-            }
-            else {
+            } else {
                 BlockBreakLogger.log(preparedStmt, batchCount, user, block.getLocation(), MaterialUtils.getBlockId(blockType), blockDataId, meta, block.getBlockData().getAsString(), blockData);
             }
         }

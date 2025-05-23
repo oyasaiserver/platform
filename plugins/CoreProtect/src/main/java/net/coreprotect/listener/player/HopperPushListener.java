@@ -1,5 +1,15 @@
 package net.coreprotect.listener.player;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.thread.Scheduler;
+import net.coreprotect.utility.ItemUtils;
+import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -7,17 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.bukkit.Location;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.ItemUtils;
 
 public final class HopperPushListener {
 
@@ -46,7 +45,7 @@ public final class HopperPushListener {
         ItemStack[] destinationContainer = ItemUtils.getContainerState(destinationHolder.getInventory().getContents());
         ItemStack movedItem = item.clone();
 
-        hopperQueue.add(new Object[] { location, user, sourceHolder, destinationHolder, movedItem, destinationContainer, loggingChestId, lastAbort });
+        hopperQueue.add(new Object[]{location, user, sourceHolder, destinationHolder, movedItem, destinationContainer, loggingChestId, lastAbort});
 
         // Start the processor if it's not already running
         if (processorRunning.compareAndSet(false, true)) {
@@ -62,11 +61,9 @@ public final class HopperPushListener {
                     while (!hopperQueue.isEmpty() && (ConfigHandler.serverRunning || ConfigHandler.converterRunning)) {
                         processHopperBatch();
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                finally {
+                } finally {
                     activeProcessors.decrementAndGet();
                     processorRunning.set(false);
 
@@ -76,8 +73,7 @@ public final class HopperPushListener {
                     }
                 }
             });
-        }
-        else {
+        } else {
             activeProcessors.decrementAndGet();
         }
     }
@@ -128,11 +124,10 @@ public final class HopperPushListener {
             }
             movedItems.add(movedItem);
 
-            ConfigHandler.hopperAbort.put(loggingChestId, new Object[] { movedItems, ItemUtils.getContainerState(destinationContents) });
+            ConfigHandler.hopperAbort.put(loggingChestId, new Object[]{movedItems, ItemUtils.getContainerState(destinationContents)});
             return;
-        }
-        else {
-            ConfigHandler.hopperSuccess.put(loggingChestId, new Object[] { destinationContainer, movedItem });
+        } else {
+            ConfigHandler.hopperSuccess.put(loggingChestId, new Object[]{destinationContainer, movedItem});
         }
 
         List<Object> list = ConfigHandler.transactingChest.get(location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ());
@@ -157,8 +152,7 @@ public final class HopperPushListener {
                 if (itemStack.getAmount() >= removeAmount) {
                     itemStack.setAmount(itemStack.getAmount() - removeAmount);
                     removeAmount = 0;
-                }
-                else {
+                } else {
                     removeAmount = removeAmount - itemStack.getAmount();
                     itemStack = null;
                 }

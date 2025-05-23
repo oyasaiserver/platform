@@ -1,19 +1,13 @@
 package net.coreprotect.utility;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.utility.serialize.ItemMetaHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
@@ -23,11 +17,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.utility.serialize.ItemMetaHandler;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 public class ItemUtils {
 
@@ -55,8 +46,7 @@ public class ItemUtils {
                 }
                 c1++;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -193,16 +183,13 @@ public class ItemUtils {
         if (isHelmet && inventory.getHelmet() == null) {
             inventory.setHelmet(itemStack);
             return 3;
-        }
-        else if (isChestplate && inventory.getChestplate() == null) {
+        } else if (isChestplate && inventory.getChestplate() == null) {
             inventory.setChestplate(itemStack);
             return 2;
-        }
-        else if (isLeggings && inventory.getLeggings() == null) {
+        } else if (isLeggings && inventory.getLeggings() == null) {
             inventory.setLeggings(itemStack);
             return 1;
-        }
-        else if (isBoots && inventory.getBoots() == null) {
+        } else if (isBoots && inventory.getBoots() == null) {
             inventory.setBoots(itemStack);
             return 0;
         }
@@ -218,8 +205,7 @@ public class ItemUtils {
             System.arraycopy(armorContent, 0, contents, 0, 4);
             contents[4] = equipment.getItemInMainHand();
             contents[5] = equipment.getItemInOffHand();
-        }
-        else {
+        } else {
             Arrays.fill(contents, new ItemStack(Material.AIR));
         }
 
@@ -241,16 +227,13 @@ public class ItemUtils {
                     if (equipment != null) {
                         contents = getArmorStandContents(equipment);
                     }
-                }
-                else if (type == Material.ITEM_FRAME) {
+                } else if (type == Material.ITEM_FRAME) {
                     ItemFrame entity = (ItemFrame) container;
                     contents = getItemFrameItem(entity);
-                }
-                else if (type == Material.JUKEBOX) {
+                } else if (type == Material.JUKEBOX) {
                     org.bukkit.block.Jukebox blockState = (org.bukkit.block.Jukebox) ((Block) container).getState();
                     contents = BlockUtils.getJukeboxItem(blockState);
-                }
-                else {
+                } else {
                     Block block = (Block) container;
                     Inventory inventory = BlockUtils.getContainerInventory(block.getState(), true);
                     if (inventory != null) {
@@ -274,8 +257,7 @@ public class ItemUtils {
                 if (contents != null) {
                     contents = getContainerState(contents);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -287,8 +269,7 @@ public class ItemUtils {
         EntityEquipment equipment = null;
         try {
             equipment = entity.getEquipment();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return equipment;
@@ -297,9 +278,8 @@ public class ItemUtils {
     public static ItemStack[] getItemFrameItem(ItemFrame entity) {
         ItemStack[] contents = null;
         try {
-            contents = new ItemStack[] { entity.getItem() };
-        }
-        catch (Exception e) {
+            contents = new ItemStack[]{entity.getItem()};
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return contents;
@@ -308,8 +288,7 @@ public class ItemUtils {
     public static int getItemStackHashCode(ItemStack item) {
         try {
             return item.hashCode();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return -1;
         }
     }
@@ -334,7 +313,7 @@ public class ItemUtils {
     public static void updateInventory(org.bukkit.entity.Player player) {
         player.updateInventory();
     }
-    
+
     public static byte[] convertByteData(Object data) {
         byte[] result = null;
         if (data == null) {
@@ -349,8 +328,7 @@ public class ItemUtils {
             oos.close();
             bos.close();
             result = bos.toByteArray();
-        }
-        catch (Exception e) { // only display exception on development branch
+        } catch (Exception e) { // only display exception on development branch
             if (!ConfigHandler.EDITION_BRANCH.contains("-dev")) {
                 e.printStackTrace();
             }
@@ -363,8 +341,7 @@ public class ItemUtils {
         try {
             org.bukkit.configuration.serialization.DelegateDeserialization delegate = itemMetaClass.getAnnotation(org.bukkit.configuration.serialization.DelegateDeserialization.class);
             return (ItemMeta) org.bukkit.configuration.serialization.ConfigurationSerialization.deserializeObject(args, delegate.value());
-        }
-        catch (Exception e) { // only display exception on development branch
+        } catch (Exception e) { // only display exception on development branch
             if (!ConfigHandler.EDITION_BRANCH.contains("-dev")) {
                 e.printStackTrace();
             }
@@ -372,7 +349,7 @@ public class ItemUtils {
 
         return null;
     }
-    
+
     public static String getEnchantments(byte[] metadata, int type, int amount) {
         if (metadata == null) {
             return "";
@@ -393,15 +370,14 @@ public class ItemUtils {
 
         if (!displayName.isEmpty()) {
             message.insert(0, enchantments.isEmpty() ? Color.WHITE : Color.AQUA);
-        }
-        else if (!enchantments.isEmpty()) {
+        } else if (!enchantments.isEmpty()) {
             String name = StringUtils.capitalize(item.getType().name().replace("_", " "), true);
             message.insert(0, Color.AQUA + Color.ITALIC + name);
         }
 
         return message.toString();
     }
-    
+
     public static Map<Integer, Object> serializeItemStackLegacy(ItemStack itemStack, String faceData, int slot) {
         Map<Integer, Object> result = new HashMap<>();
         Map<String, Object> itemMap = serializeItemStack(itemStack, faceData, slot);

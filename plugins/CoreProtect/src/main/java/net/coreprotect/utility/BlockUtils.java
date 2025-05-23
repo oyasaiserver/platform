@@ -1,18 +1,10 @@
 package net.coreprotect.utility;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
+import net.coreprotect.CoreProtect;
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.thread.Scheduler;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CommandBlock;
-import org.bukkit.block.Jukebox;
-import org.bukkit.block.ShulkerBox;
+import org.bukkit.block.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
@@ -20,9 +12,11 @@ import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.CoreProtect;
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.thread.Scheduler;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class BlockUtils {
 
@@ -51,17 +45,14 @@ public class BlockUtils {
                     }
                 }
                 string = String.join(",", blockDataArray);
-            }
-            else if (!string.contains(":") && (material == Material.PAINTING || BukkitAdapter.ADAPTER.isItemFrame(material))) {
+            } else if (!string.contains(":") && (material == Material.PAINTING || BukkitAdapter.ADAPTER.isItemFrame(material))) {
                 int id = MaterialUtils.getBlockdataId(string, true);
                 if (id > -1) {
                     string = Integer.toString(id);
-                }
-                else {
+                } else {
                     return result;
                 }
-            }
-            else {
+            } else {
                 return result;
             }
 
@@ -96,12 +87,10 @@ public class BlockUtils {
 
                     if (material == Material.PAINTING || BukkitAdapter.ADAPTER.isItemFrame(material)) {
                         result = String.join(",", blockDataArray);
-                    }
-                    else {
+                    } else {
                         result = NAMESPACE + material.name().toLowerCase(Locale.ROOT) + "[" + String.join(",", blockDataArray) + "]";
                     }
-                }
-                else {
+                } else {
                     result = "";
                 }
             }
@@ -142,7 +131,7 @@ public class BlockUtils {
         if (type.equals(Material.ICE)) { // Ice block
             int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
             int wid = WorldUtils.getWorldId(block.getWorld().getName());
-            net.coreprotect.thread.CacheHandler.lookupCache.put(block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid, new Object[] { unixtimestamp, user, Material.WATER });
+            net.coreprotect.thread.CacheHandler.lookupCache.put(block.getX() + "." + block.getY() + "." + block.getZ() + "." + wid, new Object[]{unixtimestamp, user, Material.WATER});
             return true;
         }
         return false;
@@ -155,8 +144,7 @@ public class BlockUtils {
                 ((Waterlogged) result).setWaterlogged(false);
             }
             return result;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -169,8 +157,7 @@ public class BlockUtils {
         if (!update) {
             setTypeAndData(block, type, blockData, update);
             map.remove(block);
-        }
-        else {
+        } else {
             map.put(block, blockData);
         }
     }
@@ -195,8 +182,7 @@ public class BlockUtils {
                     }
                 }
                 block.update();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }, block.getLocation());
@@ -217,8 +203,7 @@ public class BlockUtils {
                     inventory = ((BlockInventoryHolder) blockState).getInventory();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return inventory;
@@ -232,15 +217,13 @@ public class BlockUtils {
                 if (command.length() > 0) {
                     meta.add(command);
                 }
-            }
-            else if (block instanceof Banner banner) {
+            } else if (block instanceof Banner banner) {
                 meta.add(banner.getBaseColor());
                 List<Pattern> patterns = banner.getPatterns();
                 for (Pattern pattern : patterns) {
                     meta.add(pattern.serialize());
                 }
-            }
-            else if (block instanceof ShulkerBox shulkerBox) {
+            } else if (block instanceof ShulkerBox shulkerBox) {
                 ItemStack[] inventory = shulkerBox.getSnapshotInventory().getStorageContents();
                 int slot = 0;
                 for (ItemStack itemStack : inventory) {
@@ -251,8 +234,7 @@ public class BlockUtils {
                     slot++;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -265,9 +247,8 @@ public class BlockUtils {
     public static ItemStack[] getJukeboxItem(Jukebox blockState) {
         ItemStack[] contents = null;
         try {
-            contents = new ItemStack[] { blockState.getRecord() };
-        }
-        catch (Exception e) {
+            contents = new ItemStack[]{blockState.getRecord()};
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return contents;
@@ -276,11 +257,9 @@ public class BlockUtils {
     public static int getSignData(boolean frontGlowing, boolean backGlowing) {
         if (frontGlowing && backGlowing) {
             return 3;
-        }
-        else if (backGlowing) {
+        } else if (backGlowing) {
             return 2;
-        }
-        else if (frontGlowing) {
+        } else if (frontGlowing) {
             return 1;
         }
 

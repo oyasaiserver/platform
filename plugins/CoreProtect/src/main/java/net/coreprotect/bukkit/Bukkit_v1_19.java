@@ -1,17 +1,12 @@
 package net.coreprotect.bukkit;
 
+import net.coreprotect.model.BlockGroup;
+import org.bukkit.Material;
+import org.bukkit.entity.*;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Frog;
-import org.bukkit.entity.Goat;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Tadpole;
-
-import net.coreprotect.model.BlockGroup;
 
 /**
  * Bukkit adapter implementation for Minecraft 1.19.
@@ -132,10 +127,8 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
      * Gets metadata from a living entity specific to 1.19.
      * Handles Frog, Tadpole, and updated Goat entities.
      *
-     * @param entity
-     *            The living entity
-     * @param info
-     *            The list to populate with entity metadata
+     * @param entity The living entity
+     * @param info   The list to populate with entity metadata
      * @return true if metadata was extracted, false otherwise
      */
     @Override
@@ -148,12 +141,10 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
             if (entity instanceof Frog frog) {
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(frog.getVariant()));
                 return true;
-            }
-            else if (entity instanceof Tadpole tadpole) {
+            } else if (entity instanceof Tadpole tadpole) {
                 info.add(tadpole.getAge());
                 return true;
-            }
-            else if (entity instanceof Goat goat) {
+            } else if (entity instanceof Goat goat) {
                 info.add(goat.isScreaming());
                 info.add(goat.hasLeftHorn());
                 info.add(goat.hasRightHorn());
@@ -162,8 +153,7 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
 
             // Fall back to parent implementation if not a known 1.19 entity
             return super.getEntityMeta(entity, info);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Log error or handle exception if needed
             return false;
         }
@@ -173,12 +163,9 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
      * Sets metadata on an entity specific to 1.19.
      * Handles Frog, Tadpole, and updated Goat entities.
      *
-     * @param entity
-     *            The entity
-     * @param value
-     *            The metadata value
-     * @param count
-     *            The index of the metadata property
+     * @param entity The entity
+     * @param value  The metadata value
+     * @param count  The index of the metadata property
      * @return true if metadata was set, false otherwise
      */
     @Override
@@ -197,14 +184,12 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
                     frog.setVariant((Frog.Variant) value);
                     return true;
                 }
-            }
-            else if (entity instanceof Tadpole tadpole) {
+            } else if (entity instanceof Tadpole tadpole) {
                 if (count == 0) {
                     tadpole.setAge((int) value);
                     return true;
                 }
-            }
-            else if (entity instanceof Goat goat) {
+            } else if (entity instanceof Goat goat) {
                 boolean boolValue = (Boolean) value;
 
                 switch (count) {
@@ -225,8 +210,7 @@ public class Bukkit_v1_19 extends Bukkit_v1_18 {
 
             // Fall back to parent implementation if not a known 1.19 entity
             return super.setEntityMeta(entity, value, count);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Log error or handle exception if needed
             return false;
         }

@@ -1,22 +1,5 @@
 package net.coreprotect.database;
 
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Queue;
@@ -30,6 +13,22 @@ import net.coreprotect.utility.BlockUtils;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ItemUtils;
 import net.coreprotect.utility.MaterialUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class ContainerRollback extends Rollback {
 
@@ -50,7 +49,7 @@ public class ContainerRollback extends Rollback {
             Queue.queueRollbackUpdate(userString, location, lookupList, Process.CONTAINER_ROLLBACK_UPDATE, rollbackType); // Perform update transaction in consumer
 
             final String finalUserString = userString;
-            ConfigHandler.rollbackHash.put(userString, new int[] { 0, 0, 0, 0, 0 });
+            ConfigHandler.rollbackHash.put(userString, new int[]{0, 0, 0, 0, 0});
 
             Scheduler.scheduleSyncDelayedTask(CoreProtect.getInstance(), new Runnable() {
                 @Override
@@ -71,15 +70,13 @@ public class ContainerRollback extends Rollback {
 
                         if (BlockGroup.CONTAINERS.contains(type)) {
                             container = BlockUtils.getContainerInventory(block.getState(), false);
-                        }
-                        else {
+                        } else {
                             for (Entity entity : block.getChunk().getEntities()) {
                                 if (entity.getLocation().getBlockX() == location.getBlockX() && entity.getLocation().getBlockY() == location.getBlockY() && entity.getLocation().getBlockZ() == location.getBlockZ()) {
                                     if (entity instanceof ArmorStand) {
                                         type = Material.ARMOR_STAND;
                                         container = ItemUtils.getEntityEquipment((LivingEntity) entity);
-                                    }
-                                    else if (entity instanceof ItemFrame) {
+                                    } else if (entity instanceof ItemFrame) {
                                         type = Material.ITEM_FRAME;
                                         container = entity;
                                         matchingFrames.add((ItemFrame) entity);
@@ -144,9 +141,8 @@ public class ContainerRollback extends Rollback {
                         }
                         matchingFrames.clear();
 
-                        ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, modifyCount, entityCount, 1, 1 });
-                    }
-                    catch (Exception e) {
+                        ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, modifyCount, entityCount, 1, 1});
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -182,8 +178,7 @@ public class ContainerRollback extends Rollback {
 
                 RollbackComplete.output(user, location, checkUsers, restrictList, excludeList, excludeUserList, actionList, timeString, file, totalSeconds, itemCount, blockCount, entityCount, rollbackType, radius, verbose, restrictWorld, 0);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

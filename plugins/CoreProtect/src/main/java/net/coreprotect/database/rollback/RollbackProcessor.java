@@ -1,14 +1,11 @@
 package net.coreprotect.database.rollback;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.database.logger.ItemLogger;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,49 +15,27 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Jukebox;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.database.logger.ItemLogger;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.utility.BlockUtils;
-import net.coreprotect.utility.ItemUtils;
-import net.coreprotect.utility.MaterialUtils;
-import net.coreprotect.utility.Teleport;
-import net.coreprotect.utility.WorldUtils;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class RollbackProcessor {
 
     /**
      * Process data for a specific chunk
-     * 
-     * @param finalChunkX
-     *            The chunk X coordinate
-     * @param finalChunkZ
-     *            The chunk Z coordinate
-     * @param chunkKey
-     *            The chunk lookup key
-     * @param blockList
-     *            The list of block data to process
-     * @param itemList
-     *            The list of item data to process
-     * @param rollbackType
-     *            The rollback type (0=rollback, 1=restore)
-     * @param preview
-     *            Whether this is a preview (0=no, 1=yes-non-destructive, 2=yes-destructive)
-     * @param finalUserString
-     *            The username performing the rollback
-     * @param finalUser
-     *            The user performing the rollback
-     * @param bukkitRollbackWorld
-     *            The world to process
+     *
+     * @param finalChunkX         The chunk X coordinate
+     * @param finalChunkZ         The chunk Z coordinate
+     * @param chunkKey            The chunk lookup key
+     * @param blockList           The list of block data to process
+     * @param itemList            The list of item data to process
+     * @param rollbackType        The rollback type (0=rollback, 1=restore)
+     * @param preview             Whether this is a preview (0=no, 1=yes-non-destructive, 2=yes-destructive)
+     * @param finalUserString     The username performing the rollback
+     * @param finalUser           The user performing the rollback
+     * @param bukkitRollbackWorld The world to process
      * @return True if successful, false if there was an error
      */
     public static boolean processChunk(int finalChunkX, int finalChunkZ, long chunkKey, ArrayList<Object[]> blockList, ArrayList<Object[]> itemList, int rollbackType, int preview, String finalUserString, Player finalUser, World bukkitRollbackWorld, boolean inventoryRollback) {
@@ -101,8 +76,7 @@ public class RollbackProcessor {
                 if (blockDataString != null && blockDataString.contains(":")) {
                     try {
                         blockData = Bukkit.getServer().createBlockData(blockDataString);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         // corrupt BlockData, let the server automatically set the BlockData instead
                     }
                 }
@@ -123,17 +97,14 @@ public class RollbackProcessor {
                     rowType = Material.AIR;
                     blockData = null;
                     rowTypeRaw = 0;
-                }
-                else if (rowAction == 0 && rollbackType == 1) { // block removal
+                } else if (rowAction == 0 && rollbackType == 1) { // block removal
                     rowType = Material.AIR;
                     blockData = null;
                     rowTypeRaw = 0;
-                }
-                else if (rowAction == 4 && rollbackType == 0) { // entity placement
+                } else if (rowAction == 4 && rollbackType == 0) { // entity placement
                     rowType = null;
                     rowTypeRaw = 0;
-                }
-                else if (rowAction == 3 && rollbackType == 1) { // entity removal
+                } else if (rowAction == 3 && rollbackType == 1) { // entity removal
                     rowType = null;
                     rowTypeRaw = 0;
                 }
@@ -156,22 +127,18 @@ public class RollbackProcessor {
                                 BlockUtils.prepareTypeAndData(chunkChanges, block, blockType, block.getBlockData(), true);
                                 blockCount++;
                             }
-                        }
-                        else {
+                        } else {
                             if ((!BukkitAdapter.ADAPTER.isItemFrame(rowType)) && (rowType != Material.PAINTING) && (rowType != Material.ARMOR_STAND) && (rowType != Material.END_CRYSTAL)) {
                                 BlockUtils.prepareTypeAndData(chunkChanges, block, rowType, blockData, true);
                                 blockCount++;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         entityCount++;
                     }
-                }
-                else if (rowAction == 3) { // entity kill
+                } else if (rowAction == 3) { // entity kill
                     entityCount += RollbackEntityHandler.processEntity(row, rollbackType, finalUserString, oldTypeRaw, rowTypeRaw, rowData, rowAction, MaterialUtils.rolledBack((Integer) row[9], false), rowX, rowY, rowZ, rowWorldId, (Integer) row[2], rowUser);
-                }
-                else {
+                } else {
                     String world = WorldUtils.getWorldName(rowWorldId);
                     if (world.length() == 0) {
                         continue;
@@ -196,8 +163,7 @@ public class RollbackProcessor {
 
                     if (pendingChangeData != null) {
                         pendingChangeType = pendingChangeData.getMaterial();
-                    }
-                    else {
+                    } else {
                         pendingChangeData = changeBlockData;
                     }
 
@@ -214,14 +180,12 @@ public class RollbackProcessor {
                                     changeBlock = false;
                                 }
                             }
-                        }
-                        else if (rowType == Material.AIR) {
+                        } else if (rowType == Material.AIR) {
                             changeBlock = false;
                         }
 
                         countBlock = false;
-                    }
-                    else if ((pendingChangeType != Material.AIR) && (pendingChangeType != Material.CAVE_AIR)) {
+                    } else if ((pendingChangeType != Material.AIR) && (pendingChangeType != Material.CAVE_AIR)) {
                         countBlock = true;
                     }
 
@@ -239,7 +203,7 @@ public class RollbackProcessor {
                     }
                 }
 
-                ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, blockCount, entityCount, 0, scannedWorlds });
+                ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, blockCount, entityCount, 0, scannedWorlds});
             }
             data.clear();
 
@@ -298,11 +262,9 @@ public class RollbackProcessor {
                         int inventoryAction = 0;
                         if (rowAction == ItemLogger.ITEM_DROP || rowAction == ItemLogger.ITEM_PICKUP || rowAction == ItemLogger.ITEM_THROW || rowAction == ItemLogger.ITEM_SHOOT || rowAction == ItemLogger.ITEM_BREAK || rowAction == ItemLogger.ITEM_DESTROY || rowAction == ItemLogger.ITEM_CREATE || rowAction == ItemLogger.ITEM_SELL || rowAction == ItemLogger.ITEM_BUY) {
                             inventoryAction = ((rowAction == ItemLogger.ITEM_PICKUP || rowAction == ItemLogger.ITEM_CREATE || rowAction == ItemLogger.ITEM_BUY) ? 1 : 0);
-                        }
-                        else if (rowAction == ItemLogger.ITEM_REMOVE_ENDER || rowAction == ItemLogger.ITEM_ADD_ENDER) {
+                        } else if (rowAction == ItemLogger.ITEM_REMOVE_ENDER || rowAction == ItemLogger.ITEM_ADD_ENDER) {
                             inventoryAction = (rowAction == ItemLogger.ITEM_REMOVE_ENDER ? 1 : 0);
-                        }
-                        else {
+                        } else {
                             inventoryAction = (rowAction == ItemLogger.ITEM_REMOVE ? 1 : 0);
                         }
 
@@ -322,7 +284,7 @@ public class RollbackProcessor {
                         }
 
                         itemCount1 = itemCount1 + rowAmount;
-                        ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount1, blockCount1, entityCount1, 0, scannedWorlds });
+                        ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount1, blockCount1, entityCount1, 0, scannedWorlds});
                         continue; // remove this for merged rollbacks in future? (be sure to re-enable chunk sorting)
                     }
 
@@ -355,21 +317,18 @@ public class RollbackProcessor {
                                 BlockState blockState = block.getState();
                                 if (blockState instanceof Jukebox) {
                                     container = blockState;
-                                }
-                                else {
+                                } else {
                                     container = BlockUtils.getContainerInventory(blockState, false);
                                 }
 
                                 containerType = block.getType();
-                            }
-                            else if (BlockGroup.CONTAINERS.contains(Material.ARMOR_STAND) || BlockGroup.CONTAINERS.contains(Material.ITEM_FRAME)) {
+                            } else if (BlockGroup.CONTAINERS.contains(Material.ARMOR_STAND) || BlockGroup.CONTAINERS.contains(Material.ITEM_FRAME)) {
                                 for (Entity entity : block.getChunk().getEntities()) {
                                     if (entity.getLocation().getBlockX() == rowX && entity.getLocation().getBlockY() == rowY && entity.getLocation().getBlockZ() == rowZ) {
                                         if (entity instanceof ArmorStand) {
                                             container = ItemUtils.getEntityEquipment((LivingEntity) entity);
                                             containerType = Material.ARMOR_STAND;
-                                        }
-                                        else if (entity instanceof ItemFrame) {
+                                        } else if (entity instanceof ItemFrame) {
                                             container = entity;
                                             containerType = Material.ITEM_FRAME;
                                             if (faceData.length() > 0 && (BlockFace.valueOf(faceData) == entity.getFacing())) {
@@ -407,7 +366,7 @@ public class RollbackProcessor {
                     }
                 }
 
-                ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount1, blockCount1, entityCount1, 0, scannedWorlds });
+                ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount1, blockCount1, entityCount1, 0, scannedWorlds});
             }
             itemData.clear();
 
@@ -421,7 +380,7 @@ public class RollbackProcessor {
             int blockCount = rollbackHashData[1];
             int entityCount = rollbackHashData[2];
             int scannedWorlds = rollbackHashData[4];
-            ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, blockCount, entityCount, 1, (scannedWorlds + 1) });
+            ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, blockCount, entityCount, 1, (scannedWorlds + 1)});
 
             // Teleport players out of danger if they're within this chunk
             if (preview == 0) {
@@ -438,8 +397,7 @@ public class RollbackProcessor {
             }
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             int[] rollbackHashData = ConfigHandler.rollbackHash.get(finalUserString);
             int itemCount = rollbackHashData[0];
@@ -447,7 +405,7 @@ public class RollbackProcessor {
             int entityCount = rollbackHashData[2];
             int scannedWorlds = rollbackHashData[4];
 
-            ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, blockCount, entityCount, 2, (scannedWorlds + 1) });
+            ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, blockCount, entityCount, 2, (scannedWorlds + 1)});
             return false;
         }
     }

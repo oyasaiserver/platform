@@ -1,10 +1,10 @@
 package net.coreprotect.patch.script;
 
-import java.sql.Statement;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.patch.Patch;
+
+import java.sql.Statement;
 
 public class __2_5_0 {
 
@@ -17,8 +17,7 @@ public class __2_5_0 {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign MODIFY line_3 VARCHAR(100)");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign MODIFY line_4 VARCHAR(100)");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "user MODIFY user VARCHAR(32)");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -28,8 +27,7 @@ public class __2_5_0 {
             }
 
             statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "block ADD COLUMN meta BLOB");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

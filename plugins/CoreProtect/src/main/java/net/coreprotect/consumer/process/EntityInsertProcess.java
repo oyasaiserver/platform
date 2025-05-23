@@ -1,13 +1,13 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.MaterialStatement;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.utility.Chat;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 class EntityInsertProcess {
 
@@ -24,8 +24,7 @@ class EntityInsertProcess {
                 if (materialId > ConfigHandler.entityId) {
                     ConfigHandler.entityId = materialId;
                 }
-            }
-            else {
+            } else {
                 Chat.console(Phrase.build(Phrase.CACHE_ERROR, "entity"));
                 Chat.console(Phrase.build(Phrase.CACHE_RELOAD, Selector.FIRST));
                 ConfigHandler.loadTypes(statement);

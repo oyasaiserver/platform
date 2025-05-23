@@ -1,19 +1,17 @@
 package net.coreprotect.paper;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.UUID;
-
+import com.destroystokyo.paper.profile.PlayerProfile;
+import net.coreprotect.config.Config;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
 import org.bukkit.block.sign.Side;
 import org.bukkit.profile.PlayerTextures;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-
-import net.coreprotect.config.Config;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import java.net.URI;
+import java.net.URL;
+import java.util.UUID;
 
 public class Paper_v1_20 extends Paper_v1_17 {
 
@@ -22,8 +20,7 @@ public class Paper_v1_20 extends Paper_v1_17 {
         // https://docs.adventure.kyori.net/serializer/
         if (line < 4) {
             return LegacyComponentSerializer.legacySection().serialize(sign.getSide(Side.FRONT).line(line));
-        }
-        else {
+        } else {
             return LegacyComponentSerializer.legacySection().serialize(sign.getSide(Side.BACK).line(line - 4));
         }
     }
@@ -33,8 +30,7 @@ public class Paper_v1_20 extends Paper_v1_17 {
         String owner = skull.getPlayerProfile().getName();
         if (skull.getPlayerProfile().getId() != null) {
             owner = skull.getPlayerProfile().getId().toString();
-        }
-        else if (Config.getGlobal().MYSQL && owner != null && owner.length() > 255) {
+        } else if (Config.getGlobal().MYSQL && owner != null && owner.length() > 255) {
             return owner.substring(0, 255);
         }
 
@@ -45,8 +41,7 @@ public class Paper_v1_20 extends Paper_v1_17 {
     public void setSkullOwner(Skull skull, String owner) {
         if (owner != null && owner.length() >= 32 && owner.contains("-")) {
             skull.setPlayerProfile(Bukkit.createProfile(UUID.fromString(owner)));
-        }
-        else {
+        } else {
             skull.setPlayerProfile(Bukkit.createProfile(owner));
         }
     }
@@ -69,8 +64,7 @@ public class Paper_v1_20 extends Paper_v1_17 {
             textures.setSkin(URI.create(skin).toURL());
             playerProfile.setTextures(textures);
             skull.setPlayerProfile(playerProfile);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

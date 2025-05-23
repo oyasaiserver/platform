@@ -1,11 +1,9 @@
 package net.coreprotect.utility.serialize;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.utility.Color;
+import net.coreprotect.utility.ItemUtils;
+import net.coreprotect.utility.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -14,22 +12,14 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.CrossbowMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.ItemUtils;
-import net.coreprotect.utility.StringUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ItemMetaHandler {
 
@@ -145,8 +135,7 @@ public class ItemMetaHandler {
                 list = new ArrayList<>();
                 list.add(subMeta.getColor().serialize());
                 metadata.add(list);
-            }
-            else if (itemMeta instanceof PotionMeta meta) {
+            } else if (itemMeta instanceof PotionMeta meta) {
                 PotionMeta subMeta = meta.clone();
                 meta.setColor(null);
                 meta.clearCustomEffects();
@@ -164,8 +153,7 @@ public class ItemMetaHandler {
                         metadata.add(list);
                     }
                 }
-            }
-            else if (itemMeta instanceof FireworkMeta meta) {
+            } else if (itemMeta instanceof FireworkMeta meta) {
                 FireworkMeta subMeta = meta.clone();
                 meta.clearEffects();
                 list.add(meta.serialize());
@@ -176,8 +164,7 @@ public class ItemMetaHandler {
                         deserializeFireworkEffect(effect, metadata);
                     }
                 }
-            }
-            else if (itemMeta instanceof FireworkEffectMeta meta) {
+            } else if (itemMeta instanceof FireworkEffectMeta meta) {
                 FireworkEffectMeta subMeta = meta.clone();
                 meta.setEffect(null);
                 list.add(meta.serialize());
@@ -187,8 +174,7 @@ public class ItemMetaHandler {
                     FireworkEffect effect = subMeta.getEffect();
                     deserializeFireworkEffect(effect, metadata);
                 }
-            }
-            else if (itemMeta instanceof BannerMeta meta) {
+            } else if (itemMeta instanceof BannerMeta meta) {
                 BannerMeta subMeta = (BannerMeta) meta.clone();
                 meta.setPatterns(new ArrayList<>());
                 list.add(meta.serialize());
@@ -199,8 +185,7 @@ public class ItemMetaHandler {
                     list.add(pattern.serialize());
                     metadata.add(list);
                 }
-            }
-            else if (itemMeta instanceof CrossbowMeta meta) {
+            } else if (itemMeta instanceof CrossbowMeta meta) {
                 CrossbowMeta subMeta = (CrossbowMeta) meta.clone();
                 meta.setChargedProjectiles(null);
                 list.add(meta.serialize());
@@ -218,8 +203,7 @@ public class ItemMetaHandler {
 
                     metadata.add(list);
                 }
-            }
-            else if (itemMeta instanceof MapMeta meta) {
+            } else if (itemMeta instanceof MapMeta meta) {
                 MapMeta subMeta = meta.clone();
                 meta.setColor(null);
                 list.add(meta.serialize());
@@ -230,8 +214,7 @@ public class ItemMetaHandler {
                     list.add(subMeta.getColor().serialize());
                     metadata.add(list);
                 }
-            }
-            else if (itemMeta instanceof SuspiciousStewMeta meta) {
+            } else if (itemMeta instanceof SuspiciousStewMeta meta) {
                 SuspiciousStewMeta subMeta = meta.clone();
                 meta.clearCustomEffects();
                 list.add(meta.serialize());
@@ -244,8 +227,7 @@ public class ItemMetaHandler {
                         metadata.add(list);
                     }
                 }
-            }
-            else if (!BukkitAdapter.ADAPTER.getItemMeta(itemMeta, list, metadata, slot)) {
+            } else if (!BukkitAdapter.ADAPTER.getItemMeta(itemMeta, list, metadata, slot)) {
                 list.add(itemMeta.serialize());
                 metadata.add(list);
             }

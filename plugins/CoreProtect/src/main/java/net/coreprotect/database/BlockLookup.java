@@ -1,17 +1,16 @@
 package net.coreprotect.database;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.thread.CacheHandler;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class BlockLookup {
 
@@ -42,12 +41,11 @@ public class BlockLookup {
                 result = ConfigHandler.playerIdCacheReversed.get(resultUserId);
                 if (result.length() > 0) {
                     Material resultMaterial = MaterialUtils.getType(resultType);
-                    CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + worldId, new Object[] { time, result, resultMaterial });
+                    CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + worldId, new Object[]{time, result, resultMaterial});
                 }
             }
             results.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -81,8 +79,7 @@ public class BlockLookup {
             if (data != null) {
                 result = (String) data[1];
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -109,8 +106,7 @@ public class BlockLookup {
                     result = (String) data[1];
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

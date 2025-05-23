@@ -1,7 +1,12 @@
 package net.coreprotect.listener.block;
 
-import java.util.Arrays;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.listener.player.InventoryChangeListener;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.paper.listener.BlockPreDispenseListener;
+import net.coreprotect.thread.CacheHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,13 +24,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.listener.player.InventoryChangeListener;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.paper.listener.BlockPreDispenseListener;
-import net.coreprotect.thread.CacheHandler;
+import java.util.Arrays;
 
 public final class BlockDispenseListener extends Queue implements Listener {
 
@@ -68,27 +67,23 @@ public final class BlockDispenseListener extends Queue implements Listener {
                 if (material.equals(Material.WATER_BUCKET)) {
                     type = Material.WATER;
                     user = "#water";
-                }
-                else if (material.equals(Material.LAVA_BUCKET)) {
+                } else if (material.equals(Material.LAVA_BUCKET)) {
                     type = Material.LAVA;
                     user = "#lava";
-                }
-                else if (material.equals(Material.FLINT_AND_STEEL)) {
+                } else if (material.equals(Material.FLINT_AND_STEEL)) {
                     type = Material.FIRE;
                     user = "#fire";
-                }
-                else {
+                } else {
                     type = BukkitAdapter.ADAPTER.getBucketContents(material);
                 }
 
                 if (!dispenseSuccess && material == Material.BONE_MEAL) {
-                    CacheHandler.redstoneCache.put(newBlock.getLocation(), new Object[] { System.currentTimeMillis(), user });
+                    CacheHandler.redstoneCache.put(newBlock.getLocation(), new Object[]{System.currentTimeMillis(), user});
                 }
 
                 if (type == Material.FIRE && (!Config.getConfig(world).BLOCK_IGNITE || !(newBlockData instanceof Lightable))) {
                     return;
-                }
-                else if (type != Material.FIRE && (!Config.getConfig(world).BUCKETS || (!Config.getConfig(world).WATER_FLOW && type.equals(Material.WATER)) || (!Config.getConfig(world).LAVA_FLOW && type.equals(Material.LAVA)))) {
+                } else if (type != Material.FIRE && (!Config.getConfig(world).BUCKETS || (!Config.getConfig(world).WATER_FLOW && type.equals(Material.WATER)) || (!Config.getConfig(world).LAVA_FLOW && type.equals(Material.LAVA)))) {
                     return;
                 }
 
@@ -101,8 +96,7 @@ public final class BlockDispenseListener extends Queue implements Listener {
 
                             queueBlockPlace(user, newBlock.getState(), newBlock.getType(), newBlock.getState(), type, -1, 0, newBlockData.getAsString());
                         }
-                    }
-                    else if (dispenseRelative) {
+                    } else if (dispenseRelative) {
                         BlockState blockState = newBlock.getState();
                         if (type.equals(Material.WATER)) {
                             if (newBlockData instanceof Waterlogged) {
@@ -112,8 +106,7 @@ public final class BlockDispenseListener extends Queue implements Listener {
 
                         if (!type.equals(Material.AIR)) {
                             queueBlockPlace(user, newBlock.getState(), newBlock.getType(), blockState, type, 1, 1, null);
-                        }
-                        else {
+                        } else {
                             Queue.queueBlockBreak(user, newBlock.getState(), newBlock.getType(), newBlock.getBlockData().getAsString(), 0);
                         }
                     }

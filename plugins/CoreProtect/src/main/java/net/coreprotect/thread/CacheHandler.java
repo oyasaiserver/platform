@@ -1,15 +1,14 @@
 package net.coreprotect.thread;
 
+import net.coreprotect.config.ConfigHandler;
+import org.bukkit.Location;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Location;
-
-import net.coreprotect.config.ConfigHandler;
 
 public class CacheHandler implements Runnable {
 
@@ -21,7 +20,7 @@ public class CacheHandler implements Runnable {
     public static ConcurrentHashMap<String, Object[]> spreadCache = new ConcurrentHashMap<>(16, 0.75f, 2);
     public static ConcurrentHashMap<Location, Object[]> redstoneCache = new ConcurrentHashMap<>(16, 0.75f, 2);
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void run() {
         while (ConfigHandler.serverRunning) {
@@ -76,18 +75,15 @@ public class CacheHandler implements Runnable {
                             if (time < timestamp) {
                                 try {
                                     iterator.remove();
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                 }
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             break;
                         }
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -140,8 +136,7 @@ public class CacheHandler implements Runnable {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

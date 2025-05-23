@@ -1,11 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -13,6 +7,11 @@ import net.coreprotect.database.statement.SignStatement;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+
+import java.sql.PreparedStatement;
+import java.util.Locale;
 
 public class SignTextLogger {
 
@@ -56,8 +55,7 @@ public class SignTextLogger {
             }
 
             SignStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, action, color, colorSecondary, data, isWaxed ? 1 : 0, isFront ? 0 : 1, line1, line2, line3, line4, line5, line6, line7, line8);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

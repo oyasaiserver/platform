@@ -1,5 +1,11 @@
 package net.coreprotect.listener.entity;
 
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Lookup;
+import net.coreprotect.listener.player.PlayerInteractEntityListener;
+import net.coreprotect.utility.MaterialUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -12,13 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.inventory.ItemStack;
-
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Lookup;
-import net.coreprotect.listener.player.PlayerInteractEntityListener;
-import net.coreprotect.utility.MaterialUtils;
 
 public final class HangingBreakListener extends Queue implements Listener {
 
@@ -36,8 +35,7 @@ public final class HangingBreakListener extends Queue implements Listener {
 
                 if (cause.equals(HangingBreakEvent.RemoveCause.PHYSICS)) {
                     causeName = "#physics";
-                }
-                else if (cause.equals(HangingBreakEvent.RemoveCause.OBSTRUCTION)) {
+                } else if (cause.equals(HangingBreakEvent.RemoveCause.OBSTRUCTION)) {
                     causeName = "#obstruction";
                 }
 
@@ -61,20 +59,18 @@ public final class HangingBreakListener extends Queue implements Listener {
 
                     if (!event.isCancelled() && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS) {
                         if (itemframe.getItem().getType() != Material.AIR) {
-                            ItemStack[] oldState = new ItemStack[] { itemframe.getItem().clone() };
-                            ItemStack[] newState = new ItemStack[] { new ItemStack(Material.AIR) };
-                            PlayerInteractEntityListener.queueContainerSpecifiedItems(causeName, Material.ITEM_FRAME, new Object[] { oldState, newState, itemframe.getFacing() }, itemframe.getLocation(), logDrops);
+                            ItemStack[] oldState = new ItemStack[]{itemframe.getItem().clone()};
+                            ItemStack[] newState = new ItemStack[]{new ItemStack(Material.AIR)};
+                            PlayerInteractEntityListener.queueContainerSpecifiedItems(causeName, Material.ITEM_FRAME, new Object[]{oldState, newState, itemframe.getFacing()}, itemframe.getLocation(), logDrops);
                         }
                     }
-                }
-                else {
+                } else {
                     material = Material.PAINTING;
                     Painting painting = (Painting) entity;
                     blockData = "FACING=" + painting.getFacing().name();
                     try {
                         itemData = MaterialUtils.getArtId(painting.getArt().toString(), true);
-                    }
-                    catch (IncompatibleClassChangeError e) {
+                    } catch (IncompatibleClassChangeError e) {
                         // 1.21.2+
                     }
                 }

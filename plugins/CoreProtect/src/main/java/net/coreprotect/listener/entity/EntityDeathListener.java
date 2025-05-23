@@ -1,59 +1,19 @@
 package net.coreprotect.listener.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Registry;
-import org.bukkit.World;
+import com.google.common.collect.Lists;
+import net.coreprotect.CoreProtect;
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.thread.Scheduler;
+import net.coreprotect.utility.serialize.ItemMetaHandler;
+import org.bukkit.*;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
-import org.bukkit.entity.AbstractArrow;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.AbstractVillager;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Bee;
-import org.bukkit.entity.Cat;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Enderman;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fox;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.MushroomCow;
-import org.bukkit.entity.Panda;
-import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.Piglin;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Raider;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Spellcaster;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.ThrownPotion;
-import org.bukkit.entity.TropicalFish;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zoglin;
-import org.bukkit.entity.Zombie;
-import org.bukkit.entity.ZombieVillager;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -67,14 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
-import com.google.common.collect.Lists;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.serialize.ItemMetaHandler;
+import java.util.*;
 
 public final class EntityDeathListener extends Queue implements Listener {
 
@@ -144,61 +97,49 @@ public final class EntityDeathListener extends Queue implements Listener {
 
             if (attacker instanceof Player player) {
                 e = player.getName();
-            }
-            else if (attacker instanceof AbstractArrow arrow) {
+            } else if (attacker instanceof AbstractArrow arrow) {
                 ProjectileSource shooter = arrow.getShooter();
 
                 if (shooter instanceof Player player) {
                     e = player.getName();
-                }
-                else if (shooter instanceof LivingEntity) {
+                } else if (shooter instanceof LivingEntity) {
                     EntityType entityType = ((LivingEntity) shooter).getType();
                     if (entityType != null) { // Check for MyPet plugin
                         String name = entityType.name().toLowerCase(Locale.ROOT);
                         e = "#" + name;
                     }
                 }
-            }
-            else if (attacker instanceof ThrownPotion potion) {
+            } else if (attacker instanceof ThrownPotion potion) {
                 ProjectileSource shooter = potion.getShooter();
 
                 if (shooter instanceof Player player) {
                     e = player.getName();
-                }
-                else if (shooter instanceof LivingEntity) {
+                } else if (shooter instanceof LivingEntity) {
                     EntityType entityType = ((LivingEntity) shooter).getType();
                     if (entityType != null) { // Check for MyPet plugin
                         String name = entityType.name().toLowerCase(Locale.ROOT);
                         e = "#" + name;
                     }
                 }
-            }
-            else if (attacker.getType().name() != null) {
+            } else if (attacker.getType().name() != null) {
                 e = "#" + attacker.getType().name().toLowerCase(Locale.ROOT);
             }
-        }
-        else {
+        } else {
             if (cause.equals(EntityDamageEvent.DamageCause.FIRE)) {
                 e = "#fire";
-            }
-            else if (cause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
+            } else if (cause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
                 if (!skip) {
                     e = "#fire";
                 }
-            }
-            else if (cause.equals(EntityDamageEvent.DamageCause.LAVA)) {
+            } else if (cause.equals(EntityDamageEvent.DamageCause.LAVA)) {
                 e = "#lava";
-            }
-            else if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+            } else if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
                 e = "#explosion";
-            }
-            else if (cause.equals(EntityDamageEvent.DamageCause.MAGIC)) {
+            } else if (cause.equals(EntityDamageEvent.DamageCause.MAGIC)) {
                 e = "#magic";
-            }
-            else if (cause.equals(EntityDamageEvent.DamageCause.WITHER)) {
+            } else if (cause.equals(EntityDamageEvent.DamageCause.WITHER)) {
                 e = "#wither_effect";
-            }
-            else if (!cause.name().contains("_")) {
+            } else if (!cause.name().contains("_")) {
                 e = "#" + cause.name().toLowerCase(Locale.ROOT);
             }
         }
@@ -229,8 +170,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                     // Player player = (Player)entity;
                     // e = player.getName();
                     e = "#" + entity_type.name().toLowerCase(Locale.ROOT);
-                }
-                else if (entity instanceof Player) {
+                } else if (entity instanceof Player) {
                     e = entity.getName();
                 }
             }
@@ -304,60 +244,44 @@ public final class EntityDeathListener extends Queue implements Listener {
 
             if (entity instanceof Creeper creeper) {
                 info.add(creeper.isPowered());
-            }
-            else if (entity instanceof Enderman enderman) {
+            } else if (entity instanceof Enderman enderman) {
                 info.add(null);
-
                 try {
                     info.add(enderman.getCarriedBlock().getAsString());
+                } catch (Exception endermanException) {
                 }
-                catch (Exception endermanException) {
-                }
-            }
-            else if (entity instanceof IronGolem irongolem) {
+            } else if (entity instanceof IronGolem irongolem) {
                 info.add(irongolem.isPlayerCreated());
-            }
-            else if (entity instanceof Cat cat) {
+            } else if (entity instanceof Cat cat) {
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(cat.getCatType()));
                 info.add(cat.getCollarColor());
                 info.add(cat.isSitting());
-            }
-            else if (entity instanceof Fox fox) {
+            } else if (entity instanceof Fox fox) {
                 info.add(fox.getFoxType());
                 info.add(fox.isSitting());
-            }
-            else if (entity instanceof Panda panda) {
+            } else if (entity instanceof Panda panda) {
                 info.add(panda.getMainGene());
                 info.add(panda.getHiddenGene());
-            }
-            else if (entity instanceof Pig pig) {
+            } else if (entity instanceof Pig pig) {
                 info.add(pig.hasSaddle());
-            }
-            else if (entity instanceof Sheep sheep) {
-                info.add(sheep.isSheared());
+            } else if (entity instanceof Sheep sheep) {
+                info.add(sheep.readyToBeSheared());
                 info.add(sheep.getColor());
-            }
-            else if (entity instanceof MushroomCow mushroomCow) {
+            } else if (entity instanceof MushroomCow mushroomCow) {
                 info.add(mushroomCow.getVariant());
-            }
-            else if (entity instanceof Skeleton) {
+            } else if (entity instanceof Skeleton) {
                 info.add(null);
-            }
-            else if (entity instanceof Slime slime) {
+            } else if (entity instanceof Slime slime) {
                 info.add(slime.getSize());
-            }
-            else if (entity instanceof Parrot parrot) {
+            } else if (entity instanceof Parrot parrot) {
                 info.add(parrot.getVariant());
-            }
-            else if (entity instanceof TropicalFish tropicalFish) {
+            } else if (entity instanceof TropicalFish tropicalFish) {
                 info.add(tropicalFish.getBodyColor());
                 info.add(tropicalFish.getPattern());
                 info.add(tropicalFish.getPatternColor());
-            }
-            else if (entity instanceof Phantom phantom) {
+            } else if (entity instanceof Phantom phantom) {
                 info.add(phantom.getSize());
-            }
-            else if (entity instanceof AbstractVillager abstractVillager) {
+            } else if (entity instanceof AbstractVillager abstractVillager) {
                 List<Object> recipes = new ArrayList<>();
                 for (MerchantRecipe merchantRecipe : abstractVillager.getRecipes()) {
                     List<Object> recipe = new ArrayList<>();
@@ -395,35 +319,29 @@ public final class EntityDeathListener extends Queue implements Listener {
                     info.add(recipes);
                     info.add(villager.getVillagerLevel());
                     info.add(villager.getVillagerExperience());
-                }
-                else {
+                } else {
                     info.add(null);
                     info.add(null);
                     info.add(recipes);
                 }
-            }
-            else if (entity instanceof Raider raider) {
+            } else if (entity instanceof Raider raider) {
                 info.add(raider.isPatrolLeader());
 
                 if (entity instanceof Spellcaster spellcaster) {
                     info.add(spellcaster.getSpell());
                 }
-            }
-            else if (entity instanceof Wolf wolf) {
+            } else if (entity instanceof Wolf wolf) {
                 info.add(wolf.isSitting());
                 info.add(wolf.getCollarColor());
                 BukkitAdapter.ADAPTER.getWolfVariant(wolf, info);
-            }
-            else if (entity instanceof ZombieVillager zombieVillager) {
+            } else if (entity instanceof ZombieVillager zombieVillager) {
                 info.add(zombieVillager.isBaby());
                 info.add(BukkitAdapter.ADAPTER.getRegistryKey(zombieVillager.getVillagerProfession()));
-            }
-            else if (entity instanceof Zombie zombie) {
+            } else if (entity instanceof Zombie zombie) {
                 info.add(zombie.isBaby());
                 info.add(null);
                 info.add(null);
-            }
-            else if (entity instanceof AbstractHorse abstractHorse) {
+            } else if (entity instanceof AbstractHorse abstractHorse) {
                 info.add(null);
                 info.add(null);
                 info.add(abstractHorse.getDomestication());
@@ -438,8 +356,7 @@ public final class EntityDeathListener extends Queue implements Listener {
                     ItemStack saddle = horse.getInventory().getSaddle();
                     if (saddle != null) {
                         info.add(saddle.serialize());
-                    }
-                    else {
+                    } else {
                         info.add(null);
                     }
 
@@ -459,43 +376,35 @@ public final class EntityDeathListener extends Queue implements Listener {
                         info.add(armor.serialize());
                         if (color != null) {
                             info.add(color.serialize());
-                        }
-                        else {
+                        } else {
                             info.add(null);
                         }
-                    }
-                    else {
+                    } else {
                         info.add(null);
                         info.add(null);
                     }
-                }
-                else if (entity instanceof ChestedHorse chestedHorse) {
+                } else if (entity instanceof ChestedHorse chestedHorse) {
                     info.add(chestedHorse.isCarryingChest());
 
                     if (entity instanceof Llama llama) {
                         ItemStack decor = llama.getInventory().getDecor();
                         if (decor != null) {
                             info.add(decor.serialize());
-                        }
-                        else {
+                        } else {
                             info.add(null);
                         }
                         info.add(llama.getColor());
                     }
                 }
-            }
-            else if (entity instanceof Bee bee) {
+            } else if (entity instanceof Bee bee) {
                 info.add(bee.getAnger());
                 info.add(bee.hasNectar());
                 info.add(bee.hasStung());
-            }
-            else if (entity instanceof Piglin piglin) {
+            } else if (entity instanceof Piglin piglin) {
                 info.add(piglin.isBaby());
-            }
-            else if (entity instanceof Zoglin zoglin) {
+            } else if (entity instanceof Zoglin zoglin) {
                 info.add(zoglin.isBaby());
-            }
-            else {
+            } else {
                 BukkitAdapter.ADAPTER.getEntityMeta(entity, info);
             }
 
@@ -509,8 +418,7 @@ public final class EntityDeathListener extends Queue implements Listener {
 
             if (!(entity instanceof Player)) {
                 Queue.queueEntityKill(e, entity.getLocation(), data, type);
-            }
-            else {
+            } else {
                 Queue.queuePlayerKill(e, entity.getLocation(), entity.getName());
             }
         }

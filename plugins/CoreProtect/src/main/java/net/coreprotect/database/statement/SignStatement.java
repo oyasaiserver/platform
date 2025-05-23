@@ -1,14 +1,13 @@
 package net.coreprotect.database.statement;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.utility.BlockUtils;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.utility.BlockUtils;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class SignStatement {
 
@@ -43,8 +42,7 @@ public class SignStatement {
             if (batchCount > 0 && batchCount % 1000 == 0) {
                 preparedStmt.executeBatch();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -95,8 +93,7 @@ public class SignStatement {
             }
 
             resultSet.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

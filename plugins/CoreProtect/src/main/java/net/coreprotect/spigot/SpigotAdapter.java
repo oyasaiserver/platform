@@ -1,17 +1,15 @@
 package net.coreprotect.spigot;
 
-import java.util.regex.Matcher;
-
-import org.bukkit.command.CommandSender;
-
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Util;
+import org.bukkit.command.CommandSender;
+
+import java.util.regex.Matcher;
 
 public class SpigotAdapter implements SpigotInterface {
 
-    public static SpigotInterface ADAPTER;
     public static final int SPIGOT_UNAVAILABLE = 0;
     public static final int SPIGOT_V1_13 = BukkitAdapter.BUKKIT_V1_13;
     public static final int SPIGOT_V1_14 = BukkitAdapter.BUKKIT_V1_14;
@@ -22,6 +20,7 @@ public class SpigotAdapter implements SpigotInterface {
     public static final int SPIGOT_V1_19 = BukkitAdapter.BUKKIT_V1_19;
     public static final int SPIGOT_V1_20 = BukkitAdapter.BUKKIT_V1_20;
     public static final int SPIGOT_V1_21 = BukkitAdapter.BUKKIT_V1_21;
+    public static SpigotInterface ADAPTER;
 
     public static void loadAdapter() {
         int spigotVersion = ConfigHandler.SERVER_VERSION;
@@ -68,8 +67,7 @@ public class SpigotAdapter implements SpigotInterface {
                 if (data[0].equals(Chat.COMPONENT_COMMAND) || data[0].equals(Chat.COMPONENT_POPUP)) {
                     message.append(data[2]);
                 }
-            }
-            else {
+            } else {
                 message.append(matcher.group(2));
             }
         }

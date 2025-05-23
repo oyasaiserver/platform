@@ -1,16 +1,15 @@
 package net.coreprotect.api.result;
 
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-
 import net.coreprotect.api.SessionLookup;
 import net.coreprotect.utility.EntityUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.StringUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+
+import java.util.Locale;
 
 public class ParseResult {
     private final String[] parse;
@@ -39,14 +38,11 @@ public class ParseResult {
         String result = "unknown";
         if (actionID == 0) {
             result = "break";
-        }
-        else if (actionID == 1) {
+        } else if (actionID == 1) {
             result = "place";
-        }
-        else if (actionID == 2) {
+        } else if (actionID == 2) {
             result = "click";
-        }
-        else if (actionID == 3) {
+        } else if (actionID == 3) {
             result = "kill";
         }
 
@@ -82,8 +78,7 @@ public class ParseResult {
 
         if (actionID == 3) {
             typeName = EntityUtils.getEntityType(type).name();
-        }
-        else {
+        } else {
             typeName = MaterialUtils.getType(type).name().toLowerCase(Locale.ROOT);
             typeName = StringUtils.nameFilter(typeName, this.getData());
         }

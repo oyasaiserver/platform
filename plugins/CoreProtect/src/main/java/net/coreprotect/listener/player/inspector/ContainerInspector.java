@@ -1,14 +1,13 @@
 package net.coreprotect.listener.player.inspector;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.List;
-
+import net.coreprotect.database.lookup.ChestTransactionLookup;
+import net.coreprotect.utility.Chat;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.coreprotect.database.lookup.ChestTransactionLookup;
-import net.coreprotect.utility.Chat;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.List;
 
 public class ContainerInspector extends BaseInspector {
 
@@ -28,14 +27,11 @@ public class ContainerInspector extends BaseInspector {
 
                         statement.close();
                     }
-                }
-                catch (InspectionException e) {
+                } catch (InspectionException e) {
                     Chat.sendMessage(player, e.getMessage());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                finally {
+                } finally {
                     finishInspection(player);
                 }
             }

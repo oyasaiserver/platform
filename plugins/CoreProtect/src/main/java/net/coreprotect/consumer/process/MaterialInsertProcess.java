@@ -1,13 +1,13 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.MaterialStatement;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.utility.Chat;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 class MaterialInsertProcess {
 
@@ -24,8 +24,7 @@ class MaterialInsertProcess {
                 if (materialId > ConfigHandler.materialId) {
                     ConfigHandler.materialId = materialId;
                 }
-            }
-            else {
+            } else {
                 Chat.console(Phrase.build(Phrase.CACHE_ERROR, "material"));
                 Chat.console(Phrase.build(Phrase.CACHE_RELOAD, Selector.FIRST));
                 ConfigHandler.loadTypes(statement);

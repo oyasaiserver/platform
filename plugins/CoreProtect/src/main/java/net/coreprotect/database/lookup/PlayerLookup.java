@@ -1,12 +1,12 @@
 package net.coreprotect.database.lookup;
 
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Locale;
-
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
 
 public class PlayerLookup {
 
@@ -47,8 +47,7 @@ public class PlayerLookup {
                 ConfigHandler.playerIdCacheReversed.put(id, user);
                 return true;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

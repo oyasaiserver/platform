@@ -1,15 +1,14 @@
 package net.coreprotect.command.parser;
 
-import java.util.Locale;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.utility.WorldUtils;
+import java.util.Locale;
 
 /**
  * Parser for location-related command arguments
@@ -18,19 +17,16 @@ public class LocationParser {
 
     /**
      * Parse location from command sender and command arguments
-     * 
-     * @param user
-     *            The command sender
-     * @param argumentArray
-     *            The command arguments
+     *
+     * @param user          The command sender
+     * @param argumentArray The command arguments
      * @return The parsed location
      */
     public static Location parseLocation(CommandSender user, String[] argumentArray) {
         Location location = null;
         if (user instanceof Player) {
             location = ((Player) user).getLocation();
-        }
-        else if (user instanceof BlockCommandSender) {
+        } else if (user instanceof BlockCommandSender) {
             location = ((BlockCommandSender) user).getBlock().getLocation();
         }
 
@@ -39,13 +35,10 @@ public class LocationParser {
 
     /**
      * Parse coordinates from command arguments and apply them to a location
-     * 
-     * @param location
-     *            The base location
-     * @param inputArguments
-     *            The command arguments
-     * @param worldId
-     *            The world ID
+     *
+     * @param location       The base location
+     * @param inputArguments The command arguments
+     * @param worldId        The world ID
      * @return The modified location
      */
     public static Location parseCoordinates(Location location, String[] inputArguments, int worldId) {
@@ -60,8 +53,7 @@ public class LocationParser {
 
                 if (argument.equals("position:") || argument.equals("location:") || argument.equals("c:") || argument.equals("coord:") || argument.equals("coords:") || argument.equals("cord:") || argument.equals("cords:") || argument.equals("coordinate:") || argument.equals("coordinates:") || argument.equals("cordinate:") || argument.equals("cordinates:")) {
                     next = 2;
-                }
-                else if (next == 2 || argument.startsWith("c:") || argument.startsWith("coord:") || argument.startsWith("coords:") || argument.startsWith("cord:") || argument.startsWith("cords:") || argument.startsWith("coordinate:") || argument.startsWith("coordinates:") || argument.startsWith("cordinate:") || argument.startsWith("cordinates:")) {
+                } else if (next == 2 || argument.startsWith("c:") || argument.startsWith("coord:") || argument.startsWith("coords:") || argument.startsWith("cord:") || argument.startsWith("cords:") || argument.startsWith("coordinate:") || argument.startsWith("coordinates:") || argument.startsWith("cordinate:") || argument.startsWith("cordinates:")) {
                     argument = argument.replaceAll("coordinates:", "");
                     argument = argument.replaceAll("coordinate:", "");
                     argument = argument.replaceAll("cordinates:", "");
@@ -83,11 +75,9 @@ public class LocationParser {
                                 double parsedCoord = Double.parseDouble(coord);
                                 if (cCount == 0) {
                                     x = parsedCoord;
-                                }
-                                else if (cCount == 1) {
+                                } else if (cCount == 1) {
                                     z = parsedCoord;
-                                }
-                                else if (cCount == 2) {
+                                } else if (cCount == 2) {
                                     y = z;
                                     z = parsedCoord;
                                 }
@@ -116,8 +106,7 @@ public class LocationParser {
                         }
                     }
                     next = 0;
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }
@@ -128,13 +117,10 @@ public class LocationParser {
 
     /**
      * Parse radius from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
-     * @param user
-     *            The command sender
-     * @param location
-     *            The base location
+     *
+     * @param inputArguments The command arguments
+     * @param user           The command sender
+     * @param location       The base location
      * @return The parsed radius
      */
     public static Integer[] parseRadius(String[] inputArguments, CommandSender user, Location location) {
@@ -150,24 +136,21 @@ public class LocationParser {
 
                 if (argument.equals("r:") || argument.equals("radius:")) {
                     next = 2;
-                }
-                else if (next == 2 || argument.startsWith("r:") || argument.startsWith("radius:")) {
+                } else if (next == 2 || argument.startsWith("r:") || argument.startsWith("radius:")) {
                     argument = argument.replaceAll("radius:", "");
                     argument = argument.replaceAll("r:", "");
                     if (argument.equals("#worldedit") || argument.equals("#we")) {
                         // For WorldEdit, we'll need to use the original CommandParser since
                         // the WorldEditHandler.runWorldEditCommand method is protected
                         return null; // Let CommandParser handle this case
-                    }
-                    else if ((argument.startsWith("#") && argument.length() > 1) || argument.equals("global") || argument.equals("off") || argument.equals("-1") || argument.equals("none") || argument.equals("false")) {
+                    } else if ((argument.startsWith("#") && argument.length() > 1) || argument.equals("global") || argument.equals("off") || argument.equals("-1") || argument.equals("none") || argument.equals("false")) {
                         // radius = -2;
-                    }
-                    else {
+                    } else {
                         int rcount = 0;
                         int r_x = 0;
                         int r_y = -1;
                         int r_z = 0;
-                        String[] r_dat = new String[] { argument };
+                        String[] r_dat = new String[]{argument};
                         boolean validRadius = false;
                         if (argument.contains("x")) {
                             r_dat = argument.split("x");
@@ -179,11 +162,9 @@ public class LocationParser {
                                 if (rcount == 0) { // x
                                     r_x = (int) a1;
                                     r_z = (int) a1;
-                                }
-                                else if (rcount == 1) { // y
+                                } else if (rcount == 1) { // y
                                     r_y = (int) a1;
-                                }
-                                else if (rcount == 2) { // z
+                                } else if (rcount == 2) { // z
                                     r_z = (int) a1;
                                 }
                                 validRadius = true;
@@ -209,16 +190,14 @@ public class LocationParser {
                                 max = r_z;
                             }
                             if (validRadius) {
-                                radius = new Integer[] { max, xmin, xmax, ymin, ymax, zmin, zmax, 0 };
-                            }
-                            else {
-                                radius = new Integer[] { -1 };
+                                radius = new Integer[]{max, xmin, xmax, ymin, ymax, zmin, zmax, 0};
+                            } else {
+                                radius = new Integer[]{-1};
                             }
                         }
                     }
                     next = 0;
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }

@@ -1,13 +1,12 @@
 package net.coreprotect.utility;
 
-import java.util.Locale;
-
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Queue;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+
+import java.util.Locale;
 
 public class EntityUtils extends Queue {
 
@@ -31,8 +30,7 @@ public class EntityUtils extends Queue {
 
         if (ConfigHandler.entities.get(name) != null) {
             id = ConfigHandler.entities.get(name);
-        }
-        else if (internal) {
+        } else if (internal) {
             int entityID = ConfigHandler.entityId + 1;
             ConfigHandler.entities.put(name, entityID);
             ConfigHandler.entitiesReversed.put(entityID, name);

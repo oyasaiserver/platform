@@ -1,14 +1,13 @@
 package net.coreprotect;
 
-import java.io.File;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.services.PluginInitializationService;
 import net.coreprotect.services.ShutdownService;
 import net.coreprotect.utility.Chat;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 /**
  * Main class for the CoreProtect plugin
@@ -16,6 +15,7 @@ import net.coreprotect.utility.Chat;
 public final class CoreProtect extends JavaPlugin {
 
     private static CoreProtect instance;
+    private final CoreProtectAPI api = new CoreProtectAPI();
     private boolean advancedChestsEnabled = false;
 
     /**
@@ -26,8 +26,6 @@ public final class CoreProtect extends JavaPlugin {
     public static CoreProtect getInstance() {
         return instance;
     }
-
-    private final CoreProtectAPI api = new CoreProtectAPI();
 
     /**
      * Get the CoreProtect API

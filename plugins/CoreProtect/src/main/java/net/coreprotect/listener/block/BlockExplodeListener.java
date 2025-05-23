@@ -1,11 +1,11 @@
 package net.coreprotect.listener.block;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Database;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.paper.PaperAdapter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,12 +20,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Database;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.paper.PaperAdapter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public final class BlockExplodeListener extends Queue implements Listener {
 
@@ -66,8 +65,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
                                 Location bisectLocation = location.clone();
                                 if (bisected.getHalf() == Half.TOP) {
                                     bisectLocation.setY(bisectLocation.getY() - 1);
-                                }
-                                else {
+                                } else {
                                     bisectLocation.setY(bisectLocation.getY() + 1);
                                 }
 
@@ -77,8 +75,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
                                     blockMap.put(bisectLocation, world.getBlockAt(bisectLocation));
                                 }
                             }
-                        }
-                        else if (scanType.hasGravity() && Config.getConfig(world).BLOCK_MOVEMENT) {
+                        } else if (scanType.hasGravity() && Config.getConfig(world).BLOCK_MOVEMENT) {
                             // log the top-most sand/gravel block as being removed
                             int scanY = location.getBlockY() + 1;
                             boolean topFound = false;
@@ -132,8 +129,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
                     boolean isWaxed = BukkitAdapter.ADAPTER.isWaxed(sign);
 
                     Queue.queueSignText(user, location, 0, color, colorSecondary, frontGlowing, backGlowing, isWaxed, isFront, line1, line2, line3, line4, line5, line6, line7, line8, 5);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -153,8 +149,7 @@ public final class BlockExplodeListener extends Queue implements Listener {
         }
         if (user.contains("tnt")) {
             user = "#tnt";
-        }
-        else if (user.contains("end_crystal")) {
+        } else if (user.contains("end_crystal")) {
             user = "#end_crystal";
         }
         if (!user.startsWith("#")) {

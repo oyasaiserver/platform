@@ -1,13 +1,5 @@
 package net.coreprotect.services;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import org.bukkit.Location;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Consumer;
 import net.coreprotect.consumer.process.Process;
@@ -16,6 +8,13 @@ import net.coreprotect.listener.player.PlayerQuitListener;
 import net.coreprotect.paper.PaperAdapter;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Teleport;
+import org.bukkit.Location;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  * Service responsible for handling plugin shutdown operations
@@ -33,8 +32,7 @@ public class ShutdownService {
     /**
      * Safely shuts down the plugin, ensuring all data is saved
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      */
     public static void safeShutdown(Plugin plugin) {
         try {
@@ -56,8 +54,7 @@ public class ShutdownService {
 
             if (ConfigHandler.converterRunning) {
                 Chat.console(Phrase.build(Phrase.FINISHING_CONVERSION));
-            }
-            else {
+            } else {
                 Chat.console(Phrase.build(Phrase.FINISHING_LOGGING));
             }
 
@@ -69,8 +66,7 @@ public class ShutdownService {
 
             ConfigHandler.performDisable();
             Chat.console(Phrase.build(Phrase.DISABLE_SUCCESS, "CoreProtect v" + plugin.getDescription().getVersion()));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -78,10 +74,8 @@ public class ShutdownService {
     /**
      * Waits for pending operations (consumer tasks or conversions) to complete
      *
-     * @param shutdownTime
-     *            The time when shutdown began
-     * @param nextAlertTime
-     *            The time for the next status message
+     * @param shutdownTime  The time when shutdown began
+     * @param nextAlertTime The time for the next status message
      */
     private static void waitForPendingOperations(long shutdownTime, long nextAlertTime) throws InterruptedException {
         while ((Consumer.isRunning() || ConfigHandler.converterRunning) && !ConfigHandler.purgeRunning) {
@@ -94,12 +88,10 @@ public class ShutdownService {
                     Chat.console(Phrase.build(Phrase.LOGGING_ITEMS, String.format("%,d", consumerCount)));
                 }
                 nextAlertTime = currentTime + ALERT_INTERVAL_MS;
-            }
-            else if (!ConfigHandler.databaseReachable && (currentTime - shutdownTime) >= DB_UNREACHABLE_TIMEOUT_MS) {
+            } else if (!ConfigHandler.databaseReachable && (currentTime - shutdownTime) >= DB_UNREACHABLE_TIMEOUT_MS) {
                 Chat.console(Phrase.build(Phrase.DATABASE_UNREACHABLE));
                 break;
-            }
-            else if ((currentTime - shutdownTime) >= MAX_SHUTDOWN_WAIT_MS) {
+            } else if ((currentTime - shutdownTime) >= MAX_SHUTDOWN_WAIT_MS) {
                 Chat.console(Phrase.build(Phrase.LOGGING_TIME_LIMIT));
                 break;
             }

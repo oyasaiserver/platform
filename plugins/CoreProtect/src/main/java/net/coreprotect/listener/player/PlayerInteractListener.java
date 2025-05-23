@@ -1,21 +1,29 @@
 package net.coreprotect.listener.player;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
+import net.coreprotect.CoreProtect;
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.language.Phrase;
+import net.coreprotect.listener.block.CampfireStartListener;
+import net.coreprotect.listener.player.inspector.BlockInspector;
+import net.coreprotect.listener.player.inspector.ContainerInspector;
+import net.coreprotect.listener.player.inspector.InteractionInspector;
+import net.coreprotect.listener.player.inspector.SignInspector;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.paper.PaperAdapter;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.thread.Scheduler;
+import net.coreprotect.utility.Chat;
+import net.coreprotect.utility.Color;
+import net.coreprotect.utility.ItemUtils;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.block.Jukebox;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
@@ -38,25 +46,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.CoreProtect;
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.language.Phrase;
-import net.coreprotect.listener.block.CampfireStartListener;
-import net.coreprotect.listener.player.inspector.BlockInspector;
-import net.coreprotect.listener.player.inspector.ContainerInspector;
-import net.coreprotect.listener.player.inspector.InteractionInspector;
-import net.coreprotect.listener.player.inspector.SignInspector;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.paper.PaperAdapter;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.Chat;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.ItemUtils;
-import net.coreprotect.utility.WorldUtils;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class PlayerInteractListener extends Queue implements Listener {
 
@@ -107,8 +101,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
             if (checkBlockData instanceof Bisected) {
                 PlayerInteractUtils.handleBisectedBlockVisualization(player, event.getClickedBlock(), world);
-            }
-            else {
+            } else {
                 Block block = event.getClickedBlock();
                 int blockX = block.getX();
                 int blockY = block.getY();
@@ -125,8 +118,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
             }
 
             event.setCancelled(true);
-        }
-        else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        } else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Block block = event.getClickedBlock();
             if (block != null) {
                 final Material type = block.getType();
@@ -141,8 +133,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                         Location location = clickedBlock.getLocation();
                         signInspector.performSignLookup(player, location);
                         event.setCancelled(true);
-                    }
-                    else if (isContainerBlock && Config.getConfig(world).ITEM_TRANSACTIONS) {
+                    } else if (isContainerBlock && Config.getConfig(world).ITEM_TRANSACTIONS) {
                         Location location = null;
                         if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST)) {
                             Chest chest = (Chest) clickedBlock.getState();
@@ -150,8 +141,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                             if (inventoryHolder instanceof DoubleChest doubleChest) {
                                 location = doubleChest.getLocation();
-                            }
-                            else {
+                            } else {
                                 location = chest.getLocation();
                             }
                         }
@@ -162,8 +152,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                         containerInspector.performContainerLookup(player, location);
                         event.setCancelled(true);
-                    }
-                    else if (isInteractBlock) {
+                    } else if (isInteractBlock) {
                         // standard player interactions
                         Block interactBlock = clickedBlock;
                         if (BlockGroup.DOORS.contains(type)) {
@@ -181,8 +170,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                             event.setCancelled(true);
                         }
                     }
-                }
-                else {
+                } else {
                     boolean performLookup = true;
                     EquipmentSlot eventHand = event.getHand();
                     String uuid = event.getPlayer().getUniqueId().toString();
@@ -204,7 +192,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                         blockInspector.performAirBlockLookup(player, finalBlock);
 
                         ItemUtils.updateInventory(event.getPlayer());
-                        lastInspectorEvent.put(uuid, new Object[] { systemTime, eventHand });
+                        lastInspectorEvent.put(uuid, new Object[]{systemTime, eventHand});
 
                         if (event.hasItem()) {
                             Material eventItem = event.getItem().getType();
@@ -253,8 +241,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                     }
                 }
             }
-        }
-        else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+        } else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             Player player = event.getPlayer();
             Block block = event.getClickedBlock();
             World world = player.getWorld();
@@ -316,8 +303,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                                 }, block.getLocation());
                             }
                         }
-                    }
-                    else if (BlockGroup.INTERACT_BLOCKS.contains(type)) {
+                    } else if (BlockGroup.INTERACT_BLOCKS.contains(type)) {
                         if (event.getHand().equals(EquipmentSlot.HAND) && Config.getConfig(world).PLAYER_INTERACTIONS) {
                             Block interactBlock = event.getClickedBlock();
                             if (BlockGroup.DOORS.contains(type)) {
@@ -331,8 +317,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                             Queue.queuePlayerInteraction(player.getName(), interactBlock.getState(), type);
                         }
-                    }
-                    else if (BlockGroup.LIGHTABLES.contains(type)) { // extinguishing a lit block such as a campfire
+                    } else if (BlockGroup.LIGHTABLES.contains(type)) { // extinguishing a lit block such as a campfire
                         BlockData blockData = block.getBlockData();
                         if (blockData instanceof Lightable && ((Lightable) blockData).isLit() && ((BlockGroup.CANDLES.contains(type) && event.getMaterial() == Material.AIR) || (!BlockGroup.CANDLES.contains(type) && event.getMaterial().name().endsWith("_SHOVEL")))) {
                             ((Lightable) blockData).setLit(false);
@@ -352,19 +337,16 @@ public final class PlayerInteractListener extends Queue implements Listener {
                                 }
                             });
                             */
-                        }
-                        else if (CampfireStartListener.useCampfireStartEvent && (type == Material.CAMPFIRE || type == Material.SOUL_CAMPFIRE)) {
+                        } else if (CampfireStartListener.useCampfireStartEvent && (type == Material.CAMPFIRE || type == Material.SOUL_CAMPFIRE)) {
                             ItemStack handItem = null;
                             ItemStack mainHand = player.getInventory().getItemInMainHand();
                             ItemStack offHand = player.getInventory().getItemInOffHand();
 
                             if (event.getHand().equals(EquipmentSlot.HAND) && mainHand != null && mainHand.getType() != Material.BUCKET) {
                                 handItem = mainHand;
-                            }
-                            else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null) {
+                            } else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null) {
                                 handItem = offHand;
-                            }
-                            else {
+                            } else {
                                 return;
                             }
 
@@ -376,13 +358,12 @@ public final class PlayerInteractListener extends Queue implements Listener {
                                 int y = location.getBlockY();
                                 int z = location.getBlockZ();
                                 String coordinates = x + "." + y + "." + z + "." + wid + "." + type.name();
-                                CacheHandler.interactCache.put(coordinates, new Object[] { time, handItem, player.getName() });
+                                CacheHandler.interactCache.put(coordinates, new Object[]{time, handItem, player.getName()});
                             }
                         }
 
                         isCake = type.name().endsWith(Material.CAKE.name());
-                    }
-                    else if (type == Material.JUKEBOX) {
+                    } else if (type == Material.JUKEBOX) {
                         BlockState blockState = block.getState();
                         if (blockState instanceof Jukebox jukebox) {
                             ItemStack jukeboxRecord = jukebox.isPlaying() ? jukebox.getRecord() : new ItemStack(Material.AIR);
@@ -396,11 +377,9 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                                 if (event.getHand().equals(EquipmentSlot.HAND) && mainHand != null && mainHand.getType().name().startsWith("MUSIC_DISC")) {
                                     handItem = mainHand;
-                                }
-                                else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && offHand.getType().name().startsWith("MUSIC_DISC")) {
+                                } else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && offHand.getType().name().startsWith("MUSIC_DISC")) {
                                     handItem = offHand;
-                                }
-                                else {
+                                } else {
                                     return;
                                 }
 
@@ -415,14 +394,13 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                                 if (Config.getConfig(block.getWorld()).ITEM_TRANSACTIONS) {
                                     boolean logDrops = player.getGameMode() != GameMode.CREATIVE;
-                                    ItemStack[] oldState = new ItemStack[] { oldItemState };
-                                    ItemStack[] newState = new ItemStack[] { newItemState };
-                                    PlayerInteractEntityListener.queueContainerSpecifiedItems(player.getName(), Material.JUKEBOX, new Object[] { oldState, newState }, jukebox.getLocation(), logDrops);
+                                    ItemStack[] oldState = new ItemStack[]{oldItemState};
+                                    ItemStack[] newState = new ItemStack[]{newItemState};
+                                    PlayerInteractEntityListener.queueContainerSpecifiedItems(player.getName(), Material.JUKEBOX, new Object[]{oldState, newState}, jukebox.getLocation(), logDrops);
                                 }
                             }
                         }
-                    }
-                    else if (BukkitAdapter.ADAPTER.isChiseledBookshelf(type)) {
+                    } else if (BukkitAdapter.ADAPTER.isChiseledBookshelf(type)) {
                         BlockState blockState = block.getState();
                         if (blockState instanceof BlockInventoryHolder) {
                             ItemStack book = BukkitAdapter.ADAPTER.getChiseledBookshelfBook(blockState, event);
@@ -437,11 +415,9 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                                     if (event.getHand().equals(EquipmentSlot.HAND) && mainHand != null && BukkitAdapter.ADAPTER.isBookshelfBook(mainHand.getType())) {
                                         handItem = mainHand;
-                                    }
-                                    else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && BukkitAdapter.ADAPTER.isBookshelfBook(offHand.getType())) {
+                                    } else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && BukkitAdapter.ADAPTER.isBookshelfBook(offHand.getType())) {
                                         handItem = offHand;
-                                    }
-                                    else {
+                                    } else {
                                         return;
                                     }
 
@@ -456,24 +432,20 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                                     InventoryChangeListener.inventoryTransaction(player.getName(), blockState.getLocation(), null);
                                 }
-                            }
-                            else { // fallback if unable to determine bookshelf slot
+                            } else { // fallback if unable to determine bookshelf slot
                                 InventoryChangeListener.inventoryTransaction(player.getName(), blockState.getLocation(), null);
                             }
                         }
-                    }
-                    else if (BukkitAdapter.ADAPTER.isDecoratedPot(type)) {
+                    } else if (BukkitAdapter.ADAPTER.isDecoratedPot(type)) {
                         BlockState blockState = block.getState();
                         InventoryChangeListener.inventoryTransaction(player.getName(), blockState.getLocation(), null);
-                    }
-                    else if (BukkitAdapter.ADAPTER.isSuspiciousBlock(type)) {
+                    } else if (BukkitAdapter.ADAPTER.isSuspiciousBlock(type)) {
                         ItemStack handItem = null;
                         ItemStack mainHand = player.getInventory().getItemInMainHand();
                         ItemStack offHand = player.getInventory().getItemInOffHand();
                         if (event.getHand().equals(EquipmentSlot.HAND) && mainHand != null) {
                             handItem = mainHand;
-                        }
-                        else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null) {
+                        } else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null) {
                             handItem = offHand;
                         }
 
@@ -500,12 +472,11 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                                 if (logChange) {
                                     Queue.queueBlockPlace(player.getName(), blockState, newType, blockState, newType, -1, 0, null);
-                                    suspiciousBlockEvent.put(player.getName(), new Object[] { systemTime, blockLocation });
+                                    suspiciousBlockEvent.put(player.getName(), new Object[]{systemTime, blockLocation});
                                 }
                             }, blockLocation, 100);
                         }
-                    }
-                    else if (type == Material.DRAGON_EGG) {
+                    } else if (type == Material.DRAGON_EGG) {
                         PlayerInteractUtils.clickedDragonEgg(player, block);
                     }
 
@@ -538,7 +509,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                             int y = location.getBlockY();
                             int z = location.getBlockZ();
                             String coordinates = x + "." + y + "." + z + "." + wid + "." + userUUID;
-                            CacheHandler.interactCache.put(coordinates, new Object[] { time, Material.CAKE, block.getState() });
+                            CacheHandler.interactCache.put(coordinates, new Object[]{time, Material.CAKE, block.getState()});
                         }
                     }
                 }
@@ -548,8 +519,7 @@ public final class PlayerInteractListener extends Queue implements Listener {
                 List<Material> entityBlockTypes = Arrays.asList(Material.ARMOR_STAND, Material.END_CRYSTAL, Material.BOW, Material.CROSSBOW, Material.TRIDENT, Material.EXPERIENCE_BOTTLE, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.ENDER_PEARL, Material.FIREWORK_ROCKET, Material.EGG, Material.SNOWBALL);
                 try {
                     entityBlockTypes.add(Material.valueOf("WIND_CHARGE"));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // not running MC 1.21+
                 }
                 ItemStack handItem = null;
@@ -558,11 +528,9 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                 if (event.getHand().equals(EquipmentSlot.HAND) && mainHand != null && entityBlockTypes.contains(mainHand.getType())) {
                     handItem = mainHand;
-                }
-                else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && entityBlockTypes.contains(offHand.getType())) {
+                } else if (event.getHand().equals(EquipmentSlot.OFF_HAND) && offHand != null && entityBlockTypes.contains(offHand.getType())) {
                     handItem = offHand;
-                }
-                else {
+                } else {
                     return;
                 }
 
@@ -597,15 +565,13 @@ public final class PlayerInteractListener extends Queue implements Listener {
                                     if (blockExists) {
                                         Queue.queueBlockPlace(playerFinal.getName(), locationFinal.getBlock().getState(), locationFinal.getBlock().getType(), locationFinal.getBlock().getState(), Material.END_CRYSTAL, showingBottom, 1, null);
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }, locationFinal);
                         }
                     }
-                }
-                else {
+                } else {
                     Location relativeBlockLocation = player.getLocation().clone();
                     relativeBlockLocation.setY(relativeBlockLocation.getY() + 1);
                     Location blockLocation = relativeBlockLocation.clone();
@@ -623,12 +589,11 @@ public final class PlayerInteractListener extends Queue implements Listener {
 
                     String relativeBlockKey = world.getName() + "-" + relativeBlockLocation.getBlockX() + "-" + relativeBlockLocation.getBlockY() + "-" + relativeBlockLocation.getBlockZ();
                     String blockKey = world.getName() + "-" + blockLocation.getBlockX() + "-" + blockLocation.getBlockY() + "-" + blockLocation.getBlockZ();
-                    Object[] keys = new Object[] { System.currentTimeMillis(), relativeBlockKey, blockKey, handItem };
+                    Object[] keys = new Object[]{System.currentTimeMillis(), relativeBlockKey, blockKey, handItem};
                     ConfigHandler.entityBlockMapper.put(player.getName(), keys);
                 }
             }
-        }
-        else if (event.getAction().equals(Action.PHYSICAL)) {
+        } else if (event.getAction().equals(Action.PHYSICAL)) {
             Block block = event.getClickedBlock();
             if (block == null || (!block.getType().equals(Material.FARMLAND) && !block.getType().equals(Material.TURTLE_EGG))) {
                 return;

@@ -1,9 +1,11 @@
 package net.coreprotect.patch.script;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.database.Database;
+import net.coreprotect.patch.Patch;
+import net.coreprotect.utility.BlockUtils;
+import net.coreprotect.utility.MaterialUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -11,12 +13,9 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.database.Database;
-import net.coreprotect.patch.Patch;
-import net.coreprotect.utility.BlockUtils;
-import net.coreprotect.utility.MaterialUtils;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class __2_18_0 {
 
@@ -29,8 +28,7 @@ public class __2_18_0 {
                 if (Config.getGlobal().MYSQL) {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "block ADD COLUMN blockdata BLOB");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 String error = e.getMessage().toLowerCase();
                 if (!error.contains("duplicate") && !error.contains("error 1060")) {
                     e.printStackTrace();
@@ -109,8 +107,7 @@ public class __2_18_0 {
                                 BlockData newBlockData = null;
                                 try {
                                     newBlockData = Bukkit.getUnsafe().fromLegacy(validatedMaterial, (byte) blockData);
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     // unable to generate block data
                                 }
                                 if (newBlockData != null) {
@@ -158,8 +155,7 @@ public class __2_18_0 {
                         hasLegacy = true;
                     }
                     resultSet.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Database.commitTransaction(statement, Config.getGlobal().MYSQL);
@@ -183,22 +179,19 @@ public class __2_18_0 {
                         statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "material_map ADD INDEX(id)");
                         statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "world ADD INDEX(id)");
                         statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "blockdata_map ADD INDEX(id)");
-                    }
-                    else {
+                    } else {
                         statement.executeUpdate("CREATE INDEX IF NOT EXISTS art_map_id_index ON " + ConfigHandler.prefix + "art_map(id);");
                         statement.executeUpdate("CREATE INDEX IF NOT EXISTS blockdata_map_id_index ON " + ConfigHandler.prefix + "blockdata_map(id);");
                         statement.executeUpdate("CREATE INDEX IF NOT EXISTS entity_map_id_index ON " + ConfigHandler.prefix + "entity_map(id);");
                         statement.executeUpdate("CREATE INDEX IF NOT EXISTS material_map_id_index ON " + ConfigHandler.prefix + "material_map(id);");
                         statement.executeUpdate("CREATE INDEX IF NOT EXISTS world_id_index ON " + ConfigHandler.prefix + "world(id);");
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

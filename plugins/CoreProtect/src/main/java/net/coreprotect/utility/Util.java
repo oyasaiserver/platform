@@ -1,12 +1,11 @@
 package net.coreprotect.utility;
 
-import java.util.regex.Pattern;
-
+import net.coreprotect.consumer.Queue;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
-import net.coreprotect.consumer.Queue;
+import java.util.regex.Pattern;
 
 /**
  * Central utility class that provides access to various utility functions.

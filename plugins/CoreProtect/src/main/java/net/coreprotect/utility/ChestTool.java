@@ -1,14 +1,12 @@
 package net.coreprotect.utility;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.thread.Scheduler;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.thread.Scheduler;
 
 public class ChestTool {
 
@@ -42,8 +40,7 @@ public class ChestTool {
                 default:
                     break;
             }
-        }
-        else if (chestType == Type.RIGHT) {
+        } else if (chestType == Type.RIGHT) {
             switch (blockFace) {
                 case NORTH:
                     newFace = BlockFace.WEST;
@@ -84,8 +81,7 @@ public class ChestTool {
                 Chest chestData = (Chest) blockData;
                 chestData.setType(newType);
                 relativeBlock.setBlockData(chestData, true);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }, relativeBlock.getLocation(), 2);

@@ -1,9 +1,10 @@
 package net.coreprotect.listener.player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.logger.ItemLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,19 +18,11 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.MerchantInventory;
-import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.logger.ItemLogger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public final class CraftItemListener extends Queue implements Listener {
 
@@ -45,18 +38,15 @@ public final class CraftItemListener extends Queue implements Listener {
             List<ItemStack> list = ConfigHandler.itemsBuy.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsBuy.put(loggingItemId, list);
-        }
-        else if (action == ItemLogger.ITEM_SELL) {
+        } else if (action == ItemLogger.ITEM_SELL) {
             List<ItemStack> list = ConfigHandler.itemsSell.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsSell.put(loggingItemId, list);
-        }
-        else if (action == ItemLogger.ITEM_CREATE) {
+        } else if (action == ItemLogger.ITEM_CREATE) {
             List<ItemStack> list = ConfigHandler.itemsCreate.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsCreate.put(loggingItemId, list);
-        }
-        else {
+        } else {
             List<ItemStack> list = ConfigHandler.itemsDestroy.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsDestroy.put(loggingItemId, list);
@@ -88,8 +78,7 @@ public final class CraftItemListener extends Queue implements Listener {
         Recipe recipe = null;
         if (!isTrade && event instanceof CraftItemEvent) {
             recipe = ((CraftItemEvent) event).getRecipe();
-        }
-        else if (isTrade && event.getInventory() instanceof MerchantInventory) {
+        } else if (isTrade && event.getInventory() instanceof MerchantInventory) {
             recipe = ((MerchantInventory) event.getInventory()).getSelectedRecipe();
         }
         if (recipe == null) {
@@ -129,8 +118,7 @@ public final class CraftItemListener extends Queue implements Listener {
                         if (newMultiplier == Integer.MIN_VALUE || merchantAmount < newMultiplier) {
                             newMultiplier = merchantAmount;
                         }
-                    }
-                    else if (newMultiplier == Integer.MIN_VALUE || item.getAmount() < newMultiplier) {
+                    } else if (newMultiplier == Integer.MIN_VALUE || item.getAmount() < newMultiplier) {
                         newMultiplier = item.getAmount();
                     }
                 }
@@ -162,11 +150,9 @@ public final class CraftItemListener extends Queue implements Listener {
         List<ItemStack> oldItems = new ArrayList<>();
         if (recipe instanceof ShapelessRecipe) {
             oldItems.addAll(((ShapelessRecipe) recipe).getIngredientList());
-        }
-        else if (recipe instanceof ShapedRecipe) {
+        } else if (recipe instanceof ShapedRecipe) {
             oldItems.addAll(((ShapedRecipe) recipe).getIngredientMap().values());
-        }
-        else if (recipe instanceof MerchantRecipe) {
+        } else if (recipe instanceof MerchantRecipe) {
             oldItems.addAll(((MerchantRecipe) recipe).getIngredients());
         }
 

@@ -1,15 +1,14 @@
 package net.coreprotect.listener.block;
 
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.utility.WorldUtils;
 
 public class BlockUtil {
 
@@ -56,19 +55,16 @@ public class BlockUtil {
                 if (yc < BukkitAdapter.ADAPTER.getMinHeight(world)) {
                     block = world.getBlockAt(x, yc + 1, z);
                     bottomfound = 1;
-                }
-                else {
+                } else {
                     Block block_down = world.getBlockAt(x, yc, z);
                     Material down = block_down.getType();
                     if (!BukkitAdapter.ADAPTER.isInvisible(down) && !down.equals(Material.WATER) && !down.equals(Material.LAVA) && !down.equals(Material.SNOW)) {
                         block = world.getBlockAt(x, yc + 1, z);
                         bottomfound = 1;
-                    }
-                    else if (down == Material.WATER && type.name().endsWith("_CONCRETE_POWDER")) {
+                    } else if (down == Material.WATER && type.name().endsWith("_CONCRETE_POWDER")) {
                         block = world.getBlockAt(x, yc, z);
                         bottomfound = 1;
-                    }
-                    else {
+                    } else {
                         String cords = x + "." + yc + "." + z + "." + wid;
                         Object[] data = CacheHandler.lookupCache.get(cords);
                         if (data != null) {
@@ -82,7 +78,7 @@ public class BlockUtil {
                     yc--;
                 }
             }
-            CacheHandler.lookupCache.put(x + "." + block.getY() + "." + z + "." + wid, new Object[] { timestamp, player, type });
+            CacheHandler.lookupCache.put(x + "." + block.getY() + "." + z + "." + wid, new Object[]{timestamp, player, type});
         }
 
         return block;

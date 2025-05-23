@@ -1,16 +1,11 @@
 package net.coreprotect.bukkit;
 
-import java.util.List;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
+import net.coreprotect.model.BlockGroup;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 
-import net.coreprotect.model.BlockGroup;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Bukkit adapter implementation for Minecraft 1.21.
@@ -60,11 +55,9 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
 
     /**
      * Helper method to add a block to a block group if it's not already present.
-     * 
-     * @param block
-     *            The block to add
-     * @param group
-     *            The group to add the block to
+     *
+     * @param block The block to add
+     * @param group The group to add the block to
      */
     private void addToBlockGroupIfMissing(Material block, Set<Material> group) {
         group.add(block);
@@ -73,9 +66,8 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
     /**
      * Gets the EntityType corresponding to a Material.
      * Maps Material to its equivalent EntityType for entity handling.
-     * 
-     * @param material
-     *            The material to convert
+     *
+     * @param material The material to convert
      * @return The corresponding EntityType, or UNKNOWN if not mappable
      */
     @Override
@@ -91,9 +83,8 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
     /**
      * Gets a registry key string from a keyed object.
      * Used for serializing objects that implement Keyed.
-     * 
-     * @param value
-     *            The keyed object
+     *
+     * @param value The keyed object
      * @return The string representation of the registry key
      */
     @Override
@@ -104,14 +95,12 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
     /**
      * Gets a registry value from a key string and class.
      * Used for deserializing registry objects.
-     * 
-     * @param key
-     *            The registry key as a string
-     * @param tClass
-     *            The class of the registry
+     *
+     * @param key    The registry key as a string
+     * @param tClass The class of the registry
      * @return The registry value
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Object getRegistryValue(String key, Object tClass) {
         NamespacedKey namespacedKey = NamespacedKey.fromString(key);
@@ -122,11 +111,9 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
     /**
      * Gets the wolf variant and adds it to the info list.
      * This functionality is specific to Minecraft 1.21+.
-     * 
-     * @param wolf
-     *            The wolf entity
-     * @param info
-     *            The list to add the variant information to
+     *
+     * @param wolf The wolf entity
+     * @param info The list to add the variant information to
      */
     @Override
     public void getWolfVariant(org.bukkit.entity.Wolf wolf, List<Object> info) {
@@ -137,11 +124,9 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
     /**
      * Sets the wolf variant from the provided value.
      * This functionality is specific to Minecraft 1.21+.
-     * 
-     * @param wolf
-     *            The wolf entity
-     * @param value
-     *            The variant value to set
+     *
+     * @param wolf  The wolf entity
+     * @param value The variant value to set
      */
     @Override
     public void setWolfVariant(org.bukkit.entity.Wolf wolf, Object value) {

@@ -1,20 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -27,6 +12,16 @@ import net.coreprotect.utility.ItemUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
 import net.coreprotect.utility.serialize.ItemMetaHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.sql.PreparedStatement;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ContainerLogger extends Queue {
 
@@ -42,11 +37,9 @@ public class ContainerLogger extends Queue {
             if (type == Material.ITEM_FRAME) {
                 contents = (ItemStack[]) ((Object[]) container)[1];
                 faceData = ((BlockFace) ((Object[]) container)[2]).name();
-            }
-            else if (type == Material.JUKEBOX || type == Material.ARMOR_STAND) {
+            } else if (type == Material.JUKEBOX || type == Material.ARMOR_STAND) {
                 contents = (ItemStack[]) ((Object[]) container)[1];
-            }
-            else {
+            } else {
                 Inventory inventory = (Inventory) container;
                 if (inventory != null) {
                     contents = inventory.getContents();
@@ -122,8 +115,7 @@ public class ContainerLogger extends Queue {
                 if (forceSize == 0) {
                     ConfigHandler.forceContainer.remove(loggingContainerId);
                 }
-            }
-            else {
+            } else {
                 String transactingChestId = location.getWorld().getUID() + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
                 if (ConfigHandler.transactingChest.get(transactingChestId) != null) {
                     List<Object> list = Collections.synchronizedList(new ArrayList<>(ConfigHandler.transactingChest.get(transactingChestId)));
@@ -139,8 +131,7 @@ public class ContainerLogger extends Queue {
                             ItemStack removeItem = null;
                             if (item instanceof ItemStack) {
                                 addItem = (ItemStack) item;
-                            }
-                            else if (item != null) {
+                            } else if (item != null) {
                                 addItem = ((ItemStack[]) item)[0];
                                 removeItem = ((ItemStack[]) item)[1];
                             }
@@ -176,8 +167,7 @@ public class ContainerLogger extends Queue {
                                 newAmount = newAmount - oldAmount;
                                 oldi.setAmount(0);
                                 newi.setAmount(newAmount);
-                            }
-                            else {
+                            } else {
                                 oldAmount = oldAmount - newAmount;
                                 oldi.setAmount(oldAmount);
                                 newi.setAmount(0);
@@ -193,16 +183,14 @@ public class ContainerLogger extends Queue {
             if (type != Material.ENDER_CHEST) {
                 logTransaction(preparedStmtContainer, batchCount, player, type, faceData, oldInventory, 0, location);
                 logTransaction(preparedStmtContainer, batchCount, player, type, faceData, newInventory, 1, location);
-            }
-            else { // pass ender chest transactions to item logger
+            } else { // pass ender chest transactions to item logger
                 ItemLogger.logTransaction(preparedStmtItems, batchCount, 0, player, location, oldInventory, ItemLogger.ITEM_REMOVE_ENDER);
                 ItemLogger.logTransaction(preparedStmtItems, batchCount, 0, player, location, newInventory, ItemLogger.ITEM_ADD_ENDER);
             }
 
             oldList.remove(0);
             ConfigHandler.oldContainer.put(loggingContainerId, oldList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -253,8 +241,7 @@ public class ContainerLogger extends Queue {
                 ConfigHandler.hopperSuccess.remove(hopperPush);
                 ConfigHandler.hopperAbort.remove(hopperPush);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

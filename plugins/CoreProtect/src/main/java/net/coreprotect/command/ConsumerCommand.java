@@ -1,15 +1,14 @@
 package net.coreprotect.command;
 
-import java.util.Locale;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Color;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+
+import java.util.Locale;
 
 public class ConsumerCommand {
 
@@ -44,17 +43,14 @@ public class ConsumerCommand {
                 if (ConfigHandler.pauseConsumer) {
                     if (pauseCommand) {
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.CONSUMER_ERROR, Selector.FIRST)); // already paused
-                    }
-                    else {
+                    } else {
                         ConfigHandler.pauseConsumer = false;
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.CONSUMER_TOGGLED, Selector.SECOND)); // now started
                     }
-                }
-                else {
+                } else {
                     if (resumeCommand) {
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.CONSUMER_ERROR, Selector.SECOND)); // already running
-                    }
-                    else {
+                    } else {
                         ConfigHandler.pauseConsumer = true;
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.CONSUMER_TOGGLED, Selector.FIRST)); // now paused
                     }

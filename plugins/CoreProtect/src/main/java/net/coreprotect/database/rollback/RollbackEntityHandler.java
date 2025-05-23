@@ -1,5 +1,9 @@
 package net.coreprotect.database.rollback;
 
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.utility.EntityUtils;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,42 +12,24 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.utility.EntityUtils;
-import net.coreprotect.utility.WorldUtils;
-
 public class RollbackEntityHandler {
 
     /**
      * Processes an entity-related rollback operation.
      *
-     * @param row
-     *            The database row containing entity data (used only for specific operations)
-     * @param rollbackType
-     *            The type of rollback (0 for rollback, 1 for restore)
-     * @param finalUserString
-     *            The user string for tracking operations
-     * @param rowTypeRaw
-     *            The raw type value
-     * @param rowData
-     *            The data value
-     * @param rowAction
-     *            The action value
-     * @param rowRolledBack
-     *            Whether the entity was already rolled back
-     * @param rowX
-     *            The X coordinate
-     * @param rowY
-     *            The Y coordinate
-     * @param rowZ
-     *            The Z coordinate
-     * @param rowWorldId
-     *            The world ID
-     * @param rowUserId
-     *            The user ID
-     * @param rowUser
-     *            The username associated with this entity change
+     * @param row             The database row containing entity data (used only for specific operations)
+     * @param rollbackType    The type of rollback (0 for rollback, 1 for restore)
+     * @param finalUserString The user string for tracking operations
+     * @param rowTypeRaw      The raw type value
+     * @param rowData         The data value
+     * @param rowAction       The action value
+     * @param rowRolledBack   Whether the entity was already rolled back
+     * @param rowX            The X coordinate
+     * @param rowY            The Y coordinate
+     * @param rowZ            The Z coordinate
+     * @param rowWorldId      The world ID
+     * @param rowUserId       The user ID
+     * @param rowUser         The username associated with this entity change
      * @return The number of entities affected (1 if successful, 0 otherwise)
      */
     public static int processEntity(Object[] row, int rollbackType, String finalUserString, int oldTypeRaw, int rowTypeRaw, int rowData, int rowAction, int rowRolledBack, int rowX, int rowY, int rowZ, int rowWorldId, int rowUserId, String rowUser) {
@@ -74,8 +60,7 @@ public class RollbackEntityHandler {
                         updateEntityCount(finalUserString, 1);
                         return 1;
                     }
-                }
-                else if (rowTypeRaw <= 0) {
+                } else if (rowTypeRaw <= 0) {
                     // Attempt to remove entity
                     if (rowRolledBack == 1) {
                         boolean removed = false;
@@ -104,8 +89,7 @@ public class RollbackEntityHandler {
                                     entity.remove();
                                     break;
                                 }
-                            }
-                            else {
+                            } else {
                                 if (entity.getType().equals(EntityUtils.getEntityType(oldTypeRaw))) {
                                     Location entityLocation = entity.getLocation();
                                     int entityx = entityLocation.getBlockX();
@@ -140,8 +124,7 @@ public class RollbackEntityHandler {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -151,8 +134,7 @@ public class RollbackEntityHandler {
     /**
      * Gets the world name from a world ID.
      *
-     * @param worldId
-     *            The world ID
+     * @param worldId The world ID
      * @return The world name
      */
     private static String getWorldName(int worldId) {
@@ -162,10 +144,8 @@ public class RollbackEntityHandler {
     /**
      * Updates the entity count in the rollback hash for a specific user.
      *
-     * @param userString
-     *            The user string identifier
-     * @param increment
-     *            The amount to increment the entity count by
+     * @param userString The user string identifier
+     * @param increment  The amount to increment the entity count by
      */
     public static void updateEntityCount(String userString, int increment) {
         int[] rollbackHashData = ConfigHandler.rollbackHash.get(userString);
@@ -178,21 +158,17 @@ public class RollbackEntityHandler {
 
             entityCount += increment;
 
-            ConfigHandler.rollbackHash.put(userString, new int[] { itemCount, blockCount, entityCount, next, scannedWorlds });
+            ConfigHandler.rollbackHash.put(userString, new int[]{itemCount, blockCount, entityCount, next, scannedWorlds});
         }
     }
 
     /**
      * Spawns an entity at the given block location.
-     * 
-     * @param user
-     *            The username of the player
-     * @param block
-     *            The block state where the entity should be spawned
-     * @param type
-     *            The type of entity to spawn
-     * @param data
-     *            Additional data for the entity
+     *
+     * @param user  The username of the player
+     * @param block The block state where the entity should be spawned
+     * @param type  The type of entity to spawn
+     * @param data  Additional data for the entity
      */
     public static void spawnEntity(String user, BlockState block, EntityType type, int data) {
         // Create a new helper method that will delegate to Queue

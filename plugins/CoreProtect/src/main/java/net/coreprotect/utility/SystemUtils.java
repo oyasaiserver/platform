@@ -1,16 +1,15 @@
 package net.coreprotect.utility;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.Configurator;
-
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
 
 public class SystemUtils {
 
@@ -25,9 +24,8 @@ public class SystemUtils {
 
     /**
      * Set test mode to skip actual hardware operations
-     * 
-     * @param enabled
-     *            Whether to enable test mode
+     *
+     * @param enabled Whether to enable test mode
      */
     public static void setTestMode(boolean enabled) {
         testMode = enabled;
@@ -38,7 +36,7 @@ public class SystemUtils {
 
     /**
      * Check if running on Apple Silicon
-     * 
+     *
      * @return True if running on Apple Silicon
      */
     public static boolean isAppleSilicon() {
@@ -50,7 +48,7 @@ public class SystemUtils {
 
     /**
      * Get processor clock speed for Apple Silicon
-     * 
+     *
      * @return Processor speed in GHz, or null if unavailable
      */
     public static Double getAppleSiliconSpeed() {
@@ -74,8 +72,7 @@ public class SystemUtils {
                     appleProcessorSpeed = Double.parseDouble(matcher.group(1));
                     return appleProcessorSpeed;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // Failed to extract frequency from model name
             }
         }
@@ -95,20 +92,16 @@ public class SystemUtils {
                     // Extract M-series info
                     if (appleChipInfo.contains("M1")) {
                         return getMSeriesSpeed("M1", appleChipInfo);
-                    }
-                    else if (appleChipInfo.contains("M2")) {
+                    } else if (appleChipInfo.contains("M2")) {
                         return getMSeriesSpeed("M2", appleChipInfo);
-                    }
-                    else if (appleChipInfo.contains("M3")) {
+                    } else if (appleChipInfo.contains("M3")) {
                         return getMSeriesSpeed("M3", appleChipInfo);
-                    }
-                    else if (appleChipInfo.contains("M4")) {
+                    } else if (appleChipInfo.contains("M4")) {
                         return getMSeriesSpeed("M4", appleChipInfo);
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Failed with sysctl method
         }
 
@@ -116,17 +109,13 @@ public class SystemUtils {
         if (modelName != null) {
             if (modelName.contains("M1")) {
                 appleProcessorSpeed = 3.2;
-            }
-            else if (modelName.contains("M2")) {
+            } else if (modelName.contains("M2")) {
                 appleProcessorSpeed = 3.7;
-            }
-            else if (modelName.contains("M3")) {
+            } else if (modelName.contains("M3")) {
                 appleProcessorSpeed = 4.05;
-            }
-            else if (modelName.contains("M4")) {
+            } else if (modelName.contains("M4")) {
                 appleProcessorSpeed = 4.5;
-            }
-            else {
+            } else {
                 appleProcessorSpeed = 3.0; // Generic fallback
             }
             return appleProcessorSpeed;
@@ -137,11 +126,9 @@ public class SystemUtils {
 
     /**
      * Get the processor speed based on the M-series chip variant
-     * 
-     * @param series
-     *            The M-series (M1, M2, M3, M4)
-     * @param chipInfo
-     *            The full chip info string
+     *
+     * @param series   The M-series (M1, M2, M3, M4)
+     * @param chipInfo The full chip info string
      * @return The processor speed in GHz
      */
     private static Double getMSeriesSpeed(String series, String chipInfo) {
@@ -149,35 +136,30 @@ public class SystemUtils {
             case "M1":
                 if (chipInfo.contains("Pro") || chipInfo.contains("Max") || chipInfo.contains("Ultra")) {
                     appleProcessorSpeed = 3.23; // M1 Pro/Max/Ultra P cores
-                }
-                else {
+                } else {
                     appleProcessorSpeed = 3.2; // Base M1 P cores
                 }
                 break;
             case "M2":
                 if (chipInfo.contains("Pro") || chipInfo.contains("Max") || chipInfo.contains("Ultra")) {
                     appleProcessorSpeed = 3.7; // M2 Pro/Max/Ultra P cores
-                }
-                else {
+                } else {
                     appleProcessorSpeed = 3.5; // Base M2 P cores
                 }
                 break;
             case "M3":
                 if (chipInfo.contains("Pro") || chipInfo.contains("Max")) {
                     appleProcessorSpeed = 4.05; // M3 Pro/Max P cores
-                }
-                else {
+                } else {
                     appleProcessorSpeed = 4.0; // Base M3 P cores
                 }
                 break;
             case "M4":
                 if (chipInfo.contains("Max")) {
                     appleProcessorSpeed = 4.5; // M4 Max P cores
-                }
-                else if (chipInfo.contains("Pro")) {
+                } else if (chipInfo.contains("Pro")) {
                     appleProcessorSpeed = 4.5; // M4 Pro P cores
-                }
-                else {
+                } else {
                     appleProcessorSpeed = 4.3; // Base M4 P cores
                 }
                 break;
@@ -190,7 +172,7 @@ public class SystemUtils {
 
     /**
      * Get processor model name for Apple Silicon
-     * 
+     *
      * @return Processor model name, or null if unavailable
      */
     private static String getProcessorModel() {
@@ -203,8 +185,7 @@ public class SystemUtils {
                     return reader.readLine();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Failed to get CPU model
         }
 
@@ -222,8 +203,7 @@ public class SystemUtils {
             Class.forName("com.sun.jna.Platform");
             if (System.getProperty("os.name").startsWith("Windows") && !System.getProperty("sun.arch.data.model").equals("64")) {
                 Class.forName("com.sun.jna.platform.win32.Win32Exception");
-            }
-            else if (System.getProperty("os.name").toLowerCase().contains("android") || System.getProperty("java.runtime.name").toLowerCase().contains("android")) {
+            } else if (System.getProperty("os.name").toLowerCase().contains("android") || System.getProperty("java.runtime.name").toLowerCase().contains("android")) {
                 return null;
             }
 
@@ -232,15 +212,13 @@ public class SystemUtils {
                     Configurator.setLevel("oshi.hardware.common.AbstractCentralProcessor", Level.OFF);
                     log4jInitialized = true;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // log4j configuration failure, continue without it
             }
 
             SystemInfo systemInfo = new SystemInfo();
             result = systemInfo.getHardware().getProcessor();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // unable to read processor information
         }
 
@@ -249,7 +227,7 @@ public class SystemUtils {
 
     /**
      * Get processor information string (for testing)
-     * 
+     *
      * @return The processor information string
      */
     public static String getProcessorInfoString() {
@@ -268,7 +246,7 @@ public class SystemUtils {
 
     /**
      * Check if Log4j is disabled via system properties
-     * 
+     *
      * @return true if Log4j is disabled
      */
     private static boolean isLog4jDisabled() {

@@ -1,16 +1,5 @@
 package net.coreprotect.api;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.consumer.Consumer;
 import net.coreprotect.consumer.Queue;
@@ -18,6 +7,12 @@ import net.coreprotect.consumer.process.Process;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.StringUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+
+import java.util.*;
 
 /**
  * Provides API methods for looking up block-related actions in the processing queue.
@@ -36,9 +31,8 @@ public class QueueLookup extends Queue {
     /**
      * Performs a lookup of block-related actions in the processing queue for the specified block.
      * This allows retrieving actions that have not yet been committed to the database.
-     * 
-     * @param block
-     *            The block to look up in the processing queue
+     *
+     * @param block The block to look up in the processing queue
      * @return List of results in a String array format, empty list if API is disabled or no results found
      */
     public static List<String[]> performLookup(Block block) {
@@ -96,7 +90,7 @@ public class QueueLookup extends Queue {
                     int resultType = MaterialUtils.getBlockId(blockType);
                     int time = (int) (System.currentTimeMillis() / 1000L);
 
-                    String[] lookupData = new String[] { String.valueOf(time), user, String.valueOf(location.getBlockX()), String.valueOf(location.getBlockY()), String.valueOf(location.getBlockZ()), String.valueOf(resultType), String.valueOf(legacyData), String.valueOf(action), "0", String.valueOf(worldId), blockData };
+                    String[] lookupData = new String[]{String.valueOf(time), user, String.valueOf(location.getBlockX()), String.valueOf(location.getBlockY()), String.valueOf(location.getBlockZ()), String.valueOf(resultType), String.valueOf(legacyData), String.valueOf(action), "0", String.valueOf(worldId), blockData};
 
                     result.add(StringUtils.toStringArray(lookupData));
                 }
@@ -104,8 +98,7 @@ public class QueueLookup extends Queue {
 
             // Reverse the result list to match database lookup order (most recent first)
             Collections.reverse(result);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -114,15 +107,14 @@ public class QueueLookup extends Queue {
 
     /**
      * Calculates the total count of actions in the consumer queues.
-     * 
+     *
      * @return The total count of actions in the consumer queues
      */
     private static int calculateConsumerCount() {
         int currentConsumerSize = Process.getCurrentConsumerSize();
         if (currentConsumerSize == 0) {
             return Consumer.getConsumerSize(0) + Consumer.getConsumerSize(1);
-        }
-        else {
+        } else {
             int consumerId = (Consumer.currentConsumer == 1) ? 1 : 0;
             return Consumer.getConsumerSize(consumerId) + currentConsumerSize;
         }
@@ -130,13 +122,10 @@ public class QueueLookup extends Queue {
 
     /**
      * Determines if an action in the queue pertains to the specified block location.
-     * 
-     * @param userData
-     *            User data associated with the action
-     * @param objectData
-     *            Object data associated with the action
-     * @param blockLocation
-     *            Location of the block being looked up
+     *
+     * @param userData      User data associated with the action
+     * @param objectData    Object data associated with the action
+     * @param blockLocation Location of the block being looked up
      * @return true if the action pertains to the specified block, false otherwise
      */
     private static boolean isActionForBlock(String[] userData, Object objectData, Location blockLocation) {

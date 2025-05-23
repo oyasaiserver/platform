@@ -1,9 +1,16 @@
 package net.coreprotect.listener.entity;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.Locale;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Database;
+import net.coreprotect.database.lookup.BlockLookup;
+import net.coreprotect.language.Phrase;
+import net.coreprotect.listener.player.PlayerInteractEntityListener;
+import net.coreprotect.utility.Chat;
+import net.coreprotect.utility.Color;
+import net.coreprotect.utility.MaterialUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -17,17 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Database;
-import net.coreprotect.database.lookup.BlockLookup;
-import net.coreprotect.language.Phrase;
-import net.coreprotect.listener.player.PlayerInteractEntityListener;
-import net.coreprotect.utility.Chat;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.MaterialUtils;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.Locale;
 
 public final class HangingBreakByEntityListener extends Queue implements Listener {
 
@@ -56,7 +55,7 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
                         return;
                     }
                 }
-                ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { true, System.currentTimeMillis() });
+                ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{true, System.currentTimeMillis()});
 
                 try (Connection connection = Database.getConnection(true)) {
                     if (connection != null) {
@@ -67,22 +66,19 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
                             for (String b : blockData.split("\n")) {
                                 Chat.sendComponent(player, b);
                             }
-                        }
-                        else if (blockData.length() > 0) {
+                        } else if (blockData.length() > 0) {
                             Chat.sendComponent(player, blockData);
                         }
 
                         statement.close();
-                    }
-                    else {
+                    } else {
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.DATABASE_BUSY));
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { false, System.currentTimeMillis() });
+                ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{false, System.currentTimeMillis()});
             }
         }
         Runnable runnable = new BasicThread();
@@ -116,8 +112,7 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
                 if (remover instanceof Player player) {
                     culprit = player.getName();
                     logDrops = player.getGameMode() != GameMode.CREATIVE;
-                }
-                else if (remover.getType() != null) {
+                } else if (remover.getType() != null) {
                     culprit = "#" + remover.getType().name().toLowerCase(Locale.ROOT);
                 }
             }
@@ -131,20 +126,18 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
 
                 if (!event.isCancelled() && Config.getConfig(entity.getWorld()).ITEM_TRANSACTIONS && !inspecting) {
                     if (itemframe.getItem().getType() != Material.AIR) {
-                        ItemStack[] oldState = new ItemStack[] { itemframe.getItem().clone() };
-                        ItemStack[] newState = new ItemStack[] { new ItemStack(Material.AIR) };
-                        PlayerInteractEntityListener.queueContainerSpecifiedItems(culprit, Material.ITEM_FRAME, new Object[] { oldState, newState, itemframe.getFacing() }, itemframe.getLocation(), logDrops);
+                        ItemStack[] oldState = new ItemStack[]{itemframe.getItem().clone()};
+                        ItemStack[] newState = new ItemStack[]{new ItemStack(Material.AIR)};
+                        PlayerInteractEntityListener.queueContainerSpecifiedItems(culprit, Material.ITEM_FRAME, new Object[]{oldState, newState, itemframe.getFacing()}, itemframe.getLocation(), logDrops);
                     }
                 }
-            }
-            else {
+            } else {
                 material = Material.PAINTING;
                 Painting painting = (Painting) entity;
                 blockData = "FACING=" + painting.getFacing().name();
                 try {
                     itemData = MaterialUtils.getArtId(painting.getArt().toString(), true);
-                }
-                catch (IncompatibleClassChangeError e) {
+                } catch (IncompatibleClassChangeError e) {
                     // 1.21.2+
                 }
             }

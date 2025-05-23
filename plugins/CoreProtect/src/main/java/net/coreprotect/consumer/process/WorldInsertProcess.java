@@ -1,14 +1,14 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.MaterialStatement;
 import net.coreprotect.database.statement.WorldStatement;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.utility.Chat;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 class WorldInsertProcess {
 
@@ -25,8 +25,7 @@ class WorldInsertProcess {
                 if (worldId > ConfigHandler.worldId) {
                     ConfigHandler.worldId = worldId;
                 }
-            }
-            else {
+            } else {
                 Chat.console(Phrase.build(Phrase.CACHE_ERROR, "world"));
                 Chat.console(Phrase.build(Phrase.CACHE_RELOAD, Selector.SECOND));
                 ConfigHandler.loadWorlds(statement);

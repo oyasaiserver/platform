@@ -1,8 +1,9 @@
 package net.coreprotect.listener.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -15,10 +16,8 @@ import org.bukkit.event.block.BlockPistonEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.utility.WorldUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class BlockPistonListener extends Queue implements Listener {
 
@@ -26,8 +25,7 @@ public final class BlockPistonListener extends Queue implements Listener {
         List<Block> event_blocks = null;
         if (event instanceof BlockPistonExtendEvent) {
             event_blocks = ((BlockPistonExtendEvent) event).getBlocks();
-        }
-        else if (event instanceof BlockPistonRetractEvent) {
+        } else if (event instanceof BlockPistonRetractEvent) {
             event_blocks = ((BlockPistonRetractEvent) event).getBlocks();
         }
 
@@ -55,8 +53,7 @@ public final class BlockPistonListener extends Queue implements Listener {
                 Block n = null;
                 if (ll == -1) {
                     n = bm;
-                }
-                else {
+                } else {
                     n = nblocks.get(ll);
                 }
                 if (n != null) {
@@ -68,7 +65,7 @@ public final class BlockPistonListener extends Queue implements Listener {
                     if (CacheHandler.pistonCache.get(cords) == null) {
                         log = 1;
                     }
-                    CacheHandler.pistonCache.put(cords, new Object[] { unixtimestamp });
+                    CacheHandler.pistonCache.put(cords, new Object[]{unixtimestamp});
                 }
                 l++;
             }

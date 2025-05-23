@@ -1,10 +1,10 @@
 package net.coreprotect.command.parser;
 
-import java.math.BigDecimal;
-import java.util.Locale;
-
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
+
+import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * Parser for time-related command arguments
@@ -13,9 +13,8 @@ public class TimeParser {
 
     /**
      * Parse time from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return An array of two longs - [time1, time2]
      */
     public static long[] parseTime(String[] inputArguments) {
@@ -36,7 +35,7 @@ public class TimeParser {
         // Special case for test compatibility
         for (String arg : argumentArray) {
             if (arg.contains("3mo")) {
-                return new long[] { 7776000, 0 };
+                return new long[]{7776000, 0};
             }
         }
 
@@ -48,8 +47,7 @@ public class TimeParser {
 
                 if (argument.equals("t:") || argument.equals("time:")) {
                     next = 1;
-                }
-                else if (next == 1 || argument.startsWith("t:") || argument.startsWith("time:")) {
+                } else if (next == 1 || argument.startsWith("t:") || argument.startsWith("time:")) {
                     // time arguments
                     argument = argument.replaceAll("time:", "");
                     argument = argument.replaceAll("t:", "");
@@ -86,8 +84,7 @@ public class TimeParser {
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 y = Double.parseDouble(i4);
                             }
-                        }
-                        else if (i3.endsWith("mo") && mo == 0) {
+                        } else if (i3.endsWith("mo") && mo == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 mo = Double.parseDouble(i4);
@@ -97,32 +94,27 @@ public class TimeParser {
                                     mo = 3.0; // Ensure this is exactly 3.0
                                 }
                             }
-                        }
-                        else if (i3.endsWith("w") && w == 0) {
+                        } else if (i3.endsWith("w") && w == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 w = Double.parseDouble(i4);
                             }
-                        }
-                        else if (i3.endsWith("d") && d == 0) {
+                        } else if (i3.endsWith("d") && d == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 d = Double.parseDouble(i4);
                             }
-                        }
-                        else if (i3.endsWith("h") && h == 0) {
+                        } else if (i3.endsWith("h") && h == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 h = Double.parseDouble(i4);
                             }
-                        }
-                        else if (i3.endsWith("m") && m == 0) {
+                        } else if (i3.endsWith("m") && m == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 m = Double.parseDouble(i4);
                             }
-                        }
-                        else if (i3.endsWith("s") && s == 0) {
+                        } else if (i3.endsWith("s") && s == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 s = Double.parseDouble(i4);
@@ -137,13 +129,11 @@ public class TimeParser {
                     // 1 month = 30 days = 2592000 seconds
                     if (timeStart > 0) {
                         timeEnd = (long) (((y * 31536000) + (mo * 2592000) + (w * 604800) + (d * 86400) + (h * 3600) + (m * 60) + s));
-                    }
-                    else {
+                    } else {
                         timeStart = (long) (((y * 31536000) + (mo * 2592000) + (w * 604800) + (d * 86400) + (h * 3600) + (m * 60) + s));
                     }
                     next = 0;
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }
@@ -151,18 +141,16 @@ public class TimeParser {
         }
 
         if (timeEnd >= timeStart) {
-            return new long[] { timeEnd, timeStart };
-        }
-        else {
-            return new long[] { timeStart, timeEnd };
+            return new long[]{timeEnd, timeStart};
+        } else {
+            return new long[]{timeStart, timeEnd};
         }
     }
 
     /**
      * Parse time string from command arguments for display
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return A formatted time string
      */
     public static String parseTimeString(String[] inputArguments) {
@@ -186,8 +174,7 @@ public class TimeParser {
 
                 if (argument.equals("t:") || argument.equals("time:")) {
                     next = 1;
-                }
-                else if (next == 1 || argument.startsWith("t:") || argument.startsWith("time:")) {
+                } else if (next == 1 || argument.startsWith("t:") || argument.startsWith("time:")) {
                     // time arguments
                     argument = argument.replaceAll("time:", "");
                     argument = argument.replaceAll("t:", "");
@@ -220,80 +207,67 @@ public class TimeParser {
                                 y = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(y) + "y";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_YEARS, timeString(y), (y.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("mo") && mo.intValue() == 0) {
+                        } else if (i3.endsWith("mo") && mo.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 mo = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(mo) + "mo";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_MONTHS, timeString(mo), (mo.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("w") && w.intValue() == 0) {
+                        } else if (i3.endsWith("w") && w.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 w = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(w) + "w";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_WEEKS, timeString(w), (w.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("d") && d.intValue() == 0) {
+                        } else if (i3.endsWith("d") && d.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 d = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(d) + "d";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_DAYS, timeString(d), (d.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("h") && h.intValue() == 0) {
+                        } else if (i3.endsWith("h") && h.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 h = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(h) + "h";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_HOURS, timeString(h), (h.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("m") && m.intValue() == 0) {
+                        } else if (i3.endsWith("m") && m.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 m = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(m) + "m";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_MINUTES, timeString(m), (m.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
-                        }
-                        else if (i3.endsWith("s") && s.intValue() == 0) {
+                        } else if (i3.endsWith("s") && s.intValue() == 0) {
                             String i4 = i3.replaceAll("[^0-9.]", "");
                             if (i4.length() > 0 && i4.replaceAll("[^0-9]", "").length() > 0 && i4.indexOf('.') == i4.lastIndexOf('.')) {
                                 s = new BigDecimal(i4);
                                 if (range) {
                                     time = time + " " + timeString(s) + "s";
-                                }
-                                else {
+                                } else {
                                     time = time + " " + Phrase.build(Phrase.TIME_SECONDS, timeString(s), (s.doubleValue() == 1 ? Selector.FIRST : Selector.SECOND));
                                 }
                             }
@@ -302,8 +276,7 @@ public class TimeParser {
                         argCount++;
                     }
                     next = 0;
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }
@@ -319,9 +292,8 @@ public class TimeParser {
 
     /**
      * Parse rows from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return The number of rows
      */
     public static int parseRows(String[] inputArguments) {
@@ -338,8 +310,7 @@ public class TimeParser {
 
                 if (argument.equals("rows:")) {
                     next = 1;
-                }
-                else if (next == 1 || argument.startsWith("rows:")) {
+                } else if (next == 1 || argument.startsWith("rows:")) {
                     argument = argument.replaceAll("rows:", "").trim();
                     if (!argument.startsWith("-")) {
                         String i2 = argument.replaceAll("[^0-9]", "");
@@ -349,8 +320,7 @@ public class TimeParser {
                     }
 
                     next = 0;
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }

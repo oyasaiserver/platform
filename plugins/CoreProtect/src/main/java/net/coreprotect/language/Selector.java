@@ -1,10 +1,10 @@
 package net.coreprotect.language;
 
+import net.coreprotect.utility.Color;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.coreprotect.utility.Color;
 
 public class Selector {
 
@@ -24,8 +24,7 @@ public class Selector {
         try {
             substring = substring.substring(substring.indexOf("{") + 1);
             substring = substring.substring(0, substring.indexOf("}"));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             substring = "";
         }
 
@@ -34,8 +33,7 @@ public class Selector {
             int index = substring(substring, "|", selector);
             if (index == -1) {
                 param = substring.substring(0, substring.indexOf("|"));
-            }
-            else {
+            } else {
                 param = substring.substring(index + 1, (substring.lastIndexOf("|") > index ? substring(substring, "|", selector + 1) : substring.length()));
             }
 

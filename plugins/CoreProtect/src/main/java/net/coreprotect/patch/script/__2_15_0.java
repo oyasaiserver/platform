@@ -1,12 +1,12 @@
 package net.coreprotect.patch.script;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class __2_15_0 {
 
@@ -41,18 +41,15 @@ public class __2_15_0 {
             try {
                 if (Config.getGlobal().MYSQL) {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "block MODIFY COLUMN rowid bigint NOT NULL AUTO_INCREMENT, ADD COLUMN blockdata BLOB");
-                }
-                else {
+                } else {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "block ADD COLUMN blockdata BLOB");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // already updated
             }
 
             ConfigHandler.loadTypes(statement);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

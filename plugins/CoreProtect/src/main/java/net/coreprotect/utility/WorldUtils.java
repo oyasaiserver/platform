@@ -1,10 +1,9 @@
 package net.coreprotect.utility;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Queue;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 public class WorldUtils extends Queue {
 
@@ -23,8 +22,7 @@ public class WorldUtils extends Queue {
                 Queue.queueWorldInsert(wid, name);
             }
             id = ConfigHandler.worlds.get(name);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return id;
@@ -36,8 +34,7 @@ public class WorldUtils extends Queue {
             if (ConfigHandler.worldsReversed.get(id) != null) {
                 name = ConfigHandler.worldsReversed.get(id);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return name;
@@ -65,11 +62,9 @@ public class WorldUtils extends Queue {
                 if (worldName.toLowerCase(java.util.Locale.ROOT).equals(name)) {
                     result = world.getName();
                     break;
-                }
-                else if (worldName.toLowerCase(java.util.Locale.ROOT).endsWith(name)) {
+                } else if (worldName.toLowerCase(java.util.Locale.ROOT).endsWith(name)) {
                     result = world.getName();
-                }
-                else if (worldName.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-zA-Z0-9]", "").endsWith(name)) {
+                } else if (worldName.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-zA-Z0-9]", "").endsWith(name)) {
                     result = world.getName();
                 }
             }
@@ -77,21 +72,19 @@ public class WorldUtils extends Queue {
             if (result.length() > 0) {
                 id = getWorldId(result);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return id;
     }
-    
+
     public static String getWidIndex(String queryTable) {
         String index = "";
         boolean isMySQL = net.coreprotect.config.Config.getGlobal().MYSQL;
         if (isMySQL) {
             index = "USE INDEX(wid) ";
-        }
-        else {
+        } else {
             switch (queryTable) {
                 case "block":
                     index = "INDEXED BY block_index ";

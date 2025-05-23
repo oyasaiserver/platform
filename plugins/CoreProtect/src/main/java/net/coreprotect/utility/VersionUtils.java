@@ -1,16 +1,15 @@
 package net.coreprotect.utility;
 
-import java.io.InputStreamReader;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.thread.NetworkHandler;
 import net.coreprotect.worldedit.CoreProtectEditSessionEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
+import java.io.InputStreamReader;
 
 public class VersionUtils {
 
@@ -37,12 +36,11 @@ public class VersionUtils {
             String[] versionSplit = pluginVersion.split("\\.");
             minor = Integer.parseInt(versionSplit[0]);
             revision = Integer.parseInt(versionSplit[1]);
-        }
-        else {
+        } else {
             minor = Integer.parseInt(pluginVersion);
         }
 
-        return new Integer[] { major, minor, revision };
+        return new Integer[]{major, minor, revision};
     }
 
     public static String getPluginName() {
@@ -62,8 +60,7 @@ public class VersionUtils {
 
         if (branch.startsWith("-edge")) {
             name = name + " " + branch.substring(1, 2).toUpperCase() + branch.substring(2, 5);
-        }
-        else if (isCommunityEdition()) {
+        } else if (isCommunityEdition()) {
             name = name + " " + ConfigHandler.COMMUNITY_EDITION;
         }
 
@@ -73,8 +70,7 @@ public class VersionUtils {
     public static boolean isSpigot() {
         try {
             Class.forName("org.spigotmc.SpigotConfig");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
@@ -84,8 +80,7 @@ public class VersionUtils {
     public static boolean isPaper() {
         try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
@@ -95,8 +90,7 @@ public class VersionUtils {
     public static boolean isFolia() {
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
@@ -136,8 +130,7 @@ public class VersionUtils {
             if (branch.length() > 0) {
                 branch = "-" + branch;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -148,17 +141,15 @@ public class VersionUtils {
         if (oldVersion[0] < currentVersion[0]) {
             // Major version
             return true;
-        }
-        else if (oldVersion[0].equals(currentVersion[0]) && oldVersion[1] < currentVersion[1]) {
+        } else if (oldVersion[0].equals(currentVersion[0]) && oldVersion[1] < currentVersion[1]) {
             // Minor version
             return true;
-        }
-        else // Revision version (#.#.# vs #.#.#)
+        } else // Revision version (#.#.# vs #.#.#)
             if (oldVersion.length < 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && 0 < currentVersion[2]) {
-            // Revision version (#.# vs #.#.#)
-            return true;
-        }
-        else return oldVersion.length >= 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && oldVersion[2] < currentVersion[2];
+                // Revision version (#.# vs #.#.#)
+                return true;
+            } else
+                return oldVersion.length >= 3 && currentVersion.length >= 3 && oldVersion[0].equals(currentVersion[0]) && oldVersion[1].equals(currentVersion[1]) && oldVersion[2] < currentVersion[2];
     }
 
     public static boolean newVersion(Integer[] oldVersion, String currentVersion) {
@@ -193,12 +184,10 @@ public class VersionUtils {
                     if (value < 6) {
                         validVersion = false;
                     }
-                }
-                else {
+                } else {
                     if (version.contains("+")) {
                         version = version.split("\\+")[1];
-                    }
-                    else {
+                    } else {
                         version = version.split(";")[1];
                     }
 
@@ -209,8 +198,7 @@ public class VersionUtils {
                         }
                     }
                 }
-            }
-            else if (version.contains(".")) {
+            } else if (version.contains(".")) {
                 String[] worldEditVersion = version.split("-|\\.");
                 if (worldEditVersion.length >= 2) {
                     worldEditVersion[0] = worldEditVersion[0].replaceAll("[^0-9]", "");
@@ -219,8 +207,7 @@ public class VersionUtils {
                         validVersion = false;
                     }
                 }
-            }
-            else if (version.equals("unspecified")) { // FAWE
+            } else if (version.equals("unspecified")) { // FAWE
                 validVersion = false;
                 Plugin fawe = Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit");
                 if (fawe != null) {
@@ -232,19 +219,16 @@ public class VersionUtils {
                         validVersion = true;
                     }
                 }
-            }
-            else {
+            } else {
                 validVersion = false;
             }
 
             if (validVersion) {
                 CoreProtectEditSessionEvent.register();
-            }
-            else {
+            } else {
                 Chat.console(Phrase.build(Phrase.INTEGRATION_VERSION, "WorldEdit"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -252,8 +236,7 @@ public class VersionUtils {
     public static void unloadWorldEdit() {
         try {
             CoreProtectEditSessionEvent.unregister();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

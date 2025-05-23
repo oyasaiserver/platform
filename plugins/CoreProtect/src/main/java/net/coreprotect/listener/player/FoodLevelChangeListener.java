@@ -1,5 +1,10 @@
 package net.coreprotect.listener.player;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.thread.Scheduler;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,12 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.WorldUtils;
 
 public final class FoodLevelChangeListener extends Queue implements Listener {
 
@@ -62,8 +61,7 @@ public final class FoodLevelChangeListener extends Queue implements Listener {
                                     Queue.queueBlockPlace(player.getName(), newBlockState, newBlock.getType(), null, newBlockState.getType(), -1, 0, newBlockState.getBlockData().getAsString());
                                 }
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }, oldBlockState.getLocation());

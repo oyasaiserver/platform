@@ -1,32 +1,5 @@
 package net.coreprotect.thread;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Stream;
-
-import org.bukkit.Bukkit;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigFile;
@@ -35,15 +8,29 @@ import net.coreprotect.language.Language;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.VersionUtils;
+import org.bukkit.Bukkit;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 public class NetworkHandler extends Language implements Runnable {
 
-    private boolean startup = true;
-    private boolean background = false;
-    private boolean translate = true;
     private static String latestVersion = null;
     private static String latestEdgeVersion = null;
     private static String donationKey = null;
+    private boolean startup = true;
+    private boolean background = false;
+    private boolean translate = true;
 
     public NetworkHandler(boolean startup, boolean background) {
         this.startup = startup;
@@ -87,21 +74,17 @@ public class NetworkHandler extends Language implements Runnable {
                             String[] remoteKey = response.replaceAll("[^a-zA-Z0-9;]", "").split(";");
                             if (remoteKey.length > 1 && remoteKey[1].equals("1") && remoteKey[0].length() == 8) {
                                 donationKey = remoteKey[0];
-                            }
-                            else if (remoteKey.length > 1) {
+                            } else if (remoteKey.length > 1) {
                                 donationKey = null;
-                            }
-                            else {
+                            } else {
                                 keyValidated = false;
                             }
                         }
                         reader.close();
-                    }
-                    else {
+                    } else {
                         keyValidated = false;
                     }
-                }
-                else {
+                } else {
                     donationKey = null;
                 }
 
@@ -112,11 +95,9 @@ public class NetworkHandler extends Language implements Runnable {
                             Chat.console(Phrase.build(Phrase.INVALID_DONATION_KEY) + " " + Phrase.build(Phrase.CHECK_CONFIG) + ".");
                         }
                         Files.write(licensePath, "".getBytes());
-                    }
-                    else if (keyValidated) {
+                    } else if (keyValidated) {
                         Files.write(licensePath, donationKey.getBytes());
-                    }
-                    else if (Files.isReadable(licensePath)) {
+                    } else if (Files.isReadable(licensePath)) {
                         List<String> licenseFile = Files.readAllLines(licensePath);
                         if (licenseFile.size() == 1) {
                             donationKey = licenseFile.get(0);
@@ -125,12 +106,10 @@ public class NetworkHandler extends Language implements Runnable {
                             }
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // Unable to connect to coreprotect.net
             }
 
@@ -162,8 +141,7 @@ public class NetworkHandler extends Language implements Runnable {
                                             String cacheLanguage = split[5].substring(1, split[5].length() - 1);
                                             if (cacheVersion.equals(pluginVersion) && cacheLanguage.equals(languageCode)) {
                                                 validCache = true;
-                                            }
-                                            else {
+                                            } else {
                                                 ConfigFile.resetCache(ConfigFile.LANGUAGE_CACHE, ConfigFile.LANGUAGE);
                                             }
                                             if (validCache && Files.getLastModifiedTime(languagePath).toMillis() >= Files.getLastModifiedTime(languageCachePath).toMillis()) {
@@ -172,8 +150,7 @@ public class NetworkHandler extends Language implements Runnable {
                                         }
                                     }
                                 }
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -259,20 +236,17 @@ public class NetworkHandler extends Language implements Runnable {
                                 }
 
                                 connection.disconnect();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 // Unable to connect to coreprotect.net
                             }
                         }
-                    }
-                    else {
+                    } else {
                         ConfigFile.resetCache(ConfigFile.LANGUAGE_CACHE, ConfigFile.LANGUAGE);
                     }
 
                     // optionally clear user phrases here
                     translate = false;
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -316,8 +290,7 @@ public class NetworkHandler extends Language implements Runnable {
                     connectionEdge.setConnectTimeout(5000);
                     connectionEdge.connect();
                     statusEdge = connectionEdge.getResponseCode();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // Unable to connect to update.coreprotect.net
                 }
 
@@ -339,16 +312,14 @@ public class NetworkHandler extends Language implements Runnable {
                                         Chat.console("--------------------");
                                         startup = false;
                                     }
-                                }
-                                else {
+                                } else {
                                     latestVersion = null;
                                 }
                             }
                         }
 
                         reader.close();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -364,16 +335,14 @@ public class NetworkHandler extends Language implements Runnable {
                                 boolean newVersion = VersionUtils.newVersion(version, remoteVersion);
                                 if (newVersion) {
                                     latestEdgeVersion = remoteVersion;
-                                }
-                                else {
+                                } else {
                                     latestEdgeVersion = null;
                                 }
                             }
                         }
 
                         reader.close();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -391,8 +360,7 @@ public class NetworkHandler extends Language implements Runnable {
                     connection.connect();
                     connection.getResponseCode();
                     connection.disconnect();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // Unable to connect to stats.coreprotect.net
                 }
 
@@ -404,13 +372,11 @@ public class NetworkHandler extends Language implements Runnable {
                         time = System.currentTimeMillis();
                         Thread.sleep(1000);
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Chat.console(Phrase.build(Phrase.UPDATE_ERROR));
             e.printStackTrace();
         }

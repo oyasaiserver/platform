@@ -1,13 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.block.BlockState;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -17,6 +9,13 @@ import net.coreprotect.database.statement.EntityStatement;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.block.BlockState;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.Locale;
 
 public class EntityKillLogger {
 
@@ -52,8 +51,7 @@ public class EntityKillLogger {
                 resultSet.next();
                 entity_key = resultSet.getInt(1);
                 resultSet.close();
-            }
-            else {
+            } else {
                 ResultSet keys = preparedStmt2.getGeneratedKeys();
                 keys.next();
                 entity_key = keys.getInt(1);
@@ -61,8 +59,7 @@ public class EntityKillLogger {
             }
 
             BlockStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, type, entity_key, null, null, 3, 0);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

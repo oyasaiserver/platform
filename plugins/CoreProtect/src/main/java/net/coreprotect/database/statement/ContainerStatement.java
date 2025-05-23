@@ -1,8 +1,8 @@
 package net.coreprotect.database.statement;
 
-import java.sql.PreparedStatement;
-
 import net.coreprotect.utility.ItemUtils;
+
+import java.sql.PreparedStatement;
 
 public class ContainerStatement {
 
@@ -30,8 +30,7 @@ public class ContainerStatement {
             if (batchCount > 0 && batchCount % 1000 == 0) {
                 preparedStmt.executeBatch();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

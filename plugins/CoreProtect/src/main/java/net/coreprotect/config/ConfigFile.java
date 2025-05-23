@@ -1,31 +1,17 @@
 package net.coreprotect.config;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import net.coreprotect.CoreProtect;
+import net.coreprotect.language.Language;
+import net.coreprotect.language.Phrase;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.TreeMap;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.language.Language;
-import net.coreprotect.language.Phrase;
 
 public class ConfigFile extends Config {
 
@@ -38,6 +24,10 @@ public class ConfigFile extends Config {
     private static final String DEFAULT_FILE_HEADER = "# CoreProtect Language File (en)";
     private final HashMap<String, String> lang;
 
+    public ConfigFile() {
+        this.lang = new LinkedHashMap<>();
+    }
+
     public static void init(String fileName) throws IOException {
         for (Phrase phrase : Phrase.values()) {
             DEFAULT_VALUES.put(phrase.name(), phrase.getPhrase());
@@ -46,32 +36,6 @@ public class ConfigFile extends Config {
 
         boolean isCache = fileName.startsWith(".");
         loadFiles(fileName, isCache);
-    }
-
-    public ConfigFile() {
-        this.lang = new LinkedHashMap<>();
-    }
-
-    public void load(final InputStream in, String fileName, boolean isCache) throws IOException {
-        // if we fail reading, we will not corrupt our current config.
-        final Map<String, String> newConfig = new LinkedHashMap<>(this.lang.size());
-        ConfigFile.load(in, newConfig, true);
-
-        this.lang.clear();
-        this.lang.putAll(newConfig);
-
-        for (final Entry<String, String> entry : this.lang.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            if (DEFAULT_VALUES.containsKey(key) && value.length() > 0 && (!isCache || DEFAULT_VALUES.get(key).equals(USER_VALUES.get(key)))) {
-                Phrase phrase = Phrase.valueOf(key);
-                if (!isCache) {
-                    Language.setUserPhrase(phrase, value);
-                }
-
-                Language.setTranslatedPhrase(phrase, value);
-            }
-        }
     }
 
     // this function will close in
@@ -98,8 +62,7 @@ public class ConfigFile extends Config {
                     value = value.replace("''", "'");
                     value = value.replace("\\'", "'");
                     value = value.replace("\\\\", "\\");
-                }
-                else if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+                } else if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
                     value = value.replaceAll("^\"|\"$", "");
                     value = value.replace("\\\"", "\"");
                     value = value.replace("\\\\", "\\");
@@ -133,13 +96,90 @@ public class ConfigFile extends Config {
             final ConfigFile temp = new ConfigFile();
             temp.load(new ByteArrayInputStream(data), fileName, isCache);
             temp.addMissingOptions(globalFile);
-        }
-        else {
+        } else {
             final ConfigFile temp = new ConfigFile();
             temp.addMissingOptions(globalFile);
         }
 
         return map;
+    }
+
+    public static void modifyLine(String fileName, String oldLine, String newLine) {
+        try {
+            Path path = Paths.get(ConfigHandler.path + fileName);
+            List<String> lines = Files.readAllLines(path);
+
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).equalsIgnoreCase(oldLine)) {
+                    if (newLine != null && newLine.length() > 0) {
+                        lines.set(i, newLine);
+                    } else {
+                        lines.remove(i);
+                    }
+
+                    break;
+                }
+            }
+
+            if (lines.size() > 0) {
+                String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
+                Files.write(path, (lines), StandardCharsets.UTF_8);
+                Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+                lines.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sortFile(String fileName) {
+        try {
+            Path path = Paths.get(ConfigHandler.path + fileName);
+            List<String> lines = Files.readAllLines(path);
+            List<String> sort = lines.subList(2, lines.size());
+            Collections.sort(sort);
+            lines = lines.subList(0, 2);
+            lines.addAll(sort);
+
+            if (lines.size() > 0) {
+                String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
+                Files.write(path, (lines), StandardCharsets.UTF_8);
+                Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+                lines.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void resetCache(String cacheName, String fileName) throws IOException {
+        File file = new File(CoreProtect.getInstance().getDataFolder(), cacheName);
+        if (file.length() > 0) {
+            new FileOutputStream(file).close();
+            init(fileName);
+        }
+    }
+
+    public void load(final InputStream in, String fileName, boolean isCache) throws IOException {
+        // if we fail reading, we will not corrupt our current config.
+        final Map<String, String> newConfig = new LinkedHashMap<>(this.lang.size());
+        ConfigFile.load(in, newConfig, true);
+
+        this.lang.clear();
+        this.lang.putAll(newConfig);
+
+        for (final Entry<String, String> entry : this.lang.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (DEFAULT_VALUES.containsKey(key) && value.length() > 0 && (!isCache || DEFAULT_VALUES.get(key).equals(USER_VALUES.get(key)))) {
+                Phrase phrase = Phrase.valueOf(key);
+                if (!isCache) {
+                    Language.setUserPhrase(phrase, value);
+                }
+
+                Language.setTranslatedPhrase(phrase, value);
+            }
+        }
     }
 
     @Override
@@ -172,65 +212,6 @@ public class ConfigFile extends Config {
             }
 
             out.close();
-        }
-    }
-
-    public static void modifyLine(String fileName, String oldLine, String newLine) {
-        try {
-            Path path = Paths.get(ConfigHandler.path + fileName);
-            List<String> lines = Files.readAllLines(path);
-
-            for (int i = 0; i < lines.size(); i++) {
-                if (lines.get(i).equalsIgnoreCase(oldLine)) {
-                    if (newLine != null && newLine.length() > 0) {
-                        lines.set(i, newLine);
-                    }
-                    else {
-                        lines.remove(i);
-                    }
-
-                    break;
-                }
-            }
-
-            if (lines.size() > 0) {
-                String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
-                Files.write(path, (lines), StandardCharsets.UTF_8);
-                Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-                lines.clear();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sortFile(String fileName) {
-        try {
-            Path path = Paths.get(ConfigHandler.path + fileName);
-            List<String> lines = Files.readAllLines(path);
-            List<String> sort = lines.subList(2, lines.size());
-            Collections.sort(sort);
-            lines = lines.subList(0, 2);
-            lines.addAll(sort);
-
-            if (lines.size() > 0) {
-                String lastLine = lines.get(lines.size() - 1); // append the final line to prevent a line separator from being added
-                Files.write(path, (lines), StandardCharsets.UTF_8);
-                Files.write(path, lastLine.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-                lines.clear();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void resetCache(String cacheName, String fileName) throws IOException {
-        File file = new File(CoreProtect.getInstance().getDataFolder(), cacheName);
-        if (file.length() > 0) {
-            new FileOutputStream(file).close();
-            init(fileName);
         }
     }
 }

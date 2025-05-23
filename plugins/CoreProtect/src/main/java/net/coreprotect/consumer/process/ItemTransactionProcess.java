@@ -1,13 +1,12 @@
 package net.coreprotect.consumer.process;
 
-import java.sql.PreparedStatement;
-import java.util.Locale;
-
-import org.bukkit.Location;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Queue;
 import net.coreprotect.database.logger.ItemLogger;
+import org.bukkit.Location;
+
+import java.sql.PreparedStatement;
+import java.util.Locale;
 
 class ItemTransactionProcess extends Queue {
 
@@ -34,8 +33,7 @@ class ItemTransactionProcess extends Queue {
                         ConfigHandler.itemsSell.remove(loggingItemId);
                         ConfigHandler.itemsBuy.remove(loggingItemId);
                         ConfigHandler.loggingItem.remove(loggingItemId);
-                    }
-                    else {
+                    } else {
                         Queue.queueItemTransaction(user, location, time, offset, forceData);
                     }
                 }

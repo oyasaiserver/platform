@@ -1,14 +1,14 @@
 package net.coreprotect.language;
 
+import net.coreprotect.utility.ChatMessage;
+import net.coreprotect.utility.Color;
+import net.coreprotect.utility.StringUtils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.coreprotect.utility.ChatMessage;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.StringUtils;
 
 public enum Phrase {
 
@@ -227,18 +227,6 @@ public enum Phrase {
     final private static String SPLIT = ":";
     final private static String FULL_WIDTH_SPLIT = "：";
 
-    public String getPhrase() {
-        return Language.getPhrase(this);
-    }
-
-    public String getUserPhrase() {
-        return Language.getUserPhrase(this);
-    }
-
-    public String getTranslatedPhrase() {
-        return Language.getTranslatedPhrase(this);
-    }
-
     public static String build(Phrase phrase, String... params) {
         String output = phrase.getTranslatedPhrase();
 
@@ -333,5 +321,17 @@ public enum Phrase {
         }
 
         return match;
+    }
+
+    public String getPhrase() {
+        return Language.getPhrase(this);
+    }
+
+    public String getUserPhrase() {
+        return Language.getUserPhrase(this);
+    }
+
+    public String getTranslatedPhrase() {
+        return Language.getTranslatedPhrase(this);
     }
 }

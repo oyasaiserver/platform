@@ -1,23 +1,18 @@
 package net.coreprotect.database.lookup;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Locale;
-
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.listener.channel.PluginChannelListener;
-import net.coreprotect.utility.ChatUtils;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.MaterialUtils;
-import net.coreprotect.utility.StringUtils;
-import net.coreprotect.utility.WorldUtils;
+import net.coreprotect.utility.*;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Locale;
 
 public class InteractionLookup {
 
@@ -32,14 +27,11 @@ public class InteractionLookup {
             if (command == null) {
                 if (commandSender.hasPermission("coreprotect.co")) {
                     command = "co";
-                }
-                else if (commandSender.hasPermission("coreprotect.core")) {
+                } else if (commandSender.hasPermission("coreprotect.core")) {
                     command = "core";
-                }
-                else if (commandSender.hasPermission("coreprotect.coreprotect")) {
+                } else if (commandSender.hasPermission("coreprotect.coreprotect")) {
                     command = "coreprotect";
-                }
-                else {
+                } else {
                     command = "co";
                 }
             }
@@ -123,12 +115,10 @@ public class InteractionLookup {
                     pageInfo = pageInfo + ChatUtils.getPageNavigation(command, page, totalPages) + "\n";
                     result = result + pageInfo;
                 }
-            }
-            else {
+            } else {
                 if (rowMax > count && count > 0) {
                     result = Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_RESULTS_PAGE, Selector.SECOND);
-                }
-                else {
+                } else {
                     result = Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_DATA_LOCATION, Selector.THIRD);
                 }
             }
@@ -136,8 +126,7 @@ public class InteractionLookup {
             ConfigHandler.lookupPage.put(commandSender.getName(), page);
             ConfigHandler.lookupType.put(commandSender.getName(), 7);
             ConfigHandler.lookupCommand.put(commandSender.getName(), x + "." + y + "." + z + "." + worldId + ".2." + limit);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -1,14 +1,13 @@
 package net.coreprotect.patch.script;
 
-import java.sql.Statement;
-import java.util.Locale;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
 import org.bukkit.Art;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
+import java.sql.Statement;
+import java.util.Locale;
 
 public class __2_11_0 {
 
@@ -16,8 +15,7 @@ public class __2_11_0 {
         try {
             if (Config.getGlobal().MYSQL) {
                 statement.executeUpdate("START TRANSACTION");
-            }
-            else {
+            } else {
                 statement.executeUpdate("BEGIN TRANSACTION");
             }
 
@@ -56,12 +54,10 @@ public class __2_11_0 {
 
             if (Config.getGlobal().MYSQL) {
                 statement.executeUpdate("COMMIT");
-            }
-            else {
+            } else {
                 statement.executeUpdate("COMMIT TRANSACTION");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

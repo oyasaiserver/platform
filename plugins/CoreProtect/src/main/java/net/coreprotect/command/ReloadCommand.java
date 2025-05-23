@@ -1,13 +1,12 @@
 package net.coreprotect.command;
 
-import org.bukkit.command.CommandSender;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Consumer;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.thread.NetworkHandler;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Color;
+import org.bukkit.command.CommandSender;
 
 public class ReloadCommand {
     protected static void runCommand(final CommandSender player, boolean permission, String[] args) {
@@ -27,7 +26,7 @@ public class ReloadCommand {
                     return;
                 }
             }
-            ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { true, System.currentTimeMillis() });
+            ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{true, System.currentTimeMillis()});
 
             class BasicThread implements Runnable {
                 @Override
@@ -46,20 +45,18 @@ public class ReloadCommand {
 
                         Thread networkHandler = new Thread(new NetworkHandler(false, false));
                         networkHandler.start();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     Consumer.isPaused = false;
-                    ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { false, System.currentTimeMillis() });
+                    ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{false, System.currentTimeMillis()});
                 }
             }
             Runnable runnable = new BasicThread();
             Thread thread = new Thread(runnable);
             thread.start();
-        }
-        else {
+        } else {
             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_PERMISSION));
         }
     }

@@ -81,7 +81,7 @@ public class StringUtils {
             String rolledBack = array[8];
             String wid = array[9];
             String blockData = array[10];
-            return new String[] { time, user, x, y, z, type, data, action, rolledBack, wid, "", "", blockData };
+            return new String[]{time, user, x, y, z, type, data, action, rolledBack, wid, "", "", blockData};
         }
 
         return null;

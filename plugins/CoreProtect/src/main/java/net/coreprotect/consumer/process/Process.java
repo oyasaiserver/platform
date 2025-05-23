@@ -1,5 +1,12 @@
 package net.coreprotect.consumer.process;
 
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Consumer;
+import net.coreprotect.database.Database;
+import net.coreprotect.database.statement.UserStatement;
+import org.bukkit.Material;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -7,14 +14,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.Material;
-
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Consumer;
-import net.coreprotect.database.Database;
-import net.coreprotect.database.statement.UserStatement;
 
 public class Process {
 
@@ -62,8 +61,7 @@ public class Process {
                 statement.executeUpdate("UPDATE " + ConfigHandler.prefix + "database_lock SET status = '" + locked + "', time = '" + unixTimestamp + "' WHERE rowid = '1'");
                 lastLockUpdate = unixTimestamp;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -87,7 +85,7 @@ public class Process {
             if (currentConsumerSize == 0) { // No data, skip processing
                 updateLockTable(statement, (lastRun ? 0 : 1));
                 statement.close();
-                Consumer.consumer_id.put(processId, new Integer[] { 0, 0 });
+                Consumer.consumer_id.put(processId, new Integer[]{0, 0});
                 Consumer.isPaused = false;
                 return;
             }
@@ -234,7 +232,7 @@ public class Process {
                                     consumerData.remove(index);
                                 }
                                 currentConsumerSize = 0;
-                                Consumer.consumer_id.put(processId, new Integer[] { 0, 0 });
+                                Consumer.consumer_id.put(processId, new Integer[]{0, 0});
                                 Consumer.isPaused = false;
                                 return;
                             }
@@ -245,8 +243,7 @@ public class Process {
                                 Thread.sleep(500);
                                 Database.beginTransaction(statement, Config.getGlobal().MYSQL);
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -278,12 +275,11 @@ public class Process {
             users.clear();
             consumerObject.clear();
             consumerData.clear();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Consumer.consumer_id.put(processId, new Integer[] { 0, 0 });
+        Consumer.consumer_id.put(processId, new Integer[]{0, 0});
         Consumer.isPaused = false;
     }
 
@@ -304,8 +300,7 @@ public class Process {
             preparedStmtEntity.executeBatch();
             preparedStmtBlockdata.executeBatch();
             Database.commitTransaction(statement, Config.getGlobal().MYSQL);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

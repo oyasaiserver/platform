@@ -1,25 +1,18 @@
 package net.coreprotect.database.lookup;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Locale;
-
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-import org.bukkit.command.CommandSender;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import net.coreprotect.listener.channel.PluginChannelListener;
-import net.coreprotect.utility.ChatUtils;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.EntityUtils;
-import net.coreprotect.utility.MaterialUtils;
-import net.coreprotect.utility.StringUtils;
-import net.coreprotect.utility.Util;
-import net.coreprotect.utility.WorldUtils;
+import net.coreprotect.utility.*;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.command.CommandSender;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Locale;
 
 public class BlockLookup {
 
@@ -34,14 +27,11 @@ public class BlockLookup {
             if (command == null) {
                 if (commandSender.hasPermission("coreprotect.co")) {
                     command = "co";
-                }
-                else if (commandSender.hasPermission("coreprotect.core")) {
+                } else if (commandSender.hasPermission("coreprotect.core")) {
                     command = "core";
-                }
-                else if (commandSender.hasPermission("coreprotect.coreprotect")) {
+                } else if (commandSender.hasPermission("coreprotect.coreprotect")) {
                     command = "coreprotect";
-                }
-                else {
+                } else {
                     command = "co";
                 }
             }
@@ -102,8 +92,7 @@ public class BlockLookup {
                     phrase = Phrase.LOOKUP_INTERACTION; // {clicked|killed}
                     selector = (resultAction != 3 ? Selector.FIRST : Selector.SECOND);
                     tag = (resultAction != 3 ? Color.WHITE + "-" : Color.RED + "-");
-                }
-                else {
+                } else {
                     phrase = Phrase.LOOKUP_BLOCK; // {placed|broke}
                     selector = (resultAction != 0 ? Selector.FIRST : Selector.SECOND);
                     tag = (resultAction != 0 ? Color.GREEN + "+" : Color.RED + "-");
@@ -117,8 +106,7 @@ public class BlockLookup {
                 String target;
                 if (resultAction == 3) {
                     target = EntityUtils.getEntityType(resultType).name();
-                }
-                else {
+                } else {
                     Material resultMaterial = MaterialUtils.getType(resultType);
                     if (resultMaterial == null) {
                         resultMaterial = Material.AIR;
@@ -148,12 +136,10 @@ public class BlockLookup {
                     pageInfo = pageInfo + ChatUtils.getPageNavigation(command, page, totalPages) + "\n";
                     resultText = resultText + pageInfo;
                 }
-            }
-            else {
+            } else {
                 if (rowMax > count && count > 0) {
                     resultText = Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_RESULTS_PAGE, Selector.SECOND);
-                }
-                else {
+                } else {
                     // resultText = Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Color.WHITE + "No block data found at " + Color.ITALIC + "x" + x + "/y" + y + "/z" + z + ".";
                     resultText = Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_DATA_LOCATION, Selector.FIRST);
                     if (!blockName.equals("air") && !blockName.equals("cave_air")) {
@@ -165,8 +151,7 @@ public class BlockLookup {
             ConfigHandler.lookupPage.put(commandSender.getName(), page);
             ConfigHandler.lookupType.put(commandSender.getName(), 2);
             ConfigHandler.lookupCommand.put(commandSender.getName(), x + "." + y + "." + z + "." + worldId + ".0." + limit);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resultText;

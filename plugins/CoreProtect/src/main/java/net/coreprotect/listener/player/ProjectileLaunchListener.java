@@ -1,15 +1,10 @@
 package net.coreprotect.listener.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.logger.ItemLogger;
+import net.coreprotect.utility.EntityUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
@@ -20,11 +15,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.logger.ItemLogger;
-import net.coreprotect.utility.EntityUtils;
+import java.util.*;
+import java.util.Map.Entry;
 
 public final class ProjectileLaunchListener extends Queue implements Listener {
 
@@ -47,8 +39,7 @@ public final class ProjectileLaunchListener extends Queue implements Listener {
             List<ItemStack> list = ConfigHandler.itemsShot.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsShot.put(loggingItemId, list);
-        }
-        else {
+        } else {
             List<ItemStack> list = ConfigHandler.itemsThrown.getOrDefault(loggingItemId, new ArrayList<>());
             list.add(itemStack);
             ConfigHandler.itemsThrown.put(loggingItemId, list);
@@ -79,8 +70,7 @@ public final class ProjectileLaunchListener extends Queue implements Listener {
                             itemStack = item;
                             break;
                         }
-                    }
-                    else if (event.getEntity() instanceof AbstractArrow) {
+                    } else if (event.getEntity() instanceof AbstractArrow) {
                         itemStack = PlayerPickupArrowListener.getArrowType((AbstractArrow) event.getEntity());
                     }
 

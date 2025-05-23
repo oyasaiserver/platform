@@ -1,26 +1,19 @@
 package net.coreprotect.listener.block;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Database;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.paper.PaperAdapter;
+import net.coreprotect.utility.BlockUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Banner;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
-import org.bukkit.block.Skull;
-import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.Rail;
+import org.bukkit.block.*;
+import org.bukkit.block.data.*;
 import org.bukkit.block.data.Rail.Shape;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Bell;
 import org.bukkit.block.data.type.Lantern;
@@ -32,13 +25,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Database;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.paper.PaperAdapter;
-import net.coreprotect.utility.BlockUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public final class BlockBreakListener extends Queue implements Listener {
 
@@ -50,8 +39,7 @@ public final class BlockBreakListener extends Queue implements Listener {
                 blockFace = ((Bed) blockData).getPart() == Bed.Part.FOOT ? blockFace.getOppositeFace() : blockFace;
             }
             return scanBlock.getRelative(blockFace.getOppositeFace()).getLocation().equals(block.getLocation());
-        }
-        else if (blockData instanceof MultipleFacing multipleFacing) {
+        } else if (blockData instanceof MultipleFacing multipleFacing) {
             for (BlockFace blockFace : multipleFacing.getFaces()) {
                 boolean adjacent = scanBlock.getRelative(blockFace).getLocation().equals(block.getLocation());
                 if (adjacent) {
@@ -60,8 +48,7 @@ public final class BlockBreakListener extends Queue implements Listener {
             }
 
             return false;
-        }
-        else if (blockData instanceof Lantern) {
+        } else if (blockData instanceof Lantern) {
             boolean scan = false;
             switch (scanMin) {
                 case BlockUtil.TOP:
@@ -75,8 +62,7 @@ public final class BlockBreakListener extends Queue implements Listener {
             }
 
             return scan;
-        }
-        else return BukkitAdapter.ADAPTER.isAttached(block, scanBlock, blockData, scanMin);
+        } else return BukkitAdapter.ADAPTER.isAttached(block, scanBlock, blockData, scanMin);
     }
 
     static void processBlockBreak(Player player, String user, Block block, boolean logBreak, int skipScan) {
@@ -147,8 +133,7 @@ public final class BlockBreakListener extends Queue implements Listener {
                                 physics = 1;
                             }
                             */
-                        }
-                        else {
+                        } else {
                             // determine if side block is attached
                             if (scanType.equals(Material.RAIL) || scanType.equals(Material.POWERED_RAIL) || scanType.equals(Material.DETECTOR_RAIL) || scanType.equals(Material.ACTIVATOR_RAIL)) {
                                 BlockData blockData = scanBlock.getBlockData();
@@ -157,42 +142,32 @@ public final class BlockBreakListener extends Queue implements Listener {
 
                                 if (scanMin == 1 && shape != Shape.ASCENDING_WEST) {
                                     log = false;
-                                }
-                                else if (scanMin == 2 && shape != Shape.ASCENDING_EAST) {
+                                } else if (scanMin == 2 && shape != Shape.ASCENDING_EAST) {
+                                    log = false;
+                                } else if (scanMin == 3 && shape != Shape.ASCENDING_NORTH) {
+                                    log = false;
+                                } else if (scanMin == 4 && shape != Shape.ASCENDING_SOUTH) {
                                     log = false;
                                 }
-                                else if (scanMin == 3 && shape != Shape.ASCENDING_NORTH) {
-                                    log = false;
-                                }
-                                else if (scanMin == 4 && shape != Shape.ASCENDING_SOUTH) {
-                                    log = false;
-                                }
-                            }
-                            else if (scanType.name().endsWith("_BED") && !type.name().endsWith("_BED")) {
+                            } else if (scanType.name().endsWith("_BED") && !type.name().endsWith("_BED")) {
                                 log = false;
-                            }
-                            else if (!isAttached(block, scanBlock, scanMin)) {
+                            } else if (!isAttached(block, scanBlock, scanMin)) {
                                 log = false;
                             }
                         }
-                    }
-                    else { // top/bottom block
+                    } else { // top/bottom block
                         if (BlockUtil.verticalBreakScan(player, user, block, scanBlock, scanType, scanMin)) {
                             log = false;
-                        }
-                        else if (scanMin == 5 && (!BlockGroup.TRACK_TOP.contains(scanType) && !BlockGroup.TRACK_TOP_BOTTOM.contains(scanType))) {
+                        } else if (scanMin == 5 && (!BlockGroup.TRACK_TOP.contains(scanType) && !BlockGroup.TRACK_TOP_BOTTOM.contains(scanType))) {
                             // top
                             log = false;
-                        }
-                        else if (scanMin == 6 && (!BlockGroup.TRACK_BOTTOM.contains(scanType) && !BlockGroup.TRACK_TOP_BOTTOM.contains(scanType))) {
+                        } else if (scanMin == 6 && (!BlockGroup.TRACK_BOTTOM.contains(scanType) && !BlockGroup.TRACK_TOP_BOTTOM.contains(scanType))) {
                             // bottom
                             log = false;
-                        }
-                        else if (scanMin == 4 && !BlockGroup.TRACK_TOP.contains(scanType)) {
+                        } else if (scanMin == 4 && !BlockGroup.TRACK_TOP.contains(scanType)) {
                             // checking block below for door
                             log = false;
-                        }
-                        else if (!isAttached(block, scanBlock, scanMin)) {
+                        } else if (!isAttached(block, scanBlock, scanMin)) {
                             log = false;
                         }
                     }
@@ -201,22 +176,19 @@ public final class BlockBreakListener extends Queue implements Listener {
                             if (scanType.equals(Material.STICKY_PISTON) || scanType.equals(Material.PISTON)) { // adjacent piston
                                 log = true;
                             }
-                        }
-                        else if (scanMin == 5) {
+                        } else if (scanMin == 5) {
                             if (scanType.hasGravity() || BukkitAdapter.ADAPTER.isSuspiciousBlock(scanType)) {
                                 log = true;
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     // determine if side block is attached
                     if (scanType.equals(Material.PISTON_HEAD)) {
                         if (!type.equals(Material.STICKY_PISTON) && !type.equals(Material.PISTON)) {
                             log = false;
                         }
-                    }
-                    else if (scanType.equals(Material.BELL)) {
+                    } else if (scanType.equals(Material.BELL)) {
                         boolean scanBell = false;
                         BlockData blockData = scanBlock.getBlockData();
                         Bell bell = (Bell) blockData;
@@ -236,14 +208,12 @@ public final class BlockBreakListener extends Queue implements Listener {
                         if (!scanBell) {
                             log = false;
                         }
-                    }
-                    else if (BlockGroup.BUTTONS.contains(scanType) || scanType == Material.LEVER) {
+                    } else if (BlockGroup.BUTTONS.contains(scanType) || scanType == Material.LEVER) {
                         boolean scanButton = BukkitAdapter.ADAPTER.isAttached(block, scanBlock, scanBlock.getBlockData(), scanMin);
                         if (!scanButton) {
                             log = false;
                         }
-                    }
-                    else if (!isAttached(block, scanBlock, scanMin)) {
+                    } else if (!isAttached(block, scanBlock, scanMin)) {
                         log = false;
                     }
                 }
@@ -262,8 +232,7 @@ public final class BlockBreakListener extends Queue implements Listener {
                         Queue.queueAdvancedBreak(user, blockState, blockType, blockState.getBlockData().getAsString(), 0, type, blockNumber);
                     }
                     log = false;
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -289,8 +258,7 @@ public final class BlockBreakListener extends Queue implements Listener {
                         boolean isWaxed = BukkitAdapter.ADAPTER.isWaxed(sign);
 
                         Queue.queueSignText(user, location, 0, color, colorSecondary, frontGlowing, backGlowing, isWaxed, isFront, line1, line2, line3, line4, line5, line6, line7, line8, 5);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

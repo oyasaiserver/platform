@@ -19,8 +19,7 @@ public class MaterialStatement {
             if (batchCount > 0 && batchCount % 1000 == 0) {
                 preparedStmt.executeBatch();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -34,8 +33,7 @@ public class MaterialStatement {
                 result = true;
             }
             resultSet.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

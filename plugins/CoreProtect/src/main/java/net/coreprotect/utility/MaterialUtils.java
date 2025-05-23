@@ -1,12 +1,11 @@
 package net.coreprotect.utility;
 
-import java.util.Locale;
-import java.util.Set;
-
-import org.bukkit.Material;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Queue;
+import org.bukkit.Material;
+
+import java.util.Locale;
+import java.util.Set;
 
 public class MaterialUtils extends Queue {
 
@@ -33,8 +32,7 @@ public class MaterialUtils extends Queue {
 
         if (ConfigHandler.materials.get(name) != null) {
             id = ConfigHandler.materials.get(name);
-        }
-        else if (internal) {
+        } else if (internal) {
             int mid = ConfigHandler.materialId + 1;
             ConfigHandler.materials.put(name, mid);
             ConfigHandler.materialsReversed.put(mid, name);
@@ -52,8 +50,7 @@ public class MaterialUtils extends Queue {
 
         if (ConfigHandler.blockdata.get(data) != null) {
             id = ConfigHandler.blockdata.get(data);
-        }
-        else if (internal) {
+        } else if (internal) {
             int bid = ConfigHandler.blockdataId + 1;
             ConfigHandler.blockdata.put(data, bid);
             ConfigHandler.blockdataReversed.put(bid, data);
@@ -133,8 +130,7 @@ public class MaterialUtils extends Queue {
 
         if (ConfigHandler.art.get(name) != null) {
             id = ConfigHandler.art.get(name);
-        }
-        else if (internal) {
+        } else if (internal) {
             int artID = ConfigHandler.artId + 1;
             ConfigHandler.art.put(name, artID);
             ConfigHandler.artReversed.put(artID, name);

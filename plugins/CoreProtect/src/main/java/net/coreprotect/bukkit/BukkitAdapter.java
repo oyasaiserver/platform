@@ -1,36 +1,26 @@
 package net.coreprotect.bukkit;
 
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.World;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.utility.BlockUtils;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.FaceAttachable;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.utility.BlockUtils;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Base adapter implementation for Bukkit API compatibility.
@@ -38,9 +28,6 @@ import net.coreprotect.utility.BlockUtils;
  * Version-specific implementations extend this class to provide specialized behavior.
  */
 public class BukkitAdapter implements BukkitInterface {
-
-    /** The currently active adapter instance */
-    public static BukkitInterface ADAPTER;
 
     // Version constants for Bukkit implementations
     public static final int BUKKIT_V1_13 = 13;
@@ -52,6 +39,10 @@ public class BukkitAdapter implements BukkitInterface {
     public static final int BUKKIT_V1_19 = 19;
     public static final int BUKKIT_V1_20 = 20;
     public static final int BUKKIT_V1_21 = 21;
+    /**
+     * The currently active adapter instance
+     */
+    public static BukkitInterface ADAPTER;
 
     /**
      * Initializes the appropriate Bukkit adapter based on the server version.
@@ -163,17 +154,16 @@ public class BukkitAdapter implements BukkitInterface {
 
     @Override
     public ItemStack getArrowMeta(Arrow arrow, ItemStack itemStack) {
-        PotionData data = arrow.getBasePotionData();
-        if (data.getType() != PotionType.valueOf("UNCRAFTABLE")) {
+        var basePotionType = arrow.getBasePotionType();
+        if (basePotionType != PotionType.valueOf("UNCRAFTABLE")) {
             itemStack = new ItemStack(Material.TIPPED_ARROW);
             PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-            meta.setBasePotionData(data);
+            meta.setBasePotionType(basePotionType);
             for (PotionEffect effect : arrow.getCustomEffects()) {
                 meta.addCustomEffect(effect, false);
             }
             itemStack.setItemMeta(meta);
         }
-
         return itemStack;
     }
 
@@ -277,8 +267,7 @@ public class BukkitAdapter implements BukkitInterface {
     public String getLine(Sign sign, int line) {
         if (line < 4) {
             return sign.getLine(line);
-        }
-        else {
+        } else {
             return "";
         }
     }

@@ -1,11 +1,5 @@
 package net.coreprotect.patch.script;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
-import org.bukkit.entity.EntityType;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
@@ -14,7 +8,11 @@ import net.coreprotect.language.Selector;
 import net.coreprotect.patch.Patch;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.EntityUtils;
-import net.coreprotect.utility.Util;
+import org.bukkit.entity.EntityType;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class __2_20_0 {
 
@@ -23,8 +21,7 @@ public class __2_20_0 {
             if (Config.getGlobal().MYSQL) {
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "command MODIFY message VARCHAR(16000), CONVERT TO CHARACTER SET utf8mb4");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "command", Selector.FIRST, Selector.FIRST));
                 }
 
@@ -34,23 +31,19 @@ public class __2_20_0 {
 
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "chat MODIFY message VARCHAR(16000), CONVERT TO CHARACTER SET utf8mb4");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "chat", Selector.FIRST, Selector.FIRST));
                 }
 
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign ADD COLUMN data TINYINT");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.FIRST, Selector.FIRST));
                 }
-            }
-            else {
+            } else {
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign ADD COLUMN data INTEGER;");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.FIRST, Selector.FIRST));
                 }
             }
@@ -99,8 +92,7 @@ public class __2_20_0 {
             preparedStatementUpdate.close();
 
             Database.commitTransaction(statement, Config.getGlobal().MYSQL);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

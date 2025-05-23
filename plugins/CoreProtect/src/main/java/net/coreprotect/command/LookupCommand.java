@@ -1,20 +1,5 @@
 package net.coreprotect.command;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-
 import net.coreprotect.command.lookup.BlockLookupThread;
 import net.coreprotect.command.lookup.ChestTransactionLookupThread;
 import net.coreprotect.command.lookup.StandardLookupThread;
@@ -26,6 +11,20 @@ import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ChatMessage;
 import net.coreprotect.utility.Color;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class LookupCommand {
     public static void runCommand(CommandSender player, Command command, boolean permission, String[] args) {
@@ -69,13 +68,11 @@ public class LookupCommand {
         for (Object arg : argBlocks) {
             if (arg instanceof Material) {
                 hasBlock = true;
-            }
-            else if (arg instanceof EntityType) {
+            } else if (arg instanceof EntityType) {
                 hasEntity = true;
                 if (argAction.size() == 0) {
                     argAction.add(3);
-                }
-                else if (!argAction.contains(3)) {
+                } else if (!argAction.contains(3)) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.INVALID_INCLUDE_COMBO));
                     return;
                 }
@@ -86,13 +83,11 @@ public class LookupCommand {
         for (Object arg : argExclude.keySet()) {
             if (arg instanceof Material) {
                 hasBlock = true;
-            }
-            else if (arg instanceof EntityType) {
+            } else if (arg instanceof EntityType) {
                 hasEntity = true;
                 if (argAction.size() == 0) {
                     argAction.add(3);
-                }
-                else if (!argAction.contains(3)) {
+                } else if (!argAction.contains(3)) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.INVALID_INCLUDE_COMBO));
                     return;
                 }
@@ -116,11 +111,9 @@ public class LookupCommand {
         }
         if (type == 0 && resultc > 1) {
             type = 4;
-        }
-        else if (resultc > 2) {
+        } else if (resultc > 2) {
             type = 4;
-        }
-        else if (resultc > 1) {
+        } else if (resultc > 1) {
             pageLookup = true;
             String dat = args[1];
             if (dat.contains(":")) {
@@ -134,8 +127,7 @@ public class LookupCommand {
                     type = 4;
                     pageLookup = false;
                 }
-            }
-            else {
+            } else {
                 String check1 = dat.replaceAll("[^a-zA-Z_]", "");
                 if (check1.length() > 0) {
                     type = 4;
@@ -332,8 +324,7 @@ public class LookupCommand {
             Runnable runnable = new ChestTransactionLookupThread(player, command, location, p, re);
             Thread thread = new Thread(runnable);
             thread.start();
-        }
-        else if (type == 2 || type == 3 || type == 7 || type == 8) {
+        } else if (type == 2 || type == 3 || type == 7 || type == 8) {
             boolean defaultRe = true;
             int page = 1;
             int re = 7;
@@ -396,8 +387,7 @@ public class LookupCommand {
             Runnable runnable = new BlockLookupThread(player, command, block, blockState, page, re, type);
             Thread thread = new Thread(runnable);
             thread.start();
-        }
-        else if (type == 4 || type == 5) {
+        } else if (type == 4 || type == 5) {
             boolean defaultRe = true;
             int pa = 1;
             int re = 4;
@@ -518,8 +508,7 @@ public class LookupCommand {
                     ts = ConfigHandler.lookupTime.get(player.getName());
                     startTime = 1;
                     endTime = 0;
-                }
-                else {
+                } else {
                     if (lo != null) {
                         x = lo.getBlockX();
                         z = lo.getBlockZ();
@@ -544,8 +533,7 @@ public class LookupCommand {
                             int lookupType = ConfigHandler.lookupType.get(player.getName());
                             if (lookupType == 1) {
                                 valid = true;
-                            }
-                            else if (lookupType == 5) {
+                            } else if (lookupType == 5) {
                                 if (ConfigHandler.lookupUlist.get(player.getName()).contains("#container")) {
                                     valid = true;
                                 }
@@ -566,8 +554,7 @@ public class LookupCommand {
                             argAction.add(5);
                             argRadius = null;
                             argWid = 0;
-                        }
-                        else {
+                        } else {
                             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.INVALID_CONTAINER));
                             return;
                         }
@@ -580,14 +567,12 @@ public class LookupCommand {
                     if (timeStart == -1) {
                         if (startTime <= 0) {
                             timeStart = 0;
-                        }
-                        else {
+                        } else {
                             timeStart = (System.currentTimeMillis() / 1000L) - startTime;
                         }
                         if (endTime <= 0) {
                             timeEnd = 0;
-                        }
-                        else {
+                        } else {
                             timeEnd = (System.currentTimeMillis() / 1000L) - endTime;
                         }
                     }
@@ -595,25 +580,20 @@ public class LookupCommand {
                     Runnable runnable = new StandardLookupThread(player, command, rollbackusers, argBlocks, argExclude, argExcludeUsers, argAction, argRadius, lo, x, y, z, wid, argWid, timeStart, timeEnd, argNoisy, argExcluded, argRestricted, pa, re, type, ts, count);
                     Thread thread = new Thread(runnable);
                     thread.start();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 // Functions.sendMessage(player, ChatColors.RED + "You did not specify a lookup radius.");
                 if (argUsers.size() == 0 && argBlocks.size() == 0 && (argWid > 0 || forceglobal)) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.MISSING_LOOKUP_USER, Selector.FIRST));
-                }
-                else if (argUsers.size() == 0 && argBlocks.size() == 0 && argRadius == null) {
+                } else if (argUsers.size() == 0 && argBlocks.size() == 0 && argRadius == null) {
                     Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.MISSING_LOOKUP_USER, Selector.SECOND));
-                }
-                else {
+                } else {
                     Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.MISSING_PARAMETERS, "/co l <params>"));
                 }
             }
-        }
-        else {
+        } else {
             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.MISSING_PARAMETERS, "/co l <params>"));
         }
     }

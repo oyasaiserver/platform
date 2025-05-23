@@ -1,5 +1,10 @@
 package net.coreprotect.listener.block;
 
+import net.coreprotect.config.Config;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.database.Lookup;
+import net.coreprotect.thread.CacheHandler;
+import net.coreprotect.utility.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,12 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-
-import net.coreprotect.config.Config;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.database.Lookup;
-import net.coreprotect.thread.CacheHandler;
-import net.coreprotect.utility.WorldUtils;
 
 public final class BlockFromToListener extends Queue implements Listener {
 
@@ -55,8 +54,7 @@ public final class BlockFromToListener extends Queue implements Listener {
                 String f = "#flow";
                 if (type.equals(Material.WATER)) {
                     f = "#water";
-                }
-                else if (type.equals(Material.LAVA)) {
+                } else if (type.equals(Material.LAVA)) {
                     f = "#lava";
                 }
 
@@ -76,16 +74,15 @@ public final class BlockFromToListener extends Queue implements Listener {
                     String cacheId = toBlock.getX() + "." + toBlock.getY() + "." + toBlock.getZ() + "." + WorldUtils.getWorldId(toBlock.getWorld().getName());
                     int timestamp = (int) (System.currentTimeMillis() / 1000L);
                     Object[] cacheData = CacheHandler.spreadCache.get(cacheId);
-                    CacheHandler.spreadCache.put(cacheId, new Object[] { timestamp, type });
+                    CacheHandler.spreadCache.put(cacheId, new Object[]{timestamp, type});
                     if (toBlockState == null && cacheData != null && cacheData[1] == type) {
                         return;
                     }
                 }
 
-                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[] { unixtimestamp, f, type });
+                CacheHandler.lookupCache.put(x + "." + y + "." + z + "." + wid, new Object[]{unixtimestamp, f, type});
                 Queue.queueBlockPlace(f, toBlock.getState(), block.getType(), toBlockState, type, -1, 0, blockData.getAsString());
-            }
-            else if (type.equals(Material.DRAGON_EGG)) {
+            } else if (type.equals(Material.DRAGON_EGG)) {
                 Location location = block.getLocation();
                 int worldId = WorldUtils.getWorldId(location.getWorld().getName());
                 int x = location.getBlockX();

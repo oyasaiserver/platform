@@ -1,13 +1,13 @@
 package net.coreprotect.patch.script;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
 import net.coreprotect.patch.Patch;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class __2_16_0 {
 
@@ -16,12 +16,10 @@ public class __2_16_0 {
             if (Config.getGlobal().MYSQL) {
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "skull MODIFY owner VARCHAR(64), DROP COLUMN type, DROP COLUMN data, DROP COLUMN rotation");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // update already ran
                 }
-            }
-            else {
+            } else {
                 statement.executeUpdate("BEGIN TRANSACTION");
                 statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "skull RENAME TO " + ConfigHandler.prefix + "skull_temp");
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + ConfigHandler.prefix + "skull (id INTEGER PRIMARY KEY ASC, time INTEGER, owner TEXT);");
@@ -42,8 +40,7 @@ public class __2_16_0 {
                     String id = resultSet.getString("id");
                     if (idList.length() == 0) {
                         idList = id;
-                    }
-                    else {
+                    } else {
                         idList = idList + ", " + id;
                     }
                 }
@@ -63,8 +60,7 @@ public class __2_16_0 {
                     resultSet.close();
                     Database.commitTransaction(statement, Config.getGlobal().MYSQL);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -97,8 +93,7 @@ public class __2_16_0 {
             }
             resultSet.close();
             Database.commitTransaction(statement, Config.getGlobal().MYSQL);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

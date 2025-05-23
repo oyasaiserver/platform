@@ -1,11 +1,11 @@
 package net.coreprotect.command.parser;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import org.bukkit.command.CommandSender;
 
 /**
  * Parser for user-related command arguments
@@ -14,9 +14,8 @@ public class UserParser {
 
     /**
      * Parse users from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return A list of parsed users
      */
     public static List<String> parseUsers(String[] inputArguments) {
@@ -33,15 +32,12 @@ public class UserParser {
                 if (next == 2) {
                     if (argument.endsWith(",")) {
                         next = 2;
-                    }
-                    else {
+                    } else {
                         next = 0;
                     }
-                }
-                else if (argument.equals("p:") || argument.equals("user:") || argument.equals("users:") || argument.equals("u:")) {
+                } else if (argument.equals("p:") || argument.equals("user:") || argument.equals("users:") || argument.equals("u:")) {
                     next = 1;
-                }
-                else if (next == 1 || argument.startsWith("p:") || argument.startsWith("user:") || argument.startsWith("users:") || argument.startsWith("u:")) {
+                } else if (next == 1 || argument.startsWith("p:") || argument.startsWith("user:") || argument.startsWith("users:") || argument.startsWith("u:")) {
                     argument = argument.replaceAll("user:", "");
                     argument = argument.replaceAll("users:", "");
                     argument = argument.replaceAll("p:", "");
@@ -53,23 +49,18 @@ public class UserParser {
                         }
                         if (argument.endsWith(",")) {
                             next = 1;
-                        }
-                        else {
+                        } else {
                             next = 0;
                         }
-                    }
-                    else {
+                    } else {
                         parseUser(users, argument);
                         next = 0;
                     }
-                }
-                else if (argument.endsWith(",") || argument.endsWith(":")) {
+                } else if (argument.endsWith(",") || argument.endsWith(":")) {
                     next = 2;
-                }
-                else if (argument.contains(":")) {
+                } else if (argument.contains(":")) {
                     next = 0;
-                }
-                else {
+                } else {
                     parseUser(users, argument);
                     next = 0;
                 }
@@ -81,11 +72,9 @@ public class UserParser {
 
     /**
      * Parse excluded users from command arguments
-     * 
-     * @param player
-     *            The command sender
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param player         The command sender
+     * @param inputArguments The command arguments
      * @return A list of excluded users
      */
     public static List<String> parseExcludedUsers(CommandSender player, String[] inputArguments) {
@@ -101,8 +90,7 @@ public class UserParser {
 
                 if (argument.equals("e:") || argument.equals("exclude:")) {
                     next = 5;
-                }
-                else if (next == 5 || argument.startsWith("e:") || argument.startsWith("exclude:")) {
+                } else if (next == 5 || argument.startsWith("e:") || argument.startsWith("exclude:")) {
                     argument = argument.replaceAll("exclude:", "");
                     argument = argument.replaceAll("e:", "");
                     if (argument.contains(",")) {
@@ -115,20 +103,17 @@ public class UserParser {
                         }
                         if (argument.endsWith(",")) {
                             next = 5;
-                        }
-                        else {
+                        } else {
                             next = 0;
                         }
-                    }
-                    else {
+                    } else {
                         boolean isBlock = MaterialParser.isBlockOrEntity(argument);
                         if (!isBlock) {
                             excluded.add(argument);
                         }
                         next = 0;
                     }
-                }
-                else {
+                } else {
                     next = 0;
                 }
             }
@@ -139,11 +124,9 @@ public class UserParser {
 
     /**
      * Process a user string and add it to the users list if valid
-     * 
-     * @param users
-     *            The list to add the user to
-     * @param user
-     *            The user string to process
+     *
+     * @param users The list to add the user to
+     * @param user  The user string to process
      */
     private static void parseUser(List<String> users, String user) {
         List<String> badUsers = Arrays.asList("n", "noisy", "v", "verbose", "#v", "#verbose", "#silent", "#preview", "#preview_cancel", "#count", "#sum");

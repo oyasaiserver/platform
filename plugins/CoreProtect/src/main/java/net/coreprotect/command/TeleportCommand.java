@@ -1,21 +1,15 @@
 package net.coreprotect.command;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.language.Phrase;
+import net.coreprotect.thread.Scheduler;
+import net.coreprotect.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.language.Phrase;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.Chat;
-import net.coreprotect.utility.ChatMessage;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.Teleport;
-import net.coreprotect.utility.Util;
-import net.coreprotect.utility.WorldUtils;
 
 public class TeleportCommand {
 
@@ -69,11 +63,9 @@ public class TeleportCommand {
 
             if (x == null) {
                 x = args[i].replaceAll("[^0-9.\\-]", "");
-            }
-            else if (z == null) {
+            } else if (z == null) {
                 z = args[i].replaceAll("[^0-9.\\-]", "");
-            }
-            else if (y == null) {
+            } else if (y == null) {
                 y = z;
                 z = args[i].replaceAll("[^0-9.\\-]", "");
             }
@@ -111,6 +103,6 @@ public class TeleportCommand {
             Teleport.performSafeTeleport(((Player) player), location, true);
         }, location);
 
-        ConfigHandler.teleportThrottle.put(player.getName(), new Object[] { false, System.currentTimeMillis() });
+        ConfigHandler.teleportThrottle.put(player.getName(), new Object[]{false, System.currentTimeMillis()});
     }
 }

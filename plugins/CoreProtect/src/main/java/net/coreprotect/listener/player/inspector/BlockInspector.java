@@ -1,15 +1,14 @@
 package net.coreprotect.listener.player.inspector;
 
-import java.sql.Connection;
-import java.sql.Statement;
-
+import net.coreprotect.database.lookup.BlockLookup;
+import net.coreprotect.utility.Chat;
 import org.bukkit.GameMode;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-import net.coreprotect.database.lookup.BlockLookup;
-import net.coreprotect.utility.Chat;
+import java.sql.Connection;
+import java.sql.Statement;
 
 public class BlockInspector extends BaseInspector {
 
@@ -28,8 +27,7 @@ public class BlockInspector extends BaseInspector {
                             for (String b : resultData.split("\n")) {
                                 Chat.sendComponent(player, b);
                             }
-                        }
-                        else if (resultData.length() > 0) {
+                        } else if (resultData.length() > 0) {
                             Chat.sendComponent(player, resultData);
                         }
 
@@ -40,14 +38,11 @@ public class BlockInspector extends BaseInspector {
                             player.sendSignChange(sign.getLocation(), sign.getLines(), sign.getColor());
                         }
                     }
-                }
-                catch (InspectionException e) {
+                } catch (InspectionException e) {
                     Chat.sendMessage(player, e.getMessage());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                finally {
+                } finally {
                     finishInspection(player);
                 }
             }
@@ -74,33 +69,27 @@ public class BlockInspector extends BaseInspector {
                                 for (String b : blockData.split("\n")) {
                                     Chat.sendComponent(player, b);
                                 }
-                            }
-                            else if (blockData.length() > 0) {
+                            } else if (blockData.length() > 0) {
                                 Chat.sendComponent(player, blockData);
                             }
-                        }
-                        else {
+                        } else {
                             String blockData = BlockLookup.performLookup(null, statement, finalBlock, player, 0, 1, 7);
                             if (blockData.contains("\n")) {
                                 for (String splitData : blockData.split("\n")) {
                                     Chat.sendComponent(player, splitData);
                                 }
-                            }
-                            else if (blockData.length() > 0) {
+                            } else if (blockData.length() > 0) {
                                 Chat.sendComponent(player, blockData);
                             }
                         }
 
                         statement.close();
                     }
-                }
-                catch (InspectionException e) {
+                } catch (InspectionException e) {
                     Chat.sendMessage(player, e.getMessage());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                finally {
+                } finally {
                     finishInspection(player);
                 }
             }

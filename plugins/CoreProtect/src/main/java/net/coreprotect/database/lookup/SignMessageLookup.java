@@ -1,15 +1,5 @@
 package net.coreprotect.database.lookup;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.language.Phrase;
@@ -18,6 +8,15 @@ import net.coreprotect.listener.channel.PluginChannelListener;
 import net.coreprotect.utility.ChatUtils;
 import net.coreprotect.utility.Color;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignMessageLookup {
 
@@ -34,14 +33,11 @@ public class SignMessageLookup {
             if (command == null) {
                 if (commandSender.hasPermission("coreprotect.co")) {
                     command = "co";
-                }
-                else if (commandSender.hasPermission("coreprotect.core")) {
+                } else if (commandSender.hasPermission("coreprotect.core")) {
                     command = "core";
-                }
-                else if (commandSender.hasPermission("coreprotect.coreprotect")) {
+                } else if (commandSender.hasPermission("coreprotect.coreprotect")) {
                     command = "coreprotect";
-                }
-                else {
+                } else {
                     command = "co";
                 }
             }
@@ -161,12 +157,10 @@ public class SignMessageLookup {
                     result.add(Color.WHITE + "-----");
                     result.add(ChatUtils.getPageNavigation(command, page, totalPages));
                 }
-            }
-            else {
+            } else {
                 if (rowMax > count && count > 0) {
                     result.add(Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_RESULTS_PAGE, Selector.SECOND));
-                }
-                else {
+                } else {
                     result.add(Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_DATA_LOCATION, Selector.FOURTH));
                 }
             }
@@ -174,8 +168,7 @@ public class SignMessageLookup {
             ConfigHandler.lookupType.put(commandSender.getName(), 8);
             ConfigHandler.lookupPage.put(commandSender.getName(), page);
             ConfigHandler.lookupCommand.put(commandSender.getName(), x + "." + y + "." + z + "." + worldId + ".8." + limit);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -1,5 +1,14 @@
 package net.coreprotect.patch;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Consumer;
+import net.coreprotect.database.Database;
+import net.coreprotect.language.Phrase;
+import net.coreprotect.utility.Chat;
+import net.coreprotect.utility.Color;
+import net.coreprotect.utility.VersionUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
@@ -12,15 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-
-import net.coreprotect.CoreProtect;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Consumer;
-import net.coreprotect.database.Database;
-import net.coreprotect.language.Phrase;
-import net.coreprotect.utility.Chat;
-import net.coreprotect.utility.Color;
-import net.coreprotect.utility.VersionUtils;
 
 public class Patch {
 
@@ -37,8 +37,7 @@ public class Patch {
         if (firstVersion != null) {
             if ((firstVersion[0] + "." + firstVersion[1] + "." + firstVersion[2]).equals("0.0.0")) {
                 result = VersionUtils.getPluginVersion();
-            }
-            else {
+            } else {
                 result = firstVersion[1] + "." + firstVersion[2];
             }
         }
@@ -50,7 +49,7 @@ public class Patch {
     }
 
     public static Integer[] getDatabaseVersion(Connection connection, boolean lastVersion) {
-        Integer[] last_version = new Integer[] { 0, 0, 0 };
+        Integer[] last_version = new Integer[]{0, 0, 0};
         try {
             String query = "SELECT version FROM " + ConfigHandler.prefix + "version ORDER BY rowid " + (lastVersion ? "DESC" : "ASC") + " LIMIT 0, 1";
             Statement statement = connection.createStatement();
@@ -67,8 +66,7 @@ public class Patch {
                     last_version[0] = Integer.parseInt(old_version_split[0]);
                     last_version[1] = Integer.parseInt(old_version_split[1]);
                     last_version[2] = Integer.parseInt(old_version_split[2]);
-                }
-                else { // #.#
+                } else { // #.#
                     int revision = 0;
                     String parse = old_version_split[1];
                     if (parse.length() > 1) {
@@ -81,8 +79,7 @@ public class Patch {
             }
             rs.close();
             statement.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -116,14 +113,12 @@ public class Patch {
             Collections.sort(patches, (o1, o2) -> {
                 if (VersionUtils.newVersion(o1, o2)) {
                     return -1;
-                }
-                else if (VersionUtils.newVersion(o2, o1)) {
+                } else if (VersionUtils.newVersion(o2, o1)) {
                     return 1;
                 }
                 return 0;
             });
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -141,8 +136,7 @@ public class Patch {
                 Thread.sleep(500);
             }
             ConfigHandler.serverRunning = isRunning;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -169,7 +163,7 @@ public class Patch {
                 int patchMajor = Integer.parseInt(thePatch[0]);
                 int patchMinor = Integer.parseInt(thePatch[1]);
                 int patchRevision = Integer.parseInt(thePatch[2]);
-                Integer[] patchVersion = new Integer[] { patchMajor, patchMinor, patchRevision };
+                Integer[] patchVersion = new Integer[]{patchMajor, patchMinor, patchRevision};
 
                 boolean performPatch = VersionUtils.newVersion(newVersion, patchVersion);
                 if (performPatch) {
@@ -185,16 +179,14 @@ public class Patch {
                             patchMethod.setAccessible(true);
                             success = (Boolean) patchMethod.invoke(null, statement);
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     if (success) {
                         patched = true;
                         newVersion = patchVersion;
-                    }
-                    else {
+                    } else {
                         allPatches = false;
                         break;
                     }
@@ -204,8 +196,7 @@ public class Patch {
             if (allPatches) { // all patches completed
                 if (patched) { // actually performed a patch
                     result = 1;
-                }
-                else { // no patches necessary
+                } else { // no patches necessary
                     result = 0;
                 }
             }
@@ -214,14 +205,12 @@ public class Patch {
             int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
             if (result >= 0) {
                 statement.executeUpdate("INSERT INTO " + ConfigHandler.prefix + "version (time,version) VALUES ('" + unixtimestamp + "', '" + version[0] + "." + version[1] + "." + version[2] + "')");
-            }
-            else if (patched) {
+            } else if (patched) {
                 statement.executeUpdate("INSERT INTO " + ConfigHandler.prefix + "version (time,version) VALUES ('" + unixtimestamp + "', '" + newVersion[0] + "." + newVersion[1] + "." + newVersion[2] + "')");
             }
 
             statement.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -237,7 +226,7 @@ public class Patch {
 
             boolean newVersion = VersionUtils.newVersion(lastVersion, currentVersion);
             if (newVersion && lastVersion[0] > 0 && !ConfigHandler.converterRunning) {
-                Integer[] minimumVersion = new Integer[] { 2, 0, 0 };
+                Integer[] minimumVersion = new Integer[]{2, 0, 0};
                 if (VersionUtils.newVersion(lastVersion, minimumVersion)) {
                     Chat.sendConsoleMessage("§c[CoreProtect] " + Phrase.build(Phrase.PATCH_OUTDATED_1, "v" + minimumVersion[0] + "." + minimumVersion[1] + "." + minimumVersion[2]));
                     Chat.sendConsoleMessage("§c[CoreProtect] " + Phrase.build(Phrase.PATCH_OUTDATED_2));
@@ -271,8 +260,7 @@ public class Patch {
                                 }
                                 Thread.sleep(1000);
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -288,28 +276,23 @@ public class Patch {
                                 Chat.console("-----");
                                 Chat.console(Phrase.build(Phrase.PATCH_SUCCESS, "v" + CoreProtect.getInstance().getDescription().getVersion()));
                                 Chat.console("-----");
-                            }
-                            else if (finished == 0) {
+                            } else if (finished == 0) {
                                 Consumer.isPaused = false;
-                            }
-                            else if (finished == -1) {
+                            } else if (finished == -1) {
                                 processConsumer();
                                 Chat.console(Phrase.build(Phrase.PATCH_INTERRUPTED));
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
                 (new Thread(new runPatch())).start();
                 (new Thread(new patchStatus())).start();
-            }
-            else if (lastVersion[0] == 0) {
+            } else if (lastVersion[0] == 0) {
                 int unixtimestamp = (int) (System.currentTimeMillis() / 1000L);
                 statement.executeUpdate("INSERT INTO " + ConfigHandler.prefix + "version (time,version) VALUES ('" + unixtimestamp + "', '" + currentVersion[0] + "." + (ConfigHandler.EDITION_BRANCH.contains("-dev") ? (currentVersion[1] - 1) : currentVersion[1]) + "." + currentVersion[2] + "')");
-            }
-            else {
+            } else {
                 currentVersion[2] = 0;
                 lastVersion[2] = 0;
                 if (VersionUtils.newVersion(currentVersion, lastVersion)) {
@@ -317,8 +300,7 @@ public class Patch {
                     return false;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

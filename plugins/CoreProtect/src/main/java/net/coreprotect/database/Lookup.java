@@ -1,18 +1,17 @@
 package net.coreprotect.database;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import net.coreprotect.consumer.Consumer;
+import net.coreprotect.consumer.Queue;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
 
-import net.coreprotect.consumer.Consumer;
-import net.coreprotect.consumer.Queue;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Lookup extends Queue {
 
@@ -33,8 +32,7 @@ public class Lookup extends Queue {
                 rows += count;
             }
             results.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -49,8 +47,7 @@ public class Lookup extends Queue {
         try {
             List<Object[]> lookupList = LookupRaw.performLookupRaw(statement, user, checkUuids, checkUsers, restrictList, excludeList, excludeUserList, actionList, location, radius, null, startTime, endTime, -1, -1, restrictWorld, lookup);
             newList = LookupConverter.convertRawLookup(statement, lookupList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -63,8 +60,7 @@ public class Lookup extends Queue {
         try {
             List<Object[]> lookupList = LookupRaw.performLookupRaw(statement, user, checkUuids, checkUsers, restrictList, excludeList, excludeUserList, actionList, location, radius, rowData, startTime, endTime, limitOffset, limitCount, restrictWorld, lookup);
             newList = LookupConverter.convertRawLookup(statement, lookupList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

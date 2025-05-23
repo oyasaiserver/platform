@@ -1,12 +1,5 @@
 package net.coreprotect.services;
 
-import java.io.File;
-
-import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.command.CommandHandler;
 import net.coreprotect.command.TabHandler;
@@ -21,6 +14,12 @@ import net.coreprotect.thread.NetworkHandler;
 import net.coreprotect.thread.Scheduler;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ChatUtils;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 /**
  * Service responsible for plugin initialization tasks
@@ -34,8 +33,7 @@ public class PluginInitializationService {
     /**
      * Initializes plugin components and configurations
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      * @return true if initialization was successful, false otherwise
      */
     public static boolean initializePlugin(CoreProtect plugin) {
@@ -61,8 +59,7 @@ public class PluginInitializationService {
 
             // Initialize configuration
             start = ConfigHandler.performInitialization(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -84,8 +81,7 @@ public class PluginInitializationService {
     /**
      * Registers plugin commands
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      */
     private static void registerCommands(JavaPlugin plugin) {
         plugin.getCommand("coreprotect").setExecutor(CommandHandler.getInstance());
@@ -109,8 +105,7 @@ public class PluginInitializationService {
     /**
      * Displays startup messages in the console
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      */
     private static void displayStartupMessages(JavaPlugin plugin) {
         PluginDescriptionFile pluginDescription = plugin.getDescription();
@@ -118,8 +113,7 @@ public class PluginInitializationService {
 
         if (Config.getGlobal().MYSQL) {
             Chat.console(Phrase.build(Phrase.USING_MYSQL));
-        }
-        else {
+        } else {
             Chat.console(Phrase.build(Phrase.USING_SQLITE));
         }
 
@@ -132,8 +126,7 @@ public class PluginInitializationService {
     /**
      * Starts background services
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      */
     private static void startBackgroundServices(CoreProtect plugin) {
         // Start network handler
@@ -141,8 +134,7 @@ public class PluginInitializationService {
             try {
                 Thread networkHandler = new Thread(new NetworkHandler(true, true));
                 networkHandler.start();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }, 0);
@@ -158,14 +150,12 @@ public class PluginInitializationService {
     /**
      * Enables metrics reporting
      *
-     * @param plugin
-     *            The CoreProtect plugin instance
+     * @param plugin The CoreProtect plugin instance
      */
     private static void enableMetrics(JavaPlugin plugin) {
         try {
             new Metrics(plugin, 2876);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Failed to connect to bStats server or something else went wrong
         }
     }

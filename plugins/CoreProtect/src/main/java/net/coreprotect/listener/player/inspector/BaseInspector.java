@@ -1,13 +1,12 @@
 package net.coreprotect.listener.player.inspector;
 
-import java.sql.Connection;
-
-import org.bukkit.entity.Player;
-
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.utility.Color;
+import org.bukkit.entity.Player;
+
+import java.sql.Connection;
 
 public abstract class BaseInspector {
 
@@ -29,7 +28,7 @@ public abstract class BaseInspector {
     }
 
     protected Connection getDatabaseConnection(Player player) throws Exception {
-        ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { true, System.currentTimeMillis() });
+        ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{true, System.currentTimeMillis()});
 
         Connection connection = Database.getConnection(true);
         if (connection == null) {
@@ -40,7 +39,7 @@ public abstract class BaseInspector {
     }
 
     protected void finishInspection(Player player) {
-        ConfigHandler.lookupThrottle.put(player.getName(), new Object[] { false, System.currentTimeMillis() });
+        ConfigHandler.lookupThrottle.put(player.getName(), new Object[]{false, System.currentTimeMillis()});
     }
 
     public static class InspectionException extends Exception {

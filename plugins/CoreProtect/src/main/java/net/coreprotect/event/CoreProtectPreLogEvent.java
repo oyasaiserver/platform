@@ -15,8 +15,20 @@ public class CoreProtectPreLogEvent extends Event implements Cancellable {
         this.user = user;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public String getUser() {
         return user;
+    }
+
+    public void setUser(String newUser) {
+        if (newUser == null || newUser.isEmpty()) {
+            throw new IllegalArgumentException("Invalid user");
+        }
+
+        this.user = newUser;
     }
 
     @Override
@@ -29,20 +41,8 @@ public class CoreProtectPreLogEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
-    public void setUser(String newUser) {
-        if (newUser == null || newUser.isEmpty()) {
-            throw new IllegalArgumentException("Invalid user");
-        }
-
-        this.user = newUser;
-    }
-
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

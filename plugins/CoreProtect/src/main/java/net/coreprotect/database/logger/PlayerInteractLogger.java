@@ -1,12 +1,5 @@
 package net.coreprotect.database.logger;
 
-import java.sql.PreparedStatement;
-import java.util.Locale;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
@@ -15,6 +8,12 @@ import net.coreprotect.database.statement.UserStatement;
 import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+
+import java.sql.PreparedStatement;
+import java.util.Locale;
 
 public class PlayerInteractLogger {
 
@@ -46,8 +45,7 @@ public class PlayerInteractLogger {
             int z = block.getZ();
             int data = 0;
             BlockStatement.insert(preparedStmt, batchCount, time, userId, wid, x, y, z, type, data, null, null, 2, 0);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

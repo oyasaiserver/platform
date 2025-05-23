@@ -1,7 +1,10 @@
 package net.coreprotect.paper.listener;
 
-import java.util.concurrent.ConcurrentHashMap;
-
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.listener.player.InventoryChangeListener;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -13,19 +16,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import io.papermc.paper.event.block.BlockPreDispenseEvent;
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.listener.player.InventoryChangeListener;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class BlockPreDispenseListener extends Queue implements Listener {
 
-    public static boolean useBlockPreDispenseEvent = true;
-    public static boolean useForDroppers = false;
-
     // Maximum time to keep entries in the cache (in milliseconds)
     private static final long CACHE_EXPIRY_TIME = 5000; // 5 seconds
+    public static boolean useBlockPreDispenseEvent = true;
+    public static boolean useForDroppers = false;
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPreDispense(BlockPreDispenseEvent event) {
@@ -57,8 +55,7 @@ public final class BlockPreDispenseListener extends Queue implements Listener {
             if (item.hasItemMeta()) {
                 try {
                     eventKey += ":" + item.getItemMeta().hashCode();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // If we can't get metadata hash, just use the basic key
                 }
             }
@@ -82,7 +79,7 @@ public final class BlockPreDispenseListener extends Queue implements Listener {
             ConfigHandler.dispenserNoChange.remove(locationKey);
 
             // Store the event details for ContainerLogger to use
-            ConfigHandler.dispenserPending.put(locationKey, new Object[] { eventKey, // The detailed event key
+            ConfigHandler.dispenserPending.put(locationKey, new Object[]{eventKey, // The detailed event key
                     currentTime, // Timestamp
                     event.getSlot(), // Slot
                     item.clone() // Item (cloned to prevent modification)

@@ -1,23 +1,5 @@
 package net.coreprotect.database.rollback;
 
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import net.coreprotect.CoreProtect;
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.Config;
@@ -35,6 +17,16 @@ import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.Color;
 import net.coreprotect.utility.DatabaseUtils;
 import net.coreprotect.utility.WorldUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.sql.Statement;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class Rollback extends RollbackUtil {
 
@@ -192,25 +184,22 @@ public class Rollback extends RollbackUtil {
                         int table = (Integer) data[14];
                         if (table == 2) { // item
                             inventoryList.add(data);
-                        }
-                        else if (table == 1) { // container
+                        } else if (table == 1) { // container
                             containerList.add(data);
-                        }
-                        else { // block
+                        } else { // block
                             blockList.add(data);
                         }
                     }
                     Queue.queueRollbackUpdate(userString, location, inventoryList, Process.INVENTORY_ROLLBACK_UPDATE, rollbackType);
                     Queue.queueRollbackUpdate(userString, location, containerList, Process.INVENTORY_CONTAINER_ROLLBACK_UPDATE, rollbackType);
                     Queue.queueRollbackUpdate(userString, location, blockList, Process.BLOCK_INVENTORY_ROLLBACK_UPDATE, rollbackType);
-                }
-                else {
+                } else {
                     Queue.queueRollbackUpdate(userString, location, lookupList, Process.ROLLBACK_UPDATE, rollbackType);
                     Queue.queueRollbackUpdate(userString, location, itemList, Process.CONTAINER_ROLLBACK_UPDATE, rollbackType);
                 }
             }
 
-            ConfigHandler.rollbackHash.put(userString, new int[] { 0, 0, 0, 0, 0 });
+            ConfigHandler.rollbackHash.put(userString, new int[]{0, 0, 0, 0, 0});
 
             final String finalUserString = userString;
             for (Entry<Long, Integer> entry : DatabaseUtils.entriesSortedByValues(chunkList)) {
@@ -246,7 +235,7 @@ public class Rollback extends RollbackUtil {
                     worldMap.put(rollbackWorldId, bukkitRollbackWorld);
                 }
 
-                ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, blockCount, entityCount, 0, scannedWorldData });
+                ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, blockCount, entityCount, 0, scannedWorldData});
                 for (Entry<Integer, World> rollbackWorlds : worldMap.entrySet()) {
                     Integer rollbackWorldId = rollbackWorlds.getKey();
                     World bukkitRollbackWorld = rollbackWorlds.getValue();
@@ -273,8 +262,7 @@ public class Rollback extends RollbackUtil {
                         // Not actually changing blocks, so less intensive.
                         sleepTime = sleepTime + 1;
                         Thread.sleep(1);
-                    }
-                    else {
+                    } else {
                         sleepTime = sleepTime + 5;
                         Thread.sleep(5);
                     }
@@ -298,7 +286,7 @@ public class Rollback extends RollbackUtil {
                 itemCount = rollbackHashData[0];
                 blockCount = rollbackHashData[1];
                 entityCount = rollbackHashData[2];
-                ConfigHandler.rollbackHash.put(finalUserString, new int[] { itemCount, blockCount, entityCount, 0, 0 });
+                ConfigHandler.rollbackHash.put(finalUserString, new int[]{itemCount, blockCount, entityCount, 0, 0});
 
                 if (verbose && user != null && preview == 0 && !actionList.contains(11)) {
                     Integer chunks = chunkList.size();
@@ -323,8 +311,7 @@ public class Rollback extends RollbackUtil {
 
             list = LookupConverter.convertRawLookup(statement, lookupList);
             return list;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

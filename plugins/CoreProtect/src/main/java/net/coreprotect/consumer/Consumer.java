@@ -1,29 +1,21 @@
 package net.coreprotect.consumer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import net.coreprotect.CoreProtect;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.process.Process;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.CoreProtect;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.process.Process;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Consumer extends Process implements Runnable, Thread.UncaughtExceptionHandler {
 
-    private static Thread consumerThread = null;
     public static volatile int currentConsumer = 0;
     public static volatile boolean isPaused = false;
     public static volatile boolean transacting = false;
     public static volatile boolean interrupt = false;
-    protected static volatile boolean pausedSuccess = false;
-
     public static ConcurrentHashMap<Integer, ArrayList<Object[]>> consumer = new ConcurrentHashMap<>(4, 0.75f, 2);
     // public static ConcurrentHashMap<Integer, Integer[]> consumer_id = new ConcurrentHashMap<>();
     public static Map<Integer, Integer[]> consumer_id = Collections.synchronizedMap(new HashMap<>());
@@ -42,22 +34,22 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
     public static ConcurrentHashMap<Integer, Map<Integer, List<Object[]>>> consumerObjectArrayList = new ConcurrentHashMap<>(4, 0.75f, 2);
     @Deprecated
     public static ConcurrentHashMap<Integer, Map<Integer, List<Object>>> consumerObjectList = new ConcurrentHashMap<>(4, 0.75f, 2);
-
     public static ConcurrentHashMap<Integer, Map<Integer, Object>> consumerObjects = new ConcurrentHashMap<>(4, 0.75f, 2);
+    protected static volatile boolean pausedSuccess = false;
+    private static Thread consumerThread = null;
     // ^merge maps into single object based map
 
     private static void errorDelay() {
         try {
             Thread.sleep(30000); // 30 seconds
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     protected static int newConsumerId(int consumer) {
         int id = Consumer.consumer_id.get(consumer)[0];
-        Consumer.consumer_id.put(consumer, new Integer[] { id + 1, 1 });
+        Consumer.consumer_id.put(consumer, new Integer[]{id + 1, 1});
         return id;
     }
 
@@ -72,8 +64,8 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
     public static void initialize() {
         Consumer.consumer.put(0, new ArrayList<>());
         Consumer.consumer.put(1, new ArrayList<>());
-        Consumer.consumer_id.put(0, new Integer[] { 0, 0 });
-        Consumer.consumer_id.put(1, new Integer[] { 0, 0 });
+        Consumer.consumer_id.put(0, new Integer[]{0, 0});
+        Consumer.consumer_id.put(1, new Integer[]{0, 0});
         Consumer.consumerUsers.put(0, new HashMap<>());
         Consumer.consumerUsers.put(1, new HashMap<>());
         Consumer.consumerObjects.put(0, new HashMap<>());
@@ -104,11 +96,18 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
                 pausedSuccess = true;
                 Thread.sleep(100);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         pausedSuccess = false;
+    }
+
+    public static void startConsumer() {
+        if (!isRunning()) {
+            consumerThread = new Thread(new Consumer());
+            consumerThread.setUncaughtExceptionHandler(new Consumer());
+            consumerThread.start();
+        }
     }
 
     @Override
@@ -123,16 +122,14 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
                 int process_id = 0;
                 if (currentConsumer == 0) {
                     currentConsumer = 1;
-                }
-                else {
+                } else {
                     process_id = 1;
                     currentConsumer = 0;
                 }
                 Thread.sleep(500);
                 pauseConsumer(process_id);
                 Process.processConsumer(process_id, lastRun);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 errorDelay();
             }
@@ -143,13 +140,5 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
     public void uncaughtException(Thread thread, Throwable e) {
         e.printStackTrace();
         Bukkit.getPluginManager().disablePlugin(CoreProtect.getInstance());
-    }
-
-    public static void startConsumer() {
-        if (!isRunning()) {
-            consumerThread = new Thread(new Consumer());
-            consumerThread.setUncaughtExceptionHandler(new Consumer());
-            consumerThread.start();
-        }
     }
 }

@@ -1,11 +1,11 @@
 package net.coreprotect.utility;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
+import net.coreprotect.CoreProtect;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.language.Phrase;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.paper.PaperAdapter;
+import net.coreprotect.thread.Scheduler;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,21 +13,18 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
-import net.coreprotect.CoreProtect;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.language.Phrase;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.paper.PaperAdapter;
-import net.coreprotect.thread.Scheduler;
-import net.coreprotect.utility.BlockUtils;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Teleport {
+
+    public static ConcurrentHashMap<Location, BlockData> revertBlocks = new ConcurrentHashMap<>();
 
     private Teleport() {
         throw new IllegalStateException("Utility class");
     }
-
-    public static ConcurrentHashMap<Location, BlockData> revertBlocks = new ConcurrentHashMap<>();
 
     public static void performSafeTeleport(Player player, Location location, boolean enforceTeleport) {
         try {
@@ -57,8 +54,7 @@ public class Teleport {
                 if (BlockUtils.passableBlock(block1) && BlockUtils.passableBlock(block2)) {
                     if (unsafeBlocks.contains(type1)) {
                         placeSafe = true;
-                    }
-                    else {
+                    } else {
                         safeBlock = true;
                         if (placeSafe && player.getGameMode() == GameMode.SURVIVAL) {
                             int below = checkY - 1;
@@ -71,8 +67,7 @@ public class Teleport {
                                 revertBlocks.put(revertLocation, revertBlockData);
                                 if (!ConfigHandler.isFolia) {
                                     block1.setType(Material.BARRIER);
-                                }
-                                else {
+                                } else {
                                     block1.setType(Material.DIRT);
                                 }
                                 checkY++;
@@ -103,8 +98,7 @@ public class Teleport {
                     location.setY(checkY);
                     if (ConfigHandler.isFolia) {
                         PaperAdapter.ADAPTER.teleportAsync(player, location);
-                    }
-                    else {
+                    } else {
                         player.teleport(location);
                     }
 
@@ -113,8 +107,7 @@ public class Teleport {
                         if (location.getY() >= (oldY + 1.00)) {
                             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.TELEPORTED_SAFETY));
                         }
-                    }
-                    else {
+                    } else {
                         Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.TELEPORTED, "x" + playerX + "/y" + checkY + "/z" + playerZ + "/" + location.getWorld().getName()));
                     }
                     if (alert) {
@@ -124,8 +117,7 @@ public class Teleport {
 
                 checkY++;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

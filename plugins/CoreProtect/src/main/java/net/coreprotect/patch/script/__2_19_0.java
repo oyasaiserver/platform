@@ -1,14 +1,5 @@
 package net.coreprotect.patch.script;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.Tag;
-
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.database.Database;
@@ -17,6 +8,14 @@ import net.coreprotect.language.Selector;
 import net.coreprotect.patch.Patch;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.MaterialUtils;
+import org.bukkit.Material;
+import org.bukkit.Tag;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class __2_19_0 {
 
@@ -27,8 +26,7 @@ public class __2_19_0 {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign ADD COLUMN action int");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign DROP INDEX wid");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign ADD INDEX(wid,x,z,time), ADD INDEX(user,time), ADD INDEX(time)");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.FIRST, Selector.FIRST));
                 }
 
@@ -38,38 +36,32 @@ public class __2_19_0 {
 
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "chat ADD COLUMN wid int, ADD COLUMN x int, ADD COLUMN y int, ADD COLUMN z int, ADD INDEX(wid,x,z,time)");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "chat", Selector.FIRST, Selector.FIRST));
                 }
 
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "command ADD COLUMN wid int, ADD COLUMN x int, ADD COLUMN y int, ADD COLUMN z int, ADD INDEX(wid,x,z,time)");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "command", Selector.FIRST, Selector.FIRST));
                 }
-            }
-            else {
+            } else {
                 /* Update co_sign table */
                 try {
                     statement.executeUpdate("DROP INDEX IF EXISTS sign_index;");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.SECOND, Selector.THIRD));
                 }
                 try {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "sign ADD COLUMN action INTEGER;");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.FIRST, Selector.FIRST));
                 }
                 try {
                     statement.executeUpdate("CREATE INDEX IF NOT EXISTS sign_index ON " + ConfigHandler.prefix + "sign(wid,x,z,time);");
                     statement.executeUpdate("CREATE INDEX IF NOT EXISTS sign_user_index ON " + ConfigHandler.prefix + "sign(user,time);");
                     statement.executeUpdate("CREATE INDEX IF NOT EXISTS sign_time_index ON " + ConfigHandler.prefix + "sign(time);");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "sign", Selector.SECOND, Selector.SECOND));
                 }
 
@@ -83,14 +75,12 @@ public class __2_19_0 {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "chat ADD COLUMN x INTEGER;");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "chat ADD COLUMN y INTEGER;");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "chat ADD COLUMN z INTEGER;");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "chat", Selector.FIRST, Selector.FIRST));
                 }
                 try {
                     statement.executeUpdate("CREATE INDEX IF NOT EXISTS chat_wid_index ON " + ConfigHandler.prefix + "chat(wid,x,z,time);");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "chat", Selector.SECOND, Selector.SECOND));
                 }
 
@@ -100,14 +90,12 @@ public class __2_19_0 {
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "command ADD COLUMN x INTEGER;");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "command ADD COLUMN y INTEGER;");
                     statement.executeUpdate("ALTER TABLE " + ConfigHandler.prefix + "command ADD COLUMN z INTEGER;");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "command", Selector.FIRST, Selector.FIRST));
                 }
                 try {
                     statement.executeUpdate("CREATE INDEX IF NOT EXISTS command_wid_index ON " + ConfigHandler.prefix + "command(wid,x,z,time);");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Chat.console(Phrase.build(Phrase.PATCH_SKIP_UPDATE, ConfigHandler.prefix + "command", Selector.SECOND, Selector.SECOND));
                 }
             }
@@ -132,8 +120,7 @@ public class __2_19_0 {
             for (Integer id : signList) {
                 if (signData.length() == 0) {
                     signData = signData.append(id);
-                }
-                else {
+                } else {
                     signData.append(",").append(id);
                 }
             }
@@ -167,8 +154,7 @@ public class __2_19_0 {
             preparedStatementUpdate.close();
 
             Database.commitTransaction(statement, Config.getGlobal().MYSQL);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

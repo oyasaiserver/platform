@@ -1,7 +1,9 @@
 package net.coreprotect.utility.entity;
 
-import java.util.Locale;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.model.BlockGroup;
+import net.coreprotect.utility.BlockUtils;
+import net.coreprotect.utility.MaterialUtils;
 import org.bukkit.Art;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,15 +11,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Painting;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.model.BlockGroup;
-import net.coreprotect.utility.BlockUtils;
-import net.coreprotect.utility.MaterialUtils;
+import java.util.Locale;
 
 public class HangingUtil {
 
@@ -25,7 +23,7 @@ public class HangingUtil {
         throw new IllegalStateException("Utility class");
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void spawnHanging(final BlockState blockstate, final Material rowType, final String hangingData, final int rowData) {
         try {
             Block block = blockstate.getBlock();
@@ -37,8 +35,7 @@ public class HangingUtil {
             if (hangingData != null && !hangingData.contains(":") && hangingData.contains("=")) {
                 try {
                     hangingFace = BlockFace.valueOf(hangingData.split("=")[1].toUpperCase(Locale.ROOT));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -66,34 +63,27 @@ public class HangingUtil {
                 if (!BlockGroup.NON_ATTACHABLE.contains(c1.getType())) {
                     faceSet = BlockFace.WEST;
                     block = c1;
-                }
-                else if (!BlockGroup.NON_ATTACHABLE.contains(c2.getType())) {
+                } else if (!BlockGroup.NON_ATTACHABLE.contains(c2.getType())) {
                     faceSet = BlockFace.EAST;
                     block = c2;
-                }
-                else if (!BlockGroup.NON_ATTACHABLE.contains(c3.getType())) {
+                } else if (!BlockGroup.NON_ATTACHABLE.contains(c3.getType())) {
                     faceSet = BlockFace.NORTH;
                     block = c3;
-                }
-                else if (!BlockGroup.NON_ATTACHABLE.contains(c4.getType())) {
+                } else if (!BlockGroup.NON_ATTACHABLE.contains(c4.getType())) {
                     faceSet = BlockFace.SOUTH;
                     block = c4;
                 }
 
                 if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.EAST)))) {
                     face = BlockFace.EAST;
-                }
-                else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.NORTH)))) {
+                } else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.NORTH)))) {
                     face = BlockFace.NORTH;
-                }
-                else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.WEST)))) {
+                } else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.WEST)))) {
                     face = BlockFace.WEST;
-                }
-                else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.SOUTH)))) {
+                } else if (!BlockUtils.solidBlock(BlockUtils.getType(block.getRelative(BlockFace.SOUTH)))) {
                     face = BlockFace.SOUTH;
                 }
-            }
-            else {
+            } else {
                 faceSet = hangingFace;
                 face = hangingFace;
             }
@@ -116,8 +106,7 @@ public class HangingUtil {
                         if (width > 1) {
                             if (faceSet.equals(BlockFace.WEST)) {
                                 paintingZ--;
-                            }
-                            else if (faceSet.equals(BlockFace.SOUTH)) {
+                            } else if (faceSet.equals(BlockFace.SOUTH)) {
                                 paintingX--;
                             }
                         }
@@ -129,16 +118,14 @@ public class HangingUtil {
                     Painting hanging = null;
                     try {
                         hanging = block.getWorld().spawn(spawnBlock.getLocation(), Painting.class);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                     if (hanging != null) {
                         hanging.teleport(block.getWorld().getBlockAt(paintingX, paintingY, paintingZ).getLocation());
                         hanging.setFacingDirection(faceSet, true);
                         hanging.setArt(painting, true);
                     }
-                }
-                else if (BukkitAdapter.ADAPTER.isItemFrame(rowType)) {
+                } else if (BukkitAdapter.ADAPTER.isItemFrame(rowType)) {
                     try {
                         Block spawnBlock = hangingFace != null ? block : block.getRelative(face);
                         if (hangingFace == null) {
@@ -156,13 +143,11 @@ public class HangingUtil {
                                 hanging.setItem(istack);
                             }
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -173,8 +158,7 @@ public class HangingUtil {
             if (hangingData != null && !hangingData.contains(":") && hangingData.contains("=")) {
                 try {
                     hangingFace = BlockFace.valueOf(hangingData.split("=")[1].toUpperCase(Locale.ROOT));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -189,8 +173,7 @@ public class HangingUtil {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

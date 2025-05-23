@@ -1,20 +1,14 @@
 package net.coreprotect.command;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import net.coreprotect.command.parser.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import net.coreprotect.command.parser.ActionParser;
-import net.coreprotect.command.parser.LocationParser;
-import net.coreprotect.command.parser.MaterialParser;
-import net.coreprotect.command.parser.TimeParser;
-import net.coreprotect.command.parser.UserParser;
-import net.coreprotect.command.parser.WorldParser;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Main parser class for CoreProtect commands.
@@ -24,9 +18,8 @@ public class CommandParser {
 
     /**
      * Parse page number from command arguments
-     * 
-     * @param argumentArray
-     *            The command arguments
+     *
+     * @param argumentArray The command arguments
      * @return The modified argument array
      */
     protected static String[] parsePage(String[] argumentArray) {
@@ -35,9 +28,8 @@ public class CommandParser {
 
     /**
      * Parse action type from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return A list of action type integers
      */
     protected static List<Integer> parseAction(String[] inputArguments) {
@@ -46,13 +38,10 @@ public class CommandParser {
 
     /**
      * Parse coordinates from command arguments
-     * 
-     * @param location
-     *            The base location
-     * @param inputArguments
-     *            The command arguments
-     * @param worldId
-     *            The world ID
+     *
+     * @param location       The base location
+     * @param inputArguments The command arguments
+     * @param worldId        The world ID
      * @return The parsed location
      */
     protected static Location parseCoordinates(Location location, String[] inputArguments, int worldId) {
@@ -61,9 +50,8 @@ public class CommandParser {
 
     /**
      * Parse count flag from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return true if the count flag is present
      */
     protected static boolean parseCount(String[] inputArguments) {
@@ -72,13 +60,10 @@ public class CommandParser {
 
     /**
      * Parse excluded materials and entities from command arguments
-     * 
-     * @param player
-     *            The command sender
-     * @param inputArguments
-     *            The command arguments
-     * @param argAction
-     *            The list of actions to include
+     *
+     * @param player         The command sender
+     * @param inputArguments The command arguments
+     * @param argAction      The list of actions to include
      * @return A map of excluded materials and entities
      */
     protected static Map<Object, Boolean> parseExcluded(CommandSender player, String[] inputArguments, List<Integer> argAction) {
@@ -87,11 +72,9 @@ public class CommandParser {
 
     /**
      * Parse excluded users from command arguments
-     * 
-     * @param player
-     *            The command sender
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param player         The command sender
+     * @param inputArguments The command arguments
      * @return A list of excluded users
      */
     protected static List<String> parseExcludedUsers(CommandSender player, String[] inputArguments) {
@@ -100,9 +83,8 @@ public class CommandParser {
 
     /**
      * Parse force global flag from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return true if global search should be forced
      */
     protected static boolean parseForceGlobal(String[] inputArguments) {
@@ -111,11 +93,9 @@ public class CommandParser {
 
     /**
      * Parse location from command sender and command arguments
-     * 
-     * @param user
-     *            The command sender
-     * @param argumentArray
-     *            The command arguments
+     *
+     * @param user          The command sender
+     * @param argumentArray The command arguments
      * @return The parsed location
      */
     protected static Location parseLocation(CommandSender user, String[] argumentArray) {
@@ -124,9 +104,8 @@ public class CommandParser {
 
     /**
      * Parse noisy/verbose flag from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return 1 if noisy/verbose mode is enabled, 0 otherwise
      */
     protected static int parseNoisy(String[] inputArguments) {
@@ -135,9 +114,8 @@ public class CommandParser {
 
     /**
      * Parse preview flag from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return 1 for preview, 2 for preview cancel, 0 otherwise
      */
     protected static int parsePreview(String[] inputArguments) {
@@ -146,13 +124,10 @@ public class CommandParser {
 
     /**
      * Parse radius from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
-     * @param user
-     *            The command sender
-     * @param location
-     *            The base location
+     *
+     * @param inputArguments The command arguments
+     * @param user           The command sender
+     * @param location       The base location
      * @return The parsed radius
      */
     protected static Integer[] parseRadius(String[] inputArguments, CommandSender user, Location location) {
@@ -173,13 +148,10 @@ public class CommandParser {
 
     /**
      * Parse restricted materials and entities from command arguments
-     * 
-     * @param player
-     *            The command sender
-     * @param inputArguments
-     *            The command arguments
-     * @param argAction
-     *            The list of actions to include
+     *
+     * @param player         The command sender
+     * @param inputArguments The command arguments
+     * @param argAction      The list of actions to include
      * @return A list of restricted materials and entities
      */
     protected static List<Object> parseRestricted(CommandSender player, String[] inputArguments, List<Integer> argAction) {
@@ -188,9 +160,8 @@ public class CommandParser {
 
     /**
      * Parse time from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return An array of two longs - [time1, time2]
      */
     protected static long[] parseTime(String[] inputArguments) {
@@ -199,9 +170,8 @@ public class CommandParser {
 
     /**
      * Parse time string from command arguments for display
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return A formatted time string
      */
     protected static String parseTimeString(String[] inputArguments) {
@@ -210,9 +180,8 @@ public class CommandParser {
 
     /**
      * Parse rows from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return The number of rows
      */
     protected static int parseRows(String[] inputArguments) {
@@ -221,13 +190,10 @@ public class CommandParser {
 
     /**
      * Parse world from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
-     * @param processWorldEdit
-     *            Whether to process WorldEdit arguments
-     * @param requireLoaded
-     *            Whether the world must be loaded
+     *
+     * @param inputArguments   The command arguments
+     * @param processWorldEdit Whether to process WorldEdit arguments
+     * @param requireLoaded    Whether the world must be loaded
      * @return The world ID
      */
     protected static int parseWorld(String[] inputArguments, boolean processWorldEdit, boolean requireLoaded) {
@@ -236,9 +202,8 @@ public class CommandParser {
 
     /**
      * Parse whether to use WorldEdit for radius
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return true if WorldEdit should be used
      */
     protected static boolean parseWorldEdit(String[] inputArguments) {
@@ -247,11 +212,9 @@ public class CommandParser {
 
     /**
      * Parse world name from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
-     * @param processWorldEdit
-     *            Whether to process WorldEdit arguments
+     *
+     * @param inputArguments   The command arguments
+     * @param processWorldEdit Whether to process WorldEdit arguments
      * @return The world name
      */
     protected static String parseWorldName(String[] inputArguments, boolean processWorldEdit) {
@@ -260,7 +223,7 @@ public class CommandParser {
 
     /**
      * Get a map of block tags and their associated materials
-     * 
+     *
      * @return A map of block tags and their associated materials
      */
     protected static Map<String, Set<Material>> getTags() {
@@ -269,9 +232,8 @@ public class CommandParser {
 
     /**
      * Check if an argument matches a block tag
-     * 
-     * @param argument
-     *            The argument to check
+     *
+     * @param argument The argument to check
      * @return true if the argument matches a block tag
      */
     protected static boolean checkTags(String argument) {
@@ -280,11 +242,9 @@ public class CommandParser {
 
     /**
      * Check if an argument matches a block tag and add the associated materials to the list
-     * 
-     * @param argument
-     *            The argument to check
-     * @param list
-     *            The list to add the associated materials to
+     *
+     * @param argument The argument to check
+     * @param list     The list to add the associated materials to
      * @return true if the argument matches a block tag
      */
     protected static boolean checkTags(String argument, Map<Object, Boolean> list) {
@@ -293,11 +253,9 @@ public class CommandParser {
 
     /**
      * Check if an argument matches a block tag and add the associated materials to the list
-     * 
-     * @param argument
-     *            The argument to check
-     * @param list
-     *            The list to add the associated materials to
+     *
+     * @param argument The argument to check
+     * @param list     The list to add the associated materials to
      * @return true if the argument matches a block tag
      */
     protected static boolean checkTags(String argument, List<Object> list) {
@@ -306,9 +264,8 @@ public class CommandParser {
 
     /**
      * Parse users from command arguments
-     * 
-     * @param inputArguments
-     *            The command arguments
+     *
+     * @param inputArguments The command arguments
      * @return A list of parsed users
      */
     protected static List<String> parseUsers(String[] inputArguments) {
@@ -317,9 +274,8 @@ public class CommandParser {
 
     /**
      * Helper method for formatting BigDecimal values
-     * 
-     * @param input
-     *            The BigDecimal value to format
+     *
+     * @param input The BigDecimal value to format
      * @return The formatted string
      */
     private static String timeString(BigDecimal input) {

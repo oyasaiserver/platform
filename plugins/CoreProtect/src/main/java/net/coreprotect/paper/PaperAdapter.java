@@ -1,7 +1,7 @@
 package net.coreprotect.paper;
 
-import java.util.UUID;
-
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -11,12 +11,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.config.ConfigHandler;
+import java.util.UUID;
 
 public class PaperAdapter implements PaperInterface {
 
-    public static PaperInterface ADAPTER;
     public static final int PAPER_UNAVAILABLE = 0;
     public static final int PAPER_V1_13 = BukkitAdapter.BUKKIT_V1_13;
     public static final int PAPER_V1_14 = BukkitAdapter.BUKKIT_V1_14;
@@ -27,6 +25,7 @@ public class PaperAdapter implements PaperInterface {
     public static final int PAPER_V1_19 = BukkitAdapter.BUKKIT_V1_19;
     public static final int PAPER_V1_20 = BukkitAdapter.BUKKIT_V1_20;
     public static final int PAPER_V1_21 = BukkitAdapter.BUKKIT_V1_21;
+    public static PaperInterface ADAPTER;
 
     public static void loadAdapter() {
         int paperVersion = ConfigHandler.SERVER_VERSION;
