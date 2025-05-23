@@ -6,44 +6,43 @@ import org.bukkit.event.HandlerList;
 
 public class CoreProtectPreLogEvent extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
-    private String user;
+  private static final HandlerList handlers = new HandlerList();
+  private boolean cancelled = false;
+  private String user;
 
-    public CoreProtectPreLogEvent(String user) {
-        super(true); // async
-        this.user = user;
+  public CoreProtectPreLogEvent(String user) {
+    super(true); // async
+    this.user = user;
+  }
+
+  public static HandlerList getHandlerList() {
+    return handlers;
+  }
+
+  public String getUser() {
+    return user;
+  }
+
+  public void setUser(String newUser) {
+    if (newUser == null || newUser.isEmpty()) {
+      throw new IllegalArgumentException("Invalid user");
     }
 
-    public String getUser() {
-        return user;
-    }
+    this.user = newUser;
+  }
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+  @Override
+  public boolean isCancelled() {
+    return cancelled;
+  }
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
-    }
+  @Override
+  public void setCancelled(boolean cancel) {
+    this.cancelled = cancel;
+  }
 
-    public void setUser(String newUser) {
-        if (newUser == null || newUser.isEmpty()) {
-            throw new IllegalArgumentException("Invalid user");
-        }
-
-        this.user = newUser;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+  @Override
+  public HandlerList getHandlers() {
+    return handlers;
+  }
 }

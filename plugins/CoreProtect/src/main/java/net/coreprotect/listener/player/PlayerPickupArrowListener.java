@@ -1,5 +1,8 @@
 package net.coreprotect.listener.player;
 
+import net.coreprotect.bukkit.BukkitAdapter;
+import net.coreprotect.consumer.Queue;
+import net.coreprotect.listener.entity.EntityPickupItemListener;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
@@ -9,34 +12,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.bukkit.BukkitAdapter;
-import net.coreprotect.consumer.Queue;
-import net.coreprotect.listener.entity.EntityPickupItemListener;
-
 public final class PlayerPickupArrowListener extends Queue implements Listener {
 
-    public static ItemStack getArrowType(AbstractArrow arrow) {
-        ItemStack itemStack = null;
-        switch (arrow.getType()) {
-            case SPECTRAL_ARROW:
-                itemStack = new ItemStack(Material.SPECTRAL_ARROW);
-                break;
-            default:
-                itemStack = new ItemStack(Material.ARROW);
-                break;
-        }
-
-        if (arrow instanceof Arrow arrowEntity) {
-            itemStack = BukkitAdapter.ADAPTER.getArrowMeta(arrowEntity, itemStack);
-        }
-
-        return itemStack;
+  public static ItemStack getArrowType(AbstractArrow arrow) {
+    ItemStack itemStack = null;
+    switch (arrow.getType()) {
+      case SPECTRAL_ARROW:
+        itemStack = new ItemStack(Material.SPECTRAL_ARROW);
+        break;
+      default:
+        itemStack = new ItemStack(Material.ARROW);
+        break;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
-        ItemStack itemStack = getArrowType(event.getArrow());
-        EntityPickupItemListener.onItemPickup(event.getPlayer(), event.getArrow().getLocation(), itemStack);
+    if (arrow instanceof Arrow arrowEntity) {
+      itemStack = BukkitAdapter.ADAPTER.getArrowMeta(arrowEntity, itemStack);
     }
 
+    return itemStack;
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  private void onPlayerPickupArrowEvent(PlayerPickupArrowEvent event) {
+    ItemStack itemStack = getArrowType(event.getArrow());
+    EntityPickupItemListener.onItemPickup(
+        event.getPlayer(), event.getArrow().getLocation(), itemStack);
+  }
 }

@@ -1,16 +1,15 @@
 package net.coreprotect.consumer.process;
 
 import java.sql.PreparedStatement;
-
-import org.bukkit.Location;
-
 import net.coreprotect.database.logger.PlayerSessionLogger;
+import org.bukkit.Location;
 
 class PlayerLogoutProcess {
 
-    static void process(PreparedStatement preparedStmt, int batchCount, Object object, int time, String user) {
-        if (object instanceof Location location) {
-            PlayerSessionLogger.log(preparedStmt, batchCount, user, location, time, 0);
-        }
+  static void process(
+      PreparedStatement preparedStmt, int batchCount, Object object, int time, String user) {
+    if (object instanceof Location location) {
+      PlayerSessionLogger.log(preparedStmt, batchCount, user, location, time, 0);
     }
+  }
 }

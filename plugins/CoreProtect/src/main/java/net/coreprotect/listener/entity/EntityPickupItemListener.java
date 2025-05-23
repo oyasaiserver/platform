@@ -3,7 +3,9 @@ package net.coreprotect.listener.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+import net.coreprotect.config.Config;
+import net.coreprotect.config.ConfigHandler;
+import net.coreprotect.consumer.Queue;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -14,37 +16,41 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.coreprotect.config.Config;
-import net.coreprotect.config.ConfigHandler;
-import net.coreprotect.consumer.Queue;
-
 public final class EntityPickupItemListener extends Queue implements Listener {
 
-    public static void onItemPickup(Player player, Location location, ItemStack itemStack) {
-        if (itemStack == null || location == null || !Config.getConfig(location.getWorld()).ITEM_PICKUPS) {
-            return;
-        }
-
-        String loggingItemId = player.getName().toLowerCase(Locale.ROOT) + "." + location.getBlockX() + "." + location.getBlockY() + "." + location.getBlockZ();
-        int itemId = getItemId(loggingItemId);
-
-        List<ItemStack> list = ConfigHandler.itemsPickup.getOrDefault(loggingItemId, new ArrayList<>());
-        list.add(itemStack.clone());
-        ConfigHandler.itemsPickup.put(loggingItemId, list);
-
-        int time = (int) (System.currentTimeMillis() / 1000L) + 1;
-        Queue.queueItemTransaction(player.getName(), location.clone(), time, 0, itemId);
+  public static void onItemPickup(Player player, Location location, ItemStack itemStack) {
+    if (itemStack == null
+        || location == null
+        || !Config.getConfig(location.getWorld()).ITEM_PICKUPS) {
+      return;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onEntityPickupItem(EntityPickupItemEvent event) {
-        if (event.getEntityType() != EntityType.PLAYER) {
-            return;
-        }
+    String loggingItemId =
+        player.getName().toLowerCase(Locale.ROOT)
+            + "."
+            + location.getBlockX()
+            + "."
+            + location.getBlockY()
+            + "."
+            + location.getBlockZ();
+    int itemId = getItemId(loggingItemId);
 
-        Player player = (Player) event.getEntity();
-        Item item = event.getItem();
-        onItemPickup(player, item.getLocation(), item.getItemStack());
+    List<ItemStack> list = ConfigHandler.itemsPickup.getOrDefault(loggingItemId, new ArrayList<>());
+    list.add(itemStack.clone());
+    ConfigHandler.itemsPickup.put(loggingItemId, list);
+
+    int time = (int) (System.currentTimeMillis() / 1000L) + 1;
+    Queue.queueItemTransaction(player.getName(), location.clone(), time, 0, itemId);
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  private void onEntityPickupItem(EntityPickupItemEvent event) {
+    if (event.getEntityType() != EntityType.PLAYER) {
+      return;
     }
 
+    Player player = (Player) event.getEntity();
+    Item item = event.getItem();
+    onItemPickup(player, item.getLocation(), item.getItemStack());
+  }
 }

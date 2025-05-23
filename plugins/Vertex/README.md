@@ -6,3 +6,4 @@
 <p align="center">
   Plugin for Oyasai Server
 </p>
+

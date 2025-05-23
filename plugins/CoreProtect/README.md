@@ -13,13 +13,13 @@ CoreProtect is a blazing fast data logging and anti-griefing tool for Minecraft 
 
 For a detailed description of the plugin, please visit [coreprotect.net](https://coreprotect.net).
 
-| Quick Links |  |
-| --- | --- |
-| CoreProtect Discord: | [discord.gg/b4DZ4jy](https://discord.gg/b4DZ4jy) |
-| CoreProtect Patreon: | [patreon.com/coreprotect](https://www.patreon.com/coreprotect) |
-| CoreProtect Documentation: | [docs.coreprotect.net](https://docs.coreprotect.net) |
-| Downloads for MC 1.14 - 1.20: | [coreprotect.net/latest](https://coreprotect.net/latest/) |
-| Downloads for MC 1.8 - 1.12: | [coreprotect.net/legacy](https://coreprotect.net/legacy/) |
+| Quick Links                   |                                                                |
+|-------------------------------|----------------------------------------------------------------|
+| CoreProtect Discord:          | [discord.gg/b4DZ4jy](https://discord.gg/b4DZ4jy)               |
+| CoreProtect Patreon:          | [patreon.com/coreprotect](https://www.patreon.com/coreprotect) |
+| CoreProtect Documentation:    | [docs.coreprotect.net](https://docs.coreprotect.net)           |
+| Downloads for MC 1.14 - 1.20: | [coreprotect.net/latest](https://coreprotect.net/latest/)      |
+| Downloads for MC 1.8 - 1.12:  | [coreprotect.net/legacy](https://coreprotect.net/legacy/)      |
 
 bStats
 ------
@@ -27,16 +27,20 @@ bStats
 
 API
 ------
+
 ### [API Documentation](https://docs.coreprotect.net/api/)
 
 ### Dependency Information
+
 Maven
+
 ```xml
 <repository>
     <id>playpro-repo</id>
     <url>https://maven.playpro.com</url>
 </repository>
 ```
+
 ```xml
 <dependency>
     <groupId>net.coreprotect</groupId>

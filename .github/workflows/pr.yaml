@@ -1,0 +1,24 @@
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  merging-into-main:
+    name: "Merging into main"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure target branch is main
+        run: |
+          [[ "$GITHUB_BASE_REF" == main ]]
+
+  conventional-commit:
+    name: "PR title"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

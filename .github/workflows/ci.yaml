@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 env:
   PLUGIN_ARTIFACT_NAME: plugins
@@ -21,6 +22,7 @@ jobs:
           npm run typecheck
 
   build-and-upload-plugins:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,4 +36,4 @@ jobs:
         with:
           name: ${{ env.PLUGIN_ARTIFACT_NAME }}
           path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          retention-days: 2
+          retention-days: 1
