@@ -15,8 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-env
+      - uses: ./.github/actions/setup-java
       - run: ./gradlew spotlessCheck --parallel
+      - uses: ./.github/actions/setup-node
       - run: |
           npm run check
           npm run typecheck
@@ -26,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-env
+      - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |

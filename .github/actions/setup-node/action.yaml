@@ -1,14 +1,8 @@
-name: Setup Shared Environment
+name: Setup node.js
 
 runs:
   using: composite
   steps:
-    - uses: actions/setup-java@v4
-      with:
-        cache: gradle
-        distribution: oracle
-        java-version: "24"
-    - uses: gradle/actions/setup-gradle@v4
     - uses: actions/setup-node@v4
       with:
         node-version-file: package.json
