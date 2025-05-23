@@ -1,0 +1,17 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cdktf:
+    runs-on: ubuntu-latest
+    environment: ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-dotenvx
+      - run: dotenvx run -f envs/ci/.env -- npm run deploy -w infra/cdktf
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}

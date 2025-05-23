@@ -2,9 +2,7 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": [
-    "apps/*"
-  ],
+  "workspaces": ["apps/*", "infra/cdktf"],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
     "typecheck": "tsc --build --noEmit"

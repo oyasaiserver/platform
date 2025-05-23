@@ -1,0 +1,16 @@
+{
+  "name": "cdktf",
+  "scripts": {
+    "get": "cdktf get",
+    "synth": "cdktf synth",
+    "deploy": "cdktf deploy",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@cdktf/provider-cloudflare": "^12.5.0"
+  },
+  "devDependencies": {
+    "cdktf": "^0.20.12",
+    "tsx": "^4.19.4"
+  }
+}
