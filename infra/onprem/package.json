@@ -2,6 +2,9 @@
   "name": "@infra/onprem",
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "@infra/onprem": "src/index.ts"
+  },
   "scripts": {
     "deploy": "tsx scripts/deploy.ts"
   }

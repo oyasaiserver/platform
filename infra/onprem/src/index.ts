@@ -1,9 +1,10 @@
+#!/usr/bin/env -S node --no-warnings=ExperimentalWarning
 import { $ } from 'zx'
 
 $.verbose = true
 $.nothrow = true
 
-console.log('Starting platform-server')
+console.log('Starting platform-server!')
 
 process.exit(0)
 //
