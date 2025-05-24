@@ -1,0 +1,11 @@
+{
+  "name": "@platform/env",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "env-regen": "bin/regen.ts"
+  },
+  "scripts": {
+    "start": "tsx src"
+  }
+}

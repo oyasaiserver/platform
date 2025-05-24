@@ -1,0 +1,29 @@
+import { D1Database } from '@cdktf/provider-cloudflare/lib/d1-database'
+import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
+import { TerraformStack } from 'cdktf'
+import type { Construct } from 'constructs'
+import { NamedCloudBackend } from '../backend/named-cloud-backend'
+
+export class CloudflareStack extends TerraformStack {
+  private readonly name = 'cloudflare'
+  private readonly accountId = '7befe273c79e6f7993c1cd4534d6afff'
+
+  private readonly databaseIds = ['sociallikes']
+
+  public constructor(scope: Construct, id: string) {
+    super(scope, id)
+
+    new NamedCloudBackend(this, this.name)
+
+    new CloudflareProvider(this, this.name, {
+      apiToken: process.env.CLOUDFLARE_API_TOKEN
+    })
+
+    for (const id of this.databaseIds) {
+      new D1Database(this, `${this.name}-${id}-d1`, {
+        accountId: this.accountId,
+        name: `${id}-d1-db`
+      })
+    }
+  }
+}

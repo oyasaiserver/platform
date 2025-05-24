@@ -5,7 +5,8 @@
     "synth": "cdktf synth",
     "deploy": "cdktf deploy",
     "deploy:ci": "cdktf deploy --auto-approve",
-    "start": "tsx src/index.ts"
+    "diff": "cdktf diff",
+    "start": "tsx src"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^12.5.0"

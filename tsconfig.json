@@ -1,4 +1,9 @@
 {
   "files": [],
-  "references": [{ "path": "apps/wiki" }, { "path": "infra/cdktf" }]
+  "references": [
+    { "path": "apps/wiki" },
+    { "path": "infra/cdktf" },
+    { "path": "packages/env" },
+    { "path": "packages/constants" }
+  ]
 }

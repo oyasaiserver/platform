@@ -1,0 +1,8 @@
+{
+  "name": "@platform/constants",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src"
+  }
+}
