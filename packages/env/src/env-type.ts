@@ -6,5 +6,7 @@ export type EnvType = Readonly<{
   ENVIRONMENT: 'development' | 'local' | 'production'
   CLOUDFLARE_API_TOKEN: string
   DOTENV_PUBLIC_KEY: string
+  ENVIRONMENT: string
   TF_API_TOKEN: string
+  TF_TOKEN_app_terraform_io: string
 }>
