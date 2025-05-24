@@ -12,11 +12,11 @@ jobs:
       matrix:
         environment: [ production, development ]
     environment: ${{ matrix.environment }}
+    env:
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - run: npm run load-env -w packages/env
-        env:
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
       - uses: hashicorp/setup-terraform@v3
       - run: npm run diff -w infra/cdktf
