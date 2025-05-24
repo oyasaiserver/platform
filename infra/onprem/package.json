@@ -1,0 +1,7 @@
+{
+  "name": "@infra/onprem",
+  "type": "module",
+  "scripts": {
+    "deploy": "tsx scripts/deploy.ts"
+  }
+}
