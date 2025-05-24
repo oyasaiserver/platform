@@ -8,6 +8,10 @@ const { ENVIRONMENT, NODE_ENV, DOTENV_PRIVATE_KEY, GITHUB_ENV } = process.env
 
 console.log(process.env)
 
+console.log(ENVIRONMENT)
+console.log(NODE_ENV)
+console.log(ENVIRONMENT || NODE_ENV || 'local')
+
 const environment = ENVIRONMENT || NODE_ENV || 'local'
 
 console.log(`Loading environment variables for ${environment}...`)
