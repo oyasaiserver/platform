@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --no-warnings=ExperimentalWarning
+#!/usr/bin/env -S npx tsx
 import { $ } from 'zx'
 
 $.verbose = true
