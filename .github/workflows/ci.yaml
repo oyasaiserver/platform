@@ -47,7 +47,7 @@ jobs:
           path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
           retention-days: 1
 
-  publish-infra-onprem:
+  publish-infra-onprem-package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -7,5 +7,8 @@
   },
   "scripts": {
     "deploy": "tsx scripts/deploy.ts"
+  },
+  "dependencies": {
+    "zx": "^8.5.4"
   }
 }
