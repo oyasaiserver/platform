@@ -1,5 +1,4 @@
 import { writeFile } from 'node:fs/promises'
-import { EOL } from 'node:os'
 import { join } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
 import { dirs } from './dirs'
@@ -15,9 +14,13 @@ const envFile = join(dirs.envs, environment, '.env')
 const envKeysFile = join(dirs.envs, environment, '.env.keys')
 
 if (process.env.DOTENV_PRIVATE_KEY) {
+  console.log('Writing private key to .env.keys file...')
   await writeFile(
     envKeysFile,
-    `DOTENV_PRIVATE_KEY="${process.env.DOTENV_PRIVATE_KEY}"${EOL}`
+    `DOTENV_PRIVATE_KEY="${process.env.DOTENV_PRIVATE_KEY}"`
+  )
+  console.log(
+    `DOTENV_PRIVATE_KEY="${process.env.DOTENV_PRIVATE_KEY.toUpperCase()}"`
   )
 }
 
@@ -25,6 +28,8 @@ const output = config({
   path: envFile,
   envKeysFile
 })
+
+console.log(output)
 
 export const Env = {
   ENVIRONMENT: environment,
