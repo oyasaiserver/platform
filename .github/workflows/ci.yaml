@@ -18,7 +18,7 @@ jobs:
           npm run check
           npm run typecheck
 
-  codegen:
+  codegen-no-drift:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
       - run: npm run check
       - run: git diff --exit-code
 
-  build-and-upload-plugins:
+  upload-plugins:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
@@ -46,3 +46,10 @@ jobs:
           name: ${{ env.PLUGIN_ARTIFACT_NAME }}
           path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
           retention-days: 1
+
+  publish-infra-onprem-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: npx pkg-pr-new publish infra/onprem --bin

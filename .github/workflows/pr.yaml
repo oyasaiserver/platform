@@ -5,7 +5,6 @@ on:
 
 jobs:
   merging-into-main:
-    name: "Merging into main"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,8 +12,7 @@ jobs:
         run: |
           [[ "$GITHUB_BASE_REF" == main ]]
 
-  conventional-commit:
-    name: "PR title"
+  pr-title-is-conventional-commit:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
