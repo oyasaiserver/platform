@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
-    "codegen": "env-regen",
+    "codegen": "regen-env",
     "typecheck": "tsc --build --noEmit"
   },
   "dependencies": {
