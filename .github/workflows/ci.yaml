@@ -30,7 +30,7 @@ jobs:
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/load-env
       - uses: hashicorp/setup-terraform@v3
       - run: npm run diff -w infra/cdktf
         env:
