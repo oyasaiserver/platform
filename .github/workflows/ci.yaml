@@ -52,4 +52,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npx pkg-pr-new publish ./infra/onprem
+      - run: npx pkg-pr-new publish infra/onprem
