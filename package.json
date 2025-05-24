@@ -5,11 +5,11 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "infra/cdktf"
+    "infra/*"
   ],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
-    "codegen": "env-codegen && npm run check",
+    "codegen": "env-codegen",
     "typecheck": "tsc --build --noEmit"
   },
   "dependencies": {
