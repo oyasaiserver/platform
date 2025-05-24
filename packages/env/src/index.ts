@@ -14,7 +14,7 @@ const output = parse(await readFile(envFile), {
     process.env.DOTENV_PRIVATE_KEY || (await readFile(envKeysFile, 'utf-8'))
 })
 
-console.log(output)
+Object.assign(process.env, output)
 
 export const Env = {
   ENVIRONMENT: environment,
