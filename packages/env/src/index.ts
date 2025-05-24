@@ -14,6 +14,14 @@ const privateKey =
   process.env.DOTENV_PRIVATE_KEY ||
   parse(await readFile(envKeysFile)).DOTENV_PRIVATE_KEY
 
+if (process.env.DOTENV_PRIVATE_KEY) {
+  console.log('Using private key from environment variable')
+  console.log(process.env.DOTENV_PRIVATE_KEY)
+} else {
+  console.log('Using private key from env.keys file')
+  console.log(privateKey)
+}
+
 const output = parse(await readFile(envFile), {
   privateKey
 })
