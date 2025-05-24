@@ -2,17 +2,12 @@
   "name": "@infra/local",
   "type": "module",
   "scripts": {
-    "build": "bun build --compile --minify src/index.ts --outfile platform-server"
+    "build": "bun build --compile --minify src/index.ts --outfile dist/platform-server"
   },
   "dependencies": {
     "bun": "^1.2.14"
   },
   "devDependencies": {
     "@types/bun": "^1.2.14"
-  },
-  "module": "src/index.ts",
-  "private": true,
-  "peerDependencies": {
-    "typescript": "^5"
   }
 }

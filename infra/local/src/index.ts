@@ -1,11 +1,14 @@
-import { readFile, rm, writeFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { $ } from 'bun'
-import composeYaml from '../compose.yaml' with { type: 'file' }
+import composeYaml from '../assets/compose.yaml' with { type: 'file' }
 
-await rm('compose.yaml', { force: true })
+$.nothrow()
 
-// copy the compose.yaml file to the current directory
+// copy the compose.yaml
 await writeFile('compose.yaml', await readFile(composeYaml, 'utf-8'))
 
-// start the containers
-$`docker compose --profile production --profile development up -d`
+// Stop the containers if they are running
+await $`docker compose --profile production --profile development -f compose.yaml down --remove-orphans`
+
+// Start the containers
+await $`docker compose --profile production --profile development -f compose.yaml up -d --wait`

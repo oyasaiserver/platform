@@ -1,12 +1,9 @@
 services:
   minecraft-production:
-    container_name: minecraft-production
     image: itzg/minecraft-server:java24
     restart: unless-stopped
     profiles:
       - production
-    tty: true
-    stdin_open: true
     ports:
       - "25565:25565"
     environment:
@@ -15,13 +12,10 @@ services:
       - ./minecraft-production:/data
 
   minecraft-development:
-    container_name: minecraft-development
     image: itzg/minecraft-server:java24
     restart: unless-stopped
     profiles:
       - development
-    tty: true
-    stdin_open: true
     ports:
       - "25566:25566"
     environment:

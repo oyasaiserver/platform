@@ -2,14 +2,10 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "infra/cdktf"
-  ],
+  "workspaces": ["apps/*", "packages/*", "infra/*"],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
-    "codegen": "env-codegen && npm run check",
+    "codegen": "env-codegen",
     "typecheck": "tsc --build --noEmit"
   },
   "dependencies": {

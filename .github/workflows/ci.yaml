@@ -6,10 +6,6 @@ on:
       - main
   pull_request:
 
-env:
-  PLUGIN_ARTIFACT_NAME: plugins
-  PLUGIN_ARTIFACTS_DIR: flat-plugins
-
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -28,11 +24,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - run: npm run codegen
+      - run: npm run check
       - run: git diff --exit-code
 
   build-and-upload-plugins:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      PLUGIN_ARTIFACT_NAME: plugins
+      PLUGIN_ARTIFACTS_DIR: flat-plugins
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
