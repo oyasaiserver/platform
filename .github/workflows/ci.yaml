@@ -31,6 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
+      - uses: hashicorp/setup-terraform@v3
       - run: npm run diff -w infra/cdktf
 
   build-and-upload-plugins:
