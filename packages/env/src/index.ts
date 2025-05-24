@@ -4,9 +4,7 @@ import { parse } from '@dotenvx/dotenvx'
 import { dirs } from './dirs'
 import type { EnvType } from './env-type'
 
-console.log(process.env)
-
-const environment = process.env.ENVIRONMENT || process.env.NODE_ENV || 'local'
+const environment = process.env.NODE_ENV || process.env.ENVIRONMENT || 'local'
 
 console.log(`Loading environment variables for ${environment}...`)
 
