@@ -4,8 +4,5 @@
   "main": "src/index.ts",
   "bin": {
     "env-regen": "bin/regen.ts"
-  },
-  "scripts": {
-    "start": "tsx src"
   }
 }
