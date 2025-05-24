@@ -22,3 +22,6 @@ export const Env = {
   ENVIRONMENT: environment,
   ...output
 } as EnvType
+
+console.log(process.env)
+console.log(Env)
