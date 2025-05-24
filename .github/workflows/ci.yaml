@@ -22,6 +22,17 @@ jobs:
           npm run check
           npm run typecheck
 
+  cdktf-no-drift:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [ production, development ]
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: npm run diff -w infra/cdktf
+
   build-and-upload-plugins:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest

@@ -8,13 +8,10 @@ on:
 jobs:
   cdktf:
     runs-on: ubuntu-latest
-    environment: ci
+    environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
       - name: Deploy CDKTF stack
-        run: dotenvx run -f envs/ci/.env -- npm run deploy:ci -w infra/cdktf
-        env:
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+        run: npm run deploy:ci -w infra/cdktf
