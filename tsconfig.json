@@ -3,7 +3,7 @@
   "references": [
     { "path": "apps/wiki" },
     { "path": "infra/cdktf" },
-    { "path": "infra/onprem"},
+    { "path": "infra/onprem" },
     { "path": "packages/env" },
     { "path": "packages/constants" }
   ]
