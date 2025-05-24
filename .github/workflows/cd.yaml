@@ -18,3 +18,5 @@ jobs:
       - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
       - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run diff -w infra/cdktf
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
