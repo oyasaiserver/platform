@@ -1,8 +1,5 @@
 {
-  "name": "@platform/constants",
+  "name": "@oyasaiserver/constants",
   "type": "module",
-  "main": "src/index.ts",
-  "scripts": {
-    "start": "tsx src"
-  }
+  "main": "src/index.ts"
 }

@@ -1,14 +1,10 @@
 {
   "name": "@infra/local",
   "type": "module",
+  "bin": {
+    "platform-server": "./src/index.ts"
+  },
   "scripts": {
-    "build": "bun build --compile --minify src/index.ts --outfile dist/platform-server",
-    "deploy": "npm run build && tsx src/deploy.ts"
-  },
-  "dependencies": {
-    "bun": "^1.2.14"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.2.14"
+    "deploy": "tsx scripts/deploy.ts"
   }
 }

@@ -1,8 +1,8 @@
-import { Env } from '@platform/env'
+import { Env } from '@oyasaiserver/env'
 import { App } from 'cdktf'
 import { CloudflareStack } from './stacks/cloudflare-stack'
 
-export class PlatformApp extends App {
+class PlatformApp extends App {
   public constructor() {
     super()
     new CloudflareStack(this, `cloudflare-${Env.ENVIRONMENT}`)
