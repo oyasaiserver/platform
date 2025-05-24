@@ -21,7 +21,10 @@ export class CloudflareStack extends TerraformStack {
     for (const id of this.databaseIds) {
       new D1Database(this, `d1-${id}-${Env.ENVIRONMENT}`, {
         accountId: this.accountId,
-        name: `${id}-${Env.ENVIRONMENT}`
+        name: `${id}-${Env.ENVIRONMENT}`,
+        readReplication: {
+          mode: 'disabled'
+        }
       })
     }
   }
