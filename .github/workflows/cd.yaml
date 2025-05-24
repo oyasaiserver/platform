@@ -20,17 +20,3 @@ jobs:
       - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run deploy:ci -w infra/cdktf
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
-
-  build-and-deploy-server:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [ production, development ]
-    environment: ${{ matrix.environment }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-dotenvx
-      - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run deploy -w infra/local
-        env:
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
