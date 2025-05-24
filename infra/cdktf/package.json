@@ -1,12 +1,13 @@
 {
   "name": "cdktf",
+  "type": "module",
   "scripts": {
+    "app:": "tsx src",
     "get": "cdktf get",
     "synth": "cdktf synth",
     "deploy": "cdktf deploy",
     "deploy:ci": "cdktf deploy --auto-approve",
-    "diff": "cdktf diff",
-    "start": "tsx src"
+    "diff": "cdktf diff"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^12.5.0"

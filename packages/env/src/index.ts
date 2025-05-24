@@ -10,8 +10,7 @@ const output = config({
   envKeysFile: join(dirs.envs, environment, '.env.keys')
 })
 
-if (!output.parsed) {
-  throw output.error
-}
-
-export const Env = output.parsed as unknown as EnvType
+export const Env = {
+  ENVIRONMENT: environment,
+  ...output.parsed
+} as EnvType
