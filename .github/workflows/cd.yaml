@@ -15,3 +15,5 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
       - name: Deploy CDKTF stack
         run: npm run deploy:ci -w infra/cdktf
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}

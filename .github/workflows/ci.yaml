@@ -33,6 +33,8 @@ jobs:
       - uses: ./.github/actions/setup-node
       - uses: hashicorp/setup-terraform@v3
       - run: npm run diff -w infra/cdktf
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   build-and-upload-plugins:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

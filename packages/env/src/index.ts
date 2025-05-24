@@ -1,19 +1,20 @@
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { config } from '@dotenvx/dotenvx'
+import { parse } from '@dotenvx/dotenvx'
 import { dirs } from './dirs'
 import type { EnvType } from './env-type'
 
 const environment = process.env.ENVIRONMENT || process.env.NODE_ENV || 'local'
 
-const path = join(dirs.envs, environment, '.env')
+const envFile = join(dirs.envs, environment, '.env')
 const envKeysFile = join(dirs.envs, environment, '.env.keys')
 
-const output = config({
-  path,
-  envKeysFile: process.env.DOTENV_PRIVATE_KEY ? envKeysFile : undefined
+const output = parse(await readFile(envFile), {
+  privateKey:
+    process.env.DOTENV_PRIVATE_KEY || (await readFile(envKeysFile, 'utf-8'))
 })
 
 export const Env = {
   ENVIRONMENT: environment,
-  ...output.parsed
+  ...output
 } as EnvType
