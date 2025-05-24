@@ -28,6 +28,7 @@ jobs:
         environment: [ production, development ]
     environment: ${{ matrix.environment }}
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-dotenvx
       - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run deploy -w infra/local
