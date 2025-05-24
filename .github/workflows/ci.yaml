@@ -22,6 +22,14 @@ jobs:
           npm run check
           npm run typecheck
 
+  codegen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: npm run codegen
+      - run: git diff --exit-code
+
   build-and-upload-plugins:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest

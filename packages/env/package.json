@@ -3,9 +3,6 @@
   "type": "module",
   "main": "src/index.ts",
   "bin": {
-    "regen-env": "bin/regen.ts"
-  },
-  "scripts": {
-    "load-env": "tsx src/index.ts"
+    "env-codegen": "bin/regen.ts"
   }
 }
