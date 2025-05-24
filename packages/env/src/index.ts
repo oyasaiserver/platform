@@ -17,7 +17,7 @@ const envKeysFile = join(dirs.envs, environment, '.env.keys')
 if (process.env.DOTENV_PRIVATE_KEY) {
   await writeFile(
     envKeysFile,
-    `DOTENV_PRIVATE_KEY=${process.env.DOTENV_PRIVATE_KEY}${EOL}`
+    `DOTENV_PRIVATE_KEY="${process.env.DOTENV_PRIVATE_KEY}"${EOL}`
   )
 }
 
