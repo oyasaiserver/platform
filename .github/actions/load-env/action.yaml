@@ -1,8 +1,0 @@
-name: Setup node.js
-
-runs:
-  using: composite
-  steps:
-    - uses: ./.github/actions/setup-node
-    - run: npm run load-env -w packages/env
-      shell: bash
