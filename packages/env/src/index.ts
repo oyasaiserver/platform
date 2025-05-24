@@ -10,11 +10,11 @@ console.log(`Loading environment variables for ${environment}...`)
 
 const envFile = join(dirs.envs, environment, '.env')
 const envKeysFile = join(dirs.envs, environment, '.env.keys')
-const privateKey = `DOTENV_PRIVATE_KEY=${
+const privateKey =
   process.env.DOTENV_PRIVATE_KEY ||
   parse(await readFile(envKeysFile)).DOTENV_PRIVATE_KEY
-}`
 
+console.log(privateKey.toUpperCase())
 const output = parse(await readFile(envFile), {
   privateKey
 })
