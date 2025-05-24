@@ -6,6 +6,8 @@ import type { EnvType } from './env-type'
 
 const { ENVIRONMENT, NODE_ENV, DOTENV_PRIVATE_KEY, GITHUB_ENV } = process.env
 
+console.log(process.env)
+
 const environment = ENVIRONMENT || NODE_ENV || 'local'
 
 console.log(`Loading environment variables for ${environment}...`)
