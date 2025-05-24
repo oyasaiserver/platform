@@ -9,6 +9,8 @@ const environment = process.env.ENVIRONMENT || process.env.NODE_ENV || 'local'
 const envFile = join(dirs.envs, environment, '.env')
 const envKeysFile = join(dirs.envs, environment, '.env.keys')
 
+console.log(process.env.DOTENV_PRIVATE_KEY)
+
 const output = parse(await readFile(envFile), {
   privateKey:
     process.env.DOTENV_PRIVATE_KEY || (await readFile(envKeysFile, 'utf-8'))
