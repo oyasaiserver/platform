@@ -1,8 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises'
-import { $ } from 'bun'
+import { $ } from 'zx'
 import composeYaml from '../assets/compose.yaml' with { type: 'file' }
 
-$.nothrow()
+$.nothrow = true
 
 // copy the compose.yaml
 await writeFile('compose.yaml', await readFile(composeYaml, 'utf-8'))

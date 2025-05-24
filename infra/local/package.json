@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "bun build --compile --minify src/index.ts --outfile dist/platform-server",
-    "deploy": "tsx scripts/deploy.ts"
+    "deploy": "npm run build && tsx src/deploy.ts"
   },
   "dependencies": {
     "bun": "^1.2.14"

@@ -2,12 +2,12 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseEnv } from 'node:util'
-import { REPOSITORY_ROOT } from '@platform/constants'
+import { repositoryRoot } from '@platform/constants'
 import { getConsistentKey } from './is-key-consistent'
 
 export const dirs = {
   src: join(import.meta.dirname, '..', 'src'),
-  envs: join(REPOSITORY_ROOT, 'envs')
+  envs: join(repositoryRoot, 'envs')
 } as const
 
 const environments = await readdir(dirs.envs)

@@ -16,7 +16,8 @@
     "@dotenvx/dotenvx": "^1.44.1",
     "@platform/constants": "workspace:*",
     "@platform/env": "workspace:*",
-    "tsx": "^4.19.4"
+    "tsx": "^4.19.4",
+    "zx": "^8.5.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
