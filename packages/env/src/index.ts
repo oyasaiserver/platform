@@ -8,6 +8,8 @@ const { ENVIRONMENT, NODE_ENV, DOTENV_PRIVATE_KEY, GITHUB_ENV } = process.env
 
 const environment = ENVIRONMENT || NODE_ENV || 'local'
 
+console.log('`Loading environment variables for ${environment}...`')
+
 const envFile = join(dirs.envs, environment, '.env')
 const envKeysFile = join(dirs.envs, environment, '.env.keys')
 const privateKey =
