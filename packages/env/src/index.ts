@@ -1,4 +1,5 @@
 import { writeFile } from 'node:fs/promises'
+import { EOL } from 'node:os'
 import { join } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
 import { dirs } from './dirs'
@@ -16,7 +17,7 @@ const envKeysFile = join(dirs.envs, environment, '.env.keys')
 if (process.env.DOTENV_PRIVATE_KEY) {
   await writeFile(
     envKeysFile,
-    `DOTENV_PRIVATE_KEY=${process.env.DOTENV_PRIVATE_KEY}`
+    `DOTENV_PRIVATE_KEY=${process.env.DOTENV_PRIVATE_KEY}${EOL}`
   )
 }
 
