@@ -1,4 +1,6 @@
 #!/usr/bin/env -S npx tsx
+import { readdir } from 'node:fs/promises'
+import { resolve } from 'node:path'
 import { $ } from 'zx'
 import { Assets } from './services/assets'
 import { Backup } from './services/backup'
@@ -7,6 +9,10 @@ import { DockerCompose } from './services/docker-compose'
 import { Overlays } from './services/overlays'
 
 $.verbose = true
+
+console.log(await readdir(resolve(import.meta.dirname, '../../../envs')))
+
+process.env(0)
 
 await DockerCompose.down()
 
