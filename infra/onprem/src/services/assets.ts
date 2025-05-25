@@ -8,7 +8,7 @@ export class Assets {
     '../../assets'
   )
 
-  public static async copy(filename: string, destination = ''): Promise<void> {
+  public static async clone(filename: string, destination = ''): Promise<void> {
     await copyFile(
       join(Assets.path, filename),
       join(cwd(), destination, filename)

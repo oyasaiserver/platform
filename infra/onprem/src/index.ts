@@ -1,5 +1,6 @@
 #!/usr/bin/env -S npx tsx
-import { rm } from 'node:fs/promises'
+import { readdir, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 import { cwd } from 'node:process'
 import { $ } from 'zx'
 import { Assets } from './services/assets'
@@ -8,7 +9,9 @@ import { Overlays } from './services/overlays'
 
 $.verbose = true
 
-await Assets.copy('compose.yaml')
+const envs = ['production', 'development']
+
+await Assets.clone('compose.yaml')
 
 await DockerCompose.down()
 
@@ -16,14 +19,18 @@ await DockerCompose.down()
 
 // await BackupManager.restore()
 
-await rm(`${cwd()}/*/minecraft-main`, {
-  recursive: true,
-  force: true
-})
+// cleanup
+for (const it of await readdir(cwd())) {
+  const dir = join(cwd(), it)
+  await rm(dir, {
+    recursive: true,
+    force: true
+  })
+}
 
-await Overlays.apply(`${Assets.path}/overlays`, [
-  `${cwd()}/production`,
-  `${cwd()}/development`
-])
+await Overlays.apply(
+  `${Assets.path}/overlays`,
+  envs.map(env => join(cwd(), env))
+)
 
 await DockerCompose.up()
