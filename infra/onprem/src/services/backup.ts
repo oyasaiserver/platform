@@ -18,14 +18,16 @@ export class Backup {
     } catch (_) {
       return
     }
+
     await mkdir(Backup.directory, {
       recursive: true
     })
-    const archive = join(
-      Backup.directory,
-      `${basename(dir)}-${Date.now()}.tar.zst`
-    )
-    await $`tar -cf - ${dir} | zstd -T0 -5 -o ${archive}`
+
+    const name = basename(dir)
+    const base = join(dir, '..')
+    const archive = join(Backup.directory, `${name}-${Date.now()}.tar.zst`)
+
+    await $`tar -C ${base} -cf - ${name} | zstd -T0 -5 -o ${archive}`
     return new Backup(archive, dir)
   }
 
