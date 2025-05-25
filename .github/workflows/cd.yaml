@@ -70,8 +70,8 @@ jobs:
       - run: |
           npm run deploy:ci -w infra/cdktf
         env:
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   deploy-onprem-infra:
     needs:
