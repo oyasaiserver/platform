@@ -2,11 +2,12 @@
   "name": "@infra/onprem",
   "version": "1.0.0",
   "type": "module",
+  "files": ["src", "assets"],
   "bin": {
     "@infra/onprem": "src/index.ts"
   },
   "scripts": {
-    "start": "tsx scripts/start.ts"
+    "start": "tsx src/index.ts"
   },
   "dependencies": {
     "zx": "^8.5.4"

@@ -1,12 +1,18 @@
 #!/usr/bin/env -S npx tsx
+import { cp } from 'node:fs/promises'
+import { join, resolve } from 'node:path'
 import { $ } from 'zx'
 
 $.verbose = true
 $.nothrow = true
 
-console.log('Starting platform-server!')
+const assetsDir = resolve(import.meta.dirname, '../assets')
 
-process.exit(0)
+// update compose.yaml
+await cp(join(assetsDir, 'compose.yaml'), process.cwd(), {
+  force: true
+})
+
 //
 // // copy the compose.yaml
 // await writeFile('compose.yaml', await readFile(composeYaml, 'utf-8'))
