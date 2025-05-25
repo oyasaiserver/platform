@@ -1,6 +1,8 @@
 x-minecraft-service: &minecraft-service
   image: itzg/minecraft-server:java24
   restart: unless-stopped
+  tty: true
+  stdin_open: true
   environment:
     EULA: TRUE
     TYPE: PURPUR
