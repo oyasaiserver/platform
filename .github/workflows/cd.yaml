@@ -4,21 +4,33 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "⚠️ Deploy to production ⚠️"
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
 
 jobs:
-  cdktf:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [ production, development ]
-    environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
-      - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run deploy:ci -w infra/cdktf
+      # language=bash
+      - run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_ENV
+          fi
+      - run: npm run get -w infra/cdktf
+      - run: npm run synth -w infra/cdktf
+      - run: dotenvx run -f envs/$ENVIRONMENT/.env -- npm run deploy:ci -w infra/cdktf
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
