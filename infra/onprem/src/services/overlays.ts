@@ -9,11 +9,12 @@ export class Overlays {
 
     for (const entry of entries) {
       for (const target of targets) {
-        if (entry.isDirectory()) {
-          await mkdir(join(target, entry.name), {
-            recursive: true
-          })
+        if (!entry.isDirectory()) {
+          continue
         }
+        await mkdir(join(target, entry.name), {
+          recursive: true
+        })
       }
 
       const src = join(overlay, entry.name)
@@ -22,7 +23,9 @@ export class Overlays {
           src,
           targets.map(target => join(target, entry.name))
         )
-      } else if (entry.isFile()) {
+        continue
+      }
+      if (entry.isFile()) {
         for (const targetDir of targets) {
           await copyFile(src, join(targetDir, entry.name))
         }
