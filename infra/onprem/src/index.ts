@@ -7,7 +7,7 @@ import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
 import { Overlays } from './services/overlays'
 
-const environment = process.env.ENVIRONMENT || 'local'
+const environment = process.env.ENVIRONMENT as string
 
 const processEnv = Env.parse(environment)
 
@@ -23,6 +23,8 @@ await step('backup-clean-and-restore', async () => {
   })
   await backup?.restore()
 })
+
+await step('pull-plugins-from-github-artifacts', async () => {})
 
 await step('apply-overlays', async () => {
   await Overlays.apply(`${Assets.path}/overlays`, environment)

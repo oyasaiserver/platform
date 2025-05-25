@@ -7,7 +7,7 @@ export class Env {
     '../../envs'
   )
 
-  public static parse(environemnt: string): DotenvPopulateInput {
+  public static parse(environemnt = 'local'): DotenvPopulateInput {
     const processEnv: DotenvPopulateInput = {}
     config({
       strict: true,
