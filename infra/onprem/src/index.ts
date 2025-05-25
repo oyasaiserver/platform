@@ -4,20 +4,17 @@ import { join } from 'node:path'
 import { cwd } from 'node:process'
 import { $ } from 'zx'
 import { Assets } from './services/assets'
+import { Backup } from './services/backup'
 import { DockerCompose } from './services/docker-compose'
 import { Overlays } from './services/overlays'
 
 $.verbose = true
 
-const envs = ['production', 'development']
-
 await Assets.clone('compose.yaml')
 
 await DockerCompose.down()
 
-// await BackupManager.create('production/minecraft-main/worlds')
-
-// await BackupManager.restore()
+const backup = await Backup.create('minecraft-main/worlds')
 
 // cleanup
 for (const it of await readdir(cwd())) {
@@ -28,9 +25,8 @@ for (const it of await readdir(cwd())) {
   })
 }
 
-await Overlays.apply(
-  `${Assets.path}/overlays`,
-  envs.map(env => join(cwd(), env))
-)
+await backup.restore()
+
+await Overlays.apply(`${Assets.path}/overlays`, ['production', 'development'])
 
 await DockerCompose.up()
