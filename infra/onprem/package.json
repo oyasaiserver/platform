@@ -1,15 +1,14 @@
 {
-  "name": "@infra/onprem",
+  "name": "@platform/infra-onprem",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets"],
+  "files": ["src", "assets", "envs"],
   "bin": {
-    "@infra/onprem": "src/index.ts"
-  },
-  "scripts": {
-    "start": "tsx src/index.ts"
+    "@platform/infra-onprem": "src/index.ts"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.44.1",
+    "tasuku": "^2.0.1",
     "zx": "^8.5.4"
   }
 }

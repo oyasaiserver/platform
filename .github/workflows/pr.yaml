@@ -12,7 +12,7 @@ jobs:
         run: |
           [[ "$GITHUB_BASE_REF" == main ]]
 
-  pr-title-is-conventional-commit:
+  pr-title-lint:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read

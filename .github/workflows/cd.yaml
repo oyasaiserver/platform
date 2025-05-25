@@ -4,21 +4,85 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "⚠️ Deploy to production ⚠️"
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
 
 jobs:
-  cdktf:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  resolve-env:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [ production, development ]
-    environment: ${{ matrix.environment }}
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+    steps:
+      - id: env
+        # language=bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=development" >> "$GITHUB_OUTPUT"
+          fi
+
+  upload-plugins:
+    runs-on: ubuntu-latest
+    env:
+      artifacts_dir: flat-plugins
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
+      - run: ./gradlew build --parallel
+      - name: Flatten and collect JARs
+        run: |
+          mkdir -p ${{ env.artifacts_dir }}
+          find plugins -name "*.jar" -exec cp {} ${{ env.artifacts_dir }}/ \;
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugins
+          path: ${{ env.artifacts_dir }}
+          retention-days: 1
+
+  cdktf:
+    needs:
+      - upload-plugins
+      - resolve-env
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
-      - run: dotenvx run -f "envs/${{ matrix.environment }}/.env" -- npm run deploy:ci -w infra/cdktf
+      - run: npm run get -w infra/cdktf
+      - run: npm run synth -w infra/cdktf
+        # language=bash
+      - run: dotenvx run -f envs/$ENVIRONMENT/.env -- npm run deploy:ci -w infra/cdktf
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+  deploy-onprem-infra:
+    needs:
+      - upload-plugins
+      - cdktf
+      - resolve-env
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-dotenvx
+      - name: Prepare on-prem command (no ssh yet)
+        # language=bash
+        run: |
+          echo "TODO: simulating ssh command"
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "ENVIRONMENT=$ENVIRONMENT"
+          echo "yes | npx https://pkg.pr.new/oyasaiserver/platform/@platform/infra-onprem@$SHORT_SHA"

@@ -1,5 +1,5 @@
 {
-  "name": "@infra/cdktf",
+  "name": "@platform/infra-cdktf",
   "type": "module",
   "scripts": {
     "get": "cdktf get",

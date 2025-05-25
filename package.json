@@ -8,9 +8,9 @@
     "infra/*"
   ],
   "scripts": {
+    "build": "tsc --build",
     "check": "biome check --write && sort-package-json --quiet",
-    "codegen": "env-codegen",
-    "typecheck": "tsc --build --noEmit"
+    "codegen": "env-codegen"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",

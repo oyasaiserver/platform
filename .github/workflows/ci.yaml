@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  check:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +13,13 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run check
-          npm run typecheck
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: npm run build
 
   codegen-no-drift:
     runs-on: ubuntu-latest
@@ -24,29 +30,10 @@ jobs:
       - run: npm run check
       - run: git diff --exit-code
 
-  publish-infra-onprem-package:
+  publish-package-infra-onprem:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
+      - run: cp -rf envs infra/onprem/envs
       - run: npx pkg-pr-new publish infra/onprem --bin
-
-  upload-plugins:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    env:
-      PLUGIN_ARTIFACT_NAME: plugins
-      PLUGIN_ARTIFACTS_DIR: flat-plugins
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-java
-      - run: ./gradlew build --parallel
-      - name: Flatten and collect JARs
-        run: |
-          mkdir -p ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          find plugins -name "*.jar" -exec cp {} ${{ env.PLUGIN_ARTIFACTS_DIR }}/ \;
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.PLUGIN_ARTIFACT_NAME }}
-          path: ${{ env.PLUGIN_ARTIFACTS_DIR }}
-          retention-days: 1

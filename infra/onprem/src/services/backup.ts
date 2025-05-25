@@ -2,8 +2,10 @@ import { mkdir, stat } from 'node:fs/promises'
 import { basename, dirname, join } from 'node:path'
 import { $ } from 'zx'
 
+$.quiet = true
+
 export class Backup {
-  public static readonly directory: string = 'backups'
+  private static readonly directory: string = 'backups'
 
   public constructor(
     private readonly archive: string,
