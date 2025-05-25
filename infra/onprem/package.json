@@ -2,11 +2,12 @@
   "name": "@infra/onprem",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets", "../../envs"],
+  "files": ["src", "assets"],
   "bin": {
     "@infra/onprem": "src/index.ts"
   },
   "scripts": {
+    "build": "tsx scripts/build.ts",
     "start": "tsx src/index.ts"
   },
   "dependencies": {

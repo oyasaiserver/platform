@@ -12,7 +12,7 @@ $.verbose = true
 
 console.log(await readdir(resolve(import.meta.dirname, '../../../envs')))
 
-process.env(0)
+process.exit(0)
 
 await DockerCompose.down()
 
