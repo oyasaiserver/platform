@@ -9,3 +9,5 @@ runs:
         distribution: oracle
         java-version: "24"
     - uses: gradle/actions/setup-gradle@v4
+      with:
+        cache-overwrite-existing: true
