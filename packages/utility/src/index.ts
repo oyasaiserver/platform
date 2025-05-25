@@ -1,1 +1,0 @@
-export { words } from './string'

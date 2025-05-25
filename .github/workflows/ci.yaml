@@ -30,7 +30,7 @@ jobs:
       - run: npm run check
       - run: git diff --exit-code
 
-  action-timeline:
+  actions-timeline:
     runs-on: ubuntu-latest
     needs:
       - format

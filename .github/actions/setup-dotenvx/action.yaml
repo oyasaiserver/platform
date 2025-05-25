@@ -1,7 +1,0 @@
-name: Setup dotenvx
-
-runs:
-  using: composite
-  steps:
-    - run: curl -sfS https://dotenvx.sh/install.sh | sh
-      shell: bash

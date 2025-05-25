@@ -57,21 +57,20 @@ jobs:
 
   cdktf:
     needs:
-      - upload-plugins
       - resolve-env
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-dotenvx
       - uses: hashicorp/setup-terraform@v3
       - run: npm run get -w infra/cdktf
       - run: npm run synth -w infra/cdktf
         # language=bash
       - run: |
-          dotenvx run -f envs/${{ needs.resolve-env.outputs.environment }}/.env -- npm run deploy:ci -w infra/cdktf
+          npm run deploy:ci -w infra/cdktf
         env:
+          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   deploy-onprem-infra:
@@ -87,7 +86,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-dotenvx
         # language=bash
       - run: |
           echo "TODO: simulating ssh command"
@@ -95,7 +93,7 @@ jobs:
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "yes | npx https://pkg.pr.new/oyasaiserver/platform/@platform/infra-onprem@$SHORT_SHA"
 
-  action-timeline:
+  actions-timeline:
     runs-on: ubuntu-latest
     needs:
       - resolve-env
