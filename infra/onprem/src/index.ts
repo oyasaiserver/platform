@@ -7,7 +7,7 @@ import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
 import { Overlays } from './services/overlays'
 
-const environment = process.argv.at(2) || 'local'
+const environment = process.env.ENVIRONMENT || 'local'
 
 const processEnv = Env.parse(environment)
 
