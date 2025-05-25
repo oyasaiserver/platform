@@ -4,9 +4,8 @@
   "scripts": {
     "get": "cdktf get",
     "synth": "cdktf synth",
-    "deploy": "cdktf deploy",
-    "deploy:ci": "cdktf deploy --auto-approve",
-    "diff": "cdktf diff"
+    "diff": "cdktf diff",
+    "deploy": "tsx scripts/deploy-ci.ts"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^12.5.0"

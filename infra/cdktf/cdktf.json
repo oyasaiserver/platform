@@ -1,6 +1,6 @@
 {
   "language": "typescript",
-  "app": "tsx src",
+  "app": "tsx src/index.ts",
   "projectId": "1129dba1-c375-4ed0-ac92-258762707dd5",
   "terraformProviders": ["cloudflare/cloudflare@5.5.0"]
 }

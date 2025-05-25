@@ -64,11 +64,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - uses: hashicorp/setup-terraform@v3
-      - run: npm run get -w infra/cdktf
-      - run: npm run synth -w infra/cdktf
-        # language=bash
       - run: |
-          npm run deploy:ci -w infra/cdktf
+          npm run get -w infra/cdktf
+          npm run synth -w infra/cdktf
+          npm run deploy -w infra/cdktf
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
