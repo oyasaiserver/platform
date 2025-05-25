@@ -12,7 +12,6 @@
     "@dotenvx/dotenvx": "^1.44.1",
     "@platform/constants": "workspace",
     "@platform/env": "workspace",
-    "@platform/utility": "workspace",
     "tsx": "^4.19.4",
     "zx": "^8.5.4"
   },
