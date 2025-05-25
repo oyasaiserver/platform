@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises'
+import { mkdir, stat } from 'node:fs/promises'
 import { basename, join, resolve } from 'node:path'
 import { $ } from 'zx'
 
@@ -8,7 +8,11 @@ export class Backup {
     private readonly original: string
   ) {}
 
-  public static async create(dir: string): Promise<Backup> {
+  public static async create(dir: string): Promise<Backup | undefined> {
+    const meta = await stat(dir)
+    if (!meta.isDirectory()) {
+      return
+    }
     await mkdir('backup', {
       recursive: true
     })

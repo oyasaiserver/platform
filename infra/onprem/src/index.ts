@@ -25,7 +25,7 @@ for (const it of await readdir(cwd())) {
   })
 }
 
-await backup.restore()
+await backup?.restore()
 
 await Overlays.apply(`${Assets.path}/overlays`, ['production', 'development'])
 
