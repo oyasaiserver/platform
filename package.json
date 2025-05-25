@@ -2,7 +2,11 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*", "infra/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "infra/*"
+  ],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
     "codegen": "env-codegen",
