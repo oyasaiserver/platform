@@ -9,8 +9,11 @@ export class Backup {
   ) {}
 
   public static async create(dir: string): Promise<Backup | undefined> {
-    const meta = await stat(dir)
-    if (!meta.isDirectory()) {
+    try {
+      if (!(await stat(dir)).isDirectory()) {
+        return
+      }
+    } catch (_) {
       return
     }
     await mkdir('backup', {
