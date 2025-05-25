@@ -17,4 +17,4 @@ await copyFile(join(assets, composeYaml), join(cwd(), composeYaml))
 await $`docker compose --profile production --profile development -f compose.yaml down --remove-orphans`
 
 // Start the containers
-await $`docker compose --profile production --profile development -f compose.yaml up --detached --wait`
+await $`docker compose --profile production --profile development -f compose.yaml up -d --wait`
