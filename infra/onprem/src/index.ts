@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx tsx
 import { rm } from 'node:fs/promises'
 import step from 'tasuku'
+import { Artifacts } from './services/artifacts'
 import { Assets } from './services/assets'
 import { Backup } from './services/backup'
 import { DockerCompose } from './services/docker-compose'
@@ -16,6 +17,9 @@ await step('docker-compose-down', async () => {
 })
 
 await step('backup-clean-and-restore', async () => {
+  if (environment !== 'production') {
+    return
+  }
   const backup = await Backup.create(`${environment}/minecraft-main/worlds`)
   await rm(environment, {
     recursive: true,
@@ -24,7 +28,14 @@ await step('backup-clean-and-restore', async () => {
   await backup?.restore()
 })
 
-await step('pull-plugins-from-github-artifacts', async () => {})
+await step('pull-plugins-from-github-artifacts', async () => {
+  await Artifacts.pull([
+    {
+      artifact: 'plugins',
+      path: `${environment}/minecraft-main/plugins`
+    }
+  ])
+})
 
 await step('apply-overlays', async () => {
   await Overlays.apply(`${Assets.path}/overlays`, environment)

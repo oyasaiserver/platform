@@ -11,8 +11,7 @@ jobs:
       - uses: ./.github/actions/setup-java
       - run: ./gradlew spotlessCheck --parallel
       - uses: ./.github/actions/setup-node
-      - run: |
-          npm run check
+      - run: npm run check
 
   typecheck:
     runs-on: ubuntu-latest

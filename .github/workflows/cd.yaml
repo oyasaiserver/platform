@@ -79,6 +79,7 @@ jobs:
       - cdktf
       - resolve-env
     runs-on: ubuntu-latest
+    environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node

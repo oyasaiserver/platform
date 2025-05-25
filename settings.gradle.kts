@@ -1,10 +1,9 @@
 rootProject.name = "platform"
 
-val dir = "plugins"
-
-file(dir)
-    .listFiles()
-    .filter { it.isDirectory }
-    .forEach {
-        include("$dir:${it.name}")
-    }
+"plugins".let {
+    file(it)
+        .listFiles()
+        .forEach { plugin ->
+            include("$it:${plugin.name}")
+        }
+}
