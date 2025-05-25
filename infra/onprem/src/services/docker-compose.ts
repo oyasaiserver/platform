@@ -1,5 +1,7 @@
 import { $ } from 'zx'
 
+$.quiet = true
+
 export class DockerCompose {
   private static readonly cmd = 'docker compose --file compose.yaml'.split(' ')
 
