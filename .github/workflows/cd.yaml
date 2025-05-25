@@ -52,8 +52,7 @@ jobs:
       - upload-plugins
       - resolve-env
     runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+    environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
@@ -63,8 +62,7 @@ jobs:
       - run: npm run synth -w infra/cdktf
         # language=bash
       - run: |
-          dotenvx run -f envs/$ENVIRONMENT/.env -- npm run deploy:ci -w infra/cdktf
-        shell: bash
+          dotenvx run -f envs/${{ needs.resolve-env.outputs.environment }}/.env -- npm run deploy:ci -w infra/cdktf
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
@@ -87,4 +85,3 @@ jobs:
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "yes | npx https://pkg.pr.new/oyasaiserver/platform/@platform/infra-onprem@$SHORT_SHA"
-        shell: bash
