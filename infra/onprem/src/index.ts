@@ -10,7 +10,7 @@ import { Overlays } from './services/overlays'
 const [environment, envKey] = process.argv.slice(2) as [string, string]
 
 await step('env-config', async () => {
-  await Env.config(environment, envKey)
+  Env.config(environment, envKey)
 })
 
 await step('docker-compose-down', async () => {

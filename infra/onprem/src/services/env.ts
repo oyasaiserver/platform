@@ -1,4 +1,3 @@
-import { writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
 
@@ -8,12 +7,9 @@ export class Env {
     '../../envs'
   )
 
-  public static async config(
-    environemnt: string,
-    envKey: string
-  ): Promise<void> {
+  public static config(environemnt: string, envKey: string): void {
     const envKeysFile = join(Env.path, environemnt, '.env.keys')
-    await writeFile(envKeysFile, `DOTENV_PRIVATE_KEY=${envKey}`)
+    process.env.DOTENV_PRIVATE_KEY = envKey
     config({
       strict: true,
       path: join(Env.path, environemnt, '.env'),
