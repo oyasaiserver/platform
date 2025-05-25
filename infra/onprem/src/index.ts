@@ -17,9 +17,6 @@ await step('docker-compose-down', async () => {
 })
 
 await step('backup-clean-and-restore', async () => {
-  if (environment !== 'production') {
-    return
-  }
   const backup = await Backup.create(`${environment}/minecraft-main/worlds`)
   await rm(environment, {
     recursive: true,
