@@ -1,24 +1,26 @@
+x-minecraft-service: &minecraft-service
+  image: itzg/minecraft-server:java24
+  restart: unless-stopped
+  environment:
+    EULA: TRUE
+    TYPE: PURPUR
+    VERSION: 1.21.5
+
 services:
-  minecraft-production:
-    image: itzg/minecraft-server:java24
-    restart: unless-stopped
+  minecraft-main-production:
+    <<: *minecraft-service
     profiles:
       - production
     ports:
       - "25565:25565"
-    environment:
-      EULA: TRUE
     volumes:
-      - ./minecraft-production:/data
+      - ./production/minecraft-main:/data
 
-  minecraft-development:
-    image: itzg/minecraft-server:java24
-    restart: unless-stopped
+  minecraft-main-development:
+    <<: *minecraft-service
     profiles:
       - development
     ports:
       - "25566:25566"
-    environment:
-      EULA: TRUE
     volumes:
-      - ./minecraft-development:/data
+      - ./development/minecraft-main:/data

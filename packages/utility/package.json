@@ -1,0 +1,5 @@
+{
+  "name": "@platform/utility",
+  "type": "module",
+  "main": "src/index.ts"
+}

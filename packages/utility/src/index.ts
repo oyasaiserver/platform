@@ -1,0 +1,1 @@
+export { words } from './string'
