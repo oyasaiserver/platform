@@ -11,6 +11,8 @@ export class Env {
     process.env.DOTENV_PRIVATE_KEY = envKey
     config({
       strict: true,
+      quiet: true,
+      override: true,
       path: join(Env.path, environemnt, '.env')
     })
   }
