@@ -79,18 +79,14 @@ jobs:
       - cdktf
       - resolve-env
     runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
-      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+    environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-        # language=bash
-      - run: |
-          echo "TODO: simulating ssh command"
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "ENVIRONMENT=$ENVIRONMENT"
-          echo "yes | npx https://pkg.pr.new/oyasaiserver/platform/@platform/infra-onprem@$SHORT_SHA"
+      - run: npm run deploy -w infra/onprem
+        env:
+          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   actions-timeline:
     runs-on: ubuntu-latest

@@ -3,7 +3,7 @@ import { config } from '@dotenvx/dotenvx'
 import { REPOSITORY_ROOT } from '@platform/constants'
 import type { EnvType } from './env-type'
 
-const environment = process.env.ENVIRONMENT || 'local'
+const environment = process.env.ENVIRONMENT as string
 
 config({
   strict: true,
