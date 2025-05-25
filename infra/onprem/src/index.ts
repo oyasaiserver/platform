@@ -1,31 +1,34 @@
 #!/usr/bin/env -S npx tsx
-import { readdir } from 'node:fs/promises'
-import { resolve } from 'node:path'
-import { $ } from 'zx'
+import { rm } from 'node:fs/promises'
+import task from 'tasuku'
 import { Assets } from './services/assets'
 import { Backup } from './services/backup'
-import { Clener } from './services/cleaner'
 import { DockerCompose } from './services/docker-compose'
 import { Overlays } from './services/overlays'
 
-$.verbose = true
+const environment = process.argv.at(2) || 'local'
 
-console.log(await readdir(resolve(import.meta.dirname, '../../../envs')))
-
-process.exit(0)
-
-await DockerCompose.down()
-
-const backup = await Backup.create('production/minecraft-main/worlds')
-
-await Clener.clean({
-  exclude: [Backup.directory]
+await task('docker-compose-down', async () => {
+  await DockerCompose.down(environment)
 })
 
-await backup?.restore()
+await task('backup-clean-and-restore', async () => {
+  const backup = await Backup.create(`${environment}/minecraft-main/worlds`)
+  await rm(environment, {
+    recursive: true,
+    force: true
+  })
+  await backup?.restore()
+})
 
-await Overlays.apply(`${Assets.path}/overlays`, ['production', 'development'])
+await task('apply-overlays', async () => {
+  await Overlays.apply(`${Assets.path}/overlays`, environment)
+})
 
-await Assets.clone('compose.yaml')
+await task('clone-compose-yaml', async () => {
+  await Assets.clone('compose.yaml')
+})
 
-await DockerCompose.up()
+await task('docker-compose-up', async () => {
+  await DockerCompose.up(environment)
+})

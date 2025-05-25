@@ -2,7 +2,10 @@
   "name": "@platform/infra-onprem",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets"],
+  "files": [
+    "src",
+    "assets"
+  ],
   "bin": {
     "@platform/infra-onprem": "src/index.ts"
   },
@@ -11,6 +14,7 @@
     "start": "tsx src/index.ts"
   },
   "dependencies": {
+    "tasuku": "^2.0.1",
     "zx": "^8.5.4"
   }
 }
