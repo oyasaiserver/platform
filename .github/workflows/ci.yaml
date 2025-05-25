@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  check:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +13,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run check
-          npm run typecheck
+          npm run build
 
   codegen-no-drift:
     runs-on: ubuntu-latest
