@@ -1,10 +1,8 @@
 {
   "extends": "@total-typescript/tsconfig/bundler/no-dom",
   "compilerOptions": {
-    "composite": true,
-    "noEmit": false,
-    "outDir": "dist"
+    "composite": true
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
