@@ -10,6 +10,7 @@ export class DockerCompose {
     environment: string,
     processEnv: DotenvPopulateInput
   ): Promise<void> {
+    console.log(processEnv)
     await $({
       env: processEnv
     })`${DockerCompose.cmd(environment)} up -d --wait`
