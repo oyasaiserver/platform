@@ -7,8 +7,6 @@ runs:
       with:
         node-version-file: package.json
         cache: npm
-        cache-dependency-path: |
-          package-lock.json
-          **/package-lock.json
+        cache-dependency-path: package-lock.json
     - run: npm ci
       shell: bash

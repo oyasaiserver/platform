@@ -1,5 +1,5 @@
 {
-  "name": "@oyasaiserver/constants",
+  "name": "@platform/constants",
   "type": "module",
   "main": "src/index.ts"
 }

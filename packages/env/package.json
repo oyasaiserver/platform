@@ -1,5 +1,5 @@
 {
-  "name": "@oyasaiserver/env",
+  "name": "@platform/env",
   "type": "module",
   "main": "src/index.ts",
   "bin": {
