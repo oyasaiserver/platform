@@ -14,7 +14,7 @@ const composeYaml = 'compose.yaml'
 await copyFile(join(assets, composeYaml), join(cwd(), composeYaml))
 
 // Stop the containers if they are running
-await $`$docker compose --profile production --profile development -f compose.yaml down down --remove-orphans`
+await $`docker compose --profile production --profile development -f compose.yaml down --remove-orphans`
 
 // Start the containers
-await $`$docker compose --profile production --profile development -f compose.yaml down up -d --wait`
+await $`docker compose --profile production --profile development -f compose.yaml up --detached --wait`
