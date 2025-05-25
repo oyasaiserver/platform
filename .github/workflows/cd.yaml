@@ -62,7 +62,8 @@ jobs:
       - run: npm run get -w infra/cdktf
       - run: npm run synth -w infra/cdktf
         # language=bash
-      - run: dotenvx run -f envs/$ENVIRONMENT/.env -- npm run deploy:ci -w infra/cdktf
+      - run: |
+          dotenvx run -f envs/$ENVIRONMENT/.env -- npm run deploy:ci -w infra/cdktf
         shell: bash
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
