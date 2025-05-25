@@ -13,14 +13,8 @@ const assets = resolve(import.meta.dirname, '../assets')
 const composeYaml = 'compose.yaml'
 await copyFile(join(assets, composeYaml), join(cwd(), composeYaml))
 
-// docker compose command
-const docker =
-  'docker compose --profile production --profile development -f compose.yaml down'
-
 // Stop the containers if they are running
-await $`${docker} down --remove-orphans`
-
-// backup the world data
+await $`$docker compose --profile production --profile development -f compose.yaml down down --remove-orphans`
 
 // Start the containers
-await $`${docker} up -d --wait`
+await $`$docker compose --profile production --profile development -f compose.yaml down up -d --wait`
