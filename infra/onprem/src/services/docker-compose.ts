@@ -1,19 +1,25 @@
+import type { DotenvPopulateInput } from '@dotenvx/dotenvx'
 import { $ } from 'zx'
 
 $.quiet = true
 
 export class DockerCompose {
-  private static readonly cmd = 'docker compose --file compose.yaml'.split(' ')
+  private static readonly base = 'docker compose --file compose.yaml'.split(' ')
 
-  public static async up(environment: string): Promise<void> {
-    await $`${DockerCompose.cmd} ${DockerCompose.profile(environment)} up -d --wait`
+  public static async up(
+    environment: string,
+    processEnv: DotenvPopulateInput
+  ): Promise<void> {
+    await $({
+      env: processEnv
+    })`${DockerCompose.cmd(environment)} up -d --wait`
   }
 
   public static async down(environment: string): Promise<void> {
-    await $`${DockerCompose.cmd} ${DockerCompose.profile(environment)} down --remove-orphans`.nothrow()
+    await $`${DockerCompose.cmd(environment)} down --remove-orphans`.nothrow()
   }
 
-  private static profile(environment: string): string[] {
-    return ['--profile', environment]
+  private static cmd(environment: string): string[] {
+    return [...DockerCompose.base, '--profile', environment]
   }
 }

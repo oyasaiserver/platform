@@ -7,11 +7,9 @@ import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
 import { Overlays } from './services/overlays'
 
-const [environment, envKey] = process.argv.slice(2) as [string, string]
+const environment = process.argv.at(2) || 'local'
 
-await step('env-config', async () => {
-  Env.config(environment, envKey)
-})
+const processEnv = Env.parse(environment)
 
 await step('docker-compose-down', async () => {
   await DockerCompose.down(environment)
@@ -35,5 +33,5 @@ await step('clone-compose-yaml', async () => {
 })
 
 await step('docker-compose-up', async () => {
-  await DockerCompose.up(environment)
+  await DockerCompose.up(environment, processEnv)
 })
