@@ -2,11 +2,7 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "infra/*"
-  ],
+  "workspaces": ["apps/*", "packages/*", "infra/*"],
   "scripts": {
     "check": "biome check --write && sort-package-json --quiet",
     "codegen": "env-codegen",
@@ -16,6 +12,7 @@
     "@dotenvx/dotenvx": "^1.44.1",
     "@platform/constants": "workspace",
     "@platform/env": "workspace",
+    "@platform/utility": "workspace",
     "tsx": "^4.19.4",
     "zx": "^8.5.4"
   },

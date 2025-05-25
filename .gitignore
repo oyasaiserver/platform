@@ -401,6 +401,3 @@ terraform.rc
 cdktf.out
 cdktf.log
 .gen
-
-### User-specific files
-minecraft-*

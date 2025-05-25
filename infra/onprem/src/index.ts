@@ -1,20 +1,20 @@
 #!/usr/bin/env -S npx tsx
-import { copyFile } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
 import { cwd } from 'node:process'
 import { $ } from 'zx'
+import { Assets } from './services/assets'
+import { DockerCompose } from './services/docker-compose'
+import { Overlays } from './services/overlays'
 
 $.verbose = true
 
-// assets directory
-const assets = resolve(import.meta.dirname, '../assets')
+await Assets.copy('compose.yaml')
 
-// update compose.yaml
-const composeYaml = 'compose.yaml'
-await copyFile(join(assets, composeYaml), join(cwd(), composeYaml))
+await DockerCompose.down()
 
-// Stop the containers if they are running
-await $`docker compose --profile production --profile development -f compose.yaml down --remove-orphans`
+// await BackupManager.create('production/minecraft-main/worlds')
 
-// Start the containers
-await $`docker compose --profile production --profile development -f compose.yaml up -d --wait`
+// await BackupManager.restore()
+
+await Overlays.apply(`${Assets.path}/overlays`, `${cwd()}/production`)
+
+await DockerCompose.up()

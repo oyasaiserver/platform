@@ -16,6 +16,9 @@
       "nursery": {
         "useExplicitType": "warn"
       },
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      },
       "correctness": {
         "noUnusedImports": "warn"
       }
