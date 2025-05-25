@@ -8,12 +8,10 @@ export class Env {
   )
 
   public static config(environemnt: string, envKey: string): void {
-    const envKeysFile = join(Env.path, environemnt, '.env.keys')
     process.env.DOTENV_PRIVATE_KEY = envKey
     config({
       strict: true,
-      path: join(Env.path, environemnt, '.env'),
-      envKeysFile
+      path: join(Env.path, environemnt, '.env')
     })
   }
 }
