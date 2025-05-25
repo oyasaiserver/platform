@@ -10,7 +10,7 @@ export class DockerCompose {
   }
 
   public static async down(): Promise<void> {
-    await $`${DockerCompose.cmd} down --remove-orphans`
+    await $`${DockerCompose.cmd} down --remove-orphans`.nothrow()
   }
 
   private static words(cmd: string): string[] {
