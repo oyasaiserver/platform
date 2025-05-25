@@ -7,10 +7,14 @@ export class Overlays {
       withFileTypes: true
     })
 
+    for (const target of targets) {
+      await mkdir(target)
+    }
+
     for (const entry of entries) {
-      for (const targetDir of targets) {
+      for (const target of targets) {
         if (entry.isDirectory()) {
-          await mkdir(join(targetDir, entry.name), {
+          await mkdir(join(target, entry.name), {
             recursive: true
           })
         }
