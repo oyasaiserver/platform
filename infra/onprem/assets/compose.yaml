@@ -5,6 +5,8 @@ x-minecraft-service: &minecraft-service
     EULA: TRUE
     TYPE: PURPUR
     VERSION: 1.21.5
+    # from .env
+    ENVIRONMENT: ${ENVIRONMENT}
 
 services:
   minecraft-main-production:
