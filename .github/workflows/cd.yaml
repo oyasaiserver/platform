@@ -94,3 +94,14 @@ jobs:
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "yes | npx https://pkg.pr.new/oyasaiserver/platform/@platform/infra-onprem@$SHORT_SHA"
+
+  action-timeline:
+    runs-on: ubuntu-latest
+    needs:
+      - resolve-env
+      - upload-plugins
+      - publish-package-infra-onprem
+      - cdktf
+      - deploy-onprem-infra
+    steps:
+      - uses: Kesin11/actions-timeline@v2

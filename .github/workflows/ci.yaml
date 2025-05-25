@@ -29,3 +29,12 @@ jobs:
       - run: npm run codegen
       - run: npm run check
       - run: git diff --exit-code
+
+  action-timeline:
+    runs-on: ubuntu-latest
+    needs:
+      - format
+      - typecheck
+      - codegen-no-drift
+    steps:
+      - uses: Kesin11/actions-timeline@v2
