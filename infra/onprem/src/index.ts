@@ -4,9 +4,14 @@ import step from 'tasuku'
 import { Assets } from './services/assets'
 import { Backup } from './services/backup'
 import { DockerCompose } from './services/docker-compose'
+import { Env } from './services/env'
 import { Overlays } from './services/overlays'
 
-const environment = process.argv.at(2) || 'local'
+const [environment, envKey] = process.argv.slice(2) as [string, string]
+
+await step('env-config', async () => {
+  await Env.config(environment, envKey)
+})
 
 await step('docker-compose-down', async () => {
   await DockerCompose.down(environment)
