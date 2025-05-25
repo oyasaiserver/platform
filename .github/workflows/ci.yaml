@@ -13,7 +13,13 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run check
-          npm run build
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: npm run build
 
   codegen-no-drift:
     runs-on: ubuntu-latest

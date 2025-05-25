@@ -2,11 +2,15 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*", "infra/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "infra/*"
+  ],
   "scripts": {
+    "build": "tsc --build",
     "check": "biome check --write && sort-package-json --quiet",
-    "codegen": "env-codegen",
-    "build": "tsc --build"
+    "codegen": "env-codegen"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",
