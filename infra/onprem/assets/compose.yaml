@@ -3,6 +3,8 @@ x-minecraft-service: &minecraft-service
   restart: unless-stopped
   environment:
     EULA: TRUE
+    TYPE: PURPUR
+    VERSION: 1.21.5
 
 services:
   minecraft-main-production:

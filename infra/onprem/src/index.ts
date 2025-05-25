@@ -15,6 +15,9 @@ await DockerCompose.down()
 
 // await BackupManager.restore()
 
-await Overlays.apply(`${Assets.path}/overlays`, `${cwd()}/production`)
+await Overlays.apply(`${Assets.path}/overlays`, [
+  `${cwd()}/production`,
+  `${cwd()}/development`
+])
 
 await DockerCompose.up()

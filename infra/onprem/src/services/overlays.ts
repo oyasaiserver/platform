@@ -2,23 +2,30 @@ import { copyFile, mkdir, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 export class Overlays {
-  public static async apply(
-    overlayDir: string,
-    targetDir: string
-  ): Promise<void> {
-    const entries = await readdir(overlayDir, {
+  public static async apply(overlay: string, targets: string[]): Promise<void> {
+    const entries = await readdir(overlay, {
       withFileTypes: true
     })
 
     for (const entry of entries) {
-      const src = join(overlayDir, entry.name)
-      const dest = join(targetDir, entry.name)
+      for (const targetDir of targets) {
+        if (entry.isDirectory()) {
+          await mkdir(join(targetDir, entry.name), {
+            recursive: true
+          })
+        }
+      }
 
+      const src = join(overlay, entry.name)
       if (entry.isDirectory()) {
-        await mkdir(dest, { recursive: true })
-        await Overlays.apply(src, dest)
+        await Overlays.apply(
+          src,
+          targets.map(target => join(target, entry.name))
+        )
       } else if (entry.isFile()) {
-        await copyFile(src, dest)
+        for (const targetDir of targets) {
+          await copyFile(src, join(targetDir, entry.name))
+        }
       }
     }
   }
