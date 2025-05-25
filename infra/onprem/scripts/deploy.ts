@@ -1,4 +1,4 @@
-import { Env } from '@oyasaiserver/env'
+import { Env } from '@platform/env'
 import { $ } from 'zx'
 
 $.verbose = true

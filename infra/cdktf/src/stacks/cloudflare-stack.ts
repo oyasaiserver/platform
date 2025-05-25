@@ -1,6 +1,6 @@
 import { D1Database } from '@cdktf/provider-cloudflare/lib/d1-database'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
-import { Env } from '@oyasaiserver/env'
+import { Env } from '@platform/env'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend'

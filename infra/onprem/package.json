@@ -6,7 +6,7 @@
     "@infra/onprem": "src/index.ts"
   },
   "scripts": {
-    "deploy": "tsx scripts/deploy.ts"
+    "start": "tsx scripts/start.ts"
   },
   "dependencies": {
     "zx": "^8.5.4"
