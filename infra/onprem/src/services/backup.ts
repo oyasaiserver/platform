@@ -3,6 +3,8 @@ import { basename, join, resolve } from 'node:path'
 import { $ } from 'zx'
 
 export class Backup {
+  public static readonly directory: string = 'backups'
+
   public constructor(
     private readonly archive: string,
     private readonly original: string
@@ -16,10 +18,13 @@ export class Backup {
     } catch (_) {
       return
     }
-    await mkdir('backup', {
+    await mkdir(Backup.directory, {
       recursive: true
     })
-    const archive = join('backup', `${basename(dir)}-${Date.now()}.tar.zst`)
+    const archive = join(
+      Backup.directory,
+      `${basename(dir)}-${Date.now()}.tar.zst`
+    )
     await $`tar -cf - ${dir} | zstd -T0 -5 -o ${archive}`
     return new Backup(archive, dir)
   }

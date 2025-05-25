@@ -12,7 +12,9 @@ await DockerCompose.down()
 
 const backup = await Backup.create('production/minecraft-main/worlds')
 
-await Clener.clean()
+await Clener.clean({
+  exclude: [Backup.directory]
+})
 
 await backup?.restore()
 
