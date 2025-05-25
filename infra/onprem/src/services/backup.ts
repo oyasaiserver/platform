@@ -1,5 +1,5 @@
 import { mkdir, stat } from 'node:fs/promises'
-import { basename, join } from 'node:path'
+import { basename, dirname, join } from 'node:path'
 import { $ } from 'zx'
 
 export class Backup {
@@ -32,6 +32,7 @@ export class Backup {
   }
 
   public async restore(): Promise<void> {
-    await $`zstd -d -c ${this.archive} | tar -xf - -C .`
+    const restoreTo = dirname(this.original)
+    await $`zstd -d -c ${this.archive} | tar -xf - -C ${restoreTo}`
   }
 }
