@@ -10,7 +10,7 @@ $.verbose = true
 
 await DockerCompose.down()
 
-const backup = await Backup.create('minecraft-main/worlds')
+const backup = await Backup.create('production/minecraft-main/worlds')
 
 await Clener.clean()
 
