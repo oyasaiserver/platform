@@ -33,6 +33,9 @@ export class Backup {
 
   public async restore(): Promise<void> {
     const restoreTo = dirname(this.original)
+    await mkdir(restoreTo, {
+      recursive: true
+    })
     await $`zstd -d -c ${this.archive} | tar -xf - -C ${restoreTo}`
   }
 }
