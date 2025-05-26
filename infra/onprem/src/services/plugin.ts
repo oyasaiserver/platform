@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 
 interface PluginDefinition {
   name: string
@@ -15,6 +15,9 @@ export class Plugin {
     path,
     plugins
   }: DownloadConfig): Promise<void> {
+    await mkdir(path, {
+      recursive: true
+    })
     await Promise.all(
       plugins.map(async plugin => {
         const url = new URL(plugin.url)
