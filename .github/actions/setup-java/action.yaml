@@ -11,3 +11,5 @@ runs:
     - uses: gradle/actions/setup-gradle@v4
       with:
         cache-overwrite-existing: true
+        cache-cleanup: always
+        gradle-home-cache-cleanup: true
