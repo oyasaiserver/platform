@@ -7,7 +7,7 @@ interface Mapping {
 
 export class Artifact {
   private static readonly base =
-    'https://nightly.link/oyasaiserver/platform/workflows/cd.yaml/main'
+    'https://nightly.link/oyasaiserver/platform/workflows/cd.yaml/main/'
 
   public static async download(mappings: Mapping[]): Promise<void> {
     for (const mapping of mappings) {
