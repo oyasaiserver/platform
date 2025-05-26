@@ -19,7 +19,11 @@ await step('docker-compose-down', async () => {
 })
 
 await step('backup-clean-and-restore', async () => {
-  const backup = await Backup.create(`${environment}/minecraft-main/worlds`)
+  const backup = await Backup.create(
+    `${environment}/minecraft-main/worlds`,
+    '.backups'
+  )
+  await backup?.removeStale()
   await rm(environment, {
     recursive: true,
     force: true
