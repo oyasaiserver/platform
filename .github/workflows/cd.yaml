@@ -47,16 +47,6 @@ jobs:
           path: ${{ env.artifacts_dir }}
           retention-days: 1
 
-  publish-package-infra-onprem:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
-      - run: |
-          rm -rf infra/onprem/envs
-          cp -rf envs infra/onprem/envs
-          npx pkg-pr-new publish infra/onprem --bin
-
   cdktf:
     needs:
       - resolve-env
@@ -74,11 +64,24 @@ jobs:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
+  publish-package-infra-onprem:
+    needs:
+      - resolve-env
+      - upload-plugins
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: |
+          rm -rf infra/onprem/envs
+          cp -rf envs infra/onprem/envs
+          npx pkg-pr-new publish infra/onprem --bin
+
   deploy-onprem-infra:
     needs:
       - upload-plugins
-      - publish-package-infra-onprem
       - cdktf
+      - publish-package-infra-onprem
       - resolve-env
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}

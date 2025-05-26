@@ -31,11 +31,19 @@ jobs:
       - run: npm run check
       - run: git diff --exit-code
 
+  build-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
+      - run: ./gradlew build --parallel
+
   actions-timeline:
     runs-on: ubuntu-latest
     needs:
       - format
       - typecheck
       - codegen-no-drift
+      - build-plugins
     steps:
       - uses: Kesin11/actions-timeline@v2
