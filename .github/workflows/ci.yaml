@@ -9,9 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
-      - run: ./gradlew spotlessCheck --parallel
       - uses: ./.github/actions/setup-node
-      - run: npm run check
+      - run: |
+          ./gradlew spotlessCheck --parallel &
+          npm run check &
+          wait
 
   typecheck:
     runs-on: ubuntu-latest
