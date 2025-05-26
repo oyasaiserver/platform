@@ -15,7 +15,6 @@ import net.coreprotect.thread.NetworkHandler;
 import net.coreprotect.thread.Scheduler;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ChatUtils;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,9 +66,6 @@ public class PluginInitializationService {
 
       // Start background services
       startBackgroundServices(plugin);
-
-      // Start metrics
-      enableMetrics(plugin);
     }
 
     return start;
@@ -145,18 +141,5 @@ public class PluginInitializationService {
 
     // Start consumer
     Consumer.startConsumer();
-  }
-
-  /**
-   * Enables metrics reporting
-   *
-   * @param plugin The CoreProtect plugin instance
-   */
-  private static void enableMetrics(JavaPlugin plugin) {
-    try {
-      new Metrics(plugin, 2876);
-    } catch (Exception e) {
-      // Failed to connect to bStats server or something else went wrong
-    }
   }
 }
