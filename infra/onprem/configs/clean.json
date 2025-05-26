@@ -1,0 +1,8 @@
+{
+  "except": [
+    ".backups",
+    "worlds",
+    "plugins/CoreProtect/database.db",
+    "plugins/LuckPerms/yaml-storage/users"
+  ]
+}

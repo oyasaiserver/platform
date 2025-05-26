@@ -2,7 +2,7 @@
   "name": "@platform/infra-onprem",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets", "envs"],
+  "files": ["src", "assets", "envs", "configs"],
   "bin": {
     "@platform/infra-onprem": "src/index.ts"
   },

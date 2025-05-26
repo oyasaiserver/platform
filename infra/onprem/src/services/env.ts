@@ -15,6 +15,7 @@ export class Env {
     const processEnv: DotenvPopulateInput = {}
     config({
       strict: true,
+      quiet: true,
       processEnv,
       path: join(Env.path, environemnt, '.env')
     })

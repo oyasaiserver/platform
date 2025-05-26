@@ -1,10 +1,10 @@
 #!/usr/bin/env -S npx tsx
-import { rm } from 'node:fs/promises'
 import step from 'tasuku'
-import { plugins } from '../assets/plugins.json'
+import { except } from '../configs/clean.json'
+import { plugins } from '../configs/plugins.json'
 import { Artifact } from './services/artifact'
 import { Assets } from './services/assets'
-import { Backup } from './services/backup'
+import { Cleaner } from './services/cleaner'
 import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
 import { Overlays } from './services/overlays'
@@ -19,16 +19,16 @@ await step('docker-compose-down', async () => {
 })
 
 await step('backup-clean-and-restore', async () => {
-  const backup = await Backup.create(
-    `${environment}/minecraft-main/worlds`,
-    '.backups'
-  )
-  await backup?.removeStale()
-  await rm(environment, {
-    recursive: true,
-    force: true
+  // const backup = await Backup.create(
+  //   `${environment}/minecraft-main/worlds`,
+  //   `${environment}/minecraft-main/.backups`
+  // )
+  // await backup?.removeStale()
+  await Cleaner.clean({
+    dir: `${environment}/minecraft-main`,
+    except
   })
-  await backup?.restore()
+  // await backup?.restore()
 })
 
 await step('download-plugins-from-github-artifact', async () => {
