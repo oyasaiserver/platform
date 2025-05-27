@@ -78,7 +78,7 @@ jobs:
           rm -rf packages/server/compose
           cp -rf compose packages/server/compose
           # publish
-          npm publish -w packages/server
+          npx pkg-pr-new publish packages/server --bin
 
   build-infra-onprem-image:
     runs-on: ubuntu-latest
