@@ -2,7 +2,7 @@
   "name": "@platform/server",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets", "envs", "configs"],
+  "files": ["src", "assets", "envs", "configs", "compose"],
   "bin": {
     "@platform/server": "src/index.ts"
   },

@@ -32,19 +32,19 @@ jobs:
   upload-plugins:
     runs-on: ubuntu-latest
     env:
-      artifacts_dir: flat-plugins
+      DIR: flat-plugins
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |
-          mkdir -p ${{ env.artifacts_dir }}
-          find plugins -name "*.jar" -exec cp {} ${{ env.artifacts_dir }}/ \;
+          mkdir -p ${{ env.DIR }}
+          find plugins -name "*.jar" -exec cp {} ${{ env.DIR }}/ \;
       - uses: actions/upload-artifact@v4
         with:
           name: plugins
-          path: ${{ env.artifacts_dir }}
+          path: ${{ env.DIR }}
           retention-days: 1
 
   cdktf:
@@ -64,25 +64,52 @@ jobs:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
-  publish-package-infra-onprem:
-    needs:
-      - resolve-env
-      - upload-plugins
+  publish-package-server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
+        # language=bash
       - run: |
+          # reify envs
           rm -rf packages/server/envs
           cp -rf envs packages/server/envs
+          # reify compose
+          rm -rf packages/server/compose
+          cp -rf compose packages/server/compose
+          # publish
           npx pkg-pr-new publish packages/server --bin
+
+  build-infra-onprem-image:
+    runs-on: ubuntu-latestï
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        # language=bash
+      - run: |
+          SHA=$(git rev-parse --short HEAD)
+          docker build -f infra/onprem/Dockerfile \
+            -t $IMAGE_NAME:latest \
+            --build-arg SHA=$SHA \
+            .
+          docker push $IMAGE_NAME:latest
 
   deploy-onprem-infra:
     needs:
+      - resolve-env
       - upload-plugins
       - cdktf
-      - publish-package-infra-onprem
-      - resolve-env
+      - publish-package-server
+      - build-infra-onprem-image
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
@@ -98,8 +125,9 @@ jobs:
     needs:
       - resolve-env
       - upload-plugins
-      - publish-package-infra-onprem
+      - publish-package-server
       - cdktf
+      - build-infra-onprem-image
       - deploy-onprem-infra
     steps:
       - uses: Kesin11/actions-timeline@v2
