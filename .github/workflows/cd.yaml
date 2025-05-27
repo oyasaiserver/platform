@@ -81,7 +81,7 @@ jobs:
           npx pkg-pr-new publish packages/server --bin
 
   build-infra-onprem-image:
-    runs-on: ubuntu-latestï
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
