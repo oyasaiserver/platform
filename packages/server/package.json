@@ -1,10 +1,10 @@
 {
-  "name": "@platform/infra-onprem",
+  "name": "@platform/server",
   "version": "1.0.0",
   "type": "module",
   "files": ["src", "assets", "envs", "configs"],
   "bin": {
-    "@platform/infra-onprem": "src/index.ts"
+    "@platform/server": "src/index.ts"
   },
   "scripts": {
     "deploy": "tsx scripts/deploy.ts"

@@ -73,9 +73,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - run: |
-          rm -rf infra/onprem/envs
-          cp -rf envs infra/onprem/envs
-          npx pkg-pr-new publish infra/onprem --bin
+          rm -rf packages/server/envs
+          cp -rf envs packages/server/envs
+          npx pkg-pr-new publish packages/server --bin
 
   deploy-onprem-infra:
     needs:
@@ -88,7 +88,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npm run deploy -w infra/onprem
+      - run: npm run deploy -w packages/server
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
