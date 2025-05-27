@@ -1,10 +1,10 @@
 ---
-- name: playbook
+- name: Playbook
   hosts: localhost
   become: true
   tasks:
-    - name: install-docker
-      apt:
+    - name: Install docker
+      ansible.builtin.apt:
         name: docker.io
         state: present
         update_cache: true
