@@ -12,4 +12,3 @@ runs:
       with:
         cache-overwrite-existing: true
         cache-cleanup: always
-        gradle-home-cache-cleanup: true
