@@ -95,7 +95,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
         # language=bash
-        run: |
+      - run: |
           SHA=$(git rev-parse --short HEAD)
           docker build -f infra/onprem/Dockerfile \
             -t $IMAGE_NAME:latest \
