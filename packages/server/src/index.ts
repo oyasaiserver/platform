@@ -52,7 +52,7 @@ await step('apply-overlays', async () => {
 })
 
 await step('clone-compose-yaml', async () => {
-  await Assets.clone('compose.yaml')
+  await Assets.clone('compose/compose.yaml')
 })
 
 await step('docker-compose-up', async () => {

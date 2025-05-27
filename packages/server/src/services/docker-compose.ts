@@ -4,7 +4,8 @@ import { $ } from 'zx'
 $.quiet = true
 
 export class DockerCompose {
-  private static readonly base = 'docker compose --file compose.yaml'.split(' ')
+  private static readonly base =
+    'docker compose --file compose/compose.yaml'.split(' ')
 
   public static async up(
     environment: string,
