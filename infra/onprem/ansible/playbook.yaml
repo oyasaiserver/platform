@@ -1,2 +1,10 @@
 ---
-- name: oyasai
+- name: playbook
+  hosts: localhost
+  become: true
+  tasks:
+    - name: install-docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: true
