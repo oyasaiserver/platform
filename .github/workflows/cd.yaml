@@ -88,7 +88,7 @@ jobs:
       contents: read
       packages: write
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem-${{ needs.resolve-env.outputs.environment }}
+      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem
     steps:
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
