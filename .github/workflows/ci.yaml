@@ -43,7 +43,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ansible/ansible-lint@v25.5.0
-      - run: ansible-lint infra/onprem/ansible/playbook.yaml
+        with:
+          working_directory: infra/onprem/ansible
 
   actions-timeline:
     runs-on: ubuntu-latest
