@@ -82,11 +82,13 @@ jobs:
 
   build-infra-onprem-image:
     runs-on: ubuntu-latest
+    needs:
+      - resolve-env
     permissions:
       contents: read
       packages: write
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem
+      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem-${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
