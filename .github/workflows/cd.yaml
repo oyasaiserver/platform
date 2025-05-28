@@ -66,58 +66,36 @@ jobs:
 
   publish-package-server:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
         # language=bash
       - run: |
           # reify envs
-          rm -rf packages/server/envs
-          cp -rf envs packages/server/envs
+          rm -rf packages/core/envs
+          cp -rf envs packages/core/envs
           # reify compose
-          rm -rf packages/server/compose
-          cp -rf compose packages/server/compose
+          rm -rf packages/core/compose
+          cp -rf compose packages/core/compose
           # publish
-          npx pkg-pr-new publish packages/server --bin
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+          npm publish -w packages/core
 
-  build-infra-onprem-image:
-    runs-on: ubuntu-latest
-    needs:
-      - resolve-env
-    permissions:
-      contents: read
-      packages: write
-    env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}/infra-onprem
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-        # language=bash
-      - run: |
-          SHA=$(git rev-parse --short HEAD)
-          docker build -f infra/onprem/Dockerfile \
-            -t $IMAGE_NAME:latest \
-            --build-arg SHA=$SHA \
-            .
-          docker push $IMAGE_NAME:latest
-
-  deploy-onprem-infra:
+  deploy-onprem:
     needs:
       - resolve-env
       - upload-plugins
       - cdktf
       - publish-package-server
-      - build-infra-onprem-image
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npm run deploy -w packages/server
+      - run: npm run deploy -w packages/core
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
@@ -129,7 +107,6 @@ jobs:
       - upload-plugins
       - publish-package-server
       - cdktf
-      - build-infra-onprem-image
-      - deploy-onprem-infra
+      - deploy-onprem
     steps:
       - uses: Kesin11/actions-timeline@v2
