@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }

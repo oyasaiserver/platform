@@ -27,9 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npm run codegen
-      - run: npm run check
-      - run: git diff --exit-code
+      - run: |
+          npm run codegen
+          npm run check
+          git diff --exit-code
 
   build-plugins:
     runs-on: ubuntu-latest
