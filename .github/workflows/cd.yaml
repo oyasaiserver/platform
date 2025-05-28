@@ -69,6 +69,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      GITHUB_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
@@ -83,6 +85,7 @@ jobs:
           # publish
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
           echo "@oyasaiserver:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          npm pkg set version=1.0.0-rc.${GITHUB_SHA}
           npm publish -w packages/core
 
   deploy-onprem:
