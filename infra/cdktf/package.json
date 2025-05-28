@@ -1,5 +1,5 @@
 {
-  "name": "@platform/infra-cdktf",
+  "name": "@oyasaiserver/infra-cdktf",
   "type": "module",
   "scripts": {
     "get": "cdktf get",

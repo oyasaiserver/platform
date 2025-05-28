@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
-import { REPOSITORY_ROOT } from '@platform/constants'
+import { REPOSITORY_ROOT } from '@oyasaiserver/constants'
 import type { EnvType } from './env-type'
 
 const environment = process.env.ENVIRONMENT as string
