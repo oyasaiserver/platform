@@ -4,7 +4,7 @@
   "type": "module",
   "files": ["src", "assets", "envs", "configs", "compose"],
   "bin": {
-    "@oyasaiserver/core": "src/index.ts"
+    "start": "src/index.ts"
   },
   "scripts": {
     "deploy": "tsx scripts/deploy.ts"
