@@ -13,6 +13,7 @@ on:
         type: choice
         options:
           - production
+          - development
 
 jobs:
   resolve-env:
@@ -79,9 +80,6 @@ jobs:
           # reify envs
           rm -rf packages/core/envs
           cp -rf envs packages/core/envs
-          # reify compose
-          rm -rf packages/core/compose
-          cp -rf compose packages/core/compose
           # publish
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
           echo "@oyasaiserver:registry=https://npm.pkg.github.com/" >> ~/.npmrc
