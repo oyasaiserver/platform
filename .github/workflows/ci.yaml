@@ -54,6 +54,19 @@ jobs:
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
 
+  run-server:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [ development, production ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-java
+      - run: |
+          export ENVIRONMENT=${{ matrix.environment }}
+          npm run start -w packages/core
+
   actions-timeline:
     runs-on: ubuntu-latest
     needs:

@@ -26,6 +26,7 @@ class Vertex : JavaPlugin() {
                 register(name, command)
             }
         }
+        println(Env.Database.Mongo)
     }
 
     override fun onDisable() {
