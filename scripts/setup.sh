@@ -3,19 +3,16 @@
 brew install asdf
 
 # shellcheck disable=SC2016
-LINE='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
+line='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
 
-# Determine which shell rc file to use
-case "$(basename "$SHELL")" in
-  zsh) rcfile="$HOME/.zshrc" ;;
-  bash) rcfile="$HOME/.bashrc" ;;
-  *) echo "Unsupported shell: $SHELL" >&2; exit 1 ;;
-esac
+rcfiles=("$HOME/.zshrc" "$HOME/.bashrc")
 
-# Add the line only if it's not already there
-if ! grep -Fxq "$LINE" "$rcfile"; then
-  printf '\n%s\n' "$LINE" >> "$rcfile"
-fi
+for rcfile in "${rcfiles[@]}"; do
+  # Add the line only if it's not already there
+  if ! grep -Fxq "$line" "$rcfile"; then
+    printf '\n%s\n' "$line" >> "$rcfile"
+  fi
+done
 
 # install nodejs plugin
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
