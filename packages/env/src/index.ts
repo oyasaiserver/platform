@@ -1,6 +1,5 @@
 import { join } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
-import { REPOSITORY_ROOT } from '@oyasaiserver/constants'
 import type { EnvType } from './env-type'
 
 const environment = process.env.ENVIRONMENT as string
@@ -8,7 +7,7 @@ const environment = process.env.ENVIRONMENT as string
 config({
   strict: true,
   override: true,
-  path: join(REPOSITORY_ROOT, 'envs', environment, '.env')
+  path: join('envs', environment, '.env')
 })
 
 export const Env = {
