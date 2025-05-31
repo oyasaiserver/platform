@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: bash ./scripts/setup.sh
+      - run: sh ./scripts/setup.sh
         shell: bash
 
   asdf-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - run: bash ./scripts/setup.sh
+      - run: sh ./scripts/setup.sh
         shell: zsh
 
   typecheck:
