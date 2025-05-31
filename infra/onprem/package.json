@@ -1,0 +1,14 @@
+{
+  "name": "@oyasaiserver/infra-onprem",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "jsdom": "^26.1.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7"
+  }
+}
