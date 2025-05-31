@@ -48,6 +48,15 @@ jobs:
       - run: ./gradlew build --parallel
       - uses: ./.github/actions/upload-plugins
 
+  test-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - uses: actions/download-artifact@v4
+      - run: |
+          npm run test:integration -w tests
+
   actions-timeline:
     runs-on: ubuntu-latest
     needs:
