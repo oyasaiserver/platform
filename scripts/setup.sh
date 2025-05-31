@@ -17,9 +17,6 @@ if ! grep -Fxq "$LINE" "$rcfile"; then
   printf '\n%s\n' "$LINE" >> "$rcfile"
 fi
 
-# shellcheck disable=SC1090
-source "$rcfile"
-
 # install nodejs plugin
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 

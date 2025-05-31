@@ -42,7 +42,7 @@ jobs:
       - uses: homebrew/actions/setup-homebrew@master
       - run: |
           sh ./scripts/setup.sh
-          cd .. && cd platform
+          source ~/.zshrc && source ~/.bashrc
           npm ci
           npm run verify-asdf -w scripts
           
