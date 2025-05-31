@@ -68,7 +68,6 @@ jobs:
         # language=bash
       - run: |
           # reify envs
-          rm -rf packages/core/envs
           cp -rf envs packages/core/envs
           # publish
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
