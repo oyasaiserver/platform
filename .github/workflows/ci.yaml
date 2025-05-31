@@ -50,6 +50,8 @@ jobs:
 
   test-integration:
     runs-on: ubuntu-latest
+    needs:
+      - build-and-upload-plugins
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
