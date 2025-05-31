@@ -35,7 +35,7 @@ await step('backup-clean-and-restore', async () => {
 await step('download-plugins-from-github-artifact', async () => {
   await Artifact.download([
     {
-      artifact: 'plugins',
+      artifact: 'plugins.zip',
       path: `${environment}/minecraft-main/plugins`
     }
   ])

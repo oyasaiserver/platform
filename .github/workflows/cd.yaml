@@ -30,23 +30,13 @@ jobs:
             echo "environment=development" >> "$GITHUB_OUTPUT"
           fi
 
-  upload-plugins:
+  build-and-upload-plugins:
     runs-on: ubuntu-latest
-    env:
-      dir: flat-plugins
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
-      - name: Flatten and collect JARs
-        run: |
-          mkdir -p ${{ env.dir }}
-          find plugins -name "*.jar" -exec cp {} ${{ env.dir }}/ \;
-      - uses: actions/upload-artifact@v4
-        with:
-          name: plugins
-          path: ${{ env.dir }}
-          retention-days: 1
+      - uses: ./.github/actions/upload-plugins
 
   cdktf:
     needs:
@@ -89,7 +79,7 @@ jobs:
   deploy-onprem:
     needs:
       - resolve-env
-      - upload-plugins
+      - build-and-upload-plugins
       - cdktf
       - publish-package-server
     runs-on: ubuntu-latest
@@ -106,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - resolve-env
-      - upload-plugins
+      - build-and-upload-plugins
       - publish-package-server
       - cdktf
       - deploy-onprem

@@ -1,0 +1,16 @@
+name: Upload JARs
+
+runs:
+  using: composite
+  steps:
+    - name: Flatten and collect JARs
+      # language=bash
+      run: |
+        mkdir -p __temp_flat_plugins_dir__ 
+        find plugins -name "*.jar" -exec cp {} __temp_flat_plugins_dir__/ \;
+      shell: bash
+    - uses: actions/upload-artifact@v4
+      with:
+        name: plugins
+        path: __temp_flat_plugins_dir__
+        retention-days: 1

@@ -11,7 +11,7 @@ export class Artifact {
 
   public static async download(mappings: Mapping[]): Promise<void> {
     for (const mapping of mappings) {
-      const url = new URL(`${mapping.artifact}.zip`, Artifact.base)
+      const url = new URL(mapping.artifact, Artifact.base)
       const response = await fetch(url)
       const arrayBuffer = await response.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)

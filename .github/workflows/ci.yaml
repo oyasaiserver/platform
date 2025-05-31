@@ -47,12 +47,13 @@ jobs:
           npm ci
           npm run verify-asdf -w tests
 
-  build-plugins:
+  build-and-upload-plugins:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
+      - uses: ./.github/actions/upload-plugins
 
   actions-timeline:
     runs-on: ubuntu-latest
@@ -61,6 +62,6 @@ jobs:
       - typecheck
       - codegen-no-drift
       - asdf
-      - build-plugins
+      - build-and-upload-plugins
     steps:
       - uses: Kesin11/actions-timeline@v2
