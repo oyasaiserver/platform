@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
-if [[ -z "${SHELL:-}" ]]; then
+if [ -z "${SHELL:-}" ]; then
   echo "❌ \$SHELL not set. Run this script from a shell (bash or zsh)."
   exit 1
 fi
@@ -12,7 +12,7 @@ detect_shell_rc() {
   case "$SHELL_NAME" in
     zsh) echo "$HOME/.zshrc" ;;
     bash)
-      if [[ -f "$HOME/.bash_profile" ]]; then echo "$HOME/.bash_profile"
+      if [ -f "$HOME/.bash_profile" ]; then echo "$HOME/.bash_profile"
       else echo "$HOME/.bashrc"; fi
       ;;
     *) echo "Unsupported shell: $SHELL_NAME" >&2; exit 1 ;;
@@ -22,39 +22,54 @@ detect_shell_rc() {
 SHELL_RC="$(detect_shell_rc)"
 
 # Install Homebrew if missing
-if ! command -v brew &>/dev/null; then
+if ! command -v brew >/dev/null 2>&1; then
   echo "🛠 Installing Homebrew..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Load brew shellenv
-eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+BREW_PATH=""
+if [ -x /opt/homebrew/bin/brew ]; then
+  BREW_PATH="/opt/homebrew/bin/brew"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  BREW_PATH="/home/linuxbrew/.linuxbrew/bin/brew"
+else
+  echo "❌ Brew installation not found after install." >&2
+  exit 1
+fi
+
+eval "$("$BREW_PATH" shellenv)"
 
 # Install asdf if missing
-if ! command -v asdf &>/dev/null; then
+if ! command -v asdf >/dev/null 2>&1; then
   echo "🛠 Installing asdf..."
   brew install asdf
 fi
 
-ASDF_INIT_CMD='. "$(brew --prefix asdf)/libexec/asdf.sh"'
+ASDF_PREFIX="$(brew --prefix asdf)"
+ASDF_INIT_CMD=". \"$ASDF_PREFIX/libexec/asdf.sh\""
 ASDF_SHIMS_PATH='${ASDF_DATA_DIR:-$HOME/.asdf}/shims'
 
 # Append to shell rc
-grep -Fq "$ASDF_INIT_CMD" "$SHELL_RC" || echo "$ASDF_INIT_CMD" >> "$SHELL_RC"
-grep -Fq "$ASDF_SHIMS_PATH" "$SHELL_RC" || echo "export PATH=\"$ASDF_SHIMS_PATH:\$PATH\"" >> "$SHELL_RC"
+grep -F "$ASDF_INIT_CMD" "$SHELL_RC" >/dev/null 2>&1 || echo "$ASDF_INIT_CMD" >> "$SHELL_RC"
+echo "$PATH" | grep -F "$ASDF_SHIMS_PATH" >/dev/null 2>&1 || echo "export PATH=\"$ASDF_SHIMS_PATH:\$PATH\"" >> "$SHELL_RC"
 
 # Source and prep environment
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+. "$ASDF_PREFIX/libexec/asdf.sh"
+PATH="$(eval echo "$ASDF_SHIMS_PATH"):$PATH"
+export PATH
 
-# Plugins
-if ! asdf plugin list | grep -q '^nodejs$'; then
+# Install nodejs plugin
+if ! asdf plugin list | grep '^nodejs$' >/dev/null 2>&1; then
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-  command -v gpg >/dev/null || brew install gnupg
-  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+  if ! command -v gpg >/dev/null 2>&1; then
+    brew install gnupg
+  fi
+  sh "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 fi
 
-if ! asdf plugin list | grep -q '^java$'; then
+# Install java plugin
+if ! asdf plugin list | grep '^java$' >/dev/null 2>&1; then
   asdf plugin add java https://github.com/halcyon/asdf-java.git
 fi
 

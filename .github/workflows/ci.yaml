@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: chmod +x ./scripts/setup.sh && ./scripts/setup.sh && ./scripts/verify-asdf.sh
+      - run: sh ./scripts/setup.sh && sh ./scripts/verify-asdf.sh
         shell: bash
 
   asdf-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - run: chmod +x ./scripts/setup.sh && ./scripts/setup.sh && ./scripts/verify-asdf.sh
+      - run: sh ./scripts/setup.sh && sh ./scripts/verify-asdf.sh
         shell: zsh
 
   typecheck:
