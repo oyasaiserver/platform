@@ -47,11 +47,11 @@ await step('download-plugins', async () => {
 })
 
 await step('apply-overlays', async () => {
-  await Overlays.apply(`${__dirname}/overlays`, env.ENVIRONMENT)
+  await Overlays.apply(`${__dirname}/../overlays`, env.ENVIRONMENT)
 })
 
 await step('clone-compose-yaml', async () => {
-  await cp(`${__dirname}/compose.yaml`, `${env.ENVIRONMENT}/compose.yaml`)
+  await cp(`${__dirname}/../compose.yaml`, 'compose.yaml')
 })
 
 await step('docker-compose-up', async () => {
