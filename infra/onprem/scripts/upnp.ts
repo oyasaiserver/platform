@@ -1,21 +1,10 @@
-import { networkInterfaces } from 'node:os'
-import { Client } from '../src/unpn/client'
+import { Client } from 'nat-upnp-ts'
 
-const client = Client.create()
-console.log(client)
+const client = new Client()
 
-export function getLocalIp(): string {
-  const interfaces = networkInterfaces()
-  for (const interfaceName of Object.keys(interfaces)) {
-    const iface = interfaces[interfaceName]
-    if (!iface) {
-      continue
-    }
-    for (const alias of iface) {
-      if (alias.family === 'IPv4' && !alias.internal) {
-        return alias.address
-      }
-    }
-  }
-  return ''
-}
+await client.createMapping({
+  public: 25565,
+  private: 25565
+})
+
+client.close()

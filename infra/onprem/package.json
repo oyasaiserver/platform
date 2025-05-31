@@ -6,15 +6,6 @@
     "upnp": "tsx scripts/upnp.ts"
   },
   "dependencies": {
-    "@achingbrain/nat-port-mapper": "^4.0.2",
-    "@libp2p/autonat": "^2.0.33",
-    "@libp2p/tcp": "^10.1.13",
-    "@libp2p/upnp-nat": "^3.1.16",
-    "libp2p": "^2.8.8",
-    "xml2js": "^0.6.2"
-  },
-  "devDependencies": {
-    "@types/jsdom": "^21.1.7",
-    "@types/xml2js": "^0.4.14"
+    "nat-upnp-ts": "^2.0.1"
   }
 }
