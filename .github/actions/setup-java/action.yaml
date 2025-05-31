@@ -7,7 +7,7 @@ runs:
       with:
         cache: gradle
         distribution: oracle
-        java-version: "24"
+        java-version-file: .tool-versions
     - uses: gradle/actions/setup-gradle@v4
       with:
         cache-overwrite-existing: true

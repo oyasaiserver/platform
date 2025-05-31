@@ -14,6 +14,17 @@ jobs:
           ./gradlew spotlessCheck --parallel &
           npm run check &
           wait
+  asdf:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        shell: [ bash, zsh ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run setup
+        shell: ${{ matrix.shell }}
+        run: ./scripts/setup.sh
 
   typecheck:
     runs-on: ubuntu-latest

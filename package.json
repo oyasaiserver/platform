@@ -2,11 +2,7 @@
   "name": "platform",
   "description": "Platform for Oyasai Server",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "infra/*"
-  ],
+  "workspaces": ["apps/*", "packages/*", "infra/*"],
   "scripts": {
     "build": "tsc --build",
     "check": "biome check --write && sort-package-json --quiet",
@@ -25,8 +21,5 @@
     "@types/node": "^22.15.21",
     "sort-package-json": "^3.2.1",
     "typescript": "^5.8.3"
-  },
-  "engines": {
-    "node": "^24.1.0"
   }
 }
