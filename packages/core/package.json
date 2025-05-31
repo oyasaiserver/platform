@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "files": ["dist", "overlays", "compose.yaml"],
-  "bin": {
-    "@oyasaiserver/core": "dist/index.ts"
-  },
   "scripts": {
     "build": "tsup",
+    "start": "node dist/index.js",
     "deploy": "tsx scripts/deploy.ts"
   },
   "devDependencies": {
