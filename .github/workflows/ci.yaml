@@ -52,7 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check
-      - typecheck
       - codegen-no-drift
       - asdf
       - build-and-upload-plugins
