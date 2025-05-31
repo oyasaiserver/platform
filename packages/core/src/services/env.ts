@@ -7,6 +7,8 @@ import type { EnvType } from '@oyasaiserver/env'
  */
 export class Env {
   public static async fetch(): Promise<EnvType> {
-    return parse(process.env.DOTENV_PUBLIC_KEYS as string) as EnvType
+    return parse(process.env.DOTENV_PUBLIC_KEYS as string, {
+      privateKey: process.env.DOTENV_PRIVATE_KEY
+    }) as EnvType
   }
 }

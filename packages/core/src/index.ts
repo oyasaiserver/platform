@@ -1,8 +1,8 @@
 #!/usr/bin/env -S npx tsx
+import { cp, readdir } from 'node:fs/promises'
 import { except } from '../configs/clean.json'
 import { plugins } from '../configs/plugins.json'
 import { Artifact } from './services/artifact'
-import { Assets } from './services/assets'
 import { Cleaner } from './services/cleaner'
 import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
@@ -47,11 +47,12 @@ await step('download-plugins', async () => {
 })
 
 await step('apply-overlays', async () => {
-  await Overlays.apply(`${Assets.path}/overlays`, env.ENVIRONMENT)
+  console.log(await readdir('.'))
+  await Overlays.apply('../overlays', env.ENVIRONMENT)
 })
 
 await step('clone-compose-yaml', async () => {
-  await Assets.clone('compose/compose.yaml')
+  await cp('../compose.yaml', env.ENVIRONMENT)
 })
 
 await step('docker-compose-up', async () => {

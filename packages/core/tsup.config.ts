@@ -17,6 +17,7 @@ export default defineConfig({
   target: 'es2022',
   clean: true,
   minify: true,
+  shims: true,
   env: {
     DOTENV_PUBLIC_KEYS: dotenvPublicKeys
   },
@@ -24,13 +25,7 @@ export default defineConfig({
     // language=javascript
     js: `
       import { createRequire } from 'node:module';
-      import { dirname } from 'node:path';
-      import { fileURLToPath } from 'node:url';
-
       const require = createRequire(import.meta.url);
-      
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = dirname(__filename);
     `
   }
 })
