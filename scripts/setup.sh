@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 if [[ -z "${SHELL:-}" ]]; then
   echo "❌ \$SHELL not set. Run this script from a shell (bash or zsh)."
