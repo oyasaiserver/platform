@@ -15,19 +15,15 @@ jobs:
           npm run check &
           wait
 
-  asdf-ubuntu:
-    runs-on: ubuntu-latest
+  asdf:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - run: sh ./scripts/setup.sh
         shell: bash
-
-  asdf-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: sh ./scripts/setup.sh
-        shell: zsh
 
   typecheck:
     runs-on: ubuntu-latest
