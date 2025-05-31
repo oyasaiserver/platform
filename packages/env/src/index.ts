@@ -14,3 +14,5 @@ export const Env = {
   ENVIRONMENT: environment,
   ...process.env
 } as EnvType
+
+export type { EnvType } from './env-type'

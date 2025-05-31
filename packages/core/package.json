@@ -1,14 +1,10 @@
 {
-  "$schemas": [
-    "https://json.schemastore.org/package.json",
-    "https://json.schemastore.org/tsconfig"
-  ],
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "files": ["dist"],
+  "files": ["dist", "overlays", "compose.yaml"],
   "bin": {
-    "start": "dist/index.ts"
+    "@oyasaiserver/core": "dist/index.ts"
   },
   "scripts": {
     "build": "tsup",

@@ -11,12 +11,10 @@ import { Plugin } from './services/plugin'
 import { Upnp } from './services/upnp'
 import { step } from './step'
 
-const environment = process.env.ENVIRONMENT as string
-
-const processEnv = await Env.fetch()
+const env = await Env.fetch()
 
 await step('docker-compose-down', async () => {
-  await DockerCompose.down(environment)
+  await DockerCompose.down(env.ENVIRONMENT)
 })
 
 await step('backup-clean-and-restore', async () => {
@@ -26,7 +24,7 @@ await step('backup-clean-and-restore', async () => {
   // )
   // await backup?.removeStale()
   await Cleaner.clean({
-    dir: `${environment}/minecraft-main`,
+    dir: `${env.ENVIRONMENT}/minecraft-main`,
     except
   })
   // await backup?.restore()
@@ -36,7 +34,7 @@ await step('download-plugins-from-github-artifact', async () => {
   await Artifact.download([
     {
       artifact: 'plugins.zip',
-      path: `${environment}/minecraft-main/plugins`
+      path: `${env.ENVIRONMENT}/minecraft-main/plugins`
     }
   ])
 })
@@ -44,12 +42,12 @@ await step('download-plugins-from-github-artifact', async () => {
 await step('download-plugins', async () => {
   await Plugin.download({
     plugins,
-    path: `${environment}/minecraft-main/plugins`
+    path: `${env.ENVIRONMENT}/minecraft-main/plugins`
   })
 })
 
 await step('apply-overlays', async () => {
-  await Overlays.apply(`${Assets.path}/overlays`, environment)
+  await Overlays.apply(`${Assets.path}/overlays`, env.ENVIRONMENT)
 })
 
 await step('clone-compose-yaml', async () => {
@@ -57,7 +55,7 @@ await step('clone-compose-yaml', async () => {
 })
 
 await step('docker-compose-up', async () => {
-  await DockerCompose.up(environment, processEnv)
+  await DockerCompose.up(env.ENVIRONMENT, env)
 })
 
 await step('upnp-create-mapping', async () => {
