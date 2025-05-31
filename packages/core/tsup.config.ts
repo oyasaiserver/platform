@@ -21,7 +21,6 @@ export default defineConfig({
   format: 'esm',
   target: 'es2022',
   platform: 'node',
-  minify: true,
   clean: true,
   env: {
     DOTENV_PUBLIC_KEYS: dotenvPublicKeys
