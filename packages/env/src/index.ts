@@ -7,7 +7,7 @@ const environment = process.env.ENVIRONMENT as string
 config({
   strict: true,
   override: true,
-  path: join('envs', environment, '.env')
+  path: join('../..', 'envs', environment, '.env')
 })
 
 export const Env = {

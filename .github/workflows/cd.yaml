@@ -33,19 +33,19 @@ jobs:
   upload-plugins:
     runs-on: ubuntu-latest
     env:
-      DIR: flat-plugins
+      dir: flat-plugins
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
       - name: Flatten and collect JARs
         run: |
-          mkdir -p ${{ env.DIR }}
-          find plugins -name "*.jar" -exec cp {} ${{ env.DIR }}/ \;
+          mkdir -p ${{ env.dir }}
+          find plugins -name "*.jar" -exec cp {} ${{ env.dir }}/ \;
       - uses: actions/upload-artifact@v4
         with:
           name: plugins
-          path: ${{ env.DIR }}
+          path: ${{ env.dir }}
           retention-days: 1
 
   cdktf:
