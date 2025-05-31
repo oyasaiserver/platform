@@ -3,8 +3,8 @@
   "references": [
     { "path": "apps/wiki" },
     { "path": "infra/cdktf" },
-    { "path": "packages/constants" },
     { "path": "packages/core" },
-    { "path": "packages/env" }
+    { "path": "packages/env" },
+    { "path": "tests" }
   ]
 }
