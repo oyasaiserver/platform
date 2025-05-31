@@ -45,7 +45,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npx pkg-pr-new publish packages/core --bin
+      - run: npx pkg-pr-new publish packages/core
+        env:
+          ENVIRONMENT: development
 
   build-and-upload-plugins:
     runs-on: ubuntu-latest
