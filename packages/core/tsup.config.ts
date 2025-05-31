@@ -1,28 +1,29 @@
+import { ok } from 'node:assert'
 import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'tsup'
 
 const environment = process.env.ENVIRONMENT
-
-if (!environment) {
-  throw new Error('ENVIRONMENT variable is not set')
-}
+ok(environment)
 
 const dotenvPublicKeys = await readFile(
-  `../../envs/${process.env.ENVIRONMENT}/.env`,
+  `../../envs/${environment}/.env`,
   'utf-8'
 )
-
-if (!dotenvPublicKeys) {
-  throw new Error(`No .env file found for environment: ${environment}`)
-}
+ok(dotenvPublicKeys)
 
 export default defineConfig({
   entry: ['src/index.ts'],
   format: 'esm',
   target: 'es2022',
-  platform: 'node',
   clean: true,
   env: {
     DOTENV_PUBLIC_KEYS: dotenvPublicKeys
+  },
+  banner: {
+    // language=javascript
+    js: `
+      import { createRequire } from 'node:module'; 
+      const require = createRequire(import.meta.url);
+    `
   }
 })
