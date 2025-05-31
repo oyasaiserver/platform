@@ -45,7 +45,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - run: npx pkg-pr-new publish packages/core
+      - run: |
+          npm run build -w packages/core
+          npx pkg-pr-new publish packages/core
         env:
           ENVIRONMENT: development
 
