@@ -1,23 +1,27 @@
 {
+  "$schemas": [
+    "https://json.schemastore.org/package.json",
+    "https://json.schemastore.org/tsconfig"
+  ],
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets", "envs", "configs", "compose"],
+  "files": ["dist"],
   "bin": {
-    "start": "src/index.ts"
+    "start": "dist/index.ts"
   },
   "scripts": {
+    "build": "tsup",
     "deploy": "tsx scripts/deploy.ts"
   },
-  "dependencies": {
-    "@dotenvx/dotenvx": "^1.44.1",
+  "devDependencies": {
+    "@types/decompress": "^4.2.7",
     "decompress": "^4.2.1",
     "nat-upnp-ts": "^2.0.1",
     "tasuku": "^2.0.1",
-    "webpod": "^1.0.0",
-    "zx": "^8.5.4"
+    "webpod": "^1.0.0"
   },
-  "devDependencies": {
-    "@types/decompress": "^4.2.7"
+  "dependencies": {
+    "tsup": "^8.5.0"
   }
 }

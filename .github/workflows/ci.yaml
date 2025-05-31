@@ -59,6 +59,17 @@ jobs:
         with:
           # specified at actions/upload-plugins
           name: plugins
+          path:
+            # We're cheating here - in order for the test to truly mimic the
+            # production behavior, download should happen in `packages/core`.
+            # However, since the artifact storage is limited and it's hard to
+            # mock the download step in `packages/core`, we download it here
+            # and apply plugins as a overlay.
+            packages/core/overlays/minecraft-main/plugins
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          # specified at actions/upload-plugins
+          name: plugins
       - run: |
           npm run test:integration -w tests
 
@@ -69,5 +80,6 @@ jobs:
       - codegen-no-drift
       - asdf
       - build-and-upload-plugins
+      - test-integration
     steps:
       - uses: Kesin11/actions-timeline@v2

@@ -13,7 +13,7 @@ import { step } from './step'
 
 const environment = process.env.ENVIRONMENT as string
 
-const processEnv = Env.parse(environment)
+const processEnv = await Env.fetch()
 
 await step('docker-compose-down', async () => {
   await DockerCompose.down(environment)
