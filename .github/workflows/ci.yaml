@@ -23,7 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sh ./scripts/setup.sh
-        shell: bash
 
   typecheck:
     runs-on: ubuntu-latest
