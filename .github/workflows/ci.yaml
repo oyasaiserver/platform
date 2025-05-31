@@ -40,9 +40,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: homebrew/actions/setup-homebrew@master
-      - run: sh ./scripts/setup.sh
-        # explicitly open new shell to ensure asdf is available
       - run: |
+          sh ./scripts/setup.sh
+          cd .. && cd platform
           npm ci
           npm run verify-asdf -w scripts
           
