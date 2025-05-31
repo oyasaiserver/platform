@@ -45,7 +45,7 @@ jobs:
           source ~/.zshrc || true
           source ~/.bashrc || true
           npm ci
-          npm run verify-asdf -w scripts
+          npm run verify-asdf -w tests
 
   build-plugins:
     runs-on: ubuntu-latest

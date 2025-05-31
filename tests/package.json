@@ -2,6 +2,6 @@
   "name": "@oyasaiserver/scripts",
   "type": "module",
   "scripts": {
-    "test:integration": "tsx --test integration/**/*.ts"
+    "verify-asdf": "tsx --test ci/verify-asdf.ts"
   }
 }
