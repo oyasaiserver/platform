@@ -1,5 +1,4 @@
 #!/usr/bin/env -S npx tsx
-import step from 'tasuku'
 import { except } from '../configs/clean.json'
 import { plugins } from '../configs/plugins.json'
 import { Artifact } from './services/artifact'
@@ -9,6 +8,8 @@ import { DockerCompose } from './services/docker-compose'
 import { Env } from './services/env'
 import { Overlays } from './services/overlays'
 import { Plugin } from './services/plugin'
+import { Upnp } from './services/upnp'
+import { step } from './step'
 
 const environment = process.env.ENVIRONMENT as string
 
@@ -57,4 +58,8 @@ await step('clone-compose-yaml', async () => {
 
 await step('docker-compose-up', async () => {
   await DockerCompose.up(environment, processEnv)
+})
+
+await step('upnp-create-mapping', async () => {
+  await Upnp.createMapping(25565)
 })

@@ -1,11 +1,5 @@
 {
   "name": "@oyasaiserver/infra-onprem",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "upnp": "tsx scripts/upnp.ts"
-  },
-  "dependencies": {
-    "nat-upnp-ts": "^2.0.1"
-  }
+  "type": "module"
 }
