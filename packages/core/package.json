@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "files": ["dist", "overlays", "compose.yaml"],
+  "bin": {
+    "start": "dist/index.js"
+  },
   "scripts": {
     "build": "tsup",
     "start": "node dist/index.js",
