@@ -50,13 +50,6 @@ configurations.configureEach {
     }
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-        vendor = JvmVendorSpec.ORACLE
-    }
-}
-
 tasks.apply {
     jar {
         enabled = false

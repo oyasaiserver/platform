@@ -32,6 +32,21 @@ jobs:
           npm run check
           git diff --exit-code
 
+  asdf:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: homebrew/actions/setup-homebrew@master
+      - run: |
+          sh ./scripts/setup.sh
+          source ~/.zshrc || true
+          source ~/.bashrc || true
+          npm ci
+          npm run verify-asdf -w scripts
+
   build-plugins:
     runs-on: ubuntu-latest
     steps:
@@ -45,6 +60,7 @@ jobs:
       - format
       - typecheck
       - codegen-no-drift
+      - asdf
       - build-plugins
     steps:
       - uses: Kesin11/actions-timeline@v2

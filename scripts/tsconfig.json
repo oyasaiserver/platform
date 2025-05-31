@@ -1,0 +1,7 @@
+{
+  "extends": "@total-typescript/tsconfig/bundler/no-dom",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": ["src", "bin"]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@oyasaiserver/scripts",
+  "type": "module",
+  "scripts": {
+    "verify-asdf": "tsx src/verify-asdf.ts"
+  }
+}

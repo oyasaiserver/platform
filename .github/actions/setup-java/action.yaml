@@ -6,8 +6,8 @@ runs:
     - uses: actions/setup-java@v4
       with:
         cache: gradle
-        distribution: oracle
-        java-version: "24"
+        distribution: temurin
+        java-version-file: .tool-versions
     - uses: gradle/actions/setup-gradle@v4
       with:
         cache-overwrite-existing: true
