@@ -3,14 +3,12 @@
 brew install asdf
 
 # shellcheck disable=SC2016
-line='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
+LINE='export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"'
 
-rcfiles=("$HOME/.zshrc" "$HOME/.bashrc")
-
-for rcfile in "${rcfiles[@]}"; do
-  # Add the line only if it's not already there
-  if ! grep -Fxq "$line" "$rcfile"; then
-    printf '\n%s\n' "$line" >> "$rcfile"
+for rcfile in "$HOME/.zshrc" "$HOME/.bashrc"; do
+  # Add the line only if it's not already present
+  if ! grep -Fxq "$LINE" "$rcfile"; then
+    printf '\n%s\n' "$LINE" >> "$rcfile"
   fi
 done
 
