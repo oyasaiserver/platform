@@ -57,12 +57,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-java
-        env:
-          ENVIRONMENT: ${{ matrix.environment }}
+        # language=bash
       - run: |
           # reify envs
           rm -rf packages/core/envs
           cp -rf envs packages/core/envs
+          export ENVIRONMENT=${{ matrix.environment }}
           npm run start -w packages/core
 
   actions-timeline:
