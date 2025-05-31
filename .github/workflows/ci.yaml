@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: homebrew/actions/setup-homebrew@master
-      - run: sh ./scripts/setup.sh
+      - run: sh ./scripts/setup.sh && npm run verify-asdf -w scripts
 
   typecheck:
     runs-on: ubuntu-latest

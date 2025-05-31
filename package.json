@@ -5,7 +5,8 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "infra/*"
+    "infra/*",
+    "scripts"
   ],
   "scripts": {
     "build": "tsc --build",
