@@ -42,7 +42,8 @@ jobs:
       - uses: homebrew/actions/setup-homebrew@master
       - run: |
           sh ./scripts/setup.sh
-          source ~/.zshrc && source ~/.bashrc
+          source ~/.zshrc || true
+          source ~/.bashrc || true
           npm ci
           npm run verify-asdf -w scripts
 
