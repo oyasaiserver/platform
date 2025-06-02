@@ -3,8 +3,8 @@
   "description": "Wiki for Oyasai Server",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev",
     "build": "vitepress build",
+    "dev": "vitepress dev",
     "preview": "vitepress preview"
   },
   "dependencies": {

@@ -2,10 +2,10 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "files": ["src", "assets", "envs", "configs", "compose"],
   "bin": {
     "start": "src/index.ts"
   },
+  "files": ["src", "assets", "envs", "configs", "compose"],
   "scripts": {
     "deploy": "tsx scripts/deploy.ts"
   },

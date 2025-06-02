@@ -2,10 +2,10 @@
   "name": "@oyasaiserver/infra-cdktf",
   "type": "module",
   "scripts": {
-    "get": "cdktf get",
-    "synth": "cdktf synth",
+    "deploy": "tsx scripts/deploy-ci.ts",
     "diff": "cdktf diff",
-    "deploy": "tsx scripts/deploy-ci.ts"
+    "get": "cdktf get",
+    "synth": "cdktf synth"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^12.5.0"
