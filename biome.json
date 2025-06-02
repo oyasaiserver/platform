@@ -26,8 +26,7 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space",
-    "bracketSpacing": true
+    "indentStyle": "space"
   },
   "javascript": {
     "formatter": {

@@ -1,4 +1,4 @@
-import { ok } from 'node:assert'
+import { ok } from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { EOL } from 'node:os'
 import { describe, test } from 'node:test'
