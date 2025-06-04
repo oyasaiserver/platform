@@ -5,7 +5,7 @@
   "workspaces": ["apps/*", "packages/*", "infra/*", "tests"],
   "scripts": {
     "build": "tsc --build",
-    "check": "sort-package-json --quiet && biome check --write",
+    "check": "sort-package-json */**/package.json --quiet && biome check --write",
     "codegen": "env-codegen && npm run check"
   },
   "dependencies": {

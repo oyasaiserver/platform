@@ -26,6 +26,7 @@ jobs:
           git diff --exit-code
 
   asdf:
+    if: contains(github.event.pull_request.changed_files, '.tool-versions')
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
@@ -40,20 +41,11 @@ jobs:
           npm ci
           npm run verify-asdf -w tests
 
-  build-and-upload-plugins:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-java
-      - run: ./gradlew build --parallel
-      - uses: ./.github/actions/upload-plugins
-
   actions-timeline:
     runs-on: ubuntu-latest
     needs:
       - check
       - codegen-no-drift
       - asdf
-      - build-and-upload-plugins
     steps:
       - uses: Kesin11/actions-timeline@v2
