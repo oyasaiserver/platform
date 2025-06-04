@@ -3,6 +3,6 @@
   "compilerOptions": {
     "composite": true
   },
-  "include": ["src", "scripts"],
+  "include": ["."],
   "exclude": ["node_modules"]
 }

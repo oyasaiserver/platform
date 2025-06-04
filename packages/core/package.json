@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "start": "src/index.ts"
+    "start": "dist/index.js"
   },
-  "files": ["src", "assets", "envs", "configs", "compose"],
+  "files": ["dist", "overlays", "compose.yaml"],
   "scripts": {
+    "build": "tsup",
     "deploy": "tsx scripts/deploy.ts"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
     "zx": "^8.5.4"
   },
   "devDependencies": {
-    "@types/decompress": "^4.2.7"
+    "@types/decompress": "^4.2.7",
+    "tsup": "^8.5.0"
   }
 }
