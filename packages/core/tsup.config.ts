@@ -3,8 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'tsup'
 import { dependencies } from './package.json'
 
-const environment = process.env.ENVIRONMENT
-ok(environment)
+const environment = process.env.ENVIRONMENT || 'local'
 
 const dotenvPublicKeys = await readFile(
   `../../envs/${environment}/.env`,

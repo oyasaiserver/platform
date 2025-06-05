@@ -28,3 +28,12 @@ services:
       - "25566:25566"
     volumes:
       - ./development/minecraft-main:/data
+
+  minecraft-main-local:
+    <<: *minecraft-service
+    profiles:
+      - local
+    ports:
+      - "25565:25565"
+    volumes:
+      - ./local/minecraft-main:/data
