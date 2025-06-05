@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { config } from '@dotenvx/dotenvx'
 import type { EnvType } from './env-type'
 
-const environment = process.env.ENVIRONMENT as string
+const environment = process.env.ENVIRONMENT || 'local'
 
 config({
   strict: true,
