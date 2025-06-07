@@ -8,7 +8,8 @@
     "synth": "cdktf synth"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "^13.0.0"
+    "@cdktf/provider-cloudflare": "^13.0.0",
+    "constructs": "^10.4.2"
   },
   "devDependencies": {
     "cdktf": "^0.21.0",

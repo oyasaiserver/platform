@@ -3,11 +3,12 @@ import { join } from 'node:path'
 import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
 import { secrets as secretsSchema } from '@oyasaiserver/gen/common/secrets'
+import { directory } from './directory'
 import { ensure, fallback } from './utils'
 
 const envFile = join(
   import.meta.dirname,
-  `../../../envs/${fallback(process.env.ENVIRONMENT, 'local')}/.env`
+  `${directory.root}/envs/${fallback(process.env.ENVIRONMENT, 'local')}/.env`
 )
 
 export const secrets = secretsSchema.parse(
