@@ -1,4 +1,4 @@
-import { Env } from '@oyasaiserver/env'
+import { Env } from '@oyasaiserver/platform/env'
 import { $ } from 'zx'
 
 $({

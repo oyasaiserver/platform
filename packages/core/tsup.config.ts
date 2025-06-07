@@ -1,7 +1,6 @@
 import { ok } from 'node:assert'
 import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'tsup'
-import { dependencies } from './package.json'
 
 const environment = process.env.ENVIRONMENT || 'local'
 
@@ -27,6 +26,5 @@ export default defineConfig({
       import { createRequire } from 'node:module';
       const require = createRequire(import.meta.url);
     `
-  },
-  noExternal: Object.keys(dependencies)
+  }
 })
