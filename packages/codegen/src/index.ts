@@ -8,9 +8,9 @@ import { jsonSchemaToZod } from 'json-schema-to-zod'
 
 const src = ensure(argv[2])
 const dst = ensure(argv[3])
-const dir = join(cwd(), src)
+const schema = join(cwd(), src)
 
-for (const file of await readdir(dir)) {
+for (const file of await readdir(schema)) {
   if (!file.endsWith('.json')) {
     await rm(file, {
       recursive: true,
@@ -19,7 +19,7 @@ for (const file of await readdir(dir)) {
   }
 }
 
-const files = await readdir(dir, {
+const files = await readdir(schema, {
   withFileTypes: true,
   recursive: true
 })
@@ -29,23 +29,23 @@ const promises = files
   .map(async dirent => {
     const absolute = join(dirent.parentPath, dirent.name)
     const releative = relative(cwd(), absolute)
-    const parsed = parse(releative)
-    const gendir = parsed.dir.replace(src, dst)
+    const { name, dir } = parse(releative)
+    const gendir = dir.replace(src, dst)
     const content = await readFile(releative, 'utf-8')
     await mkdir(gendir, {
       recursive: true
     })
-    const genpath = join(gendir, parsed.name)
-    const { $id: id, ...schema } = JSON.parse(content)
+    const genpath = join(gendir, name)
+    const schema = JSON.parse(content)
     await writeFile(
       `${genpath}.ts`,
       // language=typescript
       `
         import { z } from 'zod/v4'
         
-        export const ${id} = ${jsonSchemaToZod(schema)}
+        export const ${name} = ${jsonSchemaToZod(schema)}
         
-        export type ${pascalCase(id)} = z.infer<typeof ${id}>
+        export type ${pascalCase(name)} = z.infer<typeof ${name}>
       `
     )
   })
