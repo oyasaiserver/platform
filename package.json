@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "check": "sort-package-json */**/package.json --quiet && biome check --write",
-    "codegen": "codegen schema gen && npm run check"
+    "codegen": "codegen schema gen"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",
