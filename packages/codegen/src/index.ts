@@ -5,6 +5,7 @@ import { argv, cwd } from 'node:process'
 import { ensure } from '@oyasaiserver/platform/utils'
 import { pascalCase } from 'change-case'
 import { jsonSchemaToZod } from 'json-schema-to-zod'
+import { format } from './format'
 
 const src = ensure(argv[2])
 const dst = ensure(argv[3])
@@ -29,25 +30,24 @@ const promises = files
   .map(async dirent => {
     const absolute = join(dirent.parentPath, dirent.name)
     const releative = relative(cwd(), absolute)
-    const parsed = parse(releative)
-    const gendir = parsed.dir.replace(src, dst)
+    const { dir, name } = parse(releative)
+    const gendir = dir.replace(src, dst)
     const content = await readFile(releative, 'utf-8')
     await mkdir(gendir, {
       recursive: true
     })
-    const genpath = join(gendir, parsed.name)
+    const genpath = join(gendir, name)
     const { $id: id, ...schema } = JSON.parse(content)
-    await writeFile(
-      `${genpath}.ts`,
-      // language=typescript
-      `
-        import { z } from 'zod/v4'
-        
-        export const ${id} = ${jsonSchemaToZod(schema)}
-        
-        export type ${pascalCase(id)} = z.infer<typeof ${id}>
-      `
-    )
+    // language=typescript
+    const code = `
+      import { z } from 'zod/v4'
+      
+      export const ${id} = ${jsonSchemaToZod(schema)}
+      
+      export type ${pascalCase(id)} = z.infer<typeof ${id}>
+    `
+    const path = `${genpath}.ts`
+    await writeFile(path, format(code, path))
   })
 
 await Promise.all(promises)
