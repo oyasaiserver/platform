@@ -41,20 +41,6 @@ export interface SsdpEmitter extends EventEmitter {
   _ended?: boolean
 }
 
-export interface ISsdp {
-  /**
-   * Search for a SSDP compatible server on the network
-   * @param device Search Type (ST) header, specifying which device to search for
-   * @param emitter An existing EventEmitter to emit event on
-   * @returns The event emitter provided in Promise, or a newly instantiated one.
-   */
-  search(device: string, emitter?: SsdpEmitter): SsdpEmitter
-  /**
-   * Close all sockets
-   */
-  close(): void
-}
-
 // Device Types
 export interface Service {
   service: string
@@ -123,4 +109,35 @@ export type DeletePortMappingOpts = StandardOpts
 export interface GetMappingOpts {
   local?: boolean
   description?: RegExp | string
+}
+
+export interface Service {
+  service: string
+  SCPDURL: string
+  controlURL: string
+}
+
+export interface RawService {
+  serviceType: string
+  serviceId: string
+  controlURL?: string
+  eventSubURL?: string
+  SCPDURL?: string
+}
+
+export interface RawDevice {
+  deviceType: string
+  presentationURL: string
+  friendlyName: string
+  manufacturer: string
+  manufacturerURL: string
+  modelDescription: string
+  modelName: string
+  modelNumber: string
+  modelURL: string
+  serialNumber: string
+  UDN: string
+  UPC: string
+  serviceList?: { service: RawService | RawService[] }
+  deviceList?: { device: RawDevice | RawDevice[] }
 }

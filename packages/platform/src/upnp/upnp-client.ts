@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events'
+import { ensure } from '../utils'
 import { Device } from './device'
 import { Ssdp } from './ssdp'
 import type {
@@ -95,11 +96,11 @@ export class UpnpClient {
       const result: Mapping = {
         public: {
           host: res.NewRemoteHost || '',
-          port: Number.parseInt(res.NewExternalPort, 10)
+          port: Number.parseInt(ensure(res.NewExternalPort), 10)
         },
         private: {
           host: res.NewInternalClient || '',
-          port: Number.parseInt(res.NewInternalPort, 10)
+          port: Number.parseInt(ensure(res.NewInternalPort), 10)
         },
         protocol: res.NewProtocol.toLowerCase(),
         enabled: res.NewEnabled === '1',

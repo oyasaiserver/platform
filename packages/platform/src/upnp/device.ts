@@ -1,21 +1,17 @@
 import { URL } from 'node:url'
 import { XMLParser } from 'fast-xml-parser'
-import type { RawResponse } from './types'
+import type { RawDevice, RawResponse, RawService, Service } from './types'
 
-export class Device implements IDevice {
-  readonly description: string
-  readonly services: string[]
+export class Device {
+  private readonly services = [
+    'urn:schemas-upnp-org:service:WANIPConnection:1',
+    'urn:schemas-upnp-org:service:WANIPConnection:2',
+    'urn:schemas-upnp-org:service:WANPPPConnection:1'
+  ]
 
-  constructor(url: string) {
-    this.description = url
-    this.services = [
-      'urn:schemas-upnp-org:service:WANIPConnection:1',
-      'urn:schemas-upnp-org:service:WANIPConnection:2',
-      'urn:schemas-upnp-org:service:WANPPPConnection:1'
-    ]
-  }
+  constructor(private readonly description: string) {}
 
-  private async getXML(url: string): Promise<RawResponse> {
+  private async getXml(url: string): Promise<RawResponse> {
     try {
       const res = await fetch(url)
       const data = await res.text()
@@ -26,7 +22,7 @@ export class Device implements IDevice {
   }
 
   public async getService(types: string[]): Promise<Service> {
-    return this.getXML(this.description).then(({ root: xml }) => {
+    return this.getXml(this.description).then(({ root: xml }) => {
       if (!xml) {
         throw new Error('Invalid XML response')
       }
@@ -111,65 +107,4 @@ export class Device implements IDevice {
       devices
     }
   }
-}
-
-/*
- * ===================
- * ====== Types ======
- * ===================
- */
-
-export interface Service {
-  service: string
-  SCPDURL: string
-  controlURL: string
-}
-
-export interface RawService {
-  serviceType: string
-  serviceId: string
-  controlURL?: string
-  eventSubURL?: string
-  SCPDURL?: string
-}
-
-export interface RawDevice {
-  deviceType: string
-  presentationURL: string
-  friendlyName: string
-  manufacturer: string
-  manufacturerURL: string
-  modelDescription: string
-  modelName: string
-  modelNumber: string
-  modelURL: string
-  serialNumber: string
-  UDN: string
-  UPC: string
-  serviceList?: { service: RawService | RawService[] }
-  deviceList?: { device: RawDevice | RawDevice[] }
-}
-
-export interface IDevice {
-  /**
-   * Get the available services on the network device
-   * @param types List of service types to look for
-   */
-  getService(types: string[]): Promise<Service>
-  /**
-   * Parse out available services
-   * and devices from a root device
-   * @param info
-   * @returns the available devices and services in array form
-   */
-  parseDescription(info: { device?: RawDevice }): {
-    services: RawService[]
-    devices: RawDevice[]
-  }
-  /**
-   * Perform a SSDP/UPNP request
-   * @param action the action to perform
-   * @param kvpairs arguments of said action
-   */
-  run(action: string, kvpairs: (string | number)[][]): Promise<RawResponse>
 }
