@@ -11,5 +11,7 @@ const content = await readFile(path)
 
 export const Env = env.parse({
   ENVIRONMENT: environment,
-  ...parse(content)
+  ...parse(content, {
+    privateKey: process.env.DOTENV_PRIVATE_KEY
+  })
 })
