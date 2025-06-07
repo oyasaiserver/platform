@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "with-env": "./bin/with-env.ts"
+    "platform-env": "./bin/platform-env.ts"
   },
   "exports": {
     "./*": {
