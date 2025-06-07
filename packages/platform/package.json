@@ -2,13 +2,13 @@
   "name": "@oyasaiserver/platform",
   "version": "1.0.0",
   "type": "module",
-  "bin": {
-    "platform-env": "./bin/platform-env.ts"
-  },
   "exports": {
     "./*": {
       "import": "./src/*.ts"
     }
+  },
+  "bin": {
+    "platform-env": "./bin/platform-env.ts"
   },
   "scripts": {
     "start": "tsx src/index.ts"
