@@ -2,7 +2,7 @@
   "name": "@oyasaiserver/infra-cdktf",
   "type": "module",
   "scripts": {
-    "deploy": "tsx scripts/deploy-ci.ts",
+    "deploy": "with-env cdktf deploy --auto-approve",
     "diff": "cdktf diff",
     "get": "cdktf get",
     "synth": "cdktf synth"

@@ -2,6 +2,9 @@
   "name": "@oyasaiserver/platform",
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "with-env": "./bin/with-env.ts"
+  },
   "exports": {
     "./*": {
       "import": "./src/*.ts"
