@@ -2,9 +2,11 @@
   "files": [],
   "references": [
     { "path": "apps/wiki" },
+    { "path": "gen" },
     { "path": "infra/cdktf" },
     { "path": "packages/core" },
-    { "path": "packages/env" },
+    { "path": "packages/platform" },
+    { "path": "packages/codegen" },
     { "path": "tests" }
   ]
 }

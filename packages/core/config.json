@@ -1,4 +1,7 @@
 {
+  "clean": {
+    "except": ["worlds"]
+  },
   "plugins": [
     {
       "name": "EssentialsX",

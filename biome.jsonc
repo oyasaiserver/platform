@@ -10,6 +10,7 @@
     "enabled": true
   },
   "files": {
+    "include": ["gen/**/*", "*/**/*.ts", "*/**/*.json"],
     "ignore": ["packages/core/server"]
   },
   "linter": {

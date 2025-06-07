@@ -1,0 +1,15 @@
+{
+  "name": "@oyasaiserver/codegen",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "codegen": "src/index.ts"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "change-case": "^5.4.4",
+    "json-schema-to-zod": "^2.6.1"
+  }
+}

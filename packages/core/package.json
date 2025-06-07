@@ -13,12 +13,10 @@
     "start": "cp dist/index.js server/index.js && cd server && node ."
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.44.1",
     "decompress": "^4.2.1",
     "nat-upnp-ts": "^2.0.1",
     "ora": "^5.4.1",
-    "webpod": "^1.0.0",
-    "zx": "^8.5.4"
+    "webpod": "^1.0.0"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",

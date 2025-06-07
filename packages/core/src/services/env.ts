@@ -1,5 +1,5 @@
 import { parse } from '@dotenvx/dotenvx'
-import type { EnvType } from '@oyasaiserver/env'
+import type { Env as EnvType } from '@oyasaiserver/gen/common/env'
 
 /**
  * Can't use `@oyasaiserver/env` - remember, this is a standalone cli application.
@@ -9,6 +9,6 @@ export class Env {
   public static async fetch(): Promise<EnvType> {
     return parse(process.env.DOTENV_PUBLIC_KEYS as string, {
       privateKey: process.env.DOTENV_PRIVATE_KEY
-    }) as EnvType
+    }) satisfies EnvType
   }
 }

@@ -1,0 +1,13 @@
+{
+  "name": "@oyasaiserver/platform",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "start": "tsx src/index.ts"
+  }
+}

@@ -1,7 +1,6 @@
 #!/usr/bin/env -S npx tsx
 import { cp } from 'node:fs/promises'
-import { except } from '../configs/clean.json'
-import { plugins } from '../configs/plugins.json'
+import { clean, plugins } from '../config.json'
 import { Artifact } from './services/artifact'
 import { Cleaner } from './services/cleaner'
 import { DockerCompose } from './services/docker-compose'
@@ -25,7 +24,7 @@ await step('backup-clean-and-restore', async () => {
   // await backup?.removeStale()
   await Cleaner.clean({
     dir: `${env.ENVIRONMENT}/minecraft-main`,
-    except
+    except: clean.except
   })
   // await backup?.restore()
 })
