@@ -90,14 +90,3 @@ jobs:
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
-
-  actions-timeline:
-    runs-on: ubuntu-latest
-    needs:
-      - resolve-env
-      - build-and-upload-plugins
-      - publish-package-server
-      - cdktf
-      - deploy-onprem
-    steps:
-      - uses: Kesin11/actions-timeline@v2

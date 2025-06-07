@@ -20,11 +20,3 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  actions-timeline:
-    runs-on: ubuntu-latest
-    needs:
-      - merging-into-main
-      - pr-title-lint
-    steps:
-      - uses: Kesin11/actions-timeline@v2
