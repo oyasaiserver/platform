@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "check": "sort-package-json */**/package.json --quiet && biome check --write",
     "codegen": "codegen schema gen",
-    "update-deps": "ncu --deep --upgrade --reject @oyasaiserver/*"
+    "upgrade": "ncu --deep --upgrade --reject @oyasaiserver/*"
   },
   "dependencies": {
     "@oyasaiserver/codegen": "^1.0.0",
