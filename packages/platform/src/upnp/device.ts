@@ -105,8 +105,6 @@ export class Device implements IDevice {
   }
 }
 
-export default Device
-
 /*
  * ===================
  * ====== Types ======

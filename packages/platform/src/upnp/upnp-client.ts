@@ -1,6 +1,6 @@
-import {} from '../utils'
-import Device from './device'
-import Ssdp from './ssdp'
+import { EventEmitter } from 'node:events'
+import { Device } from './device'
+import { Ssdp } from './ssdp'
 import type { RawResponse } from './types'
 
 export class UpnpClient implements IClient {
@@ -133,7 +133,8 @@ export class UpnpClient implements IClient {
   }> {
     let timeouted = false
     const p = this.ssdp.search(
-      'urn:schemas-upnp-org:device:InternetGatewayDevice:1'
+      'urn:schemas-upnp-org:device:InternetGatewayDevice:1',
+      new EventEmitter()
     )
 
     return new Promise<{ gateway: Device; address: string }>((s, r) => {

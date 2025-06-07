@@ -1,6 +1,7 @@
-import dgram, { type Socket } from 'node:dgram'
-import EventEmitter from 'node:events'
-import os, { type NetworkInterfaceInfo } from 'node:os'
+import { type Socket, createSocket } from 'node:dgram'
+import { EventEmitter } from 'node:events'
+import { type NetworkInterfaceInfo, networkInterfaces } from 'node:os'
+import type { ISsdp, SearchCallback, SsdpEmitter } from './types'
 
 export class Ssdp implements ISsdp {
   private sourcePort = this.options?.sourcePort || 0
@@ -16,7 +17,7 @@ export class Ssdp implements ISsdp {
 
   constructor(private options?: { sourcePort?: number }) {
     // Create sockets on all external interfaces
-    const interfaces = os.networkInterfaces()
+    const interfaces = networkInterfaces()
     this.sockets = Object.keys(interfaces).reduce<Socket[]>(
       (arr, key) =>
         arr.concat(
@@ -29,7 +30,7 @@ export class Ssdp implements ISsdp {
   }
 
   private createSocket(iface: NetworkInterfaceInfo): Socket {
-    const socket = dgram.createSocket(iface.family === 'IPv4' ? 'udp4' : 'udp6')
+    const socket = createSocket(iface.family === 'IPv4' ? 'udp4' : 'udp6')
 
     socket.on('message', message => {
       // Ignore messages after closing sockets
@@ -86,15 +87,7 @@ export class Ssdp implements ISsdp {
     this.ssdpEmitter.emit('device', headers, addr)
   }
 
-  public search(device: string, emitter?: SsdpEmitter): SsdpEmitter {
-    if (!emitter) {
-      emitter = new EventEmitter()
-      emitter._ended = false
-      emitter.once('end', () => {
-        emitter._ended = true
-      })
-    }
-
+  public search(device: string, emitter: SsdpEmitter): SsdpEmitter {
     if (!this.bound) {
       this.queue.push([device, emitter])
       return emitter
@@ -143,47 +136,4 @@ function parseMimeHeader(headerStr: string): Record<string, string> {
     }
     return headers
   }, {})
-}
-
-export default Ssdp
-
-/*
- * ===================
- * ====== Types ======
- * ===================
- */
-
-type SearchArgs = [Record<string, string>, string]
-export type SearchCallback = (...args: SearchArgs) => void
-type SearchEvent = <E extends Events>(
-  ev: E,
-  ...args: E extends 'device' ? SearchArgs : []
-) => boolean
-type Events = 'device' | 'end'
-type Event<E extends Events> = E extends 'device' ? SearchCallback : () => void
-type EventListener<T> = <E extends Events>(ev: E, callback: Event<E>) => T
-
-export interface SsdpEmitter extends EventEmitter {
-  removeListener: EventListener<this>
-  addListener: EventListener<this>
-  once: EventListener<this>
-  on: EventListener<this>
-
-  emit: SearchEvent
-
-  _ended?: boolean
-}
-
-export interface ISsdp {
-  /**
-   * Search for a SSDP compatible server on the network
-   * @param device Search Type (ST) header, specifying which device to search for
-   * @param emitter An existing EventEmitter to emit event on
-   * @returns The event emitter provided in Promise, or a newly instantiated one.
-   */
-  search(device: string, emitter?: SsdpEmitter): SsdpEmitter
-  /**
-   * Close all sockets
-   */
-  close(): void
 }
