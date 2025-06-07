@@ -2,8 +2,6 @@ import { mkdir, readdir, rm, stat } from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
 import { $ } from 'zx'
 
-$.quiet = true
-
 export class Backup {
   private constructor(
     private readonly name: string,

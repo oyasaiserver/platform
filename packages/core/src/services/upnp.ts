@@ -1,4 +1,4 @@
-import { Client } from 'nat-upnp-ts'
+import { Client } from '@oyasaiserver/platform/upnp/client'
 
 export class Upnp {
   public static async createMapping(port: number): Promise<void> {
