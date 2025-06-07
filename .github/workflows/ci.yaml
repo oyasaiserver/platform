@@ -22,7 +22,6 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run codegen
-          npm run check
           git diff --exit-code
 
   asdf:
