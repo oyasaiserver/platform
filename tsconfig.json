@@ -2,7 +2,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "esnext",
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
@@ -14,7 +14,7 @@
     "noUncheckedSideEffectImports": true,
     "module": "preserve",
     "noEmit": true,
-    "lib": ["es2022"]
+    "lib": ["esnext"]
   },
   "references": [
     { "path": "apps/wiki" },

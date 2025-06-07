@@ -4,7 +4,7 @@
   "type": "module",
   "exports": {
     "./*": {
-      "import": "./src/*.ts"
+      "import": ["./src/*.ts", "./src/*/index.ts"]
     }
   },
   "bin": {
@@ -14,6 +14,7 @@
     "start": "tsx src/index.ts"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.44.1"
+    "@dotenvx/dotenvx": "^1.44.1",
+    "fast-xml-parser": "^4.5.3"
   }
 }

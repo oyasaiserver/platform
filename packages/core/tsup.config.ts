@@ -1,11 +1,12 @@
 import { ok } from 'node:assert'
 import { readFile } from 'node:fs/promises'
+import { directory } from '@oyasaiserver/platform/directory'
 import { defineConfig } from 'tsup'
 
 const environment = process.env.ENVIRONMENT || 'local'
 
 const dotenvPublicKeys = await readFile(
-  `../../envs/${environment}/.env`,
+  `${directory.root}/envs/${environment}/.env`,
   'utf-8'
 )
 ok(dotenvPublicKeys)

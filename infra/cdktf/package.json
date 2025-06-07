@@ -8,11 +8,12 @@
     "synth": "cdktf synth"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "^12.5.0"
+    "@cdktf/provider-cloudflare": "^13.0.0",
+    "constructs": "^10.4.2"
   },
   "devDependencies": {
-    "cdktf": "^0.20.12",
-    "cdktf-cli": "^0.20.12",
-    "wrangler": "^4.16.1"
+    "cdktf": "^0.21.0",
+    "cdktf-cli": "^0.21.0",
+    "wrangler": "^4.19.1"
   }
 }
