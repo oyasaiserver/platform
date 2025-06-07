@@ -5,7 +5,7 @@ import { fallback } from './utils'
 
 const environment = fallback(process.env.ENVIRONMENT, 'local')
 
-config({
+const { parsed } = config({
   strict: true,
   override: true,
   path: join('../..', 'envs', environment, '.env')
@@ -13,5 +13,5 @@ config({
 
 export const Env = env.parse({
   ENVIRONMENT: environment,
-  ...process.env
+  ...parsed
 })
