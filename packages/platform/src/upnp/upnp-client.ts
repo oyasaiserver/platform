@@ -2,7 +2,7 @@ import Device from './device'
 import Ssdp from './ssdp'
 import type { RawResponse } from './types'
 
-export class Client implements IClient {
+export class UpnpClient implements IClient {
   readonly timeout: number
   readonly ssdp = new Ssdp()
 
@@ -170,8 +170,6 @@ function normalizeOptions(options: StandardOpts) {
     internal: toObject(options.private)
   }
 }
-
-export default Client
 
 /*
  * ===================

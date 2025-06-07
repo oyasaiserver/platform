@@ -2,13 +2,24 @@ import { spinner } from 'zx'
 
 import { cp } from 'node:fs/promises'
 import { secrets } from '@oyasaiserver/platform/secrets'
+import { UpnpClient } from '@oyasaiserver/platform/upnp/upnp-client'
 import { clean, plugins } from '../config.json'
 import { Artifact } from './services/artifact'
 import { Cleaner } from './services/cleaner'
 import { DockerCompose } from './services/docker-compose'
 import { Overlays } from './services/overlays'
 import { Plugin } from './services/plugin'
-import { Upnp } from './services/upnp'
+
+await spinner('upnp-create-mapping', async () => {
+  const client = new UpnpClient()
+  await client.createMapping({
+    public: 25565,
+    private: 25565
+  })
+  client.close()
+})
+
+process.exit(0)
 
 await spinner('docker-compose-down', async () => {
   await DockerCompose.down(secrets.ENVIRONMENT)
