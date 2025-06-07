@@ -29,7 +29,7 @@ const promises = files
   .map(async dirent => {
     const absolute = join(dirent.parentPath, dirent.name)
     const releative = relative(cwd(), absolute)
-    const { name, dir } = parse(releative)
+    const { dir, name } = parse(releative)
     const gendir = dir.replace(src, dst)
     const content = await readFile(releative, 'utf-8')
     await mkdir(gendir, {
