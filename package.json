@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "^22.15.21",
     "sort-package-json": "^3.2.1",
     "typescript": "^5.8.3"
