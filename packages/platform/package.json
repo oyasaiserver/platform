@@ -7,6 +7,9 @@
       "import": "./src/*.ts"
     }
   },
+  "bin": {
+    "platform-env": "./bin/platform-env.ts"
+  },
   "scripts": {
     "start": "tsx src/index.ts"
   }

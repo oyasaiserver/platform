@@ -1,14 +1,25 @@
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { config } from '@dotenvx/dotenvx'
+import { parse } from '@dotenvx/dotenvx'
 import { env } from '@oyasaiserver/gen/common/env'
 import { fallback } from './utils'
 
 const environment = fallback(process.env.ENVIRONMENT, 'local')
 
-const { parsed } = config({
-  strict: true,
-  override: true,
-  path: join('../..', 'envs', environment, '.env')
+const envFile = join(import.meta.dirname, `../../../envs/${environment}/.env`)
+
+const publicKey = fallback(
+  process.env.DOTENV_PUBLIC_KEYS,
+  await readFile(envFile, 'utf-8')
+)
+
+const privateKey = fallback(
+  process.env.DOTENV_PRIVATE_KEY,
+  await readFile(`${envFile}.keys`, 'utf-8')
+)
+
+const parsed = parse(publicKey, {
+  privateKey
 })
 
 export const Env = env.parse({
