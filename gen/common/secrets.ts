@@ -1,6 +1,6 @@
 import { z } from 'zod/v4'
 
-export const env = z
+export const secrets = z
   .object({
     DOTENV_PUBLIC_KEY: z.string(),
     ENVIRONMENT: z.enum(['production', 'development', 'local']),
@@ -11,4 +11,4 @@ export const env = z
   .strict()
   .readonly()
 
-export type Env = z.infer<typeof env>
+export type Secrets = z.infer<typeof secrets>

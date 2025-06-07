@@ -1,5 +1,5 @@
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
-import { Env } from '@oyasaiserver/platform/env'
+import { secrets } from '@oyasaiserver/platform/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend'
@@ -13,7 +13,7 @@ export class CloudflareStack extends TerraformStack {
     new NamedCloudBackend(this, id)
 
     new CloudflareProvider(this, id, {
-      apiToken: Env.CLOUDFLARE_API_TOKEN
+      apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
   }
 }

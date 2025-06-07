@@ -1,13 +1,13 @@
 #!/usr/bin/env tsx
 import { $ } from 'zx'
-import { Env } from '../src/env'
+import { secrets } from '../src/secrets'
 
 const command = process.argv.slice(2)
 
 $({
   env: {
     ...process.env,
-    ...Env
+    ...secrets
   },
   verbose: true
 })`${command}`

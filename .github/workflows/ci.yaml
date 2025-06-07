@@ -39,12 +39,3 @@ jobs:
           source ~/.bashrc || true
           npm ci
           npm run verify-asdf -w tests
-
-  actions-timeline:
-    runs-on: ubuntu-latest
-    needs:
-      - check
-      - codegen-no-drift
-      - asdf
-    steps:
-      - uses: Kesin11/actions-timeline@v2

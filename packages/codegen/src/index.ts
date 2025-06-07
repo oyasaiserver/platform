@@ -9,9 +9,9 @@ import { format } from './format'
 
 const src = ensure(argv[2])
 const dst = ensure(argv[3])
-const dir = join(cwd(), src)
+const schema = join(cwd(), src)
 
-for (const file of await readdir(dir)) {
+for (const file of await readdir(schema)) {
   if (!file.endsWith('.json')) {
     await rm(file, {
       recursive: true,
@@ -20,7 +20,7 @@ for (const file of await readdir(dir)) {
   }
 }
 
-const files = await readdir(dir, {
+const files = await readdir(schema, {
   withFileTypes: true,
   recursive: true
 })
@@ -37,14 +37,14 @@ const promises = files
       recursive: true
     })
     const genpath = join(gendir, name)
-    const { $id: id, ...schema } = JSON.parse(content)
+    const schema = JSON.parse(content)
     // language=typescript
     const code = `
       import { z } from 'zod/v4'
       
-      export const ${id} = ${jsonSchemaToZod(schema)}
+      export const ${name} = ${jsonSchemaToZod(schema)}
       
-      export type ${pascalCase(id)} = z.infer<typeof ${id}>
+      export type ${pascalCase(name)} = z.infer<typeof ${name}>
     `
     const path = `${genpath}.ts`
     await writeFile(path, format(code, path))

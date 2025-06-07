@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
-import { env } from '@oyasaiserver/gen/common/env'
+import { secrets as secretsSchema } from '@oyasaiserver/gen/common/secrets'
 import { ensure, fallback } from './utils'
 
 const envFile = join(
@@ -10,7 +10,7 @@ const envFile = join(
   `../../../envs/${fallback(process.env.ENVIRONMENT, 'local')}/.env`
 )
 
-export const Env = env.parse(
+export const secrets = secretsSchema.parse(
   parse(
     await fallback(process.env.DOTENV_PUBLIC_KEYS, async () => {
       return readFile(envFile, 'utf-8')

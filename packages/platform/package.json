@@ -8,9 +8,12 @@
     }
   },
   "bin": {
-    "platform-env": "./bin/platform-env.ts"
+    "platform-secrets": "./bin/platform-secrets.ts"
   },
   "scripts": {
     "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.44.1"
   }
 }
