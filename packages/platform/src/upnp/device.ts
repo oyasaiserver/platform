@@ -1,11 +1,11 @@
 import { URL } from 'node:url'
-import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
 import type { RawResponse } from './types'
 
 export class Device implements IDevice {
   readonly description: string
   readonly services: string[]
+
   constructor(url: string) {
     this.description = url
     this.services = [
@@ -14,29 +14,36 @@ export class Device implements IDevice {
       'urn:schemas-upnp-org:service:WANPPPConnection:1'
     ]
   }
+
   private async getXML(url: string): Promise<RawResponse> {
-    return axios
-      .get(url)
-      .then(({ data }) => new XMLParser().parse(data))
-      .catch(() => new Error('Failed to lookup device description'))
+    try {
+      const res = await fetch(url)
+      const data = await res.text()
+      return new XMLParser().parse(data)
+    } catch {
+      throw new Error('Failed to lookup device description')
+    }
   }
+
   public async getService(types: string[]): Promise<Service> {
     return this.getXML(this.description).then(({ root: xml }) => {
-      const services = this.parseDescription(xml).services.filter(
-        ({ serviceType }) => types.includes(serviceType)
-      )
+      if (!xml) {
+        throw new Error('Invalid XML response')
+      }
 
-      if (
-        services.length === 0 ||
-        !services[0].controlURL ||
-        !services[0].SCPDURL
-      ) {
+      const services = this.parseDescription({
+        device: xml.device as RawDevice
+      }).services.filter(({ serviceType }) => types.includes(serviceType))
+
+      if (!services[0] || !services[0].controlURL || !services[0].SCPDURL) {
         throw new Error('Service not found')
       }
 
-      const baseUrl = new URL(xml.baseURL, this.description)
-      const prefix = (url: string) =>
-        new URL(url, baseUrl.toString()).toString()
+      const baseUrl = new URL(xml.baseURL || '', this.description)
+
+      function prefix(url: string): string {
+        return new URL(url, baseUrl).toString()
+      }
 
       return {
         service: services[0].serviceType,
@@ -45,6 +52,7 @@ export class Device implements IDevice {
       }
     })
   }
+
   public async run(
     action: string,
     args: (string | number)[][]
@@ -56,20 +64,20 @@ export class Device implements IDevice {
       ''
     )}</u:${action}></s:Body></s:Envelope>`
 
-    return axios
-      .post(info.controlURL, body, {
-        headers: {
-          'Content-Type': 'text/xml; charset="utf-8"',
-          'Content-Length': `${Buffer.byteLength(body)}`,
-          Connection: 'close',
-          SOAPAction: JSON.stringify(`${info.service}#${action}`)
-        }
-      })
-      .then(
-        ({ data }) =>
-          new XMLParser({ removeNSPrefix: true }).parse(data).Envelope.Body
-      )
+    const res = await fetch(info.controlURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/xml; charset="utf-8"',
+        'Content-Length': `${Buffer.byteLength(body)}`,
+        Connection: 'close',
+        SOAPAction: JSON.stringify(`${info.service}#${action}`)
+      },
+      body
+    })
+    const data = await res.text()
+    return new XMLParser({ removeNSPrefix: true }).parse(data).Envelope.Body
   }
+
   public parseDescription(info: { device?: RawDevice }): {
     services: RawService[]
     devices: RawDevice[]

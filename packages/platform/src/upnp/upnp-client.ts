@@ -1,11 +1,18 @@
 import { EventEmitter } from 'node:events'
 import { Device } from './device'
 import { Ssdp } from './ssdp'
-import type { RawResponse } from './types'
+import type {
+  DeletePortMappingOpts,
+  GetMappingOpts,
+  Mapping,
+  NewPortMappingOpts,
+  RawResponse,
+  StandardOpts
+} from './types'
 
-export class UpnpClient implements IClient {
-  readonly timeout: number
-  readonly ssdp = new Ssdp()
+export class UpnpClient {
+  private readonly timeout: number
+  private readonly ssdp = new Ssdp()
 
   constructor(options: { timeout?: number } = {}) {
     this.timeout = options.timeout || 1800
@@ -16,15 +23,14 @@ export class UpnpClient implements IClient {
   ): Promise<RawResponse> {
     return this.getGateway().then(({ gateway, address }) => {
       const ports = normalizeOptions(options)
-
       return gateway.run('AddPortMapping', [
-        ['NewRemoteHost', ports.remote.host],
-        ['NewExternalPort', ports.remote.port],
+        ['NewRemoteHost', ports.remote.host || ''],
+        ['NewExternalPort', ports.remote.port || 0],
         [
           'NewProtocol',
           options.protocol ? options.protocol.toUpperCase() : 'TCP'
         ],
-        ['NewInternalPort', ports.internal.port],
+        ['NewInternalPort', ports.internal.port || 0],
         ['NewInternalClient', ports.internal.host || address],
         ['NewEnabled', 1],
         ['NewPortMappingDescription', options.description || 'node:nat:upnp'],
@@ -40,8 +46,8 @@ export class UpnpClient implements IClient {
       const ports = normalizeOptions(options)
 
       return gateway.run('DeletePortMapping', [
-        ['NewRemoteHost', ports.remote.host],
-        ['NewExternalPort', ports.remote.port],
+        ['NewRemoteHost', ports.remote.host || ''],
+        ['NewExternalPort', ports.remote.port || 0],
         [
           'NewProtocol',
           options.protocol ? options.protocol.toUpperCase() : 'TCP'
@@ -54,7 +60,7 @@ export class UpnpClient implements IClient {
     const { gateway, address } = await this.getGateway()
     let i = 0
     let end = false
-    const results = []
+    const results: Mapping[] = []
 
     while (true) {
       const data = await gateway
@@ -63,11 +69,12 @@ export class UpnpClient implements IClient {
           if (i !== 1) {
             end = true
           }
+          return undefined
         })
 
-      if (end) break
+      if (end || !data) break
 
-      const key = Object.keys(data || {}).find(k =>
+      const key = Object.keys(data).find(k =>
         /^GetGenericPortMappingEntryResponse/.test(k)
       )
 
@@ -75,23 +82,29 @@ export class UpnpClient implements IClient {
         throw new Error('Incorrect response')
       }
 
-      const res = data[key]
+      const res = data[key] as Record<string, string>
+
+      if (
+        !res.NewProtocol ||
+        !res.NewPortMappingDescription ||
+        !res.NewLeaseDuration
+      ) {
+        throw new Error('Invalid response data')
+      }
 
       const result: Mapping = {
         public: {
-          host:
-            (typeof res.NewRemoteHost === 'string' && res.NewRemoteHost) || '',
+          host: res.NewRemoteHost || '',
           port: Number.parseInt(res.NewExternalPort, 10)
         },
         private: {
-          host: res.NewInternalClient,
+          host: res.NewInternalClient || '',
           port: Number.parseInt(res.NewInternalPort, 10)
         },
         protocol: res.NewProtocol.toLowerCase(),
         enabled: res.NewEnabled === '1',
         description: res.NewPortMappingDescription,
         ttl: Number.parseInt(res.NewLeaseDuration, 10),
-        // temporary, so typescript will compile
         local: false
       }
       result.local = result.private.host === address
@@ -122,8 +135,8 @@ export class UpnpClient implements IClient {
         /^GetExternalIPAddressResponse$/.test(k)
       )
 
-      if (!key) throw new Error('Incorrect response')
-      return data[key]?.NewExternalIPAddress
+      if (!key || !data[key]) throw new Error('Incorrect response')
+      return data[key].NewExternalIPAddress as string
     })
   }
 
@@ -148,6 +161,11 @@ export class UpnpClient implements IClient {
         p.emit('end')
         clearTimeout(timeout)
 
+        if (!info.location) {
+          r(new Error('Invalid device info'))
+          return
+        }
+
         // Create gateway
         s({ gateway: new Device(info.location), address })
       })
@@ -169,7 +187,6 @@ function normalizeOptions(options: StandardOpts): {
   } {
     if (typeof addr === 'number') return { port: addr }
     if (typeof addr === 'object') return addr
-
     return {}
   }
 
@@ -177,82 +194,4 @@ function normalizeOptions(options: StandardOpts): {
     remote: toObject(options.public),
     internal: toObject(options.private)
   }
-}
-
-/*
- * ===================
- * ====== Types ======
- * ===================
- */
-
-export interface Mapping {
-  public: { host: string; port: number }
-  private: { host: string; port: number }
-  protocol: string
-  enabled: boolean
-  description: string
-  ttl: number
-  local: boolean
-}
-
-/**
- * Standard options that many options use.
- */
-export interface StandardOpts {
-  public?:
-    | number
-    | {
-        port?: number
-        host?: string
-      }
-  private?:
-    | number
-    | {
-        port?: number
-        host?: string
-      }
-  protocol?: string
-}
-
-export interface NewPortMappingOpts extends StandardOpts {
-  description?: string
-  ttl?: number
-}
-export type DeletePortMappingOpts = StandardOpts
-export interface GetMappingOpts {
-  local?: boolean
-  description?: RegExp | string
-}
-
-/**
- * Main client interface.
- */
-export interface IClient {
-  /**
-   * Create a new port mapping
-   * @param options Options for the new port mapping
-   */
-  createMapping(options: NewPortMappingOpts): Promise<RawResponse>
-  /**
-   * Remove a port mapping
-   * @param options Specify which port mapping to remove
-   */
-  removeMapping(options: DeletePortMappingOpts): Promise<RawResponse>
-  /**
-   * Get a list of existing mappings
-   * @param options Filter mappings based on these options
-   */
-  getMappings(options?: GetMappingOpts): Promise<Mapping[]>
-  /**
-   * Fetch the external/public IP from the gateway
-   */
-  getPublicIp(): Promise<string>
-  /**
-   * Get the gateway device for communication
-   */
-  getGateway(): Promise<{ gateway: Device; address: string }>
-  /**
-   * Close the underlaying sockets and resources
-   */
-  close(): void
 }
