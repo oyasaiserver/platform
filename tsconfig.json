@@ -16,7 +16,6 @@
     "noEmit": true,
     "lib": ["es2022"]
   },
-  "files": [],
   "references": [
     { "path": "apps/wiki" },
     { "path": "gen" },
@@ -25,5 +24,6 @@
     { "path": "packages/platform" },
     { "path": "packages/codegen" },
     { "path": "tests" }
-  ]
+  ],
+  "files": []
 }
