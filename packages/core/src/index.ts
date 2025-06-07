@@ -10,17 +10,6 @@ import { DockerCompose } from './services/docker-compose'
 import { Overlays } from './services/overlays'
 import { Plugin } from './services/plugin'
 
-await spinner('upnp-create-mapping', async () => {
-  const client = new UpnpClient()
-  await client.createMapping({
-    public: 25565,
-    private: 25565
-  })
-  client.close()
-})
-
-process.exit(0)
-
 await spinner('docker-compose-down', async () => {
   await DockerCompose.down(secrets.ENVIRONMENT)
 })
@@ -67,5 +56,10 @@ await spinner('docker-compose-up', async () => {
 })
 
 await spinner('upnp-create-mapping', async () => {
-  await Upnp.createMapping(25565)
+  const client = new UpnpClient()
+  await client.createMapping({
+    public: 25565,
+    private: 25565
+  })
+  client.close()
 })
