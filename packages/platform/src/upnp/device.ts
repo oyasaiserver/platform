@@ -14,13 +14,13 @@ export class Device implements IDevice {
       'urn:schemas-upnp-org:service:WANPPPConnection:1'
     ]
   }
-  private async getXML(url: string) {
+  private async getXML(url: string): Promise<RawResponse> {
     return axios
       .get(url)
       .then(({ data }) => new XMLParser().parse(data))
       .catch(() => new Error('Failed to lookup device description'))
   }
-  public async getService(types: string[]) {
+  public async getService(types: string[]): Promise<Service> {
     return this.getXML(this.description).then(({ root: xml }) => {
       const services = this.parseDescription(xml).services.filter(
         ({ serviceType }) => types.includes(serviceType)
@@ -51,34 +51,18 @@ export class Device implements IDevice {
   ): Promise<RawResponse> {
     const info = await this.getService(this.services)
 
-    const body =
-      '<?xml version="1.0"?>' +
-      '<s:Envelope ' +
-      'xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-      's:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">' +
-      '<s:Body>' +
-      '<u:' +
-      action +
-      ' xmlns:u=' +
-      JSON.stringify(info.service) +
-      '>' +
-      args.reduce(
-        (p, [a, b]) => `${p}<${a ?? ''}>${b ?? ''}</${a ?? ''}>`,
-        ''
-      ) +
-      '</u:' +
-      action +
-      '>' +
-      '</s:Body>' +
-      '</s:Envelope>'
+    const body = `<?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:${action} xmlns:u=${JSON.stringify(info.service)}>${args.reduce(
+      (p, [a, b]) => `${p}<${a ?? ''}>${b ?? ''}</${a ?? ''}>`,
+      ''
+    )}</u:${action}></s:Body></s:Envelope>`
 
     return axios
       .post(info.controlURL, body, {
         headers: {
           'Content-Type': 'text/xml; charset="utf-8"',
-          'Content-Length': '' + Buffer.byteLength(body),
+          'Content-Length': `${Buffer.byteLength(body)}`,
           Connection: 'close',
-          SOAPAction: JSON.stringify(info.service + '#' + action)
+          SOAPAction: JSON.stringify(`${info.service}#${action}`)
         }
       })
       .then(
@@ -86,11 +70,14 @@ export class Device implements IDevice {
           new XMLParser({ removeNSPrefix: true }).parse(data).Envelope.Body
       )
   }
-  public parseDescription(info: { device?: RawDevice }) {
+  public parseDescription(info: { device?: RawDevice }): {
+    services: RawService[]
+    devices: RawDevice[]
+  } {
     const services: RawService[] = []
     const devices: RawDevice[] = []
 
-    function traverseDevices(device?: RawDevice) {
+    function traverseDevices(device?: RawDevice): void {
       if (!device) return
       const serviceList = device.serviceList?.service ?? []
       const deviceList = device.deviceList?.device ?? []

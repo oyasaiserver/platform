@@ -1,3 +1,4 @@
+import {} from '../utils'
 import Device from './device'
 import Ssdp from './ssdp'
 import type { RawResponse } from './types'
@@ -17,13 +18,13 @@ export class UpnpClient implements IClient {
       const ports = normalizeOptions(options)
 
       return gateway.run('AddPortMapping', [
-        ['NewRemoteHost', ports.remote.host + ''],
-        ['NewExternalPort', ports.remote.port + ''],
+        ['NewRemoteHost', ports.remote.host],
+        ['NewExternalPort', ports.remote.port],
         [
           'NewProtocol',
           options.protocol ? options.protocol.toUpperCase() : 'TCP'
         ],
-        ['NewInternalPort', ports.internal.port + ''],
+        ['NewInternalPort', ports.internal.port],
         ['NewInternalClient', ports.internal.host || address],
         ['NewEnabled', 1],
         ['NewPortMappingDescription', options.description || 'node:nat:upnp'],
@@ -39,8 +40,8 @@ export class UpnpClient implements IClient {
       const ports = normalizeOptions(options)
 
       return gateway.run('DeletePortMapping', [
-        ['NewRemoteHost', ports.remote.host + ''],
-        ['NewExternalPort', ports.remote.port + ''],
+        ['NewRemoteHost', ports.remote.host],
+        ['NewExternalPort', ports.remote.port],
         [
           'NewProtocol',
           options.protocol ? options.protocol.toUpperCase() : 'TCP'
@@ -49,20 +50,20 @@ export class UpnpClient implements IClient {
     })
   }
 
-  public async getMappings(options: GetMappingOpts = {}) {
+  public async getMappings(options: GetMappingOpts = {}): Promise<Mapping[]> {
     const { gateway, address } = await this.getGateway()
     let i = 0
     let end = false
     const results = []
 
     while (true) {
-      const data = (await gateway
+      const data = await gateway
         .run('GetGenericPortMappingEntry', [['NewPortMappingIndex', i++]])
         .catch(err => {
           if (i !== 1) {
             end = true
           }
-        }))!
+        })
 
       if (end) break
 
@@ -74,7 +75,7 @@ export class UpnpClient implements IClient {
         throw new Error('Incorrect response')
       }
 
-      const res: any = data[key]
+      const res = data[key]
 
       const result: Mapping = {
         public: {
@@ -100,8 +101,6 @@ export class UpnpClient implements IClient {
       }
 
       if (options.description) {
-        if (typeof result.description !== 'string') continue
-
         if (options.description instanceof RegExp) {
           if (!options.description.test(result.description)) continue
         } else {
@@ -124,11 +123,14 @@ export class UpnpClient implements IClient {
       )
 
       if (!key) throw new Error('Incorrect response')
-      return data[key]?.NewExternalIPAddress + ''
+      return data[key]?.NewExternalIPAddress
     })
   }
 
-  public async getGateway() {
+  public async getGateway(): Promise<{
+    gateway: Device
+    address: string
+  }> {
     let timeouted = false
     const p = this.ssdp.search(
       'urn:schemas-upnp-org:device:InternetGatewayDevice:1'
@@ -151,15 +153,20 @@ export class UpnpClient implements IClient {
     })
   }
 
-  public close() {
+  public close(): void {
     this.ssdp.close()
   }
 }
 
-function normalizeOptions(options: StandardOpts) {
-  function toObject(addr: StandardOpts['public']) {
+function normalizeOptions(options: StandardOpts): {
+  remote: { port?: number; host?: string }
+  internal: { port?: number; host?: string }
+} {
+  function toObject(addr: StandardOpts['public']): {
+    port?: number
+    host?: string
+  } {
     if (typeof addr === 'number') return { port: addr }
-    if (typeof addr === 'string' && !isNaN(addr)) return { port: Number(addr) }
     if (typeof addr === 'object') return addr
 
     return {}

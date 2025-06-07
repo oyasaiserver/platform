@@ -1,6 +1,6 @@
 import dgram, { type Socket } from 'node:dgram'
 import EventEmitter from 'node:events'
-import os from 'node:os'
+import os, { type NetworkInterfaceInfo } from 'node:os'
 
 export class Ssdp implements ISsdp {
   private sourcePort = this.options?.sourcePort || 0
@@ -28,7 +28,7 @@ export class Ssdp implements ISsdp {
     )
   }
 
-  private createSocket(iface: any) {
+  private createSocket(iface: NetworkInterfaceInfo): Socket {
     const socket = dgram.createSocket(iface.family === 'IPv4' ? 'udp4' : 'udp6')
 
     socket.on('message', message => {
@@ -36,21 +36,26 @@ export class Ssdp implements ISsdp {
       if (this.closed) return
 
       // Parse response
-      this.parseResponse(message.toString(), socket.address as any as string)
+      this.parseResponse(
+        message.toString(),
+        socket.address as unknown as string
+      )
     })
 
     // Bind in next tick (sockets should be me in this.sockets array)
-    process.nextTick(() => {
+    process.nextTick((): void => {
       // Unqueue this._queue once all sockets are ready
-      const onready = () => {
+      const onready = (): void => {
         if (this.boundCount < this.sockets.length) return
 
         this.bound = true
-        this.queue.forEach(([device, emitter]) => this.search(device, emitter))
+        for (const [device, emitter] of this.queue) {
+          this.search(device, emitter)
+        }
       }
 
       socket.on('listening', () => {
-        this.boundCount += 1
+        this.boundCount++
         onready()
       })
 
@@ -68,7 +73,7 @@ export class Ssdp implements ISsdp {
     return socket
   }
 
-  private parseResponse(response: string, addr: string) {
+  private parseResponse(response: string, addr: string): void {
     // Ignore incorrect packets
     if (!/^(HTTP|NOTIFY)/m.test(response)) return
 
@@ -86,7 +91,7 @@ export class Ssdp implements ISsdp {
       emitter = new EventEmitter()
       emitter._ended = false
       emitter.once('end', () => {
-        emitter!._ended = true
+        emitter._ended = true
       })
     }
 
@@ -96,24 +101,13 @@ export class Ssdp implements ISsdp {
     }
 
     const query = Buffer.from(
-      'M-SEARCH * HTTP/1.1\r\n' +
-        'HOST: ' +
-        this.multicast +
-        ':' +
-        this.port +
-        '\r\n' +
-        'MAN: "ssdp:discover"\r\n' +
-        'MX: 1\r\n' +
-        'ST: ' +
-        device +
-        '\r\n' +
-        '\r\n'
+      `M-SEARCH * HTTP/1.1\r\nHOST: ${this.multicast}:${this.port}\r\nMAN: "ssdp:discover"\r\nMX: 1\r\nST: ${device}\r\n\r\n`
     )
 
     // Send query on each socket
-    this.sockets.forEach(socket =>
+    for (const socket of this.sockets) {
       socket.send(query, 0, query.length, this.port, this.multicast)
-    )
+    }
 
     const ondevice: SearchCallback = (headers, address) => {
       if (!emitter || emitter._ended || headers.st !== device) return
@@ -130,13 +124,15 @@ export class Ssdp implements ISsdp {
     return emitter
   }
 
-  public close() {
-    this.sockets.forEach(socket => socket.close())
+  public close(): void {
+    for (const socket of this.sockets) {
+      socket.close()
+    }
     this.closed = true
   }
 }
 
-function parseMimeHeader(headerStr: string) {
+function parseMimeHeader(headerStr: string): Record<string, string> {
   const lines = headerStr.split(/\r\n/g)
 
   // Parse headers from lines to hashmap
