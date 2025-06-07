@@ -9,7 +9,6 @@
     "codegen": "codegen schema gen"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.44.1",
     "@oyasaiserver/codegen": "^1.0.0",
     "@oyasaiserver/gen": "^1.0.0",
     "@oyasaiserver/platform": "^1.0.0",

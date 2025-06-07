@@ -12,5 +12,8 @@
   },
   "scripts": {
     "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.44.1"
   }
 }
