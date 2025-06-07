@@ -1,7 +1,0 @@
-{
-  "name": "@oyasaiserver/scripts",
-  "type": "module",
-  "scripts": {
-    "update-deps": "tsx src/update-deps.ts"
-  }
-}

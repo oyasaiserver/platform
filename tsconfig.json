@@ -23,8 +23,7 @@
     { "path": "packages/core" },
     { "path": "packages/platform" },
     { "path": "packages/codegen" },
-    { "path": "tests" },
-    { "path": "scripts" }
+    { "path": "tests" }
   ],
   "files": []
 }
