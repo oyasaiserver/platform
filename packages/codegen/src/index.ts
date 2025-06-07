@@ -5,6 +5,7 @@ import { argv, cwd } from 'node:process'
 import { ensure } from '@oyasaiserver/platform/utils'
 import { pascalCase } from 'change-case'
 import { jsonSchemaToZod } from 'json-schema-to-zod'
+import { format } from './format'
 
 const src = ensure(argv[2])
 const dst = ensure(argv[3])
@@ -37,17 +38,16 @@ const promises = files
     })
     const genpath = join(gendir, name)
     const schema = JSON.parse(content)
-    await writeFile(
-      `${genpath}.ts`,
-      // language=typescript
-      `
-        import { z } from 'zod/v4'
-        
-        export const ${name} = ${jsonSchemaToZod(schema)}
-        
-        export type ${pascalCase(name)} = z.infer<typeof ${name}>
-      `
-    )
+    // language=typescript
+    const code = `
+      import { z } from 'zod/v4'
+      
+      export const ${name} = ${jsonSchemaToZod(schema)}
+      
+      export type ${pascalCase(name)} = z.infer<typeof ${name}>
+    `
+    const path = `${genpath}.ts`
+    await writeFile(path, format(code, path))
   })
 
 await Promise.all(promises)
