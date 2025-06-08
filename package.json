@@ -17,7 +17,7 @@
   "scripts": {
     "build": "tsc --build",
     "check": "sort-package-json */**/package.json --quiet && biome check --write",
-    "codegen": "codegen schema gen",
+    "codegen": "codegen schema gen && npm run check",
     "upgrade": "ncu --deep --upgrade --reject @oyasaiserver/*"
   },
   "type": "module",
