@@ -1,4 +1,4 @@
-import { secrets } from '@oyasaiserver/platform/secrets'
+import { secrets } from '@oyasaiserver/lib/secrets'
 import { App } from 'cdktf'
 import { CloudflareStack } from './stacks/cloudflare-stack.ts'
 

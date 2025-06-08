@@ -1,6 +1,6 @@
 import { cp } from 'node:fs/promises'
-import { secrets } from '@oyasaiserver/platform/secrets'
-import { UpnpClient } from '@oyasaiserver/platform/upnp/upnp-client'
+import { secrets } from '@oyasaiserver/lib/secrets'
+import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { spinner } from 'zx'
 import { clean, plugins } from '../config.json'
 import { Artifact } from './services/artifact.ts'

@@ -1,6 +1,6 @@
-import { directory } from '@oyasaiserver/platform/directory'
-import { readFileContent } from '@oyasaiserver/platform/fs'
-import { secrets } from '@oyasaiserver/platform/secrets'
+import { directory } from '@oyasaiserver/lib/directory'
+import { readFileContent } from '@oyasaiserver/lib/fs'
+import { secrets } from '@oyasaiserver/lib/secrets'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
