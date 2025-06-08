@@ -1,4 +1,4 @@
-#!/usr/bin/env node --no-warnings=ExperimentalWarning
+#!/usr/bin/env tsx
 import { mkdir, readdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { argv } from 'node:process'
