@@ -1,13 +1,7 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
   "assist": {
-    "actions": {
-      "recommended": true
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space"
+    "enabled": true
   },
   "javascript": {
     "formatter": {
@@ -16,6 +10,10 @@
       "semicolons": "asNeeded",
       "trailingCommas": "none"
     }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
   },
   "linter": {
     "enabled": true,
