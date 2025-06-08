@@ -41,5 +41,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-java
       - run: |
           npm run test -w tests
