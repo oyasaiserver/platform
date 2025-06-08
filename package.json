@@ -13,7 +13,6 @@
     "@oyasaiserver/codegen": "^1.0.0",
     "@oyasaiserver/gen": "^1.0.0",
     "@oyasaiserver/platform": "^1.0.0",
-    "tsx": "^4.19.4",
     "zx": "^8.5.5"
   },
   "devDependencies": {

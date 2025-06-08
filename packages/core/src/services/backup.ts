@@ -3,12 +3,22 @@ import { basename, dirname, join, resolve } from 'node:path'
 import { $ } from 'zx'
 
 export class Backup {
+  private readonly name: string
+  private readonly archive: string
+  private readonly original: string
+  private readonly backupDir: string
+
   private constructor(
-    private readonly name: string,
-    private readonly archive: string,
-    private readonly original: string,
-    private readonly backupDir: string
-  ) {}
+    name: string,
+    archive: string,
+    original: string,
+    backupDir: string
+  ) {
+    this.name = name
+    this.archive = archive
+    this.original = original
+    this.backupDir = backupDir
+  }
 
   public static async create(
     dir: string,

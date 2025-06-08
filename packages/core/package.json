@@ -8,7 +8,7 @@
   "files": ["dist", "overlays", "compose.yaml"],
   "scripts": {
     "build": "tsup",
-    "deploy": "tsx scripts/deploy.ts",
+    "deploy": "node scripts/deploy.ts",
     "prestart": "npm run build",
     "start": "cp dist/index.js server/index.js && cd server && node ."
   },

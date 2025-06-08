@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { $ } from 'zx'
 import { secrets } from '../src/secrets.ts'
 

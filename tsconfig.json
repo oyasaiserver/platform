@@ -16,6 +16,7 @@
     "noUncheckedSideEffectImports": true,
     "module": "preserve",
     "noEmit": true,
+    "erasableSyntaxOnly": true,
     "lib": ["esnext"]
   },
   "references": [

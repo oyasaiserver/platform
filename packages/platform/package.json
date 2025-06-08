@@ -11,7 +11,7 @@
     "platform-secrets": "./bin/platform-secrets.ts"
   },
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start": "node src/index.ts"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",

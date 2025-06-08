@@ -8,8 +8,11 @@ export class Device {
     'urn:schemas-upnp-org:service:WANIPConnection:2',
     'urn:schemas-upnp-org:service:WANPPPConnection:1'
   ]
+  private readonly description: string
 
-  constructor(private readonly description: string) {}
+  constructor(description: string) {
+    this.description = description
+  }
 
   private async getXml(url: string): Promise<RawResponse> {
     try {

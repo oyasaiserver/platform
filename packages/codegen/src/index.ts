@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { join, parse, relative } from 'node:path'
 import { argv, cwd } from 'node:process'

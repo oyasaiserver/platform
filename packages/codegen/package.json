@@ -6,7 +6,7 @@
     "codegen": "src/index.ts"
   },
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start": "node src/index.ts"
   },
   "dependencies": {
     "@biomejs/js-api": "^0.7.1",
