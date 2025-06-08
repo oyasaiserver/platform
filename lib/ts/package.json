@@ -1,5 +1,5 @@
 {
-  "name": "@oyasaiserver/platform",
+  "name": "@oyasaiserver/lib",
   "version": "1.0.0",
   "type": "module",
   "exports": {
@@ -8,7 +8,7 @@
     }
   },
   "bin": {
-    "with-secrets": "./bin/with-secrets.ts"
+    "with-secrets": "bin/with-secrets.ts"
   },
   "scripts": {
     "start": "tsx src/index.ts"

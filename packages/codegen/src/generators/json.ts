@@ -1,4 +1,4 @@
-import { writeJsonFile } from '@oyasaiserver/platform/fs'
+import { writeJsonFile } from '@oyasaiserver/lib/fs'
 
 export async function json(dst: string) {
   await writeJsonFile(`${dst}/package.json`, {

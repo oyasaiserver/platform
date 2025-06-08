@@ -1,5 +1,5 @@
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
-import { secrets } from '@oyasaiserver/platform/secrets'
+import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'

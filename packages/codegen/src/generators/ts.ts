@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join, parse } from 'node:path'
-import { readFileJson } from '@oyasaiserver/platform/fs'
+import { readFileJson } from '@oyasaiserver/lib/fs'
 import { pascalCase } from 'change-case'
 import { type JsonSchema, jsonSchemaToZod } from 'json-schema-to-zod'
 

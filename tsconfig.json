@@ -24,8 +24,8 @@
     { "path": "apps/wiki" },
     { "path": "gen" },
     { "path": "infra/cdktf" },
+    { "path": "lib/ts" },
     { "path": "packages/core" },
-    { "path": "packages/platform" },
     { "path": "packages/codegen" },
     { "path": "tests" }
   ]
