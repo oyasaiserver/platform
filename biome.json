@@ -6,20 +6,10 @@
     "useIgnoreFile": true,
     "defaultBranch": "main"
   },
-  "organizeImports": {
-    "enabled": true
-  },
-  "files": {
-    "include": ["gen/**/*", "*/**/*.ts", "*/**/*.json"],
-    "ignore": ["packages/core/server"]
-  },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
-      "nursery": {
-        "useExplicitType": "warn"
-      },
       "complexity": {
         "noStaticOnlyClass": "off"
       },

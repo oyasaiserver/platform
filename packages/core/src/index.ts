@@ -1,8 +1,7 @@
-import { spinner } from 'zx'
-
 import { cp } from 'node:fs/promises'
 import { secrets } from '@oyasaiserver/platform/secrets'
 import { UpnpClient } from '@oyasaiserver/platform/upnp/upnp-client'
+import { spinner } from 'zx'
 import { clean, plugins } from '../config.json'
 import { Artifact } from './services/artifact.ts'
 import { Cleaner } from './services/cleaner.ts'

@@ -5,7 +5,11 @@
   "bin": {
     "start": "dist/index.js"
   },
-  "files": ["dist", "overlays", "compose.yaml"],
+  "files": [
+    "dist",
+    "overlays",
+    "compose.yaml"
+  ],
   "scripts": {
     "build": "tsup",
     "deploy": "node scripts/deploy.ts",

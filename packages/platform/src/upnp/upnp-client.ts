@@ -66,7 +66,7 @@ export class UpnpClient {
     while (true) {
       const data = await gateway
         .run('GetGenericPortMappingEntry', [['NewPortMappingIndex', i++]])
-        .catch(err => {
+        .catch(() => {
           if (i !== 1) {
             end = true
           }
@@ -129,7 +129,7 @@ export class UpnpClient {
   }
 
   public async getPublicIp(): Promise<string> {
-    return this.getGateway().then(async ({ gateway, address }) => {
+    return this.getGateway().then(async ({ gateway }) => {
       const data = await gateway.run('GetExternalIPAddress', [])
 
       const key = Object.keys(data || {}).find(k =>
