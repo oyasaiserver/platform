@@ -34,8 +34,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: homebrew/actions/setup-homebrew@master
       - run: |
-          sh ./scripts/setup.sh
-          source ~/.zshrc || true
-          source ~/.bashrc || true
-          npm ci
-          npm run verify-asdf -w tests
+          sh ./scripts/setup.sh && source ~/.zshrc && source ~/.bashrc
+          npm run test:system -w tests
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-java
+      - run: |
+          npm run test -w tests
