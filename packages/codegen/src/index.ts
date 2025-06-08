@@ -1,44 +1,35 @@
 #!/usr/bin/env node --no-warnings=ExperimentalWarning
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises'
-import { join, parse } from 'node:path'
+import { mkdir, readdir, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 import { argv } from 'node:process'
 import { directory } from '@oyasaiserver/platform/directory'
-import { readFileJson } from '@oyasaiserver/platform/fs'
 import { ensure } from '@oyasaiserver/platform/utils'
-import { pascalCase } from 'change-case'
-import { type JsonSchema, jsonSchemaToZod } from 'json-schema-to-zod'
+import { spinner } from 'zx'
+import { json } from './generators/json.ts'
+import { ts } from './generators/ts.ts'
 
 const src = join(directory.root, ensure(argv[2]))
-const dst = join(directory.root, ensure(argv[3]), 'src')
+const dst = join(directory.root, ensure(argv[3]))
 
-await rm(dst, {
-  force: true,
-  recursive: true
-})
-
-await mkdir(dst)
-
-const paths = await readdir(src, {
-  recursive: true
-})
-
-const promises = paths
-  .filter(path => path.endsWith('.json'))
-  .map(async path => {
-    const { dir, name } = parse(path)
-    const outdir = join(dst, dir)
-    await mkdir(outdir, {
-      recursive: true
-    })
-    const schema = await readFileJson<JsonSchema>(`${src}/${path}`)
-    const code = `
-      import { z } from 'zod/v4'
-      
-      export const ${name} = ${jsonSchemaToZod(schema)}
-      
-      export type ${pascalCase(name)} = z.infer<typeof ${name}>
-    `
-    await writeFile(`${outdir}/${name}.ts`, code)
+await spinner('reset', async () => {
+  await rm(`dst`, {
+    force: true,
+    recursive: true
   })
+  await mkdir(dst, {
+    recursive: true
+  })
+  await json(dst)
+})
 
-await Promise.all(promises)
+await spinner('generate', async () => {
+  const paths = await readdir(src, {
+    recursive: true
+  })
+  const promises = paths
+    .filter(path => path.endsWith('.json'))
+    .map(async path => {
+      await ts(path, src, dst)
+    })
+  await Promise.all(promises)
+})
