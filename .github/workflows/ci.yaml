@@ -32,6 +32,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - uses: homebrew/actions/setup-homebrew@master
       - run: |
           sh ./scripts/setup.sh && source ~/.zshrc && source ~/.bashrc
           npm run test:system -w tests
