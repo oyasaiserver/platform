@@ -2,7 +2,7 @@ import { type Socket, createSocket } from 'node:dgram'
 import { EventEmitter } from 'node:events'
 import type { IPVersion, SocketAddress } from 'node:net'
 import { type NetworkInterfaceInfo, networkInterfaces } from 'node:os'
-import type { SsdpEmitter } from './types'
+import type { SsdpEmitter } from './types.ts'
 
 export class Ssdp {
   private bound = false

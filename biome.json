@@ -24,7 +24,11 @@
         "noStaticOnlyClass": "off"
       },
       "correctness": {
-        "noUnusedImports": "warn"
+        "noUnusedImports": "warn",
+        "useImportExtensions": {
+          "level": "warn",
+          "fix": "safe"
+        }
       }
     }
   },

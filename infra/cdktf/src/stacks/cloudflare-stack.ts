@@ -2,7 +2,7 @@ import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
 import { secrets } from '@oyasaiserver/platform/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
-import { NamedCloudBackend } from '../backend/named-cloud-backend'
+import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
   private readonly accountId = '7befe273c79e6f7993c1cd4534d6afff'

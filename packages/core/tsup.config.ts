@@ -1,15 +1,7 @@
-import { ok } from 'node:assert'
-import { readFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/platform/directory'
+import { readFileContent } from '@oyasaiserver/platform/fs'
+import { secrets } from '@oyasaiserver/platform/secrets'
 import { defineConfig } from 'tsup'
-
-const environment = process.env.ENVIRONMENT || 'local'
-
-const dotenvPublicKeys = await readFile(
-  `${directory.root}/envs/${environment}/.env`,
-  'utf-8'
-)
-ok(dotenvPublicKeys)
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -19,7 +11,9 @@ export default defineConfig({
   minify: true,
   shims: true,
   env: {
-    DOTENV_PUBLIC_KEYS: dotenvPublicKeys
+    DOTENV_PUBLIC_KEYS: await readFileContent(
+      `${directory.root}/envs/${secrets.ENVIRONMENT}/.env`
+    )
   },
   banner: {
     // language=javascript

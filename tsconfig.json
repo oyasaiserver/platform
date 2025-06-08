@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "esnext",

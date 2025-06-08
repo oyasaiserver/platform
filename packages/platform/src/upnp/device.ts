@@ -1,6 +1,6 @@
 import { URL } from 'node:url'
 import { XMLParser } from 'fast-xml-parser'
-import type { RawDevice, RawResponse, RawService, Service } from './types'
+import type { RawDevice, RawResponse, RawService, Service } from './types.ts'
 
 export class Device {
   private readonly services = [

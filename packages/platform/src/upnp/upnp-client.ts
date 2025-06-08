@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events'
-import { ensure } from '../utils'
-import { Device } from './device'
-import { Ssdp } from './ssdp'
+import { ensure } from '../utils.ts'
+import { Device } from './device.ts'
+import { Ssdp } from './ssdp.ts'
 import type {
   DeletePortMappingOpts,
   GetMappingOpts,
@@ -9,7 +9,7 @@ import type {
   NewPortMappingOpts,
   RawResponse,
   StandardOpts
-} from './types'
+} from './types.ts'
 
 export class UpnpClient {
   private readonly timeout: number

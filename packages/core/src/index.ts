@@ -4,11 +4,11 @@ import { cp } from 'node:fs/promises'
 import { secrets } from '@oyasaiserver/platform/secrets'
 import { UpnpClient } from '@oyasaiserver/platform/upnp/upnp-client'
 import { clean, plugins } from '../config.json'
-import { Artifact } from './services/artifact'
-import { Cleaner } from './services/cleaner'
-import { DockerCompose } from './services/docker-compose'
-import { Overlays } from './services/overlays'
-import { Plugin } from './services/plugin'
+import { Artifact } from './services/artifact.ts'
+import { Cleaner } from './services/cleaner.ts'
+import { DockerCompose } from './services/docker-compose.ts'
+import { Overlays } from './services/overlays.ts'
+import { Plugin } from './services/plugin.ts'
 
 await spinner('docker-compose-down', async () => {
   await DockerCompose.down(secrets.ENVIRONMENT)
