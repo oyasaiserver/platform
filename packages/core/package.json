@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "decompress": "^4.2.1",
-    "nat-upnp-ts": "^2.0.1",
     "webpod": "^1.0.0"
   },
   "devDependencies": {
