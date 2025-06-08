@@ -6,7 +6,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent } from '@oyasaiserver/lib/fs'
 import { $ } from 'zx'
 
-const commands: Readonly<Record<string, string[]>> = {
+const commands = {
   java: ['java', '--version'],
   nodejs: ['node', '--version']
 }
