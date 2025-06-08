@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events'
-import { ensure } from '../utils'
-import { Device } from './device'
-import { Ssdp } from './ssdp'
+import { ensure } from '../utils.ts'
+import { Device } from './device.ts'
+import { Ssdp } from './ssdp.ts'
 import type {
   DeletePortMappingOpts,
   GetMappingOpts,
@@ -9,7 +9,7 @@ import type {
   NewPortMappingOpts,
   RawResponse,
   StandardOpts
-} from './types'
+} from './types.ts'
 
 export class UpnpClient {
   private readonly timeout: number
@@ -66,7 +66,7 @@ export class UpnpClient {
     while (true) {
       const data = await gateway
         .run('GetGenericPortMappingEntry', [['NewPortMappingIndex', i++]])
-        .catch(err => {
+        .catch(() => {
           if (i !== 1) {
             end = true
           }
@@ -94,19 +94,19 @@ export class UpnpClient {
       }
 
       const result: Mapping = {
-        public: {
-          host: res.NewRemoteHost || '',
-          port: Number.parseInt(ensure(res.NewExternalPort), 10)
-        },
+        description: res.NewPortMappingDescription,
+        enabled: res.NewEnabled === '1',
+        local: false,
         private: {
           host: res.NewInternalClient || '',
           port: Number.parseInt(ensure(res.NewInternalPort), 10)
         },
         protocol: res.NewProtocol.toLowerCase(),
-        enabled: res.NewEnabled === '1',
-        description: res.NewPortMappingDescription,
-        ttl: Number.parseInt(res.NewLeaseDuration, 10),
-        local: false
+        public: {
+          host: res.NewRemoteHost || '',
+          port: Number.parseInt(ensure(res.NewExternalPort), 10)
+        },
+        ttl: Number.parseInt(res.NewLeaseDuration, 10)
       }
       result.local = result.private.host === address
 
@@ -129,7 +129,7 @@ export class UpnpClient {
   }
 
   public async getPublicIp(): Promise<string> {
-    return this.getGateway().then(async ({ gateway, address }) => {
+    return this.getGateway().then(async ({ gateway }) => {
       const data = await gateway.run('GetExternalIPAddress', [])
 
       const key = Object.keys(data || {}).find(k =>
@@ -168,7 +168,7 @@ export class UpnpClient {
         }
 
         // Create gateway
-        s({ gateway: new Device(info.location), address })
+        s({ address, gateway: new Device(info.location) })
       })
     })
   }
@@ -192,7 +192,7 @@ function normalizeOptions(options: StandardOpts): {
   }
 
   return {
-    remote: toObject(options.public),
-    internal: toObject(options.private)
+    internal: toObject(options.private),
+    remote: toObject(options.public)
   }
 }

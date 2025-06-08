@@ -2,8 +2,8 @@ import { readFile } from 'node:fs/promises'
 import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
 import { secrets as secretsSchema } from '@oyasaiserver/gen/common/secrets'
-import { directory } from './directory'
-import { ensure, fallback } from './utils'
+import { directory } from './directory.ts'
+import { ensure, fallback } from './utils.ts'
 
 const envFile = `${directory.root}/envs/${fallback(process.env.ENVIRONMENT, 'local')}/.env`
 

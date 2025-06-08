@@ -1,14 +1,13 @@
-import { spinner } from 'zx'
-
 import { cp } from 'node:fs/promises'
 import { secrets } from '@oyasaiserver/platform/secrets'
 import { UpnpClient } from '@oyasaiserver/platform/upnp/upnp-client'
+import { spinner } from 'zx'
 import { clean, plugins } from '../config.json'
-import { Artifact } from './services/artifact'
-import { Cleaner } from './services/cleaner'
-import { DockerCompose } from './services/docker-compose'
-import { Overlays } from './services/overlays'
-import { Plugin } from './services/plugin'
+import { Artifact } from './services/artifact.ts'
+import { Cleaner } from './services/cleaner.ts'
+import { DockerCompose } from './services/docker-compose.ts'
+import { Overlays } from './services/overlays.ts'
+import { Plugin } from './services/plugin.ts'
 
 await spinner('docker-compose-down', async () => {
   await DockerCompose.down(secrets.ENVIRONMENT)
@@ -38,8 +37,8 @@ await spinner('download-plugins-from-github-artifact', async () => {
 
 await spinner('download-plugins', async () => {
   await Plugin.download({
-    plugins,
-    path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`
+    path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`,
+    plugins
   })
 })
 
@@ -58,8 +57,8 @@ await spinner('docker-compose-up', async () => {
 await spinner('upnp-create-mapping', async () => {
   const client = new UpnpClient()
   await client.createMapping({
-    public: 25565,
-    private: 25565
+    private: 25565,
+    public: 25565
   })
   client.close()
 })

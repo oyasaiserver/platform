@@ -1,6 +1,6 @@
 import { secrets } from '@oyasaiserver/platform/secrets'
 import { App } from 'cdktf'
-import { CloudflareStack } from './stacks/cloudflare-stack'
+import { CloudflareStack } from './stacks/cloudflare-stack.ts'
 
 class PlatformApp extends App {
   public constructor() {

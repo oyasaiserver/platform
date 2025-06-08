@@ -1,5 +1,5 @@
 import { ok } from 'node:assert/strict'
-import type { Nullable } from './types'
+import type { Nullable } from './types.ts'
 
 export function ensure<T>(value: T): NonNullable<T> {
   ok(value)

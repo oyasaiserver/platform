@@ -1,43 +1,43 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true,
-    "defaultBranch": "main"
-  },
-  "organizeImports": {
+  "assist": {
     "enabled": true
   },
-  "files": {
-    "include": ["gen/**/*", "*/**/*.ts", "*/**/*.json"],
-    "ignore": ["packages/core/server"]
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "nursery": {
-        "useExplicitType": "warn"
-      },
-      "complexity": {
-        "noStaticOnlyClass": "off"
-      },
-      "correctness": {
-        "noUnusedImports": "warn"
-      }
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
     }
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
   },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "semicolons": "asNeeded",
-      "arrowParentheses": "asNeeded",
-      "trailingCommas": "none"
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "warn",
+        "useImportExtensions": {
+          "fix": "safe",
+          "level": "warn"
+        }
+      },
+      "nursery": {
+        "useJsonImportAttribute": "warn"
+      },
+      "recommended": true
     }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true,
+    "useIgnoreFile": true
   }
 }

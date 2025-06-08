@@ -4,14 +4,14 @@
   "type": "module",
   "exports": {
     "./*": {
-      "import": ["./src/*.ts", "./src/*/index.ts"]
+      "import": "./src/*.ts"
     }
   },
   "bin": {
     "platform-secrets": "./bin/platform-secrets.ts"
   },
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start": "node src/index.ts"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",

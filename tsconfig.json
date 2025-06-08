@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "esnext",
+    "allowImportingTsExtensions": true,
     "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
+    "composite": true,
+    "erasableSyntaxOnly": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noUncheckedSideEffectImports": true,
+    "lib": ["esnext"],
     "module": "preserve",
+    "moduleDetection": "force",
     "noEmit": true,
-    "lib": ["esnext"]
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
+    "verbatimModuleSyntax": true
   },
+  "files": [],
   "references": [
     { "path": "apps/wiki" },
     { "path": "gen" },
@@ -24,6 +28,5 @@
     { "path": "packages/platform" },
     { "path": "packages/codegen" },
     { "path": "tests" }
-  ],
-  "files": []
+  ]
 }

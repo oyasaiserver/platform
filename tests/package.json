@@ -1,7 +1,7 @@
 {
   "name": "@oyasaiserver/tests",
-  "type": "module",
   "scripts": {
-    "verify-asdf": "tsx --test ci/verify-asdf.ts"
-  }
+    "verify-asdf": "node --test ci/verify-asdf.ts"
+  },
+  "type": "module"
 }

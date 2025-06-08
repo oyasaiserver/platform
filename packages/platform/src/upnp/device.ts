@@ -1,6 +1,6 @@
 import { URL } from 'node:url'
 import { XMLParser } from 'fast-xml-parser'
-import type { RawDevice, RawResponse, RawService, Service } from './types'
+import type { RawDevice, RawResponse, RawService, Service } from './types.ts'
 
 export class Device {
   private readonly services = [
@@ -8,8 +8,11 @@ export class Device {
     'urn:schemas-upnp-org:service:WANIPConnection:2',
     'urn:schemas-upnp-org:service:WANPPPConnection:1'
   ]
+  private readonly description: string
 
-  constructor(private readonly description: string) {}
+  constructor(description: string) {
+    this.description = description
+  }
 
   private async getXml(url: string): Promise<RawResponse> {
     try {
@@ -42,9 +45,9 @@ export class Device {
       }
 
       return {
-        service: services[0].serviceType,
+        controlURL: prefix(services[0].controlURL),
         SCPDURL: prefix(services[0].SCPDURL),
-        controlURL: prefix(services[0].controlURL)
+        service: services[0].serviceType
       }
     })
   }
@@ -61,14 +64,14 @@ export class Device {
     )}</u:${action}></s:Body></s:Envelope>`
 
     const res = await fetch(info.controlURL, {
-      method: 'POST',
+      body,
       headers: {
-        'Content-Type': 'text/xml; charset="utf-8"',
-        'Content-Length': `${Buffer.byteLength(body)}`,
         Connection: 'close',
+        'Content-Length': `${Buffer.byteLength(body)}`,
+        'Content-Type': 'text/xml; charset="utf-8"',
         SOAPAction: JSON.stringify(`${info.service}#${action}`)
       },
-      body
+      method: 'POST'
     })
     const data = await res.text()
     return new XMLParser({ removeNSPrefix: true }).parse(data).Envelope.Body
@@ -103,8 +106,8 @@ export class Device {
     traverseDevices(info.device)
 
     return {
-      services,
-      devices
+      devices,
+      services
     }
   }
 }

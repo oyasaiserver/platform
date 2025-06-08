@@ -5,8 +5,8 @@ import { describe, test } from 'node:test'
 import { $ } from 'zx'
 
 const commands: Readonly<Record<string, string>> = {
-  nodejs: 'node',
-  java: 'java'
+  java: 'java',
+  nodejs: 'node'
 }
 
 await describe(import.meta.filename, async () => {

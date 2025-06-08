@@ -5,16 +5,19 @@
   "bin": {
     "start": "dist/index.js"
   },
-  "files": ["dist", "overlays", "compose.yaml"],
+  "files": [
+    "dist",
+    "overlays",
+    "compose.yaml"
+  ],
   "scripts": {
     "build": "tsup",
-    "deploy": "tsx scripts/deploy.ts",
+    "deploy": "node scripts/deploy.ts",
     "prestart": "npm run build",
     "start": "cp dist/index.js server/index.js && cd server && node ."
   },
   "dependencies": {
     "decompress": "^4.2.1",
-    "nat-upnp-ts": "^2.0.1",
     "webpod": "^1.0.0"
   },
   "devDependencies": {

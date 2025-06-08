@@ -1,11 +1,10 @@
-#!/usr/bin/env tsx
-import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
+#!/usr/bin/env node
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { join, parse, relative } from 'node:path'
 import { argv, cwd } from 'node:process'
 import { ensure } from '@oyasaiserver/platform/utils'
 import { pascalCase } from 'change-case'
 import { jsonSchemaToZod } from 'json-schema-to-zod'
-import { format } from './format'
 
 const src = ensure(argv[2])
 const dst = ensure(argv[3])
@@ -14,15 +13,15 @@ const schema = join(cwd(), src)
 for (const file of await readdir(schema)) {
   if (!file.endsWith('.json')) {
     await rm(file, {
-      recursive: true,
-      force: true
+      force: true,
+      recursive: true
     })
   }
 }
 
 const files = await readdir(schema, {
-  withFileTypes: true,
-  recursive: true
+  recursive: true,
+  withFileTypes: true
 })
 
 const promises = files
@@ -46,8 +45,7 @@ const promises = files
       
       export type ${pascalCase(name)} = z.infer<typeof ${name}>
     `
-    const path = `${genpath}.ts`
-    await writeFile(path, format(code, path))
+    await writeFile(`${genpath}.ts`, code)
   })
 
 await Promise.all(promises)

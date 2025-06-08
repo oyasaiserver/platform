@@ -1,8 +1,8 @@
-import { type Socket, createSocket } from 'node:dgram'
+import { createSocket, type Socket } from 'node:dgram'
 import { EventEmitter } from 'node:events'
 import type { IPVersion, SocketAddress } from 'node:net'
 import { type NetworkInterfaceInfo, networkInterfaces } from 'node:os'
-import type { SsdpEmitter } from './types'
+import type { SsdpEmitter } from './types.ts'
 
 export class Ssdp {
   private bound = false
@@ -63,8 +63,8 @@ export class Ssdp {
         return {
           address: iface.address,
           family: iface.family.toLowerCase() as IPVersion,
-          port: this.sourcePort,
-          flowlabel: 0
+          flowlabel: 0,
+          port: this.sourcePort
         }
       }
       socket.bind(this.sourcePort, iface.address)
