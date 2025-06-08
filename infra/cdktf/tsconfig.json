@@ -1,8 +1,5 @@
 {
-  "compilerOptions": {
-    "composite": true
-  },
   "exclude": ["cdktf.out"],
   "extends": "../../tsconfig.json",
-  "include": ["src", "scripts"]
+  "include": ["**/*"]
 }

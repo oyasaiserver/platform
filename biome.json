@@ -28,6 +28,9 @@
           "level": "warn"
         }
       },
+      "nursery": {
+        "useJsonImportAttribute": "warn"
+      },
       "recommended": true
     }
   },

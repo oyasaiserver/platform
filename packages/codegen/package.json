@@ -9,8 +9,6 @@
     "start": "node src/index.ts"
   },
   "dependencies": {
-    "@biomejs/js-api": "^0.7.1",
-    "@biomejs/wasm-nodejs": "^1.9.4",
     "change-case": "^5.4.4",
     "json-schema-to-zod": "^2.6.1"
   }
