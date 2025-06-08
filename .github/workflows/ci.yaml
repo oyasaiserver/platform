@@ -22,7 +22,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run codegen
-          git diff --exit-code
+          test -z "$(git status --porcelain)"
 
   asdf:
     if: contains(github.event.pull_request.changed_files, '.tool-versions')
