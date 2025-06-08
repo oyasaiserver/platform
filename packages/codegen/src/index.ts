@@ -11,9 +11,6 @@ import { ts } from './generators/ts.ts'
 const src = join(directory.root, ensure(argv[2]))
 const dst = join(directory.root, ensure(argv[3]))
 
-console.log('Source directory:', src)
-console.log('Destination directory:', dst)
-
 await spinner('reset', async () => {
   await rm(`dst`, {
     force: true,
@@ -25,20 +22,14 @@ await spinner('reset', async () => {
   await json(dst)
 })
 
-console.log('Generating TypeScript files from JSON schemas...')
-
 await spinner('generate', async () => {
   const paths = await readdir(src, {
     recursive: true
   })
-  console.log('Found JSON schema files:', paths)
   const promises = paths
     .filter(path => path.endsWith('.json'))
     .map(async path => {
-      console.log('Processing file:', path)
       await ts(path, src, dst)
     })
-  console.log('Total files to process:', promises.length)
   await Promise.all(promises)
-  console.log('TypeScript files generated successfully.')
 })

@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc --build",
     "check": "biome check --write && sort-package-json */**/package.json --quiet",
-    "codegen": "codegen schema gen",
+    "codegen": "codegen schema gen && npm run check",
     "upgrade": "ncu --deep --upgrade --reject @oyasaiserver/*"
   },
   "dependencies": {
