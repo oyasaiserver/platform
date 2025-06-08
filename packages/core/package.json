@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "deploy": "node scripts/deploy.ts",
+    "deploy": "tsx scripts/deploy.ts",
     "prestart": "npm run build",
     "start": "cp dist/index.js server/index.js && cd server && node ."
   },

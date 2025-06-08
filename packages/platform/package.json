@@ -11,7 +11,7 @@
     "with-secrets": "./bin/with-secrets.ts"
   },
   "scripts": {
-    "start": "node src/index.ts"
+    "start": "tsx src/index.ts"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",
