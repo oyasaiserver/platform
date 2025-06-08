@@ -14,7 +14,7 @@
     "build": "tsc --build",
     "check": "biome check --write && sort-package-json */**/package.json --quiet",
     "codegen": "codegen schema gen && npm run check",
-    "upgrade": "ncu --deep --upgrade --reject @oyasaiserver/*"
+    "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always"
   },
   "dependencies": {
     "@oyasaiserver/codegen": "^1.0.0",
