@@ -1,43 +1,36 @@
-#!/usr/bin/env node
-import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { join, parse, relative } from 'node:path'
-import { argv, cwd } from 'node:process'
+#!/usr/bin/env node --no-warnings=ExperimentalWarning
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises'
+import { join, parse } from 'node:path'
+import { argv } from 'node:process'
+import { directory } from '@oyasaiserver/platform/directory'
+import { readFileJson } from '@oyasaiserver/platform/fs'
 import { ensure } from '@oyasaiserver/platform/utils'
 import { pascalCase } from 'change-case'
-import { jsonSchemaToZod } from 'json-schema-to-zod'
+import { type JsonSchema, jsonSchemaToZod } from 'json-schema-to-zod'
 
-const src = ensure(argv[2])
-const dst = ensure(argv[3])
-const schema = join(cwd(), src)
+const src = join(directory.root, ensure(argv[2]))
+const dst = join(directory.root, ensure(argv[3]), 'src')
 
-for (const file of await readdir(schema)) {
-  if (!file.endsWith('.json')) {
-    await rm(file, {
-      force: true,
-      recursive: true
-    })
-  }
-}
-
-const files = await readdir(schema, {
-  recursive: true,
-  withFileTypes: true
+await rm(dst, {
+  force: true,
+  recursive: true
 })
 
-const promises = files
-  .filter(dirent => dirent.isFile())
-  .map(async dirent => {
-    const absolute = join(dirent.parentPath, dirent.name)
-    const releative = relative(cwd(), absolute)
-    const { dir, name } = parse(releative)
-    const gendir = dir.replace(src, dst)
-    const content = await readFile(releative, 'utf-8')
-    await mkdir(gendir, {
+await mkdir(dst)
+
+const paths = await readdir(src, {
+  recursive: true
+})
+
+const promises = paths
+  .filter(path => path.endsWith('.json'))
+  .map(async path => {
+    const { dir, name } = parse(path)
+    const outdir = join(dst, dir)
+    await mkdir(outdir, {
       recursive: true
     })
-    const genpath = join(gendir, name)
-    const schema = JSON.parse(content)
-    // language=typescript
+    const schema = await readFileJson<JsonSchema>(`${src}/${path}`)
     const code = `
       import { z } from 'zod/v4'
       
@@ -45,7 +38,7 @@ const promises = files
       
       export type ${pascalCase(name)} = z.infer<typeof ${name}>
     `
-    await writeFile(`${genpath}.ts`, code)
+    await writeFile(`${outdir}/${name}.ts`, code)
   })
 
 await Promise.all(promises)

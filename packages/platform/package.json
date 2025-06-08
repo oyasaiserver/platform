@@ -8,13 +8,13 @@
     }
   },
   "bin": {
-    "platform-secrets": "./bin/platform-secrets.ts"
+    "with-secrets": "./bin/with-secrets.ts"
   },
   "scripts": {
     "start": "node src/index.ts"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.1",
-    "fast-xml-parser": "^4.5.3"
+    "fast-xml-parser": "^5.2.5"
   }
 }
