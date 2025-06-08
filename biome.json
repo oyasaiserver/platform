@@ -1,25 +1,8 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true,
-    "defaultBranch": "main"
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "complexity": {
-        "noStaticOnlyClass": "off"
-      },
-      "correctness": {
-        "noUnusedImports": "warn",
-        "useImportExtensions": {
-          "level": "warn",
-          "fix": "safe"
-        }
-      }
+  "assist": {
+    "actions": {
+      "recommended": true
     }
   },
   "formatter": {
@@ -28,10 +11,32 @@
   },
   "javascript": {
     "formatter": {
+      "arrowParentheses": "asNeeded",
       "quoteStyle": "single",
       "semicolons": "asNeeded",
-      "arrowParentheses": "asNeeded",
       "trailingCommas": "none"
     }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "warn",
+        "useImportExtensions": {
+          "fix": "safe",
+          "level": "warn"
+        }
+      },
+      "recommended": true
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true,
+    "useIgnoreFile": true
   }
 }

@@ -41,8 +41,8 @@ export class Cleaner {
     )
     if (!childStatuses.some(status => status)) {
       await rm(current, {
-        recursive: true,
-        force: true
+        force: true,
+        recursive: true
       })
       return false
     }

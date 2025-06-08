@@ -37,8 +37,8 @@ await spinner('download-plugins-from-github-artifact', async () => {
 
 await spinner('download-plugins', async () => {
   await Plugin.download({
-    plugins,
-    path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`
+    path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`,
+    plugins
   })
 })
 
@@ -57,8 +57,8 @@ await spinner('docker-compose-up', async () => {
 await spinner('upnp-create-mapping', async () => {
   const client = new UpnpClient()
   await client.createMapping({
-    public: 25565,
-    private: 25565
+    private: 25565,
+    public: 25565
   })
   client.close()
 })

@@ -94,19 +94,19 @@ export class UpnpClient {
       }
 
       const result: Mapping = {
-        public: {
-          host: res.NewRemoteHost || '',
-          port: Number.parseInt(ensure(res.NewExternalPort), 10)
-        },
+        description: res.NewPortMappingDescription,
+        enabled: res.NewEnabled === '1',
+        local: false,
         private: {
           host: res.NewInternalClient || '',
           port: Number.parseInt(ensure(res.NewInternalPort), 10)
         },
         protocol: res.NewProtocol.toLowerCase(),
-        enabled: res.NewEnabled === '1',
-        description: res.NewPortMappingDescription,
-        ttl: Number.parseInt(res.NewLeaseDuration, 10),
-        local: false
+        public: {
+          host: res.NewRemoteHost || '',
+          port: Number.parseInt(ensure(res.NewExternalPort), 10)
+        },
+        ttl: Number.parseInt(res.NewLeaseDuration, 10)
       }
       result.local = result.private.host === address
 
@@ -168,7 +168,7 @@ export class UpnpClient {
         }
 
         // Create gateway
-        s({ gateway: new Device(info.location), address })
+        s({ address, gateway: new Device(info.location) })
       })
     })
   }
@@ -192,7 +192,7 @@ function normalizeOptions(options: StandardOpts): {
   }
 
   return {
-    remote: toObject(options.public),
-    internal: toObject(options.private)
+    internal: toObject(options.private),
+    remote: toObject(options.public)
   }
 }

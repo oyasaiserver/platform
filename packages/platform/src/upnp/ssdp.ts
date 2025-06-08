@@ -63,8 +63,8 @@ export class Ssdp {
         return {
           address: iface.address,
           family: iface.family.toLowerCase() as IPVersion,
-          port: this.sourcePort,
-          flowlabel: 0
+          flowlabel: 0,
+          port: this.sourcePort
         }
       }
       socket.bind(this.sourcePort, iface.address)

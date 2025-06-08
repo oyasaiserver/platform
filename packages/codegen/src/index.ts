@@ -14,15 +14,15 @@ const schema = join(cwd(), src)
 for (const file of await readdir(schema)) {
   if (!file.endsWith('.json')) {
     await rm(file, {
-      recursive: true,
-      force: true
+      force: true,
+      recursive: true
     })
   }
 }
 
 const files = await readdir(schema, {
-  withFileTypes: true,
-  recursive: true
+  recursive: true,
+  withFileTypes: true
 })
 
 const promises = files

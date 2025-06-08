@@ -2,25 +2,25 @@ import { defineConfig } from 'vitepress'
 import { description, name } from '../package.json'
 
 export default defineConfig({
-  srcDir: 'src',
-  title: name,
   description,
+  srcDir: 'src',
   themeConfig: {
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { link: '/', text: 'Home' },
+      { link: '/markdown-examples', text: 'Examples' }
     ],
     sidebar: [
       {
-        text: 'Examples',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
+          { link: '/markdown-examples', text: 'Markdown Examples' },
+          { link: '/api-examples', text: 'Runtime API Examples' }
+        ],
+        text: 'Examples'
       }
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
-  }
+  },
+  title: name
 })

@@ -1,13 +1,13 @@
 {
-  "name": "@oyasaiserver/gen",
-  "version": "1.0.0",
-  "type": "module",
+  "dependencies": {
+    "zod": "^3.25.56"
+  },
   "exports": {
     "./*": {
       "import": "./*.ts"
     }
   },
-  "dependencies": {
-    "zod": "^3.25.56"
-  }
+  "name": "@oyasaiserver/gen",
+  "type": "module",
+  "version": "1.0.0"
 }
