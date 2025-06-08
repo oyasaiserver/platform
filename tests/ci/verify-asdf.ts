@@ -4,9 +4,9 @@ import { EOL } from 'node:os'
 import { describe, test } from 'node:test'
 import { $ } from 'zx'
 
-const commands: Readonly<Record<string, string>> = {
-  java: 'java',
-  nodejs: 'node'
+const commands: Readonly<Record<string, string[]>> = {
+  java: ['java', '--version'],
+  nodejs: ['node', '--version']
 }
 
 await describe(import.meta.filename, async () => {
@@ -14,7 +14,7 @@ await describe(import.meta.filename, async () => {
     const toolVersions = await readFile('../.tool-versions', 'utf-8')
     toolVersions.split(EOL).map(async line => {
       const [tool, version] = line.split(' ') as [keyof typeof commands, string]
-      const response = await $`${commands[tool]} --version`.text()
+      const response = await $`${commands[tool]}`.text()
       ok(response.toLowerCase().includes(version))
     })
   })
