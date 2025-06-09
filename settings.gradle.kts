@@ -7,3 +7,4 @@ rootProject.name = "platform"
 }
 
 include(":lib:kotlin")
+include(":gen:kotlin")
