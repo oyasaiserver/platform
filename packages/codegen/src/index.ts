@@ -12,7 +12,7 @@ const src = join(directory.root, ensure(argv[2]))
 const dst = join(directory.root, ensure(argv[3]))
 
 await spinner('reset', async () => {
-  await rm(`dst`, {
+  await rm(dst, {
     force: true,
     recursive: true
   })

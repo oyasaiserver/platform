@@ -1,4 +1,4 @@
-import { createSocket, type Socket } from 'node:dgram'
+import { type Socket, createSocket } from 'node:dgram'
 import { EventEmitter } from 'node:events'
 import type { IPVersion, SocketAddress } from 'node:net'
 import { type NetworkInterfaceInfo, networkInterfaces } from 'node:os'

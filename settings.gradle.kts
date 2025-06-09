@@ -1,10 +1,9 @@
 rootProject.name = "platform"
 
-"plugins".let {
-    file(it)
-        .listFiles()
-        .filter { it.isDirectory }
-        .forEach { plugin ->
-            include("$it:${plugin.name}")
-        }
+"plugins".let { dir ->
+    file(dir).listFiles().filter { it.isDirectory }.forEach { plugin ->
+        include("$dir:${plugin.name}")
+    }
 }
+
+include(":lib:kotlin")

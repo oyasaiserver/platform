@@ -1,8 +1,5 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
-  "assist": {
-    "enabled": true
-  },
   "javascript": {
     "formatter": {
       "arrowParentheses": "asNeeded",
@@ -27,9 +24,6 @@
           "fix": "safe",
           "level": "warn"
         }
-      },
-      "nursery": {
-        "useJsonImportAttribute": "warn"
       },
       "recommended": true
     }

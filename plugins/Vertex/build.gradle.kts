@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.2.0-Beta2"
+    kotlin("jvm")
     kotlin("plugin.serialization") version "2.2.0-Beta2"
-    id("com.gradleup.shadow") version "9.0.0-beta12"
+    id("com.gradleup.shadow")
 }
 
 repositories {
@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT")
     compileOnly("net.essentialsx:EssentialsX:2.21.1-SNAPSHOT")
+    implementation(project(":lib:kotlin"))
     implementation("com.google.genai:google-genai:0.4.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
     implementation("org.apache.commons:commons-lang3:3.17.0")
