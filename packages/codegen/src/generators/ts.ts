@@ -6,7 +6,7 @@ import { type JsonSchema, jsonSchemaToZod } from 'json-schema-to-zod'
 
 export async function ts(path: string, src: string, dst: string) {
   const { dir, name } = parse(path)
-  const outdir = join(dst, 'ts', dir)
+  const outdir = join(dst, dir)
   await mkdir(outdir, {
     recursive: true
   })

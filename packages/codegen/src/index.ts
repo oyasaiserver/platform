@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { mkdir, readdir, rm } from 'node:fs/promises'
+import { readdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { argv } from 'node:process'
 import { directory } from '@oyasaiserver/lib/directory'
@@ -16,20 +16,17 @@ await spinner('reset', async () => {
     force: true,
     recursive: true
   })
-  await mkdir(dst, {
-    recursive: true
-  })
-  await json(dst)
 })
 
 await spinner('generate', async () => {
+  await json(`${dst}/ts`)
   const paths = await readdir(src, {
     recursive: true
   })
   const promises = paths
     .filter(path => path.endsWith('.json'))
     .map(async path => {
-      await ts(path, src, dst)
+      await ts(path, src, `${dst}/ts`)
     })
   await Promise.all(promises)
 })
