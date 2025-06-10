@@ -9,20 +9,17 @@ repositories { mavenCentral() }
 spotless {
     java {
         target("**/*.java")
-        targetExclude("node_modules/**")
         googleJavaFormat()
     }
 
     kotlin {
         target("**/*.kt")
-        targetExclude("node_modules/**")
         ktfmt().kotlinlangStyle()
         ktlint()
     }
 
     kotlinGradle {
         target("**/*.gradle.kts")
-        targetExclude("node_modules/**")
         ktfmt().kotlinlangStyle()
         ktlint()
     }
