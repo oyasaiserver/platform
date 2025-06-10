@@ -14,7 +14,7 @@
     "build": "tsc --build",
     "check": "biome check --write && sort-package-json */**/package.json --quiet",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "codegen": "codegen schema gen && (biome check --write & ./gradlew spotlessApply)"
+    "codegen": "codegen schema gen && (biome check --write gen & ./gradlew spotlessApply)"
   },
   "dependencies": {
     "@oyasaiserver/codegen": "^1.0.0",
