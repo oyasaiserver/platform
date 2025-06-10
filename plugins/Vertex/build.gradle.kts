@@ -14,6 +14,7 @@ dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT")
     compileOnly("net.essentialsx:EssentialsX:2.21.1-SNAPSHOT")
     implementation(project(":lib:kotlin"))
+    implementation(project(":gen:kotlin"))
     implementation("com.google.genai:google-genai:0.4.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
     implementation("org.apache.commons:commons-lang3:3.17.0")
@@ -52,18 +53,15 @@ configurations.configureEach {
 }
 
 tasks.apply {
-    jar {
-        enabled = false
-    }
+    jar { enabled = false }
 
-    shadowJar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
+    shadowJar { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
     build {
-        compileKotlin.get().compilerOptions.optIn.addAll(
-            "kotlin.uuid.ExperimentalUuidApi",
-        )
+        compileKotlin
+            .get()
+            .compilerOptions.optIn
+            .addAll("kotlin.uuid.ExperimentalUuidApi")
         dependsOn(shadowJar)
     }
 
@@ -72,8 +70,6 @@ tasks.apply {
         val properties = mapOf("version" to version)
         inputs.properties(properties)
         filteringCharset = Charsets.UTF_8.name()
-        filesMatching("plugin.yml") {
-            expand(properties)
-        }
+        filesMatching("plugin.yml") { expand(properties) }
     }
 }

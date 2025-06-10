@@ -11,7 +11,7 @@ export async function json(dst: string) {
     type: 'module',
     exports: {
       './*': {
-        import: './*.ts'
+        import: './src/*.ts'
       }
     }
   })

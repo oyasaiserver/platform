@@ -4,7 +4,9 @@ plugins {
 }
 
 group = "net.coreprotect"
+
 version = "22.4"
+
 description = "CoreProtect"
 
 repositories {
@@ -31,11 +33,7 @@ dependencies {
 }
 
 tasks.apply {
-    jar {
-        manifest {
-            attributes["paperweight-mappings-namespace"] = "mojang"
-        }
-    }
+    jar { manifest { attributes["paperweight-mappings-namespace"] = "mojang" } }
 
     shadowJar {
         archiveClassifier.set("")
