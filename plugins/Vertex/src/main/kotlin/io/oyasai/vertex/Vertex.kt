@@ -1,17 +1,15 @@
 package io.oyasai.vertex
 
 import com.earth2me.essentials.Essentials
-import io.oyasai.vertex.database.DatabaseManager
 import io.oyasai.vertex.services.Service
 import io.oyasai.vertex.util.getSubKotlinObjectsOf
-import io.oyasai.vertex.util.launchAsync
 import org.bukkit.command.Command
 import org.bukkit.plugin.java.JavaPlugin
 import org.reflections.Reflections
 
 class Vertex : JavaPlugin() {
     override fun onLoad() {
-        launchAsync { DatabaseManager.initialize() }
+        //        launchAsync { DatabaseManager.initialize() }
         services.forEach { it.onLoad() }
     }
 
@@ -30,7 +28,7 @@ class Vertex : JavaPlugin() {
 
     override fun onDisable() {
         services.forEach { it.onDisable() }
-        DatabaseManager.close()
+        //        DatabaseManager.close()
     }
 
     companion object {

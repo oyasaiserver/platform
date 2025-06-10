@@ -10,6 +10,10 @@
     {
       "name": "LuckPerms",
       "url": "https://download.luckperms.net/1584/bukkit/loader/LuckPerms-Bukkit-5.5.0.jar"
+    },
+    {
+      "name": "PlugmanX",
+      "url": "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
     }
   ]
 }

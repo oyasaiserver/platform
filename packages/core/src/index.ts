@@ -1,4 +1,5 @@
 import { cp } from 'node:fs/promises'
+import { writeJsonFile } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { spinner } from 'zx'
@@ -48,6 +49,10 @@ await spinner('apply-overlays', async () => {
 
 await spinner('clone-compose-yaml', async () => {
   await cp(`${__dirname}/../compose.yaml`, 'compose.yaml')
+})
+
+await spinner('clone-env-file', async () => {
+  await writeJsonFile(`${secrets.ENVIRONMENT}/.env.json`, secrets)
 })
 
 await spinner('docker-compose-up', async () => {
