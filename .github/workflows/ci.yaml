@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
           npm run codegen
@@ -32,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: homebrew/actions/setup-homebrew@master
+      - uses: ./.github/actions/setup-homebrew
       - run: |
           sh ./scripts/setup.sh && source ~/.zshrc && source ~/.bashrc
           npm run test:system -w tests
@@ -42,6 +43,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-java
       - run: |
           npm run test -w tests
