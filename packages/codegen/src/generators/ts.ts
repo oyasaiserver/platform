@@ -8,8 +8,10 @@ export async function ts({ schema, dir, name }: GeneratorParams) {
     recursive: true
   })
   const code = `
-    import { z } from 'zod/v4'  
+    import { z } from 'zod/v4'
+    
     export const ${name} = ${jsonSchemaToZod(schema)}
+    
     export type ${pascalCase(name)} = z.infer<typeof ${name}>
   `
   await writeFile(`${dir}/${name}.ts`, code)

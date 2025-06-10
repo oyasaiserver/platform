@@ -15,7 +15,10 @@ export async function kotlin({ schema, dir, name }: GeneratorParams) {
     recursive: true
   })
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore())
-  await schemaInput.addSource({ name, schema: JSON.stringify(schema) })
+  await schemaInput.addSource({
+    name,
+    schema: JSON.stringify(schema)
+  })
   const inputData = new InputData()
   inputData.addInput(schemaInput)
   const result = await quicktype({
