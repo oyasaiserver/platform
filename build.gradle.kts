@@ -4,20 +4,27 @@ plugins {
     id("com.diffplug.spotless") version "7.0.3"
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 spotless {
+    val spotlessIgnore = listOf("node_modules/**")
+
     java {
         target("**/*.java")
-        targetExclude("node_modules/**")
+        targetExclude(spotlessIgnore)
         googleJavaFormat()
     }
 
     kotlin {
         target("**/*.kt")
-        targetExclude("node_modules/**")
+        targetExclude(spotlessIgnore)
+        ktfmt().kotlinlangStyle()
+        ktlint()
+    }
+
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        targetExclude(spotlessIgnore)
         ktfmt().kotlinlangStyle()
         ktlint()
     }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "change-case": "^5.4.4",
-    "json-schema-to-zod": "^2.6.1"
+    "json-schema-to-zod": "^2.6.1",
+    "quicktype-core": "^23.2.6"
   }
 }
