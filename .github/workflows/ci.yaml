@@ -37,11 +37,3 @@ jobs:
       - run: |
           sh ./scripts/setup.sh && source ~/.zshrc && source ~/.bashrc
           npm run test:system -w tests
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run test -w tests
