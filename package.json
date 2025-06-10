@@ -11,10 +11,10 @@
     "tests"
   ],
   "scripts": {
-    "build": "(tsc --build) & ./gradlew build --parallel",
-    "check": "(biome check --write && sort-package-json */**/package.json --quiet) & ./gradlew spotlessApply",
+    "build": "tsc --build",
+    "check": "biome check --write && sort-package-json */**/package.json --quiet",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "codegen": "codegen schema gen && npm run check"
+    "codegen": "codegen schema gen && (biome check --write & ./gradlew spotlessApply)"
   },
   "dependencies": {
     "@oyasaiserver/codegen": "^1.0.0",
