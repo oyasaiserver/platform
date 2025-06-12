@@ -36,7 +36,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - run: ./gradlew build --parallel
-      - uses: ./.github/actions/upload-plugins
+      - name: flatten-and-collect-jars
+        # language=bash
+        run: |
+          mkdir -p __temp_flat_plugins_dir__ 
+          find plugins -name "*.jar" -exec cp {} __temp_flat_plugins_dir__/ \;
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugins
+          path: __temp_flat_plugins_dir__
+          retention-days: 1
 
   cdktf:
     needs:
