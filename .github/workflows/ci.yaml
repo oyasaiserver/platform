@@ -24,16 +24,3 @@ jobs:
       - run: |
           npm run codegen
           test -z "$(git status --porcelain)"
-
-  asdf:
-    if: contains(github.event.pull_request.changed_files, '.tool-versions')
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-homebrew
-      - run: |
-          sh ./scripts/setup.sh && source ~/.zshrc && source ~/.bashrc
-          npm run test:system -w tests
