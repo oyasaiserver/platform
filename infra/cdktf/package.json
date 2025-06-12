@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.0.0",
+    "@cdktf/provider-github": "^15.0.0",
     "constructs": "^10.4.2"
   },
   "devDependencies": {

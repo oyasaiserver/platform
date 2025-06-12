@@ -1,11 +1,13 @@
-import { secrets } from '@oyasaiserver/lib/secrets'
 import { App } from 'cdktf'
 import { CloudflareStack } from './stacks/cloudflare-stack.ts'
+import { GitHubStack } from './stacks/github-stack.ts'
 
 class PlatformApp extends App {
   public constructor() {
     super()
-    new CloudflareStack(this, `cloudflare-${secrets.ENVIRONMENT}`)
+    new CloudflareStack(this)
+
+    new GitHubStack(this)
   }
 }
 
