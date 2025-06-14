@@ -2,6 +2,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { defineConfig } from 'tsup'
+import { compilerOptions } from '../../tsconfig.json'
 
 export default defineConfig({
   clean: true,
@@ -19,6 +20,5 @@ export default defineConfig({
       js: '.mjs'
     }
   },
-  shims: true,
-  target: 'es2022'
+  target: compilerOptions.target
 })
