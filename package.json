@@ -17,9 +17,6 @@
     "codegen": "codegen schema gen && (biome check --write gen & ./gradlew spotlessApply)"
   },
   "dependencies": {
-    "@oyasaiserver/codegen": "^1.0.0",
-    "@oyasaiserver/gen": "^1.0.0",
-    "@oyasaiserver/lib": "^1.0.0",
     "tsx": "^4.20.3",
     "zod": "^3.25.64",
     "zx": "^8.5.5"
