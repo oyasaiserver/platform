@@ -1,0 +1,22 @@
+name: Setup Homebrew
+
+runs:
+  using: composite
+  steps:
+    - uses: asdf-vm/actions/setup@v4
+    - name: restore-cache
+      id: asdf-tools-cache
+      uses: actions/cache@v3
+      with:
+        key: asdf-tools-${{ hashFiles('.tool-versions') }}
+        restore-keys: |
+          asdf-tools-
+        path: |
+          ${{ env.ASDF_DIR }}/plugins
+          ${{ env.ASDF_DIR }}/installs
+    - name: install-on-cache-miss
+      if: ${{ steps.asdf-tools-cache.outputs.cache-hit != 'true' }}
+      uses: asdf-vm/actions/install@v4
+    - name: reshim
+      shell: bash
+      run: asdf reshim

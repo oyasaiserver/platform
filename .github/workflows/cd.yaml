@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-java
+      - uses: ./.github/actions/setup-asdf
       - run: ./gradlew build --parallel
       - name: flatten-and-collect-jars
         # language=bash
@@ -55,7 +55,7 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-asdf
       - uses: hashicorp/setup-terraform@v3
       - run: |
           npm run get -w infra/cdktf
@@ -74,7 +74,7 @@ jobs:
       GITHUB_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-asdf
         # language=bash
       - run: |
           # publish
@@ -93,7 +93,7 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-asdf
       - run: npm run deploy -w packages/core
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
