@@ -7,7 +7,7 @@ plugins {
 repositories { mavenCentral() }
 
 spotless {
-    val spotlessIgnore = listOf("node_modules")
+    val spotlessIgnore = listOf("node_modules/**/*")
 
     java {
         target("**/*.java")
