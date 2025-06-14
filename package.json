@@ -13,8 +13,7 @@
   "scripts": {
     "build": "tsc --build",
     "check": "biome check --write && sort-package-json */**/package.json --quiet",
-    "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "codegen": "codegen schema gen && (biome check --write gen & ./gradlew spotlessApply)"
+    "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always"
   },
   "dependencies": {
     "tsx": "^4.20.3",

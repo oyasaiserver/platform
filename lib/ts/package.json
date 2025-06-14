@@ -8,7 +8,7 @@
     }
   },
   "bin": {
-    "with-secrets": "bin/with-secrets.ts"
+    "secrets": "bin/secrets.ts"
   },
   "scripts": {
     "start": "tsx src/index.ts"

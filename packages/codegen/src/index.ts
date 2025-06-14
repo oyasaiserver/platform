@@ -6,7 +6,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileJson } from '@oyasaiserver/lib/fs'
 import { ensure } from '@oyasaiserver/lib/utils'
 import type { JsonSchema } from 'json-schema-to-zod'
-import { spinner } from 'zx'
+import { $, spinner } from 'zx'
 import { gradle } from './generators/gradle.ts'
 import { json } from './generators/json.ts'
 import { kotlin } from './generators/kotlin.ts'
@@ -45,4 +45,10 @@ await spinner('generate', async () => {
       })
     })
   await Promise.all(promises)
+})
+
+await spinner('format', async () => {
+  await $({
+    cwd: directory.root
+  })`npm run check && ./gradlew spotlessApply`
 })
