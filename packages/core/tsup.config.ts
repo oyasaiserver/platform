@@ -2,15 +2,9 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { defineConfig } from 'tsup'
+import { compilerOptions } from '../../tsconfig.json'
 
 export default defineConfig({
-  banner: {
-    // language=javascript
-    js: `
-      import { createRequire } from 'node:module';
-      const require = createRequire(import.meta.url);
-    `
-  },
   clean: true,
   entry: ['src/index.ts'],
   env: {
@@ -20,6 +14,11 @@ export default defineConfig({
   },
   format: 'esm',
   minify: true,
-  shims: true,
-  target: 'es2022'
+  noExternal: [/.*/],
+  outExtension() {
+    return {
+      js: '.mjs'
+    }
+  },
+  target: compilerOptions.target
 })

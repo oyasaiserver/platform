@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
 
 @Serializable
 data class Secrets(
+    @SerialName("CLOUDFLARE_ACCOUNT_ID") val cloudflareAccountId: String,
     @SerialName("CLOUDFLARE_API_TOKEN") val cloudflareApiToken: String,
     @SerialName("DOTENV_PUBLIC_KEY") val dotenvPublicKey: String,
     @SerialName("ENVIRONMENT") val environment: Environment,

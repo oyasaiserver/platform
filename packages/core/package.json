@@ -14,7 +14,7 @@
     "build": "tsup",
     "deploy": "tsx scripts/deploy.ts",
     "prestart": "npm run build",
-    "start": "cp dist/index.js server/index.js && cd server && node ."
+    "start": "cp dist/* server && cd server && node ."
   },
   "dependencies": {
     "decompress": "^4.2.1",
