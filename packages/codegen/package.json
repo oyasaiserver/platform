@@ -6,7 +6,7 @@
     "codegen": "src/index.ts"
   },
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts schema gen"
   },
   "dependencies": {
     "change-case": "^5.4.4",
