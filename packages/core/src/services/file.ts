@@ -2,7 +2,5 @@
 type Asset = 'dist' | 'overlays' | 'compose.yaml'
 
 export class File {
-  static async copy(...assets: Asset[]) {
-
-  }
+  static async copy(...assets: Asset[]) {}
 }

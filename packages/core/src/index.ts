@@ -7,7 +7,6 @@ import { clean, plugins } from '../config.json'
 import { Artifact } from './services/artifact.ts'
 import { Cleaner } from './services/cleaner.ts'
 import { DockerCompose } from './services/docker-compose.ts'
-import { File } from './services/file.ts'
 import { Overlays } from './services/overlays.ts'
 import { Plugin } from './services/plugin.ts'
 
