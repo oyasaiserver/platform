@@ -4,13 +4,6 @@ import { secrets } from '@oyasaiserver/lib/secrets'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  banner: {
-    // language=javascript
-    js: `
-      import { createRequire } from 'node:module';
-      const require = createRequire(import.meta.url);
-    `
-  },
   clean: true,
   entry: ['src/index.ts'],
   env: {
@@ -20,6 +13,12 @@ export default defineConfig({
   },
   format: 'esm',
   minify: true,
+  noExternal: [/.*/],
+  outExtension() {
+    return {
+      js: '.mjs'
+    }
+  },
   shims: true,
   target: 'es2022'
 })
