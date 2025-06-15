@@ -6,7 +6,7 @@ import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
-  private readonly requiredChecks = ['ci/check', 'ci/codegen-no-drift']
+  private readonly requiredChecks = ['check', 'codegen-no-drift']
 
   public constructor(scope: Construct, id: string) {
     super(scope, id)
