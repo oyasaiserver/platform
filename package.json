@@ -14,7 +14,7 @@
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
     "check": "biome check --write && sort-package-json package.json */**/package.json --quiet",
-    "codegen": "codegen schema gen"
+    "codegen": "codegen --src schema --out gen"
   },
   "dependencies": {
     "tsx": "^4.20.3",

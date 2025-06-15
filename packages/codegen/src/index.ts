@@ -1,30 +1,30 @@
 #!/usr/bin/env tsx
 import { readdir, rm } from 'node:fs/promises'
 import { join, parse } from 'node:path'
-import { argv } from 'node:process'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileJson } from '@oyasaiserver/lib/fs'
 import { ensure } from '@oyasaiserver/lib/utils'
 import type { JsonSchema } from 'json-schema-to-zod'
+import { argv } from 'zx'
 import { $, spinner } from 'zx'
 import { gradle } from './generators/gradle.ts'
 import { json } from './generators/json.ts'
 import { kotlin } from './generators/kotlin.ts'
 import { ts } from './generators/ts.ts'
 
-const src = join(directory.root, ensure(argv[2]))
-const dst = join(directory.root, ensure(argv[3]))
+const src = join(directory.root, ensure(argv.src))
+const out = join(directory.root, ensure(argv.out))
 
 await spinner('reset', async () => {
-  await rm(dst, {
+  await rm(out, {
     force: true,
     recursive: true
   })
 })
 
 await spinner('generate', async () => {
-  await json(`${dst}/ts`)
-  await gradle(`${dst}/kotlin`)
+  await json(`${out}/ts`)
+  await gradle(`${out}/kotlin`)
   const paths = await readdir(src, {
     recursive: true
   })
@@ -36,12 +36,12 @@ await spinner('generate', async () => {
       await ts({
         schema,
         name,
-        dir: `${dst}/ts/src/${dir}`
+        dir: `${out}/ts/src/${dir}`
       })
       await kotlin({
         schema,
         name,
-        dir: `${dst}/kotlin/src/main/kotlin/io/oyasai/gen`
+        dir: `${out}/kotlin/src/main/kotlin/io/oyasai/gen`
       })
     })
   await Promise.all(promises)
