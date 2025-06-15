@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { BranchDefault } from '@cdktf/provider-github/lib/branch-default'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { Repository } from '@cdktf/provider-github/lib/repository'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
@@ -12,6 +13,9 @@ import { description, homepage, name } from '../../../../package.json'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
+  private readonly repository = 'platform'
+  private readonly defaultBranch = 'main'
+
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
@@ -30,7 +34,6 @@ export class GitHubStack extends TerraformStack {
       name,
       description,
       visibility: 'public',
-      defaultBranch: 'main',
       homepageUrl: homepage,
       hasIssues: true,
       hasWiki: false,
@@ -45,10 +48,15 @@ export class GitHubStack extends TerraformStack {
       squashMergeCommitTitle: 'PR_TITLE'
     })
 
+    new BranchDefault(this, `${id}-branch-default`, {
+      repository: this.repository,
+      branch: this.defaultBranch
+    })
+
     new RepositoryRuleset(this, `${id}-repository-ruleset`, {
-      repository: 'platform',
+      repository: this.repository,
       enforcement: 'active',
-      name: 'main',
+      name: 'base',
       target: 'branch',
       conditions: {
         refName: {
