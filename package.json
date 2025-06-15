@@ -12,11 +12,12 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "check": "biome check --write && sort-package-json */**/package.json --quiet",
-    "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always"
+    "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
+    "check": "biome check --write && sort-package-json package.json */**/package.json --quiet"
   },
   "dependencies": {
     "tsx": "^4.20.3",
+    "zod": "^3.25.64",
     "zx": "^8.5.5"
   },
   "devDependencies": {

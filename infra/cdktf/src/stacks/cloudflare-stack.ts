@@ -5,8 +5,7 @@ import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
-  public constructor(scope: Construct) {
-    const id = 'cloudflare'
+  public constructor(scope: Construct, id: string) {
     super(scope, id)
 
     new NamedCloudBackend(this, `${id}-${secrets.ENVIRONMENT}`)
