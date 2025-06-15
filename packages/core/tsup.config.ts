@@ -2,7 +2,27 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { defineConfig } from 'tsup'
+import { spinner } from 'zx'
 import { compilerOptions } from '../../tsconfig.json'
+import { plugins } from './config.json'
+import { Artifact } from './src/services/artifact.ts'
+import { Plugin } from './src/services/plugin.ts'
+
+await spinner('download-plugins-from-github-artifact', async () => {
+  await Artifact.download([
+    {
+      artifact: 'plugins.zip',
+      path: 'overlays/minecraft-main/plugins'
+    }
+  ])
+})
+
+await spinner('download-plugins', async () => {
+  await Plugin.download({
+    path: 'overlays/minecraft-main/plugins',
+    plugins
+  })
+})
 
 export default defineConfig({
   clean: true,
@@ -15,10 +35,5 @@ export default defineConfig({
   format: 'esm',
   minify: true,
   noExternal: [/.*/],
-  outExtension() {
-    return {
-      js: '.mjs'
-    }
-  },
   target: compilerOptions.target
 })

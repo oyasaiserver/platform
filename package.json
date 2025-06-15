@@ -4,17 +4,12 @@
   "homepage": "https://oyasai.io",
   "type": "module",
   "workspaces": [
-    "apps/*",
-    "gen/ts",
-    "lib/ts",
-    "infra/*",
-    "packages/*",
-    "tests"
+    "**"
   ],
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "check": "biome check --write && sort-package-json package.json */**/package.json --quiet",
+    "check": "biome check --write && sort-package-json '**/package.json'",
     "codegen": "codegen --src schema --out gen"
   },
   "dependencies": {

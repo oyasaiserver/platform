@@ -4,6 +4,10 @@
     "ignoreUnknown": true,
     "ignore": ["packages/core/server"]
   },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
   "javascript": {
     "formatter": {
       "arrowParentheses": "asNeeded",
@@ -11,10 +15,6 @@
       "semicolons": "asNeeded",
       "trailingCommas": "none"
     }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space"
   },
   "linter": {
     "enabled": true,
