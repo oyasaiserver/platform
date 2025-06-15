@@ -1,13 +1,14 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
+import { parse } from 'yaml'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
-  private readonly requiredChecks = ['check', 'codegen-no-drift']
-
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
@@ -44,7 +45,7 @@ export class GitHubStack extends TerraformStack {
           requiredReviewThreadResolution: true
         },
         requiredStatusChecks: {
-          requiredCheck: this.requiredChecks.map(context => ({
+          requiredCheck: this.getRequiredCheckContexts().map(context => ({
             context
           }))
         }
@@ -56,6 +57,15 @@ export class GitHubStack extends TerraformStack {
           bypassMode: 'always'
         }
       ]
+    })
+  }
+
+  private getRequiredCheckContexts(): readonly string[] {
+    return ['ci.yaml', 'pr.yaml'].flatMap(file => {
+      const path = join('.github/workflows', file)
+      const content = readFileSync(path).toString()
+      const { jobs } = parse(content)
+      return Object.keys(jobs)
     })
   }
 }

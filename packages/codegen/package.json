@@ -5,9 +5,6 @@
   "bin": {
     "codegen": "src/index.ts"
   },
-  "scripts": {
-    "start": "tsx src/index.ts schema gen"
-  },
   "dependencies": {
     "change-case": "^5.4.4",
     "json-schema-to-zod": "^2.6.1",
