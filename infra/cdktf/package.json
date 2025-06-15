@@ -10,7 +10,8 @@
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.0.0",
     "@cdktf/provider-github": "^15.0.0",
-    "constructs": "^10.4.2"
+    "constructs": "^10.4.2",
+    "yaml": "^2.8.0"
   },
   "devDependencies": {
     "cdktf": "^0.21.0",
