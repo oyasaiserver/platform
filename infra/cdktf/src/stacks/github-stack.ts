@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
+import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
@@ -62,7 +63,7 @@ export class GitHubStack extends TerraformStack {
 
   private getRequiredCheckContexts(): readonly string[] {
     return ['ci.yaml', 'pr.yaml'].flatMap(file => {
-      const path = join('.github/workflows', file)
+      const path = join(directory.root, '.github/workflows', file)
       const content = readFileSync(path).toString()
       const { jobs } = parse(content)
       return Object.keys(jobs)
