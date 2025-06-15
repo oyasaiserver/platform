@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "tsx": "^4.20.3",
+    "zod": "^3.25.64",
     "zx": "^8.5.5"
   },
   "devDependencies": {
