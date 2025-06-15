@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
-import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
@@ -10,12 +9,6 @@ import { parse } from 'yaml'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
-  private readonly requiredChecks = ['check', 'codegen-no-drift']
-  private readonly workflowsCiYaml = join(
-    directory.root,
-    '.github/workflows/ci.yaml'
-  )
-
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
@@ -68,8 +61,11 @@ export class GitHubStack extends TerraformStack {
   }
 
   private getRequiredCheckContexts(): readonly string[] {
-    const content = readFileSync(this.workflowsCiYaml).toString()
-    const { jobs } = parse(content)
-    return Object.keys(jobs)
+    return ['ci.yaml', 'pr.yaml'].flatMap(file => {
+      const path = join('.github/workflows', file)
+      const content = readFileSync(path).toString()
+      const { jobs } = parse(content)
+      return Object.keys(jobs)
+    })
   }
 }
