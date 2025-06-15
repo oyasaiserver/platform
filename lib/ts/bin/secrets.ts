@@ -7,5 +7,6 @@ $({
     ...process.env,
     ...secrets
   },
-  verbose: true
+  verbose: true,
+  nothrow: true
 })`${process.argv.slice(2)}`
