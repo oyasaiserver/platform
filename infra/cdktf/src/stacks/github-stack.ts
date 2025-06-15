@@ -1,12 +1,14 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
+import { Repository } from '@cdktf/provider-github/lib/repository'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
 import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { parse } from 'yaml'
+import { description, homepage, name } from '../../../../package.json'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
@@ -22,6 +24,25 @@ export class GitHubStack extends TerraformStack {
         installationId: secrets.GITHUB_APP_INSTALLATION_ID,
         pemFile: secrets.GITHUB_APP_PEM_FILE
       }
+    })
+
+    new Repository(this, `${id}-repository`, {
+      name,
+      description,
+      visibility: 'public',
+      defaultBranch: 'main',
+      homepageUrl: homepage,
+      hasIssues: true,
+      hasWiki: false,
+      hasProjects: false,
+      deleteBranchOnMerge: true,
+      allowAutoMerge: true,
+      allowMergeCommit: false,
+      allowRebaseMerge: false,
+      allowSquashMerge: true,
+      allowUpdateBranch: true,
+      squashMergeCommitMessage: 'PR_BODY',
+      squashMergeCommitTitle: 'PR_TITLE'
     })
 
     new RepositoryRuleset(this, `${id}-repository-ruleset`, {
