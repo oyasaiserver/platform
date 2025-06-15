@@ -1,6 +1,7 @@
 {
   "name": "platform",
   "description": "Platform for Oyasai Server",
+  "homepage": "https://oyasai.io",
   "type": "module",
   "workspaces": [
     "apps/*",
