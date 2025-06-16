@@ -2,7 +2,11 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "files": ["dist", "overlays", "compose.yaml"],
+  "files": [
+    "dist",
+    "overlays",
+    "compose.yaml"
+  ],
   "scripts": {
     "build": "tsup",
     "deploy": "tsx scripts/deploy.ts",

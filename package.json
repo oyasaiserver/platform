@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "check": "biome check --write && sort-package-json '**/package.json'",
+    "check": "biome check --write && sort-package-json '**/package.json' --quiet",
     "codegen": "codegen --src schema --out gen"
   },
   "dependencies": {
