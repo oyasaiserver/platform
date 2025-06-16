@@ -1,6 +1,6 @@
 package io.oyasai.lib
 
-import io.oyasai.gen.Secrets
+import io.oyasai.gen.schema.Secrets
 import kotlinx.serialization.json.Json
 import java.lang.System.getenv
 

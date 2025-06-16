@@ -12,6 +12,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           ./gradlew spotlessCheck --parallel
+          ./gradlew build --parallel
           npm run check
           npm run build
 
