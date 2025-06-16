@@ -55,6 +55,7 @@ await spinner('generate', async () => {
 
 await spinner('format', async () => {
   await $({
-    cwd: directory.root
+    cwd: directory.root,
+    verbose: true
   })`npm run check && ./gradlew spotlessApply`
 })
