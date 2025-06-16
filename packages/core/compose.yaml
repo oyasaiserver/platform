@@ -1,6 +1,6 @@
 x-minecraft-service: &minecraft-service
   image: itzg/minecraft-server:java24
-  restart: unless-stopped
+  restart: always
   tty: true
   stdin_open: true
   environment:
@@ -23,7 +23,7 @@ services:
     profiles:
       - development
     ports:
-      - "25566:25566"
+      - "25566:25565"
     volumes:
       - ./development/minecraft-main:/data
 

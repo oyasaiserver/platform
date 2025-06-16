@@ -79,7 +79,6 @@ jobs:
       - run: |
           # publish
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
-          echo "@oyasaiserver:registry=https://npm.pkg.github.com/" >> ~/.npmrc
           npm pkg set version=1.0.0-rc.${GITHUB_SHA} -w packages/core
           npm publish -w packages/core --tag rc
 

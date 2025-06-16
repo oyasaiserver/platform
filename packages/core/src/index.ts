@@ -1,14 +1,13 @@
+import '@oyasaiserver/lib/shims/require'
 import { cp } from 'node:fs/promises'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { spinner } from 'zx'
-import { clean, plugins } from '../config.json'
-import { Artifact } from './services/artifact.ts'
+import { clean } from '../config.json'
 import { Cleaner } from './services/cleaner.ts'
 import { DockerCompose } from './services/docker-compose.ts'
 import { Overlays } from './services/overlays.ts'
-import { Plugin } from './services/plugin.ts'
 
 await spinner('docker-compose-down', async () => {
   await DockerCompose.down(secrets.ENVIRONMENT)
@@ -27,28 +26,12 @@ await spinner('backup-clean-and-restore', async () => {
   // await backup?.restore()
 })
 
-await spinner('download-plugins-from-github-artifact', async () => {
-  await Artifact.download([
-    {
-      artifact: 'plugins.zip',
-      path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`
-    }
-  ])
-})
-
-await spinner('download-plugins', async () => {
-  await Plugin.download({
-    path: `${secrets.ENVIRONMENT}/minecraft-main/plugins`,
-    plugins
-  })
-})
-
 await spinner('apply-overlays', async () => {
-  await Overlays.apply(`${__dirname}/../overlays`, secrets.ENVIRONMENT)
+  await Overlays.apply('../overlays', secrets.ENVIRONMENT)
 })
 
 await spinner('clone-compose-yaml', async () => {
-  await cp(`${__dirname}/../compose.yaml`, 'compose.yaml')
+  await cp('../compose.yaml', 'compose.yaml')
 })
 
 await spinner('clone-env-file', async () => {
