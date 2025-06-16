@@ -6,14 +6,3 @@
 <p align="center">
   Platform for Oyasai Server
 </p>
-
----
-
-### Getting started
-
-> [!IMPORTANT]
-> Windowsユーザーは`WSL2`のインストールが必須です。
->
-> `$ wsl --install`
-
-`$ sh ./scripts/setup.sh`

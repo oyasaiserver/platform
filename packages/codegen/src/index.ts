@@ -36,12 +36,12 @@ await spinner('generate', async () => {
       await ts({
         schema,
         name,
-        dir: `${out}/ts/src/${dir}`
+        dir: `${out}/ts/src/${argv.src}/${dir}`
       })
       await kotlin({
         schema,
         name,
-        dir: `${out}/kotlin/src/main/kotlin/io/oyasai/gen`
+        dir: `${out}/kotlin/src/main/kotlin/io/oyasai/gen/${argv.src}`
       })
     })
   await Promise.all(promises)

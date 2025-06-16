@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "description": "Platform for Oyasai Server",
+  "description": "Proof of concept for stateless Minecraft server.",
   "homepage": "https://oyasai.io",
   "type": "module",
   "workspaces": [
