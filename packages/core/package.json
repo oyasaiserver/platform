@@ -2,14 +2,7 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "bin": {
-    "start": "dist/index.js"
-  },
-  "files": [
-    "dist",
-    "overlays",
-    "compose.yaml"
-  ],
+  "files": ["dist", "overlays", "compose.yaml"],
   "scripts": {
     "build": "tsup",
     "deploy": "tsx scripts/deploy.ts",
@@ -23,5 +16,8 @@
   "devDependencies": {
     "@types/decompress": "^4.2.7",
     "tsup": "^8.5.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

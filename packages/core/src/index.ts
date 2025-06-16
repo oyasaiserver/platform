@@ -1,3 +1,4 @@
+import '@oyasaiserver/lib/shims/require'
 import { cp } from 'node:fs/promises'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
@@ -26,11 +27,11 @@ await spinner('backup-clean-and-restore', async () => {
 })
 
 await spinner('apply-overlays', async () => {
-  await Overlays.apply(`${__dirname}/../overlays`, secrets.ENVIRONMENT)
+  await Overlays.apply('../overlays', secrets.ENVIRONMENT)
 })
 
 await spinner('clone-compose-yaml', async () => {
-  await cp(`${__dirname}/../compose.yaml`, 'compose.yaml')
+  await cp('../compose.yaml', 'compose.yaml')
 })
 
 await spinner('clone-env-file', async () => {

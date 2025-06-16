@@ -27,6 +27,7 @@ await spinner('download-plugins', async () => {
 export default defineConfig({
   clean: true,
   entry: ['src/index.ts'],
+  outDir: 'dist',
   env: {
     DOTENV_PUBLIC_KEYS: await readFileContent(
       `${directory.root}/envs/${secrets.ENVIRONMENT}/.env`
@@ -34,6 +35,7 @@ export default defineConfig({
   },
   format: 'esm',
   minify: true,
+  shims: true,
   noExternal: [/.*/],
   target: compilerOptions.target
 })
