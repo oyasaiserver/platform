@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { describe, test } from 'node:test'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent } from '@oyasaiserver/lib/fs'
-import { $ } from 'zx'
+import { $ } from '@oyasaiserver/lib/zx'
 
 const commands = {
   java: ['java', '--version'],

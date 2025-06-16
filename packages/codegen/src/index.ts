@@ -4,12 +4,13 @@ import { join, parse } from 'node:path'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileJson } from '@oyasaiserver/lib/fs'
 import { ensure } from '@oyasaiserver/lib/utils'
+import { $, argv, spinner } from '@oyasaiserver/lib/zx'
 import type { JsonSchema } from 'json-schema-to-zod'
-import { argv } from 'zx'
-import { $, spinner } from 'zx'
+import { readme } from './assets/readme.tsx'
 import { gradle } from './generators/gradle.ts'
 import { json } from './generators/json.ts'
 import { kotlin } from './generators/kotlin.ts'
+import { md } from './generators/md.ts'
 import { ts } from './generators/ts.ts'
 
 const src = join(directory.root, ensure(argv.src))
@@ -45,6 +46,11 @@ await spinner('generate', async () => {
       })
     })
   await Promise.all(promises)
+  await md({
+    dir: `${out}/md`,
+    component: readme,
+    filename: 'README.md'
+  })
 })
 
 await spinner('format', async () => {

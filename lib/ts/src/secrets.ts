@@ -1,6 +1,6 @@
 import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
-import { secrets as secretsSchema } from '@oyasaiserver/gen/common/secrets'
+import { secrets as secretsSchema } from '@oyasaiserver/gen/schema/secrets'
 import { directory } from './directory.ts'
 import { readFileContent } from './fs.ts'
 import { ensure, fallback } from './utils.ts'

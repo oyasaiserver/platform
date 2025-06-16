@@ -13,7 +13,8 @@
       "arrowParentheses": "asNeeded",
       "quoteStyle": "single",
       "semicolons": "asNeeded",
-      "trailingCommas": "none"
+      "trailingCommas": "none",
+      "jsxQuoteStyle": "single"
     }
   },
   "linter": {

@@ -3,9 +3,7 @@
   "description": "Proof of concept for stateless Minecraft server.",
   "homepage": "https://oyasai.io",
   "type": "module",
-  "workspaces": [
-    "**"
-  ],
+  "workspaces": ["**"],
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
@@ -13,8 +11,7 @@
     "codegen": "codegen --src schema --out gen"
   },
   "dependencies": {
-    "tsx": "^4.20.3",
-    "zx": "^8.5.5"
+    "tsx": "^4.20.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
