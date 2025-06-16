@@ -8,10 +8,6 @@
   "dependencies": {
     "change-case": "^5.4.4",
     "json-schema-to-zod": "^2.6.1",
-    "quicktype-core": "^23.2.6",
-    "react-dom": "^19.1.0"
-  },
-  "devDependencies": {
-    "@types/react-dom": "^19.1.6"
+    "quicktype-core": "^23.2.6"
   }
 }
