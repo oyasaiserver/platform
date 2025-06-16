@@ -1,9 +1,11 @@
-import '@oyasaiserver/lib/shims/react'
+import '@oyasaiserver/lib/shims/preact'
 import { description, name } from '../../package.json'
 
-declare module 'react' {
-  interface HTMLAttributes<T> {
-    align?: 'center' | 'left' | 'right'
+declare module 'preact' {
+  namespace JSX {
+    interface HTMLAttributes {
+      align?: 'center' | 'left' | 'right'
+    }
   }
 }
 
