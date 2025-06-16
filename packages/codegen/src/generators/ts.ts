@@ -9,7 +9,7 @@ export async function ts({ schema, dir, name }: GeneratorParams) {
   })
   const camelName = camelCase(name)
   const code = `
-    import { z } from 'zod'
+    import { z } from '@oyasaiserver/lib/zod'
     
     export const ${camelName} = ${jsonSchemaToZod(schema)}
     

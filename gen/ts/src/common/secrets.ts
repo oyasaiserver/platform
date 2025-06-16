@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from '@oyasaiserver/lib/zod'
 
 export const secrets = z
   .object({
