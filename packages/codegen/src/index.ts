@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 import { readdir, rm } from 'node:fs/promises'
 import { join, parse } from 'node:path'
+import { readme } from '@oyasaiserver/assets/readme.tsx'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileJson } from '@oyasaiserver/lib/fs'
 import { ensure } from '@oyasaiserver/lib/utils'
 import { $, argv, spinner } from '@oyasaiserver/lib/zx'
 import type { JsonSchema } from 'json-schema-to-zod'
-import { readme } from './assets/readme.tsx'
 import { gradle } from './generators/gradle.ts'
 import { json } from './generators/json.ts'
 import { kotlin } from './generators/kotlin.ts'

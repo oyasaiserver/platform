@@ -1,0 +1,10 @@
+{
+  "name": "@oyasaiserver/assets",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./src/*"
+    }
+  }
+}

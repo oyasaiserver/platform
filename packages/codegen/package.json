@@ -9,7 +9,6 @@
     "change-case": "^5.4.4",
     "json-schema-to-zod": "^2.6.1",
     "quicktype-core": "^23.2.6",
-    "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {

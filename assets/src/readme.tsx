@@ -1,6 +1,5 @@
-// biome-ignore lint/correctness/noUnusedImports: shim
-import React from 'react'
-import { description, name } from '../../../../package.json'
+import '@oyasaiserver/lib/shims/react'
+import { description, name } from '../../package.json'
 
 declare module 'react' {
   interface HTMLAttributes<T> {
@@ -12,7 +11,7 @@ export const readme = (
   <>
     <p align='center'>
       <img
-        src='https://avatars.githubusercontent.com/u/70241145'
+        src='https://avatars.githubusercontent.com/oyasaiserver'
         height='96'
         alt='icon'
       />
