@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.2",
-    "fast-xml-parser": "^5.2.5"
+    "fast-xml-parser": "^5.2.5",
+    "zod": "^3.25.64"
   }
 }
