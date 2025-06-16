@@ -1,5 +1,6 @@
 import type { PathLike } from 'node:fs'
-import { type FileHandle, readFile, writeFile } from 'node:fs/promises'
+import { type FileHandle, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
 
 export async function readFileContent(
   ...args: Parameters<typeof readFile>
@@ -21,4 +22,11 @@ export async function writeJsonFile<T>(
 ) {
   const jsonContent = JSON.stringify(content, null, 2)
   await writeFile(path, jsonContent)
+}
+
+export async function writeFileSafe(...args: Parameters<typeof writeFile>) {
+  await mkdir(dirname(args[0].toString()), {
+    recursive: true
+  })
+  await writeFile(...args)
 }

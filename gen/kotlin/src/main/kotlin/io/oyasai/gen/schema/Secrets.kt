@@ -1,6 +1,6 @@
 @file:Suppress("ktlint")
 
-package io.oyasai.gen
+package io.oyasai.gen.schema
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*

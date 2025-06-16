@@ -1,19 +1,17 @@
-import { mkdir, writeFile } from 'node:fs/promises'
 import { camelCase, pascalCase } from 'change-case'
-import { jsonSchemaToZod } from 'json-schema-to-zod'
-import type { GeneratorParams } from './types.ts'
+import { type JsonSchema, jsonSchemaToZod } from 'json-schema-to-zod'
 
-export async function ts({ schema, dir, name }: GeneratorParams) {
-  await mkdir(dir, {
-    recursive: true
-  })
-  const camelName = camelCase(name)
-  const code = `
+export type Params = Readonly<{
+  schema: JsonSchema
+  name: string
+}>
+
+export async function ts({ schema, name }: Params) {
+  return `
     import { z } from '@oyasaiserver/lib/zod'
     
-    export const ${camelName} = ${jsonSchemaToZod(schema)}
+    export const ${camelCase(name)} = ${jsonSchemaToZod(schema)}
     
-    export type ${pascalCase(name)} = z.infer<typeof ${camelName}>
+    export type ${pascalCase(name)} = z.infer<typeof ${camelCase(name)}>
   `
-  await writeFile(`${dir}/${name}.ts`, code)
 }

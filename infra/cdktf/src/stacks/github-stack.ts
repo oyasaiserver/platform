@@ -4,12 +4,13 @@ import { BranchDefault } from '@cdktf/provider-github/lib/branch-default'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { Repository } from '@cdktf/provider-github/lib/repository'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
+import { constants } from '@oyasaiserver/lib/constants'
 import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { parse } from 'yaml'
-import { description, homepage, name } from '../../../../package.json'
+import { description, homepage } from '../../../../package.json'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
@@ -22,7 +23,7 @@ export class GitHubStack extends TerraformStack {
     new NamedCloudBackend(this, id)
 
     new GithubProvider(this, id, {
-      owner: 'oyasaiserver',
+      owner: constants.github.organization,
       appAuth: {
         id: secrets.GITHUB_APP_ID,
         installationId: secrets.GITHUB_APP_INSTALLATION_ID,
@@ -31,7 +32,7 @@ export class GitHubStack extends TerraformStack {
     })
 
     new Repository(this, `${id}-repository`, {
-      name,
+      name: constants.github.repository,
       description,
       visibility: 'public',
       homepageUrl: homepage,

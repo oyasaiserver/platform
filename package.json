@@ -1,6 +1,6 @@
 {
   "name": "platform",
-  "description": "Platform for Oyasai Server",
+  "description": "Proof of concept for stateless Minecraft server",
   "homepage": "https://oyasai.io",
   "type": "module",
   "workspaces": [
@@ -13,8 +13,7 @@
     "codegen": "codegen --src schema --out gen"
   },
   "dependencies": {
-    "tsx": "^4.20.3",
-    "zx": "^8.5.5"
+    "tsx": "^4.20.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
