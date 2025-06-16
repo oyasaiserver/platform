@@ -1,6 +1,5 @@
-import { mkdir, writeFile } from 'node:fs/promises'
 import { EOL } from 'node:os'
-import { pascalCase } from 'change-case'
+import type { JsonSchema } from 'json-schema-to-zod'
 import {
   FetchingJSONSchemaStore,
   InputData,
@@ -8,12 +7,15 @@ import {
   quicktype
 } from 'quicktype-core'
 import { Kotlin } from '../languages/kotlin.ts'
-import type { GeneratorParams } from './types.ts'
 
-export async function kotlin({ schema, dir, name }: GeneratorParams) {
-  await mkdir(dir, {
-    recursive: true
-  })
+export type Params = Readonly<{
+  schema: JsonSchema
+  name: string
+  dir: string
+  src: string
+}>
+
+export async function kotlin({ schema, name, src, dir }: Params) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore())
   await schemaInput.addSource({
     name,
@@ -26,11 +28,8 @@ export async function kotlin({ schema, dir, name }: GeneratorParams) {
     inputData,
     leadingComments: [],
     rendererOptions: {
-      package: 'io.oyasai.gen'
+      package: `io.oyasai.gen.${src}${dir ? `.${dir.replace('/', '.')}` : ''}`
     }
   })
-  await writeFile(
-    `${dir}/${pascalCase(name)}.kt`,
-    ['@file:Suppress("ktlint")', ...result.lines].join(EOL)
-  )
+  return ['@file:Suppress("ktlint")', ...result.lines].join(EOL)
 }
