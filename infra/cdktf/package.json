@@ -2,10 +2,7 @@
   "name": "@oyasaiserver/infra-cdktf",
   "type": "module",
   "scripts": {
-    "deploy": "secrets cdktf deploy '*' --auto-approve",
-    "diff": "cdktf diff",
-    "get": "cdktf get",
-    "synth": "cdktf synth"
+    "deploy": "secrets cdktf deploy '*' --auto-approve"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.0.0",

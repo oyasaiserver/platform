@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.0.3",
     "npm-check-updates": "^18.0.1",
     "sort-package-json": "^3.2.1",
     "typescript": "^5.8.3"

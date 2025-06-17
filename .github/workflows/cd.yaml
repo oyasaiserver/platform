@@ -58,9 +58,11 @@ jobs:
       - uses: ./.github/actions/setup-node
       - uses: hashicorp/setup-terraform@v3
       - run: |
-          npm run get -w infra/cdktf
-          npm run synth -w infra/cdktf
-          npm run deploy -w infra/cdktf
+          cdktf get
+          cdktf synth
+          npm run deploy
+        working-directory:
+          infra/cdktf
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
