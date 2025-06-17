@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitepress'
+import { name } from '../package.json'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'wiki',
+  title: name,
   description: 'A VitePress Site',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

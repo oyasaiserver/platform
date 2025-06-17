@@ -1,5 +1,5 @@
 {
-  "name": "wiki",
+  "name": "root",
   "type": "module",
   "scripts": {
     "build": "vitepress build",
