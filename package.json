@@ -3,9 +3,8 @@
   "description": "Proof of concept for stateless Minecraft server",
   "homepage": "https://oyasai.io",
   "type": "module",
-  "workspaces": [
-    "**"
-  ],
+  "workspaces": ["**"],
+  "repository": "github:oyasaiserver/platform",
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
