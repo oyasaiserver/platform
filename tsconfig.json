@@ -22,6 +22,7 @@
   },
   "files": [],
   "references": [
+    { "path": "assets" },
     { "path": "apps/wiki" },
     { "path": "gen/ts" },
     { "path": "infra/cdktf" },

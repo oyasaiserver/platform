@@ -1,5 +1,5 @@
 import '@oyasaiserver/lib/shims/preact'
-import { description, name } from '../../package.json'
+import { github } from '@oyasaiserver/lib/github'
 
 declare module 'preact' {
   namespace JSX {
@@ -18,7 +18,7 @@ export const readme = (
         alt='icon'
       />
     </p>
-    <h3 align='center'>{name}</h3>
-    <p align='center'>{description}</p>
+    <h3 align='center'>{github.repository}</h3>
+    <p align='center'>{github.description}</p>
   </>
 )
