@@ -1,6 +1,5 @@
 {
   "name": "wiki",
-  "description": "Wiki for Oyasai Server",
   "type": "module",
   "scripts": {
     "build": "vitepress build",
