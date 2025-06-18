@@ -8,5 +8,6 @@ $({
     ...secrets
   },
   verbose: true,
-  nothrow: true
+  nothrow: true,
+  stdio: 'inherit'
 })`${process.argv.slice(2)}`

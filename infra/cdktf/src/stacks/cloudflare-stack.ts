@@ -1,9 +1,8 @@
-import { PagesProject } from '@cdktf/provider-cloudflare/lib/pages-project'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
+import { WorkersScript } from '@cdktf/provider-cloudflare/lib/workers-script'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
-import { name } from '../../package.json'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
@@ -16,15 +15,21 @@ export class CloudflareStack extends TerraformStack {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
-    new PagesProject(this, id, {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-      buildConfig: {},
-      deploymentConfigs: {},
-      productionBranch: 'main',
-      source: {
-        type: 'github'
-      },
-      name
-    })
+    new WorkersScript()
+
+    // new PagesProject(this, envAware(id), {
+    //   accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+    //   buildConfig: {
+    //     buildCaching: true,
+    //     buildCommand: 'npm run build -w apss/web',
+    //     destinationDir: 'apps/web/.vitepress/dist',
+    //     rootDir: 'apps/web'
+    //   },
+    //   productionBranch: 'main',
+    //   source: {
+    //     type: 'github'
+    //   },
+    //   name: 'root'
+    // })
   }
 }
