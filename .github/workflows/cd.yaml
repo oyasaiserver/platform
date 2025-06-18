@@ -66,6 +66,7 @@ jobs:
 
   cdktf:
     needs:
+      - resolve-env
       - deploy-apps
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
