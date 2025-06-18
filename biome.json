@@ -25,6 +25,8 @@
       },
       "correctness": {
         "noUnusedImports": "warn",
+        "noUnusedFunctionParameters": "off",
+        "noUnusedVariables": "off",
         "useImportExtensions": {
           "fix": "safe",
           "level": "warn"

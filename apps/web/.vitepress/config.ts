@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  srcDir: 'pages',
+  srcDir: 'src/pages',
   title: 'web',
   description: 'A VitePress Site',
   themeConfig: {
