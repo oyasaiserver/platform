@@ -4,7 +4,8 @@
   "scripts": {
     "build": "vitepress build",
     "dev": "vitepress dev",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "deploy": "secrets wrangler deploy"
   },
   "dependencies": {
     "vitepress": "^2.0.0-alpha.6"

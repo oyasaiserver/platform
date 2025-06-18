@@ -1,7 +1,7 @@
-import type { ExecutionContext, Request } from '@cloudflare/workers-types'
+import { WorkerEntrypoint } from "cloudflare:workers";
 
-export default {
-  fetch(request: Request, env: unknown, ctx: ExecutionContext) {
-    return new Response('OK')
+export default class extends WorkerEntrypoint<Env> {
+  override fetch(request: Request) {
+    return this.env.assets.fetch(request)
   }
 }
