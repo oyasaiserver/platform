@@ -1,11 +1,16 @@
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
-import { WorkersScript } from '@cdktf/provider-cloudflare/lib/workers-script'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
+import { DnsRecord } from "@cdktf/provider-cloudflare/lib/dns-record";
+import { WorkersRoute } from "@cdktf/provider-cloudflare/lib/workers-route";
+import wikiWrangerJson from '../../../../apps/wiki/wrangler.json'
 
 export class CloudflareStack extends TerraformStack {
+  private readonly wikiOyasaiIoZoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
+  private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
+
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
@@ -15,21 +20,19 @@ export class CloudflareStack extends TerraformStack {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
-    new WorkersScript()
+    new DnsRecord(this, 'wiki-oyasai-io-dns-record', {
+      ttl: 1, // automatic
+      zoneId: this.wikiOyasaiIoZoneId,
+      name: 'wiki',
+      type: 'A',
+      proxied: true,
+      content: this.dummyIp
+    });
 
-    // new PagesProject(this, envAware(id), {
-    //   accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-    //   buildConfig: {
-    //     buildCaching: true,
-    //     buildCommand: 'npm run build -w apss/web',
-    //     destinationDir: 'apps/web/.vitepress/dist',
-    //     rootDir: 'apps/web'
-    //   },
-    //   productionBranch: 'main',
-    //   source: {
-    //     type: 'github'
-    //   },
-    //   name: 'root'
-    // })
+    new WorkersRoute(this, 'wiki-workers-route', {
+      zoneId: this.wikiOyasaiIoZoneId,
+      pattern: wikiWrangerJson.route,
+      script: wikiWrangerJson.name
+    });
   }
 }
