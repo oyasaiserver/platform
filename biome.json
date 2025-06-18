@@ -19,6 +19,7 @@
   },
   "linter": {
     "enabled": true,
+    "includes": ["!apps/web/worker-configuration.d.ts"],
     "rules": {
       "complexity": {
         "noStaticOnlyClass": "off"
@@ -42,6 +43,9 @@
     "useIgnoreFile": true
   },
   "assist": {
-    "enabled": true
+    "enabled": true,
+    "actions": {
+      "recommended": true
+    }
   }
 }
