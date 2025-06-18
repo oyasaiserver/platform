@@ -23,7 +23,7 @@
   "files": [],
   "references": [
     { "path": "assets" },
-    { "path": "apps/web" },
+    { "path": "apps/wiki"},
     { "path": "gen/ts" },
     { "path": "infra/cdktf" },
     { "path": "lib/ts" },
