@@ -1,5 +1,5 @@
 {
-  "name": "@oyasaiserver/apps-wiki",
+  "name": "@oyasaiserver/wiki",
   "type": "module",
   "scripts": {
     "build": "vitepress build",
