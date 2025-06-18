@@ -2,7 +2,7 @@
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["packages/core/server"]
+    "includes": ["**", "!**/packages/core/server"]
   },
   "formatter": {
     "enabled": true,
@@ -19,12 +19,15 @@
   },
   "linter": {
     "enabled": true,
+    "includes": ["!apps/web/worker-configuration.d.ts"],
     "rules": {
       "complexity": {
         "noStaticOnlyClass": "off"
       },
       "correctness": {
         "noUnusedImports": "warn",
+        "noUnusedFunctionParameters": "off",
+        "noUnusedVariables": "off",
         "useImportExtensions": {
           "fix": "safe",
           "level": "warn"
@@ -38,5 +41,11 @@
     "defaultBranch": "main",
     "enabled": true,
     "useIgnoreFile": true
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "recommended": true
+    }
   }
 }

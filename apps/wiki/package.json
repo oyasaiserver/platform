@@ -1,14 +1,13 @@
 {
   "name": "wiki",
-  "description": "Wiki for Oyasai Server",
   "type": "module",
   "scripts": {
     "build": "vitepress build",
+    "deploy": "secrets wrangler deploy",
     "dev": "vitepress dev",
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "vitepress": "^1.6.3",
-    "vue": "^3.5.16"
+    "vitepress": "^2.0.0-alpha.6"
   }
 }
