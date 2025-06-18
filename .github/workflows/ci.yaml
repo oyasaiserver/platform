@@ -18,6 +18,8 @@ jobs:
 
   codegen-no-drift:
     runs-on: ubuntu-latest
+    needs:
+      - check
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
