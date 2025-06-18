@@ -1,1 +1,1 @@
-<p align="center"><img src="https://avatars.githubusercontent.com/oyasaiserver" height="96" alt="icon"/></p><h3 align="center">platform</h3><p align="center">Proof of concept for stateless Minecraft server</p>
+<p align="center"><img src="https://avatars.githubusercontent.com/oyasaiserver" height="96" alt="icon"/></p><h3 align="center">platform</h3><p align="center">Proof of concept for stateless Minecraft server.</p>
