@@ -48,9 +48,25 @@ jobs:
           path: __temp_flat_plugins_dir__
           retention-days: 1
 
-  cdktf:
+  deploy-apps:
     needs:
       - resolve-env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.resolve-env.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: |
+          npm run build
+          npm run deploy
+        working-directory: apps/wiki
+        env:
+          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+  cdktf:
+    needs:
+      - deploy-apps
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
@@ -62,22 +78,6 @@ jobs:
           npm run deploy
         working-directory:
           infra/cdktf
-        env:
-          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
-
-  deploy-apps:
-    needs:
-      - cdktf
-    runs-on: ubuntu-latest
-    environment: ${{ needs.resolve-env.outputs.environment }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run build
-          npm run deploy
-        working-directory: apps/wiki
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}

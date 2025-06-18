@@ -31,7 +31,7 @@ export class CloudflareStack extends TerraformStack {
 
     new WorkersRoute(this, 'wiki-workers-route', {
       zoneId: this.wikiOyasaiIoZoneId,
-      pattern: wikiWrangerJson.route,
+      pattern: 'wiki.oyasai.io/*',
       script: wikiWrangerJson.name
     })
   }
