@@ -2,13 +2,13 @@ import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
 import { secrets } from '@oyasaiserver/lib/secrets'
+import wikiWrangerJson from '@oyasaiserver/wiki/wrangler.json'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
-import wikiWrangerJson from '../../../../apps/wiki/wrangler.json'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
-  private readonly wikiOyasaiIoZoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
+  private readonly oyasaiIoZoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
   public constructor(scope: Construct, id: string) {
@@ -22,7 +22,7 @@ export class CloudflareStack extends TerraformStack {
 
     new DnsRecord(this, 'wiki-oyasai-io-dns-record', {
       ttl: 1, // automatic
-      zoneId: this.wikiOyasaiIoZoneId,
+      zoneId: this.oyasaiIoZoneId,
       name: 'wiki',
       type: 'A',
       proxied: true,
@@ -30,7 +30,7 @@ export class CloudflareStack extends TerraformStack {
     })
 
     new WorkersRoute(this, 'wiki-workers-route', {
-      zoneId: this.wikiOyasaiIoZoneId,
+      zoneId: this.oyasaiIoZoneId,
       pattern: 'wiki.oyasai.io/*',
       script: wikiWrangerJson.name
     })
