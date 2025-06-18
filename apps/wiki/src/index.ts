@@ -1,4 +1,4 @@
-import { WorkerEntrypoint } from "cloudflare:workers";
+import { WorkerEntrypoint } from 'cloudflare:workers'
 
 export default class extends WorkerEntrypoint<Env> {
   override fetch(request: Request) {
