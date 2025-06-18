@@ -1,0 +1,32 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "web",
+  "main": "src/index.ts",
+  "compatibility_date": "2022-07-12",
+  "workers_dev": false,
+  "route": {
+    "pattern": "example.org/*",
+    "zone_name": "example.org"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "<MY_NAMESPACE>",
+      "id": "<KV_ID>"
+    }
+  ],
+  "env": {
+    "staging": {
+      "name": "my-worker-staging",
+      "route": {
+        "pattern": "staging.example.org/*",
+        "zone_name": "example.org"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "<MY_NAMESPACE>",
+          "id": "<STAGING_KV_ID>"
+        }
+      ]
+    }
+  }
+}

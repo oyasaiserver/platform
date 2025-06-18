@@ -4,7 +4,9 @@
   "homepage": "https://oyasai.io",
   "repository": "github:oyasaiserver/platform",
   "type": "module",
-  "workspaces": ["**"],
+  "workspaces": [
+    "**"
+  ],
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
@@ -15,10 +17,12 @@
     "tsx": "^4.20.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.0.0",
+    "@cloudflare/workers-types": "^4.20250617.0",
     "@types/node": "^24.0.3",
     "npm-check-updates": "^18.0.1",
     "sort-package-json": "^3.2.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "wrangler": "^4.20.1"
   }
 }

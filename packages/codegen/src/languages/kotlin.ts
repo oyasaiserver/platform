@@ -1,9 +1,9 @@
 import {
+  getOptionValues,
   KotlinTargetLanguage,
   KotlinXRenderer,
-  type RenderContext,
-  getOptionValues,
-  kotlinOptions
+  kotlinOptions,
+  type RenderContext
 } from 'quicktype-core'
 import {
   AcronymStyleOptions,
