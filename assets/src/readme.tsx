@@ -12,11 +12,7 @@ declare module 'preact' {
 export const readme = (
   <>
     <p align='center'>
-      <img
-        src='https://avatars.githubusercontent.com/oyasaiserver'
-        height='96'
-        alt='icon'
-      />
+      <img src={repository.icon} height='96' alt='icon' />
     </p>
     <h3 align='center'>{repository.name}</h3>
     <p align='center'>{repository.description}</p>

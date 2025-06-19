@@ -1,16 +1,16 @@
+import { repository } from '@oyasaiserver/lib/repository'
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: 'src/pages',
   title: 'web',
   description: 'A VitePress Site',
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
-    ],
+    search: {
+      provider: 'local'
+    },
+    logo: repository.icon,
+    socialLinks: [{ icon: 'github', link: repository.url }],
     sidebar: [
       {
         text: 'Examples',
@@ -19,9 +19,6 @@ export default defineConfig({
           { text: 'Runtime API Examples', link: '/api-examples' }
         ]
       }
-    ],
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
   }
 })

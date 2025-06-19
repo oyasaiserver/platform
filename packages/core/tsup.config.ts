@@ -3,7 +3,6 @@ import { readFileContent } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { spinner } from '@oyasaiserver/lib/zx'
 import { defineConfig } from 'tsup'
-import { compilerOptions } from '../../tsconfig.json'
 import { plugins } from './config.json'
 import { Artifact } from './src/services/artifact.ts'
 import { Plugin } from './src/services/plugin.ts'
@@ -37,5 +36,5 @@ export default defineConfig({
   minify: true,
   shims: true,
   noExternal: [/.*/],
-  target: compilerOptions.target
+  target: 'esnext'
 })

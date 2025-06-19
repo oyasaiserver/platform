@@ -1,17 +1,10 @@
-import {
-  description,
-  homepage,
-  repository as repositoryUrl
-} from '../../../package.json'
-import { ensure } from './utils.ts'
+import { type Repository } from '@oyasaiserver/gen/schema/repository'
 
-const prefix = 'github:'
-
-const [organization, name] = repositoryUrl.replace(prefix, '').split('/')
-
-export const repository = {
-  organization: ensure(organization),
-  name: ensure(name),
-  description,
-  homepage
-} as const
+export const repository: Repository = {
+  organization: 'oyasaiserver',
+  name: 'platform',
+  description: 'Proof of concept for stateless Minecraft server.',
+  homepage: 'https://oyasai.io',
+  url: 'https://github.com/oyasaiserver/platform',
+  icon: 'https://avatars.githubusercontent.com/oyasaiserver'
+}
