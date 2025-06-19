@@ -53,13 +53,16 @@ jobs:
       - resolve-env
     runs-on: ubuntu-latest
     environment: ${{ needs.resolve-env.outputs.environment }}
+    strategy:
+      matrix:
+        app: [ wiki, sociallikes ]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build
           npm run deploy
-        working-directory: apps/wiki
+        working-directory: apps/${{ matrix.app }}
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
