@@ -1,0 +1,10 @@
+{
+  "name": "@oyasaiserver/sociallikes",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev"
+  },
+  "dependencies": {
+    "hono": "^4.8.0"
+  }
+}
