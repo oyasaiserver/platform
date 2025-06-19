@@ -1,8 +1,4 @@
 {
-  "name": "platform",
-  "description": "Proof of concept for stateless Minecraft server.",
-  "homepage": "https://oyasai.io",
-  "repository": "github:oyasaiserver/platform",
   "type": "module",
   "workspaces": [
     "**"
