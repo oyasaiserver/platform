@@ -19,7 +19,7 @@
   },
   "linter": {
     "enabled": true,
-    "includes": ["!apps/web/worker-configuration.d.ts"],
+    "includes": ["!worker-configuration.d.ts"],
     "rules": {
       "complexity": {
         "noStaticOnlyClass": "off"

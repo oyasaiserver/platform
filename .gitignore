@@ -402,3 +402,6 @@ terraform.rc
 cdktf.out
 cdktf.log
 .gen
+
+# Wrangler
+.wrangler
