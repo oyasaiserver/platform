@@ -2,7 +2,8 @@ import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
 import { secrets } from '@oyasaiserver/lib/secrets'
-import wikiWrangerJson from '@oyasaiserver/wiki/wrangler.json'
+import { name as sociallikesWorkerName } from '@oyasaiserver/sociallikes/wrangler.json'
+import { name as wikiWorkerName } from '@oyasaiserver/wiki/wrangler.json'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
@@ -32,7 +33,13 @@ export class CloudflareStack extends TerraformStack {
     new WorkersRoute(this, 'wiki-workers-route', {
       zoneId: this.oyasaiIoZoneId,
       pattern: 'wiki.oyasai.io/*',
-      script: wikiWrangerJson.name
+      script: wikiWorkerName
+    })
+
+    new WorkersRoute(this, 'sociallikes-workers-route', {
+      zoneId: this.oyasaiIoZoneId,
+      pattern: 'sociallikes.oyasai.io/*',
+      script: sociallikesWorkerName
     })
   }
 }
