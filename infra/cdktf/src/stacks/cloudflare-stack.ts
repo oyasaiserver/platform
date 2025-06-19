@@ -9,7 +9,7 @@ import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
-  private readonly oyasaiIoZoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
+  private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
   public constructor(scope: Construct, id: string) {
@@ -21,25 +21,21 @@ export class CloudflareStack extends TerraformStack {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
-    new DnsRecord(this, 'wiki-oyasai-io-dns-record', {
-      ttl: 1, // automatic
-      zoneId: this.oyasaiIoZoneId,
-      name: 'wiki',
-      type: 'A',
-      proxied: true,
-      content: this.dummyIp
-    })
+    for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
+      new DnsRecord(this, `${workerName}-dns-record`, {
+        ttl: 1, // automatic
+        zoneId: this.zoneId,
+        name: workerName,
+        type: 'A',
+        proxied: true,
+        content: this.dummyIp
+      })
 
-    new WorkersRoute(this, 'wiki-workers-route', {
-      zoneId: this.oyasaiIoZoneId,
-      pattern: 'wiki.oyasai.io/*',
-      script: wikiWorkerName
-    })
-
-    new WorkersRoute(this, 'sociallikes-workers-route', {
-      zoneId: this.oyasaiIoZoneId,
-      pattern: 'sociallikes.oyasai.io/*',
-      script: sociallikesWorkerName
-    })
+      new WorkersRoute(this, `${workerName}-workers-route`, {
+        zoneId: this.zoneId,
+        pattern: `${workerName}.oyasai.io/*`,
+        script: workerName
+      })
+    }
   }
 }
