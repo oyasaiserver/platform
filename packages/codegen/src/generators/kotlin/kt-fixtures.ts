@@ -1,12 +1,13 @@
 import { mkdir, writeFile } from 'node:fs/promises'
+import { dedent } from '@oyasaiserver/lib/dedent'
 
-export async function gradle(dst: string) {
+export async function ktFixtures(dst: string) {
   await mkdir(dst, {
     recursive: true
   })
   await writeFile(
     `${dst}/build.gradle.kts`,
-    `
+    dedent`
       plugins {
         kotlin("jvm")
       }

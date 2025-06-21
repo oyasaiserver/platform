@@ -1,0 +1,10 @@
+{
+  "name": "@oyasaiserver/gen",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./src/*.ts"
+    }
+  }
+}

@@ -2,8 +2,8 @@
   "name": "@oyasaiserver/codegen",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "start": "tsx src/index.ts"
+  "bin": {
+    "codegen": "bin/codegen.ts"
   },
   "dependencies": {
     "change-case": "^5.4.4",

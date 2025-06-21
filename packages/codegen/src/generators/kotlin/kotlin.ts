@@ -6,7 +6,7 @@ import {
   JSONSchemaInput,
   quicktype
 } from 'quicktype-core'
-import { Kotlin } from '../languages/kotlin.ts'
+import { Kotlin } from '../../languages/kotlin.ts'
 
 export type Params = Readonly<{
   schema: JsonSchema
