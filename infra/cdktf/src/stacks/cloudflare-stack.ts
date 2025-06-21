@@ -1,6 +1,7 @@
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
+import { envAware } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { name as sociallikesWorkerName } from '@oyasaiserver/sociallikes/wrangler.json'
 import { name as wikiWorkerName } from '@oyasaiserver/wiki/wrangler.json'
@@ -22,18 +23,22 @@ export class CloudflareStack extends TerraformStack {
     })
 
     for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
-      new DnsRecord(this, `${workerName}-dns-record`, {
+      const suffix =
+        secrets.ENVIRONMENT === 'production' ? '' : `.${secrets.ENVIRONMENT}`
+      const subdomain = `${workerName}${suffix}`
+
+      new DnsRecord(this, envAware(workerName, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
-        name: workerName,
+        name: subdomain,
         type: 'A',
         proxied: true,
         content: this.dummyIp
       })
 
-      new WorkersRoute(this, `${workerName}-workers-route`, {
+      new WorkersRoute(this, envAware(workerName, 'workers-route'), {
         zoneId: this.zoneId,
-        pattern: `${workerName}.oyasai.io/*`,
+        pattern: `${subdomain}.oyasai.io/*`,
         script: workerName
       })
     }
