@@ -4,13 +4,12 @@ import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec'
 import { envAware, envShort } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
-import { name as sociallikesWorkerName } from '@oyasaiserver/sociallikes/wrangler.json'
-import { name as wikiWorkerName } from '@oyasaiserver/wiki/wrangler.json'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class CloudflareStack extends TerraformStack {
+  private readonly workers = ['wiki', 'sociallikes']
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
@@ -28,14 +27,14 @@ export class CloudflareStack extends TerraformStack {
       status: 'active'
     })
 
-    for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
-      const subdomain = `${workerName}${
+    for (const worker of this.workers) {
+      const subdomain = `${worker}${
         secrets.ENVIRONMENT === 'production'
           ? ''
           : `.${envShort(secrets.ENVIRONMENT)}`
       }`
 
-      new DnsRecord(this, envAware(id, workerName, 'dns-record'), {
+      new DnsRecord(this, envAware(id, worker, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
         name: subdomain,
@@ -44,10 +43,10 @@ export class CloudflareStack extends TerraformStack {
         content: this.dummyIp
       })
 
-      new WorkersRoute(this, envAware(id, workerName, 'workers-route'), {
+      new WorkersRoute(this, envAware(id, worker, 'workers-route'), {
         zoneId: this.zoneId,
         pattern: `${subdomain}.oyasai.io/*`,
-        script: workerName
+        script: envAware(worker)
       })
     }
   }
