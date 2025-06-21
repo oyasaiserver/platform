@@ -1,7 +1,7 @@
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
-import { TotalTls } from '@cdktf/provider-cloudflare/lib/total-tls'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
+import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec'
 import { envAware, envShort } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { name as sociallikesWorkerName } from '@oyasaiserver/sociallikes/wrangler.json'
@@ -21,6 +21,11 @@ export class CloudflareStack extends TerraformStack {
 
     new CloudflareProvider(this, id, {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
+    })
+
+    new ZoneDnssec(this, `zone-dnssec`, {
+      zoneId: this.zoneId,
+      status: 'active'
     })
 
     for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
