@@ -1,5 +1,6 @@
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
+import { TotalTls } from '@cdktf/provider-cloudflare/lib/total-tls'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
 import { envAware, envShort } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
@@ -16,10 +17,15 @@ export class CloudflareStack extends TerraformStack {
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
-    new NamedCloudBackend(this, id)
+    new NamedCloudBackend(this, envAware(id))
 
     new CloudflareProvider(this, id, {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
+    })
+
+    new TotalTls(this, id, {
+      enabled: true,
+      zoneId: this.zoneId
     })
 
     for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
