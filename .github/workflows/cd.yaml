@@ -61,7 +61,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --if-present
-          secrets wrangler deploy --name ${{ matrix.app }}-${{ needs.resolve-env.outputs.environment }}
+          npm run deploy -- --name ${{ matrix.app }}-${{ needs.resolve-env.outputs.environment }}
         working-directory: apps/${{ matrix.app }}
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
