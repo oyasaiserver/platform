@@ -23,11 +23,6 @@ export class CloudflareStack extends TerraformStack {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
-    new TotalTls(this, `${id}-total-tls`, {
-      enabled: true,
-      zoneId: this.zoneId
-    })
-
     for (const workerName of [wikiWorkerName, sociallikesWorkerName]) {
       const subdomain = `${workerName}${
         secrets.ENVIRONMENT === 'production'
