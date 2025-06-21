@@ -1,13 +1,9 @@
-plugins {
-  kotlin("jvm")
-}
+plugins { kotlin("jvm") }
 
-repositories {
-  mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
-  implementation(platform(libs.serialization.bom))
-  implementation(libs.serialization.core)
-  implementation(libs.serialization.json)
+    implementation(platform(libs.serialization.bom))
+    implementation(libs.serialization.core)
+    implementation(libs.serialization.json)
 }
