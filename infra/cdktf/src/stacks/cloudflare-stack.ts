@@ -23,7 +23,7 @@ export class CloudflareStack extends TerraformStack {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
-    new TotalTls(this, id, {
+    new TotalTls(this, `${id}-total-tls`, {
       enabled: true,
       zoneId: this.zoneId
     })
@@ -35,7 +35,7 @@ export class CloudflareStack extends TerraformStack {
           : `.${envShort(secrets.ENVIRONMENT)}`
       }`
 
-      new DnsRecord(this, envAware(workerName, 'dns-record'), {
+      new DnsRecord(this, envAware(id, workerName, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
         name: subdomain,
@@ -44,7 +44,7 @@ export class CloudflareStack extends TerraformStack {
         content: this.dummyIp
       })
 
-      new WorkersRoute(this, envAware(workerName, 'workers-route'), {
+      new WorkersRoute(this, envAware(id, workerName, 'workers-route'), {
         zoneId: this.zoneId,
         pattern: `${subdomain}.oyasai.io/*`,
         script: workerName
