@@ -22,8 +22,8 @@
   },
   "files": [],
   "references": [
-    { "path": "assets" },
     { "path": "apps/wiki" },
+    { "path": "apps/sociallikes" },
     { "path": "gen/ts" },
     { "path": "infra/cdktf" },
     { "path": "lib/ts" },
