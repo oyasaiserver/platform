@@ -34,39 +34,26 @@ for (const origin of await readdir(src)) {
     .filter(dirent => dirent.isFile())
     .map(async file => {
       const content = await readFileContent(join(file.parentPath, file.name))
-      if (origin === 'json') {
-        const schema = JSON.parse(content)
-        const { dir, name } = parse(file.name)
-        await writeFileSafe(
-          join(
-            out,
-            'ts',
-            'src',
-            file.parentPath.replace(src, ''),
-            `${name}.ts`
-          ),
-          await ts({ schema, name })
-        )
-        await writeFileSafe(
-          join(
-            out,
-            'kotlin',
-            'src',
-            file.parentPath.replace(src, ''),
-            `${name}.kt`
-          ),
-          await kotlin({
-            schema,
-            name,
-            dir,
-            src
-          })
-        )
+      const inner = file.parentPath.substring(src.length)
+      switch (origin) {
+        case 'json': {
+          const schema = JSON.parse(content)
+          const { dir, name } = parse(file.name)
+          await writeFileSafe(
+            `${out}/ts/src/${inner}/${name}.ts`,
+            await ts({ schema, name })
+          )
+          await writeFileSafe(
+            `${out}/kotlin/src/${inner}/${name}.kt`,
+            await kotlin({ schema, name, dir, src })
+          )
+          break
+        }
       }
     })
   await Promise.all(promises)
 }
 
 await spinner('format', async () => {
-  await $`npm run check && ./gradlew spotlessApply`
+  await $`npm run check & ./gradlew spotlessApply`
 })

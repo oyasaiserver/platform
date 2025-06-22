@@ -1,4 +1,4 @@
-import { type Repository } from '@oyasaiserver/gen/schema/repository'
+import { type Repository } from '@oyasaiserver/gen/json/repository'
 
 export const repository: Repository = {
   organization: 'oyasaiserver',
