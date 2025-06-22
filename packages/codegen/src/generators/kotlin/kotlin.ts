@@ -11,11 +11,10 @@ import { Kotlin } from '../../languages/kotlin.ts'
 export type Params = Readonly<{
   schema: JsonSchema
   name: string
-  dir: string
-  src: string
+  inner: string
 }>
 
-export async function kotlin({ schema, name, src, dir }: Params) {
+export async function kotlin({ schema, name, inner }: Params) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore())
   await schemaInput.addSource({
     name,
@@ -28,7 +27,7 @@ export async function kotlin({ schema, name, src, dir }: Params) {
     inputData,
     leadingComments: [],
     rendererOptions: {
-      package: `io.oyasai.gen.${src}${dir ? `.${dir.replace('/', '.')}` : ''}`
+      package: `io.oyasai.gen${inner.replaceAll('/', '.')}`
     }
   })
   return ['@file:Suppress("ktlint")', ...result.lines].join(EOL)
