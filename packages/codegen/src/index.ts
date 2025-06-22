@@ -1,68 +1,61 @@
-#!/usr/bin/env tsx
 import { readdir, rm } from 'node:fs/promises'
 import { join, parse } from 'node:path'
-import { readme } from '@oyasaiserver/assets/readme.tsx'
-import { directory } from '@oyasaiserver/lib/directory'
-import { readFileJson, writeFileSafe } from '@oyasaiserver/lib/fs'
-import { ensure } from '@oyasaiserver/lib/utils'
-import { $, argv, spinner } from '@oyasaiserver/lib/zx'
+import { readFileContent, writeFileSafe } from '@oyasaiserver/lib/fs'
+import { renderToString } from '@oyasaiserver/lib/preact'
+import { $, spinner } from '@oyasaiserver/lib/zx'
 import { pascalCase } from 'change-case'
-import type { JsonSchema } from 'json-schema-to-zod'
-import { gradle } from './generators/gradle.ts'
-import { json } from './generators/json.ts'
-import { kotlin } from './generators/kotlin.ts'
-import { md } from './generators/md.ts'
-import { ts } from './generators/ts.ts'
+import { readme } from '../assets/readme.tsx'
+import { kotlin } from './generators/kotlin/kotlin.ts'
+import { ktFixtures } from './generators/kotlin/kt-fixtures.ts'
+import { ts } from './generators/ts/ts.ts'
+import { tsFixtures } from './generators/ts/ts-fixtures.ts'
 
-const src = join(directory.root, ensure(argv.src))
-const out = join(directory.root, ensure(argv.out))
+const src = 'schema'
+const out = 'gen'
 
-await spinner('reset', async () => {
-  await rm(out, {
-    force: true,
-    recursive: true
-  })
+await rm(out, {
+  recursive: true,
+  force: true
 })
 
-await spinner('generate', async () => {
-  await json(`${out}/ts`)
-  await gradle(`${out}/kotlin`)
-  const paths = await readdir(src, {
-    recursive: true
+// README.md
+await writeFileSafe(`${out}/md/README.md`, renderToString(readme))
+
+// write fixtures
+await tsFixtures(`${out}/ts`)
+await ktFixtures(`${out}/kotlin`)
+
+for (const origin of await readdir(src)) {
+  const dirents = await readdir(join(src, origin), {
+    recursive: true,
+    withFileTypes: true
   })
-  const promises = paths
-    .filter(path => path.endsWith('.json'))
-    .map(async path => {
-      const { name, dir } = parse(path)
-      const schema = await readFileJson<JsonSchema>(`${src}/${path}`)
-      await writeFileSafe(
-        `${out}/ts/src/${argv.src}/${dir}/${name}.ts`,
-        await ts({
-          schema,
-          name
-        })
-      )
-      await writeFileSafe(
-        `${out}/kotlin/src/main/kotlin/io/oyasai/gen/${argv.src}/${dir}/${pascalCase(name)}.kt`,
-        await kotlin({
-          schema,
-          name,
-          dir,
-          src: argv.src
-        })
-      )
+  const promises = dirents
+    .filter(dirent => dirent.isFile())
+    .map(async file => {
+      const content = await readFileContent(join(file.parentPath, file.name))
+      const inner = file.parentPath.substring(src.length)
+      switch (origin) {
+        case 'json': {
+          const schema = JSON.parse(content)
+          const { name } = parse(file.name)
+          await writeFileSafe(
+            `${out}/ts/src/${inner}/${name}.ts`,
+            await ts({ schema, name })
+          )
+          await writeFileSafe(
+            `${out}/kotlin/src/main/kotlin/io/oyasai/gen/${inner}/${pascalCase(name)}.kt`,
+            await kotlin({ schema, name, inner })
+          )
+          break
+        }
+      }
     })
   await Promise.all(promises)
-  await md({
-    dir: `${out}/md`,
-    component: readme,
-    filename: 'README.md'
-  })
-})
+}
 
 await spinner('format', async () => {
   await $({
-    cwd: directory.root,
-    verbose: true
-  })`npm run check && ./gradlew spotlessApply`
+    nothrow: true
+  })`npm run check & ./gradlew spotlessApply`
 })

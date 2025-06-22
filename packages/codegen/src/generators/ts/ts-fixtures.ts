@@ -1,7 +1,7 @@
 import { mkdir } from 'node:fs/promises'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
 
-export async function json(dir: string) {
+export async function tsFixtures(dir: string) {
   await mkdir(dir, {
     recursive: true
   })

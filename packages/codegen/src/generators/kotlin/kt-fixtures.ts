@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 
-export async function gradle(dst: string) {
+export async function ktFixtures(dst: string) {
   await mkdir(dst, {
     recursive: true
   })

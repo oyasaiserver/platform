@@ -6,7 +6,7 @@
     "deploy": "secrets cdktf deploy '*' --auto-approve"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "^13.0.0",
+    "@cdktf/provider-cloudflare": "^13.1.0",
     "@cdktf/provider-github": "^15.0.0",
     "constructs": "^10.4.2",
     "yaml": "^2.8.0"

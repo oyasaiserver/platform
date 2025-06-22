@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "codegen": "src/index.ts"
+    "codegen": "bin/codegen.ts"
   },
   "dependencies": {
     "change-case": "^5.4.4",
