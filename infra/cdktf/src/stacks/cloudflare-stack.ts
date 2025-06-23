@@ -51,16 +51,16 @@ export class CloudflareStack extends TerraformStack {
         pattern: `${subdomain}.oyasai.io/*`,
         script: envAware(worker)
       })
+    }
 
-      for (const database of this.databases) {
-        new D1Database(this, envAware(id, database, 'd1-database'), {
-          accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-          name: envAware(database),
-          readReplication: {
-            mode: 'disabled'
-          }
-        })
-      }
+    for (const database of this.databases) {
+      new D1Database(this, envAware(id, database, 'd1-database'), {
+        accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+        name: envAware(database),
+        readReplication: {
+          mode: 'disabled'
+        }
+      })
     }
   }
 }
