@@ -1,5 +1,10 @@
 import '@oyasaiserver/lib/shims/preact'
-import { repository } from '@oyasaiserver/lib/repository'
+import {
+  description,
+  homepage,
+  name,
+  organization
+} from '@oyasaiserver/config/repository.json'
 
 declare module 'preact' {
   namespace JSX {
@@ -12,9 +17,13 @@ declare module 'preact' {
 export const readme = (
   <>
     <p align='center'>
-      <img src={repository.icon} height='96' alt='icon' />
+      <img
+        src={`https://avatars.githubusercontent.com/${organization}`}
+        height='96'
+        alt='icon'
+      />
     </p>
-    <h3 align='center'>{repository.name}</h3>
-    <p align='center'>{repository.description}</p>
+    <h3 align='center'>{name}</h3>
+    <p align='center'>{description}</p>
   </>
 )
