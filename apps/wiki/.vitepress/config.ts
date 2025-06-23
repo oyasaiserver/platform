@@ -1,4 +1,4 @@
-import { repository } from '@oyasaiserver/lib/repository'
+import { name, organization } from '@oyasaiserver/config/repository.json'
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
@@ -9,8 +9,10 @@ export default defineConfig({
     search: {
       provider: 'local'
     },
-    logo: repository.icon,
-    socialLinks: [{ icon: 'github', link: repository.url }],
+    logo: `https://avatars.githubusercontent.com/${organization}`,
+    socialLinks: [
+      { icon: 'github', link: `https://github.com/${organization}/${name}` }
+    ],
     sidebar: [
       {
         text: 'Examples',
