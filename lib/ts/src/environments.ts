@@ -9,7 +9,7 @@ export function envAware(...fragments: string[]) {
 export function envShort(environment: Environment) {
   switch (environment) {
     case 'production':
-      return ''
+      return 'prod'
     case 'development':
       return 'dev'
     case 'local':

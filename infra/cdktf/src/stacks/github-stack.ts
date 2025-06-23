@@ -9,7 +9,7 @@ import {
   homepage,
   name,
   organization
-} from '@oyasaiserver/config/repository.json'
+} from '@oyasaiserver/config/repository.json' with { type: 'json' }
 import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'

@@ -1,4 +1,6 @@
-import { name, organization } from '@oyasaiserver/config/repository.json'
+import { name, organization } from '@oyasaiserver/config/repository.json' with {
+  type: 'json'
+}
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
