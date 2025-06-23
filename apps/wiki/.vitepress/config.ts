@@ -1,6 +1,4 @@
-import { name, organization } from '@oyasaiserver/config/repository.json' with {
-  type: 'json'
-}
+// FIXME - can't import json module directly in config
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
@@ -11,9 +9,9 @@ export default defineConfig({
     search: {
       provider: 'local'
     },
-    logo: `https://avatars.githubusercontent.com/${organization}`,
+    logo: `https://avatars.githubusercontent.com/oyasaiserver`,
     socialLinks: [
-      { icon: 'github', link: `https://github.com/${organization}/${name}` }
+      { icon: 'github', link: `https://github.com/oyasaiserver/platform` }
     ],
     sidebar: [
       {
