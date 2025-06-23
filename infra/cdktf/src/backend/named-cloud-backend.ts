@@ -1,4 +1,6 @@
-import { organization } from '@oyasaiserver/config/repository.json'
+import { organization } from '@oyasaiserver/config/repository.json' with {
+  type: 'json'
+}
 import { CloudBackend, NamedCloudWorkspace } from 'cdktf'
 import type { Construct } from 'constructs'
 

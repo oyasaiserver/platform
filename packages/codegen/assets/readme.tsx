@@ -1,10 +1,9 @@
 import '@oyasaiserver/lib/shims/preact'
 import {
   description,
-  homepage,
   name,
   organization
-} from '@oyasaiserver/config/repository.json'
+} from '@oyasaiserver/config/repository.json' with { type: 'json' }
 
 declare module 'preact' {
   namespace JSX {
