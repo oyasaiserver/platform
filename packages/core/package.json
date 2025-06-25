@@ -2,7 +2,6 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/index.cjs",
   "bin": "dist/bin",
   "scripts": {
     "build": "tsx scripts/build.ts",
