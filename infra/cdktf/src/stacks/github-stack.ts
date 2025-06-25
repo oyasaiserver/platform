@@ -70,10 +70,6 @@ export class GitHubStack extends TerraformStack {
         }
       },
       rules: {
-        mergeQueue: {
-          groupingStrategy: 'ALLGREEN',
-          mergeMethod: 'SQUASH'
-        },
         pullRequest: {
           requiredApprovingReviewCount: 1,
           requireCodeOwnerReview: true,
