@@ -14,7 +14,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
-import { parse } from 'yaml'
+import { YAML } from 'zx'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
@@ -99,7 +99,7 @@ export class GitHubStack extends TerraformStack {
     return ['ci.yaml', 'pr.yaml'].flatMap(file => {
       const path = join(directory.root, '.github/workflows', file)
       const content = readFileSync(path).toString()
-      const { jobs } = parse(content)
+      const { jobs } = YAML.parse(content)
       return Object.keys(jobs)
     })
   }
