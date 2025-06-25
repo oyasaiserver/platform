@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { $ } from '@oyasaiserver/lib/zx'
+import { $ } from 'zx'
 import { secrets } from '../src/secrets.ts'
 
 $({

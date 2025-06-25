@@ -8,7 +8,7 @@ export type Params = Readonly<{
 
 export async function ts({ schema, name }: Params) {
   return `
-    import { z } from '@oyasaiserver/lib/zod'
+    import { z } from 'zod'
     
     export const ${camelCase(name)} = ${jsonSchemaToZod(schema)}
     
