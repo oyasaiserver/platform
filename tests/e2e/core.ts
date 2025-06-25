@@ -1,5 +1,5 @@
 import { match } from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { after, before, describe, test } from 'node:test'
 import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { $ } from 'zx'
@@ -7,17 +7,22 @@ import { $ } from 'zx'
 await describe(import.meta.filename, async () => {
   $.cwd = `${directory.root}/packages/core`
 
-  await test('build-and-start', async () => {
+  const container = `server-minecraft-main-${secrets.ENVIRONMENT}-1`
+
+  before(async () => {
     await $`npm run start`
   })
 
-  const container = `server-minecraft-main-${secrets.ENVIRONMENT}-1`
-
-  console.log((await $`docker ps`).text())
-
-  const logs = (await $`docker logs ${container}`).text()
+  async function getLogs() {
+    return (await $`docker logs ${container}`).text()
+  }
 
   await test('launched-successfully', async () => {
-    match(logs, /Done \([^)]*s\)! For help, type "help"/)
+    match(await getLogs(), /Done \([^)]*s\)! For help, type "help"/)
+  })
+
+  after(async () => {
+    await $`docker stop ${container}`
+    await $`docker rm ${container}`
   })
 })
