@@ -1,7 +1,5 @@
-import '@oyasaiserver/lib/shims/require'
 import { writeFile } from 'node:fs/promises'
 import { getAsset } from 'node:sea'
-import { TextDecoder } from 'node:util'
 import { decode } from '@oyasaiserver/lib/text'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { spinner } from '@oyasaiserver/lib/zx'
@@ -11,16 +9,16 @@ import { Cleaner } from './services/cleaner.ts'
 import { DockerCompose } from './services/docker-compose.ts'
 import { applyOverlays } from './services/overlays.ts'
 
-const ENVIRONMENT = process.env.ENVIRONMENT || 'local'
+const environment = process.env.ENVIRONMENT || 'local'
 
 async function main() {
   await spinner('docker-compose-down', async () => {
-    await DockerCompose.down(ENVIRONMENT)
+    await DockerCompose.down(environment)
   })
 
   await spinner('backup-clean-and-restore', async () => {
     await Cleaner.clean({
-      dir: `${ENVIRONMENT}/minecraft-main`,
+      dir: `${environment}/minecraft-main`,
       except: clean.except
     })
   })
@@ -29,7 +27,7 @@ async function main() {
     const seaConfig = decode(getAsset(config.sea.file))
     const { assets } = JSON.parse(seaConfig) || {}
     const files = Object.keys(assets) as string[]
-    await applyOverlays('overlays', ENVIRONMENT, files)
+    await applyOverlays('overlays', environment, files)
   })
 
   await spinner('clone-compose-yaml', async () => {
@@ -38,7 +36,7 @@ async function main() {
   })
 
   await spinner('docker-compose-up', async () => {
-    await DockerCompose.up(ENVIRONMENT)
+    await DockerCompose.up(environment)
   })
 
   await spinner('upnp-create-mapping', async () => {
