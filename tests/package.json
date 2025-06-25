@@ -1,0 +1,11 @@
+{
+  "name": "@oyasaiserver/tests",
+  "type": "module",
+  "scripts": {
+    "test": "tsx --test **/*",
+    "test:e2e": "tsx --test e2e/*",
+    "test:integration": "tsx --test integration/*",
+    "test:system": "tsx --test system/*",
+    "test:unit": "tsx --test unit/*"
+  }
+}
