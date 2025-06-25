@@ -1,26 +1,19 @@
-import { copyFile, mkdir, readdir } from 'node:fs/promises'
-import { join } from 'node:path'
+import { getAsset } from 'node:sea'
+import { writeFileSafe } from '@oyasaiserver/lib/fs'
+import { join, relative } from 'path'
 
-export class Overlays {
-  public static async apply(overlay: string, target: string): Promise<void> {
-    const entries = await readdir(overlay, {
-      withFileTypes: true
+export async function applyOverlays(
+  overlay: string,
+  target: string,
+  files: string[]
+) {
+  const promises = files
+    .filter(file => file.startsWith(overlay))
+    .map(async file => {
+      const relativePath = relative(overlay, file)
+      const src = file
+      const dst = join(target, relativePath)
+      await writeFileSafe(dst, Buffer.from(getAsset(src)))
     })
-
-    for (const entry of entries) {
-      const src = join(overlay, entry.name)
-      const dst = join(target, entry.name)
-
-      if (entry.isDirectory()) {
-        await mkdir(dst, {
-          recursive: true
-        })
-        await Overlays.apply(src, dst)
-        continue
-      }
-      if (entry.isFile()) {
-        await copyFile(src, dst)
-      }
-    }
-  }
+  await Promise.all(promises)
 }

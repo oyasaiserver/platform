@@ -2,16 +2,20 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "files": [
-    "dist",
-    "overlays",
-    "compose.yaml"
-  ],
+  "bin": "dist/bin",
   "scripts": {
-    "build": "tsup",
+    "build": "tsx scripts/build.ts",
     "deploy": "tsx scripts/deploy.ts",
     "prestart": "npm run build",
-    "start": "cp dist/* server && cd server && node ."
+    "start": "cp dist/bin server && cd server && ./bin"
+  },
+  "config": {
+    "sea": {
+      "file": "sea-config.json",
+      "main": "dist/index.cjs",
+      "output": "dist/sea.blob",
+      "disableExperimentalSEAWarning": true
+    }
   },
   "dependencies": {
     "decompress": "^4.2.1",
@@ -19,9 +23,7 @@
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
+    "postject": "^1.0.0-alpha.6",
     "tsup": "^8.5.0"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
