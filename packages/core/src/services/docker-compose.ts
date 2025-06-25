@@ -1,4 +1,4 @@
-import { $ } from '@oyasaiserver/lib/zx'
+import { $ } from 'zx'
 
 export class DockerCompose {
   private static readonly base = 'docker compose --file compose.yaml'.split(' ')

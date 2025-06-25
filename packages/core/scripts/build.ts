@@ -1,9 +1,9 @@
 import { cp, readdir, readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
-import { $, spinner } from '@oyasaiserver/lib/zx'
 import { inject } from 'postject'
 import { build } from 'tsup'
+import { $, spinner } from 'zx'
 import { bin, config } from '../package.json'
 
 await build({

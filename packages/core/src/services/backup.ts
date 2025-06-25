@@ -1,6 +1,6 @@
 import { mkdir, readdir, rm, stat } from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
-import { $ } from '@oyasaiserver/lib/zx'
+import { $ } from 'zx'
 
 export class Backup {
   private readonly name: string

@@ -2,7 +2,7 @@
   "name": "@oyasaiserver/tests",
   "type": "module",
   "scripts": {
-    "test": "tsx --test **/*",
-    "test:e2e": "tsx --test e2e/*"
+    "all": "tsx --test **/*",
+    "e2e": "tsx --test e2e/*"
   }
 }

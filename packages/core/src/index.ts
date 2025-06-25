@@ -2,7 +2,7 @@ import { writeFile } from 'node:fs/promises'
 import { getAsset } from 'node:sea'
 import { decode } from '@oyasaiserver/lib/text'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
-import { spinner } from '@oyasaiserver/lib/zx'
+import { spinner } from 'zx'
 import { clean } from '../config.json'
 import { config } from '../package.json'
 import { Cleaner } from './services/cleaner.ts'
@@ -40,6 +40,9 @@ async function main() {
   })
 
   await spinner('upnp-create-mapping', async () => {
+    if (environment === 'local') {
+      return
+    }
     const client = new UpnpClient()
     await client.createMapping({
       private: 25565,
