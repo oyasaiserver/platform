@@ -12,6 +12,9 @@ await describe(import.meta.filename, async () => {
   })
 
   const container = `server-minecraft-main-${secrets.ENVIRONMENT}-1`
+
+  console.log((await $`docker ps`).text())
+
   const logs = (await $`docker logs ${container}`).text()
 
   await test('launched-successfully', async () => {
