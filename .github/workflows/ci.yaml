@@ -25,3 +25,17 @@ jobs:
       - run: |
           npm run codegen
           test -z "$(git status --porcelain)"
+
+  test:
+    strategy:
+      matrix:
+        test: [e2e]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
+      - uses: ./.github/actions/setup-node
+      - run: |
+          npm run ${{ matrix.test }}
+        working-directory: tests
