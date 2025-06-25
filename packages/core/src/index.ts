@@ -40,12 +40,16 @@ async function main() {
   })
 
   await spinner('upnp-create-mapping', async () => {
-    const client = new UpnpClient()
-    await client.createMapping({
-      private: 25565,
-      public: 25565
-    })
-    client.close()
+    try {
+      const client = new UpnpClient()
+      await client.createMapping({
+        private: 25565,
+        public: 25565
+      })
+      client.close()
+    } catch {
+      console.warn('UPnP mapping failed')
+    }
   })
 }
 
