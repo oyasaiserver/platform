@@ -9,13 +9,6 @@ export async function readFileContent(
   return buffer.toString()
 }
 
-export async function readFileJson<T>(
-  ...args: Parameters<typeof readFile>
-): Promise<T> {
-  const content = await readFileContent(...args)
-  return JSON.parse(content) as T
-}
-
 export async function writeJsonFile<T>(
   path: PathLike | FileHandle,
   content: T

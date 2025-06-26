@@ -1,10 +1,10 @@
+#!/usr/bin/env tsx
 import { readdir, rm } from 'node:fs/promises'
 import { join, parse } from 'node:path'
 import { readFileContent, writeFileSafe } from '@oyasaiserver/lib/fs'
-import { renderToString } from '@oyasaiserver/lib/preact'
 import { pascalCase } from 'change-case'
 import { $, spinner } from 'zx'
-import { readme } from '../assets/readme.tsx'
+import { readme } from '../assets/readme.ts'
 import { kotlin } from './generators/kotlin/kotlin.ts'
 import { ktFixtures } from './generators/kotlin/kt-fixtures.ts'
 import { ts } from './generators/ts/ts.ts'
@@ -19,7 +19,7 @@ await rm(out, {
 })
 
 // README.md
-await writeFileSafe(`${out}/md/README.md`, renderToString(readme))
+await writeFileSafe(`${out}/md/README.md`, readme)
 
 // write fixtures
 await tsFixtures(`${out}/ts`)

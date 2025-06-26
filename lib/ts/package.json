@@ -10,15 +10,8 @@
   "bin": {
     "secrets": "bin/secrets.ts"
   },
-  "scripts": {
-    "start": "tsx src/index.ts"
-  },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.45.1",
-    "fast-xml-parser": "^5.2.5",
-    "preact": "^10.26.9",
-    "preact-render-to-string": "^6.5.13",
-    "zod": "^3.25.67",
-    "zx": "^8.6.0"
+    "fast-xml-parser": "^5.2.5"
   }
 }
