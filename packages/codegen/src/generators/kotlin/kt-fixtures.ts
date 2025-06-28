@@ -16,9 +16,6 @@ export async function ktFixtures(dst: string) {
       }
 
       dependencies {
-        implementation(platform(libs.serialization.bom))
-        implementation(libs.serialization.core)
-        implementation(libs.serialization.json)
       }
     `
   )
