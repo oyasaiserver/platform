@@ -1,0 +1,9 @@
+{
+  "name": "@oyasaiserver/api",
+  "type": "module",
+  "scripts": {
+    "deploy": "secrets wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "dependencies": {}
+}

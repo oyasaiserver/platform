@@ -55,7 +55,7 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     strategy:
       matrix:
-        app: [ wiki, sociallikes ]
+        app: [ api, wiki, sociallikes ]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
