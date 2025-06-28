@@ -22,6 +22,7 @@
   },
   "files": [],
   "references": [
+    { "path": "apps/api" },
     { "path": "apps/wiki" },
     { "path": "apps/sociallikes" },
     { "path": "gen/ts" },

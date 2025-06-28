@@ -13,7 +13,7 @@ export class CloudflareStack extends TerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
-  private readonly workers = ['wiki', 'sociallikes']
+  private readonly workers = ['api', 'wiki', 'sociallikes']
   private readonly databases = ['events']
 
   public constructor(scope: Construct, id: string) {
