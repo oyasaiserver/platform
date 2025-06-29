@@ -7,7 +7,7 @@ plugins {
 repositories { mavenCentral() }
 
 spotless {
-    val excludes = listOf("node_modules/**/*", "gen/**/*")
+    val excludes = listOf("node_modules/**/*")
 
     java {
         target("**/*.java")
