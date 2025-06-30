@@ -7,7 +7,7 @@ plugins {
 repositories { mavenCentral() }
 
 spotless {
-    val excludes = listOf("node_modules")
+    val excludes = listOf("node_modules/**/*")
 
     kotlin {
         targetExclude(excludes)
