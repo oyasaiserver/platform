@@ -25,12 +25,3 @@ await spinner('proto', async () => {
   await tsFixtures('gen/proto/ts')
   await ktFixtures('gen/proto/kotlin')
 })
-
-// await $({
-//   cwd: directory.root
-// })`${protoc} --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) --proto_path=proto --ts_proto_out=gen/proto $(find proto -name '*.proto')`
-
-await $({
-  nothrow: true,
-  quiet: false
-})`${protoc} --proto_path=proto --ts_proto_out=gen/proto proto/hello.proto`
