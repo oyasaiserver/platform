@@ -6,10 +6,8 @@
     "codegen": "src/index.ts"
   },
   "dependencies": {
-    "@bufbuild/buf": "^1.55.1",
     "@bufbuild/protoc-gen-es": "^2.6.0",
     "change-case": "^5.4.4",
-    "json-schema-to-zod": "^2.6.1",
-    "quicktype-core": "^23.2.6"
+    "grpc-tools": "^1.13.0"
   }
 }

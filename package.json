@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
     "check": "biome check --write && sort-package-json '**/package.json' --quiet",
-    "codegen": "codegen"
+    "codegen": "codegen && (npm run check & ./gradlew spotlessApply)"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
