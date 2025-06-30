@@ -1,8 +1,7 @@
 #!/usr/bin/env tsx
 import { rm } from 'node:fs/promises'
-import { directory } from '@oyasaiserver/lib/directory'
 import { writeFileSafe } from '@oyasaiserver/lib/fs'
-import { $, spinner } from 'zx'
+import { spinner } from 'zx'
 import { readme } from '../assets/readme.ts'
 import { ktFixtures } from './generators/kotlin/kt-fixtures.ts'
 import { tsFixtures } from './generators/ts/ts-fixtures.ts'
