@@ -4,7 +4,7 @@ import {
   organization
 } from '@oyasaiserver/config/repository.json' with { type: 'json' }
 
-// language=tsx
+// language=html
 export const readme = `
   <p align='center'>
     <img

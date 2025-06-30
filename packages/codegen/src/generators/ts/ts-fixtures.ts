@@ -16,7 +16,7 @@ export async function tsFixtures(dir: string) {
     }
   })
   await writeJsonFile(`${dir}/tsconfig.json`, {
-    extends: '../../tsconfig.json',
+    extends: '../../../tsconfig.json',
     include: ['**/*']
   })
 }

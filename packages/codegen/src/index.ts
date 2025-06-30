@@ -1,33 +1,36 @@
 #!/usr/bin/env tsx
-import { readdir, rm } from 'node:fs/promises'
-import { join, parse } from 'node:path'
+import { rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
-import { readFileContent, writeFileSafe } from '@oyasaiserver/lib/fs'
-import { pascalCase } from 'change-case'
+import { writeFileSafe } from '@oyasaiserver/lib/fs'
 import { $, spinner } from 'zx'
 import { readme } from '../assets/readme.ts'
-import { kotlin } from './generators/kotlin/kotlin.ts'
 import { ktFixtures } from './generators/kotlin/kt-fixtures.ts'
-import { ts } from './generators/ts/ts.ts'
 import { tsFixtures } from './generators/ts/ts-fixtures.ts'
 
 const src = 'schema'
 const out = 'gen'
+
+const protoc = 'grpc_tools_node_protoc'
 
 await rm(out, {
   recursive: true,
   force: true
 })
 
-// README.md
-await writeFileSafe(`${out}/md/README.md`, readme)
-
-// write fixtures
-await tsFixtures(`${out}/ts`)
-await ktFixtures(`${out}/kotlin`)
-
-await spinner('format', async () => {
-  await $({
-    nothrow: true
-  })`npm run check & ./gradlew spotlessApply`
+await spinner('md', async () => {
+  await writeFileSafe(`${out}/md/README.md`, readme)
 })
+
+await spinner('proto', async () => {
+  await tsFixtures('gen/proto/ts')
+  await ktFixtures('gen/proto/kotlin')
+})
+
+// await $({
+//   cwd: directory.root
+// })`${protoc} --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) --proto_path=proto --ts_proto_out=gen/proto $(find proto -name '*.proto')`
+
+await $({
+  nothrow: true,
+  quiet: false
+})`${protoc} --proto_path=proto --ts_proto_out=gen/proto proto/hello.proto`

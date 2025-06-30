@@ -13,7 +13,6 @@ repositories {
 dependencies {
     compileOnly(libs.paper.api)
     implementation(project(":lib:kotlin"))
-    implementation(project(":gen:kotlin"))
 }
 
 configurations.configureEach {
