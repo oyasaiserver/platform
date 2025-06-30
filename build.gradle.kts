@@ -9,12 +9,6 @@ repositories { mavenCentral() }
 spotless {
     val excludes = listOf("node_modules")
 
-    java {
-        targetExclude(excludes)
-        target("**/*.java")
-        googleJavaFormat()
-    }
-
     kotlin {
         targetExclude(excludes)
         target("**/*.kt")
