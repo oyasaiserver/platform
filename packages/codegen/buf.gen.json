@@ -1,0 +1,33 @@
+{
+  "version": "v2",
+  "inputs": [
+    {
+      "directory": "proto"
+    }
+  ],
+  "plugins": [
+    {
+      "local": "protoc-gen-es",
+      "out": "gen/proto/ts/src",
+      "include_imports": true,
+      "opt": "target=ts"
+    },
+    {
+      "protoc_builtin": "kotlin",
+      "out": "gen/proto/kotlin/src/main/kotlin"
+    },
+    {
+      "protoc_builtin": "java",
+      "out": "gen/proto/kotlin/src/main/java"
+    }
+  ],
+  "managed": {
+    "enabled": true,
+    "override": [
+      {
+        "file_option": "java_package_prefix",
+        "value": "io.oyasai.proto"
+      }
+    ]
+  }
+}

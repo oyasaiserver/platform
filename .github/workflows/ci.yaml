@@ -26,6 +26,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
+      - uses: arduino/setup-protoc@v3
+        with:
+          version: '31.1' # sync with .tool-versions
       - run: |
           npm run codegen
           test -z "$(git status --porcelain)"
