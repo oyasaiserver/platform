@@ -34,6 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v25
+        with:
+          github_access_token: '${{ secrets.GITHUB_TOKEN }}'
       - uses: nicknovitski/nix-develop@v1
       - run: ./gradlew build --parallel
       - name: flatten-and-collect-jars
@@ -58,6 +61,9 @@ jobs:
         app: [ api, wiki, sociallikes ]
     steps:
       - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v25
+        with:
+          github_access_token: '${{ secrets.GITHUB_TOKEN }}'
       - uses: nicknovitski/nix-develop@v1
       - run: |
           npm ci
@@ -76,6 +82,9 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v25
+        with:
+          github_access_token: '${{ secrets.GITHUB_TOKEN }}'
       - uses: nicknovitski/nix-develop@v1
       - run: |
           npm ci
