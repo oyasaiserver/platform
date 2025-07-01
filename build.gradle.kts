@@ -7,18 +7,19 @@ plugins {
 repositories { mavenCentral() }
 
 spotless {
-    val excludes = listOf("node_modules/**/*")
-
     kotlin {
-        targetExclude(excludes)
-        target("**/*.kt")
-        ktfmt().kotlinlangStyle()
+        target("**/src/**/*.kt")
+        targetExclude("gen/**/*.kt")
         ktlint()
     }
 
+    kotlin {
+        target("**/src/**/*.kt")
+        ktfmt().kotlinlangStyle()
+    }
+
     kotlinGradle {
-        targetExclude(excludes)
-        target("**/*.gradle.kts")
+        target("**/src/**/*.gradle.kt")
         ktfmt().kotlinlangStyle()
         ktlint()
     }

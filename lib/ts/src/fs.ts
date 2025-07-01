@@ -2,6 +2,11 @@ import type { PathLike } from 'node:fs'
 import { type FileHandle, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 
+export const rf = {
+  recursive: true,
+  force: true
+} as const
+
 export async function readFileContent(
   ...args: Parameters<typeof readFile>
 ): Promise<string> {

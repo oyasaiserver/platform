@@ -1,7 +1,13 @@
 {
   "type": "module",
   "workspaces": [
-    "**"
+    "apps/*",
+    "config",
+    "gen/ts",
+    "infra/cdktf",
+    "lib/ts",
+    "packages/*",
+    "tests"
   ],
   "scripts": {
     "build": "tsc --build",
