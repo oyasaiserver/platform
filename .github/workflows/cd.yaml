@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-java
+      - uses: nicknovitski/nix-develop@v1
       - run: ./gradlew build --parallel
       - name: flatten-and-collect-jars
         # language=bash
@@ -58,8 +58,9 @@ jobs:
         app: [ api, wiki, sociallikes ]
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
+      - uses: nicknovitski/nix-develop@v1
       - run: |
+          npm ci
           npm run build --if-present
           npm run deploy -- --name ${{ matrix.app }}-${{ needs.resolve-env.outputs.environment }}
         working-directory: apps/${{ matrix.app }}
@@ -75,9 +76,9 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node
-      - uses: hashicorp/setup-terraform@v3
+      - uses: nicknovitski/nix-develop@v1
       - run: |
+          npm ci
           npm run build
           npm run deploy
         working-directory:

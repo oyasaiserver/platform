@@ -1,8 +1,0 @@
-name: Setup Homebrew
-
-runs:
-  using: composite
-  steps:
-    - run: |
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      shell: bash
