@@ -1,5 +1,13 @@
 [versions]
-paper-api = "1.21.1-R0.1-SNAPSHOT"
+kotlin = "2.2.0"
+spotless = "7.0.4"
+purpur-api = "1.21.5-R0.1-SNAPSHOT"
+shadow = "9.0.0-beta17"
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
-paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+shadow-plugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
+purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api" }

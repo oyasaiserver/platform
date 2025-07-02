@@ -1,18 +1,12 @@
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "2.2.0-Beta2"
     id("com.gradleup.shadow")
 }
 
-repositories {
-    mavenCentral()
-    maven("https://repo.purpurmc.org/snapshots")
-    maven("https://repo.essentialsx.net/snapshots/")
-}
-
 dependencies {
-    compileOnly(libs.paper.api)
+    compileOnly(libs.purpur.api)
     implementation(project(":lib:kotlin"))
+    implementation(project(":gen:proto:kotlin"))
 }
 
 configurations.configureEach {

@@ -1,12 +1,26 @@
 plugins {
-    id("com.gradleup.shadow") version "9.0.0-beta12" apply false
-    kotlin("jvm") version "2.2.0-Beta2" apply false
-    id("com.diffplug.spotless") version "7.0.3"
+    alias(libs.plugins.spotless)
 }
 
-repositories { mavenCentral() }
+buildscript {
+    dependencies {
+        classpath(libs.kotlin.plugin)
+        classpath(libs.shadow.plugin)
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://repo.purpurmc.org/snapshots")
+    }
+}
 
 spotless {
+    isEnforceCheck = false
+
     kotlin {
         target("**/src/**/*.kt")
         targetExclude("gen/**/*.kt")
