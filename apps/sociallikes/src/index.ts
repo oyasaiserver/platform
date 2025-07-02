@@ -1,7 +1,7 @@
-import { Hono } from 'hono'
+import { WorkerEntrypoint } from 'cloudflare:workers'
 
-const app = new Hono()
-
-app.get('/', c => c.text('Hello Cloudflare Workers!'))
-
-export default app
+export default class extends WorkerEntrypoint<Env> {
+  override async fetch(request: Request) {
+    return new Response('SocialLikes')
+  }
+}
