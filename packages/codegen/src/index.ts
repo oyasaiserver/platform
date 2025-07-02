@@ -17,9 +17,5 @@ await spinner('md', async () => {
 await spinner('proto', async () => {
   await cp(join(import.meta.dirname, '../static'), out, rf)
 
-  await $({
-    verbose: true,
-    quiet: false
-  })`buf generate --template ${JSON.stringify(bufGenJson)}`
-  // await $`echo '${JSON.stringify(bufGenJson)}'`
+  await $`buf generate --template ${JSON.stringify(bufGenJson)}`
 })

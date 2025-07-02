@@ -4,29 +4,27 @@
 
 // Generated files should ignore deprecation warnings
 @file:Suppress("DEPRECATION")
-package io.oyasai.proto.hello;
-
 @kotlin.jvm.JvmName("-initializehelloRequest")
-public inline fun helloRequest(block: io.oyasai.proto.hello.HelloRequestKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.hello.HelloRequest =
-  io.oyasai.proto.hello.HelloRequestKt.Dsl._create(io.oyasai.proto.hello.HelloRequest.newBuilder()).apply { block() }._build()
+public inline fun helloRequest(block: HelloRequestKt.Dsl.() -> kotlin.Unit): HelloRequest =
+  HelloRequestKt.Dsl._create(HelloRequest.newBuilder()).apply { block() }._build()
 /**
- * Protobuf type `hello.HelloRequest`
+ * Protobuf type `HelloRequest`
  */
 public object HelloRequestKt {
   @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
   @com.google.protobuf.kotlin.ProtoDslMarker
   public class Dsl private constructor(
-    private val _builder: io.oyasai.proto.hello.HelloRequest.Builder
+    private val _builder: HelloRequest.Builder
   ) {
     public companion object {
       @kotlin.jvm.JvmSynthetic
     @kotlin.PublishedApi
-      internal fun _create(builder: io.oyasai.proto.hello.HelloRequest.Builder): Dsl = Dsl(builder)
+      internal fun _create(builder: HelloRequest.Builder): Dsl = Dsl(builder)
     }
 
     @kotlin.jvm.JvmSynthetic
   @kotlin.PublishedApi
-    internal fun _build(): io.oyasai.proto.hello.HelloRequest = _builder.build()
+    internal fun _build(): HelloRequest = _builder.build()
 
     /**
      * `string name = 1 [json_name = "name"];`
@@ -47,6 +45,6 @@ public object HelloRequestKt {
   }
 }
 @kotlin.jvm.JvmSynthetic
-public inline fun io.oyasai.proto.hello.HelloRequest.copy(block: `io.oyasai.proto.hello`.HelloRequestKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.hello.HelloRequest =
-  `io.oyasai.proto.hello`.HelloRequestKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+public inline fun HelloRequest.copy(block: HelloRequestKt.Dsl.() -> kotlin.Unit): HelloRequest =
+  HelloRequestKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 

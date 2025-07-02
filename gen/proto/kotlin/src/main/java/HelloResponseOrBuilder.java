@@ -3,11 +3,9 @@
 // source: hello.proto
 // Protobuf Java Version: 4.31.1
 
-package io.oyasai.proto.hello;
-
 @com.google.protobuf.Generated
 public interface HelloResponseOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:hello.HelloResponse)
+    // @@protoc_insertion_point(interface_extends:HelloResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
