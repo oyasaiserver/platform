@@ -9,7 +9,6 @@
     {
       "local": "protoc-gen-es",
       "out": "gen/proto/ts/src",
-      "include_imports": true,
       "opt": "target=ts"
     },
     {
@@ -21,7 +20,7 @@
       "out": "gen/proto/kotlin/src/main/java"
     },
     {
-      "remote": "buf.build/connectrpc/kotlin",
+      "local": "packages/codegen/bin/protoc-gen-connect-kotlin",
       "out": "gen/proto/kotlin/src/main/kotlin"
     }
   ],
