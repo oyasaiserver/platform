@@ -6,6 +6,8 @@ import {
 } from '@connectrpc/connect/protocol'
 import { HelloService } from '@oyasaiserver/proto/hello_pb'
 import { Hono } from 'hono'
+import { logger } from 'hono/logger'
+import { prettyJSON } from 'hono/pretty-json'
 import { hello } from './services/hello.ts'
 
 const router = createConnectRouter().service(HelloService, hello)
@@ -17,15 +19,18 @@ for (const handler of router.handlers) {
 
 const app = new Hono<Env>()
 
-app.all('*', async ctx => {
-  const { pathname } = new URL(ctx.req.url)
-  const handler = handlers.get(pathname)
-  if (!handler) {
-    return ctx.notFound()
-  }
-  const req = universalServerRequestFromFetch(ctx.req.raw, {})
-  const res = await handler(req)
-  return universalServerResponseToFetch(res)
-})
+app
+  .use(logger())
+  .use(prettyJSON())
+  .all('*', async ctx => {
+    const { pathname } = new URL(ctx.req.url)
+    const handler = handlers.get(pathname)
+    if (!handler) {
+      return ctx.notFound()
+    }
+    const req = universalServerRequestFromFetch(ctx.req.raw, {})
+    const res = await handler(req)
+    return universalServerResponseToFetch(res)
+  })
 
 export default app
