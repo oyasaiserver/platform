@@ -5,5 +5,8 @@
   "minify": true,
   "observability": {
     "enabled": true
+  },
+  "vars": {
+    "BEARER": "unset"
   }
 }

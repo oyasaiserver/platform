@@ -16,7 +16,8 @@ export const secretsSchema = z
     GITHUB_APP_INSTALLATION_ID: z.string(),
     GITHUB_APP_PEM_FILE: z.string(),
     TF_API_TOKEN: z.string(),
-    TF_TOKEN_app_terraform_io: z.string()
+    TF_TOKEN_app_terraform_io: z.string(),
+    BEARER: z.string()
   })
   .strict()
   .readonly()
