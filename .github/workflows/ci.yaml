@@ -29,6 +29,7 @@ jobs:
       - uses: arduino/setup-protoc@v3
         with:
           version: '31.1' # sync with .tool-versions
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           npm run codegen
           test -z "$(git status --porcelain)"
