@@ -3,8 +3,6 @@
 // source: hello.proto
 // Protobuf Java Version: 4.31.1
 
-package io.oyasai.proto.hello;
-
 @com.google.protobuf.Generated
 public final class HelloProto {
   private HelloProto() {}
@@ -27,15 +25,15 @@ public final class HelloProto {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_hello_HelloRequest_descriptor;
+    internal_static_HelloRequest_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_hello_HelloRequest_fieldAccessorTable;
+      internal_static_HelloRequest_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_hello_HelloResponse_descriptor;
+    internal_static_HelloResponse_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_hello_HelloResponse_fieldAccessorTable;
+      internal_static_HelloResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -45,29 +43,27 @@ public final class HelloProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013hello.proto\022\005hello\"\"\n\014HelloRequest\022\022\n\004" +
-      "name\030\001 \001(\tR\004name\")\n\rHelloResponse\022\030\n\007mes" +
-      "sage\030\001 \001(\tR\007message2E\n\014HelloService\0225\n\010S" +
-      "ayHello\022\023.hello.HelloRequest\032\024.hello.Hel" +
-      "loResponseBW\n\025io.oyasai.proto.helloB\nHel" +
-      "loProtoP\001\242\002\003HXX\252\002\005Hello\312\002\005Hello\342\002\021Hello\\" +
-      "GPBMetadata\352\002\005Hellob\006proto3"
+      "\n\013hello.proto\"\"\n\014HelloRequest\022\022\n\004name\030\001 " +
+      "\001(\tR\004name\")\n\rHelloResponse\022\030\n\007message\030\001 " +
+      "\001(\tR\007message29\n\014HelloService\022)\n\010SayHello" +
+      "\022\r.HelloRequest\032\016.HelloResponseB\016B\nHello" +
+      "ProtoP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_hello_HelloRequest_descriptor =
+    internal_static_HelloRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_hello_HelloRequest_fieldAccessorTable = new
+    internal_static_HelloRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_hello_HelloRequest_descriptor,
+        internal_static_HelloRequest_descriptor,
         new java.lang.String[] { "Name", });
-    internal_static_hello_HelloResponse_descriptor =
+    internal_static_HelloResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_hello_HelloResponse_fieldAccessorTable = new
+    internal_static_HelloResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_hello_HelloResponse_descriptor,
+        internal_static_HelloResponse_descriptor,
         new java.lang.String[] { "Message", });
     descriptor.resolveAllFeaturesImmutable();
   }

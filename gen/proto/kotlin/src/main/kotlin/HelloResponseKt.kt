@@ -4,29 +4,27 @@
 
 // Generated files should ignore deprecation warnings
 @file:Suppress("DEPRECATION")
-package io.oyasai.proto.hello;
-
 @kotlin.jvm.JvmName("-initializehelloResponse")
-public inline fun helloResponse(block: io.oyasai.proto.hello.HelloResponseKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.hello.HelloResponse =
-  io.oyasai.proto.hello.HelloResponseKt.Dsl._create(io.oyasai.proto.hello.HelloResponse.newBuilder()).apply { block() }._build()
+public inline fun helloResponse(block: HelloResponseKt.Dsl.() -> kotlin.Unit): HelloResponse =
+  HelloResponseKt.Dsl._create(HelloResponse.newBuilder()).apply { block() }._build()
 /**
- * Protobuf type `hello.HelloResponse`
+ * Protobuf type `HelloResponse`
  */
 public object HelloResponseKt {
   @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
   @com.google.protobuf.kotlin.ProtoDslMarker
   public class Dsl private constructor(
-    private val _builder: io.oyasai.proto.hello.HelloResponse.Builder
+    private val _builder: HelloResponse.Builder
   ) {
     public companion object {
       @kotlin.jvm.JvmSynthetic
     @kotlin.PublishedApi
-      internal fun _create(builder: io.oyasai.proto.hello.HelloResponse.Builder): Dsl = Dsl(builder)
+      internal fun _create(builder: HelloResponse.Builder): Dsl = Dsl(builder)
     }
 
     @kotlin.jvm.JvmSynthetic
   @kotlin.PublishedApi
-    internal fun _build(): io.oyasai.proto.hello.HelloResponse = _builder.build()
+    internal fun _build(): HelloResponse = _builder.build()
 
     /**
      * `string message = 1 [json_name = "message"];`
@@ -47,6 +45,6 @@ public object HelloResponseKt {
   }
 }
 @kotlin.jvm.JvmSynthetic
-public inline fun io.oyasai.proto.hello.HelloResponse.copy(block: `io.oyasai.proto.hello`.HelloResponseKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.hello.HelloResponse =
-  `io.oyasai.proto.hello`.HelloResponseKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+public inline fun HelloResponse.copy(block: HelloResponseKt.Dsl.() -> kotlin.Unit): HelloResponse =
+  HelloResponseKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 

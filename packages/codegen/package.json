@@ -7,9 +7,7 @@
   },
   "dependencies": {
     "@bufbuild/buf": "^1.55.1",
-    "@bufbuild/protobuf": "^2.6.0",
     "@bufbuild/protoc-gen-es": "^2.6.0",
-    "@connectrpc/connect": "^2.0.2",
     "change-case": "^5.4.4",
     "grpc-tools": "^1.13.0"
   }

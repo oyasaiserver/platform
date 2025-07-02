@@ -5,5 +5,8 @@
     "deploy": "secrets wrangler deploy",
     "dev": "wrangler dev"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.6.0",
+    "@connectrpc/connect": "^2.0.2"
+  }
 }
