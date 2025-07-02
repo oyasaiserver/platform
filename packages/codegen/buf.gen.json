@@ -19,6 +19,10 @@
     {
       "protoc_builtin": "java",
       "out": "gen/proto/kotlin/src/main/java"
+    },
+    {
+      "remote": "buf.build/connectrpc/kotlin",
+      "out": "gen/proto/kotlin/src/main/kotlin"
     }
   ],
   "managed": {

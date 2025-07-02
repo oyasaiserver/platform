@@ -1,3 +1,3 @@
-plugins { kotlin("jvm") }
-
-repositories { mavenCentral() }
+plugins {
+    kotlin("jvm")
+}
