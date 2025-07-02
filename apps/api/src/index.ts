@@ -1,4 +1,3 @@
-import { WorkerEntrypoint } from 'cloudflare:workers'
 import { createConnectRouter } from '@connectrpc/connect'
 import {
   type UniversalHandler,
@@ -6,30 +5,27 @@ import {
   universalServerResponseToFetch
 } from '@connectrpc/connect/protocol'
 import { HelloService } from '@oyasaiserver/proto/hello_pb'
+import { Hono } from 'hono'
 import { hello } from './services/hello.ts'
 
-export default class extends WorkerEntrypoint<Env> {
-  private readonly router = createConnectRouter()
-  private readonly handlers = new Map<string, UniversalHandler>()
+const router = createConnectRouter().service(HelloService, hello)
 
-  public constructor(ctx: ExecutionContext, env: Env) {
-    super(ctx, env)
-    this.router.service(HelloService, hello)
-    for (const handler of this.router.handlers) {
-      this.handlers.set(handler.requestPath, handler)
-    }
-  }
-
-  public override async fetch(request: Request) {
-    const { pathname } = new URL(request.url)
-    const handler = this.handlers.get(pathname)
-    if (!handler) {
-      return new Response('Not Found', {
-        status: 404
-      })
-    }
-    const universalServerRequest = universalServerRequestFromFetch(request, {})
-    const universalServerResponse = await handler(universalServerRequest)
-    return universalServerResponseToFetch(universalServerResponse)
-  }
+const handlers = new Map<string, UniversalHandler>()
+for (const handler of router.handlers) {
+  handlers.set(handler.requestPath, handler)
 }
+
+const app = new Hono<Env>()
+
+app.all('*', async ctx => {
+  const { pathname } = new URL(ctx.req.url)
+  const handler = handlers.get(pathname)
+  if (!handler) {
+    return ctx.notFound()
+  }
+  const req = universalServerRequestFromFetch(ctx.req.raw, {})
+  const res = await handler(req)
+  return universalServerResponseToFetch(res)
+})
+
+export default app

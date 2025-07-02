@@ -4,8 +4,5 @@
   "scripts": {
     "deploy": "secrets wrangler deploy",
     "dev": "wrangler dev"
-  },
-  "dependencies": {
-    "hono": "^4.8.3"
   }
 }
