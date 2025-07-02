@@ -2,6 +2,7 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-17",
+  "minify": true,
   "assets": {
     "directory": ".vitepress/dist",
     "binding": "assets",
