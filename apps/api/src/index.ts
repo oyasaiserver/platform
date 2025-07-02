@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers'
 import { createConnectRouter } from '@connectrpc/connect'
 import {
   type UniversalHandler,
@@ -6,8 +7,8 @@ import {
 } from '@connectrpc/connect/protocol'
 import { HelloService } from '@oyasaiserver/proto/hello_pb'
 import { Hono } from 'hono'
+import { bearerAuth } from 'hono/bearer-auth'
 import { logger } from 'hono/logger'
-import { prettyJSON } from 'hono/pretty-json'
 import { hello } from './services/hello.ts'
 
 const router = createConnectRouter().service(HelloService, hello)
@@ -17,11 +18,15 @@ for (const handler of router.handlers) {
   handlers.set(handler.requestPath, handler)
 }
 
-const app = new Hono<Env>()
+const app = new Hono<{ Bindings: Cloudflare.Env }>()
 
 app
   .use(logger())
-  .use(prettyJSON())
+  .use(
+    bearerAuth({
+      token: env.BEARER
+    })
+  )
   .all('*', async ctx => {
     const { pathname } = new URL(ctx.req.url)
     const handler = handlers.get(pathname)
