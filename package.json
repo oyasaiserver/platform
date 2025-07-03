@@ -13,11 +13,12 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "ncu --deep --upgrade --reject @oyasaiserver/* --install always",
-    "check": "biome check --write && sort-package-json '**/package.json' --quiet",
+    "check": "biome check --write && sort-package-json '**/package.json' --quiet && buf format --write",
     "codegen": "codegen && (npm run check & ./gradlew spotlessApply)"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
+    "@bufbuild/buf": "^1.55.1",
     "@types/node": "^24.0.10",
     "npm-check-updates": "^18.0.1",
     "sort-package-json": "^3.4.0",

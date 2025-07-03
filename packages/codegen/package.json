@@ -6,7 +6,6 @@
     "codegen": "src/index.ts"
   },
   "dependencies": {
-    "@bufbuild/buf": "^1.55.1",
     "@bufbuild/protoc-gen-es": "^2.6.0",
     "@protobuf-ts/protoc": "^2.11.1"
   }
