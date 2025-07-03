@@ -7,10 +7,12 @@ buildscript {
         classpath(libs.kotlin.plugin)
         classpath(libs.shadow.plugin)
     }
+
     repositories {
         mavenCentral()
     }
 }
+
 allprojects {
     repositories {
         mavenCentral()
