@@ -17,8 +17,8 @@ await build({
 })
 
 const seaConfig: SeaConfig = {
-  main: "dist/index.cjs",
-  output: "dist/sea.blob",
+  main: 'dist/index.cjs',
+  output: 'dist/sea.blob',
   disableExperimentalSEAWarning: true,
   assets: {}
 }
