@@ -10,12 +10,7 @@
     "start": "cp dist/bin server && cd server && ./bin"
   },
   "config": {
-    "sea": {
-      "file": "sea-config.json",
-      "main": "dist/index.cjs",
-      "output": "dist/sea.blob",
-      "disableExperimentalSEAWarning": true
-    }
+    "sea": "sea-config.json"
   },
   "dependencies": {
     "decompress": "^4.2.1",

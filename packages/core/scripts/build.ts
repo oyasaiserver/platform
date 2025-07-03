@@ -17,7 +17,9 @@ await build({
 })
 
 const seaConfig: SeaConfig = {
-  ...config.sea,
+  main: 'dist/index.cjs',
+  output: 'dist/sea.blob',
+  disableExperimentalSEAWarning: true,
   assets: {}
 }
 
@@ -33,14 +35,14 @@ await spinner('create sea config', async () => {
       .map(dirent => join(dirent.parentPath, dirent.name))
       .map(path => [path.substring(assets.length + 1), path])
   )
-  seaConfig.assets[config.sea.file] = config.sea.file
+  seaConfig.assets[config.sea] = config.sea
 })
 
 await spinner('compile', async () => {
   await cp(process.execPath, bin)
-  await writeJsonFile(config.sea.file, seaConfig)
-  await $`node --experimental-sea-config ${config.sea.file}`
-  await rm(config.sea.file)
+  await writeJsonFile(config.sea, seaConfig)
+  await $`node --experimental-sea-config ${config.sea}`
+  await rm(config.sea)
 })
 
 const isDarwin = process.platform === 'darwin'
