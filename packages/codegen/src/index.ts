@@ -17,5 +17,6 @@ await spinner('md', async () => {
 await spinner('proto', async () => {
   await cp(join(import.meta.dirname, '../static'), out, rf)
 
+  await $`protoc --version` // ensure protoc is installed
   await $`buf generate --template ${JSON.stringify(bufGenJson)}`
 })
