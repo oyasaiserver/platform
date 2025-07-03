@@ -12,7 +12,7 @@ await build({
   noExternal: [/.*/],
   format: ['cjs'],
   minify: true,
-  shims: true,
+  shims: true
 })
 
 const seaConfig: SeaConfig = {
