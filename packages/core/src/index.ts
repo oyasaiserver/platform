@@ -24,7 +24,7 @@ async function main() {
   })
 
   await spinner('apply-overlays', async () => {
-    const seaConfig = decode(getAsset(config.sea.file))
+    const seaConfig = decode(getAsset(config.sea))
     const { assets } = JSON.parse(seaConfig) || {}
     const files = Object.keys(assets) as string[]
     await applyOverlays('overlays', environment, files)

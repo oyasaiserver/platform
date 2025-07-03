@@ -1,8 +1,8 @@
-import { defineConfig } from "taze";
+import { defineConfig } from 'taze'
 
 export default defineConfig({
   mode: 'latest',
-  exclude: "@oyasaiserver/*",
+  exclude: '@oyasaiserver/*',
   recursive: true,
   force: true,
   write: true,
