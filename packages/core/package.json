@@ -19,6 +19,6 @@
   "devDependencies": {
     "@types/decompress": "^4.2.7",
     "postject": "^1.0.0-alpha.6",
-    "tsup": "^8.5.0"
+    "tsdown": "^0.12.9"
   }
 }

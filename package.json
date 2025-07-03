@@ -1,7 +1,6 @@
 {
   "type": "module",
   "workspaces": [
-    "!**/static/**",
     "apps/*",
     "config",
     "gen/proto/ts",
@@ -14,7 +13,7 @@
     "build": "tsc --build",
     "bump": "taze",
     "check": "biome check --write && sort-package-json '**/package.json' --quiet && buf format --write",
-    "codegen": "codegen && (npm run check & ./gradlew spotlessApply)"
+    "codegen": "codegen && npm run check && ./gradlew spotlessApply"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",

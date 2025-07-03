@@ -2,7 +2,7 @@ import { cp, readdir, readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
 import { inject } from 'postject'
-import { build } from 'tsup'
+import { build } from 'tsdown'
 import { $, spinner } from 'zx'
 import { bin, config } from '../package.json'
 
@@ -12,8 +12,7 @@ await build({
   noExternal: [/.*/],
   format: ['cjs'],
   minify: true,
-  shims: true,
-  removeNodeProtocol: false
+  shims: true
 })
 
 const seaConfig: SeaConfig = {
