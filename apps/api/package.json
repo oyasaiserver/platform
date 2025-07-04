@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "tsx scripts/build.ts",
-    "deploy": "secrets wrangler deploy",
+    "deploy": "secrets -- wrangler deploy",
     "dev": "wrangler dev"
   },
   "dependencies": {

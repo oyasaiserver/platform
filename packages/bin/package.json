@@ -2,6 +2,10 @@
   "name": "@oyasaiserver/bin",
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "gradle": "src/gradle.ts",
+    "secrets": "src/secrets.ts"
+  },
   "dependencies": {
     "@jahed/terraform": "^1.12.2"
   }

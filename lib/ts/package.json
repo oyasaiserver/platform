@@ -7,9 +7,6 @@
       "import": "./src/*.ts"
     }
   },
-  "bin": {
-    "secrets": "bin/secrets.ts"
-  },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.45.2",
     "fast-xml-parser": "^5.2.5"
