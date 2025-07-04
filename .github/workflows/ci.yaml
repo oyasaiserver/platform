@@ -37,5 +37,4 @@ jobs:
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
-          npm run all
-        working-directory: tests
+          npm run test --workspaces --if-present

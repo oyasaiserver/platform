@@ -1,6 +1,5 @@
+import type { Environment } from '@oyasaiserver/schema/environment'
 import { secrets } from './secrets.ts'
-
-export type Environment = typeof secrets.ENVIRONMENT
 
 export function envAware(...fragments: string[]) {
   return [...fragments, secrets.ENVIRONMENT].join('-')
