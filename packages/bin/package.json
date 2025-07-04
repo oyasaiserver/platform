@@ -5,8 +5,5 @@
   "bin": {
     "gradle": "src/gradle.ts",
     "secrets": "src/secrets.ts"
-  },
-  "dependencies": {
-    "@jahed/terraform": "^1.12.2"
   }
 }
