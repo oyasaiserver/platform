@@ -29,7 +29,7 @@
     "override": [
       {
         "file_option": "java_package_prefix",
-        "value": "io.oyasai.proto"
+        "value": "io.oyasai"
       }
     ]
   }

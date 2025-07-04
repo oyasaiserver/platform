@@ -2,6 +2,8 @@
 //
 // Source: hello.proto
 //
+package io.oyasai.proto
+
 import com.connectrpc.Headers
 import com.connectrpc.MethodSpec
 import com.connectrpc.ProtocolClientInterface
@@ -15,9 +17,9 @@ public class HelloServiceClient(
     request,
     headers,
     MethodSpec(
-    "HelloService/SayHello",
-      HelloRequest::class,
-      HelloResponse::class,
+    "proto.HelloService/SayHello",
+      io.oyasai.proto.HelloRequest::class,
+      io.oyasai.proto.HelloResponse::class,
       StreamType.UNARY,
     ),
   )

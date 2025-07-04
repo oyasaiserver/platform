@@ -4,27 +4,29 @@
 
 // Generated files should ignore deprecation warnings
 @file:Suppress("DEPRECATION")
+package io.oyasai.proto;
+
 @kotlin.jvm.JvmName("-initializehelloResponse")
-public inline fun helloResponse(block: HelloResponseKt.Dsl.() -> kotlin.Unit): HelloResponse =
-  HelloResponseKt.Dsl._create(HelloResponse.newBuilder()).apply { block() }._build()
+public inline fun helloResponse(block: io.oyasai.proto.HelloResponseKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.HelloResponse =
+  io.oyasai.proto.HelloResponseKt.Dsl._create(io.oyasai.proto.HelloResponse.newBuilder()).apply { block() }._build()
 /**
- * Protobuf type `HelloResponse`
+ * Protobuf type `proto.HelloResponse`
  */
 public object HelloResponseKt {
   @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
   @com.google.protobuf.kotlin.ProtoDslMarker
   public class Dsl private constructor(
-    private val _builder: HelloResponse.Builder
+    private val _builder: io.oyasai.proto.HelloResponse.Builder
   ) {
     public companion object {
       @kotlin.jvm.JvmSynthetic
     @kotlin.PublishedApi
-      internal fun _create(builder: HelloResponse.Builder): Dsl = Dsl(builder)
+      internal fun _create(builder: io.oyasai.proto.HelloResponse.Builder): Dsl = Dsl(builder)
     }
 
     @kotlin.jvm.JvmSynthetic
   @kotlin.PublishedApi
-    internal fun _build(): HelloResponse = _builder.build()
+    internal fun _build(): io.oyasai.proto.HelloResponse = _builder.build()
 
     /**
      * `string message = 1 [json_name = "message"];`
@@ -45,6 +47,6 @@ public object HelloResponseKt {
   }
 }
 @kotlin.jvm.JvmSynthetic
-public inline fun HelloResponse.copy(block: HelloResponseKt.Dsl.() -> kotlin.Unit): HelloResponse =
-  HelloResponseKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+public inline fun io.oyasai.proto.HelloResponse.copy(block: `io.oyasai.proto`.HelloResponseKt.Dsl.() -> kotlin.Unit): io.oyasai.proto.HelloResponse =
+  `io.oyasai.proto`.HelloResponseKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 
