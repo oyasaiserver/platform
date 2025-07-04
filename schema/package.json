@@ -1,0 +1,12 @@
+{
+  "name": "@oyasaiserver/schema",
+  "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "test": "tsx --test"
+  }
+}

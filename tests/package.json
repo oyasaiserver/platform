@@ -1,8 +1,0 @@
-{
-  "name": "@oyasaiserver/tests",
-  "type": "module",
-  "scripts": {
-    "all": "tsx --test **/*",
-    "e2e": "tsx --test e2e/*"
-  }
-}

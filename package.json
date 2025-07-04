@@ -7,7 +7,7 @@
     "infra/cdktf",
     "lib/ts",
     "packages/*",
-    "tests"
+    "schema"
   ],
   "scripts": {
     "build": "tsc --build",
@@ -24,6 +24,7 @@
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "wrangler": "^4.23.0",
+    "zod": "^3.25.71",
     "zx": "^8.6.1"
   }
 }
