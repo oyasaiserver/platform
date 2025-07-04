@@ -30,6 +30,6 @@
     { "path": "lib/ts" },
     { "path": "packages/core" },
     { "path": "packages/codegen" },
-    { "path": "tests" }
+    { "path": "schema" }
   ]
 }
