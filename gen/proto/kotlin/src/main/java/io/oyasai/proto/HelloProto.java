@@ -3,6 +3,8 @@
 // source: hello.proto
 // Protobuf Java Version: 4.31.1
 
+package io.oyasai.proto;
+
 @com.google.protobuf.Generated
 public final class HelloProto {
   private HelloProto() {}
@@ -25,15 +27,15 @@ public final class HelloProto {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_HelloRequest_descriptor;
+    internal_static_proto_HelloRequest_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_HelloRequest_fieldAccessorTable;
+      internal_static_proto_HelloRequest_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_HelloResponse_descriptor;
+    internal_static_proto_HelloResponse_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_HelloResponse_fieldAccessorTable;
+      internal_static_proto_HelloResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -43,27 +45,29 @@ public final class HelloProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013hello.proto\"\"\n\014HelloRequest\022\022\n\004name\030\001 " +
-      "\001(\tR\004name\")\n\rHelloResponse\022\030\n\007message\030\001 " +
-      "\001(\tR\007message29\n\014HelloService\022)\n\010SayHello" +
-      "\022\r.HelloRequest\032\016.HelloResponseB\016B\nHello" +
-      "ProtoP\001b\006proto3"
+      "\n\013hello.proto\022\005proto\"\"\n\014HelloRequest\022\022\n\004" +
+      "name\030\001 \001(\tR\004name\")\n\rHelloResponse\022\030\n\007mes" +
+      "sage\030\001 \001(\tR\007message2E\n\014HelloService\0225\n\010S" +
+      "ayHello\022\023.proto.HelloRequest\032\024.proto.Hel" +
+      "loResponseBQ\n\017io.oyasai.protoB\nHelloProt" +
+      "oP\001\242\002\003PXX\252\002\005Proto\312\002\005Proto\342\002\021Proto\\GPBMet" +
+      "adata\352\002\005Protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_HelloRequest_descriptor =
+    internal_static_proto_HelloRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_HelloRequest_fieldAccessorTable = new
+    internal_static_proto_HelloRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_HelloRequest_descriptor,
+        internal_static_proto_HelloRequest_descriptor,
         new java.lang.String[] { "Name", });
-    internal_static_HelloResponse_descriptor =
+    internal_static_proto_HelloResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_HelloResponse_fieldAccessorTable = new
+    internal_static_proto_HelloResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_HelloResponse_descriptor,
+        internal_static_proto_HelloResponse_descriptor,
         new java.lang.String[] { "Message", });
     descriptor.resolveAllFeaturesImmutable();
   }

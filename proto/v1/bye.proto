@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package proto.v1;
+
+service ByeService {
+  rpc SayBye(ByeRequest) returns (ByeResponse);
+}
+
+message ByeRequest {
+  string name = 1;
+}
+
+message ByeResponse {
+  string message = 1;
+}

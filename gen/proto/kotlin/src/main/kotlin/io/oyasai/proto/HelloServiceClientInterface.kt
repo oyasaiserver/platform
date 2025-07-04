@@ -2,6 +2,8 @@
 //
 // Source: hello.proto
 //
+package io.oyasai.proto
+
 import com.connectrpc.Headers
 import com.connectrpc.ResponseMessage
 
