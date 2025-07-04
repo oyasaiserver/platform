@@ -1,0 +1,8 @@
+{
+  "name": "@oyasaiserver/bin",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@jahed/terraform": "^1.12.2"
+  }
+}

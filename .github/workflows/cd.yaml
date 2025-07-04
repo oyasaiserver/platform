@@ -76,7 +76,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
-      - uses: hashicorp/setup-terraform@v3
       - run: |
           npm run build
           npm run deploy
@@ -86,23 +85,6 @@ jobs:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
-#  publish-package-server:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      packages: write
-#    env:
-#      GITHUB_SHA: ${{ github.sha }}
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: ./.github/actions/setup-node
-#        # language=bash
-#      - run: |
-#          # publish
-#          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
-#          npm pkg set version=1.0.0-rc.${GITHUB_SHA} -w packages/core
-#          npm publish -w packages/core --tag rc
-#
 #  deploy-onprem:
 #    needs:
 #      - resolve-env
