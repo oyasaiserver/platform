@@ -2,7 +2,7 @@ import { z } from 'zod/v4'
 import { environment } from './environment.ts'
 
 export const secrets = z
-  .strictObject({
+  .object({
     DOTENV_PUBLIC_KEY: z.string(),
     ENVIRONMENT: environment,
     CLOUDFLARE_ACCOUNT_ID: z.string(),
