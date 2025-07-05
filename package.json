@@ -4,7 +4,7 @@
     "apps/*",
     "config",
     "gen/proto/ts",
-    "infra/cdktf",
+    "infra/*",
     "lib/ts",
     "packages/*",
     "schema"
