@@ -407,4 +407,4 @@ cdktf.log
 .wrangler
 
 # Codegen
-!bin/lib
+!bin/lib/*.jar
