@@ -1,4 +1,4 @@
-import type { Environment } from '@oyasaiserver/schema/environment'
+import { type Environment, environment } from '@oyasaiserver/schema/environment'
 import { secrets } from './secrets.ts'
 
 export function envAware(...fragments: string[]) {
