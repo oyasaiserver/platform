@@ -4,6 +4,7 @@
   "type": "module",
   "bin": {
     "gradle": "src/gradle.ts",
+    "protoc-gen-connect-kotlin": "src/protoc-gen-connect-kotlin",
     "secrets": "src/secrets.ts"
   }
 }
