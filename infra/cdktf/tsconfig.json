@@ -1,5 +1,8 @@
 {
-  "exclude": ["cdktf.out"],
   "extends": "../../tsconfig.json",
-  "include": ["**/*"]
+  "compilerOptions": {
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": ["**/*"],
+  "exclude": ["cdktf.out"]
 }
