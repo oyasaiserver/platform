@@ -8,11 +8,9 @@ import { bin, config } from '../package.json'
 
 await build({
   clean: true,
-  entry: ['src/index.ts'],
   noExternal: [/.*/],
   format: ['cjs'],
-  minify: true,
-  shims: true
+  minify: true
 })
 
 const seaConfig: SeaConfig = {
