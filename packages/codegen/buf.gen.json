@@ -20,7 +20,7 @@
       "out": "gen/proto/kotlin/src/main/java"
     },
     {
-      "local": "packages/bin/src/protoc-gen-connect-kotlin",
+      "local": "protoc-gen-connect-kotlin",
       "out": "gen/proto/kotlin/src/main/kotlin"
     }
   ],
