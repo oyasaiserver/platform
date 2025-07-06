@@ -17,5 +17,3 @@ export const secrets = secretsSchema.parse(
     })
   })
 )
-
-export const encrypedSecrets = parseEnv(content)
