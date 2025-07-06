@@ -4,37 +4,35 @@ import { asEnvFile } from '@oyasaiserver/lib/env'
 import { getAssetContent } from '@oyasaiserver/lib/sea'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { ensure } from '@oyasaiserver/lib/utils'
-import { spinner } from 'zx'
+import { $, spinner } from 'zx'
 import { config } from '../package.json'
-import { DockerCompose } from './services/docker-compose.ts'
-import { applyOverlays } from './services/overlays.ts'
-import { runtimeSecrets } from './services/runtime-secrets.ts'
+import { applyOverlays } from './overlays.ts'
+import { runtimeSecrets } from './runtime-secrets.ts'
 
 async function main() {
   await spinner('docker-compose-down', async () => {
-    await DockerCompose.down(runtimeSecrets.ENVIRONMENT)
+    await $({
+      quiet: true,
+      nothrow: true
+    })`docker compose down --remove-orphans`
   })
 
   await spinner('apply-overlays', async () => {
     const seaConfig = getAssetContent(config.sea)
     const { assets } = nodeSeaConfig.parse(JSON.parse(seaConfig))
     const files = Object.keys(ensure(assets))
-    await applyOverlays('overlays', runtimeSecrets.ENVIRONMENT, files)
+    await applyOverlays('overlays', files)
   })
 
   await spinner('clone-fixtures', async () => {
-    await writeFile(
-      `${runtimeSecrets.ENVIRONMENT}/compose.yaml`,
-      getAssetContent('compose.yaml')
-    )
-    await writeFile(
-      `${runtimeSecrets.ENVIRONMENT}/.env`,
-      asEnvFile(runtimeSecrets)
-    )
+    await writeFile('compose.yaml', getAssetContent('compose.yaml'))
+    await writeFile('.env', asEnvFile(runtimeSecrets))
   })
 
   await spinner('docker-compose-up', async () => {
-    await DockerCompose.up(runtimeSecrets.ENVIRONMENT)
+    await $({
+      quiet: true
+    })`docker compose up -d --wait`
   })
 
   await spinner('upnp-create-mapping', async () => {
