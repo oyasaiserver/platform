@@ -9,6 +9,7 @@
     "@bufbuild/protoc-gen-es": "^2.6.0",
     "@protobuf-ts/protoc": "^2.11.1",
     "change-case": "^5.4.4",
+    "json-schema-to-typescript": "^15.0.4",
     "json-schema-to-zod": "^2.6.1"
   }
 }

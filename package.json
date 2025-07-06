@@ -17,9 +17,6 @@
     "check": "biome check --write && sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
     "codegen": "codegen && npm run check"
   },
-  "dependencies": {
-    "json-schema-to-typescript": "^15.0.4"
-  },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
     "@bufbuild/buf": "^1.55.1",
