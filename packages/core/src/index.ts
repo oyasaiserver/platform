@@ -1,38 +1,30 @@
 import { writeFile } from 'node:fs/promises'
-import { getAsset } from 'node:sea'
-import { decode } from '@oyasaiserver/lib/text'
+import { nodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
+import { getAssetContent } from '@oyasaiserver/lib/sea'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
+import { ensure } from '@oyasaiserver/lib/utils'
+import { environment as environmentSchema } from '@oyasaiserver/schema/environment'
 import { spinner } from 'zx'
-import { clean } from '../config.json'
 import { config } from '../package.json'
-import { Cleaner } from './services/cleaner.ts'
 import { DockerCompose } from './services/docker-compose.ts'
 import { applyOverlays } from './services/overlays.ts'
 
-const environment = process.env.ENVIRONMENT || 'local'
+const environment = environmentSchema.parse(process.env.ENVIRONMENT)
 
 async function main() {
   await spinner('docker-compose-down', async () => {
     await DockerCompose.down(environment)
   })
 
-  await spinner('backup-clean-and-restore', async () => {
-    await Cleaner.clean({
-      dir: `${environment}/minecraft-main`,
-      except: clean.except
-    })
-  })
-
   await spinner('apply-overlays', async () => {
-    const seaConfig = decode(getAsset(config.sea))
-    const { assets } = JSON.parse(seaConfig) || {}
-    const files = Object.keys(assets) as string[]
+    const seaConfig = getAssetContent(config.sea)
+    const { assets } = nodeSeaConfig.parse(JSON.parse(seaConfig))
+    const files = Object.keys(ensure(assets))
     await applyOverlays('overlays', environment, files)
   })
 
   await spinner('clone-compose-yaml', async () => {
-    const arrayBuffer = getAsset('compose.yaml')
-    await writeFile('compose.yaml', Buffer.from(arrayBuffer))
+    await writeFile('compose.yaml', getAssetContent('compose.yaml'))
   })
 
   await spinner('docker-compose-up', async () => {

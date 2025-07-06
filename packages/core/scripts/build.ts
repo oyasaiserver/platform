@@ -1,23 +1,25 @@
 import { cp, readdir, readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import type { NodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
+import { secrets } from '@oyasaiserver/lib/secrets'
 import { inject } from 'postject'
 import { build } from 'tsdown'
 import { $, spinner } from 'zx'
 import { bin, config } from '../package.json'
 
 await build({
-  clean: true,
-  noExternal: [/.*/],
   format: ['cjs'],
-  minify: true
+  minify: true,
+  env: {
+    ENVIRONMENT: secrets.ENVIRONMENT
+  }
 })
 
-const seaConfig: SeaConfig = {
+const seaConfig: NodeSeaConfig = {
   main: 'dist/index.cjs',
   output: 'dist/sea.blob',
-  disableExperimentalSEAWarning: true,
-  assets: {}
+  disableExperimentalSEAWarning: true
 }
 
 await spinner('create sea config', async () => {

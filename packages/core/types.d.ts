@@ -21,10 +21,3 @@ declare module 'postject' {
     options?: InjectOptions
   ): Promise<void>
 }
-
-interface SeaConfig {
-  main: string
-  output: string
-  disableExperimentalSEAWarning?: boolean
-  assets?: Record<string, string>
-}
