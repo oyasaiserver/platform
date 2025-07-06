@@ -8,7 +8,7 @@
     "infra/*",
     "lib/ts",
     "packages/*",
-    "schema"
+    "schema/ts"
   ],
   "scripts": {
     "build": "tsc --build",

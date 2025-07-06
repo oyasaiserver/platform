@@ -32,6 +32,6 @@
     { "path": "packages/core" },
     { "path": "packages/codegen" },
     { "path": "packages/migrate" },
-    { "path": "schema" }
+    { "path": "schema/ts" }
   ]
 }
