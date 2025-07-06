@@ -7,7 +7,7 @@ import { $ } from 'zx'
 await describe(import.meta.filename, async () => {
   $.cwd = `${directory.root}/packages/core`
 
-  const container = `server-minecraft-main-${secrets.ENVIRONMENT}-1`
+  const container = 'local-minecraft-main-1'
 
   before(async () => {
     await $`npm run start`

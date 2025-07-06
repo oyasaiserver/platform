@@ -1,5 +1,5 @@
 services:
-  minecraft-main-production:
+  minecraft-main:
     image: itzg/minecraft-server:java24
     ports:
       - 25565:25565
