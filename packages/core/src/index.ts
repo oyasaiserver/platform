@@ -32,7 +32,7 @@ async function main() {
   await spinner('docker-compose-up', async () => {
     await $({
       quiet: true
-    })`docker compose up -d --wait`
+    })`docker compose up --detach --wait`
   })
 
   await spinner('upnp-create-mapping', async () => {
