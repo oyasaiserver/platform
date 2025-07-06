@@ -2,12 +2,12 @@
   "name": "@oyasaiserver/core",
   "version": "1.0.0",
   "type": "module",
-  "bin": "dist/bin",
+  "bin": "dist/core",
   "scripts": {
     "build": "tsx scripts/build.ts",
     "deploy": "tsx scripts/deploy.ts",
     "prestart": "npm run build && npm run deploy",
-    "start": "cd server && ./local/bin"
+    "start": "cd server && ./local/core"
   },
   "config": {
     "sea": "sea-config.json"
