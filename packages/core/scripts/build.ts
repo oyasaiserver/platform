@@ -4,6 +4,7 @@ import { nodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
 import { directory } from '@oyasaiserver/lib/directory'
 import { writeJsonFile } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
+import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { inject } from 'postject'
 import { build } from 'tsdown'
 import { $, spinner } from 'zx'
@@ -13,7 +14,7 @@ await build({
   format: ['cjs'],
   minify: true,
   env: {
-    ENVIRONMENT: secrets.ENVIRONMENT
+    secrets: JSON.stringify(runtimeSecrets.parse(secrets))
   }
 })
 

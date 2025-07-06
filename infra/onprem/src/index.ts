@@ -14,7 +14,8 @@ export default defineInfra(environment => {
           EULA: 'TRUE',
           TYPE: 'PURPUR',
           VERSION: '1.21.5'
-        }
+        },
+        env_file: '.env'
       }
     }
   }
