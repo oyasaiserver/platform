@@ -6,7 +6,7 @@ export default defineInfra(environment => {
       [`minecraft-main-${environment}`]: {
         image: 'itzg/minecraft-server:java24',
         ports: ['25565:25565'],
-        volumes: [`./${environment}/minecraft-main:/data`]
+        volumes: [`./minecraft-main:/data`]
       }
     }
   }

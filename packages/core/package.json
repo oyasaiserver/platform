@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsx scripts/build.ts",
     "deploy": "tsx scripts/deploy.ts",
-    "prestart": "npm run build",
-    "start": "cp dist/bin server && cd server && ./bin"
+    "prestart": "npm run build && npm run deploy",
+    "start": "cd server && ./local/bin"
   },
   "config": {
     "sea": "sea-config.json"

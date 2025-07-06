@@ -24,7 +24,10 @@ async function main() {
   })
 
   await spinner('clone-compose-yaml', async () => {
-    await writeFile('compose.yaml', getAssetContent('compose.yaml'))
+    await writeFile(
+      `${environment}/compose.yaml`,
+      getAssetContent('compose.yaml')
+    )
   })
 
   await spinner('docker-compose-up', async () => {

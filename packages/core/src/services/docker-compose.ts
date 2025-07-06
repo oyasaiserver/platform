@@ -1,8 +1,6 @@
 import { $ } from 'zx'
 
 export class DockerCompose {
-  private static readonly base = 'docker compose --file compose.yaml'.split(' ')
-
   public static async up(environment: string): Promise<void> {
     await $({
       quiet: true
@@ -11,11 +9,12 @@ export class DockerCompose {
 
   public static async down(environment: string): Promise<void> {
     await $({
-      quiet: true
-    })`${DockerCompose.cmd(environment)} down --remove-orphans`.nothrow()
+      quiet: true,
+      nothrow: true
+    })`${DockerCompose.cmd(environment)} down --remove-orphans`
   }
 
   private static cmd(environment: string): string[] {
-    return [...DockerCompose.base, '--profile', environment]
+    return `docker compose --file ${environment}/compose.yaml`.split(' ')
   }
 }
