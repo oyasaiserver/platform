@@ -408,3 +408,4 @@ cdktf.log
 
 # Codegen
 !bin/lib/*.jar
+!gen/compose/compose.local.yaml
