@@ -4,4 +4,11 @@ services:
     ports:
       - 25565:25565
     volumes:
-      - ./local/minecraft-main:/data
+      - ./minecraft-main:/data
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    environment:
+      EULA: "TRUE"
+      TYPE: PURPUR
+      VERSION: 1.21.5
