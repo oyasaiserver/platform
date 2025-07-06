@@ -6,18 +6,16 @@ import { readFileContent } from './fs.ts'
 import { ensure, fallback } from './utils.ts'
 
 const envfile = `${directory.root}/envs/${fallback(process.env.ENVIRONMENT, 'local')}/.env`
+const content = await readFileContent(envfile)
 
 export const secrets = secretsSchema.parse(
-  parse(
-    await fallback(process.env.DOTENV_PUBLIC_KEYS, async () => {
-      return readFileContent(envfile)
-    }),
-    {
-      privateKey: await fallback(process.env.DOTENV_PRIVATE_KEY, async () => {
-        const content = await readFileContent(`${envfile}.keys`)
-        const { DOTENV_PRIVATE_KEY } = parseEnv(content)
-        return ensure(DOTENV_PRIVATE_KEY)
-      })
-    }
-  )
+  parse(content, {
+    privateKey: await fallback(process.env.DOTENV_PRIVATE_KEY, async () => {
+      const content = await readFileContent(`${envfile}.keys`)
+      const { DOTENV_PRIVATE_KEY } = parseEnv(content)
+      return ensure(DOTENV_PRIVATE_KEY)
+    })
+  })
 )
+
+export const encrypedSecrets = parseEnv(content)

@@ -1,4 +1,12 @@
 {
   "name": "@oyasaiserver/onprem",
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts"
+    }
+  }
 }

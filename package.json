@@ -2,6 +2,7 @@
   "type": "module",
   "workspaces": [
     "apps/*",
+    "bin",
     "config",
     "gen/proto/ts",
     "infra/*",
