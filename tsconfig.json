@@ -26,12 +26,13 @@
     { "path": "apps/wiki" },
     { "path": "apps/sociallikes" },
     { "path": "bin" },
+    { "path": "gen/json/ts" },
     { "path": "gen/proto/ts" },
     { "path": "infra/cdktf" },
     { "path": "lib/ts" },
     { "path": "packages/core" },
     { "path": "packages/codegen" },
     { "path": "packages/migrate" },
-    { "path": "schema" }
+    { "path": "schema/ts" }
   ]
 }

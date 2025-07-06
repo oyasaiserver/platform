@@ -4,11 +4,12 @@
     "apps/*",
     "bin",
     "config",
+    "gen/json/ts",
     "gen/proto/ts",
     "infra/*",
     "lib/ts",
     "packages/*",
-    "schema"
+    "schema/ts"
   ],
   "scripts": {
     "build": "tsc --build",
