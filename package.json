@@ -4,6 +4,7 @@
     "apps/*",
     "bin",
     "config",
+    "gen/json/ts",
     "gen/proto/ts",
     "infra/*",
     "lib/ts",
@@ -15,6 +16,9 @@
     "bump": "taze",
     "check": "biome check --write && sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
     "codegen": "codegen && npm run check"
+  },
+  "dependencies": {
+    "json-schema-to-typescript": "^15.0.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
