@@ -4,12 +4,6 @@ import { BranchDefault } from '@cdktf/provider-github/lib/branch-default'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider'
 import { Repository } from '@cdktf/provider-github/lib/repository'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset'
-import {
-  description,
-  homepage,
-  name,
-  organization
-} from '@oyasaiserver/config/repository.json' with { type: 'json' }
 import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
@@ -27,7 +21,7 @@ export class GitHubStack extends TerraformStack {
     new NamedCloudBackend(this, id)
 
     new GithubProvider(this, id, {
-      owner: organization,
+      owner: 'oyasaiserver',
       appAuth: {
         id: secrets.GITHUB_APP_ID,
         installationId: secrets.GITHUB_APP_INSTALLATION_ID,
@@ -36,10 +30,10 @@ export class GitHubStack extends TerraformStack {
     })
 
     new Repository(this, `${id}-repository`, {
-      name,
-      description,
+      name: 'platform',
+      description: 'Platform for Oyasai Server',
       visibility: 'public',
-      homepageUrl: homepage,
+      homepageUrl: 'oyasai.io',
       hasIssues: true,
       hasWiki: false,
       hasProjects: false,
