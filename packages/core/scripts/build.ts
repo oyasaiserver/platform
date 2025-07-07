@@ -1,13 +1,14 @@
-import { cp, readdir, readFile, rm } from 'node:fs/promises'
-import { join } from 'node:path'
+import { cp, glob, readdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { basename, join } from 'node:path'
 import { nodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
 import { directory } from '@oyasaiserver/lib/directory'
-import { writeJsonFile } from '@oyasaiserver/lib/fs'
+import { rf, writeFileSafe, writeJsonFile } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { inject } from 'postject'
 import { build } from 'tsdown'
 import { $, spinner } from 'zx'
+import { plugins } from '../config.json'
 import { bin, config } from '../package.json'
 
 await build({
@@ -24,11 +25,27 @@ const seaConfig = nodeSeaConfig.parse({
   disableExperimentalSEAWarning: true
 })
 
-await spinner('copy-infra', async () => {
+await spinner('copy-assets', async () => {
   await cp(
     `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
     `dist/compose.yaml`
   )
+  for await (const file of glob(
+    join(directory.root, 'plugins/*/build/libs/*.jar')
+  )) {
+    await cp(
+      file,
+      `assets/overlays/minecraft-main/plugins/${basename(file)}`,
+      rf
+    )
+  }
+  for (const plugin of plugins) {
+    const response = await fetch(plugin)
+    const arrayBuffer = await response.arrayBuffer()
+    const buffer = new Uint8Array(arrayBuffer)
+    const path = `assets/overlays/minecraft-main/plugins/${basename(plugin)}`
+    await writeFileSafe(path, buffer)
+  }
 })
 
 await spinner('create-sea-config', async () => {
