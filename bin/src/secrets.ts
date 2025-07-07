@@ -2,7 +2,7 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { $, argv } from 'zx'
 
-$({
+await $({
   env: {
     ...process.env,
     ...secrets

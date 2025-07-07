@@ -1,26 +1,25 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "allowJs": true,
     "composite": true,
-    "erasableSyntaxOnly": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
+    "target": "esnext",
     "jsx": "preserve",
     "lib": ["esnext"],
-    "module": "preserve",
     "moduleDetection": "force",
-    "noEmit": true,
+    "module": "preserve",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "strict": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext",
-    "verbatimModuleSyntax": true
+    "skipLibCheck": true
   },
-  "files": [],
   "references": [
     { "path": "apps/api" },
     { "path": "apps/wiki" },
@@ -34,5 +33,6 @@
     { "path": "packages/codegen" },
     { "path": "packages/migrate" },
     { "path": "schema/ts" }
-  ]
+  ],
+  "files": []
 }
