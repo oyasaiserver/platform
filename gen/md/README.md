@@ -1,8 +1,7 @@
 
   <p align='center'>
     <img
-      src='https://avatars.githubusercontent.com/oyasaiserver'
-      height='96'
+      src='https://avatars.githubusercontent.com/oyasaiserver?size=96'
       alt='icon'
     />
   </p>
