@@ -48,4 +48,4 @@ async function main() {
   })
 }
 
-main().then()
+main().then().catch(console.error)
