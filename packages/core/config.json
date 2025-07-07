@@ -1,19 +1,7 @@
 {
-  "clean": {
-    "except": ["worlds"]
-  },
   "plugins": [
-    {
-      "name": "EssentialsX",
-      "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsX-2.21.1.jar"
-    },
-    {
-      "name": "LuckPerms",
-      "url": "https://download.luckperms.net/1584/bukkit/loader/LuckPerms-Bukkit-5.5.0.jar"
-    },
-    {
-      "name": "PlugmanX",
-      "url": "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
-    }
+    "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsX-2.21.1.jar",
+    "https://download.luckperms.net/1584/bukkit/loader/LuckPerms-Bukkit-5.5.0.jar",
+    "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
   ]
 }
