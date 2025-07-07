@@ -38,7 +38,6 @@ await spinner('json', async () => {
       const inner = file.parentPath.substring(src.length)
       const schema = JSON.parse(content)
       const { name } = parse(file.name)
-      const usedNamed = new Set<string>()
       await writeFileSafe(
         `${out}/json/ts/src/${inner}/${name}.ts`,
         `
