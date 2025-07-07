@@ -7,4 +7,3 @@
     />
   </p>
   <h3 align='center'>platform</h3>
-  <p align='center'>Proof of concept for stateless Minecraft server.</p>
