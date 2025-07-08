@@ -8,8 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class Vertex : JavaPlugin() {
     override fun onLoad() {
-        val clazz = com.google.protobuf.Descriptors::class.java
-        println("Protobuf Descriptors loaded from: ${clazz.protectionDomain.codeSource.location}")
         runBlocking {
             HelloServiceClient(Client.protocol).sayHello(helloRequest { name = "Vertex" }).success {
                 println(it.message.message)
