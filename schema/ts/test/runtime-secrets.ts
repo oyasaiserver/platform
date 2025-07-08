@@ -5,7 +5,7 @@ import { type RuntimeSecrets } from '../src/runtime-secrets.ts'
 import { secrets } from '../src/secrets.ts'
 
 await describe(import.meta.filename, async () => {
-  await test('runtimeSecrets schema should be a subtype of secrets', async () => {
+  await test('runtimeSecrets schema should be supertype of secrets', async () => {
     ok(secrets satisfies ZodType<RuntimeSecrets>)
   })
 })

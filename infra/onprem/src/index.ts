@@ -1,6 +1,7 @@
 import { defineInfra } from '../lib/define-infra.ts'
 
 export default defineInfra(environment => {
+  const isLocal = environment === 'local'
   return {
     services: {
       'minecraft-main': {
@@ -15,7 +16,10 @@ export default defineInfra(environment => {
           TYPE: 'PURPUR',
           VERSION: '1.21.5'
         },
-        env_file: '.env'
+        env_file: '.env',
+        ...(isLocal && {
+          extra_hosts: ['host.docker.internal:host-gateway']
+        })
       }
     }
   }

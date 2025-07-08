@@ -12,7 +12,8 @@ export const secrets = z
     GITHUB_APP_PEM_FILE: z.string(),
     TF_API_TOKEN: z.string(),
     TF_TOKEN_app_terraform_io: z.string(),
-    BEARER: z.string()
+    BEARER: z.string(),
+    API_ENDPOINT: z.url()
   })
   .readonly()
 

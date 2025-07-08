@@ -1,7 +1,7 @@
 {
   "plugins": [
     "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsX-2.21.1.jar",
-    "https://download.luckperms.net/1584/bukkit/loader/LuckPerms-Bukkit-5.5.0.jar",
+    "https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar",
     "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
   ]
 }

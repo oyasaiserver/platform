@@ -4,7 +4,7 @@ spotless = "7.0.4"
 purpur-api = "1.21.5-R0.1-SNAPSHOT"
 shadow = "9.0.0-beta17"
 protobuf = "4.31.1"
-connect = "0.7.3"
+connect = "0.7.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -16,3 +16,5 @@ purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 connect-kotlin = { module = "com.connectrpc:connect-kotlin", version.ref = "connect" }
 connect-kotlin-google-java-ext = { module = "com.connectrpc:connect-kotlin-google-java-ext", version.ref = "connect" }
+connect-kotlin-okhttp = { module = "com.connectrpc:connect-kotlin-okhttp", version.ref = "connect" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.10.0" }

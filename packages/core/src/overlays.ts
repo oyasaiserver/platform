@@ -1,5 +1,5 @@
+import { getRawAsset } from 'node:sea'
 import { writeFileSafe } from '@oyasaiserver/lib/fs'
-import { getAssetContent } from '@oyasaiserver/lib/sea'
 import { join, relative } from 'path'
 
 export async function applyOverlays(overlay: string, files: string[]) {
@@ -8,7 +8,8 @@ export async function applyOverlays(overlay: string, files: string[]) {
     .map(async file => {
       const relativePath = relative(overlay, file)
       const dst = join(relativePath)
-      await writeFileSafe(dst, getAssetContent(file))
+      const arrayBuffer = getRawAsset(file)
+      await writeFileSafe(dst, new Uint8Array(arrayBuffer))
     })
   await Promise.all(promises)
 }

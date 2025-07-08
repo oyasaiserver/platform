@@ -1,9 +1,21 @@
 package io.oyasai.vertex
 
+import io.oyasai.lib.Client
+import io.oyasai.proto.HelloServiceClient
+import io.oyasai.proto.helloRequest
+import kotlinx.coroutines.runBlocking
 import org.bukkit.plugin.java.JavaPlugin
 
 class Vertex : JavaPlugin() {
-    override fun onLoad() {}
+    override fun onLoad() {
+        val clazz = com.google.protobuf.Descriptors::class.java
+        println("Protobuf Descriptors loaded from: ${clazz.protectionDomain.codeSource.location}")
+        runBlocking {
+            HelloServiceClient(Client.protocol).sayHello(helloRequest { name = "Vertex" }).success {
+                println(it.message.message)
+            }
+        }
+    }
 
     override fun onEnable() {}
 

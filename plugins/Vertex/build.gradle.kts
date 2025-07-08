@@ -5,6 +5,11 @@ plugins {
 
 dependencies {
     compileOnly(libs.purpur.api)
+    implementation(libs.protobuf.java)
+    implementation(libs.connect.kotlin)
+    implementation(libs.connect.kotlin.google.java.ext)
+    implementation(libs.connect.kotlin.okhttp)
+    implementation(libs.okhttp)
     implementation(project(":lib:kotlin"))
     implementation(project(":gen:proto:kotlin"))
 }
@@ -19,7 +24,10 @@ configurations.configureEach {
 tasks.apply {
     jar { enabled = false }
 
-    shadowJar { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+    shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        relocate("com.google.protobuf", "io.oyasai.protobuf")
+    }
 
     build {
         compileKotlin

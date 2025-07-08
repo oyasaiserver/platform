@@ -13,20 +13,15 @@ import { hello } from './services/hello.ts'
 
 const router = createConnectRouter().service(HelloService, hello)
 
-const handlers = new Map<string, UniversalHandler>()
-for (const handler of router.handlers) {
-  handlers.set(handler.requestPath, handler)
-}
+const handlers = new Map<string, UniversalHandler>(
+  router.handlers.map(handler => [handler.requestPath, handler])
+)
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>()
 
 app
   .use(logger())
-  .use(
-    bearerAuth({
-      token: env.BEARER
-    })
-  )
+  .use(bearerAuth({ token: env.BEARER }))
   .all('*', async ctx => {
     const { pathname } = new URL(ctx.req.url)
     const handler = handlers.get(pathname)
