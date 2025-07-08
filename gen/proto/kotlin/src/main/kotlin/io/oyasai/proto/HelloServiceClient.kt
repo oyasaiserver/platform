@@ -9,6 +9,8 @@ import com.connectrpc.MethodSpec
 import com.connectrpc.ProtocolClientInterface
 import com.connectrpc.ResponseMessage
 import com.connectrpc.StreamType
+import com.connectrpc.http.Cancelable
+import kotlin.Unit
 
 public class HelloServiceClient(
   private val client: ProtocolClientInterface,
@@ -22,6 +24,23 @@ public class HelloServiceClient(
       io.oyasai.proto.HelloResponse::class,
       StreamType.UNARY,
     ),
+  )
+
+
+  override fun sayHello(
+    request: HelloRequest,
+    headers: Headers,
+    onResult: (ResponseMessage<HelloResponse>) -> Unit,
+  ): Cancelable = client.unary(
+    request,
+    headers,
+    MethodSpec(
+    "proto.HelloService/SayHello",
+      io.oyasai.proto.HelloRequest::class,
+      io.oyasai.proto.HelloResponse::class,
+      StreamType.UNARY,
+    ),
+    onResult
   )
 
 }

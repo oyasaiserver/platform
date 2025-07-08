@@ -6,7 +6,15 @@ package io.oyasai.proto
 
 import com.connectrpc.Headers
 import com.connectrpc.ResponseMessage
+import com.connectrpc.http.Cancelable
+import kotlin.Unit
 
 public interface HelloServiceClientInterface {
   public suspend fun sayHello(request: HelloRequest, headers: Headers = emptyMap()): ResponseMessage<HelloResponse>
+
+  public fun sayHello(
+    request: HelloRequest,
+    headers: Headers = emptyMap(),
+    onResult: (ResponseMessage<HelloResponse>) -> Unit,
+  ): Cancelable
 }

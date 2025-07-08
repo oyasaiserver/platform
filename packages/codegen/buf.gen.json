@@ -21,7 +21,8 @@
     },
     {
       "local": "protoc-gen-connect-kotlin",
-      "out": "gen/proto/kotlin/src/main/kotlin"
+      "out": "gen/proto/kotlin/src/main/kotlin",
+      "opt": "generateCallbackMethods=true"
     }
   ],
   "managed": {

@@ -6,7 +6,15 @@ package io.oyasai.proto.v1
 
 import com.connectrpc.Headers
 import com.connectrpc.ResponseMessage
+import com.connectrpc.http.Cancelable
+import kotlin.Unit
 
 public interface ByeServiceClientInterface {
   public suspend fun sayBye(request: ByeRequest, headers: Headers = emptyMap()): ResponseMessage<ByeResponse>
+
+  public fun sayBye(
+    request: ByeRequest,
+    headers: Headers = emptyMap(),
+    onResult: (ResponseMessage<ByeResponse>) -> Unit,
+  ): Cancelable
 }

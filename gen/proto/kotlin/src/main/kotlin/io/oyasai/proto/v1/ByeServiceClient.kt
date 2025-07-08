@@ -9,6 +9,8 @@ import com.connectrpc.MethodSpec
 import com.connectrpc.ProtocolClientInterface
 import com.connectrpc.ResponseMessage
 import com.connectrpc.StreamType
+import com.connectrpc.http.Cancelable
+import kotlin.Unit
 
 public class ByeServiceClient(
   private val client: ProtocolClientInterface,
@@ -22,6 +24,23 @@ public class ByeServiceClient(
       io.oyasai.proto.v1.ByeResponse::class,
       StreamType.UNARY,
     ),
+  )
+
+
+  override fun sayBye(
+    request: ByeRequest,
+    headers: Headers,
+    onResult: (ResponseMessage<ByeResponse>) -> Unit,
+  ): Cancelable = client.unary(
+    request,
+    headers,
+    MethodSpec(
+    "proto.v1.ByeService/SayBye",
+      io.oyasai.proto.v1.ByeRequest::class,
+      io.oyasai.proto.v1.ByeResponse::class,
+      StreamType.UNARY,
+    ),
+    onResult
   )
 
 }
