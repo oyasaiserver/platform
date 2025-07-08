@@ -10,6 +10,7 @@ import { build } from 'tsdown'
 import { $, spinner } from 'zx'
 import { plugins } from '../config.json'
 import { bin, config } from '../package.json'
+import { normalizeJarName } from '../src/utils.ts'
 
 await build({
   format: ['cjs'],
@@ -35,7 +36,7 @@ await spinner('copy-assets', async () => {
   )) {
     await cp(
       file,
-      `assets/overlays/minecraft-main/plugins/${basename(file)}`,
+      `assets/overlays/minecraft-main/plugins/${normalizeJarName(file)}`,
       rf
     )
   }
@@ -43,7 +44,7 @@ await spinner('copy-assets', async () => {
     const response = await fetch(plugin)
     const arrayBuffer = await response.arrayBuffer()
     const buffer = new Uint8Array(arrayBuffer)
-    const path = `assets/overlays/minecraft-main/plugins/${basename(plugin)}`
+    const path = `assets/overlays/minecraft-main/plugins/${normalizeJarName(plugin)}`
     await writeFileSafe(path, buffer)
   }
 })

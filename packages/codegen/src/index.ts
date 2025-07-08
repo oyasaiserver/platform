@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 import { cp, readdir, rm } from 'node:fs/promises'
 import { join, parse } from 'node:path'
+import { composeSpec } from '@oyasaiserver/json/store/compose_spec'
 import { readFileContent, rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import onprem from '@oyasaiserver/onprem'
 import { camelCase, pascalCase } from 'change-case'
@@ -61,9 +62,10 @@ await spinner('json', async () => {
 
 await spinner('compose', async () => {
   for (const [environment, compose] of Object.entries(onprem)) {
+    const parsed = composeSpec.parse(compose)
     await writeFileSafe(
       join(out, 'compose', `compose.${environment}.yaml`),
-      YAML.stringify(compose)
+      YAML.stringify(parsed)
     )
   }
 })

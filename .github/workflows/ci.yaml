@@ -37,4 +37,5 @@ jobs:
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
+          ./gradlew build --parallel
           npm run test --workspaces --if-present
