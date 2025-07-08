@@ -12,7 +12,7 @@ object Client {
             httpClient = ConnectOkHttpClient(),
             config =
                 ProtocolClientConfig(
-                    host = RuntimeSecrets.API_ENPOINT,
+                    host = RuntimeSecrets.API_ENDPOINT,
                     serializationStrategy = GoogleJavaProtobufStrategy(),
                     interceptors = listOf { AuthorizationInterceptor },
                 ),
