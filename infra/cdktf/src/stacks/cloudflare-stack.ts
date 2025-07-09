@@ -42,35 +42,37 @@ export class CloudflareStack extends TerraformStack {
       content: secrets.PUBLIC_IPV4
     })
 
-    const tunnel = new ZeroTrustTunnelCloudflared(
-      this,
-      'zero-trust-tunnel-cloudflared',
-      {
-        accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-        name: 'ssh-oyasai-production',
-        tunnelSecret: secrets.CLOUDFLARE_TUNNEL_SECRET
-      }
-    )
-
-    new ZeroTrustTunnelCloudflaredConfigA(
-      this,
-      'zero-trust-tunnel-cloudflared-config',
-      {
-        accountId: tunnel.accountId,
-        tunnelId: tunnel.id,
-        config: {
-          ingress: [
-            {
-              hostname: 'ssh.oyasai.io',
-              service: 'ssh://localhost:22'
-            },
-            {
-              service: 'http_status:404'
-            }
-          ]
+    if (secrets.ENVIRONMENT === 'production') {
+      const tunnel = new ZeroTrustTunnelCloudflared(
+        this,
+        'zero-trust-tunnel-cloudflared',
+        {
+          accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+          name: 'ssh-oyasai-production',
+          tunnelSecret: secrets.CLOUDFLARE_TUNNEL_SECRET
         }
-      }
-    )
+      )
+
+      new ZeroTrustTunnelCloudflaredConfigA(
+        this,
+        'zero-trust-tunnel-cloudflared-config',
+        {
+          accountId: tunnel.accountId,
+          tunnelId: tunnel.id,
+          config: {
+            ingress: [
+              {
+                hostname: 'ssh.oyasai.io',
+                service: 'ssh://localhost:22'
+              },
+              {
+                service: 'http_status:404'
+              }
+            ]
+          }
+        }
+      )
+    }
 
     new DnsRecord(this, 'tunnel-dns', {
       ttl: 1, // automatic
