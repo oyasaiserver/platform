@@ -2,6 +2,8 @@ import { D1Database } from '@cdktf/provider-cloudflare/lib/d1-database'
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route'
+import { ZeroTrustTunnelCloudflared } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared'
+import { ZeroTrustTunnelCloudflaredConfigA } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared-config'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec'
 import { envAware, envShort } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
@@ -28,6 +30,42 @@ export class CloudflareStack extends TerraformStack {
     new ZoneDnssec(this, `zone-dnssec`, {
       zoneId: this.zoneId,
       status: 'active'
+    })
+
+    const tunnel = new ZeroTrustTunnelCloudflared(
+      this,
+      'zero-trust-tunnel-cloudflared',
+      {
+        accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+        name: 'ssh-oyasai-production',
+        tunnelSecret: secrets.CLOUDFLARE_TUNNEL_SECRET
+      }
+    )
+
+    new ZeroTrustTunnelCloudflaredConfigA(
+      this,
+      'zero-trust-tunnel-cloudflared-config',
+      {
+        accountId: tunnel.accountId,
+        tunnelId: tunnel.id,
+        config: {
+          ingress: [
+            {
+              hostname: 'ssh.oyasai.io',
+              service: 'ssh://sshd:22'
+            }
+          ]
+        }
+      }
+    )
+
+    new DnsRecord(this, 'tunnel-dns', {
+      ttl: 1, // automatic
+      zoneId: this.zoneId,
+      name: 'ssh',
+      type: 'CNAME',
+      proxied: true,
+      content: `${tunnel.id}.cfargotunnel.com`
     })
 
     for (const worker of this.workers) {
