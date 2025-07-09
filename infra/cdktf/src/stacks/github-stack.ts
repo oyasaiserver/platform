@@ -85,7 +85,7 @@ export class GitHubStack extends TerraformStack {
     })
   }
 
-  private getRequiredCheckContexts(): readonly string[] {
+  private getRequiredCheckContexts() {
     return ['ci.yaml', 'pr.yaml'].flatMap(file => {
       const path = join(directory.root, '.github/workflows', file)
       const content = readFileSync(path).toString()
