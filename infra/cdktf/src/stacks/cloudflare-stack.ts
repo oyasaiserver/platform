@@ -72,16 +72,16 @@ export class CloudflareStack extends TerraformStack {
           }
         }
       )
-    }
 
-    new DnsRecord(this, 'tunnel-dns', {
-      ttl: 1, // automatic
-      zoneId: this.zoneId,
-      name: 'ssh',
-      type: 'CNAME',
-      proxied: true,
-      content: `${tunnel.id}.cfargotunnel.com`
-    })
+      new DnsRecord(this, 'tunnel-dns', {
+        ttl: 1, // automatic
+        zoneId: this.zoneId,
+        name: 'ssh',
+        type: 'CNAME',
+        proxied: true,
+        content: `${tunnel.id}.cfargotunnel.com`
+      })
+    }
 
     for (const worker of this.workers) {
       const subdomain = `${worker}${
