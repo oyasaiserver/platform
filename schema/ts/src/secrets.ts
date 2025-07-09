@@ -7,6 +7,8 @@ export const secrets = z
     ENVIRONMENT: environment,
     PUBLIC_IPV4: z.string(), // TODO ipv4 validation
     SSH_PRIVATE_KEY: z.string(),
+    SSH_USERNAME: z.string(),
+    SSH_PASSWORD: z.string(),
     CLOUDFLARE_ACCOUNT_ID: z.string(),
     CLOUDFLARE_API_TOKEN: z.string(),
     CLOUDFLARE_TUNNEL_SECRET: z.string(),

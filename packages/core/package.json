@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "decompress": "^4.2.1",
-    "webpod": "^1.0.0"
+    "node-ssh": "^13.2.1"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
