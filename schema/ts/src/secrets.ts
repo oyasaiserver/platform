@@ -8,6 +8,7 @@ export const secrets = z
     PUBLIC_IPV4: z.ipv4(),
     CLOUDFLARE_ACCOUNT_ID: z.string(),
     CLOUDFLARE_API_TOKEN: z.string(),
+    CLOUDFLARE_TUNNEL_SECRET: z.string(),
     GITHUB_APP_ID: z.string(),
     GITHUB_APP_INSTALLATION_ID: z.string(),
     GITHUB_APP_PEM_FILE: z.string(),
