@@ -62,7 +62,10 @@ export class CloudflareStack extends TerraformStack {
           ingress: [
             {
               hostname: 'ssh.oyasai.io',
-              service: 'ssh://sshd:22'
+              service: 'ssh://localhost:22'
+            },
+            {
+              service: 'http_status:404'
             }
           ]
         }
