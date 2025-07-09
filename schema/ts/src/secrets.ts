@@ -5,6 +5,7 @@ export const secrets = z
   .object({
     DOTENV_PUBLIC_KEY: z.string(),
     ENVIRONMENT: environment,
+    PUBLIC_IPV4: z.ipv4(),
     CLOUDFLARE_ACCOUNT_ID: z.string(),
     CLOUDFLARE_API_TOKEN: z.string(),
     CLOUDFLARE_TUNNEL_SECRET: z.string(),

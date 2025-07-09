@@ -32,6 +32,16 @@ export class CloudflareStack extends TerraformStack {
       status: 'active'
     })
 
+    new DnsRecord(this, envAware(id, 'root-dns-record'), {
+      ttl: 1, // automatic
+      zoneId: this.zoneId,
+      name:
+        secrets.ENVIRONMENT === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
+      type: 'A',
+      proxied: false,
+      content: secrets.PUBLIC_IPV4
+    })
+
     const tunnel = new ZeroTrustTunnelCloudflared(
       this,
       'zero-trust-tunnel-cloudflared',
