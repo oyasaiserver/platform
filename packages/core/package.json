@@ -16,8 +16,7 @@
     "sea": "sea-config.json"
   },
   "dependencies": {
-    "decompress": "^4.2.1",
-    "node-ssh": "^13.2.1"
+    "decompress": "^4.2.1"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
