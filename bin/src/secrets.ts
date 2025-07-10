@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { $, argv } from 'zx'
 

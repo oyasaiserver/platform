@@ -2,7 +2,7 @@
   "name": "@oyasaiserver/api",
   "type": "module",
   "scripts": {
-    "build": "tsx scripts/build.ts",
+    "build": "node scripts/build.ts",
     "deploy": "secrets -- wrangler deploy",
     "dev": "wrangler dev"
   },

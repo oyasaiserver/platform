@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { directory } from '@oyasaiserver/lib/directory'
 import { $, argv } from 'zx'
 

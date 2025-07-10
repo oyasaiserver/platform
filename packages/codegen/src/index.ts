@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import { cp, readdir, rm, writeFile } from 'node:fs/promises'
 import { EOL } from 'node:os'
 import { join, parse } from 'node:path'
