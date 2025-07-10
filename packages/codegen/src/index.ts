@@ -63,7 +63,7 @@ await spinner('json', async () => {
 })
 
 await spinner('compose', async () => {
-  for (const [environment, compose] of Object.entries(onprem)) {
+  for (const [environment, compose] of Object.entries(await onprem)) {
     await writeFileSafe(
       join(out, 'compose', `compose.${environment}.yaml`),
       YAML.stringify(compose)

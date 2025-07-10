@@ -1,0 +1,3 @@
+oyasai.io {
+  redir https://wiki.oyasai.io{uri} permanent
+}
