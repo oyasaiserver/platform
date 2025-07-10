@@ -1,9 +1,8 @@
 import { cp } from 'node:fs/promises'
-import { EOL } from 'node:os'
 import { basename } from 'node:path'
 import { rf } from '@oyasaiserver/lib/fs'
 import { secrets } from '@oyasaiserver/lib/secrets'
-import { NodeSSH } from 'node-ssh'
+import { useSsh } from '@oyasaiserver/lib/ssh'
 import { bin } from '../package.json'
 
 if (secrets.ENVIRONMENT === 'local') {
@@ -11,36 +10,18 @@ if (secrets.ENVIRONMENT === 'local') {
   process.exit(0)
 }
 
-const ssh = await new NodeSSH().connect({
+await using ssh = await useSsh({
   host: secrets.PUBLIC_IPV4,
   username: secrets.SSH_USERNAME,
-  privateKey: secrets.SSH_PRIVATE_KEY
+  password: secrets.SSH_PASSWORD,
+  privateKey: secrets.SSH_PRIVATE_KEY,
+  verbose: true
 })
 
-const tmpfile = `/home/${secrets.SSH_USERNAME}/tmp/core`
-const path = `/opt/platform/${secrets.ENVIRONMENT}`
+await ssh.$`sudo mkdir -p /opt/platform/${secrets.ENVIRONMENT}`
+await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} /opt/platform`
 
-await ssh.putFile(bin, tmpfile)
+await ssh.sftp(bin, `/opt/platform/${secrets.ENVIRONMENT}/core`)
 
-await ssh.execCommand(
-  `
-      sudo mkdir -p ${path} && \
-      sudo mv ${tmpfile} ${path}/core && \
-      sudo chmod +x ${path}/core
-    `,
-  {
-    execOptions: {
-      pty: true
-    },
-    stdin: secrets.SSH_PASSWORD + EOL
-  }
-)
-
-await ssh.execCommand(
-  `
-    cd /opt/platform/${secrets.ENVIRONMENT} && \
-    ./core
-  `
-)
-
-ssh.dispose()
+await ssh.$`sudo chmod +x /opt/platform/${secrets.ENVIRONMENT}/core`
+await ssh.$`cd /opt/platform/${secrets.ENVIRONMENT} && ./core`
