@@ -4,5 +4,5 @@ permissions:
 parents:
   - blue
 prefixes:
-  - "&7&l匠&f ":
+  - '&7&l匠&f ':
       priority: 700

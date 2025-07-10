@@ -4,5 +4,5 @@ permissions:
 parents:
   - takumi
 prefixes:
-  - "&9匠&f ":
+  - '&9匠&f ':
       priority: 600

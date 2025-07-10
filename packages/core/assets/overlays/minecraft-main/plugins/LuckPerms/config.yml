@@ -99,7 +99,7 @@ data:
 
   # Credentials for the database.
   username: root
-  password: ""
+  password: ''
 
   # These settings apply to the MySQL connection pool.
   # - The default values will be suitable for the majority of users.
@@ -152,14 +152,14 @@ data:
   #
   # - This only applies for remote SQL storage types (MySQL, MariaDB, etc).
   # - Change this if you want to use different tables for different servers.
-  table-prefix: "luckperms_"
+  table-prefix: 'luckperms_'
 
   # The prefix to use for all LuckPerms MongoDB collections.
   #
   # - This only applies for the MongoDB storage type.
   # - Change this if you want to use different collections for different servers. The default is no
   # prefix.
-  mongodb-collection-prefix: ""
+  mongodb-collection-prefix: ''
 
   # The connection string URI to use to connect to the MongoDB instance.
   #
@@ -168,7 +168,7 @@ data:
   # - If you have a connection string that starts with 'mongodb://' or 'mongodb+srv://', enter it
   #   below.
   # - For more information, please see https://docs.mongodb.com/manual/reference/connection-string/
-  mongodb-connection-uri: ""
+  mongodb-connection-uri: ''
 
 # Define settings for a "split" storage setup.
 #
@@ -258,25 +258,25 @@ broadcast-received-log-entries: true
 redis:
   enabled: false
   address: localhost
-  username: ""
-  password: ""
+  username: ''
+  password: ''
 
 # Settings for Nats.
 # Port 4222 is used by default; set address to "host:port" if differs
 nats:
   enabled: false
   address: localhost
-  username: ""
-  password: ""
+  username: ''
+  password: ''
 
 # Settings for RabbitMQ.
 # Port 5672 is used by default; set address to "host:port" if differs
 rabbitmq:
   enabled: false
   address: localhost
-  vhost: "/"
-  username: "guest"
-  password: "guest"
+  vhost: '/'
+  username: 'guest'
+  password: 'guest'
 
 # +----------------------------------------------------------------------------------------------+ #
 # |                                                                                              | #
@@ -393,18 +393,18 @@ auto-install-translations: true
 meta-formatting:
   prefix:
     format:
-      - "highest"
+      - 'highest'
     duplicates: first-only
-    start-spacer: ""
-    middle-spacer: " "
-    end-spacer: ""
+    start-spacer: ''
+    middle-spacer: ' '
+    end-spacer: ''
   suffix:
     format:
-      - "highest"
+      - 'highest'
     duplicates: first-only
-    start-spacer: ""
-    middle-spacer: " "
-    end-spacer: ""
+    start-spacer: ''
+    middle-spacer: ' '
+    end-spacer: ''
 
 # +----------------------------------------------------------------------------------------------+ #
 # |                                                                                              | #

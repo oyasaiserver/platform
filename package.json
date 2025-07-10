@@ -14,7 +14,7 @@
     "build": "tsc --build",
     "bump": "taze",
     "check": "sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
-    "codegen": "codegen && npm run format && gradle spotlessApply",
+    "codegen": "codegen && gradle spotlessApply",
     "lint": "oxlint --fix",
     "format": "prettier --write ."
   },

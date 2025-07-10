@@ -2,7 +2,6 @@
 import { cp, readdir, rm, writeFile } from 'node:fs/promises'
 import { EOL } from 'node:os'
 import { join, parse } from 'node:path'
-import { composeSpec } from '@oyasaiserver/json/store/compose_spec'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent, rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import onprem from '@oyasaiserver/onprem'
@@ -13,6 +12,8 @@ import { jsonSchemaToZod } from 'json-schema-to-zod'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
 import bufGenJson from '../buf.gen.json' with { type: 'json' }
+import { writeFileFormat } from '@oyasaiserver/lib/prettier'
+import { normalize } from 'node:path'
 
 const out = 'gen'
 
@@ -42,8 +43,8 @@ await spinner('json', async () => {
       const inner = file.parentPath.substring(src.length)
       const schema = JSON.parse(content)
       const { name } = parse(file.name)
-      await writeFileSafe(
-        `${out}/json/ts/src/${inner}/${name}.ts`,
+      await writeFileFormat(
+        normalize(`${out}/json/ts/src/${inner}/${name}.ts`),
         `
           import { z } from 'zod'
 
@@ -65,10 +66,9 @@ await spinner('json', async () => {
 
 await spinner('compose', async () => {
   for (const [environment, compose] of Object.entries(onprem)) {
-    const parsed = composeSpec.parse(compose)
     await writeFileSafe(
       join(out, 'compose', `compose.${environment}.yaml`),
-      YAML.stringify(parsed)
+      YAML.stringify(compose)
     )
   }
 })
