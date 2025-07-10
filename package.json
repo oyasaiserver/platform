@@ -17,15 +17,15 @@
     "codegen": "codegen && npm run check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.1.1",
     "@bufbuild/buf": "^1.55.1",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.12",
     "sort-package-json": "^3.4.0",
     "taze": "^19.1.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "wrangler": "^4.24.0",
-    "zod": "^3.25.73",
-    "zx": "^8.6.1"
+    "zod": "^3.25.76",
+    "zx": "^8.6.2"
   }
 }

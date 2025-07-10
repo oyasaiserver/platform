@@ -8,7 +8,7 @@
     }
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.45.2",
+    "@dotenvx/dotenvx": "^1.47.3",
     "fast-xml-parser": "^5.2.5",
     "node-ssh": "^13.2.1"
   }

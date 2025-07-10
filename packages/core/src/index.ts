@@ -5,7 +5,7 @@ import { getAssetContent } from '@oyasaiserver/lib/sea'
 import { UpnpClient } from '@oyasaiserver/lib/upnp/upnp-client'
 import { ensure } from '@oyasaiserver/lib/utils'
 import { $, spinner } from 'zx'
-import { config } from '../package.json'
+import packageJson from '../package.json' with { type: 'json' }
 import { applyOverlays } from './overlays.ts'
 import { runtimeSecrets } from './runtime-secrets.ts'
 
@@ -18,7 +18,7 @@ async function main() {
   })
 
   await spinner('apply-overlays', async () => {
-    const seaConfig = getAssetContent(config.sea)
+    const seaConfig = getAssetContent(packageJson.config.sea)
     const { assets } = nodeSeaConfig.parse(JSON.parse(seaConfig))
     const files = Object.keys(ensure(assets))
     await applyOverlays('overlays', files)

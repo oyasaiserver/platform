@@ -12,7 +12,7 @@ import { compile, type JSONSchema } from 'json-schema-to-typescript'
 import { jsonSchemaToZod } from 'json-schema-to-zod'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
-import bufGenJson from '../buf.gen.json'
+import bufGenJson from '../buf.gen.json' with { type: 'json' }
 
 const out = 'gen'
 
