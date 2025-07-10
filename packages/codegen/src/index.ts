@@ -12,8 +12,6 @@ import { jsonSchemaToZod } from 'json-schema-to-zod'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
 import bufGenJson from '../buf.gen.json' with { type: 'json' }
-import { writeFileFormat } from '@oyasaiserver/lib/prettier'
-import { normalize } from 'node:path'
 
 const out = 'gen'
 
@@ -43,8 +41,8 @@ await spinner('json', async () => {
       const inner = file.parentPath.substring(src.length)
       const schema = JSON.parse(content)
       const { name } = parse(file.name)
-      await writeFileFormat(
-        normalize(`${out}/json/ts/src/${inner}/${name}.ts`),
+      await writeFileSafe(
+        `${out}/json/ts/src/${inner}/${name}.ts`,
         `
           import { z } from 'zod'
 

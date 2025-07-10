@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "taze",
-    "codegen": "codegen && gradle spotlessApply",
+    "codegen": "codegen && npm run format",
     "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write && gradle spotlessApply",
     "lint": "oxlint --fix"
   },
