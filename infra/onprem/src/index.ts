@@ -1,13 +1,14 @@
 import { defineInfra } from '../lib/define-infra.ts'
-import { readFileContent } from '@oyasaiserver/lib/fs'
-import { directory } from '@oyasaiserver/lib/directory'
-import { always } from '@oyasaiserver/lib/functional'
+import { envShort } from '@oyasaiserver/lib/environments'
+import dedent from 'dedent'
 
 export default defineInfra(async environment => {
   const isLocal = environment === 'local'
-  const caddyfile = await readFileContent(
-    `${directory.root}/infra/caddy/${environment}/Caddyfile`
-  ).catch(always(''))
+  const redirect = {
+    production: 'https://wiki.oyasai.io',
+    development: 'http://wiki.dev.oyasai.io',
+    local: ''
+  }[environment]
   return {
     services: {
       ...(!isLocal && {
@@ -22,10 +23,14 @@ export default defineInfra(async environment => {
           command: [
             'sh',
             '-c',
-            `cat <<'EOF' > /etc/caddy/Caddyfile
-${caddyfile.trim()}
-EOF
-caddy run --config /etc/caddy/Caddyfile --adapter caddyfile`
+            dedent`
+              cat <<'EOF' > /etc/caddy/${environment}.Caddyfile
+              ${new URL(redirect).hostname.replace('wiki.', '')} {
+                redir ${redirect}{uri} permanent
+              }
+              EOF
+              caddy run --config /etc/caddy/${environment}.Caddyfile --adapter caddyfile
+            `.trim()
           ]
         }
       }),
