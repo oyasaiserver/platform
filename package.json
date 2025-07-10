@@ -13,10 +13,9 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "taze",
-    "check": "sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
     "codegen": "codegen && gradle spotlessApply",
-    "lint": "oxlint --fix",
-    "format": "prettier --write ."
+    "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write && gradle spotlessApply",
+    "lint": "oxlint --fix"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.55.1",
