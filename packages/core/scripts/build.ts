@@ -1,5 +1,5 @@
-import { cp, glob, readdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { basename, join } from 'node:path'
+import { cp, glob, readdir, readFile, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 import { nodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
 import { directory } from '@oyasaiserver/lib/directory'
 import { rf, writeFileSafe, writeJsonFile } from '@oyasaiserver/lib/fs'
