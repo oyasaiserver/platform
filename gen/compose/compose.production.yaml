@@ -15,11 +15,11 @@ services:
       - -c
       - |-
         cat <<'EOF' > /etc/caddy/Caddyfile
-                    dev.oyasai.io {
-        redir http://wiki.dev.oyasai.io{uri} permanent
+        dev.oyasai.io {
+          redir http://wiki.dev.oyasai.io{uri} permanent
         }
-                    EOF
-                    caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+        EOF
+        caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
   minecraft-main:
     image: itzg/minecraft-server:java24
     ports:
