@@ -76,7 +76,7 @@ export class UpnpClient {
       if (end || !data) break
 
       const key = Object.keys(data).find(k =>
-        /^GetGenericPortMappingEntryResponse/.test(k)
+        k.startsWith('GetGenericPortMappingEntryResponse')
       )
 
       if (!key) {

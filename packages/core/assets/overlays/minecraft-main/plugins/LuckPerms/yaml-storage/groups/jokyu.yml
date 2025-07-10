@@ -1,9 +1,9 @@
 name: jokyu
 permissions:
-- essentials.fly
-- weight.400
+  - essentials.fly
+  - weight.400
 parents:
-- chukyu
+  - chukyu
 prefixes:
-- '&3上級者&f ':
-    priority: 300
+  - "&3上級者&f ":
+      priority: 300

@@ -1,0 +1,14 @@
+{
+  "plugins": ["@prettier/plugin-oxc"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "options": {
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "trailingComma": "none"
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
-import { cp, glob, readdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { basename, join } from 'node:path'
+import { cp, glob, readdir, readFile, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 import { nodeSeaConfig } from '@oyasaiserver/json/store/node-sea-config'
 import { directory } from '@oyasaiserver/lib/directory'
 import { rf, writeFileSafe, writeJsonFile } from '@oyasaiserver/lib/fs'
@@ -8,8 +8,8 @@ import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { inject } from 'postject'
 import { build } from 'tsdown'
 import { $, spinner } from 'zx'
-import { plugins } from '../config.json'
-import { bin, config } from '../package.json'
+import config from '../config.json' with { type: 'json' }
+import packageJson from '../package.json' with { type: 'json' }
 import { normalizeJarName } from '../src/utils.ts'
 
 await build({
@@ -40,7 +40,7 @@ await spinner('copy-assets', async () => {
       rf
     )
   }
-  for (const plugin of plugins) {
+  for (const plugin of config.plugins) {
     const response = await fetch(plugin)
     const arrayBuffer = await response.arrayBuffer()
     const buffer = new Uint8Array(arrayBuffer)
@@ -64,27 +64,32 @@ await spinner('create-sea-config', async () => {
   seaConfig.assets = {
     ...assets,
     ['compose.yaml']: 'dist/compose.yaml',
-    [config.sea]: config.sea
+    [packageJson.config.sea]: packageJson.config.sea
   }
 })
 
 await spinner('compile', async () => {
-  await cp(process.execPath, bin)
-  await writeJsonFile(config.sea, seaConfig)
-  await $`node --experimental-sea-config ${config.sea}`
-  await rm(config.sea)
+  await cp(process.execPath, packageJson.bin)
+  await writeJsonFile(packageJson.config.sea, seaConfig)
+  await $`node --experimental-sea-config ${packageJson.config.sea}`
+  await rm(packageJson.config.sea)
 })
 
 await spinner('inject', async () => {
   const isDarwin = process.platform === 'darwin'
 
-  await inject(bin, 'NODE_SEA_BLOB', await readFile(seaConfig.output), {
-    sentinelFuse: 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
-    machoSegmentName: isDarwin ? 'NODE_SEA' : undefined,
-    overwrite: true
-  })
+  await inject(
+    packageJson.bin,
+    'NODE_SEA_BLOB',
+    await readFile(seaConfig.output),
+    {
+      sentinelFuse: 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+      machoSegmentName: isDarwin ? 'NODE_SEA' : undefined,
+      overwrite: true
+    }
+  )
 
   if (isDarwin) {
-    await $`codesign --force --sign - ${bin}`
+    await $`codesign --force --sign - ${packageJson.bin}`
   }
 })

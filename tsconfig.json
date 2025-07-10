@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "composite": true,
-    "target": "esnext",
-    "jsx": "preserve",
+    "target": "es2022",
     "lib": ["esnext"],
+    "module": "nodenext",
     "moduleDetection": "force",
-    "module": "preserve",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "allowJs": true,
     "strict": true,
     "noImplicitOverride": true,

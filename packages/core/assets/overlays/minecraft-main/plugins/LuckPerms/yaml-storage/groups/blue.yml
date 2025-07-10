@@ -1,8 +1,8 @@
 name: blue
 permissions:
-- weight.700
+  - weight.700
 parents:
-- takumi
+  - takumi
 prefixes:
-- '&9匠&f ':
-    priority: 600
+  - "&9匠&f ":
+      priority: 600

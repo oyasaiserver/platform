@@ -1,5 +1,6 @@
 import { EOL } from 'node:os'
 import { type Config, NodeSSH, type SSHExecCommandResponse } from 'node-ssh'
+import { mask } from './secrets.ts'
 
 type Ssh = Readonly<{
   $(
@@ -28,7 +29,7 @@ export async function useSsh(
         }
       }
       if (config.verbose) {
-        process.stdout.write(`$ ${command}${EOL}`)
+        console.log(`$ ${command}`)
       }
       const response = await connection.execCommand(command, {
         execOptions: {
@@ -37,14 +38,17 @@ export async function useSsh(
         stdin: config.password + EOL
       })
       if (response.stdout) {
-        process.stdout.write(response.stdout + EOL)
+        console.log(mask(response.stdout))
       }
       if (response.stderr) {
-        process.stderr.write(response.stderr + EOL)
+        console.error(mask(response.stderr))
       }
       return response
     },
     async sftp(localFile: string, remoteFile: string) {
+      if (config.verbose) {
+        console.log(`[sftp] uploading ${localFile} to ${remoteFile}`)
+      }
       return connection.putFile(localFile, remoteFile)
     },
     async [Symbol.asyncDispose]() {
