@@ -37,7 +37,7 @@ jobs:
     environment: ${{ needs.resolve-env.outputs.environment }}
     strategy:
       matrix:
-        app: [ api, wiki, sociallikes ]
+        app: [api, wiki, sociallikes]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
@@ -62,8 +62,7 @@ jobs:
       - run: |
           npm run build
           npm run deploy
-        working-directory:
-          infra/cdktf
+        working-directory: infra/cdktf
         env:
           ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
