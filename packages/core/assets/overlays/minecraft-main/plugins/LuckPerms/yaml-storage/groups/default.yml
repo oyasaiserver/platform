@@ -1,6 +1,6 @@
 name: default
 permissions:
-  - "*":
+  - '*':
       value: false
   - coreprotect.co
   - essentials.afk

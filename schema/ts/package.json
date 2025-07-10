@@ -7,6 +7,6 @@
     }
   },
   "scripts": {
-    "test": "tsx --test"
+    "test": "node --test"
   }
 }

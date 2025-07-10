@@ -5,5 +5,5 @@ permissions:
 parents:
   - kenchikushi
 prefixes:
-  - "&c匠&f ":
+  - '&c匠&f ':
       priority: 500

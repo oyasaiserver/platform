@@ -4,5 +4,5 @@ permissions:
 parents:
   - shokyu
 prefixes:
-  - "&2中級者&f ":
+  - '&2中級者&f ':
       priority: 200

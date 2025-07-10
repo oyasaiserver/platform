@@ -5,5 +5,5 @@ permissions:
 parents:
   - chukyu
 prefixes:
-  - "&3上級者&f ":
+  - '&3上級者&f ':
       priority: 300
