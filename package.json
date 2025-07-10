@@ -13,11 +13,10 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "taze",
-    "check": "biome check --write && sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
+    "check": "sort-package-json '**/package.json' --quiet && buf format --write && gradle spotlessApply",
     "codegen": "codegen && npm run check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.1",
     "@bufbuild/buf": "^1.55.1",
     "@types/node": "^24.0.12",
     "sort-package-json": "^3.4.0",
