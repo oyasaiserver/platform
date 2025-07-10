@@ -17,7 +17,7 @@ jobs:
       - run: |
           ./gradlew spotlessCheck --parallel
           ./gradlew build --parallel
-          npm run check
+          npm run lint
           npm run build
 
   codegen-no-drift:
