@@ -29,22 +29,24 @@ async function main() {
     await writeFile('.env', asEnvFile(runtimeSecrets))
   })
 
-  await spinner('docker-compose-up', async () => {
-    await $({
-      quiet: true
-    })`docker compose up --detach --wait`
-  })
-
   await spinner('upnp-create-mapping', async () => {
     if (runtimeSecrets.ENVIRONMENT === 'local') {
       return
     }
     const client = new UpnpClient()
-    await client.createMapping({
-      private: 25565,
-      public: 25565
-    })
+    for (const port of [80, 443, 255565]) {
+      await client.createMapping({
+        private: port,
+        public: port
+      })
+    }
     client.close()
+  })
+
+  await spinner('docker-compose-up', async () => {
+    await $({
+      quiet: true
+    })`docker compose up --detach --wait`
   })
 }
 
