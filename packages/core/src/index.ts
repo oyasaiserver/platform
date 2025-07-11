@@ -33,8 +33,12 @@ async function main() {
     if (runtimeSecrets.ENVIRONMENT === 'local') {
       return
     }
+    const ports = [
+      255565,
+      runtimeSecrets.ENVIRONMENT === 'production' ? 443 : 80
+    ]
     const client = new UpnpClient()
-    for (const port of [80, 443, 255565]) {
+    for (const port of ports) {
       await client.createMapping({
         private: port,
         public: port
