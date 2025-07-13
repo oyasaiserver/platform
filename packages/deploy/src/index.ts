@@ -23,7 +23,7 @@ await spinner('prepare', async () => {
     await cp(jar, join(dir, jar))
   }
   for (const { name, url } of config.plugins) {
-    await download(url, join(dir, name))
+    await download(url, `${dir}/${name}.jar`)
   }
 })
 
