@@ -1,10 +1,9 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
 import { $, spinner } from 'zx'
-import { cp, glob, mkdir } from 'node:fs/promises'
+import { cp, glob, mkdir, rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
-import { normalizeJarName } from './utils.ts'
 import { download } from '@oyasaiserver/lib/download'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import config from '../config.json' with { type: 'json' }
@@ -21,10 +20,10 @@ await spinner('prepare', async () => {
   const dir = 'assets/overlays/minecraft-main/plugins'
   const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
   for await (const jar of jars) {
-    await cp(jar, join(dir, normalizeJarName(jar)))
+    await cp(jar, join(dir, jar))
   }
-  for (const plugin of config.plugins) {
-    await download(plugin, join(dir, normalizeJarName(plugin)))
+  for (const { name, url } of config.plugins) {
+    await download(url, join(dir, name))
   }
 })
 
