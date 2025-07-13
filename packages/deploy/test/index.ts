@@ -1,6 +1,5 @@
 import { doesNotMatch, match } from 'node:assert/strict'
 import { after, before, describe, test } from 'node:test'
-import { directory } from '@oyasaiserver/lib/directory'
 import { $ } from 'zx'
 
 await describe(import.meta.filename, async () => {
