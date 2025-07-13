@@ -15,6 +15,3 @@ services:
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway
-volumes:
-  caddy_data: {}
-  caddy_config: {}

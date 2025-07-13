@@ -1,25 +1,4 @@
 services:
-  caddy:
-    image: caddy:latest
-    restart: unless-stopped
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      TZ: UTC
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-    command:
-      - sh
-      - -c
-      - |-
-        cat <<'EOF' > /etc/caddy/production.Caddyfile
-        oyasai.io {
-          redir https://wiki.oyasai.io{uri} permanent
-        }
-        EOF
-        caddy run --config /etc/caddy/production.Caddyfile --adapter caddyfile
   minecraft-main:
     image: itzg/minecraft-server:java24
     ports:
@@ -34,6 +13,3 @@ services:
       TYPE: PURPUR
       VERSION: 1.21.5
     env_file: .env
-volumes:
-  caddy_data: {}
-  caddy_config: {}
