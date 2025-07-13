@@ -1,6 +1,10 @@
 import { EOL } from 'node:os'
-import { type Config, NodeSSH, type SSHExecCommandResponse } from 'node-ssh'
-import { mask } from './secrets.ts'
+import {
+  type Config,
+  NodeSSH,
+  type SSHExecCommandResponse,
+  type SSHGetPutDirectoryOptions
+} from 'node-ssh'
 
 type Ssh = Readonly<{
   $(
@@ -8,6 +12,11 @@ type Ssh = Readonly<{
     ...args: unknown[]
   ): Promise<SSHExecCommandResponse>
   sftp(localFile: string, remoteFile: string): Promise<void>
+  sftpdir(
+    localDirectory: string,
+    remoteDirectory: string,
+    options?: SSHGetPutDirectoryOptions
+  ): Promise<boolean>
 }>
 
 type SshConfig = Config & {
@@ -21,35 +30,43 @@ export async function useSsh(
   await connection.connect(config)
   return {
     async $(pieces, ...args) {
-      let command = ''
-      for (let i = 0; i < pieces.length; i++) {
-        command += pieces[i]
-        if (i < args.length) {
-          command += args[i]
-        }
-      }
+      const command = pieces.reduce(
+        (acc, piece, i) => acc + piece + (args[i] || ''),
+        ''
+      )
       if (config.verbose) {
         console.log(`$ ${command}`)
       }
-      const response = await connection.execCommand(command, {
+      return connection.execCommand(command, {
         execOptions: {
           pty: true
         },
         stdin: config.password + EOL
       })
-      if (response.stdout) {
-        console.log(mask(response.stdout))
-      }
-      if (response.stderr) {
-        console.error(mask(response.stderr))
-      }
-      return response
     },
     async sftp(localFile: string, remoteFile: string) {
       if (config.verbose) {
         console.log(`[sftp] uploading ${localFile} to ${remoteFile}`)
       }
       return connection.putFile(localFile, remoteFile)
+    },
+    async sftpdir(
+      localDirectory: string,
+      remoteDirectory: string,
+      options?: SSHGetPutDirectoryOptions
+    ) {
+      if (config.verbose) {
+        console.log(
+          `[sftp] uploading directory ${localDirectory} to ${remoteDirectory}`
+        )
+      }
+      return connection.putDirectory(localDirectory, remoteDirectory, {
+        concurrency: 10,
+        validate() {
+          return true
+        },
+        ...options
+      })
     },
     async [Symbol.asyncDispose]() {
       connection.dispose()
