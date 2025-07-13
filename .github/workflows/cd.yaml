@@ -16,25 +16,25 @@ on:
           - development
 
 jobs:
-  resolve-env:
+  envs:
     runs-on: ubuntu-latest
     outputs:
-      environment: ${{ steps.env.outputs.environment }}
+      environment: ${{ steps.environment.outputs.environment }}
     steps:
-      - id: env
+      - id: environment
         # language=bash
         run: |
+          ENVIRONMENT="development"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "environment=development" >> "$GITHUB_OUTPUT"
+            ENVIRONMENT="${{ github.event.inputs.environment }}"
           fi
+          echo "environment=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
 
   deploy-apps:
     needs:
-      - resolve-env
+      - envs
     runs-on: ubuntu-latest
-    environment: ${{ needs.resolve-env.outputs.environment }}
+    environment: ${{ needs.envs.outputs.environment }}
     strategy:
       matrix:
         app: [api, wiki, sociallikes]
@@ -43,18 +43,18 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --if-present
-          npm run deploy -- --name ${{ matrix.app }}-${{ needs.resolve-env.outputs.environment }}
+          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }}
         working-directory: apps/${{ matrix.app }}
         env:
-          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   cdktf:
     needs:
-      - resolve-env
+      - envs
       - deploy-apps
     runs-on: ubuntu-latest
-    environment: ${{ needs.resolve-env.outputs.environment }}
+    environment: ${{ needs.envs.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
@@ -64,22 +64,22 @@ jobs:
           npm run deploy
         working-directory: infra/cdktf
         env:
-          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   deploy-onprem:
     needs:
-      - resolve-env
+      - envs
       - cdktf
     runs-on: ubuntu-latest
-    environment: ${{ needs.resolve-env.outputs.environment }}
+    environment: ${{ needs.envs.outputs.environment }}
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
-          npm run build
-          npm run deploy
-        working-directory: packages/core
+          ./gradlew build --parallel
+          npm run start -w packages/deploy
         env:
-          ENVIRONMENT: ${{ needs.resolve-env.outputs.environment }}
+          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}

@@ -21,11 +21,3 @@ export const secrets = secretsSchema.parse(
     })
   })
 )
-
-export function mask(value: string) {
-  let masked = value
-  for (const secret of Object.values(secrets)) {
-    masked = masked.replace(secret, '*'.repeat(secret.length))
-  }
-  return masked
-}

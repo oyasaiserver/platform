@@ -411,4 +411,4 @@ cdktf.log
 !gen/compose/compose.local.yaml
 
 # Local server
-packages/core/server
+packages/deploy/server

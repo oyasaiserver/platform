@@ -6,9 +6,8 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent, rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import onprem from '@oyasaiserver/onprem'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
-import { camelCase, pascalCase } from 'change-case'
+import { pascalCase } from 'change-case'
 import { compile, type JSONSchema } from 'json-schema-to-typescript'
-import { jsonSchemaToZod } from 'json-schema-to-zod'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
 import bufGenJson from '../buf.gen.json' with { type: 'json' }
@@ -44,10 +43,6 @@ await spinner('json', async () => {
       await writeFileSafe(
         `${out}/json/ts/src/${inner}/${name}.ts`,
         `
-          import { z } from 'zod'
-
-          export const ${camelCase(name)} = ${jsonSchemaToZod(schema)} satisfies z.ZodType<${pascalCase(name)}>
-
           ${await compile(schema, name, {
             bannerComment: '',
             customName(schema: JSONSchema) {

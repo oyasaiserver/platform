@@ -23,8 +23,6 @@ export async function writeJsonFile<T>(
 }
 
 export async function writeFileSafe(...args: Parameters<typeof writeFile>) {
-  await mkdir(dirname(args[0].toString()), {
-    recursive: true
-  })
+  await mkdir(dirname(args[0].toString()), rf)
   await writeFile(...args)
 }

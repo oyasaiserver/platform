@@ -4,6 +4,9 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts"
     }
   },
   "dependencies": {

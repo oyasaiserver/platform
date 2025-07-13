@@ -1,5 +1,4 @@
-import { defineInfra } from '../lib/define-infra.ts'
-import { envShort } from '@oyasaiserver/lib/environments'
+import { defineInfra } from './lib/define-infra.ts'
 import dedent from 'dedent'
 
 export default defineInfra(async environment => {
