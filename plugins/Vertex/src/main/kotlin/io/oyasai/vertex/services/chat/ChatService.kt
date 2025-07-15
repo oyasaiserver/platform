@@ -16,10 +16,9 @@ object ChatService : Service() {
     @EventHandler
     fun onAsyncChat(event: AsyncChatEvent) {
         runBlocking {
-            client.transliterate(transliterateRequest { romaji = event.message().asPlainText() })
-                .success {
-                    event.message(Component.text(it.message.transliterated))
-                }
+            client
+                .transliterate(transliterateRequest { romaji = event.message().asPlainText() })
+                .success { event.message(Component.text(it.message.transliterated)) }
         }
     }
 }

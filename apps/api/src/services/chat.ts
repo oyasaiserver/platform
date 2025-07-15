@@ -1,7 +1,7 @@
 import type { ServiceImpl } from '@connectrpc/connect'
 import { ChatService } from '@oyasaiserver/proto/v1/chat_pb'
 import { toHiragana } from '@koozaki/romaji-conv'
-import { fetchJson, fetchJsonWithSchema } from '@oyasaiserver/lib/fetch'
+import { fetchJsonWithSchema } from '@oyasaiserver/lib/fetch'
 import { z } from 'zod'
 
 const url = new URL('https://www.google.com/transliterate')
