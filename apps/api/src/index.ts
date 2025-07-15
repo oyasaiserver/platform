@@ -17,9 +17,7 @@ const handlers = new Map<string, UniversalHandler>(
   router.handlers.map(handler => [handler.requestPath, handler])
 )
 
-const app = new Hono<{ Bindings: Cloudflare.Env }>()
-
-export default app
+export default new Hono()
   .use(logger())
   .use(bearerAuth({ token: env.BEARER }))
   .all('*', async ctx => {
