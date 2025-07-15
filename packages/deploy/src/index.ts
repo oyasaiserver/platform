@@ -7,7 +7,7 @@ import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { download } from '@oyasaiserver/lib/download'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import config from '../config.json' with { type: 'json' }
-import { format, join } from 'node:path'
+import { basename, format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
 
@@ -20,7 +20,7 @@ await spinner('prepare', async () => {
   const dir = 'assets/overlays/minecraft-main/plugins'
   const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
   for await (const jar of jars) {
-    await cp(jar, join(dir, jar))
+    await cp(jar, join(dir, basename(jar)))
   }
   for (const { name, url } of config.plugins) {
     await download(url, format({ dir, name, ext: '.jar' }))
