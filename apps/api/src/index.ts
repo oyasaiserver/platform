@@ -5,13 +5,13 @@ import {
   universalServerRequestFromFetch,
   universalServerResponseToFetch
 } from '@connectrpc/connect/protocol'
-import { HelloService } from '@oyasaiserver/proto/hello_pb'
 import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
 import { logger } from 'hono/logger'
-import { hello } from './services/hello.ts'
+import { chatServiceImpl } from './services/chat.ts'
+import { ChatService } from '@oyasaiserver/proto/v1/chat_pb'
 
-const router = createConnectRouter().service(HelloService, hello)
+const router = createConnectRouter().service(ChatService, chatServiceImpl)
 
 const handlers = new Map<string, UniversalHandler>(
   router.handlers.map(handler => [handler.requestPath, handler])
@@ -19,7 +19,7 @@ const handlers = new Map<string, UniversalHandler>(
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>()
 
-app
+export default app
   .use(logger())
   .use(bearerAuth({ token: env.BEARER }))
   .all('*', async ctx => {
@@ -32,5 +32,3 @@ app
     const res = await handler(req)
     return universalServerResponseToFetch(res)
   })
-
-export default app

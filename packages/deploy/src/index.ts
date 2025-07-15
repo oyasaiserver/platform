@@ -1,13 +1,13 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
 import { $, spinner } from 'zx'
-import { cp, glob, mkdir, rm } from 'node:fs/promises'
+import { cp, glob, mkdir } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { download } from '@oyasaiserver/lib/download'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import config from '../config.json' with { type: 'json' }
-import { join } from 'node:path'
+import { format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
 
@@ -23,7 +23,7 @@ await spinner('prepare', async () => {
     await cp(jar, join(dir, jar))
   }
   for (const { name, url } of config.plugins) {
-    await download(url, `${dir}/${name}.jar`)
+    await download(url, format({ dir, name, ext: '.jar' }))
   }
 })
 
