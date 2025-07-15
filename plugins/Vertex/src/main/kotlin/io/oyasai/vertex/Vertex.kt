@@ -23,7 +23,7 @@ class Vertex : JavaPlugin() {
 
     companion object {
         val plugin by lazy { getPlugin(Vertex::class.java) }
-        val reflections = Reflections(Vertex::class.java.packageName)
-        val services = reflections.getSubKotlinObjectsOf<Service>()
+        val reflections by lazy { Reflections(Vertex::class.java.packageName) }
+        val services by lazy { reflections.getSubKotlinObjectsOf<Service>() }
     }
 }
