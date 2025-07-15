@@ -15,7 +15,7 @@
     "bump": "taze",
     "codegen": "codegen && npm run format",
     "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write && gradle spotlessApply",
-    "lint": "oxlint --fix"
+    "lint": "oxlint --fix && buf lint && gradle spotlessCheck"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.55.1",
