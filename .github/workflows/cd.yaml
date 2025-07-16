@@ -43,7 +43,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --if-present
-          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null 2>&1
+          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null
         working-directory: apps/${{ matrix.app }}
         env:
           ENVIRONMENT: ${{ needs.envs.outputs.environment }}
