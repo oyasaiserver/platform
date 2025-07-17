@@ -29,7 +29,7 @@ export class GitHubStack extends TerraformStack {
       }
     })
 
-    new Repository(this, `${id}_repository`, {
+    new Repository(this, 'platform', {
       name: 'platform',
       description: 'Platform for Oyasai Server',
       visibility: 'public',
@@ -47,12 +47,12 @@ export class GitHubStack extends TerraformStack {
       squashMergeCommitTitle: 'PR_TITLE'
     })
 
-    new BranchDefault(this, `${id}_branch_default`, {
+    new BranchDefault(this, 'main', {
       repository: this.repository,
       branch: this.defaultBranch
     })
 
-    new RepositoryRuleset(this, `${id}_repository_ruleset`, {
+    new RepositoryRuleset(this, 'protect-main', {
       repository: this.repository,
       enforcement: 'active',
       name: 'base',
