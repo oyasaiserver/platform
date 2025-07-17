@@ -20,6 +20,22 @@ await spinner('md', async () => {
   await writeFileSafe(`${out}/md/README.md`, readme)
 })
 
+await spinner('wrangler', async () => {
+  const apps = await readdir('apps')
+  await Promise.all(
+    apps.map(async app => {
+      await $`cd apps/${app} && wrangler types`
+      const path = `apps/${app}/worker-configuration.d.ts`
+      const content = await readFileContent(path)
+      const patched = content
+        .split(EOL)
+        .filter(it => !it.startsWith('// Runtime types generated with workerd'))
+        .join(EOL)
+      await writeFileSafe(path, patched)
+    })
+  )
+})
+
 await spinner('proto', async () => {
   await cp(join(import.meta.dirname, '../static'), out, rf)
 
