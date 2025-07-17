@@ -49,7 +49,7 @@ export class CloudflareStack extends TerraformStack {
         tunnelSecret: secrets.CLOUDFLARE_TUNNEL_SECRET
       })
 
-      new ZeroTrustTunnelCloudflaredConfigA(this, `${tunnel.id}-config`, {
+      new ZeroTrustTunnelCloudflaredConfigA(this, 'tunnel-config', {
         accountId: tunnel.accountId,
         tunnelId: tunnel.id,
         config: {
@@ -65,7 +65,7 @@ export class CloudflareStack extends TerraformStack {
         }
       })
 
-      new DnsRecord(this, `${tunnel.id}-dns-record`, {
+      new DnsRecord(this, 'tunnel-dns-record', {
         ttl: 1, // automatic
         zoneId: this.zoneId,
         name: 'ssh',
