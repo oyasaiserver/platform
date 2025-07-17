@@ -1,7 +1,6 @@
 import { env } from 'cloudflare:workers'
 import { createConnectRouter } from '@connectrpc/connect'
 import {
-  type UniversalHandler,
   universalServerRequestFromFetch,
   universalServerResponseToFetch
 } from '@connectrpc/connect/protocol'
@@ -13,7 +12,7 @@ import { ChatService } from '@oyasaiserver/proto/v1/chat_pb'
 
 const router = createConnectRouter().service(ChatService, chatServiceImpl)
 
-const handlers = new Map<string, UniversalHandler>(
+const handlers = new Map(
   router.handlers.map(handler => [handler.requestPath, handler])
 )
 
