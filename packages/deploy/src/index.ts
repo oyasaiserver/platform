@@ -10,6 +10,7 @@ import config from '../config.json' with { type: 'json' }
 import { basename, format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
+import { config as onpremConfig } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
   await writeFileSafe(`dist/.env`, asEnvFile(runtimeSecrets.parse(secrets)))
@@ -59,8 +60,10 @@ await ssh.sftpdir('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
-for (const port of [80, 443, 25565]) {
-  await ssh.$`upnpc -a $(hostname -I | awk '{print $1}') ${port} ${port} TCP`
-}
+await Promise.all(
+  [80, 443, onpremConfig.minecraft.port[secrets.ENVIRONMENT]].map(port => {
+    return ssh.$`upnpc -a $(hostname -I | awk '{print $1}') ${port} ${port} TCP`
+  })
+)
 
 await ssh.$`cd ${dir} && docker compose up --detach --wait`
