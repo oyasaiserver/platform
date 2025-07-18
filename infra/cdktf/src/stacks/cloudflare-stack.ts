@@ -1,11 +1,10 @@
-import { D1Database } from '@cdktf/provider-cloudflare/lib/d1-database/index.js'
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record/index.js'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZeroTrustTunnelCloudflared } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared/index.js'
 import { ZeroTrustTunnelCloudflaredConfigA } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared-config/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import { envAware, envShort } from '@oyasaiserver/lib/environments'
+import { envAware } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
@@ -16,7 +15,6 @@ export class CloudflareStack extends TerraformStack {
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
   private readonly workers = ['api', 'wiki', 'sociallikes']
-  private readonly databases = ['sociallikes_buildings', 'sociallikes_likes']
 
   public constructor(scope: Construct, id: string) {
     super(scope, id)
@@ -32,7 +30,7 @@ export class CloudflareStack extends TerraformStack {
       status: 'active'
     })
 
-    new DnsRecord(this, envAware('root-dns-record'), {
+    const rootDnsRecord = new DnsRecord(this, envAware('root-dns-record'), {
       ttl: 1, // automatic
       zoneId: this.zoneId,
       name:
@@ -76,16 +74,12 @@ export class CloudflareStack extends TerraformStack {
     }
 
     for (const worker of this.workers) {
-      const subdomain = `${worker}${
-        secrets.ENVIRONMENT === 'production'
-          ? ''
-          : `.${envShort(secrets.ENVIRONMENT)}`
-      }`
+      const domain = `${worker}.${rootDnsRecord.name}`
 
       new DnsRecord(this, envAware(worker, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
-        name: subdomain,
+        name: domain.replace('.oyasai.io', ''),
         type: 'A',
         proxied: true,
         content: this.dummyIp
@@ -93,18 +87,8 @@ export class CloudflareStack extends TerraformStack {
 
       new WorkersRoute(this, envAware(worker, 'workers-route'), {
         zoneId: this.zoneId,
-        pattern: `${subdomain}.oyasai.io/*`,
+        pattern: `${domain}/*`,
         script: envAware(worker)
-      })
-    }
-
-    for (const database of this.databases) {
-      new D1Database(this, envAware(database, 'd1-database'), {
-        accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-        name: `${database}_${secrets.ENVIRONMENT}`,
-        readReplication: {
-          mode: 'disabled'
-        }
       })
     }
   }

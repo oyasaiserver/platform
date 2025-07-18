@@ -2,7 +2,7 @@ import { type Environment } from '@oyasaiserver/schema/environment'
 import { secrets } from './secrets.ts'
 
 export function envAware(...fragments: string[]) {
-  return [...fragments, secrets.ENVIRONMENT].join('_')
+  return [...fragments, secrets.ENVIRONMENT].join('-')
 }
 
 export function envShort(environment: Environment) {
