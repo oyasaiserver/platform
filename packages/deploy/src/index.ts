@@ -66,4 +66,4 @@ await Promise.all(
   })
 )
 
-await ssh.$`cd ${dir} && docker compose up --detach --wait`
+await ssh.$`cd ${dir} && docker compose up --detach`
