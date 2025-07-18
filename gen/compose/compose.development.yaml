@@ -2,7 +2,7 @@ services:
   minecraft-main:
     image: itzg/minecraft-server:java24
     ports:
-      - 25565:25565
+      - 25566:25565
     volumes:
       - ./minecraft-main:/data
     restart: unless-stopped
@@ -13,3 +13,5 @@ services:
       TYPE: PURPUR
       VERSION: 1.21.5
     env_file: .env
+    extra_hosts:
+      - host.docker.internal:host-gateway

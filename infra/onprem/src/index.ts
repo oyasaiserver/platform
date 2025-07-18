@@ -1,26 +1,28 @@
 import { defineInfra } from './lib/define-infra.ts'
+import type { Service } from '@oyasaiserver/json/store/compose_spec'
+import { config } from './config.ts'
 
 export default defineInfra(async environment => {
-  const isLocal = environment === 'local'
-  return {
-    services: {
-      'minecraft-main': {
-        image: 'itzg/minecraft-server:java24',
-        ports: ['25565:25565'],
-        volumes: [`./minecraft-main:/data`],
-        restart: 'unless-stopped',
-        tty: true,
-        stdin_open: true,
-        environment: {
-          EULA: 'TRUE',
-          TYPE: 'PURPUR',
-          VERSION: '1.21.5'
-        },
-        env_file: '.env',
-        ...(isLocal && {
-          extra_hosts: ['host.docker.internal:host-gateway']
-        })
-      }
+  const services: Record<string, Service> = {
+    'minecraft-main': {
+      image: 'itzg/minecraft-server:java24',
+      ports: [
+        `${config.minecraft.port[environment]}:${config.minecraft.port.default}`
+      ],
+      volumes: ['./minecraft-main:/data'],
+      restart: 'unless-stopped',
+      tty: true,
+      stdin_open: true,
+      environment: {
+        EULA: 'TRUE',
+        TYPE: config.minecraft.type,
+        VERSION: config.minecraft.version
+      },
+      env_file: '.env',
+      extra_hosts: ['host.docker.internal:host-gateway']
     }
+  }
+  return {
+    services
   }
 })
