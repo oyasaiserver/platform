@@ -1,9 +1,0 @@
-{
-  "name": "@oyasaiserver/deploy",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node src/index.ts",
-    "test": "node --test"
-  }
-}
