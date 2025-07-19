@@ -40,39 +40,6 @@ export class CloudflareStack extends TerraformStack {
       content: secrets.PUBLIC_IPV4
     })
 
-    if (secrets.ENVIRONMENT === 'production') {
-      const tunnel = new ZeroTrustTunnelCloudflared(this, 'tunnel', {
-        accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-        name: 'ssh',
-        tunnelSecret: secrets.CLOUDFLARE_TUNNEL_SECRET
-      })
-
-      new ZeroTrustTunnelCloudflaredConfigA(this, 'tunnel-config', {
-        accountId: tunnel.accountId,
-        tunnelId: tunnel.id,
-        config: {
-          ingress: [
-            {
-              hostname: 'ssh.oyasai.io',
-              service: 'ssh://localhost:22'
-            },
-            {
-              service: 'http_status:404'
-            }
-          ]
-        }
-      })
-
-      new DnsRecord(this, 'tunnel-dns-record', {
-        ttl: 1, // automatic
-        zoneId: this.zoneId,
-        name: 'ssh',
-        type: 'CNAME',
-        proxied: true,
-        content: `${tunnel.id}.cfargotunnel.com`
-      })
-    }
-
     for (const worker of this.workers) {
       const domain = `${worker}.${rootDnsRecord.name}`
 

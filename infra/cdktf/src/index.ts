@@ -2,12 +2,9 @@ import { App } from 'cdktf'
 import { CloudflareStack } from './stacks/cloudflare-stack.ts'
 import { GitHubStack } from './stacks/github-stack.ts'
 
-class PlatformApp extends App {
-  public constructor() {
-    super()
-    new GitHubStack(this, 'github')
-    new CloudflareStack(this, 'cloudflare')
-  }
-}
+const app = new App()
 
-new PlatformApp().synth()
+new GitHubStack(app, 'github')
+new CloudflareStack(app, 'cloudflare')
+
+app.synth()
