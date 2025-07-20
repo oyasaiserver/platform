@@ -4,7 +4,7 @@
   "scripts": {
     "build": "cdktf get && cdktf synth",
     "deploy": "secrets -- cdktf deploy '*' --auto-approve",
-    "test": "node --test"
+    "test:integration": "node --test 'test/integration/**/*.ts'"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.2.1",

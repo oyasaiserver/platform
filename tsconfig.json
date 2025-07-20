@@ -31,7 +31,6 @@
     { "path": "infra/cdktf" },
     { "path": "lib/ts" },
     { "path": "packages/codegen" },
-    { "path": "packages/migrate" },
     { "path": "schema/ts" }
   ],
   "files": []

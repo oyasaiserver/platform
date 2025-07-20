@@ -42,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
