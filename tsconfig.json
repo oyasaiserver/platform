@@ -30,7 +30,6 @@
     { "path": "gen/proto/ts" },
     { "path": "infra/cdktf" },
     { "path": "lib/ts" },
-    { "path": "packages/deploy" },
     { "path": "packages/codegen" },
     { "path": "packages/migrate" },
     { "path": "schema/ts" }

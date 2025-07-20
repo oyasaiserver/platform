@@ -30,7 +30,15 @@ jobs:
           npm run codegen
           test -z "$(git status --porcelain)"
 
-  tests:
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: |
+          npm run test --workspaces --if-present
+
+  test-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,4 +46,4 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           ./gradlew build --parallel
-          npm run test --workspaces --if-present
+          npm run test:integration --workspaces --if-present
