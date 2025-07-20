@@ -2,6 +2,9 @@
   "name": "@oyasaiserver/lib",
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "secrets": "bin/secrets.ts"
+  },
   "exports": {
     "./*": {
       "import": "./src/*.ts"

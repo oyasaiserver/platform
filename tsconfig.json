@@ -25,7 +25,6 @@
     { "path": "apps/api" },
     { "path": "apps/wiki" },
     { "path": "apps/sociallikes" },
-    { "path": "bin" },
     { "path": "gen/json/ts" },
     { "path": "gen/proto/ts" },
     { "path": "infra/cdktf" },

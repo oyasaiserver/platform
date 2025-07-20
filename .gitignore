@@ -407,7 +407,7 @@ cdktf.log
 .wrangler
 
 # Codegen
-!bin/lib/*.jar
+!packages/codegen/lib/*.jar
 !gen/compose/compose.local.yaml
 
 # Local server
