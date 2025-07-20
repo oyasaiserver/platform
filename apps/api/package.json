@@ -7,7 +7,7 @@
     "dev": "wrangler dev"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.6.0",
+    "@bufbuild/protobuf": "^2.6.1",
     "@connectrpc/connect": "^2.0.2",
     "@koozaki/romaji-conv": "^2.0.32",
     "hono": "^4.8.5"

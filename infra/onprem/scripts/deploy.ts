@@ -60,12 +60,12 @@ await ssh.sftpdir('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
-for (const port of [
+await ssh.$`sudoc upnpc -r ${[
   config.port.http,
   config.port.https,
   config.services.minecraft.port[secrets.ENVIRONMENT]
-]) {
-  await ssh.$`sudo upnpc -d $(hostname -I | awk '{print $1}') ${port} TCP || true`
-}
+]
+  .map(port => `${port} tcp`)
+  .join(' ')}`
 
 await ssh.$`cd ${dir} && docker compose up --detach --wait`
