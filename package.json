@@ -20,13 +20,13 @@
   "devDependencies": {
     "@bufbuild/buf": "^1.55.1",
     "@prettier/plugin-oxc": "^0.0.4",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.0.15",
     "oxlint": "^1.7.0",
     "prettier": "^3.6.2",
     "sort-package-json": "^3.4.0",
     "taze": "^19.1.0",
     "typescript": "^5.8.3",
-    "wrangler": "^4.24.4",
+    "wrangler": "^4.25.0",
     "zod": "^4.0.5",
     "zx": "^8.7.1"
   }
