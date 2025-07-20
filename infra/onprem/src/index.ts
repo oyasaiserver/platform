@@ -7,7 +7,7 @@ export default defineInfra(async environment => {
     'minecraft-main': {
       image: 'itzg/minecraft-server:java24',
       ports: [
-        `${config.minecraft.port[environment]}:${config.minecraft.port.default}`
+        `${config.services.minecraft.port[environment]}:${config.port.minecraft}`
       ],
       volumes: ['./minecraft-main:/data'],
       restart: 'unless-stopped',
@@ -15,8 +15,8 @@ export default defineInfra(async environment => {
       stdin_open: true,
       environment: {
         EULA: 'TRUE',
-        TYPE: config.minecraft.type,
-        VERSION: config.minecraft.version
+        TYPE: config.services.minecraft.type,
+        VERSION: config.services.minecraft.version
       },
       env_file: '.env',
       extra_hosts: ['host.docker.internal:host-gateway']

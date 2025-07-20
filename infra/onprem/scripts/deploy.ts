@@ -6,11 +6,11 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { download } from '@oyasaiserver/lib/download'
 import { asEnvFile } from '@oyasaiserver/lib/env'
-import config from '../config.json' with { type: 'json' }
+import plugins from '../plugins.json' with { type: 'json' }
 import { basename, format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
-import { config as onpremConfig } from '@oyasaiserver/onprem/config'
+import { config } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
   await writeFileSafe(`dist/.env`, asEnvFile(runtimeSecrets.parse(secrets)))
@@ -23,7 +23,7 @@ await spinner('prepare', async () => {
   for await (const jar of jars) {
     await cp(jar, join(dir, basename(jar)))
   }
-  for (const { name, url } of config.plugins) {
+  for (const { name, url } of plugins) {
     await download(url, format({ dir, name, ext: '.jar' }))
   }
 })
@@ -60,10 +60,12 @@ await ssh.sftpdir('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
-await Promise.all(
-  [80, 443, onpremConfig.minecraft.port[secrets.ENVIRONMENT]].map(port => {
-    return ssh.$`upnpc -a $(hostname -I | awk '{print $1}') ${port} ${port} TCP`
-  })
-)
+for (const port of [
+  config.port.http,
+  config.port.https,
+  config.services.minecraft.port[secrets.ENVIRONMENT]
+]) {
+  await ssh.$`sudo upnpc -d $(hostname -I | awk '{print $1}') ${port} TCP || true`
+}
 
-await ssh.$`cd ${dir} && docker compose up --detach`
+await ssh.$`cd ${dir} && docker compose up --detach --wait`

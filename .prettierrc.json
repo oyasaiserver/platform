@@ -1,7 +1,7 @@
 {
   "plugins": ["@prettier/plugin-oxc"],
+  "arrowParens": "avoid",
   "semi": false,
   "singleQuote": true,
-  "arrowParens": "avoid",
   "trailingComma": "none"
 }
