@@ -2,7 +2,6 @@
   "type": "module",
   "workspaces": [
     "apps/*",
-    "bin",
     "gen/json/ts",
     "gen/proto/ts",
     "infra/*",
@@ -13,9 +12,9 @@
   "scripts": {
     "build": "tsc --build",
     "bump": "taze",
-    "codegen": "codegen && npm run format",
-    "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write && gradle spotlessApply",
-    "lint": "oxlint --fix && gradle spotlessCheck"
+    "codegen": "codegen && npm run format && ./gradlew spotlessApply",
+    "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write",
+    "lint": "oxlint --fix"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.55.1",
