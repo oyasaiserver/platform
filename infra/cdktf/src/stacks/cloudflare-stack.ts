@@ -1,8 +1,6 @@
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record/index.js'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
-import { ZeroTrustTunnelCloudflared } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared/index.js'
-import { ZeroTrustTunnelCloudflaredConfigA } from '@cdktf/provider-cloudflare/lib/zero-trust-tunnel-cloudflared-config/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
 import { envAware } from '@oyasaiserver/lib/environments'
 import { secrets } from '@oyasaiserver/lib/secrets'
