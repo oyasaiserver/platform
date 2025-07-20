@@ -2,7 +2,7 @@
   "name": "@oyasaiserver/onprem",
   "type": "module",
   "scripts": {
-    "deploy": "node src/index.ts",
+    "deploy": "node scripts/deploy.ts",
     "test:integration": "node --test test/integration"
   },
   "exports": {

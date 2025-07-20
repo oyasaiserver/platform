@@ -6,7 +6,7 @@ await describe(import.meta.filename, async () => {
   const container = 'local-minecraft-main-1'
 
   before(async () => {
-    await $`npm run start`
+    await $`npm run deploy`
   })
 
   async function getLogs() {
