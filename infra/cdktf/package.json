@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "build": "cdktf get && cdktf synth",
-    "deploy": "secrets -- cdktf deploy '*' --auto-approve"
+    "deploy": "secrets -- cdktf deploy '*' --auto-approve",
+    "test": "node --test"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.2.1",

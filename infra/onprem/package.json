@@ -11,6 +11,6 @@
   },
   "scripts": {
     "deploy": "node scripts/deploy.ts",
-    "test:integration": "node --test 'test/integration/**/*'"
+    "test:integration": "node --test 'test/integration/**/*.ts'"
   }
 }
