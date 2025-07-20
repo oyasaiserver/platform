@@ -60,7 +60,7 @@ await ssh.sftpdir('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
-await ssh.$`sudoc upnpc -r ${[
+await ssh.$`sudo upnpc -r ${[
   config.port.http,
   config.port.https,
   config.services.minecraft.port[secrets.ENVIRONMENT]
