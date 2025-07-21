@@ -3,7 +3,6 @@ import { parse } from '@dotenvx/dotenvx'
 import { secrets as secretsSchema } from '@oyasaiserver/schema/secrets'
 import { directory } from './directory.ts'
 import { readFileContent } from './fs.ts'
-import { envkey } from '@oyasaiserver/schema/envkey'
 import { environment } from './environments.ts'
 
 const envfile = `${directory.root}/envs/${environment}/.env`
@@ -16,7 +15,6 @@ export const secrets = secretsSchema.parse(
       process.env.DOTENV_PRIVATE_KEY ||
       (await readFileContent(`${envfile}.keys`)
         .then(parseEnv)
-        .then(envkey.parse)
         .then(it => it.DOTENV_PRIVATE_KEY))
   })
 )
