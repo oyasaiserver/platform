@@ -412,3 +412,4 @@ cdktf.log
 
 # Local server
 infra/onprem/server
+!infra/onprem/assets/overlays/**/*.jar

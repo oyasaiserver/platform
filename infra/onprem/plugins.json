@@ -4,6 +4,14 @@
     "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsX-2.21.1.jar"
   },
   {
+    "name": "EssentialsXChat",
+    "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsXChat-2.21.1.jar"
+  },
+  {
+    "name": "EssentialsXSpawn",
+    "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsXSpawn-2.21.1.jar"
+  },
+  {
     "name": "LuckPerms",
     "url": "https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar"
   },
