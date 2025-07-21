@@ -1,4 +1,5 @@
 import type { ZodType } from 'zod'
+import { writeFileSafe } from './fs.ts'
 
 export async function fetchJsonWithSchema<T>(
   schema: ZodType<T>,
@@ -9,9 +10,9 @@ export async function fetchJsonWithSchema<T>(
   return schema.parse(json)
 }
 
-export async function fetchJson<T>(
-  ...args: Parameters<typeof fetch>
-): Promise<T> {
-  const response = await fetch(...args)
-  return (await response.json()) as T
+export async function download(url: string | URL, dest: string): Promise<void> {
+  const response = await fetch(url)
+  const arrayBuffer = await response.arrayBuffer()
+  const buffer = new Uint8Array(arrayBuffer)
+  await writeFileSafe(dest, buffer)
 }
