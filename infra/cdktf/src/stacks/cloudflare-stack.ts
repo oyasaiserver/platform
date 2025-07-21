@@ -7,12 +7,14 @@ import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
+import { readdirSync } from 'node:fs'
+import { directory } from '@oyasaiserver/lib/directory'
 
 export class CloudflareStack extends TerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
-  private readonly workers = ['api', 'wiki', 'sociallikes']
+  private readonly workers = readdirSync(`${directory.root}/apps`)
 
   public constructor(scope: Construct, id: string) {
     super(scope, id)

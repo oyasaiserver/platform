@@ -1,8 +1,0 @@
-{
-  "name": "@oyasaiserver/sociallikes",
-  "type": "module",
-  "scripts": {
-    "deploy": "secrets -- wrangler deploy",
-    "dev": "wrangler dev"
-  }
-}
