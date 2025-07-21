@@ -5,7 +5,6 @@ import { directory } from './directory.ts'
 import { readFileContent } from './fs.ts'
 import { envkey } from '@oyasaiserver/schema/envkey'
 import { environment } from './environments.ts'
-import { fallback } from './functional.ts'
 
 const envfile = `${directory.root}/envs/${environment}/.env`
 
@@ -13,10 +12,11 @@ const content = await readFileContent(envfile)
 
 export const secrets = secretsSchema.parse(
   parse(content, {
-    privateKey: await fallback(process.env.DOTENV_PRIVATE_KEY, async () => {
-      const content = await readFileContent(`${envfile}.keys`)
-      const env = parseEnv(content)
-      return envkey.parse(env).DOTENV_PRIVATE_KEY
-    })
+    privateKey:
+      process.env.DOTENV_PRIVATE_KEY ||
+      (await readFileContent(`${envfile}.keys`)
+        .then(parseEnv)
+        .then(envkey.parse)
+        .then(it => it.DOTENV_PRIVATE_KEY))
   })
 )
