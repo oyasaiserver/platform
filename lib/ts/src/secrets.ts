@@ -3,8 +3,10 @@ import { parse } from '@dotenvx/dotenvx'
 import { secrets as secretsSchema } from '@oyasaiserver/schema/secrets'
 import { directory } from './directory.ts'
 import { readFileContent } from './fs.ts'
-import { environment } from './environments.ts'
 import { env } from 'node:process'
+import { environment as environmentSchema } from '@oyasaiserver/schema/environment'
+
+const environment = environmentSchema.parse(env.ENVIRONMENT)
 
 const envfile = `${directory.root}/envs/${environment}/.env`
 
