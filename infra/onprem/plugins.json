@@ -26,5 +26,9 @@
   {
     "name": "FastAsyncWorldEdit",
     "url": "https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/download/2.13.0/FastAsyncWorldEdit-Paper-2.13.0.jar"
+  },
+  {
+    "name": "WorldGuard",
+    "url": "https://dev.bukkit.org/projects/worldguard/files/6643567"
   }
 ]
