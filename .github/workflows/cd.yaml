@@ -37,7 +37,7 @@ jobs:
     environment: ${{ needs.envs.outputs.environment }}
     strategy:
       matrix:
-        app: [api, wiki, sociallikes]
+        app: [wiki]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node
