@@ -21,6 +21,10 @@
   },
   {
     "name": "ProtocolLib",
-    "url": "https://github.com/dmulloy2/ProtocolLib/releases/download/5.3.0/ProtocolLib.jar"
+    "url": "https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/artifact/build/libs/ProtocolLib.jar"
+  },
+  {
+    "name": "FastAsyncWorldEdit",
+    "url": "https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/download/2.13.0/FastAsyncWorldEdit-Paper-2.13.0.jar"
   }
 ]

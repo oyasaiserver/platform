@@ -1,7 +1,7 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
 import { $, spinner } from 'zx'
-import { cp, glob, mkdir } from 'node:fs/promises'
+import { cp, glob, rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { download } from '@oyasaiserver/lib/fetch'
@@ -13,7 +13,7 @@ import { exit } from 'node:process'
 import { config } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
-  await writeFileSafe(`dist/.env`, asEnvFile(runtimeSecrets.parse(secrets)))
+  await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
   await cp(
     `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
     `dist/compose.yaml`
@@ -30,7 +30,9 @@ await spinner('prepare', async () => {
 
 if (secrets.ENVIRONMENT === 'local') {
   const dir = `server/${secrets.ENVIRONMENT}`
-  await mkdir(dir, rf)
+  for await (const plugin of glob('server/**/plugins/*.jar')) {
+    await rm(plugin)
+  }
   await cp('assets/overlays', dir, rf)
   await cp('dist', dir, rf)
   await $({
@@ -53,6 +55,8 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
+
+await ssh.$`find ${secrets.ENVIRONMENT} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
 await ssh.putDirectory('assets/overlays', dir)
 

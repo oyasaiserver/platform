@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import { secrets } from '../src/secrets.ts'
 import { $, argv } from 'zx'
+import { env } from 'node:process'
 
 await $({
   env: {
-    ...process.env,
+    ...env,
     ...secrets
   },
   nothrow: true,
