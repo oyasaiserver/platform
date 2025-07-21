@@ -4,7 +4,7 @@ import { $, spinner } from 'zx'
 import { cp, glob, mkdir } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
-import { download } from '@oyasaiserver/lib/download'
+import { download } from '@oyasaiserver/lib/fetch'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import plugins from '../plugins.json' with { type: 'json' }
 import { basename, format, join } from 'node:path'
@@ -54,9 +54,9 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
-await ssh.sftpdir('assets/overlays', dir)
+await ssh.putDirectory('assets/overlays', dir)
 
-await ssh.sftpdir('dist', dir)
+await ssh.putDirectory('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 

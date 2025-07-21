@@ -11,8 +11,7 @@
     "secrets": "bin/secrets.ts"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.48.1",
-    "fast-xml-parser": "^5.2.5",
+    "@dotenvx/dotenvx": "^1.48.2",
     "node-ssh": "^13.2.1"
   }
 }

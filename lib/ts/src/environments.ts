@@ -1,17 +1,8 @@
-import { type Environment } from '@oyasaiserver/schema/environment'
 import { secrets } from './secrets.ts'
+import { environment as environmentSchema } from '@oyasaiserver/schema/environment'
+
+export const environment = environmentSchema.parse(process.env.ENVIRONMENT)
 
 export function envAware(...fragments: string[]) {
   return [...fragments, secrets.ENVIRONMENT].join('-')
-}
-
-export function envShort(environment: Environment) {
-  switch (environment) {
-    case 'production':
-      return 'prod'
-    case 'development':
-      return 'dev'
-    case 'local':
-      return 'local'
-  }
 }

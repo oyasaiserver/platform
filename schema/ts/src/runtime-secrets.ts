@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { environment } from './environment.ts'
 
 export const runtimeSecrets = z

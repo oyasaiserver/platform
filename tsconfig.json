@@ -28,6 +28,7 @@
     { "path": "gen/json/ts" },
     { "path": "gen/proto/ts" },
     { "path": "infra/cdktf" },
+    { "path": "infra/onprem" },
     { "path": "lib/ts" },
     { "path": "packages/codegen" },
     { "path": "schema/ts" }

@@ -11,8 +11,8 @@ type Ssh = Readonly<{
     pieces: TemplateStringsArray,
     ...args: unknown[]
   ): Promise<SSHExecCommandResponse>
-  sftp(localFile: string, remoteFile: string): Promise<void>
-  sftpdir(
+  put(localFile: string, remoteFile: string): Promise<void>
+  putDirectory(
     localDirectory: string,
     remoteDirectory: string,
     options?: SSHGetPutDirectoryOptions
@@ -44,13 +44,13 @@ export async function useSsh(
         stdin: config.password + EOL
       })
     },
-    async sftp(localFile: string, remoteFile: string) {
+    async put(localFile: string, remoteFile: string) {
       if (config.verbose) {
         console.log(`[sftp] uploading ${localFile} to ${remoteFile}`)
       }
       return connection.putFile(localFile, remoteFile)
     },
-    async sftpdir(
+    async putDirectory(
       localDirectory: string,
       remoteDirectory: string,
       options?: SSHGetPutDirectoryOptions
