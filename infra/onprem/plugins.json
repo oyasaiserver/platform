@@ -18,5 +18,9 @@
   {
     "name": "PlugManX",
     "url": "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
+  },
+  {
+    "name": "ProtocolLib",
+    "url": "https://github.com/dmulloy2/ProtocolLib/releases/download/5.3.0/ProtocolLib.jar"
   }
 ]

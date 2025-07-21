@@ -18,7 +18,7 @@ await spinner('prepare', async () => {
     `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
     `dist/compose.yaml`
   )
-  const dir = 'assets/overlays/minecraft-main/plugins'
+  const dir = 'dist/minecraft-main/plugins'
   const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
   for await (const jar of jars) {
     await cp(jar, join(dir, basename(jar)))
