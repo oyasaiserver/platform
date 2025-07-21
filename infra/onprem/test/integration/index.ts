@@ -1,24 +1,26 @@
 import { doesNotMatch, match } from 'node:assert/strict'
-import { after, before, describe, test } from 'node:test'
+import { after, before, beforeEach, describe, test } from 'node:test'
 import { $ } from 'zx'
 
 await describe(import.meta.filename, async () => {
-  const container = 'local-minecraft-main-1'
-
   before(async () => {
     await $`npm run deploy`
   })
 
-  async function getLogs() {
-    return $`docker logs ${container}`.text()
-  }
+  const container = 'local-minecraft-main-1'
+  let logs: string
+
+  beforeEach(async () => {
+    const container = 'local-minecraft-main-1'
+    logs = await $`docker logs ${container}`.text()
+  })
 
   await test('launched-successfully', async () => {
-    match(await getLogs(), /Done \([^)]*s\)! For help, type "help"/)
+    match(logs, /Done \([^)]*s\)! For help, type "help"/, logs)
   })
 
   await test('no-errors', async () => {
-    doesNotMatch(await getLogs(), /ERROR/)
+    doesNotMatch(logs, /ERROR/, logs)
   })
 
   after(async () => {

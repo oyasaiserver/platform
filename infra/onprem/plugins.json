@@ -4,11 +4,31 @@
     "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsX-2.21.1.jar"
   },
   {
+    "name": "EssentialsXChat",
+    "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsXChat-2.21.1.jar"
+  },
+  {
+    "name": "EssentialsXSpawn",
+    "url": "https://github.com/EssentialsX/Essentials/releases/download/2.21.1/EssentialsXSpawn-2.21.1.jar"
+  },
+  {
     "name": "LuckPerms",
     "url": "https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar"
   },
   {
     "name": "PlugManX",
     "url": "https://github.com/Test-Account666/PlugManX/releases/download/2.4.1/PlugManX-2.4.1.jar"
+  },
+  {
+    "name": "ProtocolLib",
+    "url": "https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/artifact/build/libs/ProtocolLib.jar"
+  },
+  {
+    "name": "FastAsyncWorldEdit",
+    "url": "https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/download/2.13.0/FastAsyncWorldEdit-Paper-2.13.0.jar"
+  },
+  {
+    "name": "WorldGuard",
+    "url": "https://dev.bukkit.org/projects/worldguard/files/6643567/download"
   }
 ]
