@@ -12,6 +12,7 @@ services:
       EULA: 'TRUE'
       TYPE: PURPUR
       VERSION: 1.21.5
+      ICON: https://avatars.githubusercontent.com/oyasaiserver
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway

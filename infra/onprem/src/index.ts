@@ -17,7 +17,8 @@ export default defineInfra(async environment => {
       environment: {
         EULA: 'TRUE',
         TYPE: config.services.minecraft.type,
-        VERSION: config.services.minecraft.version
+        VERSION: config.services.minecraft.version,
+        ICON: 'https://avatars.githubusercontent.com/oyasaiserver'
       },
       env_file: '.env',
       extra_hosts: ['host.docker.internal:host-gateway']
