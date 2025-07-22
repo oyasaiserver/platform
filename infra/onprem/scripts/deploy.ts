@@ -16,7 +16,7 @@ await spinner('prepare', async () => {
   await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
   await cp(
     `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
-    `dist/compose.yaml`
+    'dist/compose.yaml'
   )
   const dir = 'dist/minecraft-main/plugins'
   const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
