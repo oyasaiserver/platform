@@ -13,5 +13,8 @@
   "dependencies": {
     "@dotenvx/dotenvx": "^1.48.2",
     "node-ssh": "^13.2.1"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.7.0"
   }
 }

@@ -1,11 +1,12 @@
 import { defineInfra } from './lib/define-infra.ts'
 import type { Service } from '@oyasaiserver/json/store/compose_spec'
 import { config } from './config.ts'
+import { toolVersions } from '@oyasaiserver/lib/tool-versions'
 
 export default defineInfra(async environment => {
   const services: Record<string, Service> = {
     'minecraft-main': {
-      image: 'itzg/minecraft-server:java24',
+      image: `itzg/minecraft-server:java${toolVersions.java.major}`,
       ports: [
         `${config.services.minecraft.port[environment]}:${config.port.minecraft}`
       ],
