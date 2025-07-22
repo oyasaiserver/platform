@@ -6,7 +6,7 @@ import { toolVersions } from '@oyasaiserver/lib/tool-versions'
 export default defineInfra(async environment => {
   const services: Record<string, Service> = {
     'minecraft-main': {
-      image: `itzg/minecraft-server:java${toolVersions['java']?.major}`,
+      image: `itzg/minecraft-server:java${toolVersions.java.major}`,
       ports: [
         `${config.services.minecraft.port[environment]}:${config.port.minecraft}`
       ],
