@@ -65,6 +65,7 @@ await ssh.putDirectory('dist', dir)
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
 await ssh.$`sudo upnpc -r ${[
+  config.port.ssh,
   config.port.http,
   config.port.https,
   config.services.minecraft.port[secrets.ENVIRONMENT]

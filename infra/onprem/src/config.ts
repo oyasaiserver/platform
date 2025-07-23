@@ -16,6 +16,7 @@ export const config = {
     }
   },
   port: {
+    ssh: 22,
     http: 80,
     https: 443,
     minecraft: 25565
