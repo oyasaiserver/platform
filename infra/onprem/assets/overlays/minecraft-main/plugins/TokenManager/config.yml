@@ -53,7 +53,7 @@ data:
     port: '3306'
     username: 'root'
     password: pigg1524
-    database: 'minecraft'
+    database: 'token'
     table: 'tokenmanager'
     url: 'jdbc:mysql://%hostname%:%port%/%database%'
 

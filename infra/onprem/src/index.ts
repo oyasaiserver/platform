@@ -34,7 +34,10 @@ export default defineInfra(async environment => {
         MARIADB_DATABASE: 'minecraft',
         MARIADB_ROOT_PASSWORD: 'pigg1524'
       },
-      volumes: ['./mariadb:/var/lib/mariadb']
+      volumes: [
+        './mariadb:/var/lib/mysql',
+        './mariadb:/docker-entrypoint-initdb.d'
+      ]
     }
   }
   return {

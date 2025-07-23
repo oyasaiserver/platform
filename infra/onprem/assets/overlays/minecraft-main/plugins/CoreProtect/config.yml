@@ -11,7 +11,7 @@ use-mysql: true
 table-prefix: co_
 mysql-host: mariadb
 mysql-port: 3306
-mysql-database: minecraft
+mysql-database: co
 mysql-username: root
 mysql-password: pigg1524
 

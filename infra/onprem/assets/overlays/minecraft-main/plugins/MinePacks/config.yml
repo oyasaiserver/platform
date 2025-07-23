@@ -83,7 +83,7 @@ Database:
   # Settings only for MySQL
   SQL:
     Host: 'mariadb:3306'
-    Database: 'minecraft'
+    Database: 'backpack'
     User: 'root'
     Password: 'pigg1524'
     # The max amount of connections to the database the connection pool will open
