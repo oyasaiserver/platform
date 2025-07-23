@@ -3,12 +3,14 @@ services:
     image: itzg/minecraft-server:java24
     ports:
       - 25565:25565
+    restart: unless-stopped
     tty: true
     stdin_open: true
     environment:
       EULA: true
       TYPE: PURPUR
       VERSION: 1.21.5
+      USE_MEOWICE_FLAGS: false
       ENABLE_ROLLING_LOGS: true
       LOG_TIMESTAMP: true
       MEMORY: 3G
@@ -18,11 +20,11 @@ services:
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway
-  mysql:
+  mariadb:
     image: mariadb:10.4.28
-    ports:
-      - 3308:3306
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: pigg1524
+      MARIADB_DATABASE: minecraft
+      MARIADB_ROOT_PASSWORD: pigg1524
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./mariadb:/var/lib/mariadb

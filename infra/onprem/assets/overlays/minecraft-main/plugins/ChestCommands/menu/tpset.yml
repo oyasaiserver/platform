@@ -1,0 +1,536 @@
+menu-settings:
+  name: '&l&6[lang]cc.command[/lang] 2'
+  rows: 6
+  commands:
+    - menuucommand2tpset
+  auto-refresh: 5
+  open-with-item:
+    material: wool:1
+    left-click: false
+    right-click: true
+chat:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: chat.yml'
+  NAME: '&l&#996633[lang]cc.chat[/lang]'
+  LORE:
+    - '[lang]cc.chatd[/lang]'
+  MATERIAL: brown_concrete_powder
+  POSITION-X: 1
+  POSITION-Y: 6
+ucommand1:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: ucommand1.yml'
+  NAME: '&l&c[lang]cc.command[/lang] 1'
+  LORE:
+    - '[lang]cc.commandd[/lang]'
+  MATERIAL: red_concrete_powder
+  POSITION-X: 2
+  POSITION-Y: 6
+ucommand2:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: menu.yml'
+  NAME: '&l&6[lang]cc.command[/lang] 2'
+  LORE:
+    - '[lang]cc.commandd[/lang]'
+  MATERIAL: orange_concrete_powder
+  POSITION-X: 3
+  POSITION-Y: 6
+shop:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: shop.yml'
+  NAME: '&l&e[lang]cc.shop[/lang]'
+  LORE:
+    - '[lang]cc.shopd[/lang]'
+    - '[lang]cc.shopd1[/lang]'
+  MATERIAL: yellow_concrete_powder
+  POSITION-X: 4
+  POSITION-Y: 6
+sociallikes:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: sociallikes.yml'
+  NAME: '&a[lang]cc.sociallikes[/lang]'
+  LORE:
+    - '[lang]cc.sociallikesd[/lang]'
+    - '[lang]cc.sociallikesd1[/lang]'
+  MATERIAL: lime_concrete_powder
+  POSITION-X: 5
+  POSITION-Y: 6
+carbuilder:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: carbuilder.yml'
+  NAME: '&l&3[lang]cc.carbuilder[/lang]'
+  LORE:
+    - '[lang]cc.carbuilderd[/lang]'
+    - '[lang]cc.carbuilderd1[/lang]'
+  MATERIAL: cyan_concrete_powder
+  POSITION-X: 6
+  POSITION-Y: 6
+settings:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: settings.yml'
+  NAME: '&l&9[lang]cc.settings[/lang]'
+  LORE:
+    - '[lang]cc.settingsd[/lang]'
+  MATERIAL: blue_concrete_powder
+  POSITION-X: 7
+  POSITION-Y: 6
+links:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: links.yml'
+  NAME: '&l&5[lang]cc.link[/lang]'
+  LORE:
+    - '[lang]cc.linkd[/lang]'
+  MATERIAL: purple_concrete_powder
+  POSITION-X: 8
+  POSITION-Y: 6
+painttools:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: painttools.yml'
+  NAME: '&l&d[lang]cc.painttools[/lang]'
+  LORE:
+    - '[lang]cc.painttoolsd[/lang]'
+  MATERIAL: pink_concrete_powder
+  POSITION-X: 9
+  POSITION-Y: 6
+
+fly:
+  ACTIONS:
+    - craft
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6/fly'
+  MATERIAL: elytra
+  LORE:
+    - '[lang]menu.fly.d[/lang]'
+    - '&c[lang]menu.joukyu[/lang]'
+  POSITION-X: 3
+  POSITION-Y: 5
+  PERMISSION: jokyu.fly
+  PERMISSION-MESSAGE: '&c[lang]menu.joukyu[/lang]'
+creativemode:
+  ACTIONS:
+    - gamemode creative
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6クリエイティブモード'
+  MATERIAL: iron_block
+  LORE:
+    - 'クリエイティブモードに切り替える'
+    - '&cポイントで購入するか、[lang]menu.takumi[/lang]'
+  POSITION-X: 3
+  POSITION-Y: 4
+survivalmode:
+  ACTIONS:
+    - gamemode survival
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6サバイバルモード'
+  MATERIAL: grass_block
+  LORE:
+    - 'サバイバルモードに切り替える'
+  POSITION-X: 3
+  POSITION-Y: 3
+tpset:
+  ACTIONS:
+    - 'open: ucommand2.yml'
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&lテレポート関連'
+  MATERIAL: compass
+  LORE:
+    - 'クリックで展開'
+  POSITION-X: 3
+  POSITION-Y: 2
+backpack:
+  ACTIONS:
+    - backpack
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6バックパック'
+  MATERIAL: chest
+  LORE:
+    - 'バックパックを開く'
+  POSITION-X: 3
+  POSITION-Y: 1
+
+tpaccept:
+  ACTIONS:
+    - tpaccept
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&l/tpaccept'
+  MATERIAL: lime_shulker_box
+  LORE:
+    - 'テレポートリクエストを承認'
+  POSITION-X: 1
+  POSITION-Y: 2
+tpdeny:
+  ACTIONS:
+    - tpdeny
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&l/tpdeny'
+  MATERIAL: red_shulker_box
+  LORE:
+    - 'テレポートリクエストを拒否'
+  POSITION-X: 2
+  POSITION-Y: 2
+tpsetopen:
+  ACTIONS:
+    - tpset open
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&l/tpset open'
+  MATERIAL: glow_ink_sac
+  LORE:
+    - 'テレポート：許可'
+    - '他プレイヤーのテレポートをブロックしない'
+    - '/tpset ng (プレイヤー名)でブラックリスト追加'
+    - '/tpset nglistでブラックリストを確認'
+  POSITION-X: 4
+  POSITION-Y: 2
+tpsetclose:
+  ACTIONS:
+    - tp set close
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&l/tpset close'
+  MATERIAL: ink_sac
+  LORE:
+    - 'テレポート：拒否'
+    - '他プレイヤーがテレポートしてくるのをブロック'
+    - '/tpset ok (プレイヤー名)でホワイトリスト追加'
+    - '/tpset oklistでホワイトリストを確認'
+  POSITION-X: 5
+  POSITION-Y: 2
+tpsetmode:
+  ACTIONS:
+    - tpdeny
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&6&l/tpset mode'
+  MATERIAL: squid_spawn_egg
+  LORE:
+    - '現在のモード(open/close)を確認'
+  POSITION-X: 6
+  POSITION-Y: 2
+
+gray1:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 1
+  POSITION-Y: 1
+gray2:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 2
+  POSITION-Y: 1
+
+gray4:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 4
+  POSITION-Y: 1
+gray5:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 5
+  POSITION-Y: 1
+gray6:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 6
+  POSITION-Y: 1
+gray7:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 7
+  POSITION-Y: 1
+gray8:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 8
+  POSITION-Y: 1
+gray9:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 9
+  POSITION-Y: 1
+
+7gray:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 7
+  POSITION-Y: 2
+8gray:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 8
+  POSITION-Y: 2
+9gray:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 9
+  POSITION-Y: 2
+1gray1:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 1
+  POSITION-Y: 3
+2gray2:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 2
+  POSITION-Y: 3
+
+4gray4:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 4
+  POSITION-Y: 3
+5gray5:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 5
+  POSITION-Y: 3
+6gray6:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 6
+  POSITION-Y: 3
+7gray7:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 7
+  POSITION-Y: 3
+8gray8:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 8
+  POSITION-Y: 3
+9gray9:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 9
+  POSITION-Y: 3
+1gray11:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 1
+  POSITION-Y: 4
+2gray21:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 2
+  POSITION-Y: 4
+
+4gray41:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 4
+  POSITION-Y: 4
+5gray51:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 5
+  POSITION-Y: 4
+6gray61:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 6
+  POSITION-Y: 4
+7gray71:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 7
+  POSITION-Y: 4
+8gray81:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 8
+  POSITION-Y: 4
+9gray91:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 9
+  POSITION-Y: 4
+11gray11:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 1
+  POSITION-Y: 5
+21gray21:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 2
+  POSITION-Y: 5
+
+41gray41:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 4
+  POSITION-Y: 5
+51gray51:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 5
+  POSITION-Y: 5
+61gray61:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 6
+  POSITION-Y: 5
+71gray71:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 7
+  POSITION-Y: 5
+81gray81:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 8
+  POSITION-Y: 5
+91gray91:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: ''
+  LORE:
+    - ''
+  MATERIAL: orange_stained_glass_pane
+  POSITION-X: 9
+  POSITION-Y: 5

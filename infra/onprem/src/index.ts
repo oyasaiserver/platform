@@ -27,14 +27,14 @@ export default defineInfra(async environment => {
       env_file: '.env',
       extra_hosts: ['host.docker.internal:host-gateway']
     },
-    mysql: {
+    mariadb: {
       image: 'mariadb:10.4.28',
       restart: 'unless-stopped',
-      ports: ['3308:3306'],
       environment: {
-        MYSQL_ROOT_PASSWORD: 'pigg1524'
+        MARIADB_DATABASE: 'minecraft',
+        MARIADB_ROOT_PASSWORD: 'pigg1524'
       },
-      volumes: ['./mysql:/var/lib/mysql']
+      volumes: ['./mariadb:/var/lib/mariadb']
     }
   }
   return {

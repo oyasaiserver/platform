@@ -25,7 +25,7 @@
   },
   {
     "name": "FastAsyncWorldEdit",
-    "url": "https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/download/2.13.0/FastAsyncWorldEdit-Paper-2.13.0.jar"
+    "url": "https://ci.athion.net/job/FastAsyncWorldEdit/1131/artifact/artifacts/FastAsyncWorldEdit-Paper-2.13.1-SNAPSHOT-1131.jar"
   },
   {
     "name": "WorldGuard",
