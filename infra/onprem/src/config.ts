@@ -7,10 +7,16 @@ export const config = {
         production: 25565,
         development: 25566,
         local: 25565
+      },
+      memory: {
+        production: '32G',
+        development: '12G',
+        local: '3G'
       }
     }
   },
   port: {
+    ssh: 22,
     http: 80,
     https: 443,
     minecraft: 25565

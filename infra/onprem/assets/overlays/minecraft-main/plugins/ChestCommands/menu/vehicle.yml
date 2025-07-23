@@ -1,0 +1,304 @@
+menu-settings:
+  name: '移動'
+  rows: 6
+  commands:
+    - vehimenu
+  auto-refresh: 5
+  open-actions:
+    - 'tell: &eメニューを開きました'
+  open-with-item:
+    material: wool:1
+    left-click: false
+    right-click: true
+spawncmd:
+  ACTIONS:
+    - spawn
+  NAME: '&e/spawn'
+  LORE:
+    - '[lang]menu.spawn.d[/lang]'
+  MATERIAL: redbed
+  POSITION-X: 9
+  POSITION-Y: 6
+getmenu:
+  ACTIONS:
+    - getvehicleitem
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&e[lang]menu.getmenu[/lang]'
+  LORE:
+    - '現在のページを開く省略用アイテムを'
+    - 'インベントリに入手する'
+  ENCHANTMENTS:
+    - efficiency, 114514
+  MATERIAL: book
+  POSITION-X: 1
+  POSITION-Y: 1
+openmenu:
+  ACTIONS:
+    - openmenu
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eBack'
+  MATERIAL: arrow
+  POSITION-X: 1
+  POSITION-Y: 6
+lamborghini:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 8744'
+  NAME: '&a&lマッハぎりぎりモータースポーツ'
+  LORE:
+    - 'MineCartのカーディーラー'
+    - '&o最高級のパフォーマンスカーをあなたに'
+    - ''
+    - '視点移動フリー。全てのシーンにマッチ。'
+    - 'レース、タイムアタックから日用品の買い出しまで'
+    - 'Bedrock版の方はコチラをお買い求め下さい'
+  MATERIAL: minecart
+  POSITION-X: 5
+  POSITION-Y: 5
+ssa:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 8447'
+  NAME: '&a&lオヤサイスーパーオート'
+  LORE:
+    - 'Boatのカーディーラー'
+    - '&o最上級の乗り心地'
+    - ''
+    - '長距離移動に最適の視点連動タイプ'
+    - '脳死でドライブしていたいあなたに'
+    - 'Java版限定'
+  MATERIAL: oak_boat
+  POSITION-X: 6
+  POSITION-Y: 5
+omborghini:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'gentuki'
+  NAME: '&a&l原付'
+  LORE:
+    - '原付を出す(無料)'
+    - 'HONDA Spawn50'
+    - '&e佐世保'
+    - '&eA 17038'
+  MATERIAL: minecart
+  POSITION-X: 7
+  POSITION-Y: 5
+doorcar:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'carcmd spawn imp'
+  NAME: '&a&l車をスポーン(Beta)'
+  ENCHANTMENTS:
+    - efficiency, 114514
+  LORE:
+    - 'その場に車をスポーンさせる(無料)'
+    - 'Srain3開発中プラグイン。完成までお試し無料公開中です。'
+    - '&eJava版のみ対応'
+    - '&7SUBARU Impreza WRX STi'
+  MATERIAL: minecart
+  POSITION-X: 8
+  POSITION-Y: 5
+eki1:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 9203'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+    - '&6無料レンタカー○'
+  POSITION-X: 2
+  POSITION-Y: 2
+eki2:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 9204'
+  NAME: '&eたち起駅'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 3
+  POSITION-Y: 2
+eki3:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 8676'
+  NAME: '&e穴屋JCT'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+    - '&6無料レンタカー○'
+  POSITION-X: 4
+  POSITION-Y: 2
+eki4:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 9205'
+  NAME: '&eケイン地区 市内南'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+    - '&6無料レンタカー○'
+  POSITION-X: 5
+  POSITION-Y: 2
+eki5:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 9206'
+  NAME: '&eケイン地区 市内北'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+    - '&6無料レンタカー○'
+  POSITION-X: 6
+  POSITION-Y: 2
+eki6:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 8709'
+  NAME: '&e裏参道JCT'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 7
+  POSITION-Y: 2
+eki7:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 9207'
+  NAME: '&e住宅展示場ロータリー'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 8
+  POSITION-Y: 2
+eki9:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp 8750'
+  NAME: '&e多摩金JCT'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+    - '&6無料レンタカー○'
+  POSITION-X: 2
+  POSITION-Y: 3
+eki10:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp '
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 3
+  POSITION-Y: 3
+eki11:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'sltp '
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 4
+  POSITION-Y: 3
+eki12:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 5
+  POSITION-Y: 3
+eki13:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 6
+  POSITION-Y: 3
+eki14:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 7
+  POSITION-Y: 3
+eki15:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 8
+  POSITION-Y: 3
+eki16:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 2
+  POSITION-Y: 4
+eki8:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 3
+  POSITION-Y: 4
+eki17:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 4
+  POSITION-Y: 4
+eki18:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 5
+  POSITION-Y: 4
+eki19:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 6
+  POSITION-Y: 4
+eki20:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 7
+  POSITION-Y: 4
+eki21:
+  ACTIONS:
+    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eスポーン前'
+  MATERIAL: oak_sign
+  LORE:
+    - '駅にテレポート'
+  POSITION-X: 8
+  POSITION-Y: 4
