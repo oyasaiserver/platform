@@ -7,6 +7,11 @@ export const config = {
         production: 25565,
         development: 25566,
         local: 25565
+      },
+      memory: {
+        production: '32G',
+        development: '12G',
+        local: '3G'
       }
     }
   },

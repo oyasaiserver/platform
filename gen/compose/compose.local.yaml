@@ -3,16 +3,26 @@ services:
     image: itzg/minecraft-server:java24
     ports:
       - 25565:25565
-    volumes:
-      - ./minecraft-main:/data
-    restart: unless-stopped
     tty: true
     stdin_open: true
     environment:
-      EULA: 'TRUE'
+      EULA: true
       TYPE: PURPUR
       VERSION: 1.21.5
+      ENABLE_ROLLING_LOGS: true
+      LOG_TIMESTAMP: true
+      MEMORY: 3G
       ICON: https://avatars.githubusercontent.com/oyasaiserver
+    volumes:
+      - ./minecraft-main:/data
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway
+  mysql:
+    image: mariadb:10.4.28
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: pigg1524
+    volumes:
+      - ./mysql:/var/lib/mysql
