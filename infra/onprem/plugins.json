@@ -30,5 +30,17 @@
   {
     "name": "WorldGuard",
     "url": "https://dev.bukkit.org/projects/worldguard/files/6643567/download"
+  },
+  {
+    "name": "ViaVersion",
+    "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.4.2/PAPER/ViaVersion-5.4.2.jar"
+  },
+  {
+    "name": "Floodgate",
+    "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+  },
+  {
+    "name": "Geyser",
+    "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
   }
 ]

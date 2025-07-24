@@ -13,6 +13,7 @@ import { exit } from 'node:process'
 import { config } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
+  await rm('dist', rf)
   await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
   await cp(
     `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
@@ -30,7 +31,7 @@ await spinner('prepare', async () => {
 
 if (secrets.ENVIRONMENT === 'local') {
   const dir = `server/${secrets.ENVIRONMENT}`
-  for await (const plugin of glob('server/**/plugins/*.jar')) {
+  for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
     await rm(plugin)
   }
   await cp('assets/overlays', dir, rf)
