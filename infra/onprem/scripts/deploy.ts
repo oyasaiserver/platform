@@ -34,7 +34,7 @@ if (secrets.ENVIRONMENT === 'local') {
   for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
     await rm(plugin)
   }
-  await cp('assets/overlays', dir, rf)
+  await cp('assets', dir, rf)
   await cp('dist', dir, rf)
   await $({
     cwd: dir,
@@ -61,7 +61,7 @@ await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
 await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
-await ssh.putDirectory('assets/overlays', dir)
+await ssh.putDirectory('assets', dir)
 
 await ssh.putDirectory('dist', dir)
 
