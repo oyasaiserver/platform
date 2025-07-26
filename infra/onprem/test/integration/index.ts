@@ -12,7 +12,7 @@ await describe(import.meta.filename, async () => {
   let logs: string
 
   const expectedErrors = [
-    '[DiscordSRV - Initialization/ERROR]: No bot token has been set in the config; a bot token is required to connect to Discord.'
+    '[DiscordSRV - Initialization/ERROR]: An invalid length bot token (6) has been set in the config; a valid bot token is required to connect to Discord.'
   ]
 
   beforeEach(async () => {
