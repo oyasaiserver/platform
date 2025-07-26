@@ -1,8 +1,8 @@
 menu-settings:
-  name: '&l&5[lang]cc.link[/lang]'
+  name: '&l&9[lang]cc.settings[/lang]'
   rows: 6
   commands:
-    - menuolink
+    - menuosettings
   auto-refresh: 5
   open-with-item:
     material: wool:1
@@ -10,7 +10,7 @@ menu-settings:
     right-click: true
 chat:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: chat.yml'
   NAME: '&l&5{player}[lang]cc.chat[/lang]'
   LORE:
@@ -21,7 +21,7 @@ chat:
   POSITION-Y: 6
 ucommand1:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: ucommand1.yml'
   NAME: '&l&c[lang]cc.command[/lang] 1'
   LORE:
@@ -31,7 +31,7 @@ ucommand1:
   POSITION-Y: 6
 ucommand2:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: ucommand2.yml'
   NAME: '&l&6[lang]cc.command[/lang] 2'
   LORE:
@@ -41,7 +41,7 @@ ucommand2:
   POSITION-Y: 6
 shop:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: shop.yml'
   NAME: '&l&e[lang]cc.shop[/lang]'
   LORE:
@@ -52,7 +52,7 @@ shop:
   POSITION-Y: 6
 sociallikes:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: sociallikes.yml'
   NAME: '&a[lang]cc.sociallikes[/lang]'
   LORE:
@@ -63,7 +63,7 @@ sociallikes:
   POSITION-Y: 6
 carbuilder:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: carbuilder.yml'
   NAME: '&l&3[lang]cc.carbuilder[/lang]'
   LORE:
@@ -74,8 +74,8 @@ carbuilder:
   POSITION-Y: 6
 settings:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'open: settings.yml'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: menu.yml'
   NAME: '&l&9[lang]cc.settings[/lang]'
   LORE:
     - '[lang]cc.settingsd[/lang]'
@@ -84,8 +84,8 @@ settings:
   POSITION-Y: 6
 links:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'open: menu.yml'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - 'open: links.yml'
   NAME: '&l&5[lang]cc.link[/lang]'
   LORE:
     - '[lang]cc.linkd[/lang]'
@@ -94,7 +94,7 @@ links:
   POSITION-Y: 6
 painttools:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: painttools.yml'
   NAME: '&l&d[lang]cc.painttools[/lang]'
   LORE:
@@ -103,414 +103,421 @@ painttools:
   POSITION-X: 9
   POSITION-Y: 6
 
-wiki:
+lang:
   ACTIONS:
-    - 'tell: [lang]menu.wiki.url[/lang]'
-  NAME: '&5&l[lang]menu.wiki[/lang]'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    - menulang
+  NAME: '&9&lLanguage'
   LORE:
-    - '[lang]menu.wiki.d[/lang]'
-  MATERIAL: book
-  POSITION-X: 8
+    - Change your language
+  MATERIAL: filled_map
+  POSITION-X: 7
   POSITION-Y: 5
-discord:
+chairs:
   ACTIONS:
-    - 'tell: [lang]menu.discord.url[/lang]'
-  NAME: '&5&l[lang]menu.discord[/lang]'
+    - sit toggle
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9椅子に座る'
+  MATERIAL: oak_stairs
   LORE:
-    - '[lang]menu.discord.d[/lang]'
-  MATERIAL: book
-  POSITION-X: 8
+  POSITION-X: 7
   POSITION-Y: 4
-dynmap:
+oresmelt:
   ACTIONS:
-    - 'console: tellraw {player} {"text":"http://oyasai.icu:8100","clickEvent":{"action":"open_url","value":"http://baakun.com:8123"}}'
-  NAME: '&5&lおやさい鯖Web MAP'
+    - os toggle
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9[lang]menu.smelt[/lang]'
+  MATERIAL: diamond_pickaxe
   LORE:
-    - '[lang]menu.wiki.d[/lang]'
-  MATERIAL: book
-  POSITION-X: 8
+    - '&c[lang]menu.smelt.d[/lang]'
+  POSITION-X: 7
   POSITION-Y: 3
-jms:
+getmenu:
   ACTIONS:
-    - 'tell: [lang]menu.jms.url[/lang]'
-  NAME: '&5&l[lang]menu.jms[/lang]'
+    - getmenu
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9[lang]menu.getmenu[/lang]'
   LORE:
-    - '[lang]menu.jms.d[/lang]'
+    - 'メニューブックを'
+    - 'インベントリに入手'
+  ENCHANTMENTS:
+    - efficiency, 114514
   MATERIAL: book
-  POSITION-X: 8
+  POSITION-X: 7
   POSITION-Y: 2
-mono:
-  ACTIONS:
-    - 'tell: [lang]menu.mono.url[/lang]'
-  NAME: '&5&l[lang]menu.mono[/lang]'
-  LORE:
-    - '[lang]menu.mono.d[/lang]'
-  MATERIAL: book
-  POSITION-X: 8
-  POSITION-Y: 1
+#replayfix:
+#  ACTIONS:
+#  - carcmd replaymodfix
+#  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+#  NAME: '&9CarBuilder ReplayMod Fix'
+#  MATERIAL: hopper_minecart
+#  LORE:
+#  - 'CarBuilder ReplayModモード'
+#  POSITION-X: 7
+#  POSITION-Y: 1
 
 gray1:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 1
 gray2:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 1
 gray3:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 1
 gray4:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 1
 gray5:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 1
 gray6:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 6
   POSITION-Y: 1
-gray7:
+
+gray8:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 8
   POSITION-Y: 1
-
 gray9:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 1
 1gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 2
 2gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 2
 3gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 2
 4gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 2
 5gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 2
 6gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 6
   POSITION-Y: 2
-7gray:
+
+8gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 8
   POSITION-Y: 2
-
 9gray:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 2
 1gray1:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 3
 2gray2:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 3
 3gray3:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 3
 4gray4:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 3
 5gray5:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 3
 6gray6:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 6
   POSITION-Y: 3
-7gray7:
+
+8gray8:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 8
   POSITION-Y: 3
-
 9gray9:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 3
 1gray11:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 4
 2gray21:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 4
 3gray31:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 4
 4gray41:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 4
 5gray51:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 4
 6gray61:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 6
   POSITION-Y: 4
-7gray71:
+
+8gray81:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 8
   POSITION-Y: 4
-
 9gray91:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 4
 11gray11:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 5
 21gray21:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 5
 31gray31:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 5
 41gray41:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 5
 51gray51:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 5
 61gray61:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 6
   POSITION-Y: 5
-71gray71:
+
+81gray81:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 8
   POSITION-Y: 5
-
 91gray91:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: purple_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 5

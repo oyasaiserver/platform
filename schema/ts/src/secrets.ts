@@ -22,7 +22,9 @@ export const secrets = z
     GITHUB_APP_PEM_FILE: z.string(),
     // terraform
     TF_API_TOKEN: z.string(),
-    TF_TOKEN_app_terraform_io: z.string()
+    TF_TOKEN_app_terraform_io: z.string(),
+    // plugins
+    DISCORDSRV_TOKEN: z.string()
   })
   .readonly()
 

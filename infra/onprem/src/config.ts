@@ -13,12 +13,35 @@ export const config = {
         development: '12G',
         local: '3G'
       }
+    },
+    minecraftBedrock: {
+      port: {
+        production: 19132,
+        development: 19133,
+        local: 19132
+      }
     }
   },
   port: {
-    ssh: 22,
-    http: 80,
-    https: 443,
-    minecraft: 25565
+    ssh: {
+      protocol: 'tcp',
+      value: 22
+    },
+    http: {
+      protocol: 'tcp',
+      value: 80
+    },
+    https: {
+      protocol: 'tcp',
+      value: 443
+    },
+    minecraft: {
+      protocol: 'tcp',
+      value: 25565
+    },
+    minecraftBedrock: {
+      protocol: 'udp',
+      value: 19132
+    }
   }
 } as const

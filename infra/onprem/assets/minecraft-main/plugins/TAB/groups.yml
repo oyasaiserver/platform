@@ -1,0 +1,71 @@
+admini:
+  tabprefix: '&r%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r%luckperms-suffix%§f'
+admin:
+  tabprefix: '&r%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r%luckperms-suffix%§f'
+we:
+dev:
+  tabprefix: '&r&e*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&e*%luckperms-suffix%&f'
+discord:
+white:
+  tabprefix: '&r&7*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&7*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+builder:
+  tabprefix: '&r&5*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&5%luckperms-suffix%*&f'
+  tabsuffix: ''
+  tagsuffix: ''
+jokyu:
+  tabprefix: '&r&3*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&3*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+takumi:
+  tabprefix: '&r&c*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&c*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+blue:
+  tabprefix: '&r&9*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&9*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+chukyu:
+  tabprefix: '&r&2*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&2*%luckperms-suffix%&f'
+default:
+  tabprefix: '&r&a*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&a*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+mod:
+  tabprefix: '&r&d*%luckperms-suffix%&f&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: '&7[%dp_level%&7]&r&d*%luckperms-suffix%&f'
+  tabsuffix: ''
+  tagsuffix: ''
+per-world:
+  world1:
+    Owner:
+      tabprefix: '&0&l[&a&lOwner&0&l] &a'
+      tagprefix: '&2&lOwner &a'
+      header:
+        - ur server man
+      footer:
+        - welcome
+    Admin:
+      tabprefix: '&2&lAdmin &1&l'
+      tagprefix: '&2&lAdmin &1&l'
+    Player:
+      tabprefix: '&5&lPlayer &3&l'
+      tagprefix: '&5&lPlayer &3&l'
+_DEFAULT_:
+  tabprefix: '&7<&6%SocialLikes3_ReceivedLikeCount%&7>&f '
+  tagprefix: ''
+  tabsuffix: ''
+  tagsuffix: ''
+  customtabname: '%player%'
+  customtagname: '%player%'

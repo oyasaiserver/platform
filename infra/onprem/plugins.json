@@ -42,5 +42,17 @@
   {
     "name": "Geyser",
     "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
+  },
+  {
+    "name": "DiscordSRV",
+    "url": "https://github.com/DiscordSRV/DiscordSRV/releases/download/v1.29.0/DiscordSRV-Build-1.29.0.jar"
+  },
+  {
+    "name": "TAB",
+    "url": "https://github.com/NEZNAMY/TAB/releases/download/5.2.5/TAB.v5.2.5.jar"
+  },
+  {
+    "name": "ProtocolLib",
+    "url": "https://ci.dmulloy2.net/job/ProtocolLib/753/artifact/build/libs/ProtocolLib.jar"
   }
 ]

@@ -62,6 +62,7 @@ export async function useSsh(
       }
       return connection.putDirectory(localDirectory, remoteDirectory, {
         concurrency: 10,
+        recursive: true,
         validate() {
           return true
         },
