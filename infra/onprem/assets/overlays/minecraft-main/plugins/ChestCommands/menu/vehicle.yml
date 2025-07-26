@@ -22,7 +22,7 @@ spawncmd:
 getmenu:
   ACTIONS:
     - getvehicleitem
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&e[lang]menu.getmenu[/lang]'
   LORE:
     - '現在のページを開く省略用アイテムを'
@@ -35,14 +35,14 @@ getmenu:
 openmenu:
   ACTIONS:
     - openmenu
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eBack'
   MATERIAL: arrow
   POSITION-X: 1
   POSITION-Y: 6
 lamborghini:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 8744'
   NAME: '&a&lマッハぎりぎりモータースポーツ'
   LORE:
@@ -57,7 +57,7 @@ lamborghini:
   POSITION-Y: 5
 ssa:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 8447'
   NAME: '&a&lオヤサイスーパーオート'
   LORE:
@@ -72,7 +72,7 @@ ssa:
   POSITION-Y: 5
 omborghini:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'gentuki'
   NAME: '&a&l原付'
   LORE:
@@ -85,7 +85,7 @@ omborghini:
   POSITION-Y: 5
 doorcar:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'carcmd spawn imp'
   NAME: '&a&l車をスポーン(Beta)'
   ENCHANTMENTS:
@@ -100,7 +100,7 @@ doorcar:
   POSITION-Y: 5
 eki1:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 9203'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
@@ -111,7 +111,7 @@ eki1:
   POSITION-Y: 2
 eki2:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 9204'
   NAME: '&eたち起駅'
   MATERIAL: oak_sign
@@ -121,7 +121,7 @@ eki2:
   POSITION-Y: 2
 eki3:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 8676'
   NAME: '&e穴屋JCT'
   MATERIAL: oak_sign
@@ -132,7 +132,7 @@ eki3:
   POSITION-Y: 2
 eki4:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 9205'
   NAME: '&eケイン地区 市内南'
   MATERIAL: oak_sign
@@ -143,7 +143,7 @@ eki4:
   POSITION-Y: 2
 eki5:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 9206'
   NAME: '&eケイン地区 市内北'
   MATERIAL: oak_sign
@@ -154,7 +154,7 @@ eki5:
   POSITION-Y: 2
 eki6:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 8709'
   NAME: '&e裏参道JCT'
   MATERIAL: oak_sign
@@ -164,7 +164,7 @@ eki6:
   POSITION-Y: 2
 eki7:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 9207'
   NAME: '&e住宅展示場ロータリー'
   MATERIAL: oak_sign
@@ -174,7 +174,7 @@ eki7:
   POSITION-Y: 2
 eki9:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp 8750'
   NAME: '&e多摩金JCT'
   MATERIAL: oak_sign
@@ -185,7 +185,7 @@ eki9:
   POSITION-Y: 3
 eki10:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp '
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
@@ -195,7 +195,7 @@ eki10:
   POSITION-Y: 3
 eki11:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'sltp '
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
@@ -205,7 +205,7 @@ eki11:
   POSITION-Y: 3
 eki12:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -214,7 +214,7 @@ eki12:
   POSITION-Y: 3
 eki13:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -223,7 +223,7 @@ eki13:
   POSITION-Y: 3
 eki14:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -232,7 +232,7 @@ eki14:
   POSITION-Y: 3
 eki15:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -241,7 +241,7 @@ eki15:
   POSITION-Y: 3
 eki16:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -250,7 +250,7 @@ eki16:
   POSITION-Y: 4
 eki8:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -259,7 +259,7 @@ eki8:
   POSITION-Y: 4
 eki17:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -268,7 +268,7 @@ eki17:
   POSITION-Y: 4
 eki18:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -277,7 +277,7 @@ eki18:
   POSITION-Y: 4
 eki19:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -286,7 +286,7 @@ eki19:
   POSITION-Y: 4
 eki20:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:
@@ -295,7 +295,7 @@ eki20:
   POSITION-Y: 4
 eki21:
   ACTIONS:
-    - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: '&eスポーン前'
   MATERIAL: oak_sign
   LORE:

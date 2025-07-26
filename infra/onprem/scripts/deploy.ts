@@ -57,19 +57,20 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
-await ssh.$`find ${secrets.ENVIRONMENT} -type f -name "*.jar" -path "*/plugins/*" -delete`
+await ssh.$`cd ${dir} && docker compose down --remove-orphans`
+
+await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
 await ssh.putDirectory('assets/overlays', dir)
 
 await ssh.putDirectory('dist', dir)
 
-await ssh.$`cd ${dir} && docker compose down --remove-orphans`
-
 await ssh.$`sudo upnpc -r ${[
-  config.port.ssh,
-  config.port.http,
-  config.port.https,
-  config.services.minecraft.port[secrets.ENVIRONMENT]
+  config.port.ssh.value,
+  config.port.http.value,
+  config.port.https.value,
+  config.services.minecraft.port[secrets.ENVIRONMENT],
+  config.services.minecraftBedrock.port[secrets.ENVIRONMENT]
 ]
   .map(port => `${port} tcp`)
   .join(' ')}`

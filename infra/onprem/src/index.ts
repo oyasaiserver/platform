@@ -8,7 +8,8 @@ export default defineInfra(async environment => {
     'minecraft-main': {
       image: `itzg/minecraft-server:java${toolVersions.java.major}`,
       ports: [
-        `${config.services.minecraft.port[environment]}:${config.port.minecraft}`
+        `${config.services.minecraft.port[environment]}:${config.port.minecraft.value}/${config.port.minecraft.protocol}`,
+        `${config.services.minecraftBedrock.port[environment]}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`
       ],
       restart: 'unless-stopped',
       tty: true,
