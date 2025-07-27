@@ -39,15 +39,13 @@ services:
     volumes:
       - ./minecraft-main:/data
     env_file: .env
-    extra_hosts:
-      - host.docker.internal:host-gateway
   prometheus:
     image: prom/prometheus:v3.5.0
-    ports:
-      - 9090:9090
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
+    extra_hosts:
+      - host.docker.internal:host-gateway
     command:
       - --config.file=/etc/prometheus/prometheus.yaml
   grafana:
@@ -62,8 +60,6 @@ services:
       - portical.upnp.forward=published
   node-exporter:
     image: prom/node-exporter:v1.9.1
-    ports:
-      - 9100:9100
     network_mode: host
     restart: unless-stopped
     command:

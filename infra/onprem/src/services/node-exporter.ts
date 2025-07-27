@@ -2,7 +2,6 @@ import type { Service } from '@oyasaiserver/json/store/compose_spec'
 
 export const nodeExporter: Service = {
   image: 'prom/node-exporter:v1.9.1',
-  ports: ['9100:9100'],
   network_mode: 'host',
   restart: 'unless-stopped',
   command: ['--path.rootfs=/host'],

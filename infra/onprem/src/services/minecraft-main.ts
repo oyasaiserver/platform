@@ -31,7 +31,6 @@ export function createMinecraftMain(environment: Environment): Service {
       ICON: 'https://avatars.githubusercontent.com/oyasaiserver'
     },
     volumes: ['./minecraft-main:/data'],
-    env_file: '.env',
-    extra_hosts: ['host.docker.internal:host-gateway']
+    env_file: '.env'
   }
 }
