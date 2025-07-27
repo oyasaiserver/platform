@@ -19,6 +19,13 @@ export function createOnpremInfra(environment: Environment): ComposeSpec {
         grafana,
         'node-exporter': nodeExporter
       })
+    },
+
+    volumes: {
+      ...(environment === 'production' && {
+        prometheus_data: {},
+        grafana_data: {}
+      })
     }
   }
 }

@@ -39,3 +39,4 @@ services:
     volumes:
       - ./minecraft-main:/data
     env_file: .env
+volumes: {}
