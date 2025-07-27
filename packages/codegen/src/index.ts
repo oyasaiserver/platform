@@ -4,13 +4,14 @@ import { EOL } from 'node:os'
 import { join, parse } from 'node:path'
 import { directory } from '@oyasaiserver/lib/directory'
 import { readFileContent, rf, writeFileSafe } from '@oyasaiserver/lib/fs'
-import onprem from '@oyasaiserver/onprem'
+import { createOnpremInfra } from '@oyasaiserver/onprem'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { pascalCase } from 'change-case'
 import { compile, type JSONSchema } from 'json-schema-to-typescript'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
 import bufGenJson from '../buf.gen.json' with { type: 'json' }
+import { environments } from '@oyasaiserver/lib/environments'
 
 const out = 'gen'
 
@@ -74,10 +75,11 @@ await spinner('json', async () => {
 })
 
 await spinner('compose', async () => {
-  for (const [environment, compose] of Object.entries(await onprem)) {
+  for (const environment of Object.values(environments)) {
+    const infra = createOnpremInfra(environment)
     await writeFileSafe(
       join(out, 'compose', `compose.${environment}.yaml`),
-      YAML.stringify(compose)
+      YAML.stringify(infra)
     )
   }
 })

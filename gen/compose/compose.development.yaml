@@ -23,7 +23,7 @@ services:
       - 25566:25565/tcp
       - 19133:19132/udp
     labels:
-      - portical.upnp.forward=25566:25566/tcp,19133:19133/udp
+      - portical.upnp.forward=25566/tcp,19133/udp
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -39,5 +39,4 @@ services:
     volumes:
       - ./minecraft-main:/data
     env_file: .env
-    extra_hosts:
-      - host.docker.internal:host-gateway
+volumes: {}

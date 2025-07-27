@@ -23,7 +23,7 @@ services:
       - 25565:25565/tcp
       - 19132:19132/udp
     labels:
-      - portical.upnp.forward=25565:25565/tcp,19132:19132/udp
+      - portical.upnp.forward=25565/tcp,19132/udp
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -39,5 +39,33 @@ services:
     volumes:
       - ./minecraft-main:/data
     env_file: .env
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
     extra_hosts:
       - host.docker.internal:host-gateway
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+  grafana:
+    depends_on:
+      - portical
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    labels:
+      - portical.upnp.forward=published
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
