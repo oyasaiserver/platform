@@ -28,11 +28,6 @@ await spinner('prepare', async () => {
   }
 })
 
-const dockerCompose = {
-  down: 'docker compose down --remove-orphans',
-  up: 'docker compose up --detach --wait'
-}
-
 if (secrets.ENVIRONMENT === 'local') {
   const dir = `server/${secrets.ENVIRONMENT}`
   for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
@@ -43,7 +38,7 @@ if (secrets.ENVIRONMENT === 'local') {
   await $({
     cwd: dir,
     verbose: true
-  })`${dockerCompose.down} && ${dockerCompose.up}`
+  })`docker compose down --remove-orphans && docker compose up --detach --wait`
   exit(0)
 }
 
@@ -61,7 +56,7 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
-await ssh.$`cd ${dir} && ${dockerCompose.down}`
+await ssh.$`cd ${dir} && docker compose down --remove-orphans`
 
 await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
@@ -69,4 +64,4 @@ await ssh.putDirectory('assets', dir)
 
 await ssh.putDirectory('dist', dir)
 
-await ssh.$`cd ${dir} && ${dockerCompose.up}`
+await ssh.$`cd ${dir} && docker compose up --detach --wait`
