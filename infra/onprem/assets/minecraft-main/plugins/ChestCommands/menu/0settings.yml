@@ -1,8 +1,8 @@
 menu-settings:
-  name: '&l&3&lCarBuilder1 & AirCraftBuilder'
+  name: '&l&9&lユーザー設定'
   rows: 6
   commands:
-    - menucarbuilder
+    - 1menuosettings
   auto-refresh: 5
   open-with-item:
     material: wool:1
@@ -12,11 +12,10 @@ chat:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: chat.yml'
-  NAME: '&l&5{player}&l(プロフィール)'
+  NAME: '&l&#996633&l(プロフィール)'
   LORE:
     - 'プレイヤープロフィールを確認'
-  MATERIAL: player_head
-  SKULL-OWNER: '{player}'
+  MATERIAL: brown_concrete_powder
   POSITION-X: 1
   POSITION-Y: 6
 ucommand1:
@@ -64,7 +63,7 @@ sociallikes:
 carbuilder:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'open: menu.yml'
+    - 'open: carbuilder.yml'
   NAME: '&l&3&lCarBuilder1 & AirCraftBuilder'
   LORE:
     - 'ユーザー車両建造プラグイン'
@@ -75,7 +74,7 @@ carbuilder:
 settings:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'open: settings.yml'
+    - 'open: menu.yml'
   NAME: '&l&9&lユーザー設定'
   LORE:
     - '椅子のON/OFF、TP許可設定など'
@@ -103,43 +102,58 @@ painttools:
   POSITION-X: 9
   POSITION-Y: 6
 
-rvmenu:
+lang:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'rvmenuo'
-  NAME: '&l&3&lCarBuilder2'
+    - menulang
+  NAME: '&9&lLanguage'
   LORE:
-    - 'CarBuilder2を開く'
-    - '車両の購入、カスタム、管理はこちらから'
+    - Change your language
+  MATERIAL: filled_map
+  POSITION-X: 7
+  POSITION-Y: 5
+chairs:
+  ACTIONS:
+    - chairs
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9椅子に座る'
+  MATERIAL: oak_stairs
+  LORE:
+  POSITION-X: 7
+  POSITION-Y: 4
+oresmelt:
+  ACTIONS:
+    - os toggle
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9自動精錬切り替え'
+  MATERIAL: diamond_pickaxe
+  LORE:
+    - '&c幸運ピッケルを使う際はOFFにしてください'
+  POSITION-X: 7
+  POSITION-Y: 3
+getmenu:
+  ACTIONS:
+    - getmenu
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9メニューアイテムを入手'
+  LORE:
+    - 'メニューブックを'
+    - 'インベントリに入手'
   ENCHANTMENTS:
     - efficiency, 114514
-  MATERIAL: furnace_minecart
-  POSITION-X: 6
-  POSITION-Y: 5
-ccamera:
+  MATERIAL: book
+  POSITION-X: 7
+  POSITION-Y: 2
+nickoff:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-    - 'rvmenu camera'
-  NAME: '&l&3&l視点切り替え'
+    - nick off
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&9ニックネーム削除'
+  MATERIAL: pufferfish
   LORE:
-    - 'カメラを車両に追従させるかを切り替えます'
-  MATERIAL: player_head
-  NBT-DATA: '{SkullOwner:{Id:[I;1465922634,-508081380,-1866645595,1579454195],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmZiNWVlZTQwYzNkZDY2ODNjZWM4ZGQxYzZjM2ZjMWIxZjAxMzcxNzg2NjNkNzYxMDljZmUxMmVkN2JmMjc4ZSJ9fX0="}]}}}'
-  POSITION-X: 6
-  POSITION-Y: 4
-#  POSITION-Y: 3
-#idoumolotov:
-#  ACTIONS:
-#  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-#  - 'vmenuo'
-#  NAME: '&l&3CarBuilder1 / AircraftBuilder'
-#  ENCHANTMENTS:
-#  - efficiency, 114514
-#  LORE:
-#  - 'CarBuilder / AirCraftBuilderを開く'
-#  MATERIAL: furnace_minecart
-#  POSITION-X: 6
-#  POSITION-Y: 4
+    - '現在のニックネームをリセットします'
+  POSITION-X: 7
+  POSITION-Y: 1
 
 gray1:
   ACTIONS:
@@ -147,7 +161,7 @@ gray1:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 1
 gray2:
@@ -156,7 +170,7 @@ gray2:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 1
 gray3:
@@ -165,7 +179,7 @@ gray3:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 1
 gray4:
@@ -174,7 +188,7 @@ gray4:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 1
 gray5:
@@ -183,26 +197,26 @@ gray5:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 1
-
-gray7:
+gray6:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 6
   POSITION-Y: 1
+
 gray8:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 8
   POSITION-Y: 1
 gray9:
@@ -211,7 +225,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 1
 1gray:
@@ -220,7 +234,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 2
 2gray:
@@ -229,7 +243,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 2
 3gray:
@@ -238,7 +252,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 2
 4gray:
@@ -247,7 +261,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 2
 5gray:
@@ -256,26 +270,26 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 2
-
-7gray:
+6gray:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 6
   POSITION-Y: 2
+
 8gray:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 8
   POSITION-Y: 2
 9gray:
@@ -284,7 +298,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 2
 1gray1:
@@ -293,7 +307,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 3
 2gray2:
@@ -302,7 +316,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 3
 3gray3:
@@ -311,7 +325,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 3
 4gray4:
@@ -320,7 +334,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 3
 5gray5:
@@ -329,26 +343,26 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 3
-
-7gray7:
+6gray6:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 6
   POSITION-Y: 3
+
 8gray8:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 8
   POSITION-Y: 3
 9gray9:
@@ -357,7 +371,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 3
 1gray11:
@@ -366,7 +380,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 4
 2gray21:
@@ -375,7 +389,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 4
 3gray31:
@@ -384,7 +398,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 4
 4gray41:
@@ -393,7 +407,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 4
 5gray51:
@@ -402,26 +416,26 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 4
-
-7gray71:
+6gray61:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 6
   POSITION-Y: 4
+
 8gray81:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 8
   POSITION-Y: 4
 9gray91:
@@ -430,7 +444,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 4
 11gray11:
@@ -439,7 +453,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 1
   POSITION-Y: 5
 21gray21:
@@ -448,7 +462,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 2
   POSITION-Y: 5
 31gray31:
@@ -457,7 +471,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 3
   POSITION-Y: 5
 41gray41:
@@ -466,7 +480,7 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 4
   POSITION-Y: 5
 51gray51:
@@ -475,26 +489,26 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 5
   POSITION-Y: 5
-
-71gray71:
+61gray61:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
-  POSITION-X: 7
+  MATERIAL: blue_stained_glass_pane
+  POSITION-X: 6
   POSITION-Y: 5
+
 81gray81:
   ACTIONS:
   # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 8
   POSITION-Y: 5
 91gray91:
@@ -503,6 +517,6 @@ gray9:
   NAME: ''
   LORE:
     - ''
-  MATERIAL: cyan_stained_glass_pane
+  MATERIAL: blue_stained_glass_pane
   POSITION-X: 9
   POSITION-Y: 5

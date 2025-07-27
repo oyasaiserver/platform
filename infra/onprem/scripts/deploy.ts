@@ -10,7 +10,6 @@ import plugins from '../plugins.json' with { type: 'json' }
 import { basename, format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
-import { config } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
   await rm('dist', rf)
@@ -29,6 +28,11 @@ await spinner('prepare', async () => {
   }
 })
 
+const dockerCompose = {
+  down: 'docker compose down --remove-orphans',
+  up: 'docker compose up --detach --wait'
+}
+
 if (secrets.ENVIRONMENT === 'local') {
   const dir = `server/${secrets.ENVIRONMENT}`
   for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
@@ -39,7 +43,7 @@ if (secrets.ENVIRONMENT === 'local') {
   await $({
     cwd: dir,
     verbose: true
-  })`docker compose down --remove-orphans && docker compose up --detach --wait`
+  })`${dockerCompose.down} && ${dockerCompose.up}`
   exit(0)
 }
 
@@ -57,7 +61,7 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
-await ssh.$`cd ${dir} && docker compose down --remove-orphans`
+await ssh.$`cd ${dir} && ${dockerCompose.down}`
 
 await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
@@ -65,14 +69,4 @@ await ssh.putDirectory('assets', dir)
 
 await ssh.putDirectory('dist', dir)
 
-await ssh.$`sudo upnpc -r ${[
-  config.port.ssh.value,
-  config.port.http.value,
-  config.port.https.value,
-  config.services.minecraft.port[secrets.ENVIRONMENT],
-  config.services.minecraftBedrock.port[secrets.ENVIRONMENT]
-]
-  .map(port => `${port} tcp`)
-  .join(' ')}`
-
-await ssh.$`cd ${dir} && docker compose up --detach --wait`
+await ssh.$`cd ${dir} && ${dockerCompose.up}`

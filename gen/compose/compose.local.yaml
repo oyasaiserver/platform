@@ -1,9 +1,29 @@
 services:
+  portical:
+    image: danielbodart/portical:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: host
+    command: /opt/portical/run poll
+  mariadb:
+    image: mariadb:10.4.28
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: pigg1524
+    volumes:
+      - ./mariadb:/var/lib/mysql
+      - ./mariadb:/docker-entrypoint-initdb.d
   minecraft-main:
+    depends_on:
+      - mariadb
+      - portical
     image: itzg/minecraft-server:java24
     ports:
       - 25565:25565/tcp
       - 19132:19132/udp
+    labels:
+      - portical.upnp.forward=25565:25565/tcp,19132:19132/udp
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -21,12 +41,3 @@ services:
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway
-  mariadb:
-    image: mariadb:10.4.28
-    restart: unless-stopped
-    environment:
-      MARIADB_DATABASE: minecraft
-      MARIADB_ROOT_PASSWORD: pigg1524
-    volumes:
-      - ./mariadb:/var/lib/mysql
-      - ./mariadb:/docker-entrypoint-initdb.d

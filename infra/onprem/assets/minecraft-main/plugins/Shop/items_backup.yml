@@ -1,0 +1,108 @@
+murdolator:
+  id: diamond_sword
+  name: '&c&lMurdolator'
+  lore: []
+  enchantments:
+    DAMAGE_ALL: 6
+    FIRE_ASPECT: 1
+msword:
+  id: iron_sword
+  name: '&2鉄の剣'
+  lore: []
+  enchantments:
+    LOOT_BONUS_MOBS: 1
+    DAMAGE_ALL: 5
+    DURABILITY: 2
+maxe:
+  id: iron_axe
+  name: '&2鉄の斧'
+  lore: []
+  enchantments:
+    DIG_SPEED: 3
+    DURABILITY: 3
+mpickaxe:
+  id: iron_pickaxe
+  name: '&2鉄のつるはし'
+  lore: []
+  enchantments:
+    DIG_SPEED: 4
+    LOOT_BONUS_BLOCKS: 1
+    DURABILITY: 2
+mshovel:
+  id: iron_shovel
+  name: '&2鉄のシャベル'
+  lore: []
+  enchantments:
+    DIG_SPEED: 3
+    DURABILITY: 2
+ssword:
+  id: golden_sword
+  name: '&9鉄の剣'
+  lore: []
+  enchantments:
+    LOOT_BONUS_MOBS: 1
+    DAMAGE_ALL: 7
+    DURABILITY: 1
+    KNOCKBACK: 4
+    DAMAGE_UNDEAD: 3
+saxe:
+  id: golden_axe
+  name: '&9金の斧'
+  lore: []
+  enchantments:
+    DIG_SPEED: 7
+    DURABILITY: 1
+    WATER_WORKER: 4
+spickaxe:
+  id: golden_pickaxe
+  name: '&9金のつるはし'
+  lore: []
+  enchantments:
+    DIG_SPEED: 7
+    LOOT_BONUS_BLOCKS: 4
+    DURABILITY: 2
+    WATER_WORKER: 4
+sshovel:
+  id: golden_shovel
+  name: '&9金のシャベル'
+  lore: []
+  enchantments:
+    DIG_SPEED: 7
+    DURABILITY: 3
+    WATER_WORKER: 3
+csword:
+  id: diamond_sword
+  name: '&5ダイヤモンドの剣'
+  lore: []
+  enchantments:
+    LOOT_BONUS_MOBS: 1
+    DAMAGE_ALL: 5
+    DURABILITY: 3
+    DAMAGE_UNDEAD: 3
+caxe:
+  id: diamond_axe
+  name: '&5ダイヤモンドの斧'
+  lore: []
+  enchantments:
+    DIG_SPEED: 4
+    DURABILITY: 3
+    WATER_WORKER: 3
+cpickaxe:
+  id: diamond_pickaxe
+  name: '&5ダイヤモンドのつるはし'
+  lore: []
+  enchantments:
+    DIG_SPEED: 5
+    LOOT_BONUS_BLOCKS: 2
+    DURABILITY: 3
+    WATER_WORKER: 3
+cshovel:
+  id: diamond_shovel
+  name: '&5ダイヤモンドのシャベル'
+  lore: []
+  enchantments:
+    DIG_SPEED: 4
+    DURABILITY: 5
+    WATER_WORKER: 2
+
+
