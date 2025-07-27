@@ -40,11 +40,12 @@ jobs:
 
   test-integration:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-docker
       - run: |
           ./gradlew build --parallel
           npm run test:integration --workspaces --if-present
