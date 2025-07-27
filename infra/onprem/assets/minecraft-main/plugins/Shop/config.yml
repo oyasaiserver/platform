@@ -1,0 +1,61 @@
+amountPattern: '1,4,16,32,64'
+ignoreColoredDisplay: true
+
+iconsLore:
+  - '&c左クリック&6- 購入, &c右クリック&6 - 売却'
+  - '&e購入価格: &a{buy_price}'
+  - '&e買取価格: &c{sell_price}'
+
+pageSuffix: ' #{page}'
+
+# These items will be added in the last row
+changeAmount:
+  enable: true
+  slot: 8
+  id: iron_ingot
+  name: '&eChange amount'
+  lore: []
+nextPage:
+  slot: 6
+  id: 'lime_dye'
+  inactiveId: 'gray_dye'
+  name: '&aNext page'
+  inactiveName: '&8Next page'
+previousPage:
+  slot: 5
+  id: 'pink_dye'
+  inactiveId: 'gray_dye'
+  name: '&cPrevious page'
+  inactiveName: '&8Previous page'
+
+customNodes:
+  '1':
+    slot: 0
+    id: arrow
+    name: '&eBack'
+    lore: []
+    # Executes when player click on item
+    # 'cmd' - execute command
+    # 'msg: text' - send message to player
+    # 'console: cmd' - execute command from console
+    #
+    # {player} will be replaced to player name
+    action:
+      - 'menuopen'
+    # Close menu after command execution
+    close: true
+
+messages:
+  noItem: '&c{item}を{amount}個所持している必要があります'
+  noMoney: '&c{money}円所持している必要があります'
+  bought: '&6{amount}個の{item}を{money}円で&c購入&6しました'
+  sold: '&6{amount}個の{item}を{money}円で&b売却&6しました'
+
+# Sound names can be found here hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+sounds:
+  bought: ENTITY_HORSE_STEP
+  sold: ITEM_BOOK_PUT
+  noMoney: none
+  noItem: none
+
+configVersion: '1.5'

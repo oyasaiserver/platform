@@ -1,5 +1,5 @@
 menu-settings:
-  name: '&l&e[lang]cc.shop[/lang]'
+  name: '&l&eサーバーショップ'
   rows: 6
   commands:
     - menushopyml
@@ -12,9 +12,9 @@ chat:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: chat.yml'
-  NAME: '&l&5{player}[lang]cc.chat[/lang]'
+  NAME: '&l&5{player}(プロフィール)'
   LORE:
-    - '[lang]cc.chatd[/lang]'
+    - 'プレイヤープロフィールを確認'
   MATERIAL: player_head
   SKULL-OWNER: '{player}'
   POSITION-X: 1
@@ -23,9 +23,9 @@ ucommand1:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: ucommand1.yml'
-  NAME: '&l&c[lang]cc.command[/lang] 1'
+  NAME: '&l&cユーザーコマンド 1'
   LORE:
-    - '[lang]cc.commandd[/lang]'
+    - '各種ユーザーコマンドを実行'
   MATERIAL: red_concrete_powder
   POSITION-X: 2
   POSITION-Y: 6
@@ -33,9 +33,9 @@ ucommand2:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: ucommand2.yml'
-  NAME: '&l&6[lang]cc.command[/lang] 2'
+  NAME: '&l&6ユーザーコマンド 2'
   LORE:
-    - '[lang]cc.commandd[/lang]'
+    - '各種ユーザーコマンドを実行'
   MATERIAL: orange_concrete_powder
   POSITION-X: 3
   POSITION-Y: 6
@@ -43,10 +43,10 @@ shop:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: menu.yml'
-  NAME: '&l&e[lang]cc.shop[/lang]'
+  NAME: '&l&eサーバーショップ'
   LORE:
-    - '[lang]cc.shopd[/lang]'
-    - '[lang]cc.shopd1[/lang]'
+    - '建材や装飾、鉱石の売買'
+    - 'ポイントとマイルの交換'
   MATERIAL: yellow_concrete_powder
   POSITION-X: 4
   POSITION-Y: 6
@@ -54,10 +54,10 @@ sociallikes:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: sociallikes.yml'
-  NAME: '&a[lang]cc.sociallikes[/lang]'
+  NAME: '&aSocialLikes'
   LORE:
-    - '[lang]cc.sociallikesd[/lang]'
-    - '[lang]cc.sociallikesd1[/lang]'
+    - '建築管理システム'
+    - '自分の建築、すべての建築へクリックでテレポート'
   MATERIAL: lime_concrete_powder
   POSITION-X: 5
   POSITION-Y: 6
@@ -65,10 +65,10 @@ carbuilder:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: carbuilder.yml'
-  NAME: '&l&3[lang]cc.carbuilder[/lang]'
+  NAME: '&l&3CarBuilder1 & AirCraftBuilder'
   LORE:
-    - '[lang]cc.carbuilderd[/lang]'
-    - '[lang]cc.carbuilderd1[/lang]'
+    - 'ユーザー車両建造プラグイン'
+    - 'スポーン、カスタム、車両設定など'
   MATERIAL: cyan_concrete_powder
   POSITION-X: 6
   POSITION-Y: 6
@@ -76,9 +76,9 @@ settings:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: settings.yml'
-  NAME: '&l&9[lang]cc.settings[/lang]'
+  NAME: '&l&9ユーザー設定'
   LORE:
-    - '[lang]cc.settingsd[/lang]'
+    - '椅子のON/OFF、TP許可設定など'
   MATERIAL: blue_concrete_powder
   POSITION-X: 7
   POSITION-Y: 6
@@ -86,9 +86,9 @@ links:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: links.yml'
-  NAME: '&l&5[lang]cc.link[/lang]'
+  NAME: '&l&5リンク'
   LORE:
-    - '[lang]cc.linkd[/lang]'
+    - 'ルール確認、Wikiやdynmap、Discordの参加リンクはこちら'
   MATERIAL: purple_concrete_powder
   POSITION-X: 8
   POSITION-Y: 6
@@ -96,9 +96,9 @@ painttools:
   ACTIONS:
     # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
     - 'open: painttools.yml'
-  NAME: '&l&d[lang]cc.painttools[/lang]'
+  NAME: '&l&dお絵描き'
   LORE:
-    - '[lang]cc.painttoolsd[/lang]'
+    - 'お絵描きツールの入手はこちらから'
   MATERIAL: pink_concrete_powder
   POSITION-X: 9
   POSITION-Y: 6
@@ -106,30 +106,30 @@ painttools:
 blocks:
   ACTIONS:
     - blockshop
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-  NAME: '&e[lang]menu.shop.block[/lang]'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&e建材ブロック - ショップ'
   LORE:
-    - '[lang]menu.shop.block.d[/lang]'
+    - '建材ショップを開きます'
   MATERIAL: bricks
   POSITION-X: 4
   POSITION-Y: 5
 decoration:
   ACTIONS:
     - decorationsshop
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-  NAME: '&e[lang]menu.shop.decorations[/lang]'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&e装飾 - ショップ'
   LORE:
-    - '[lang]menu.shop.decorations.d[/lang]'
+    - '装飾アイテムショップを開きます'
   MATERIAL: peony
   POSITION-X: 4
   POSITION-Y: 4
 ore:
   ACTIONS:
     - oreshop
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-  NAME: '&e[lang]menu.shop.ore[/lang]'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&e鉱石 - ショップ'
   LORE:
-    - '[lang]menu.shop.ore.d[/lang]'
+    - '鉱石の売買はここから'
     - ''
     - '&8スマホ版非対応(Pocket Edition)'
     - '&8スマホの方は中央商店街へ'
@@ -140,36 +140,36 @@ ore:
 #  ACTIONS:
 #  - redstoneshop
 #  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-#  NAME: '&e[lang]menu.shop.redstone[/lang]'
+#  NAME: '&eレッドストーン - ショップ'
 #  LORE:
-#  - '[lang]menu.shop.redstone.d[/lang]'
+#  - 'レッドストーン系アイテムショップを開きます'
 #  MATERIAL: redstone
 #  POSITION-X: 4
 #  POSITION-Y: 2
 tools:
   ACTIONS:
     - tools
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-  NAME: '&e[lang]menu.tools[/lang]'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eツールショップ'
   LORE:
-    - '[lang]menu.tools.d[/lang]'
+    - 'ツールの入手はここで'
   MATERIAL: diamond_pickaxe
   POSITION-X: 4
   POSITION-Y: 2
 pshop:
   ACTIONS:
     - pshop
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
-  NAME: '&e[lang]menu.voteshop[/lang]'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  NAME: '&eポイント - ショップ'
   LORE:
-    - '&6[lang]menu.voteshop.d[/lang]'
+    - '&6ポイントを利用してアイテム購入と権限解除'
   MATERIAL: nether_star
   POSITION-X: 4
   POSITION-Y: 1
 
 gray1:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -178,7 +178,7 @@ gray1:
   POSITION-Y: 1
 gray2:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -187,7 +187,7 @@ gray2:
   POSITION-Y: 1
 gray3:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -197,7 +197,7 @@ gray3:
 
 gray5:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -206,7 +206,7 @@ gray5:
   POSITION-Y: 1
 gray6:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -215,7 +215,7 @@ gray6:
   POSITION-Y: 1
 gray7:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -224,7 +224,7 @@ gray7:
   POSITION-Y: 1
 gray8:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -233,7 +233,7 @@ gray8:
   POSITION-Y: 1
 gray9:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -242,7 +242,7 @@ gray9:
   POSITION-Y: 1
 1gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -251,7 +251,7 @@ gray9:
   POSITION-Y: 2
 2gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -260,7 +260,7 @@ gray9:
   POSITION-Y: 2
 3gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -270,7 +270,7 @@ gray9:
 
 5gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -279,7 +279,7 @@ gray9:
   POSITION-Y: 2
 6gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -288,7 +288,7 @@ gray9:
   POSITION-Y: 2
 7gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -297,7 +297,7 @@ gray9:
   POSITION-Y: 2
 8gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -306,7 +306,7 @@ gray9:
   POSITION-Y: 2
 9gray:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -315,7 +315,7 @@ gray9:
   POSITION-Y: 2
 1gray1:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -324,7 +324,7 @@ gray9:
   POSITION-Y: 3
 2gray2:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -333,7 +333,7 @@ gray9:
   POSITION-Y: 3
 3gray3:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -343,7 +343,7 @@ gray9:
 
 5gray5:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -352,7 +352,7 @@ gray9:
   POSITION-Y: 3
 6gray6:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -361,7 +361,7 @@ gray9:
   POSITION-Y: 3
 7gray7:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -370,7 +370,7 @@ gray9:
   POSITION-Y: 3
 8gray8:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -379,7 +379,7 @@ gray9:
   POSITION-Y: 3
 9gray9:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -388,7 +388,7 @@ gray9:
   POSITION-Y: 3
 1gray11:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -397,7 +397,7 @@ gray9:
   POSITION-Y: 4
 2gray21:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -406,7 +406,7 @@ gray9:
   POSITION-Y: 4
 3gray31:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -416,7 +416,7 @@ gray9:
 
 5gray51:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -425,7 +425,7 @@ gray9:
   POSITION-Y: 4
 6gray61:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -434,7 +434,7 @@ gray9:
   POSITION-Y: 4
 7gray71:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -443,7 +443,7 @@ gray9:
   POSITION-Y: 4
 8gray81:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -452,7 +452,7 @@ gray9:
   POSITION-Y: 4
 9gray91:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -461,7 +461,7 @@ gray9:
   POSITION-Y: 4
 11gray11:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -470,7 +470,7 @@ gray9:
   POSITION-Y: 5
 21gray21:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -479,7 +479,7 @@ gray9:
   POSITION-Y: 5
 31gray31:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -489,7 +489,7 @@ gray9:
 
 51gray51:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -498,7 +498,7 @@ gray9:
   POSITION-Y: 5
 61gray61:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -507,7 +507,7 @@ gray9:
   POSITION-Y: 5
 71gray71:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -516,7 +516,7 @@ gray9:
   POSITION-Y: 5
 81gray81:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''
@@ -525,7 +525,7 @@ gray9:
   POSITION-Y: 5
 91gray91:
   ACTIONS:
-    # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
+  # - 'sound: UI_STONECUTTER_SELECT_RECIPE'
   NAME: ''
   LORE:
     - ''

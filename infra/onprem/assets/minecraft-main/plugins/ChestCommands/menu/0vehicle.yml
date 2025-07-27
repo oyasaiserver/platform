@@ -2,7 +2,7 @@ menu-settings:
   name: '移動'
   rows: 6
   commands:
-    - vehimenu
+    - 1vmenu
   auto-refresh: 5
   open-actions:
     - 'tell: &eメニューを開きました'

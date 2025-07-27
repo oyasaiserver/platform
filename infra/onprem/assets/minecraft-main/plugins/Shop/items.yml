@@ -1,0 +1,43 @@
+pickaxe_normal:
+  id: diamond_pickaxe
+  name: '&a普通のエンチャントツルハシ'
+  lore: ['&7すごく普通。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+
+pickaxe_normal_f:
+  id: diamond_pickaxe
+  name: '&a幸運のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率が上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 3
+
+pickaxe_plus1:
+  id: diamond_pickaxe
+  name: '&a幸運+のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率が更に上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 5
+
+pickaxe_plus2:
+  id: diamond_pickaxe
+  name: '&a幸運++のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率がそこそこ上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 7
+
+pickaxe_plus3:
+  id: diamond_pickaxe
+  name: '&a幸運+++のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率がかなり上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 10

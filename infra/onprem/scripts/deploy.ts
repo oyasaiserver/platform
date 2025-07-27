@@ -10,7 +10,6 @@ import plugins from '../plugins.json' with { type: 'json' }
 import { basename, format, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
-import { config } from '@oyasaiserver/onprem/config'
 
 await spinner('prepare', async () => {
   await rm('dist', rf)
@@ -64,15 +63,5 @@ await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 await ssh.putDirectory('assets', dir)
 
 await ssh.putDirectory('dist', dir)
-
-await ssh.$`sudo upnpc -r ${[
-  config.port.ssh.value,
-  config.port.http.value,
-  config.port.https.value,
-  config.services.minecraft.port[secrets.ENVIRONMENT],
-  config.services.minecraftBedrock.port[secrets.ENVIRONMENT]
-]
-  .map(port => `${port} tcp`)
-  .join(' ')}`
 
 await ssh.$`cd ${dir} && docker compose up --detach --wait`
