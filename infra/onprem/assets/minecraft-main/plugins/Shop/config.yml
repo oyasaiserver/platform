@@ -2,9 +2,9 @@ amountPattern: '1,4,16,32,64'
 ignoreColoredDisplay: true
 
 iconsLore:
-- '&c左クリック&6- 購入, &c右クリック&6 - 売却'
-- '&e購入価格: &a{buy_price}'
-- '&e買取価格: &c{sell_price}'
+  - '&c左クリック&6- 購入, &c右クリック&6 - 売却'
+  - '&e購入価格: &a{buy_price}'
+  - '&e買取価格: &c{sell_price}'
 
 pageSuffix: ' #{page}'
 
@@ -41,10 +41,9 @@ customNodes:
     #
     # {player} will be replaced to player name
     action:
-    - 'menuopen'
+      - 'menuopen'
     # Close menu after command execution
     close: true
-
 
 messages:
   noItem: '&c{item}を{amount}個所持している必要があります'
@@ -58,10 +57,5 @@ sounds:
   sold: ITEM_BOOK_PUT
   noMoney: none
   noItem: none
-
-
-
-
-
 
 configVersion: '1.5'

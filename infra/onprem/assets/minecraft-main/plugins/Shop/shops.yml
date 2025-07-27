@@ -417,8 +417,6 @@ blocks:
     - sculk_catalyst 5 1
 #    - '' # -------------  new page
 
-
-
 decorations:
   name: '&1装飾'
   rows: 6
@@ -833,114 +831,110 @@ decorations:
     - chest 10 1
     - barrel 10 1
     - ender_chest 10 1
-#    - 
-#    - 
+#    -
+#    -
 #    - '' # -------------  new page
-
 
 ores:
   name: '&1鉱石'
   rows: 3
   items:
-  - diamond 50 5
-  - gold_ingot 50 5
-  - iron_ingot 50 5
-  - coal 50 5
-  - redstone 50 5
-  - lapis_lazuli 50 5
-  - emerald 50 5
-  - amethyst_shard 50 5
-  - copper_ingot 50 5
-  - diamond_block 450 45
-  - gold_block 450 45
-  - iron_block 450 45
-  - coal_block 450 45
-  - redstone_block 450 45
-  - lapis_block 450 45
-  - emerald_block 450 45
-  - amethyst_block 450 45
-  - copper_block 450 45
-
+    - diamond 50 5
+    - gold_ingot 50 5
+    - iron_ingot 50 5
+    - coal 50 5
+    - redstone 50 5
+    - lapis_lazuli 50 5
+    - emerald 50 5
+    - amethyst_shard 50 5
+    - copper_ingot 50 5
+    - diamond_block 450 45
+    - gold_block 450 45
+    - iron_block 450 45
+    - coal_block 450 45
+    - redstone_block 450 45
+    - lapis_block 450 45
+    - emerald_block 450 45
+    - amethyst_block 450 45
+    - copper_block 450 45
 
 redstone:
   name: '&1レッドストーン'
   rows: 4
   items:
-  - powered_rail 10 5
-  - detector_rail 10 5
-  - sticky_piston 10 5
-  - piston 10 5
-  - rail 10 5
-  - lever 10 5
-  - iron_door 10 5
-  - stone_pressure_plate 10 5
-  - redstone_torch 10 5
-  - repeater 10 5
-  - comparator 10 5
-  - oak_door 10 5
-  - iron_door 10 5
-  - tripwire_hook 10 5
-  - spruce_door 10 5
-  - birch_door 10 5
-  - jungle_door 10 5
-  - acacia_door 10 5
-  - dark_oak_door 10 5
-  - mangrove_door 10 5
-  - oak_fence_gate 10 5
-  - spruce_fence_gate 10 5
-  - birch_fence_gate 10 5
-  - jungle_fence_gate 10 5
-  - dark_oak_fence_gate 10 5
-  - acacia_fence_gate 10 5
-  - mangrove_fence_gate 10 5
-  - '' # -------------  new page
-  - note_block 10 5
-  - dispenser 10 5
-  - hopper 10 5
-  - dropper 10 5
-  - observer 10 5
-  - wooden_axe 10 5
-  - oak_door 10 5
-  - oak_trapdoor 10 5
-  - iron_trapdoor 10 5
-  - daylight_detector 10 5
-  - light_weighted_pressure_plate 10 5
-  - heavy_weighted_pressure_plate 10 5
-  - spruce_pressure_plate 10 5
-  - birch_pressure_plate 10 5
-  - jungle_pressure_plate 10 5
-  - acacia_pressure_plate 10 5
-  - dark_oak_pressure_plate 10 5
-  - mangrove_pressure_plate 10 5
-  - spruce_trapdoor 10 5
-  - birch_trapdoor 10 5
-  - jungle_trapdoor 10 5
-  - acacia_trapdoor 10 5
-  - dark_oak_trapdoor 10 5
-  - mangrove_trapdoor 10 5
-  - lectern 10 5
-  - target 10 5
-  - warped_trapdoor 10 5
-  - '' # -------------  new page
-  - cherry_fence_gate 10 5
-  - cherry_door 10 5
-  - cherry_trapdoor 10 5
-  - cherry_pressure_plate 10 5
-  - cherry_button 10 5
-  - bamboo_trapdoor 10 5
-
-
+    - powered_rail 10 5
+    - detector_rail 10 5
+    - sticky_piston 10 5
+    - piston 10 5
+    - rail 10 5
+    - lever 10 5
+    - iron_door 10 5
+    - stone_pressure_plate 10 5
+    - redstone_torch 10 5
+    - repeater 10 5
+    - comparator 10 5
+    - oak_door 10 5
+    - iron_door 10 5
+    - tripwire_hook 10 5
+    - spruce_door 10 5
+    - birch_door 10 5
+    - jungle_door 10 5
+    - acacia_door 10 5
+    - dark_oak_door 10 5
+    - mangrove_door 10 5
+    - oak_fence_gate 10 5
+    - spruce_fence_gate 10 5
+    - birch_fence_gate 10 5
+    - jungle_fence_gate 10 5
+    - dark_oak_fence_gate 10 5
+    - acacia_fence_gate 10 5
+    - mangrove_fence_gate 10 5
+    - '' # -------------  new page
+    - note_block 10 5
+    - dispenser 10 5
+    - hopper 10 5
+    - dropper 10 5
+    - observer 10 5
+    - wooden_axe 10 5
+    - oak_door 10 5
+    - oak_trapdoor 10 5
+    - iron_trapdoor 10 5
+    - daylight_detector 10 5
+    - light_weighted_pressure_plate 10 5
+    - heavy_weighted_pressure_plate 10 5
+    - spruce_pressure_plate 10 5
+    - birch_pressure_plate 10 5
+    - jungle_pressure_plate 10 5
+    - acacia_pressure_plate 10 5
+    - dark_oak_pressure_plate 10 5
+    - mangrove_pressure_plate 10 5
+    - spruce_trapdoor 10 5
+    - birch_trapdoor 10 5
+    - jungle_trapdoor 10 5
+    - acacia_trapdoor 10 5
+    - dark_oak_trapdoor 10 5
+    - mangrove_trapdoor 10 5
+    - lectern 10 5
+    - target 10 5
+    - warped_trapdoor 10 5
+    - '' # -------------  new page
+    - cherry_fence_gate 10 5
+    - cherry_door 10 5
+    - cherry_trapdoor 10 5
+    - cherry_pressure_plate 10 5
+    - cherry_button 10 5
+    - bamboo_trapdoor 10 5
 
 tools:
   name: '&1ツール'
   rows: 3
   items:
-  - $pickaxe_normal 500000 0
-  - $pickaxe_normal_f 700000 0
-  - $pickaxe_plus1 1200000 0
-  - $pickaxe_plus2 1800000 0
-  - $pickaxe_plus3 2500000 0
-  - bread 1.7 0
-  - cooked_beef 4 0
-  - carrot 3 0
-  - golden_carrot 20 0
+    - $pickaxe_normal 500000 0
+    - $pickaxe_normal_f 700000 0
+    - $pickaxe_plus1 1200000 0
+    - $pickaxe_plus2 1800000 0
+    - $pickaxe_plus3 2500000 0
+    - bread 1.7 0
+    - cooked_beef 4 0
+    - carrot 3 0
+    - golden_carrot 20 0
