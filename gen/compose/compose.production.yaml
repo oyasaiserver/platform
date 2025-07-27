@@ -23,7 +23,7 @@ services:
       - 25565:25565/tcp
       - 19132:19132/udp
     labels:
-      - portical.upnp.forward=25565:25565/tcp,19132:19132/udp
+      - portical.upnp.forward=25565/tcp,19132/udp
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -41,3 +41,28 @@ services:
     env_file: .env
     extra_hosts:
       - host.docker.internal:host-gateway
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    ports:
+      - 9100:9100
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave

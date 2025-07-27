@@ -23,7 +23,7 @@ services:
       - 25565:25565/tcp
       - 19132:19132/udp
     labels:
-      - portical.upnp.forward=25565:25565/tcp,19132:19132/udp
+      - portical.upnp.forward=25565/tcp,19132/udp
     restart: unless-stopped
     tty: true
     stdin_open: true
