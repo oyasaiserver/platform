@@ -51,11 +51,15 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yaml
   grafana:
+    depends_on:
+      - portical
     image: grafana/grafana
     ports:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
+    labels:
+      - portical.upnp.forward=published
   node-exporter:
     image: prom/node-exporter:v1.9.1
     ports:
