@@ -33,12 +33,12 @@ spotless {
 
     kotlin {
         target("**/src/**/*.kt")
-        ktfmt().kotlinlangStyle()
+        ktfmt().googleStyle()
     }
 
     kotlinGradle {
         target("**/src/**/*.gradle.kt")
-        ktfmt().kotlinlangStyle()
+        ktfmt().googleStyle()
         ktlint()
     }
 
