@@ -23,12 +23,6 @@ spotless {
 
   kotlin {
     target("**/*.kt")
-    targetExclude("gen/**/*.kt")
-    ktlint()
-  }
-
-  kotlin {
-    target("**/*.kt")
     ktfmt().googleStyle()
   }
 

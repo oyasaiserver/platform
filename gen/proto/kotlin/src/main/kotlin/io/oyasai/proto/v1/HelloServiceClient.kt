@@ -12,35 +12,37 @@ import com.connectrpc.StreamType
 import com.connectrpc.http.Cancelable
 import kotlin.Unit
 
-public class HelloServiceClient(
-  private val client: ProtocolClientInterface,
-) : HelloServiceClientInterface {
-  override suspend fun sayHello(request: HelloRequest, headers: Headers): ResponseMessage<HelloResponse> = client.unary(
-    request,
-    headers,
-    MethodSpec(
-    "proto.v1.HelloService/SayHello",
-      io.oyasai.proto.v1.HelloRequest::class,
-      io.oyasai.proto.v1.HelloResponse::class,
-      StreamType.UNARY,
-    ),
-  )
-
+public class HelloServiceClient(private val client: ProtocolClientInterface) :
+  HelloServiceClientInterface {
+  override suspend fun sayHello(
+    request: HelloRequest,
+    headers: Headers,
+  ): ResponseMessage<HelloResponse> =
+    client.unary(
+      request,
+      headers,
+      MethodSpec(
+        "proto.v1.HelloService/SayHello",
+        io.oyasai.proto.v1.HelloRequest::class,
+        io.oyasai.proto.v1.HelloResponse::class,
+        StreamType.UNARY,
+      ),
+    )
 
   override fun sayHello(
     request: HelloRequest,
     headers: Headers,
     onResult: (ResponseMessage<HelloResponse>) -> Unit,
-  ): Cancelable = client.unary(
-    request,
-    headers,
-    MethodSpec(
-    "proto.v1.HelloService/SayHello",
-      io.oyasai.proto.v1.HelloRequest::class,
-      io.oyasai.proto.v1.HelloResponse::class,
-      StreamType.UNARY,
-    ),
-    onResult
-  )
-
+  ): Cancelable =
+    client.unary(
+      request,
+      headers,
+      MethodSpec(
+        "proto.v1.HelloService/SayHello",
+        io.oyasai.proto.v1.HelloRequest::class,
+        io.oyasai.proto.v1.HelloResponse::class,
+        StreamType.UNARY,
+      ),
+      onResult,
+    )
 }

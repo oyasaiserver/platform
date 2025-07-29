@@ -10,7 +10,10 @@ import com.connectrpc.http.Cancelable
 import kotlin.Unit
 
 public interface HelloServiceClientInterface {
-  public suspend fun sayHello(request: HelloRequest, headers: Headers = emptyMap()): ResponseMessage<HelloResponse>
+  public suspend fun sayHello(
+    request: HelloRequest,
+    headers: Headers = emptyMap(),
+  ): ResponseMessage<HelloResponse>
 
   public fun sayHello(
     request: HelloRequest,
