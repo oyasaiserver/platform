@@ -8,68 +8,66 @@ package io.oyasai.proto.v1;
 @com.google.protobuf.Generated
 public final class HelloProto {
   private HelloProto() {}
+
   static {
     com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
-      com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
-      /* major= */ 4,
-      /* minor= */ 31,
-      /* patch= */ 1,
-      /* suffix= */ "",
-      HelloProto.class.getName());
-  }
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 31,
+        /* patch= */ 1,
+        /* suffix= */ "",
+        HelloProto.class.getName());
   }
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {}
+
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
+
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_v1_HelloRequest_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_proto_v1_HelloRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_proto_v1_HelloRequest_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_v1_HelloResponse_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_proto_v1_HelloResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_proto_v1_HelloResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\016v1/hello.proto\022\010proto.v1\"\"\n\014HelloReque" +
-      "st\022\022\n\004name\030\001 \001(\tR\004name\")\n\rHelloResponse\022" +
-      "\030\n\007message\030\001 \001(\tR\007message2K\n\014HelloServic" +
-      "e\022;\n\010SayHello\022\026.proto.v1.HelloRequest\032\027." +
-      "proto.v1.HelloResponseBa\n\022io.oyasai.prot" +
-      "o.v1B\nHelloProtoP\001\242\002\003PXX\252\002\010Proto.V1\312\002\010Pr" +
-      "oto\\V1\342\002\024Proto\\V1\\GPBMetadata\352\002\tProto::V" +
-      "1b\006proto3"
+      "\n\016v1/hello.proto\022\010proto.v1\"\"\n\014HelloReque"
+          + "st\022\022\n\004name\030\001 \001(\tR\004name\")\n\rHelloResponse\022"
+          + "\030\n\007message\030\001 \001(\tR\007message2K\n\014HelloServic"
+          + "e\022;\n\010SayHello\022\026.proto.v1.HelloRequest\032\027."
+          + "proto.v1.HelloResponseBa\n\022io.oyasai.prot"
+          + "o.v1B\nHelloProtoP\001\242\002\003PXX\252\002\010Proto.V1\312\002\010Pr"
+          + "oto\\V1\342\002\024Proto\\V1\\GPBMetadata\352\002\tProto::V"
+          + "1b\006proto3"
     };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        });
-    internal_static_proto_v1_HelloRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_v1_HelloRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_proto_v1_HelloRequest_descriptor,
-        new java.lang.String[] { "Name", });
-    internal_static_proto_v1_HelloResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_v1_HelloResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_proto_v1_HelloResponse_descriptor,
-        new java.lang.String[] { "Message", });
+    descriptor =
+        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
+            descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {});
+    internal_static_proto_v1_HelloRequest_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_v1_HelloRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_proto_v1_HelloRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_proto_v1_HelloResponse_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_v1_HelloResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_proto_v1_HelloResponse_descriptor,
+            new java.lang.String[] {
+              "Message",
+            });
     descriptor.resolveAllFeaturesImmutable();
   }
 

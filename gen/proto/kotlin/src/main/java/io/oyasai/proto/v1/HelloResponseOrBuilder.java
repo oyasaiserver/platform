@@ -6,19 +6,22 @@
 package io.oyasai.proto.v1;
 
 @com.google.protobuf.Generated
-public interface HelloResponseOrBuilder extends
+public interface HelloResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:proto.v1.HelloResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
    * <code>string message = 1 [json_name = "message"];</code>
+   *
    * @return The message.
    */
   java.lang.String getMessage();
+
   /**
    * <code>string message = 1 [json_name = "message"];</code>
+   *
    * @return The bytes for message.
    */
-  com.google.protobuf.ByteString
-      getMessageBytes();
+  com.google.protobuf.ByteString getMessageBytes();
 }
