@@ -11,19 +11,17 @@ description = "CoreProtect"
 
 repositories {
     mavenCentral()
-//    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-//    maven("https://repo.papermc.io/repository/maven-public/")
-//    maven("https://repo.codemc.org/repository/maven-public/")
-//    maven("https://jitpack.io")
-//    maven("https://maven.enginehub.org/repo/")
+    //    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+    //    maven("https://repo.papermc.io/repository/maven-public/")
+    //    maven("https://repo.codemc.org/repository/maven-public/")
+    //    maven("https://jitpack.io")
+    //    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
     compileOnly(libs.purpur.api)
     compileOnly(libs.fawe.core)
-    compileOnly(libs.fawe.bukkit) {
-        isTransitive = false
-    }
+    compileOnly(libs.fawe.bukkit) { isTransitive = false }
     compileOnly(libs.advancedchestsapi)
     implementation(libs.hikaricp)
     implementation(libs.oshi.core)
@@ -40,12 +38,7 @@ tasks.apply {
 
         relocate("com.zaxxer", "net.coreprotect.com.zaxxer")
 
-        exclude(
-            "**/*.java",
-            "**/*.c",
-            "META-INF/maven/**",
-            "META-INF/services/**"
-        )
+        exclude("**/*.java", "**/*.c", "META-INF/maven/**", "META-INF/services/**")
 
         dependencies {
             exclude(dependency("com.google.code.gson:.*"))

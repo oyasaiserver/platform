@@ -1,6 +1,4 @@
-plugins {
-    alias(libs.plugins.spotless)
-}
+plugins { alias(libs.plugins.spotless) }
 
 buildscript {
     dependencies {
@@ -8,9 +6,7 @@ buildscript {
         classpath(libs.shadow.plugin)
     }
 
-    repositories {
-        mavenCentral()
-    }
+    repositories { mavenCentral() }
 }
 
 allprojects {
@@ -26,25 +22,25 @@ spotless {
     isEnforceCheck = false
 
     kotlin {
-        target("**/src/**/*.kt")
+        target("**/*.kt")
         targetExclude("gen/**/*.kt")
         ktlint()
     }
 
     kotlin {
-        target("**/src/**/*.kt")
+        target("**/*.kt")
         ktfmt().googleStyle()
     }
 
     kotlinGradle {
-        target("**/src/**/*.gradle.kt")
+        target("**/*.gradle.kts")
         ktfmt().googleStyle()
         ktlint()
     }
 
     java {
-        target("**/src/**/*.java")
-        targetExclude("gen/**/*.java")
+        target("**/*.java")
+        targetExclude("node_modules/**/*")
         googleJavaFormat()
     }
 }
