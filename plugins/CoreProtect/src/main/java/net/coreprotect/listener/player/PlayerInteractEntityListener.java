@@ -26,6 +26,47 @@ import org.bukkit.inventory.ItemStack;
 
 public final class PlayerInteractEntityListener extends Queue implements Listener {
 
+  public static void queueContainerSpecifiedItems(
+      String user, Material type, Object container, Location location, boolean logDrop) {
+    ItemStack[] contents = (ItemStack[]) ((Object[]) container)[0];
+    int x = location.getBlockX();
+    int y = location.getBlockY();
+    int z = location.getBlockZ();
+
+    String transactingChestId =
+        location.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
+    String loggingChestId = user.toLowerCase(Locale.ROOT) + "." + x + "." + y + "." + z;
+    int chestId = Queue.getChestId(loggingChestId);
+    if (chestId > 0) {
+      if (ConfigHandler.forceContainer.get(loggingChestId) != null) {
+        int forceSize = ConfigHandler.forceContainer.get(loggingChestId).size();
+        List<ItemStack[]> list = ConfigHandler.oldContainer.get(loggingChestId);
+
+        if (list.size() <= forceSize) {
+          list.add(ItemUtils.getContainerState(contents));
+          ConfigHandler.oldContainer.put(loggingChestId, list);
+        }
+      }
+    } else {
+      List<ItemStack[]> list = new ArrayList<>();
+      list.add(ItemUtils.getContainerState(contents));
+      ConfigHandler.oldContainer.put(loggingChestId, list);
+    }
+
+    ConfigHandler.transactingChest.computeIfAbsent(
+        transactingChestId, k -> Collections.synchronizedList(new ArrayList<>()));
+    Queue.queueContainerTransaction(user, location, type, container, chestId);
+
+    if (logDrop) {
+      ItemStack dropItem = contents[0];
+      if (dropItem.getType() == Material.AIR) {
+        return;
+      }
+
+      PlayerDropItemListener.playerDropItem(location, user, dropItem);
+    }
+  }
+
   @EventHandler(priority = EventPriority.MONITOR)
   protected void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
     if (event instanceof PlayerArmorStandManipulateEvent) {
@@ -118,47 +159,6 @@ public final class PlayerInteractEntityListener extends Queue implements Listene
         CraftItemListener.logCraftedItem(
             player.getLocation(), player.getName(), addItem, ItemLogger.ITEM_BUY);
       }
-    }
-  }
-
-  public static void queueContainerSpecifiedItems(
-      String user, Material type, Object container, Location location, boolean logDrop) {
-    ItemStack[] contents = (ItemStack[]) ((Object[]) container)[0];
-    int x = location.getBlockX();
-    int y = location.getBlockY();
-    int z = location.getBlockZ();
-
-    String transactingChestId =
-        location.getWorld().getUID().toString() + "." + x + "." + y + "." + z;
-    String loggingChestId = user.toLowerCase(Locale.ROOT) + "." + x + "." + y + "." + z;
-    int chestId = Queue.getChestId(loggingChestId);
-    if (chestId > 0) {
-      if (ConfigHandler.forceContainer.get(loggingChestId) != null) {
-        int forceSize = ConfigHandler.forceContainer.get(loggingChestId).size();
-        List<ItemStack[]> list = ConfigHandler.oldContainer.get(loggingChestId);
-
-        if (list.size() <= forceSize) {
-          list.add(ItemUtils.getContainerState(contents));
-          ConfigHandler.oldContainer.put(loggingChestId, list);
-        }
-      }
-    } else {
-      List<ItemStack[]> list = new ArrayList<>();
-      list.add(ItemUtils.getContainerState(contents));
-      ConfigHandler.oldContainer.put(loggingChestId, list);
-    }
-
-    ConfigHandler.transactingChest.computeIfAbsent(
-        transactingChestId, k -> Collections.synchronizedList(new ArrayList<>()));
-    Queue.queueContainerTransaction(user, location, type, container, chestId);
-
-    if (logDrop) {
-      ItemStack dropItem = contents[0];
-      if (dropItem.getType() == Material.AIR) {
-        return;
-      }
-
-      PlayerDropItemListener.playerDropItem(location, user, dropItem);
     }
   }
 }

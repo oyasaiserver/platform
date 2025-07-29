@@ -24,11 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -38,11 +34,11 @@ import us.lynuxcraft.deadsilenceiv.advancedchests.chest.AdvancedChest;
 
 public final class InventoryChangeListener extends Queue implements Listener {
 
+  private static final Object taskCompletionLock = new Object();
+  private static final long TASK_WAIT_MAX_MS = 50; // Maximum wait time in milliseconds
   protected static AtomicLong tasksStarted = new AtomicLong();
   protected static AtomicLong tasksCompleted = new AtomicLong();
   private static ConcurrentHashMap<String, Boolean> inventoryProcessing = new ConcurrentHashMap<>();
-  private static final Object taskCompletionLock = new Object();
-  private static final long TASK_WAIT_MAX_MS = 50; // Maximum wait time in milliseconds
 
   protected static void checkTasks(long taskStarted) {
     try {

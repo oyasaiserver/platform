@@ -1,10 +1,6 @@
 package net.coreprotect.listener.channel;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,9 +19,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 public class PluginChannelHandshakeListener implements PluginMessageListener, Listener {
 
   public static final String pluginChannel = "coreprotect:handshake";
+  private static PluginChannelHandshakeListener instance;
   private final int networkingProtocolVersion = 1;
   private final Set<UUID> pluginChannelPlayers;
-  private static PluginChannelHandshakeListener instance;
 
   public PluginChannelHandshakeListener() {
     instance = this;

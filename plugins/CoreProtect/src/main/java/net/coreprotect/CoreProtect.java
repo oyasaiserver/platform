@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CoreProtect extends JavaPlugin {
 
   private static CoreProtect instance;
+  private final CoreProtectAPI api = new CoreProtectAPI();
   private boolean advancedChestsEnabled = false;
 
   /**
@@ -22,8 +23,6 @@ public final class CoreProtect extends JavaPlugin {
   public static CoreProtect getInstance() {
     return instance;
   }
-
-  private final CoreProtectAPI api = new CoreProtectAPI();
 
   /**
    * Get the CoreProtect API

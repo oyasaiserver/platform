@@ -1,10 +1,6 @@
 package net.coreprotect.consumer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.ConfigHandler;
@@ -15,13 +11,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class Consumer extends Process implements Runnable, Thread.UncaughtExceptionHandler {
 
-  private static Thread consumerThread = null;
   public static volatile int currentConsumer = 0;
   public static volatile boolean isPaused = false;
   public static volatile boolean transacting = false;
   public static volatile boolean interrupt = false;
-  protected static volatile boolean pausedSuccess = false;
-
   public static ConcurrentHashMap<Integer, ArrayList<Object[]>> consumer =
       new ConcurrentHashMap<>(4, 0.75f, 2);
   // public static ConcurrentHashMap<Integer, Integer[]> consumer_id = new ConcurrentHashMap<>();
@@ -59,6 +52,8 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
 
   public static ConcurrentHashMap<Integer, Map<Integer, Object>> consumerObjects =
       new ConcurrentHashMap<>(4, 0.75f, 2);
+  protected static volatile boolean pausedSuccess = false;
+  private static Thread consumerThread = null;
 
   // ^merge maps into single object based map
 
@@ -131,6 +126,14 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
     pausedSuccess = false;
   }
 
+  public static void startConsumer() {
+    if (!isRunning()) {
+      consumerThread = new Thread(new Consumer());
+      consumerThread.setUncaughtExceptionHandler(new Consumer());
+      consumerThread.start();
+    }
+  }
+
   @Override
   public void run() {
     boolean lastRun = false;
@@ -161,13 +164,5 @@ public class Consumer extends Process implements Runnable, Thread.UncaughtExcept
   public void uncaughtException(Thread thread, Throwable e) {
     e.printStackTrace();
     Bukkit.getPluginManager().disablePlugin(CoreProtect.getInstance());
-  }
-
-  public static void startConsumer() {
-    if (!isRunning()) {
-      consumerThread = new Thread(new Consumer());
-      consumerThread.setUncaughtExceptionHandler(new Consumer());
-      consumerThread.start();
-    }
   }
 }

@@ -5,11 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import net.coreprotect.model.BlockGroup;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Frog;
-import org.bukkit.entity.Goat;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Tadpole;
+import org.bukkit.entity.*;
 
 /**
  * Bukkit adapter implementation for Minecraft 1.19. Provides version-specific implementations for

@@ -234,18 +234,6 @@ public enum Phrase {
   private static final String SPLIT = ":";
   private static final String FULL_WIDTH_SPLIT = "：";
 
-  public String getPhrase() {
-    return Language.getPhrase(this);
-  }
-
-  public String getUserPhrase() {
-    return Language.getUserPhrase(this);
-  }
-
-  public String getTranslatedPhrase() {
-    return Language.getTranslatedPhrase(this);
-  }
-
   public static String build(Phrase phrase, String... params) {
     String output = phrase.getTranslatedPhrase();
 
@@ -340,5 +328,17 @@ public enum Phrase {
     }
 
     return match;
+  }
+
+  public String getPhrase() {
+    return Language.getPhrase(this);
+  }
+
+  public String getUserPhrase() {
+    return Language.getUserPhrase(this);
+  }
+
+  public String getTranslatedPhrase() {
+    return Language.getTranslatedPhrase(this);
   }
 }

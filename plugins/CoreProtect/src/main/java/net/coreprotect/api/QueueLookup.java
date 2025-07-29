@@ -1,10 +1,6 @@
 package net.coreprotect.api;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
 import net.coreprotect.config.Config;
 import net.coreprotect.consumer.Consumer;
 import net.coreprotect.consumer.Queue;

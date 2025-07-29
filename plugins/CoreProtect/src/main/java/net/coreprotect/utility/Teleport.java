@@ -19,11 +19,11 @@ import org.bukkit.entity.Player;
 
 public class Teleport {
 
+  public static ConcurrentHashMap<Location, BlockData> revertBlocks = new ConcurrentHashMap<>();
+
   private Teleport() {
     throw new IllegalStateException("Utility class");
   }
-
-  public static ConcurrentHashMap<Location, BlockData> revertBlocks = new ConcurrentHashMap<>();
 
   public static void performSafeTeleport(
       Player player, Location location, boolean enforceTeleport) {

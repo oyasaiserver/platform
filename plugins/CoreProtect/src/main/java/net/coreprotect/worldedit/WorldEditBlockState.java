@@ -58,13 +58,26 @@ public final class WorldEditBlockState implements BlockState {
   }
 
   @Override
+  public void setData(MaterialData data) {}
+
+  @Override
   public BlockData getBlockData() {
     return blockData;
   }
 
   @Override
+  public void setBlockData(BlockData data) {
+    blockData = data;
+  }
+
+  @Override
   public Material getType() {
     return material;
+  }
+
+  @Override
+  public void setType(Material type) {
+    material = type;
   }
 
   @Override
@@ -114,19 +127,6 @@ public final class WorldEditBlockState implements BlockState {
   @Override
   public Chunk getChunk() {
     return null;
-  }
-
-  @Override
-  public void setData(MaterialData data) {}
-
-  @Override
-  public void setBlockData(BlockData data) {
-    blockData = data;
-  }
-
-  @Override
-  public void setType(Material type) {
-    material = type;
   }
 
   @Override

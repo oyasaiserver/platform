@@ -18,6 +18,42 @@ public class ChatMessage {
     this.message = "";
   }
 
+  public ChatMessage(String string) {
+    this.message = parseQuotes(string, this.textColor);
+    // this.message = Chat.COREPROTECT + this.textStyle + this.textColor + " - " + string;
+  }
+
+  public static String parseQuotes(String string, String textColor) {
+    int indexFirst = string.indexOf("\"");
+    int indexLast = string.lastIndexOf("\"");
+    if (indexFirst > -1 && indexLast > indexFirst) {
+      String quoteText = string.substring(indexFirst + 1, indexLast);
+      string =
+          string.replace(quoteText, Color.DARK_AQUA + ChatColor.stripColor(quoteText) + textColor);
+    }
+
+    return string;
+  }
+
+  private static String createSpaces(String string, boolean seperatorOffset, boolean createSpaces) {
+    String result = "";
+    if (!createSpaces) {
+      return result;
+    }
+
+    int count =
+        (string.length() - string.replace(String.valueOf(ChatColor.COLOR_CHAR), "").length()) * 2;
+    int length = (int) ((string.length() - count) * 1.4);
+    if (seperatorOffset) {
+      length += 2;
+    }
+    for (int i = 0; i < length; i++) {
+      result += " ";
+    }
+
+    return result;
+  }
+
   public ChatMessage setSeparator(String separator) {
     this.separator = separator;
     return this;
@@ -46,11 +82,6 @@ public class ChatMessage {
   public ChatMessage append(String color, String string) {
     this.message = this.message + color + string;
     return this;
-  }
-
-  public ChatMessage(String string) {
-    this.message = parseQuotes(string, this.textColor);
-    // this.message = Chat.COREPROTECT + this.textStyle + this.textColor + " - " + string;
   }
 
   public String build(boolean tag) {
@@ -95,37 +126,6 @@ public class ChatMessage {
     setColor(color);
     setStyle(style);
     return build();
-  }
-
-  public static String parseQuotes(String string, String textColor) {
-    int indexFirst = string.indexOf("\"");
-    int indexLast = string.lastIndexOf("\"");
-    if (indexFirst > -1 && indexLast > indexFirst) {
-      String quoteText = string.substring(indexFirst + 1, indexLast);
-      string =
-          string.replace(quoteText, Color.DARK_AQUA + ChatColor.stripColor(quoteText) + textColor);
-    }
-
-    return string;
-  }
-
-  private static String createSpaces(String string, boolean seperatorOffset, boolean createSpaces) {
-    String result = "";
-    if (!createSpaces) {
-      return result;
-    }
-
-    int count =
-        (string.length() - string.replace(String.valueOf(ChatColor.COLOR_CHAR), "").length()) * 2;
-    int length = (int) ((string.length() - count) * 1.4);
-    if (seperatorOffset) {
-      length += 2;
-    }
-    for (int i = 0; i < length; i++) {
-      result += " ";
-    }
-
-    return result;
   }
 
   public String build() {

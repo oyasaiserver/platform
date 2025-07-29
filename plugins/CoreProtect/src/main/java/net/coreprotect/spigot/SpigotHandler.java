@@ -23,6 +23,21 @@ public class SpigotHandler extends SpigotAdapter implements SpigotInterface {
     Color.DARK_AQUA = SpigotHandler.DARK_AQUA.toString();
   }
 
+  private static void addBuilder(TextComponent message, StringBuilder builder) {
+    String[] splitBuilder = builder.toString().split(SpigotHandler.DARK_AQUA.toString());
+    for (int i = 0; i < splitBuilder.length; i++) {
+      if (i > 0) {
+        TextComponent textComponent = new TextComponent(splitBuilder[i]);
+        textComponent.setColor(SpigotHandler.DARK_AQUA);
+        message.addExtra(textComponent);
+      } else {
+        message.addExtra(splitBuilder[i]);
+      }
+    }
+
+    builder.setLength(0);
+  }
+
   @Override
   public void addHoverComponent(Object message, String[] data) {
     try {
@@ -129,20 +144,5 @@ public class SpigotHandler extends SpigotAdapter implements SpigotInterface {
     }
 
     sender.spigot().sendMessage(message);
-  }
-
-  private static void addBuilder(TextComponent message, StringBuilder builder) {
-    String[] splitBuilder = builder.toString().split(SpigotHandler.DARK_AQUA.toString());
-    for (int i = 0; i < splitBuilder.length; i++) {
-      if (i > 0) {
-        TextComponent textComponent = new TextComponent(splitBuilder[i]);
-        textComponent.setColor(SpigotHandler.DARK_AQUA);
-        message.addExtra(textComponent);
-      } else {
-        message.addExtra(splitBuilder[i]);
-      }
-    }
-
-    builder.setLength(0);
   }
 }

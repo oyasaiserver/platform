@@ -1,17 +1,7 @@
 package net.coreprotect.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 import net.coreprotect.config.Config;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.consumer.Consumer;
@@ -45,6 +35,26 @@ public class Database extends Queue {
   public static final int ITEM = 13;
 
   private static final Map<Integer, String> SQL_QUERIES = new HashMap<>();
+  private static final List<String> DATABASE_TABLES =
+      Arrays.asList(
+          "art_map",
+          "block",
+          "chat",
+          "command",
+          "container",
+          "item",
+          "database_lock",
+          "entity",
+          "entity_map",
+          "material_map",
+          "blockdata_map",
+          "session",
+          "sign",
+          "skull",
+          "user",
+          "username_log",
+          "version",
+          "world");
 
   static {
     // Initialize SQL queries for different table types
@@ -338,27 +348,6 @@ public class Database extends Queue {
       e.printStackTrace();
     }
   }
-
-  private static final List<String> DATABASE_TABLES =
-      Arrays.asList(
-          "art_map",
-          "block",
-          "chat",
-          "command",
-          "container",
-          "item",
-          "database_lock",
-          "entity",
-          "entity_map",
-          "material_map",
-          "blockdata_map",
-          "session",
-          "sign",
-          "skull",
-          "user",
-          "username_log",
-          "version",
-          "world");
 
   public static void createDatabaseTables(
       String prefix,

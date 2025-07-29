@@ -39,18 +39,6 @@ public class CoreProtectAPI extends Queue {
   /** Current version of the API */
   private static final int API_VERSION = 10;
 
-  public static class ParseResult extends net.coreprotect.api.result.ParseResult {
-
-    /**
-     * Creates a new ParseResult from string array data.
-     *
-     * @param data The string array data to parse
-     */
-    public ParseResult(String[] data) {
-      super(data);
-    }
-  }
-
   /**
    * Converts a list of objects to a map for internal processing
    *
@@ -1002,5 +990,17 @@ public class CoreProtectAPI extends Queue {
    */
   private boolean isValidUserAndLocation(String user, Location location) {
     return user != null && location != null && !user.isEmpty();
+  }
+
+  public static class ParseResult extends net.coreprotect.api.result.ParseResult {
+
+    /**
+     * Creates a new ParseResult from string array data.
+     *
+     * @param data The string array data to parse
+     */
+    public ParseResult(String[] data) {
+      super(data);
+    }
   }
 }

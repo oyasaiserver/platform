@@ -1,11 +1,7 @@
 package net.coreprotect.database.logger;
 
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;

@@ -1,26 +1,14 @@
 package net.coreprotect.thread;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.config.Config;
@@ -36,12 +24,12 @@ import org.json.simple.parser.JSONParser;
 
 public class NetworkHandler extends Language implements Runnable {
 
-  private boolean startup = true;
-  private boolean background = false;
-  private boolean translate = true;
   private static String latestVersion = null;
   private static String latestEdgeVersion = null;
   private static String donationKey = null;
+  private boolean startup = true;
+  private boolean background = false;
+  private boolean translate = true;
 
   public NetworkHandler(boolean startup, boolean background) {
     this.startup = startup;

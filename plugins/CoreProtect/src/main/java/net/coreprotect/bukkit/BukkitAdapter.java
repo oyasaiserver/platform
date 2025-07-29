@@ -4,22 +4,14 @@ import java.util.List;
 import java.util.Map;
 import net.coreprotect.config.ConfigHandler;
 import net.coreprotect.utility.BlockUtils;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.FaceAttachable;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -37,9 +29,6 @@ import org.bukkit.potion.PotionType;
  */
 public class BukkitAdapter implements BukkitInterface {
 
-  /** The currently active adapter instance */
-  public static BukkitInterface ADAPTER;
-
   // Version constants for Bukkit implementations
   public static final int BUKKIT_V1_13 = 13;
   public static final int BUKKIT_V1_14 = 14;
@@ -50,6 +39,9 @@ public class BukkitAdapter implements BukkitInterface {
   public static final int BUKKIT_V1_19 = 19;
   public static final int BUKKIT_V1_20 = 20;
   public static final int BUKKIT_V1_21 = 21;
+
+  /** The currently active adapter instance */
+  public static BukkitInterface ADAPTER;
 
   /**
    * Initializes the appropriate Bukkit adapter based on the server version. This method should be

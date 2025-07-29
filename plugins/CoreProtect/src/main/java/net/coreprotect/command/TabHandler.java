@@ -1,11 +1,6 @@
 package net.coreprotect.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import net.coreprotect.config.ConfigHandler;
 import org.bukkit.Bukkit;
@@ -221,21 +216,6 @@ public class TabHandler implements TabCompleter {
         || lastArg.equals("exclude:")
         || currentArg.startsWith("e:")
         || currentArg.startsWith("exclude:");
-  }
-
-  private static class ParamState {
-    boolean hasUser;
-    boolean hasAction;
-    boolean hasInclude;
-    boolean hasExclude;
-    boolean hasRadius;
-    boolean hasTime;
-    boolean hasContainer;
-    boolean hasCount;
-    boolean hasPreview;
-    boolean hasPage;
-    boolean validContainer;
-    boolean pageLookup;
   }
 
   private ParamState getParamState(String[] args) {
@@ -599,5 +579,20 @@ public class TabHandler implements TabCompleter {
     }
 
     return params;
+  }
+
+  private static class ParamState {
+    boolean hasUser;
+    boolean hasAction;
+    boolean hasInclude;
+    boolean hasExclude;
+    boolean hasRadius;
+    boolean hasTime;
+    boolean hasContainer;
+    boolean hasCount;
+    boolean hasPreview;
+    boolean hasPage;
+    boolean validContainer;
+    boolean pageLookup;
   }
 }

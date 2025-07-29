@@ -16,9 +16,6 @@ public final class Color {
   /** Represents dark green. */
   public static final String DARK_GREEN = ChatColor.DARK_GREEN.toString();
 
-  /** Represents dark blue (aqua). */
-  public static String DARK_AQUA = ChatColor.DARK_AQUA.toString();
-
   /** Represents dark red. */
   public static final String DARK_RED = ChatColor.DARK_RED.toString();
 
@@ -72,6 +69,9 @@ public final class Color {
 
   /** Resets all previous chat colors or formats. */
   public static final String RESET = ChatColor.COLOR_CHAR + "r";
+
+  /** Represents dark blue (aqua). */
+  public static String DARK_AQUA = ChatColor.DARK_AQUA.toString();
 
   private Color() {
     throw new IllegalStateException("Utility class");

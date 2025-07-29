@@ -1,12 +1,6 @@
 package net.coreprotect.config;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -21,74 +15,12 @@ import org.bukkit.World;
 
 public class Config extends Language {
 
+  public static final String LINE_SEPARATOR = "\n";
   private static final Map<String, String[]> HEADERS = new HashMap<>();
   private static final Map<String, String> DEFAULT_VALUES = new LinkedHashMap<>();
   private static final Map<String, Config> CONFIG_BY_WORLD_NAME = new HashMap<>();
   private static final String DEFAULT_FILE_HEADER = "# CoreProtect Config";
-  public static final String LINE_SEPARATOR = "\n";
-
   private static final Config GLOBAL = new Config();
-  private final HashMap<String, String> config;
-  private Config defaults;
-
-  public String DONATION_KEY;
-  public String PREFIX;
-  public String MYSQL_HOST;
-  public String MYSQL_DATABASE;
-  public String MYSQL_USERNAME;
-  public String MYSQL_PASSWORD;
-  public String LANGUAGE;
-  public boolean ENABLE_SSL;
-  public boolean DISABLE_WAL;
-  public boolean HOVER_EVENTS;
-  public boolean DATABASE_LOCK;
-  public boolean LOG_CANCELLED_CHAT;
-  public boolean HOPPER_FILTER_META;
-  public boolean EXCLUDE_TNT;
-  public boolean NETWORK_DEBUG;
-  public boolean MYSQL;
-  public boolean CHECK_UPDATES;
-  public boolean API_ENABLED;
-  public boolean VERBOSE;
-  public boolean ROLLBACK_ITEMS;
-  public boolean ROLLBACK_ENTITIES;
-  public boolean SKIP_GENERIC_DATA;
-  public boolean BLOCK_PLACE;
-  public boolean BLOCK_BREAK;
-  public boolean NATURAL_BREAK;
-  public boolean BLOCK_MOVEMENT;
-  public boolean PISTONS;
-  public boolean BLOCK_BURN;
-  public boolean BLOCK_IGNITE;
-  public boolean EXPLOSIONS;
-  public boolean ENTITY_CHANGE;
-  public boolean ENTITY_KILLS;
-  public boolean SIGN_TEXT;
-  public boolean BUCKETS;
-  public boolean LEAF_DECAY;
-  public boolean TREE_GROWTH;
-  public boolean MUSHROOM_GROWTH;
-  public boolean VINE_GROWTH;
-  public boolean SCULK_SPREAD;
-  public boolean PORTALS;
-  public boolean WATER_FLOW;
-  public boolean LAVA_FLOW;
-  public boolean LIQUID_TRACKING;
-  public boolean ITEM_TRANSACTIONS;
-  public boolean ITEM_DROPS;
-  public boolean ITEM_PICKUPS;
-  public boolean HOPPER_TRANSACTIONS;
-  public boolean PLAYER_INTERACTIONS;
-  public boolean PLAYER_MESSAGES;
-  public boolean PLAYER_COMMANDS;
-  public boolean PLAYER_SESSIONS;
-  public boolean UNKNOWN_LOGGING;
-  public boolean USERNAME_CHANGES;
-  public boolean WORLDEDIT;
-  public int MAXIMUM_POOL_SIZE;
-  public int MYSQL_PORT;
-  public int DEFAULT_RADIUS;
-  public int MAX_RADIUS;
 
   static {
     DEFAULT_VALUES.put("donation-key", "");
@@ -298,65 +230,69 @@ public class Config extends Language {
         });
   }
 
-  private void readValues() {
-    this.ENABLE_SSL = this.getBoolean("enable-ssl", false);
-    this.DISABLE_WAL = this.getBoolean("disable-wal", false);
-    this.HOVER_EVENTS = this.getBoolean("hover-events", true);
-    this.DATABASE_LOCK = this.getBoolean("database-lock", true);
-    this.LOG_CANCELLED_CHAT = this.getBoolean("log-cancelled-chat", true);
-    this.HOPPER_FILTER_META = this.getBoolean("hopper-filter-meta", false);
-    this.EXCLUDE_TNT = this.getBoolean("exclude-tnt", false);
-    this.NETWORK_DEBUG = this.getBoolean("network-debug", false);
-    this.UNKNOWN_LOGGING = this.getBoolean("unknown-logging", false);
-    this.MAXIMUM_POOL_SIZE = this.getInt("maximum-pool-size", 10);
-    this.DONATION_KEY = this.getString("donation-key");
-    this.MYSQL = this.getBoolean("use-mysql");
-    this.PREFIX = this.getString("table-prefix");
-    this.MYSQL_HOST = this.getString("mysql-host");
-    this.MYSQL_PORT = this.getInt("mysql-port");
-    this.MYSQL_DATABASE = this.getString("mysql-database");
-    this.MYSQL_USERNAME = this.getString("mysql-username");
-    this.MYSQL_PASSWORD = this.getString("mysql-password");
-    this.LANGUAGE = this.getString("language");
-    this.CHECK_UPDATES = this.getBoolean("check-updates");
-    this.API_ENABLED = this.getBoolean("api-enabled");
-    this.VERBOSE = this.getBoolean("verbose");
-    this.DEFAULT_RADIUS = this.getInt("default-radius");
-    this.MAX_RADIUS = this.getInt("max-radius");
-    this.ROLLBACK_ITEMS = this.getBoolean("rollback-items");
-    this.ROLLBACK_ENTITIES = this.getBoolean("rollback-entities");
-    this.SKIP_GENERIC_DATA = this.getBoolean("skip-generic-data");
-    this.BLOCK_PLACE = this.getBoolean("block-place");
-    this.BLOCK_BREAK = this.getBoolean("block-break");
-    this.NATURAL_BREAK = this.getBoolean("natural-break");
-    this.BLOCK_MOVEMENT = this.getBoolean("block-movement");
-    this.PISTONS = this.getBoolean("pistons");
-    this.BLOCK_BURN = this.getBoolean("block-burn");
-    this.BLOCK_IGNITE = this.getBoolean("block-ignite");
-    this.EXPLOSIONS = this.getBoolean("explosions");
-    this.ENTITY_CHANGE = this.getBoolean("entity-change");
-    this.ENTITY_KILLS = this.getBoolean("entity-kills");
-    this.SIGN_TEXT = this.getBoolean("sign-text");
-    this.BUCKETS = this.getBoolean("buckets");
-    this.LEAF_DECAY = this.getBoolean("leaf-decay");
-    this.TREE_GROWTH = this.getBoolean("tree-growth");
-    this.MUSHROOM_GROWTH = this.getBoolean("mushroom-growth");
-    this.VINE_GROWTH = this.getBoolean("vine-growth");
-    this.SCULK_SPREAD = this.getBoolean("sculk-spread");
-    this.PORTALS = this.getBoolean("portals");
-    this.WATER_FLOW = this.getBoolean("water-flow");
-    this.LAVA_FLOW = this.getBoolean("lava-flow");
-    this.LIQUID_TRACKING = this.getBoolean("liquid-tracking");
-    this.ITEM_TRANSACTIONS = this.getBoolean("item-transactions");
-    this.ITEM_DROPS = this.getBoolean("item-drops");
-    this.ITEM_PICKUPS = this.getBoolean("item-pickups");
-    this.HOPPER_TRANSACTIONS = this.getBoolean("hopper-transactions");
-    this.PLAYER_INTERACTIONS = this.getBoolean("player-interactions");
-    this.PLAYER_MESSAGES = this.getBoolean("player-messages");
-    this.PLAYER_COMMANDS = this.getBoolean("player-commands");
-    this.PLAYER_SESSIONS = this.getBoolean("player-sessions");
-    this.USERNAME_CHANGES = this.getBoolean("username-changes");
-    this.WORLDEDIT = this.getBoolean("worldedit");
+  private final HashMap<String, String> config;
+  public String DONATION_KEY;
+  public String PREFIX;
+  public String MYSQL_HOST;
+  public String MYSQL_DATABASE;
+  public String MYSQL_USERNAME;
+  public String MYSQL_PASSWORD;
+  public String LANGUAGE;
+  public boolean ENABLE_SSL;
+  public boolean DISABLE_WAL;
+  public boolean HOVER_EVENTS;
+  public boolean DATABASE_LOCK;
+  public boolean LOG_CANCELLED_CHAT;
+  public boolean HOPPER_FILTER_META;
+  public boolean EXCLUDE_TNT;
+  public boolean NETWORK_DEBUG;
+  public boolean MYSQL;
+  public boolean CHECK_UPDATES;
+  public boolean API_ENABLED;
+  public boolean VERBOSE;
+  public boolean ROLLBACK_ITEMS;
+  public boolean ROLLBACK_ENTITIES;
+  public boolean SKIP_GENERIC_DATA;
+  public boolean BLOCK_PLACE;
+  public boolean BLOCK_BREAK;
+  public boolean NATURAL_BREAK;
+  public boolean BLOCK_MOVEMENT;
+  public boolean PISTONS;
+  public boolean BLOCK_BURN;
+  public boolean BLOCK_IGNITE;
+  public boolean EXPLOSIONS;
+  public boolean ENTITY_CHANGE;
+  public boolean ENTITY_KILLS;
+  public boolean SIGN_TEXT;
+  public boolean BUCKETS;
+  public boolean LEAF_DECAY;
+  public boolean TREE_GROWTH;
+  public boolean MUSHROOM_GROWTH;
+  public boolean VINE_GROWTH;
+  public boolean SCULK_SPREAD;
+  public boolean PORTALS;
+  public boolean WATER_FLOW;
+  public boolean LAVA_FLOW;
+  public boolean LIQUID_TRACKING;
+  public boolean ITEM_TRANSACTIONS;
+  public boolean ITEM_DROPS;
+  public boolean ITEM_PICKUPS;
+  public boolean HOPPER_TRANSACTIONS;
+  public boolean PLAYER_INTERACTIONS;
+  public boolean PLAYER_MESSAGES;
+  public boolean PLAYER_COMMANDS;
+  public boolean PLAYER_SESSIONS;
+  public boolean UNKNOWN_LOGGING;
+  public boolean USERNAME_CHANGES;
+  public boolean WORLDEDIT;
+  public int MAXIMUM_POOL_SIZE;
+  public int MYSQL_PORT;
+  public int DEFAULT_RADIUS;
+  public int MAX_RADIUS;
+  private Config defaults;
+
+  public Config() {
+    this.config = new LinkedHashMap<>();
   }
 
   public static void init() throws IOException {
@@ -380,80 +316,6 @@ public class Config extends Language {
       CONFIG_BY_WORLD_NAME.put(worldName, ret);
     }
     return ret;
-  }
-
-  public Config() {
-    this.config = new LinkedHashMap<>();
-  }
-
-  public void setDefaults(final Config defaults) {
-    this.defaults = defaults;
-  }
-
-  private String get(final String key, final String dfl) {
-    String configured = this.config.get(key);
-    if (configured == null) {
-      if (dfl != null) {
-        return dfl;
-      }
-      if (this.defaults == null) {
-        configured = DEFAULT_VALUES.get(key);
-      } else {
-        configured = this.defaults.config.getOrDefault(key, DEFAULT_VALUES.get(key));
-      }
-    }
-    return configured;
-  }
-
-  private boolean getBoolean(final String key) {
-    final String configured = this.get(key, null);
-    return configured != null && configured.startsWith("t");
-  }
-
-  private boolean getBoolean(final String key, final boolean dfl) {
-    final String configured = this.get(key, null);
-    return configured == null ? dfl : configured.startsWith("t");
-  }
-
-  private int getInt(final String key) {
-    return this.getInt(key, 0);
-  }
-
-  private int getInt(final String key, final int dfl) {
-    String configured = this.get(key, null);
-
-    if (configured == null) {
-      return dfl;
-    }
-
-    configured = configured.replaceAll("[^0-9]", "");
-
-    return configured.isEmpty() ? dfl : Integer.parseInt(configured);
-  }
-
-  private String getString(final String key) {
-    final String configured = this.get(key, null);
-    return configured == null ? "" : configured;
-  }
-
-  public void clearConfig() {
-    this.config.clear();
-  }
-
-  public void loadDefaults() {
-    this.clearConfig();
-    this.readValues();
-  }
-
-  public void load(final InputStream in) throws IOException {
-    // if we fail reading, we will not corrupt our current config.
-    final Map<String, String> newConfig = new LinkedHashMap<>(this.config.size());
-    ConfigFile.load(in, newConfig, false);
-
-    this.clearConfig();
-    this.config.putAll(newConfig);
-
-    this.readValues();
   }
 
   private static Map<String, byte[]> loadFiles(String fileName) throws IOException {
@@ -554,6 +416,137 @@ public class Config extends Language {
 
       CONFIG_BY_WORLD_NAME.put(worldName, config);
     }
+  }
+
+  private void readValues() {
+    this.ENABLE_SSL = this.getBoolean("enable-ssl", false);
+    this.DISABLE_WAL = this.getBoolean("disable-wal", false);
+    this.HOVER_EVENTS = this.getBoolean("hover-events", true);
+    this.DATABASE_LOCK = this.getBoolean("database-lock", true);
+    this.LOG_CANCELLED_CHAT = this.getBoolean("log-cancelled-chat", true);
+    this.HOPPER_FILTER_META = this.getBoolean("hopper-filter-meta", false);
+    this.EXCLUDE_TNT = this.getBoolean("exclude-tnt", false);
+    this.NETWORK_DEBUG = this.getBoolean("network-debug", false);
+    this.UNKNOWN_LOGGING = this.getBoolean("unknown-logging", false);
+    this.MAXIMUM_POOL_SIZE = this.getInt("maximum-pool-size", 10);
+    this.DONATION_KEY = this.getString("donation-key");
+    this.MYSQL = this.getBoolean("use-mysql");
+    this.PREFIX = this.getString("table-prefix");
+    this.MYSQL_HOST = this.getString("mysql-host");
+    this.MYSQL_PORT = this.getInt("mysql-port");
+    this.MYSQL_DATABASE = this.getString("mysql-database");
+    this.MYSQL_USERNAME = this.getString("mysql-username");
+    this.MYSQL_PASSWORD = this.getString("mysql-password");
+    this.LANGUAGE = this.getString("language");
+    this.CHECK_UPDATES = this.getBoolean("check-updates");
+    this.API_ENABLED = this.getBoolean("api-enabled");
+    this.VERBOSE = this.getBoolean("verbose");
+    this.DEFAULT_RADIUS = this.getInt("default-radius");
+    this.MAX_RADIUS = this.getInt("max-radius");
+    this.ROLLBACK_ITEMS = this.getBoolean("rollback-items");
+    this.ROLLBACK_ENTITIES = this.getBoolean("rollback-entities");
+    this.SKIP_GENERIC_DATA = this.getBoolean("skip-generic-data");
+    this.BLOCK_PLACE = this.getBoolean("block-place");
+    this.BLOCK_BREAK = this.getBoolean("block-break");
+    this.NATURAL_BREAK = this.getBoolean("natural-break");
+    this.BLOCK_MOVEMENT = this.getBoolean("block-movement");
+    this.PISTONS = this.getBoolean("pistons");
+    this.BLOCK_BURN = this.getBoolean("block-burn");
+    this.BLOCK_IGNITE = this.getBoolean("block-ignite");
+    this.EXPLOSIONS = this.getBoolean("explosions");
+    this.ENTITY_CHANGE = this.getBoolean("entity-change");
+    this.ENTITY_KILLS = this.getBoolean("entity-kills");
+    this.SIGN_TEXT = this.getBoolean("sign-text");
+    this.BUCKETS = this.getBoolean("buckets");
+    this.LEAF_DECAY = this.getBoolean("leaf-decay");
+    this.TREE_GROWTH = this.getBoolean("tree-growth");
+    this.MUSHROOM_GROWTH = this.getBoolean("mushroom-growth");
+    this.VINE_GROWTH = this.getBoolean("vine-growth");
+    this.SCULK_SPREAD = this.getBoolean("sculk-spread");
+    this.PORTALS = this.getBoolean("portals");
+    this.WATER_FLOW = this.getBoolean("water-flow");
+    this.LAVA_FLOW = this.getBoolean("lava-flow");
+    this.LIQUID_TRACKING = this.getBoolean("liquid-tracking");
+    this.ITEM_TRANSACTIONS = this.getBoolean("item-transactions");
+    this.ITEM_DROPS = this.getBoolean("item-drops");
+    this.ITEM_PICKUPS = this.getBoolean("item-pickups");
+    this.HOPPER_TRANSACTIONS = this.getBoolean("hopper-transactions");
+    this.PLAYER_INTERACTIONS = this.getBoolean("player-interactions");
+    this.PLAYER_MESSAGES = this.getBoolean("player-messages");
+    this.PLAYER_COMMANDS = this.getBoolean("player-commands");
+    this.PLAYER_SESSIONS = this.getBoolean("player-sessions");
+    this.USERNAME_CHANGES = this.getBoolean("username-changes");
+    this.WORLDEDIT = this.getBoolean("worldedit");
+  }
+
+  public void setDefaults(final Config defaults) {
+    this.defaults = defaults;
+  }
+
+  private String get(final String key, final String dfl) {
+    String configured = this.config.get(key);
+    if (configured == null) {
+      if (dfl != null) {
+        return dfl;
+      }
+      if (this.defaults == null) {
+        configured = DEFAULT_VALUES.get(key);
+      } else {
+        configured = this.defaults.config.getOrDefault(key, DEFAULT_VALUES.get(key));
+      }
+    }
+    return configured;
+  }
+
+  private boolean getBoolean(final String key) {
+    final String configured = this.get(key, null);
+    return configured != null && configured.startsWith("t");
+  }
+
+  private boolean getBoolean(final String key, final boolean dfl) {
+    final String configured = this.get(key, null);
+    return configured == null ? dfl : configured.startsWith("t");
+  }
+
+  private int getInt(final String key) {
+    return this.getInt(key, 0);
+  }
+
+  private int getInt(final String key, final int dfl) {
+    String configured = this.get(key, null);
+
+    if (configured == null) {
+      return dfl;
+    }
+
+    configured = configured.replaceAll("[^0-9]", "");
+
+    return configured.isEmpty() ? dfl : Integer.parseInt(configured);
+  }
+
+  private String getString(final String key) {
+    final String configured = this.get(key, null);
+    return configured == null ? "" : configured;
+  }
+
+  public void clearConfig() {
+    this.config.clear();
+  }
+
+  public void loadDefaults() {
+    this.clearConfig();
+    this.readValues();
+  }
+
+  public void load(final InputStream in) throws IOException {
+    // if we fail reading, we will not corrupt our current config.
+    final Map<String, String> newConfig = new LinkedHashMap<>(this.config.size());
+    ConfigFile.load(in, newConfig, false);
+
+    this.clearConfig();
+    this.config.putAll(newConfig);
+
+    this.readValues();
   }
 
   public void addMissingOptions(final File file) throws IOException {

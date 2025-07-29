@@ -7,12 +7,7 @@ import java.io.RandomAccessFile;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.consumer.Queue;
@@ -37,14 +32,18 @@ import org.bukkit.plugin.PluginManager;
 import oshi.hardware.CentralProcessor;
 
 public class ConfigHandler extends Queue {
-  public static int SERVER_VERSION = 0;
   public static final int EDITION_VERSION = 2;
   public static final String EDITION_BRANCH = VersionUtils.getBranch();
-  public static final String EDITION_NAME = VersionUtils.getPluginName();
   public static final String COMMUNITY_EDITION = "Community Edition";
+  public static final String EDITION_NAME = VersionUtils.getPluginName();
   public static final String JAVA_VERSION = "11.0";
   public static final String MINECRAFT_VERSION = "1.16";
   public static final String LATEST_VERSION = "1.21.6";
+  public static final CentralProcessor processorInfo = SystemUtils.getProcessorInfo();
+  public static final boolean isSpigot = VersionUtils.isSpigot();
+  public static final boolean isPaper = VersionUtils.isPaper();
+  public static final boolean isFolia = VersionUtils.isFolia();
+  public static int SERVER_VERSION = 0;
   public static String path = "plugins/CoreProtect/";
   public static String sqlite = "database.db";
   public static String host = "127.0.0.1";
@@ -55,12 +54,7 @@ public class ConfigHandler extends Queue {
   public static String prefix = "co_";
   public static String prefixConfig = "co_";
   public static int maximumPoolSize = 10;
-
   public static HikariDataSource hikariDataSource = null;
-  public static final CentralProcessor processorInfo = SystemUtils.getProcessorInfo();
-  public static final boolean isSpigot = VersionUtils.isSpigot();
-  public static final boolean isPaper = VersionUtils.isPaper();
-  public static final boolean isFolia = VersionUtils.isFolia();
   public static volatile boolean serverRunning = false;
   public static volatile boolean converterRunning = false;
   public static volatile boolean purgeRunning = false;
@@ -73,11 +67,6 @@ public class ConfigHandler extends Queue {
   public static volatile int blockdataId = 0;
   public static volatile int entityId = 0;
   public static volatile int artId = 0;
-
-  private static <K, V> Map<K, V> syncMap() {
-    return Collections.synchronizedMap(new HashMap<>());
-  }
-
   public static Map<String, Integer> worlds = syncMap();
   public static Map<Integer, String> worldsReversed = syncMap();
   public static Map<String, Integer> materials = syncMap();
@@ -135,6 +124,10 @@ public class ConfigHandler extends Queue {
   public static ConcurrentHashMap<Long, Long> populatedChunks = new ConcurrentHashMap<>();
   public static ConcurrentHashMap<String, String> language = new ConcurrentHashMap<>();
   public static List<String> databaseTables = new ArrayList<>();
+
+  private static <K, V> Map<K, V> syncMap() {
+    return Collections.synchronizedMap(new HashMap<>());
+  }
 
   public static void checkPlayers(Connection connection) {
     ConfigHandler.playerIdCache.clear();

@@ -19,11 +19,10 @@ import org.bukkit.inventory.ItemStack;
 
 public final class BlockPreDispenseListener extends Queue implements Listener {
 
-  public static boolean useBlockPreDispenseEvent = true;
-  public static boolean useForDroppers = false;
-
   // Maximum time to keep entries in the cache (in milliseconds)
   private static final long CACHE_EXPIRY_TIME = 5000; // 5 seconds
+  public static boolean useBlockPreDispenseEvent = true;
+  public static boolean useForDroppers = false;
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockPreDispense(BlockPreDispenseEvent event) {

@@ -1,27 +1,13 @@
 package net.coreprotect.config;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.language.Language;
 import net.coreprotect.language.Phrase;
@@ -37,6 +23,10 @@ public class ConfigFile extends Config {
   private static final String DEFAULT_FILE_HEADER = "# CoreProtect Language File (en)";
   private final HashMap<String, String> lang;
 
+  public ConfigFile() {
+    this.lang = new LinkedHashMap<>();
+  }
+
   public static void init(String fileName) throws IOException {
     for (Phrase phrase : Phrase.values()) {
       DEFAULT_VALUES.put(phrase.name(), phrase.getPhrase());
@@ -45,34 +35,6 @@ public class ConfigFile extends Config {
 
     boolean isCache = fileName.startsWith(".");
     loadFiles(fileName, isCache);
-  }
-
-  public ConfigFile() {
-    this.lang = new LinkedHashMap<>();
-  }
-
-  public void load(final InputStream in, String fileName, boolean isCache) throws IOException {
-    // if we fail reading, we will not corrupt our current config.
-    final Map<String, String> newConfig = new LinkedHashMap<>(this.lang.size());
-    ConfigFile.load(in, newConfig, true);
-
-    this.lang.clear();
-    this.lang.putAll(newConfig);
-
-    for (final Entry<String, String> entry : this.lang.entrySet()) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      if (DEFAULT_VALUES.containsKey(key)
-          && value.length() > 0
-          && (!isCache || DEFAULT_VALUES.get(key).equals(USER_VALUES.get(key)))) {
-        Phrase phrase = Phrase.valueOf(key);
-        if (!isCache) {
-          Language.setUserPhrase(phrase, value);
-        }
-
-        Language.setTranslatedPhrase(phrase, value);
-      }
-    }
   }
 
   // this function will close in
@@ -143,40 +105,6 @@ public class ConfigFile extends Config {
     return map;
   }
 
-  @Override
-  public void addMissingOptions(final File file) throws IOException {
-    if (file.getName().startsWith(".")) {
-      return;
-    }
-
-    final boolean writeHeader = !file.exists() || file.length() == 0;
-    try (final FileOutputStream fout = new FileOutputStream(file, true)) {
-      OutputStreamWriter out =
-          new OutputStreamWriter(new BufferedOutputStream(fout), StandardCharsets.UTF_8);
-      if (writeHeader) {
-        out.append(DEFAULT_FILE_HEADER);
-        out.append(Config.LINE_SEPARATOR);
-      }
-
-      for (final Entry<String, String> entry : DEFAULT_VALUES.entrySet()) {
-        final String key = entry.getKey();
-        final String defaultValue = entry.getValue().replaceAll("\"", "\\\\\"");
-
-        final String configuredValue = this.lang.get(key);
-        if (configuredValue != null) {
-          continue;
-        }
-
-        out.append(Config.LINE_SEPARATOR);
-        out.append(key);
-        out.append(": ");
-        out.append("\"" + defaultValue + "\"");
-      }
-
-      out.close();
-    }
-  }
-
   public static void modifyLine(String fileName, String oldLine, String newLine) {
     try {
       Path path = Paths.get(ConfigHandler.path + fileName);
@@ -242,6 +170,64 @@ public class ConfigFile extends Config {
     if (file.length() > 0) {
       new FileOutputStream(file).close();
       init(fileName);
+    }
+  }
+
+  public void load(final InputStream in, String fileName, boolean isCache) throws IOException {
+    // if we fail reading, we will not corrupt our current config.
+    final Map<String, String> newConfig = new LinkedHashMap<>(this.lang.size());
+    ConfigFile.load(in, newConfig, true);
+
+    this.lang.clear();
+    this.lang.putAll(newConfig);
+
+    for (final Entry<String, String> entry : this.lang.entrySet()) {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      if (DEFAULT_VALUES.containsKey(key)
+          && value.length() > 0
+          && (!isCache || DEFAULT_VALUES.get(key).equals(USER_VALUES.get(key)))) {
+        Phrase phrase = Phrase.valueOf(key);
+        if (!isCache) {
+          Language.setUserPhrase(phrase, value);
+        }
+
+        Language.setTranslatedPhrase(phrase, value);
+      }
+    }
+  }
+
+  @Override
+  public void addMissingOptions(final File file) throws IOException {
+    if (file.getName().startsWith(".")) {
+      return;
+    }
+
+    final boolean writeHeader = !file.exists() || file.length() == 0;
+    try (final FileOutputStream fout = new FileOutputStream(file, true)) {
+      OutputStreamWriter out =
+          new OutputStreamWriter(new BufferedOutputStream(fout), StandardCharsets.UTF_8);
+      if (writeHeader) {
+        out.append(DEFAULT_FILE_HEADER);
+        out.append(Config.LINE_SEPARATOR);
+      }
+
+      for (final Entry<String, String> entry : DEFAULT_VALUES.entrySet()) {
+        final String key = entry.getKey();
+        final String defaultValue = entry.getValue().replaceAll("\"", "\\\\\"");
+
+        final String configuredValue = this.lang.get(key);
+        if (configuredValue != null) {
+          continue;
+        }
+
+        out.append(Config.LINE_SEPARATOR);
+        out.append(key);
+        out.append(": ");
+        out.append("\"" + defaultValue + "\"");
+      }
+
+      out.close();
     }
   }
 }
