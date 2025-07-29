@@ -17,6 +17,8 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://repo.purpurmc.org/snapshots")
+        maven("https://maven.enginehub.org/repo")
+        maven("https://jitpack.io")
     }
 }
 
@@ -38,5 +40,11 @@ spotless {
         target("**/src/**/*.gradle.kt")
         ktfmt().kotlinlangStyle()
         ktlint()
+    }
+
+    java {
+        target("**/src/**/*.java")
+        targetExclude("gen/**/*.java")
+        googleJavaFormat()
     }
 }
