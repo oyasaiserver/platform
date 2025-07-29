@@ -7,6 +7,12 @@ protobuf = "4.31.1"
 connect = "0.7.4"
 okhttp = "4.10.0"
 reflections="0.10.2"
+fawe="2.13.0"
+advancedchestsapi = "3.2-BETA"
+hikaricp = "5.0.1"
+log4j = "2.19.0"
+oshi = "6.6.2"
+json-simple = "1.1.1"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -22,3 +28,11 @@ connect-kotlin-google-java-ext = { module = "com.connectrpc:connect-kotlin-googl
 connect-kotlin-okhttp = { module = "com.connectrpc:connect-kotlin-okhttp", version.ref = "connect" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
+fawe-core = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Core", version.ref = "fawe" }
+fawe-bukkit = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe" }
+advancedchestsapi = { module = "com.github.DeadSilenceIV:AdvancedChestsAPI", version.ref = "advancedchestsapi" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+oshi-core = { module = "com.github.oshi:oshi-core", version.ref = "oshi" }
+json-simple = { module = "com.googlecode.json-simple:json-simple", version.ref = "json-simple" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }

@@ -54,5 +54,17 @@
   {
     "name": "ProtocolLib",
     "url": "https://ci.dmulloy2.net/job/ProtocolLib/753/artifact/build/libs/ProtocolLib.jar"
+  },
+  {
+    "name": "Multiverse-Core",
+    "url": "https://github.com/Multiverse/Multiverse-Core/releases/download/5.1.2/multiverse-core-5.1.2.jar"
+  },
+  {
+    "name": "Multiverse-Portals",
+    "url": "https://github.com/Multiverse/Multiverse-Portals/releases/download/5.1.0/multiverse-portals-5.1.0.jar"
+  },
+  {
+    "name": "LunaChat",
+    "url": "https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar"
   }
 ]

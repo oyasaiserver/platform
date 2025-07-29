@@ -6,11 +6,11 @@ package io.oyasai.lib
 import java.lang.System.getenv
 
 object RuntimeSecrets {
-    val ENVIRONMENT = secret("ENVIRONMENT")
-    val BEARER = secret("BEARER")
-    val API_ENDPOINT = secret("API_ENDPOINT")
-    val DISCORDSRV_TOKEN = secret("DISCORDSRV_TOKEN")
+  val ENVIRONMENT = secret("ENVIRONMENT")
+  val BEARER = secret("BEARER")
+  val API_ENDPOINT = secret("API_ENDPOINT")
+  val DISCORDSRV_TOKEN = secret("DISCORDSRV_TOKEN")
 
-    private fun secret(key: String) =
-        requireNotNull(getenv(key)) { "Environment variable '$key' is not set." }
+  private fun secret(key: String) =
+    requireNotNull(getenv(key)) { "Environment variable '$key' is not set." }
 }

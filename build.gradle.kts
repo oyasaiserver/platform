@@ -1,42 +1,39 @@
-plugins {
-    alias(libs.plugins.spotless)
-}
+plugins { alias(libs.plugins.spotless) }
 
 buildscript {
-    dependencies {
-        classpath(libs.kotlin.plugin)
-        classpath(libs.shadow.plugin)
-    }
+  dependencies {
+    classpath(libs.kotlin.plugin)
+    classpath(libs.shadow.plugin)
+  }
 
-    repositories {
-        mavenCentral()
-    }
+  repositories { mavenCentral() }
 }
 
 allprojects {
-    repositories {
-        mavenCentral()
-        maven("https://repo.purpurmc.org/snapshots")
-    }
+  repositories {
+    mavenCentral()
+    maven("https://repo.purpurmc.org/snapshots")
+    maven("https://maven.enginehub.org/repo")
+    maven("https://jitpack.io")
+  }
 }
 
 spotless {
-    isEnforceCheck = false
+  isEnforceCheck = false
 
-    kotlin {
-        target("**/src/**/*.kt")
-        targetExclude("gen/**/*.kt")
-        ktlint()
-    }
+  kotlin {
+    target("**/*.kt")
+    ktfmt().googleStyle()
+  }
 
-    kotlin {
-        target("**/src/**/*.kt")
-        ktfmt().kotlinlangStyle()
-    }
+  kotlinGradle {
+    target("**/*.gradle.kts")
+    ktfmt().googleStyle()
+  }
 
-    kotlinGradle {
-        target("**/src/**/*.gradle.kt")
-        ktfmt().kotlinlangStyle()
-        ktlint()
-    }
+  java {
+    target("**/*.java")
+    targetExclude("node_modules/**/*")
+    googleJavaFormat()
+  }
 }

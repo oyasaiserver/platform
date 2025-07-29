@@ -4,5 +4,5 @@
 
 // Generated files should ignore deprecation warnings
 @file:Suppress("DEPRECATION")
-package io.oyasai.proto.v1;
 
+package io.oyasai.proto.v1
