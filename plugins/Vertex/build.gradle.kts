@@ -5,14 +5,8 @@ plugins {
 
 dependencies {
   compileOnly(libs.purpur.api)
-  implementation(libs.protobuf.java)
-  implementation(libs.connect.kotlin)
-  implementation(libs.connect.kotlin.google.java.ext)
-  implementation(libs.connect.kotlin.okhttp)
-  implementation(libs.okhttp)
   implementation(libs.reflections)
   implementation(project(":lib:kotlin"))
-  implementation(project(":gen:proto:kotlin"))
 }
 
 configurations.configureEach {

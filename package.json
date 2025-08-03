@@ -13,7 +13,7 @@
     "build": "tsc --build",
     "bump": "taze",
     "codegen": "codegen && npm run format && ./gradlew spotlessApply",
-    "format": "sort-package-json '**/package.json' && buf format --write && prettier . --write",
+    "format": "sort-package-json '**/package.json' && prettier . --write",
     "lint": "oxlint --fix"
   },
   "dependencies": {
@@ -22,7 +22,6 @@
     "zx": "^8.7.2"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.56.0",
     "@prettier/plugin-oxc": "^0.0.4",
     "@types/node": "^24.1.0",
     "oxlint": "^1.9.0",
