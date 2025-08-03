@@ -66,5 +66,17 @@
   {
     "name": "LunaChat",
     "url": "https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar"
+  },
+  {
+    "name": "DisplayShops",
+    "url": "https://github.com/XZot1K/DisplayShops/releases/download/2.0/DisplayShops_2.0.1.jar"
+  },
+  {
+    "name": "Terra",
+    "url": "https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar"
+  },
+  {
+    "name": "VoidGen",
+    "url": "https://github.com/NicoNekoDev/VoidGen/releases/download/2.2.9/VoidGen-2.2.9.jar"
   }
 ]
