@@ -23,9 +23,10 @@ export function createMinecraftMain(environment: Environment): Service {
       ENABLE_ROLLING_LOGS: true,
       LOG_TIMESTAMP: true,
       MEMORY: config.services.minecraft.memory[environment],
-      REMOVE_OLD_MODS: true,
       PLUGINS: plugins.map(plugin => plugin.url).join(),
       ICON: 'https://avatars.githubusercontent.com/oyasaiserver'
+      // TODO: turn this on when we have fully managed plugins
+      // REMOVE_OLD_MODS: true,
     },
     volumes: ['./minecraft-main:/data'],
     env_file: '.env'
