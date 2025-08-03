@@ -1,4 +1,3 @@
-import { portical } from './services/portical.ts'
 import { mariadb } from './services/mariadb.ts'
 import { createMinecraftMain } from './services/minecraft-main.ts'
 import type { ComposeSpec } from '@oyasaiserver/json/store/compose_spec'
@@ -10,7 +9,6 @@ import { nodeExporter } from './services/node-exporter.ts'
 export function createOnpremInfra(environment: Environment): ComposeSpec {
   return {
     services: {
-      portical,
       mariadb,
       'minecraft-main': createMinecraftMain(environment),
 

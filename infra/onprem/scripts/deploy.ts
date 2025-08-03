@@ -1,38 +1,36 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
-import { $, spinner } from 'zx'
+import { $ } from 'zx'
 import { cp, glob, rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
-import { download } from '@oyasaiserver/lib/fetch'
 import { asEnvFile } from '@oyasaiserver/lib/env'
-import plugins from '../plugins.json' with { type: 'json' }
-import { basename, format, join } from 'node:path'
+import { basename, join } from 'node:path'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
 
-await spinner('prepare', async () => {
-  await rm('dist', rf)
-  await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
-  await cp(
-    `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
-    'dist/compose.yaml'
-  )
-  const dir = 'dist/minecraft-main/plugins'
-  const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
-  for await (const jar of jars) {
-    await cp(jar, join(dir, basename(jar)))
-  }
-  for (const { name, url } of plugins) {
-    await download(url, format({ dir, name, ext: '.jar' }))
-  }
-})
+const paths = {
+  dist: 'dist',
+  assets: 'assets',
+  plugins: 'minecraft-main/plugins'
+} as const
+
+await rm(paths.dist, rf)
+
+await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
+
+await cp(
+  `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
+  'dist/compose.yaml'
+)
+
+const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
+for await (const jar of jars) {
+  await cp(jar, join(paths.dist, paths.plugins, basename(jar)))
+}
 
 if (secrets.ENVIRONMENT === 'local') {
   const dir = `server/${secrets.ENVIRONMENT}`
-  for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
-    await rm(plugin)
-  }
   await cp('assets', dir, rf)
   await cp('dist', dir, rf)
   await $({
@@ -57,8 +55,6 @@ await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
 await ssh.$`cd ${dir} && docker compose down --remove-orphans`
-
-await ssh.$`find ${dir} -type f -name "*.jar" -path "*/plugins/*" -delete`
 
 await ssh.putDirectory('assets', dir)
 
