@@ -19,9 +19,7 @@ configurations.configureEach {
 tasks.apply {
   jar { enabled = false }
 
-  shadowJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  }
+  shadowJar { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
   build {
     compileKotlin.get().compilerOptions.optIn.addAll("kotlin.uuid.ExperimentalUuidApi")
