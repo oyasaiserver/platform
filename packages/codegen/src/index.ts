@@ -15,6 +15,7 @@ import { environments } from '@oyasaiserver/lib/environments'
 const out = 'gen'
 
 await rm(out, rf)
+await cp(join(import.meta.dirname, '../static'), out, rf)
 
 await spinner('md', async () => {
   await writeFileSafe(`${out}/md/README.md`, readme)

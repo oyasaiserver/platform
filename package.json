@@ -3,7 +3,6 @@
   "workspaces": [
     "apps/*",
     "gen/json/ts",
-    "gen/proto/ts",
     "infra/*",
     "lib/ts",
     "packages/*",
