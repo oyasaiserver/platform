@@ -21,7 +21,6 @@ tasks.apply {
 
   shadowJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    relocate("com.google.protobuf", "io.oyasai.protobuf")
   }
 
   build {
