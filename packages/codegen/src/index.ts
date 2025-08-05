@@ -10,12 +10,12 @@ import { pascalCase } from 'change-case'
 import { compile, type JSONSchema } from 'json-schema-to-typescript'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
-import bufGenJson from '../buf.gen.json' with { type: 'json' }
 import { environments } from '@oyasaiserver/lib/environments'
 
 const out = 'gen'
 
 await rm(out, rf)
+await cp(join(import.meta.dirname, '../static'), out, rf)
 
 await spinner('md', async () => {
   await writeFileSafe(`${out}/md/README.md`, readme)
@@ -35,13 +35,6 @@ await spinner('wrangler', async () => {
       await writeFileSafe(path, patched)
     })
   )
-})
-
-await spinner('proto', async () => {
-  await cp(join(import.meta.dirname, '../static'), out, rf)
-
-  await $`protoc --version` // supress installation log
-  await $`buf generate --template ${JSON.stringify(bufGenJson)}`
 })
 
 await spinner('json', async () => {
