@@ -1,13 +1,12 @@
-import { toolVersions } from '@oyasaiserver/lib/tool-versions'
-import config from '../../config.json' with { type: 'json' }
 import type { Environment } from '@oyasaiserver/schema/environment'
 import type { Service } from '@oyasaiserver/json/store/compose_spec'
-import plugins from '../../plugins.json' with { type: 'json' }
+import { config } from '../config.ts'
+import { plugins } from '../plugins.ts'
 
 export function createMinecraftMain(environment: Environment): Service {
   return {
     depends_on: ['mariadb'],
-    image: `itzg/minecraft-server:java${toolVersions.java.major}`,
+    image: 'itzg/minecraft-server:java24',
     ports: [
       `${config.services.minecraft.port[environment]}:${config.port.minecraft.value}/${config.port.minecraft.protocol}`,
       `${config.services.minecraftBedrock.port[environment]}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`

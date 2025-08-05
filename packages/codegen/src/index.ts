@@ -10,7 +10,7 @@ import { pascalCase } from 'change-case'
 import { compile, type JSONSchema } from 'json-schema-to-typescript'
 import { $, spinner, YAML } from 'zx'
 import { readme } from '../assets/readme.ts'
-import { environments } from '@oyasaiserver/lib/environments'
+import { environment } from '@oyasaiserver/lib/environment'
 
 const out = 'gen'
 
@@ -68,10 +68,10 @@ await spinner('json', async () => {
 })
 
 await spinner('compose', async () => {
-  for (const environment of Object.values(environments)) {
-    const infra = createOnpremInfra(environment)
+  for (const env of Object.values(environment)) {
+    const infra = createOnpremInfra(env)
     await writeFileSafe(
-      join(out, 'compose', `compose.${environment}.yaml`),
+      join(out, 'compose', `compose.${env}.yaml`),
       YAML.stringify(infra)
     )
   }
