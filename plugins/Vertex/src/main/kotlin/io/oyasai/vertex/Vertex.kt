@@ -1,9 +1,8 @@
 package io.oyasai.vertex
 
-import io.oyasai.lib.getSubKotlinObjectsOf
 import io.oyasai.lib.minecraft.Service
+import io.oyasai.vertex.services.sociallikes.SocialLikesService
 import org.bukkit.plugin.java.JavaPlugin
-import org.reflections.Reflections
 
 class Vertex : JavaPlugin() {
   override fun onLoad() {
@@ -23,7 +22,6 @@ class Vertex : JavaPlugin() {
 
   companion object {
     val plugin by lazy { getPlugin(Vertex::class.java) }
-    val reflections by lazy { Reflections(Vertex::class.java.packageName) }
-    val services by lazy { reflections.getSubKotlinObjectsOf<Service>() }
+    val services = listOf<Service>(SocialLikesService)
   }
 }

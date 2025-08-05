@@ -3,7 +3,6 @@ kotlin = "2.2.0"
 spotless = "7.0.4"
 purpur-api = "1.21.5-R0.1-SNAPSHOT"
 shadow = "9.0.0-beta17"
-reflections="0.10.2"
 fawe="2.13.0"
 advancedchestsapi = "3.2-BETA"
 hikaricp = "5.0.1"
@@ -16,10 +15,8 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
 kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 shadow-plugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
 purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api" }
-reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 fawe-core = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Core", version.ref = "fawe" }
 fawe-bukkit = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe" }
 advancedchestsapi = { module = "com.github.DeadSilenceIV:AdvancedChestsAPI", version.ref = "advancedchestsapi" }

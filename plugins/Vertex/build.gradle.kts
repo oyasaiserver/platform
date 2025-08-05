@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
   compileOnly(libs.purpur.api)
-  implementation(libs.reflections)
   implementation(project(":lib:kotlin"))
 }
 
