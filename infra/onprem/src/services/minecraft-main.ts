@@ -30,7 +30,7 @@ export function createMinecraft(
       // TODO: turn this on when we have fully managed plugins
       // REMOVE_OLD_MODS: true,
     },
-    volumes: [`minecraft-${name}:/data`],
+    volumes: [`./minecraft-${name}:/data`],
     env_file: '.env'
   }
 }
