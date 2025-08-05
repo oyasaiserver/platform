@@ -6,7 +6,6 @@
     "module": "nodenext",
     "moduleDetection": "force",
     "moduleResolution": "nodenext",
-    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "allowJs": true,
@@ -19,7 +18,8 @@
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useUnknownInCatchVariables": true
   },
   "references": [
     { "path": "apps/wiki" },
