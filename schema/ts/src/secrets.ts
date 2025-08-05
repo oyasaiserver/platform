@@ -17,8 +17,9 @@ export const secrets = z
     CLOUDFLARE_TUNNEL_SECRET: z.string(),
     API_ENDPOINT: z.url(),
     BEARER: z.string(),
-    RESTIC_PASSWORD: z.string(),
     BUCKET_NAME: z.string(),
+    RESTIC_REPOSITORY: z.string(),
+    RESTIC_PASSWORD: z.string(),
     // github
     GITHUB_APP_ID: z.string(),
     GITHUB_APP_INSTALLATION_ID: z.string(),

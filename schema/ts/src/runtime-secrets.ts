@@ -8,8 +8,9 @@ export const runtimeSecrets = z
     API_ENDPOINT: z.url(),
     DISCORDSRV_TOKEN: z.string(),
     RCON_PASSWORD: z.string(),
-    RESTIC_PASSWORD: z.string(),
-    BUCKET_NAME: z.string()
+    BUCKET_NAME: z.string(),
+    RESTIC_REPOSITORY: z.string(),
+    RESTIC_PASSWORD: z.string()
   })
   .readonly()
 
