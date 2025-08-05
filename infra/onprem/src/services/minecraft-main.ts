@@ -3,7 +3,10 @@ import type { Service } from '@oyasaiserver/json/store/compose_spec'
 import { config } from '../config.ts'
 import { plugins } from '../plugins.ts'
 
-export function createMinecraftMain(environment: Environment): Service {
+export function createMinecraft(
+  name: string,
+  environment: Environment
+): Service {
   return {
     depends_on: ['mariadb'],
     image: 'itzg/minecraft-server:java24',
@@ -27,7 +30,7 @@ export function createMinecraftMain(environment: Environment): Service {
       // TODO: turn this on when we have fully managed plugins
       // REMOVE_OLD_MODS: true,
     },
-    volumes: ['./minecraft-main:/data'],
+    volumes: [`minecraft-${name}:/data`],
     env_file: '.env'
   }
 }

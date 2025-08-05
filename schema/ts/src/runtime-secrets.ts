@@ -6,7 +6,10 @@ export const runtimeSecrets = z
     ENVIRONMENT: environment,
     BEARER: z.string(),
     API_ENDPOINT: z.url(),
-    DISCORDSRV_TOKEN: z.string()
+    DISCORDSRV_TOKEN: z.string(),
+    RCON_PASSWORD: z.string(),
+    RESTIC_PASSWORD: z.string(),
+    BUCKET_NAME: z.string()
   })
   .readonly()
 

@@ -12,6 +12,9 @@ export const config = {
         production: '32G',
         development: '12G',
         local: '3G'
+      },
+      rcon: {
+        password: 'rcon-password'
       }
     },
     minecraftBedrock: {

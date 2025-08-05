@@ -10,6 +10,9 @@ object RuntimeSecrets {
   val BEARER = secret("BEARER")
   val API_ENDPOINT = secret("API_ENDPOINT")
   val DISCORDSRV_TOKEN = secret("DISCORDSRV_TOKEN")
+  val RCON_PASSWORD = secret("RCON_PASSWORD")
+  val RESTIC_PASSWORD = secret("RESTIC_PASSWORD")
+  val BUCKET_NAME = secret("BUCKET_NAME")
 
   private fun secret(key: String) =
     requireNotNull(getenv(key)) { "Environment variable '$key' is not set." }

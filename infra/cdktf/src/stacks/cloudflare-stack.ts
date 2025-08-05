@@ -9,6 +9,7 @@ import type { Construct } from 'constructs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 import { readdirSync } from 'node:fs'
 import { directory } from '@oyasaiserver/lib/directory'
+import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
 
 export class CloudflareStack extends TerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
@@ -58,5 +59,11 @@ export class CloudflareStack extends TerraformStack {
         script: envAware(worker)
       })
     }
+
+    new R2Bucket(this, envAware('r2-bucket'), {
+      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      name: secrets.BUCKET_NAME,
+      location: 'apac'
+    })
   }
 }

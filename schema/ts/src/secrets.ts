@@ -10,12 +10,15 @@ export const secrets = z
     SSH_PRIVATE_KEY: z.string(),
     SSH_USERNAME: z.string(),
     SSH_PASSWORD: z.string(),
+    RCON_PASSWORD: z.string(),
     // cloudflare
     CLOUDFLARE_ACCOUNT_ID: z.string(),
     CLOUDFLARE_API_TOKEN: z.string(),
     CLOUDFLARE_TUNNEL_SECRET: z.string(),
     API_ENDPOINT: z.url(),
     BEARER: z.string(),
+    RESTIC_PASSWORD: z.string(),
+    BUCKET_NAME: z.string(),
     // github
     GITHUB_APP_ID: z.string(),
     GITHUB_APP_INSTALLATION_ID: z.string(),
