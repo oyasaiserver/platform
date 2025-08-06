@@ -56,10 +56,6 @@ export const plugins = [
     url: 'https://github.com/NEZNAMY/TAB/releases/download/5.2.5/TAB.v5.2.5.jar'
   },
   {
-    name: 'ProtocolLib',
-    url: 'https://ci.dmulloy2.net/job/ProtocolLib/753/artifact/build/libs/ProtocolLib.jar'
-  },
-  {
     name: 'Multiverse-Core',
     url: 'https://github.com/Multiverse/Multiverse-Core/releases/download/5.1.2/multiverse-core-5.1.2.jar'
   },
