@@ -5,10 +5,7 @@ plugins {
 
 group = "net.coreprotect"
 
-
-repositories {
-  mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
   compileOnly(libs.purpur.api)
