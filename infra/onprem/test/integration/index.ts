@@ -1,8 +1,8 @@
 import { doesNotMatch, match } from 'node:assert/strict'
-import { after, before, beforeEach, describe, test } from 'node:test'
+import { after, before, beforeEach, suite, test } from 'node:test'
 import { $ } from 'zx'
 
-await describe(import.meta.filename, async () => {
+await suite(import.meta.filename, async () => {
   before(async () => {
     await $`npm run deploy`
   })
