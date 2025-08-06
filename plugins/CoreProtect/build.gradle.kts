@@ -5,18 +5,7 @@ plugins {
 
 group = "net.coreprotect"
 
-version = "22.4"
-
-description = "CoreProtect"
-
-repositories {
-  mavenCentral()
-  //    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-  //    maven("https://repo.papermc.io/repository/maven-public/")
-  //    maven("https://repo.codemc.org/repository/maven-public/")
-  //    maven("https://jitpack.io")
-  //    maven("https://maven.enginehub.org/repo/")
-}
+repositories { mavenCentral() }
 
 dependencies {
   compileOnly(libs.purpur.api)

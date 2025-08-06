@@ -1,9 +1,8 @@
 import { doesNotMatch, match } from 'node:assert/strict'
-import { after, before, beforeEach, describe, test } from 'node:test'
+import { after, before, beforeEach, suite, test } from 'node:test'
 import { $ } from 'zx'
-import { writeFile } from 'node:fs/promises'
 
-await describe(import.meta.filename, async () => {
+await suite(import.meta.filename, async () => {
   before(async () => {
     await $`npm run deploy`
   })
@@ -28,7 +27,6 @@ await describe(import.meta.filename, async () => {
     for (const expectedError of expectedErrors) {
       logs = logs.replaceAll(expectedError, '')
     }
-    await writeFile('test-integration.log', logs)
     doesNotMatch(logs, /ERROR/, logs)
   })
 
