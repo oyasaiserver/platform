@@ -16,17 +16,17 @@
     "lint": "oxlint --fix"
   },
   "dependencies": {
-    "zod": "^4.0.14",
-    "zx": "^8.7.2"
+    "zod": "^4.0.17",
+    "zx": "^8.8.0"
   },
   "devDependencies": {
     "@prettier/plugin-oxc": "^0.0.4",
-    "@types/node": "^24.2.0",
-    "oxlint": "^1.9.0",
+    "@types/node": "^24.2.1",
+    "oxlint": "^1.11.2",
     "prettier": "^3.6.2",
     "sort-package-json": "^3.4.0",
     "taze": "^19.1.0",
     "typescript": "^5.9.2",
-    "wrangler": "^4.27.0"
+    "wrangler": "^4.28.1"
   }
 }
