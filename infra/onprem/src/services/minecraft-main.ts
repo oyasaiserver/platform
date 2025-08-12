@@ -22,7 +22,7 @@ export function createMinecraftMain(environment: Environment): Service {
       ENABLE_ROLLING_LOGS: true,
       LOG_TIMESTAMP: true,
       MEMORY: config.services.minecraft.memory[environment],
-      PLUGINS: plugins.map(plugin => plugin.url).join(),
+      PLUGINS: plugins.join(),
       ICON: 'https://avatars.githubusercontent.com/oyasaiserver'
       // TODO: turn this on when we have fully managed plugins
       // REMOVE_OLD_MODS: true,
