@@ -1,0 +1,10 @@
+name: DynamicProfile
+authors: [Srain3, takucan]
+website: 'https://github.com/OyasaiServer'
+main: com.baakun.dynamicprofile.DynamicProfile
+api-version: '1.20'
+version: '0.0.1'
+
+commands:
+  dprofile:
+    description: 'DynamicProfileのメインコマンド'

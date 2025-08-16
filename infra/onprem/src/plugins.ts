@@ -1,3 +1,7 @@
+import { readdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { directory } from '@oyasaiserver/lib/directory'
+
 const versions = {
   essentials: '2.21.1'
 } as const
@@ -25,3 +29,11 @@ export const plugins = [
   'https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar',
   'https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.4.2/PAPER/ViaVersion-5.4.2.jar'
 ] as const
+
+export const staticPugins = readdirSync(
+  join(directory.root, 'infra/onprem/assets/minecraft-main/plugins')
+).filter(file => file.endsWith('.jar'))
+
+export const customPlugins = readdirSync(join(directory.root, 'plugins')).map(
+  plugin => `${plugin}*.jar`
+)

@@ -1,10 +1,7 @@
 import type { Environment } from '@oyasaiserver/schema/environment'
 import type { Service } from '@oyasaiserver/json/store/compose_spec'
 import { config } from '../config.ts'
-import { plugins } from '../plugins.ts'
-import { readdirSync } from 'node:fs'
-import { directory } from '@oyasaiserver/lib/directory'
-import { join } from 'node:path'
+import { customPlugins, plugins, staticPugins } from '../plugins.ts'
 
 export function createMinecraftMain(environment: Environment): Service {
   return {
@@ -28,11 +25,7 @@ export function createMinecraftMain(environment: Environment): Service {
       PLUGINS: plugins.join(),
       ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
       REMOVE_OLD_MODS: true,
-      REMOVE_OLD_MODS_EXCLUDE: readdirSync(
-        join(directory.root, 'infra/onprem/assets/minecraft-main/plugins')
-      )
-        .filter(file => file.endsWith('.jar'))
-        .join()
+      REMOVE_OLD_MODS_EXCLUDE: [...staticPugins, ...customPlugins].join()
     },
     volumes: ['./minecraft-main:/data'],
     env_file: '.env'

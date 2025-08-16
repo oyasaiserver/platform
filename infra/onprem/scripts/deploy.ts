@@ -1,12 +1,16 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
-import { $ } from 'zx'
-import { cp, glob, rm } from 'node:fs/promises'
+import { cp, rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
+
+if (secrets.ENVIRONMENT === 'local') {
+  console.error('This script should not be run in the local environment.')
+  exit(1)
+}
 
 const paths = {
   dist: 'dist',
@@ -22,21 +26,6 @@ await cp(
   `${directory.root}/gen/compose/compose.${secrets.ENVIRONMENT}.yaml`,
   'dist/compose.yaml'
 )
-
-if (secrets.ENVIRONMENT === 'local') {
-  const dir = `server/${secrets.ENVIRONMENT}`
-  // TODO: remove when REMOVE_OLD_MODS is on
-  for await (const plugin of glob(`${dir}/**/plugins/*.jar`)) {
-    await rm(plugin)
-  }
-  await cp('assets', dir, rf)
-  await cp('dist', dir, rf)
-  await $({
-    cwd: dir,
-    verbose: true
-  })`docker compose down --remove-orphans && docker compose up --detach --wait`
-  exit(0)
-}
 
 await using ssh = await useSsh({
   host: secrets.PUBLIC_IPV4,
