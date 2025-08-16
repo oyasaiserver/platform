@@ -4,13 +4,9 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
-    },
-    "./*": {
-      "import": "./src/*.ts"
     }
   },
   "scripts": {
-    "deploy": "node scripts/deploy.ts",
-    "test:integration": "node --test 'test/integration/**/*.ts'"
+    "deploy": "node scripts/deploy.ts"
   }
 }

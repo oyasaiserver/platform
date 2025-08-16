@@ -534,6 +534,10 @@ interface DurableObjectNamespace<
   ): DurableObjectId
   idFromName(name: string): DurableObjectId
   idFromString(id: string): DurableObjectId
+  getByName(
+    name: string,
+    options?: DurableObjectNamespaceGetDurableObjectOptions
+  ): DurableObjectStub
   get(
     id: DurableObjectId,
     options?: DurableObjectNamespaceGetDurableObjectOptions
@@ -6005,6 +6009,12 @@ type GatewayOptions = {
   requestTimeoutMs?: number
   retries?: GatewayRetries
 }
+type UniversalGatewayOptions = Exclude<GatewayOptions, 'id'> & {
+  /**
+   ** @deprecated
+   */
+  id?: string
+}
 type AiGatewayPatchLog = {
   score?: number | null
   feedback?: -1 | 1 | null
@@ -6098,7 +6108,7 @@ declare abstract class AiGateway {
   run(
     data: AIGatewayUniversalRequest | AIGatewayUniversalRequest[],
     options?: {
-      gateway?: GatewayOptions
+      gateway?: UniversalGatewayOptions
       extraHeaders?: object
     }
   ): Promise<Response>
@@ -6129,6 +6139,7 @@ type AutoRagSearchRequest = {
 }
 type AutoRagAiSearchRequest = AutoRagSearchRequest & {
   stream?: boolean
+  system_prompt?: string
 }
 type AutoRagAiSearchRequestStreaming = Omit<
   AutoRagAiSearchRequest,
@@ -7839,6 +7850,22 @@ declare namespace Rpc {
 }
 declare namespace Cloudflare {
   interface Env {}
+}
+declare module 'cloudflare:node' {
+  export interface DefaultHandler {
+    fetch?(request: Request): Response | Promise<Response>
+    tail?(events: TraceItem[]): void | Promise<void>
+    trace?(traces: TraceItem[]): void | Promise<void>
+    scheduled?(controller: ScheduledController): void | Promise<void>
+    queue?(batch: MessageBatch<unknown>): void | Promise<void>
+    test?(controller: TestController): void | Promise<void>
+  }
+  export function httpServerHandler(
+    options: {
+      port: number
+    },
+    handlers?: Omit<DefaultHandler, 'fetch'>
+  ): DefaultHandler
 }
 declare module 'cloudflare:workers' {
   export type RpcStub<T extends Rpc.Stubable> = Rpc.Stub<T>
