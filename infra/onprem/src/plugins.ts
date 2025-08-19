@@ -1,7 +1,3 @@
-import { readdirSync } from 'node:fs'
-import { join } from 'node:path'
-import { directory } from '@oyasaiserver/lib/directory'
-
 const versions = {
   essentials: '2.21.1'
 } as const
@@ -21,19 +17,39 @@ export const plugins = [
   'https://github.com/XZot1K/DisplayShops/releases/download/2.0/DisplayShops_2.0.1.jar',
   'https://github.com/DevLeoko/AdvancedBan/releases/download/v2.3.0/AdvancedBan-Bundle-2.3.0-RELEASE.jar',
   'https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar',
-  'https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar',
-  'https://ci.athion.net/job/FastAsyncWorldEdit/1160/artifact/artifacts/FastAsyncWorldEdit-Paper-2.13.2-SNAPSHOT-1160.jar',
+  'https://github.com/ViaVersion/ViaVersion/releases/download/5.4.2/ViaVersion-5.4.2.jar',
+  'https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar',
+  'https://github.com/gecolay/GSit/releases/download/2.4.3/GSit-2.4.3.jar',
+  'https://github.com/DecentSoftware-eu/DecentHolograms/releases/download/2.9.6/DecentHolograms-2.9.6.jar',
+  'https://github.com/GeorgH93/Minepacks/releases/download/v2.4.32.4/Minepacks-2.4.32.4-Release.jar',
+  'https://github.com/Jikoo/OpenInv/releases/download/5.1.13/OpenInv.jar',
+  'https://github.com/SkriptLang/Skript/releases/download/2.12.1/Skript-2.12.1.jar',
+  'https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar',
+  'https://github.com/2008Choco/VeinMiner/releases/download/v2.3.0/VeinMiner-Bukkit-2.3.0.jar',
+  'https://github.com/Aust1n46/VentureChat/releases/download/v3.7.2/VentureChat-3.7.2.jar',
+  'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
+  'https://github.com/Sonnykimee/SQLiteLib/releases/download/0.3.4/SQLiteLib-0.3.4.jar',
+  'https://github.com/steve4744/TNTRun/releases/download/v9.33-SNAPSHOT.140/TNTRun_reloaded-9.33-SNAPSHOT.jar',
+  'https://www.spigotmc.org/resources/crackshot-guns.48301/download?version=592852',
+  'https://www.spigotmc.org/resources/inventory-shop.47694/download?version=257036',
+  'https://www.spigotmc.org/resources/simple-elevators-1-8-1-20.44462/download?version=601314',
+  'https://www.spigotmc.org/resources/particlehats.1007/download?version=584502',
+  'https://www.spigotmc.org/resources/tokenmanager.8610/download?version=494520',
+  'https://www.spigotmc.org/resources/slot-machine.22023/download?version=596585',
+  'https://www.spigotmc.org/resources/placeholderapi.6245/download?version=541946',
+  'https://www.spigotmc.org/resources/bkcommonlib.39590/download?version=586975',
+  'https://www.spigotmc.org/resources/worldborder.60905/download?version=275003',
+  'https://www.spigotmc.org/resources/signshop.10997/download?version=504534',
+  'https://www.spigotmc.org/resources/mypet.12725/download?version=556882',
+  'https://www.spigotmc.org/resources/mycommand.22272/download?version=503879',
+  'https://www.spigotmc.org/resources/join-commands.51758/download?version=546295',
+  'https://dev.bukkit.org/projects/chest-commands/files/5062953/download',
   'https://dev.bukkit.org/projects/worldguard/files/6643567/download',
+  'https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar',
+  'https://cdn.modrinth.com/data/z4HZZnLr/versions/o8Ytdhc5/FastAsyncWorldEdit-Paper-2.13.1.jar',
   'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
   'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
   'https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar',
-  'https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.4.2/PAPER/ViaVersion-5.4.2.jar'
+  // CoreProtect
+  'https://www.patreon.com/file?h=136053027&m=513054290'
 ] as const
-
-export const staticPugins = readdirSync(
-  join(directory.root, 'infra/onprem/assets/minecraft-main/plugins')
-).filter(file => file.endsWith('.jar'))
-
-export const customPlugins = readdirSync(join(directory.root, 'plugins')).map(
-  plugin => `${plugin}*.jar`
-)
