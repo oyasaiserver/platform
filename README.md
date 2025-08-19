@@ -19,6 +19,7 @@
    ```
 
 ### Structure
+
 ```
 .
 ├── apps        Web apps (e.g. wiki)
