@@ -6,13 +6,14 @@
 </p>
 <h3 align='center'>platform</h3>
 
+---
+
 ### Getting Started
 
 > [!IMPORTANT]
 > [WSL](https://learn.microsoft.com/ja-jp/windows/wsl/install) is required for Windows users.
 
-1. Install [`brew`](https://brew.sh)
-2. Install [`mise`](https://mise.jdx.dev/getting-started.html), and install required tools:
+1. Install [`mise`](https://mise.jdx.dev/getting-started.html), and install required tools:
 
    ```sh
    mise install
