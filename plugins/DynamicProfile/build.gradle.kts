@@ -4,34 +4,33 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
-    maven { url = uri("https://jitpack.io") } // VaultAPI, NuVotifier, TokenManager
+  mavenCentral()
+  maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
+  maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
+  maven { url = uri("https://jitpack.io") } // VaultAPI, NuVotifier, TokenManager
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
-    implementation("com.google.code.gson:gson:2.11.0")
+  implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+  implementation("com.google.code.gson:gson:2.11.0")
 
-    compileOnly("me.clip:placeholderapi:2.11.5")
-    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
-    compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("net.luckperms:api:5.4")
-    compileOnly("com.github.Realizedd:TokenManager:3.2.4") {
-        isTransitive = false
-    }
-    compileOnly(fileTree("lib") { include("SocialLikes3-0.4.0.jar") })
-    compileOnly(libs.purpur.api)
+  compileOnly("me.clip:placeholderapi:2.11.5")
+  compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+  compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
+  compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+  compileOnly("net.luckperms:api:5.4")
+  compileOnly("com.github.Realizedd:TokenManager:3.2.4") { isTransitive = false }
+  compileOnly(fileTree("lib") { include("SocialLikes3-0.4.0.jar") })
+  compileOnly(libs.purpur.api)
 }
 
 configurations.configureEach {
-    resolutionStrategy.dependencySubstitution {
-        substitute(module("org.bukkit:bukkit"))
-            .using(module("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT"))
-    }
+  resolutionStrategy.dependencySubstitution {
+    substitute(module("org.bukkit:bukkit"))
+      .using(module("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT"))
+  }
 }
+
 tasks.apply {
   jar { enabled = false }
 
