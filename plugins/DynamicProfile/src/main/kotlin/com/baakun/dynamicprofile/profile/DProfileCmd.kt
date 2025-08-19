@@ -1,35 +1,99 @@
 package com.baakun.dynamicprofile.profile
 
+import com.baakun.dynamicprofile.DynamicProfile.Companion.perms
 import com.baakun.dynamicprofile.Tools
 import com.baakun.dynamicprofile.Tools.addText
 import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.gui.GuiInventory
+import com.baakun.dynamicprofile.Tools.plugin
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
+import com.baakun.dynamicprofile.profile.playerSelect.RunType
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
+import kotlin.concurrent.thread
 
-/** /dprofileコマンドの処理 */
-object DProfileCmd : CommandExecutor {
-  override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
-  ): Boolean {
-    if (command.name != "dprofile") return false
 
-    if (sender !is Player) return false
-    val inventory = GuiInventory.createInventory(6, sender.name)
-    val item1 =
-      Tools.getPlayerHead(sender.uniqueId)
-        .addText("&f" + sender.name, mutableListOf("Test"))
-        .allFlag()
-    item1.guiRun { sender.sendMessage("Test OK!") }
-    inventory.addItem(item1)
-    sender.openInventory(inventory)
+/**
+ * /dprofileコマンドの処理
+ */
+object DProfileCmd: CommandExecutor {
+    private val required = plugin.config.getInt("Required", 100000)
 
-    return true
-  }
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+        if (command.name != "dprofile") return false
+
+        if (sender !is Player) return false
+
+        var target: String = sender.name
+        if(args.isNotEmpty())target = args[0]
+        if(target == sender.name){
+            MyProfile.display(sender)
+        }else{
+            OtherProfile.display(sender,target)
+        }
+        return true
+    }
+
+    /**
+     * 右下の黒いガラスを埋める
+     */
+    fun addBlackStandGlass(inv: Inventory, except: Array<Int>) {
+        thread {
+            val grayStandGlassPane = ItemStack(Material.GRAY_STAINED_GLASS_PANE)
+            grayStandGlassPane.addText(" ", mutableListOf()).allFlag()
+            for (i in 0..53){
+                if(except.contains(i))continue
+                inv.setItem(i, grayStandGlassPane.clone())
+            }
+        }
+
+
+    }
+
+    /**
+     * 共通の処理（自、他プレイヤープロフィールGUI）
+     */
+    fun commonFunc(inv: Inventory, viewer: Player, target: String) {
+        thread { //Threadを使わないと、サーバーが固まる可能性があると表示され処理が止まる
+            var standGlassPane = ItemStack(Material.LIME_STAINED_GLASS_PANE)
+            standGlassPane.addText(" ", mutableListOf()).allFlag()
+            perms?.let { perms ->
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.chukyu")) standGlassPane = ItemStack(Material.GREEN_STAINED_GLASS_PANE)
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.jokyu")) standGlassPane = ItemStack(Material.CYAN_STAINED_GLASS_PANE)
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.builder")) standGlassPane = ItemStack(Material.PURPLE_STAINED_GLASS_PANE)
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.takumi")) standGlassPane = ItemStack(Material.RED_STAINED_GLASS_PANE)
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.blue")) standGlassPane = ItemStack(Material.BLUE_STAINED_GLASS_PANE)
+                if(perms.playerHas("*",Bukkit.getOfflinePlayer(target),"group.white")) standGlassPane = ItemStack(Material.WHITE_STAINED_GLASS_PANE)
+            }
+
+
+            for (x in 1..8) {
+                inv.setItem(x, standGlassPane.clone())
+            }
+            for (y in 1..5) {
+                inv.setItem(9*y, standGlassPane.clone())
+            }
+        }
+
+
+        //プレイヤー選択画面を開く
+        val headPlayer = Bukkit.getOnlinePlayers().toList().get((0..Bukkit.getOnlinePlayers().size-1).random())
+        val selectPlayer = Tools.getPlayerHead(headPlayer.uniqueId)
+        selectPlayer.addText("&a他プレイヤーのプロフィールを開く", mutableListOf(
+            "&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"
+        )).guiRun{
+            viewer.playSound(viewer.location,org.bukkit.Sound.UI_BUTTON_CLICK, SoundCategory.MASTER,0.75F,1F)
+            PlayerSelect.display(viewer, RunType.OPEN_PROFILE)
+        }
+        inv.setItem(53, selectPlayer)
+
+    }
+
 }

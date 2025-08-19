@@ -1,10 +1,31 @@
 name: DynamicProfile
-authors: [Srain3, takucan]
-website: 'https://github.com/OyasaiServer'
+authors: [ Srain3, takucan ]
+website: "https://github.com/OyasaiServer"
 main: com.baakun.dynamicprofile.DynamicProfile
-api-version: '1.20'
-version: '0.0.1'
-
+api-version: "1.20"
+version: "0.0.1"
+depend: [Votifier,Vault,TokenManager]
+softdepend: [PlaceholderAPI]
+permissions:
+  dprofile.basic:
+    description: "基本権限、鯖民向け"
+    default: true
+  dprofile.op:
+    description: "設定変更等、OP向け"
 commands:
+  dpmanager:
+    permission: dprofile.op
+    aliases: [dpma,dpm]
+    description: "DynamicProfileの管理者用コマンド"
   dprofile:
-    description: 'DynamicProfileのメインコマンド'
+    permission: dprofile.basic
+    aliases: [dp, dpr, dpro]
+    description: "DynamicProfileのメインコマンド"
+  dpleaderboard:
+    description: "DynamicProfileの各種ステータスのリーダーボードを表示する"
+    permission: dprofile.basic
+    aliases: [dpl]
+  dpweeklyleaderboard:
+    description: "DynamicProfileの各種ステータスの週間リーダーボードを表示する"
+    permission: dprofile.basic
+    aliases: [dpwl]
