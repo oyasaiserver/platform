@@ -9,17 +9,12 @@ import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { pascalCase } from 'change-case'
 import { compile, type JSONSchema } from 'json-schema-to-typescript'
 import { $, spinner, YAML } from 'zx'
-import { readme } from '../assets/readme.ts'
 import { environment } from '@oyasaiserver/lib/environment'
 
 const out = 'gen'
 
 await rm(out, rf)
 await cp(join(import.meta.dirname, '../static'), out, rf)
-
-await spinner('md', async () => {
-  await writeFileSafe(`${out}/md/README.md`, readme)
-})
 
 await spinner('wrangler', async () => {
   const apps = await readdir('apps')

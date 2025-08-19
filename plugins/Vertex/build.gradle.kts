@@ -8,13 +8,6 @@ dependencies {
   implementation(project(":lib:kotlin"))
 }
 
-configurations.configureEach {
-  resolutionStrategy.dependencySubstitution {
-    substitute(module("org.spigotmc:spigot-api"))
-      .using(module("org.purpurmc.purpur:purpur-api:1.21.5-R0.1-SNAPSHOT"))
-  }
-}
-
 tasks.apply {
   jar { enabled = false }
 

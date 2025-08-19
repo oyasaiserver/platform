@@ -9,6 +9,8 @@ hikaricp = "5.0.1"
 log4j = "2.19.0"
 oshi = "6.6.2"
 json-simple = "1.1.1"
+anvilgui = "1.6.3-SNAPSHOT"
+vault = "1.7"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -25,3 +27,5 @@ oshi-core = { module = "com.github.oshi:oshi-core", version.ref = "oshi" }
 json-simple = { module = "com.googlecode.json-simple:json-simple", version.ref = "json-simple" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
+vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }

@@ -1,7 +1,7 @@
 import type { Environment } from '@oyasaiserver/schema/environment'
 import type { Service } from '@oyasaiserver/json/store/compose_spec'
 import { config } from '../config.ts'
-import { customPlugins, plugins, staticPugins } from '../plugins.ts'
+import { plugins } from '../plugins.ts'
 
 export function createMinecraftMain(environment: Environment): Service {
   return {
@@ -23,9 +23,7 @@ export function createMinecraftMain(environment: Environment): Service {
       LOG_TIMESTAMP: true,
       MEMORY: config.services.minecraft.memory[environment],
       PLUGINS: plugins.join(),
-      ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-      REMOVE_OLD_MODS: true,
-      REMOVE_OLD_MODS_EXCLUDE: [...staticPugins, ...customPlugins].join()
+      ICON: 'https://avatars.githubusercontent.com/oyasaiserver'
     },
     volumes: ['./minecraft-main:/data'],
     env_file: '.env'

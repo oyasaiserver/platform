@@ -1,3 +1,9 @@
 rootProject.name = "platform"
 
-include(":lib:kotlin", ":plugins:Vertex", ":plugins:CoreProtect", ":plugins:DynamicProfile")
+include(
+  ":lib:kotlin",
+  ":plugins:Vertex",
+  ":plugins:PaintTools",
+  ":plugins:DynamicProfile",
+  ":plugins:OyasaiUtilities",
+)

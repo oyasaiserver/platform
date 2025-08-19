@@ -1,11 +1,13 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
-import { cp, rm } from 'node:fs/promises'
+import { cp, glob, rm } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { runtimeSecrets } from '@oyasaiserver/schema/runtime-secrets'
 import { asEnvFile } from '@oyasaiserver/lib/env'
 import { rf, writeFileSafe } from '@oyasaiserver/lib/fs'
 import { exit } from 'node:process'
+import { join } from 'node:path'
+import { basename } from 'node:path'
 
 if (secrets.ENVIRONMENT === 'local') {
   console.error('This script should not be run in the local environment.')
@@ -19,6 +21,12 @@ const paths = {
 } as const
 
 await rm(paths.dist, rf)
+
+const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
+for await (const jar of jars) {
+  const name = `${basename(jar).split('-')[0]}.jar`
+  await cp(jar, join(paths.dist, paths.plugins, name))
+}
 
 await writeFileSafe('dist/.env', asEnvFile(runtimeSecrets.parse(secrets)))
 

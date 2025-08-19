@@ -15,6 +15,7 @@ allprojects {
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://maven.enginehub.org/repo")
     maven("https://jitpack.io")
+    maven("https://repo.codemc.io/repository/maven-snapshots")
   }
 }
 
