@@ -19,7 +19,8 @@
     "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
     "skipLibCheck": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "references": [
     { "path": "apps/wiki" },

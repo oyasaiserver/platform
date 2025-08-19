@@ -14,14 +14,6 @@ export async function readFileContent(
   return buffer.toString()
 }
 
-export async function writeJsonFile<T>(
-  path: PathLike | FileHandle,
-  content: T
-) {
-  const jsonContent = JSON.stringify(content, null, 2)
-  await writeFile(path, jsonContent)
-}
-
 export async function writeFileSafe(...args: Parameters<typeof writeFile>) {
   await mkdir(dirname(args[0].toString()), rf)
   await writeFile(...args)
