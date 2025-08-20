@@ -4,6 +4,7 @@ import java.io.File
 import java.io.IOException
 import java.util.logging.Level
 import org.bukkit.Bukkit
+import org.bukkit.configuration.InvalidConfigurationException
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -25,24 +26,24 @@ open class CustomYaml(
   private val file = File(plugin.dataFolder, fileName)
 
   init {
-    if (firstCreation) {
-      saveDefault()
+    try {
+      if (firstCreation) saveDefault()
+      reload()
+    } catch (e: Exception) {
+      plugin.logger.severe("Failed to initialize YAML $fileName: ${e.message}")
     }
-    reload()
   }
 
   /** ファイルが存在しない場合ファイルを作成し保存する */
   fun saveDefault() {
-    val dataFolder = plugin.dataFolder
-    if (!dataFolder.exists() || !dataFolder.isDirectory) {
-      dataFolder.mkdir()
-    }
-    if (!file.exists()) {
-      if (fromJar) {
-        plugin.saveResource(fileName, false)
-      } else {
-        save()
+    try {
+      val dataFolder = plugin.dataFolder
+      if (!dataFolder.exists() || !dataFolder.isDirectory) dataFolder.mkdirs()
+      if (!file.exists()) {
+        if (fromJar) plugin.saveResource(fileName, false) else save()
       }
+    } catch (e: IOException) {
+      plugin.logger.severe("Could not create default YAML $fileName: ${e.message}")
     }
   }
 
@@ -57,7 +58,13 @@ open class CustomYaml(
 
   /** ファイルを再読込する */
   fun reload() {
-    this.load(file)
+    try {
+      super.load(file)
+    } catch (e: IOException) {
+      plugin.logger.severe("Could not reload YAML $fileName: ${e.message}")
+    } catch (e: InvalidConfigurationException) {
+      plugin.logger.severe("Invalid configuration in $fileName: ${e.message}")
+    }
   }
 
   /** ファイルを消去する */

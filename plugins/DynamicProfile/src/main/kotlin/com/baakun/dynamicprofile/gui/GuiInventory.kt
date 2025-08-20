@@ -47,9 +47,9 @@ object GuiInventory : Listener {
   fun inventoryClickEvents(e: InventoryClickEvent) {
     // invListに存在しないインベントリのイベントの場合return
     if (!invList.contains(e.view.topInventory)) return
-    Tools.plugin.logger.info("debug: invListにあるInventoryのClickEvent発生")
+    // Tools.plugin.logger.info("debug: invListにあるInventoryのClickEvent発生")
     e.isCancelled = true
-    GuiItem.clickItemToRun(e)
+    Bukkit.getScheduler().runTaskLater(Tools.plugin, Runnable { GuiItem.clickItemToRun(e) }, 1L)
   }
 
   /** Inventoryドラッグのキャンセル用 */
@@ -57,7 +57,7 @@ object GuiInventory : Listener {
   fun inventoryDragEvents(e: InventoryDragEvent) {
     // invListに存在しないインベントリのイベントの場合return
     if (!invList.contains(e.view.topInventory)) return
-    Tools.plugin.logger.info("debug: invListにあるInventoryのDragEvent発生")
+    // Tools.plugin.logger.info("debug: invListにあるInventoryのDragEvent発生")
     e.isCancelled = true
   }
 
@@ -66,7 +66,7 @@ object GuiInventory : Listener {
   fun inventoryCloseEvent(e: InventoryCloseEvent) {
     // invListに存在しないインベントリのイベントの場合return
     if (!invList.contains(e.view.topInventory)) return
-    Tools.plugin.logger.info("debug: invListにあるInventoryのCloseEvent発生")
+    // Tools.plugin.logger.info("debug: invListにあるInventoryのCloseEvent発生")
     invList.remove(e.view.topInventory)
   }
 
