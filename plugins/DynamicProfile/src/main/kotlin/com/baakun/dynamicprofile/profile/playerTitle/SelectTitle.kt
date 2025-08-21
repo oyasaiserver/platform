@@ -44,7 +44,8 @@ object SelectTitle {
           page++
           titles(player, page, inventory)
         }
-      }.addText("&a次のページへ", mutableListOf())
+      }
+      .addText("&a次のページへ", mutableListOf())
       .allFlag()
     previousPage
       .guiRun {
@@ -56,10 +57,11 @@ object SelectTitle {
             0.75F,
             1F,
           )
-          page --
+          page--
           titles(player, page, inventory)
         }
-      }.addText("&a前のページへ", mutableListOf())
+      }
+      .addText("&a前のページへ", mutableListOf())
       .allFlag()
     inventory.setItem(53, nextPage)
     inventory.setItem(45, previousPage)
