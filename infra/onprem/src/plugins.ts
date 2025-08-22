@@ -43,8 +43,6 @@ export const plugins = [
   'https://www.spigotmc.org/resources/mypet.12725/download?version=556882',
   'https://www.spigotmc.org/resources/mycommand.22272/download?version=503879',
   'https://www.spigotmc.org/resources/join-commands.51758/download?version=546295',
-  'https://dev.bukkit.org/projects/chest-commands/files/5062953/download',
-  'https://dev.bukkit.org/projects/worldguard/files/6643567/download',
   'https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar',
   'https://cdn.modrinth.com/data/z4HZZnLr/versions/o8Ytdhc5/FastAsyncWorldEdit-Paper-2.13.1.jar',
   'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',

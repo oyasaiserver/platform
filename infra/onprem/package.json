@@ -8,5 +8,8 @@
   },
   "scripts": {
     "deploy": "node scripts/deploy.ts"
+  },
+  "devDependencies": {
+    "@json-types/compose": "^0.10.0"
   }
 }
