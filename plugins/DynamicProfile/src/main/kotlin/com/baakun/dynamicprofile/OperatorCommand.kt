@@ -97,6 +97,14 @@ object OperatorCommand : CommandExecutor {
           ((pl.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20) / 60)
       statsData.exp += exp
 
+      val chatCount = statsData.get(BehType.CHAT)
+      val chatExp = Calculator.expAmount(BehType.CHAT) * chatCount
+      statsData.exp += chatExp
+
+      val voteCount = statsData.get(BehType.VOTE)
+      val voteExp = Calculator.expAmount(BehType.VOTE) * voteCount
+      statsData.exp += voteExp
+
       val file = File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${uuid}.json")
       try {
         file.parentFile?.mkdirs()
@@ -106,10 +114,7 @@ object OperatorCommand : CommandExecutor {
         plugin.logger.warning("[$threadName] ${pl.name} の保存失敗: ${e.message}")
       }
 
-      // 100人ごと、または最後の1人のみ進捗ログを出力
-      if (num % 100 == 0 || num == userList.size) {
-        plugin.logger.info("$threadName: [$num/${userList.size}] ${pl.name} $exp")
-      }
+      plugin.logger.info("$threadName: [$num/${userList.size}] ${pl.name} $exp")
     }
   }
 
