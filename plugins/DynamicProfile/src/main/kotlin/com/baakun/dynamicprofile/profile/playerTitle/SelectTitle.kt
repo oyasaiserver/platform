@@ -41,10 +41,11 @@ object SelectTitle {
             0.75F,
             1F,
           )
-          page += 1
+          page++
           titles(player, page, inventory)
         }
       }
+      .addText("&a次のページへ", mutableListOf())
       .allFlag()
     previousPage
       .guiRun {
@@ -56,10 +57,11 @@ object SelectTitle {
             0.75F,
             1F,
           )
-          page -= 1
+          page--
           titles(player, page, inventory)
         }
       }
+      .addText("&a前のページへ", mutableListOf())
       .allFlag()
     inventory.setItem(53, nextPage)
     inventory.setItem(45, previousPage)
@@ -83,7 +85,7 @@ object SelectTitle {
     player.openInventory(inventory)
   }
 
-  /** プレイヤーヘッドを配置 */
+  /** 称号のアイテムを配置 */
   private fun titles(player: Player, page: Int, inventory: Inventory) {
     val titles = getTitles(player).toMutableList()
     titles.sortByDescending { getTitleFromId(it).rarity }

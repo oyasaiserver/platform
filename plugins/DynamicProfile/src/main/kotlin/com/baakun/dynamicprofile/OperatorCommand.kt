@@ -8,6 +8,7 @@ import com.baakun.dynamicprofile.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.exp.BehType
 import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.gui.TitleGui
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.createNewTitle
@@ -24,7 +25,7 @@ import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.util.*
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.ComponentLike
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Statistic
@@ -33,8 +34,6 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
 
 object OperatorCommand : CommandExecutor {
   var last = 0L
@@ -322,35 +321,27 @@ object OperatorCommand : CommandExecutor {
 
           when (arg) {
             "list" -> {
-              val titles = allTitles.values.toList()
-              val spl = 5
-              var page = 0
-              if (args.size >= 3) page = (args[2].toIntOrNull()?.minus(1)) ?: 0
-              val messages = mutableListOf<ComponentLike>()
-
-              val hes = ItemStack(Material.PAPER)
-
-              hes.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
-
-              for (i in 0..<spl) {
-                val cr = spl * page + i
-                if (titles.size <= cr) break
-
-                val title = titles.get(cr)
-                val message =
-                  Component.text(" - ${title.id} - ${title.title}")
-                    .hoverEvent(
-                      Component.text("&6[称号] ${title.title}")
-                        .appendNewline()
-                        .append(Component.text("&a所有者数: &7${title.owners.size}"))
-                        .appendNewline()
-                        .append(Component.text("&aバリュー(表示優先度): &7${title.rarity}"))
-                    )
-                messages.add(message)
+              TitleGui.showAllTitlesGui(player)
+            }
+            "owners" -> {
+              if (args.size < 3) {
+                player.sendMessage(
+                  Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED)
+                )
+                return true
               }
-              player.sendMessage("-------->>すべての称号<<--------")
-              messages.forEach { u -> player.sendMessage(u) }
-              player.sendMessage("-----------------------------")
+              val titleId = args[2].toIntOrNull()
+              if (titleId == null) {
+                player.sendMessage(Component.text("無効な称号IDです").color(NamedTextColor.RED))
+                return true
+              }
+              // GUIで称号所有者リストを表示
+              TitleGui.showTitleOwnersGui(player, titleId)
+            }
+            "player" -> {
+              val targetPlayerName = if (args.size >= 3) args[2] else player.name
+              // GUIでプレイヤーの所有称号リストを表示
+              TitleGui.showPlayerTitlesGui(player, targetPlayerName)
             }
             "give" -> {
               player.sendMessage(
@@ -450,7 +441,17 @@ object OperatorCommandCompleter : TabCompleter {
               return list
             }
             "title" ->
-              return mutableListOf("list", "add", "remove", "give", "deprive", "reload", "edit")
+              return mutableListOf(
+                "list",
+                "add",
+                "remove",
+                "give",
+                "deprive",
+                "reload",
+                "edit",
+                "owners",
+                "player",
+              )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
           }
@@ -461,10 +462,12 @@ object OperatorCommandCompleter : TabCompleter {
               when (args[1]) {
                 "add" -> return mutableListOf("<新しい称号の名前>")
                 "edit",
-                "remove" ->
+                "remove",
+                "owners" ->
                   return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+                "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
               }
             }
             "setCount" -> return BehType.entries.map { it.name }.toMutableList()
