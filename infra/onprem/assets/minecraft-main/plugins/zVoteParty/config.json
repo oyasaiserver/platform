@@ -1,0 +1,37 @@
+{
+  "storage": "JSON",
+  "redisSqlStorage": "MYSQL",
+  "enableDebug": true,
+  "enableDebugTime": false,
+  "enableAutoUpdate": true,
+  "enableLogMessage": false,
+  "enableVoteCommand": true,
+  "enableVoteInventory": true,
+  "enableVoteMessage": true,
+  "enableInventoryPreRender": false,
+  "enableOpenSyncInventory": false,
+  "enableActionBarVoteAnnonce": true,
+  "enableTchatVoteAnnonce": true,
+  "joinGiveVoteMilliSecond": 500,
+  "autoSaveSecond": 900,
+  "redisServerAmount": 2,
+  "redisChannel": "zvoteparty",
+  "redis": {
+    "host": "192.168.10.10",
+    "port": 6379,
+    "password": null,
+    "databaseIndex": 0,
+    "poolConfig": {
+      "maxTotal": 128,
+      "maxIdle": 128,
+      "minIdle": 16
+    }
+  },
+  "maxSqlRetryAmoun": 5,
+  "progressBar": {
+    "lenght": 20,
+    "symbol": "|",
+    "completedColor": "§a",
+    "notCompletedColor": "§8"
+  }
+}

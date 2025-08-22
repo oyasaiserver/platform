@@ -9,7 +9,9 @@ export function createMinecraftMain(environment: Environment): Service {
     image: 'itzg/minecraft-server:java24-graalvm',
     ports: [
       `${config.services.minecraft.port[environment]}:${config.port.minecraft.value}/${config.port.minecraft.protocol}`,
-      `${config.services.minecraftBedrock.port[environment]}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`
+      `${config.services.minecraftBedrock.port[environment]}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`,
+      '8192:8192/tcp', // vote
+      '8100:8100/tcp' // bluemap
     ],
     restart: 'unless-stopped',
     tty: true,
