@@ -4,6 +4,7 @@ import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
 import com.baakun.dynamicprofile.Tools
 import com.baakun.dynamicprofile.Tools.addText
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils
 import java.util.*
 import net.kyori.adventure.text.Component
@@ -12,10 +13,68 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.Inventory
 
 object TitleGui {
 
-  /** 称号の所有者リストをGUIで表示する */
+  private const val PAGE_SIZE = 45
+  private const val ITEMS_START_SLOT = 9
+  private const val PREV_BUTTON_SLOT = 45
+  private const val NEXT_BUTTON_SLOT = 53
+  private const val TITLE_INFO_SLOT = 0
+  private const val INVENTORY_ROWS = 6
+  private const val TOP_ROW_SIZE = 9
+  private const val BOTTOM_ROW_START = 45
+
+  private fun putGrayGlass(inv: Inventory) {
+    val grayGlass = ItemStack(Material.GRAY_STAINED_GLASS_PANE).addText("", mutableListOf())
+    repeat(TOP_ROW_SIZE) { i ->
+      inv.setItem(i, grayGlass)
+      inv.setItem(i + BOTTOM_ROW_START, grayGlass)
+    }
+  }
+
+  /** 称号アイテムを作成 */
+  private fun createTitleItem(title: Title, titleId: Int, clickAction: () -> Unit): ItemStack {
+    return ItemStack(Material.NAME_TAG)
+      .addText(
+        "&6${title.title}",
+        mutableListOf(
+          "&7ID: $titleId",
+          "&b優先度: ${title.rarity}",
+          "&a所有者数: ${title.owners.size}人",
+          "&eクリックで所有者リストを表示",
+        ),
+      )
+      .guiRun { clickAction() }
+  }
+
+  private fun putNavigation(
+    inv: Inventory,
+    page: Int,
+    totalPages: Int,
+    prevAction: () -> Unit,
+    nextAction: () -> Unit,
+  ) {
+    if (page > 0) {
+      val prevButton = ItemStack(Material.ARROW)
+        .addText("&a前のページ", mutableListOf())
+        .guiRun { prevAction() }
+      inv.setItem(PREV_BUTTON_SLOT, prevButton)
+    }
+
+    if (page < totalPages - 1) {
+      val nextButton = ItemStack(Material.ARROW)
+        .addText("&a次のページ", mutableListOf())
+        .guiRun { nextAction() }
+      inv.setItem(NEXT_BUTTON_SLOT, nextButton)
+    }
+  }
+
+  /** 総ページ数 */
+  private fun calculateTotalPages(totalItems: Int): Int = (totalItems + PAGE_SIZE - 1) / PAGE_SIZE
+
+  /** 称号の所有者リスト */
   fun showTitleOwnersGui(player: Player, titleId: Int) {
     val title = allTitles[titleId]
     if (title == null) {
@@ -24,13 +83,12 @@ object TitleGui {
     }
 
     val owners = title.owners
-    val pageSize = 45
-    val totalPages = (owners.size + pageSize - 1) / pageSize
+    val totalPages = calculateTotalPages(owners.size)
 
     showOwnersPage(player, title.title, titleId, owners, 0, totalPages)
   }
 
-  /** プレイヤーの所有称号リストをGUIで表示する */
+  /** プレイヤーの所有称号リスト */
   fun showPlayerTitlesGui(player: Player, targetPlayerName: String) {
     val targetPlayer = Bukkit.getOfflinePlayer(targetPlayerName)
 
@@ -43,14 +101,20 @@ object TitleGui {
 
     val playerTitles = TitleUtils.getTitles(targetPlayer.uniqueId)
     val sortedTitles = playerTitles.sortedByDescending { allTitles[it]?.rarity ?: 0 }
-
-    val pageSize = 45
-    val totalPages = (sortedTitles.size + pageSize - 1) / pageSize
+    val totalPages = calculateTotalPages(sortedTitles.size)
 
     showPlayerTitlesPage(player, targetPlayerName, sortedTitles, 0, totalPages)
   }
 
-  /** 所有者リストのページを表示 */
+  /** 全ての称号リスト */
+  fun showAllTitlesGui(player: Player) {
+    val titles = allTitles.values.toList().sortedByDescending { it.rarity }
+    val totalPages = calculateTotalPages(titles.size)
+
+    showAllTitlesPage(player, titles, 0, totalPages)
+  }
+
+  /** 所有者リスト */
   private fun showOwnersPage(
     player: Player,
     titleName: String,
@@ -59,72 +123,54 @@ object TitleGui {
     page: Int,
     totalPages: Int,
   ) {
-    val inv = GuiInventory.createInventory(6, "称号「$titleName」の所有者 (${page + 1}/$totalPages)")
+    val inv = GuiInventory.createInventory(INVENTORY_ROWS, "称号「$titleName」の所有者 (${page + 1}/$totalPages)")
 
-    val gray_glass = ItemStack(Material.GRAY_STAINED_GLASS_PANE).addText("", mutableListOf())
-    for (i in 0..8) {
-      inv.setItem(i, gray_glass)
-      inv.setItem(i + 45, gray_glass)
-    }
+    putGrayGlass(inv)
 
-    // 左上に称号アイテムを設置
-    val titleItem =
-      ItemStack(Material.NAME_TAG)
-        .addText(
-          "&6$titleName",
-          mutableListOf(
-            "&7ID: $titleId",
-            "&b優先度: ${allTitles[titleId]?.rarity ?: 0}",
-            "&a所有者数: ${owners.size}人",
-          ),
-        )
-    inv.setItem(0, titleItem)
+    val titleItem = ItemStack(Material.NAME_TAG)
+      .addText(
+        "&6$titleName",
+        mutableListOf(
+          "&7ID: $titleId",
+          "&b優先度: ${allTitles[titleId]?.rarity ?: 0}",
+          "&a所有者数: ${owners.size}人",
+        ),
+      )
+    inv.setItem(TITLE_INFO_SLOT, titleItem)
 
     // 所有者ヘッド
-    val startIndex = page * 45
-    val endIndex = minOf(startIndex + 45, owners.size)
+    val startIndex = page * PAGE_SIZE
+    val endIndex = minOf(startIndex + PAGE_SIZE, owners.size)
 
     for (i in startIndex until endIndex) {
       val uuid = owners[i]
       val offlinePlayer = Bukkit.getOfflinePlayer(uuid)
       val playerName = offlinePlayer.name ?: "Unknown"
 
-      val skull =
-        Tools.getPlayerHead(uuid)
-          .addText(
-            "&e$playerName",
-            mutableListOf(
-              if (offlinePlayer.isOnline) "&aオンライン" else "&7オフライン",
-              "&7UUID: ${uuid.toString().substring(0, 8)}...",
-              "&eクリックで所有称号リストを表示",
-            ),
-          )
-          .guiRun { showPlayerTitlesGui(player, playerName) }
+      val skull = Tools.getPlayerHead(uuid)
+        .addText(
+          "&e$playerName",
+          mutableListOf(
+            if (offlinePlayer.isOnline) "&aオンライン" else "&7オフライン",
+            "&7UUID: ${uuid.toString().substring(0, 8)}...",
+            "&eクリックで所有称号リストを表示",
+          ),
+        )
+        .guiRun { showPlayerTitlesGui(player, playerName) }
 
-      inv.setItem(9 + (i - startIndex), skull)
+      inv.setItem(ITEMS_START_SLOT + (i - startIndex), skull)
     }
 
-    // ナビゲーションボタン
-    if (page > 0) {
-      val prevButton =
-        ItemStack(Material.ARROW).addText("&a前のページ", mutableListOf()).guiRun {
-          showOwnersPage(player, titleName, titleId, owners, page - 1, totalPages)
-        }
-      inv.setItem(45, prevButton)
-    }
-
-    if (page < totalPages - 1) {
-      val nextButton =
-        ItemStack(Material.ARROW).addText("&a次のページ", mutableListOf()).guiRun {
-          showOwnersPage(player, titleName, titleId, owners, page + 1, totalPages)
-        }
-      inv.setItem(53, nextButton)
-    }
+    putNavigation(
+      inv, page, totalPages,
+      prevAction = { showOwnersPage(player, titleName, titleId, owners, page - 1, totalPages) },
+      nextAction = { showOwnersPage(player, titleName, titleId, owners, page + 1, totalPages) }
+    )
 
     player.openInventory(inv)
   }
 
-  /** プレイヤー称号リストのページを表示 */
+  /** プレイヤー称号リスト */
   private fun showPlayerTitlesPage(
     player: Player,
     targetPlayerName: String,
@@ -132,55 +178,59 @@ object TitleGui {
     page: Int,
     totalPages: Int,
   ) {
-    val inv = GuiInventory.createInventory(6, "$targetPlayerName の所有称号 (${page + 1}/$totalPages)")
+    val inv = GuiInventory.createInventory(INVENTORY_ROWS, "$targetPlayerName の所有称号 (${page + 1}/$totalPages)")
 
-    val gray_glass = ItemStack(Material.GRAY_STAINED_GLASS_PANE).addText("", mutableListOf())
-    for (i in 0..8) {
-      inv.setItem(i, gray_glass)
-      inv.setItem(i + 45, gray_glass)
-    }
+    putGrayGlass(inv)
 
-    // 称号アイテムを表示
-    val startIndex = page * 45
-    val endIndex = minOf(startIndex + 45, titles.size)
+    val startIndex = page * PAGE_SIZE
+    val endIndex = minOf(startIndex + PAGE_SIZE, titles.size)
 
     for (i in startIndex until endIndex) {
       val titleId = titles[i]
       val title = allTitles[titleId]
 
       if (title != null) {
-        val titleItem =
-          ItemStack(Material.NAME_TAG)
-            .addText(
-              "&6${title.title}",
-              mutableListOf(
-                "&7ID: $titleId",
-                "&b優先度: ${title.rarity}",
-                "&a所有者数: ${title.owners.size}人",
-                "&eクリックで所有者リストを表示",
-              ),
-            )
-            .guiRun { showTitleOwnersGui(player, titleId) }
-
-        inv.setItem(9 + (i - startIndex), titleItem)
+        val titleItem = createTitleItem(title, titleId) { showTitleOwnersGui(player, titleId) }
+        inv.setItem(ITEMS_START_SLOT + (i - startIndex), titleItem)
       }
     }
 
-    if (page > 0) {
-      val prevButton =
-        ItemStack(Material.ARROW).addText("&a前のページ", mutableListOf()).guiRun {
-          showPlayerTitlesPage(player, targetPlayerName, titles, page - 1, totalPages)
-        }
-      inv.setItem(45, prevButton)
+    putNavigation(
+      inv, page, totalPages,
+      prevAction = { showPlayerTitlesPage(player, targetPlayerName, titles, page - 1, totalPages) },
+      nextAction = { showPlayerTitlesPage(player, targetPlayerName, titles, page + 1, totalPages) }
+    )
+
+    player.openInventory(inv)
+  }
+
+  /** 全ての称号リスト */
+  private fun showAllTitlesPage(
+    player: Player,
+    titles: List<Title>,
+    page: Int,
+    totalPages: Int,
+  ) {
+    val inv = GuiInventory.createInventory(INVENTORY_ROWS, "全ての称号 (${page + 1}/$totalPages)")
+
+    putGrayGlass(inv)
+
+    val startIndex = page * PAGE_SIZE
+    val endIndex = minOf(startIndex + PAGE_SIZE, titles.size)
+
+    for (i in startIndex until endIndex) {
+      val title = titles[i]
+      val titleId = title.id
+
+      val titleItem = createTitleItem(title, titleId) { showTitleOwnersGui(player, titleId) }
+      inv.setItem(ITEMS_START_SLOT + (i - startIndex), titleItem)
     }
 
-    if (page < totalPages - 1) {
-      val nextButton =
-        ItemStack(Material.ARROW).addText("&a次のページ", mutableListOf()).guiRun {
-          showPlayerTitlesPage(player, targetPlayerName, titles, page + 1, totalPages)
-        }
-      inv.setItem(53, nextButton)
-    }
+    putNavigation(
+      inv, page, totalPages,
+      prevAction = { showAllTitlesPage(player, titles, page - 1, totalPages) },
+      nextAction = { showAllTitlesPage(player, titles, page + 1, totalPages) }
+    )
 
     player.openInventory(inv)
   }

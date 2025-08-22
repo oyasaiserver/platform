@@ -8,6 +8,7 @@ import com.baakun.dynamicprofile.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.exp.BehType
 import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.gui.TitleGui
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.createNewTitle
@@ -17,17 +18,9 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
-import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.showPlayerTitles
-import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.showTitleOwners
 import com.github.srain3.sociallikes.datas.Data
 import com.google.gson.GsonBuilder
-import java.io.File
-import java.io.FileWriter
-import java.nio.charset.StandardCharsets
-import java.util.*
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.ComponentLike
-import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -37,8 +30,10 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
+import java.io.File
+import java.io.FileWriter
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 object OperatorCommand : CommandExecutor {
   var last = 0L
@@ -326,39 +321,7 @@ object OperatorCommand : CommandExecutor {
 
           when (arg) {
             "list" -> {
-              val titles = allTitles.values.toList()
-              val spl = 5
-              var page = 0
-              if (args.size >= 3) page = (args[2].toIntOrNull()?.minus(1)) ?: 0
-              val messages = mutableListOf<ComponentLike>()
-
-              val hes = ItemStack(Material.PAPER)
-
-              hes.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
-
-              for (i in 0..<spl) {
-                val cr = spl * page + i
-                if (titles.size <= cr) break
-
-                val title = titles.get(cr)
-                val message =
-                  Component.text(" - ${title.id} - ${title.title}")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.runCommand("/op title owners ${title.id}"))
-                    .hoverEvent(
-                      Component.text("&6[称号] ${title.title}")
-                        .appendNewline()
-                        .append(Component.text("&a所有者数: &7${title.owners.size}"))
-                        .appendNewline()
-                        .append(Component.text("&aバリュー(表示優先度): &7${title.rarity}"))
-                        .appendNewline()
-                        .append(Component.text("&eクリックで所有者リストを表示"))
-                    )
-                messages.add(message)
-              }
-              player.sendMessage("-------->>すべての称号<<--------")
-              messages.forEach { u -> player.sendMessage(u) }
-              player.sendMessage("-----------------------------")
+              TitleGui.showAllTitlesGui(player)
             }
             "owners" -> {
               if (args.size < 3) {
@@ -372,11 +335,13 @@ object OperatorCommand : CommandExecutor {
                 player.sendMessage(Component.text("無効な称号IDです").color(NamedTextColor.RED))
                 return true
               }
-              showTitleOwners(player, titleId)
+              // GUIで称号所有者リストを表示
+              TitleGui.showTitleOwnersGui(player, titleId)
             }
             "player" -> {
               val targetPlayerName = if (args.size >= 3) args[2] else player.name
-              showPlayerTitles(player, targetPlayerName)
+              // GUIでプレイヤーの所有称号リストを表示
+              TitleGui.showPlayerTitlesGui(player, targetPlayerName)
             }
             "give" -> {
               player.sendMessage(
