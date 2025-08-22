@@ -1,0 +1,140 @@
+messages:
+  prefix:
+    type: TCHAT
+    message: '&8(&6zVoteParty&8) '
+  inventory:
+    'null':
+      type: TCHAT
+      message: '&cImpossible to find the inventory with the id &6%id%&c.'
+    clone:
+      'null':
+        type: TCHAT
+        message: '&cThe inventory clone is null!'
+    open:
+      error:
+        type: TCHAT
+        message: '&cAn error occurred with the opening of the inventory &6%id%&c.'
+    button:
+      previous:
+        type: TCHAT
+        message: '&f» &7Previous page'
+      next:
+        type: TCHAT
+        message: '&f» &7Next page'
+  time:
+    day:
+      type: TCHAT
+      message: '%02d jour(s) %02d heure(s) %02d minute(s) %02d seconde(s)'
+    hour:
+      type: TCHAT
+      message: '%02d heure(s) %02d minute(s) %02d seconde(s)'
+      simple:
+        type: TCHAT
+        message: '%02d:%02d:%02d'
+    minute:
+      type: TCHAT
+      message: '%02d minute(s) %02d seconde(s)'
+    second:
+      type: TCHAT
+      message: '%02d seconde(s)'
+  command:
+    syntaxe:
+      error:
+        type: TCHAT
+        message: '&cYou must execute the command like this&7: &a%syntax%'
+      help:
+        type: TCHAT
+        message: '&a%syntax% &b» &7%description%'
+    'no':
+      permission:
+        type: TCHAT
+        message: '&cYou do not have permission to run this command.'
+      console:
+        type: TCHAT
+        message: '&cOnly one player can execute this command.'
+      arg:
+        type: TCHAT
+        message: '&cImpossible to find the command with its arguments.'
+  description:
+    version:
+      type: TCHAT
+      message: Show plugin version
+    reload:
+      type: TCHAT
+      message: Reload configurations
+    config:
+      type: TCHAT
+      message: Change configuration
+    add:
+      type: TCHAT
+      message: Add a vote to a player.
+    remove:
+      type: TCHAT
+      message: Remove a vote to a player.
+    startparty:
+      type: TCHAT
+      message: Force launch a Vote Party
+    help:
+      type: TCHAT
+      message: Show commands
+    vote:
+      type: TCHAT
+      message: Allows you to open the voting inventory
+  reload:
+    success:
+      type: TCHAT
+      message: '&aYou have just reloaded the configuration.'
+    error:
+      type: TCHAT
+      message: '&cAn error has occurred, go to the console.'
+  vote:
+    informations:
+      type: CENTER
+      messages:
+        - '&8&m-+------------------------------+-'
+        - ''
+        - '&7Vote pour le serveur &5Serveur name here&7 !'
+        - ''
+        - '&8&m-+------------------------------+-'
+    broadcast:
+      action:
+        type: ACTION
+        message: '&f%player% &7has just voted &8(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&8)'
+      tchat:
+        type: TCHAT
+        message: '&f%player% &7has just voted &8(&b%zvoteparty_votes_recorded%&7/&a%zvoteparty_votes_required_total%&8)'
+    message:
+      type: TCHAT
+      message: '&7You have just voted for the server &5Serveur name&7.'
+    later:
+      type: TCHAT
+      message: '&7You have just received &b%amount% &7votes.'
+    send:
+      type: TCHAT
+      message: '&7You just gave a vote to &f%player%&7'
+    remove:
+      success:
+        type: TCHAT
+        message: '&aYou have just removed a yours from the &f%player%&a.'
+      error:
+        type: TCHAT
+        message:
+          '&cImpossible to remove a vote from the &f%player%&c, the player
+          has no vote.'
+    needed:
+      type: TCHAT
+      messages:
+        - '&b%zvoteparty_votes_required_party% &fvotes &7needed for the next party !'
+        - '&7Serveur Minecraft Vote&8: &fhttps://serveur-minecraft-vote.fr/'
+    party:
+      start:
+        type: CENTER
+        messages:
+          - '&8&m-+------------------------------+-'
+          - ''
+          - '&7Launch of the voting party!'
+          - ''
+          - '&8&m-+------------------------------+-'
+    startparty:
+      type: TCHAT
+      message: '&aYou just launched the voting party.'
