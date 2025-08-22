@@ -26,7 +26,7 @@ export const plugins = [
   'https://github.com/SkriptLang/Skript/releases/download/2.12.1/Skript-2.12.1.jar',
   'https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar',
   'https://github.com/2008Choco/VeinMiner/releases/download/v2.3.0/VeinMiner-Bukkit-2.3.0.jar',
-  'https://github.com/Aust1n46/VentureChat/releases/download/v3.7.2/VentureChat-3.7.2.jar',
+  'https://github.com/Aust1n46/VentureChat/releases/download/v3.8.0/VentureChat-3.8.0.jar',
   'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
   'https://github.com/Sonnykimee/SQLiteLib/releases/download/0.3.4/SQLiteLib-0.3.4.jar',
   'https://github.com/steve4744/TNTRun/releases/download/v9.33-SNAPSHOT.140/TNTRun_reloaded-9.33-SNAPSHOT.jar',
