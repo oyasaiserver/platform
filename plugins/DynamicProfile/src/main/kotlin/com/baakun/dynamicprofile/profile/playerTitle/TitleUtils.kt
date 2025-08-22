@@ -2,6 +2,7 @@ package com.baakun.dynamicprofile.profile.playerTitle
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
 import com.baakun.dynamicprofile.Tools
+import com.baakun.dynamicprofile.gui.TitleGui
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -77,5 +78,15 @@ object TitleUtils {
       .filter { it: Title -> it.owners.contains(uuid) }
       .map { it.id }
       .collect(Collectors.toList())
+  }
+
+  /** 指定した称号の所有者リストをGUIで表示する */
+  fun showTitleOwners(player: Player, titleId: Int) {
+    TitleGui.showTitleOwnersGui(player, titleId)
+  }
+
+  /** 指定したプレイヤーの所有称号リストをGUIで表示する */
+  fun showPlayerTitles(player: Player, targetPlayerName: String) {
+    TitleGui.showPlayerTitlesGui(player, targetPlayerName)
   }
 }

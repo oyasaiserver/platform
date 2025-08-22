@@ -85,7 +85,7 @@ object SelectTitle {
     player.openInventory(inventory)
   }
 
-  /** プレイヤーヘッドを配置 */
+  /** 称号のアイテムを配置 */
   private fun titles(player: Player, page: Int, inventory: Inventory) {
     val titles = getTitles(player).toMutableList()
     titles.sortByDescending { getTitleFromId(it).rarity }

@@ -17,6 +17,8 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.showPlayerTitles
+import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.showTitleOwners
 import com.github.srain3.sociallikes.datas.Data
 import com.google.gson.GsonBuilder
 import java.io.File
@@ -25,6 +27,8 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.ComponentLike
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Statistic
@@ -339,18 +343,40 @@ object OperatorCommand : CommandExecutor {
                 val title = titles.get(cr)
                 val message =
                   Component.text(" - ${title.id} - ${title.title}")
+                    .color(NamedTextColor.YELLOW)
+                    .clickEvent(ClickEvent.runCommand("/op title owners ${title.id}"))
                     .hoverEvent(
                       Component.text("&6[称号] ${title.title}")
                         .appendNewline()
                         .append(Component.text("&a所有者数: &7${title.owners.size}"))
                         .appendNewline()
                         .append(Component.text("&aバリュー(表示優先度): &7${title.rarity}"))
+                        .appendNewline()
+                        .append(Component.text("&eクリックで所有者リストを表示"))
                     )
                 messages.add(message)
               }
               player.sendMessage("-------->>すべての称号<<--------")
               messages.forEach { u -> player.sendMessage(u) }
               player.sendMessage("-----------------------------")
+            }
+            "owners" -> {
+              if (args.size < 3) {
+                player.sendMessage(
+                  Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED)
+                )
+                return true
+              }
+              val titleId = args[2].toIntOrNull()
+              if (titleId == null) {
+                player.sendMessage(Component.text("無効な称号IDです").color(NamedTextColor.RED))
+                return true
+              }
+              showTitleOwners(player, titleId)
+            }
+            "player" -> {
+              val targetPlayerName = if (args.size >= 3) args[2] else player.name
+              showPlayerTitles(player, targetPlayerName)
             }
             "give" -> {
               player.sendMessage(
@@ -450,7 +476,17 @@ object OperatorCommandCompleter : TabCompleter {
               return list
             }
             "title" ->
-              return mutableListOf("list", "add", "remove", "give", "deprive", "reload", "edit")
+              return mutableListOf(
+                "list",
+                "add",
+                "remove",
+                "give",
+                "deprive",
+                "reload",
+                "edit",
+                "owners",
+                "player",
+              )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
           }
@@ -461,10 +497,12 @@ object OperatorCommandCompleter : TabCompleter {
               when (args[1]) {
                 "add" -> return mutableListOf("<新しい称号の名前>")
                 "edit",
-                "remove" ->
+                "remove",
+                "owners" ->
                   return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+                "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
               }
             }
             "setCount" -> return BehType.entries.map { it.name }.toMutableList()
