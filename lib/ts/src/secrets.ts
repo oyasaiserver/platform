@@ -21,3 +21,9 @@ export const secrets = secretsSchema.parse(
         .then(it => it.DOTENV_PRIVATE_KEY))
   })
 )
+
+export class Secrets {
+  public static fromEnv<T extends readonly string[]>(keys: T): Record<T[number], string> {
+    return {} as any
+  }
+}

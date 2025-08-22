@@ -1,5 +1,5 @@
 import type { Environment } from '@oyasaiserver/schema/environment'
-import type { Service } from '@oyasaiserver/json/store/compose_spec'
+import type { Service } from '@json-types/compose'
 import { config } from '../config.ts'
 import { plugins } from '../plugins.ts'
 

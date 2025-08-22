@@ -2,7 +2,6 @@
   "type": "module",
   "workspaces": [
     "apps/*",
-    "gen/json/ts",
     "infra/*",
     "lib/ts",
     "packages/*",
@@ -17,7 +16,7 @@
   },
   "dependencies": {
     "zod": "^4.0.17",
-    "zx": "^8.8.0"
+    "zx": "^8.8.1"
   },
   "devDependencies": {
     "@prettier/plugin-oxc": "^0.0.4",
@@ -25,7 +24,7 @@
     "oxlint": "^1.12.0",
     "prettier": "^3.6.2",
     "sort-package-json": "^3.4.0",
-    "taze": "^19.1.0",
+    "taze": "^19.3.0",
     "typescript": "^5.9.2",
     "wrangler": "^4.31.0"
   }

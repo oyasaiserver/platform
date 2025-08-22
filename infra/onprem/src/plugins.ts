@@ -33,6 +33,7 @@ export const plugins = [
   'https://www.spigotmc.org/resources/crackshot-guns.48301/download?version=592852',
   'https://www.spigotmc.org/resources/inventory-shop.47694/download?version=257036',
   'https://www.spigotmc.org/resources/simple-elevators-1-8-1-20.44462/download?version=601314',
+  'https://www.spigotmc.org/resources/votingplugin.15358/download?version=595900',
   'https://www.spigotmc.org/resources/particlehats.1007/download?version=584502',
   'https://www.spigotmc.org/resources/tokenmanager.8610/download?version=494520',
   'https://www.spigotmc.org/resources/slot-machine.22023/download?version=596585',
@@ -49,7 +50,5 @@ export const plugins = [
   'https://cdn.modrinth.com/data/z4HZZnLr/versions/o8Ytdhc5/FastAsyncWorldEdit-Paper-2.13.1.jar',
   'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
   'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
-  'https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar',
-  // CoreProtect
-  'https://www.patreon.com/file?h=136053027&m=513054290'
+  'https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar'
 ] as const

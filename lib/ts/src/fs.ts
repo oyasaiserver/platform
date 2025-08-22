@@ -1,5 +1,4 @@
-import type { PathLike } from 'node:fs'
-import { type FileHandle, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 
 export const rf = {
