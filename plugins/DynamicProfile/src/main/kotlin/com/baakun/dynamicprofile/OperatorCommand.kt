@@ -20,6 +20,10 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
 import com.github.srain3.sociallikes.datas.Data
 import com.google.gson.GsonBuilder
+import java.io.File
+import java.io.FileWriter
+import java.nio.charset.StandardCharsets
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -30,10 +34,6 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import java.io.File
-import java.io.FileWriter
-import java.nio.charset.StandardCharsets
-import java.util.*
 
 object OperatorCommand : CommandExecutor {
   var last = 0L

@@ -12,8 +12,8 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
 
 object TitleGui {
 
@@ -57,16 +57,14 @@ object TitleGui {
     nextAction: () -> Unit,
   ) {
     if (page > 0) {
-      val prevButton = ItemStack(Material.ARROW)
-        .addText("&a前のページ", mutableListOf())
-        .guiRun { prevAction() }
+      val prevButton =
+        ItemStack(Material.ARROW).addText("&a前のページ", mutableListOf()).guiRun { prevAction() }
       inv.setItem(PREV_BUTTON_SLOT, prevButton)
     }
 
     if (page < totalPages - 1) {
-      val nextButton = ItemStack(Material.ARROW)
-        .addText("&a次のページ", mutableListOf())
-        .guiRun { nextAction() }
+      val nextButton =
+        ItemStack(Material.ARROW).addText("&a次のページ", mutableListOf()).guiRun { nextAction() }
       inv.setItem(NEXT_BUTTON_SLOT, nextButton)
     }
   }
@@ -123,19 +121,21 @@ object TitleGui {
     page: Int,
     totalPages: Int,
   ) {
-    val inv = GuiInventory.createInventory(INVENTORY_ROWS, "称号「$titleName」の所有者 (${page + 1}/$totalPages)")
+    val inv =
+      GuiInventory.createInventory(INVENTORY_ROWS, "称号「$titleName」の所有者 (${page + 1}/$totalPages)")
 
     putGrayGlass(inv)
 
-    val titleItem = ItemStack(Material.NAME_TAG)
-      .addText(
-        "&6$titleName",
-        mutableListOf(
-          "&7ID: $titleId",
-          "&b優先度: ${allTitles[titleId]?.rarity ?: 0}",
-          "&a所有者数: ${owners.size}人",
-        ),
-      )
+    val titleItem =
+      ItemStack(Material.NAME_TAG)
+        .addText(
+          "&6$titleName",
+          mutableListOf(
+            "&7ID: $titleId",
+            "&b優先度: ${allTitles[titleId]?.rarity ?: 0}",
+            "&a所有者数: ${owners.size}人",
+          ),
+        )
     inv.setItem(TITLE_INFO_SLOT, titleItem)
 
     // 所有者ヘッド
@@ -147,24 +147,27 @@ object TitleGui {
       val offlinePlayer = Bukkit.getOfflinePlayer(uuid)
       val playerName = offlinePlayer.name ?: "Unknown"
 
-      val skull = Tools.getPlayerHead(uuid)
-        .addText(
-          "&e$playerName",
-          mutableListOf(
-            if (offlinePlayer.isOnline) "&aオンライン" else "&7オフライン",
-            "&7UUID: ${uuid.toString().substring(0, 8)}...",
-            "&eクリックで所有称号リストを表示",
-          ),
-        )
-        .guiRun { showPlayerTitlesGui(player, playerName) }
+      val skull =
+        Tools.getPlayerHead(uuid)
+          .addText(
+            "&e$playerName",
+            mutableListOf(
+              if (offlinePlayer.isOnline) "&aオンライン" else "&7オフライン",
+              "&7UUID: ${uuid.toString().substring(0, 8)}...",
+              "&eクリックで所有称号リストを表示",
+            ),
+          )
+          .guiRun { showPlayerTitlesGui(player, playerName) }
 
       inv.setItem(ITEMS_START_SLOT + (i - startIndex), skull)
     }
 
     putNavigation(
-      inv, page, totalPages,
+      inv,
+      page,
+      totalPages,
       prevAction = { showOwnersPage(player, titleName, titleId, owners, page - 1, totalPages) },
-      nextAction = { showOwnersPage(player, titleName, titleId, owners, page + 1, totalPages) }
+      nextAction = { showOwnersPage(player, titleName, titleId, owners, page + 1, totalPages) },
     )
 
     player.openInventory(inv)
@@ -178,7 +181,11 @@ object TitleGui {
     page: Int,
     totalPages: Int,
   ) {
-    val inv = GuiInventory.createInventory(INVENTORY_ROWS, "$targetPlayerName の所有称号 (${page + 1}/$totalPages)")
+    val inv =
+      GuiInventory.createInventory(
+        INVENTORY_ROWS,
+        "$targetPlayerName の所有称号 (${page + 1}/$totalPages)",
+      )
 
     putGrayGlass(inv)
 
@@ -196,21 +203,18 @@ object TitleGui {
     }
 
     putNavigation(
-      inv, page, totalPages,
+      inv,
+      page,
+      totalPages,
       prevAction = { showPlayerTitlesPage(player, targetPlayerName, titles, page - 1, totalPages) },
-      nextAction = { showPlayerTitlesPage(player, targetPlayerName, titles, page + 1, totalPages) }
+      nextAction = { showPlayerTitlesPage(player, targetPlayerName, titles, page + 1, totalPages) },
     )
 
     player.openInventory(inv)
   }
 
   /** 全ての称号リスト */
-  private fun showAllTitlesPage(
-    player: Player,
-    titles: List<Title>,
-    page: Int,
-    totalPages: Int,
-  ) {
+  private fun showAllTitlesPage(player: Player, titles: List<Title>, page: Int, totalPages: Int) {
     val inv = GuiInventory.createInventory(INVENTORY_ROWS, "全ての称号 (${page + 1}/$totalPages)")
 
     putGrayGlass(inv)
@@ -227,9 +231,11 @@ object TitleGui {
     }
 
     putNavigation(
-      inv, page, totalPages,
+      inv,
+      page,
+      totalPages,
       prevAction = { showAllTitlesPage(player, titles, page - 1, totalPages) },
-      nextAction = { showAllTitlesPage(player, titles, page + 1, totalPages) }
+      nextAction = { showAllTitlesPage(player, titles, page + 1, totalPages) },
     )
 
     player.openInventory(inv)
