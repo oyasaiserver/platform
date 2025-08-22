@@ -76,13 +76,22 @@ object OperatorCommand : CommandExecutor {
       move += (pl.getStatistic(Statistic.SPRINT_ONE_CM) / 100)
       move += (pl.getStatistic(Statistic.FALL_ONE_CM) / 100)
       move += (pl.getStatistic(Statistic.CROUCH_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.BOAT_ONE_CM) / 100)
       move += (pl.getStatistic(Statistic.WALK_ON_WATER_ONE_CM) / 100)
       move += (pl.getStatistic(Statistic.WALK_UNDER_WATER_ONE_CM) / 100)
       move += (pl.getStatistic(Statistic.AVIATE_ONE_CM) / 100)
       statsData.distance += move
       statsData.setCount(BehType.MOVE, 0)
       statsData.addCount(BehType.MOVE, move)
+
+      var vehicle = 0
+      vehicle += (pl.getStatistic(Statistic.BOAT_ONE_CM) / 100)
+      vehicle += (pl.getStatistic(Statistic.HORSE_ONE_CM) / 100)
+      vehicle += (pl.getStatistic(Statistic.PIG_ONE_CM) / 100)
+      vehicle += (pl.getStatistic(Statistic.MINECART_ONE_CM) / 100)
+      vehicle += (pl.getStatistic(Statistic.STRIDER_ONE_CM) / 100)
+      statsData.distance += vehicle
+      statsData.setCount(BehType.VEHICLE, 0)
+      statsData.addCount(BehType.VEHICLE, vehicle)
 
       val fly = ((pl.getStatistic(Statistic.FLY_ONE_CM) / 100))
       statsData.distance += fly
@@ -104,6 +113,13 @@ object OperatorCommand : CommandExecutor {
       val voteCount = statsData.get(BehType.VOTE)
       val voteExp = Calculator.expAmount(BehType.VOTE) * voteCount
       statsData.exp += voteExp
+
+      // 既存のVEHICLE数を取得
+      val vehicleCount = statsData.get(BehType.VEHICLE)
+
+      // VEHICLE数に応じた経験値を加算
+      val vehicleExp = Calculator.expAmount(BehType.VEHICLE) * vehicleCount
+      statsData.exp += vehicleExp
 
       val file = File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${uuid}.json")
       try {
