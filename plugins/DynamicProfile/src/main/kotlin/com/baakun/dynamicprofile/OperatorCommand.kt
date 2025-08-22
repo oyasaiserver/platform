@@ -52,85 +52,91 @@ object OperatorCommand : CommandExecutor {
   ) {
     var num = 0
     for (i in start until end) {
-      val uuid = userList[i]
-      num++
-      val statsData = getStats(uuid)
-      val pl = Bukkit.getOfflinePlayer(uuid)
-      statsData.exp = 0
-
-      statsData.setCount(BehType.LIKE, 0)
-      statsData.setCount(BehType.RECEIVE_LIKE, 0)
-
-      statsData.addCount(BehType.LIKE, userLikes.getOrDefault(uuid, 0))
-      statsData.addCount(BehType.RECEIVE_LIKE, userReceiveLikes.getOrDefault(uuid, 0))
-
-      var blockNum = 0
-      for (material in blocks) {
-        blockNum += pl.getStatistic(Statistic.USE_ITEM, material)
-      }
-      statsData.setCount(BehType.PLACE_BLOCK, 0)
-      statsData.addCount(BehType.PLACE_BLOCK, blockNum)
-
-      var move = 0
-      move += (pl.getStatistic(Statistic.WALK_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.SPRINT_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.FALL_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.CROUCH_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.WALK_ON_WATER_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.WALK_UNDER_WATER_ONE_CM) / 100)
-      move += (pl.getStatistic(Statistic.AVIATE_ONE_CM) / 100)
-      statsData.distance += move
-      statsData.setCount(BehType.MOVE, 0)
-      statsData.addCount(BehType.MOVE, move)
-
-      var vehicle = 0
-      vehicle += (pl.getStatistic(Statistic.BOAT_ONE_CM) / 100)
-      vehicle += (pl.getStatistic(Statistic.HORSE_ONE_CM) / 100)
-      vehicle += (pl.getStatistic(Statistic.PIG_ONE_CM) / 100)
-      vehicle += (pl.getStatistic(Statistic.MINECART_ONE_CM) / 100)
-      vehicle += (pl.getStatistic(Statistic.STRIDER_ONE_CM) / 100)
-      statsData.distance += vehicle
-      statsData.setCount(BehType.VEHICLE, 0)
-      statsData.addCount(BehType.VEHICLE, vehicle)
-
-      val fly = ((pl.getStatistic(Statistic.FLY_ONE_CM) / 100))
-      statsData.distance += fly
-      statsData.setCount(BehType.FLY, 0)
-      statsData.addCount(BehType.FLY, fly)
-
-      statsData.setCount(BehType.JUMP, 0)
-      statsData.addCount(BehType.JUMP, pl.getStatistic(Statistic.JUMP))
-
-      val exp =
-        Calculator.expAmount(BehType.PLAY_TIME) *
-          ((pl.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20) / 60)
-      statsData.exp += exp
-
-      val chatCount = statsData.get(BehType.CHAT)
-      val chatExp = Calculator.expAmount(BehType.CHAT) * chatCount
-      statsData.exp += chatExp
-
-      val voteCount = statsData.get(BehType.VOTE)
-      val voteExp = Calculator.expAmount(BehType.VOTE) * voteCount
-      statsData.exp += voteExp
-
-      // 既存のVEHICLE数を取得
-      val vehicleCount = statsData.get(BehType.VEHICLE)
-
-      // VEHICLE数に応じた経験値を加算
-      val vehicleExp = Calculator.expAmount(BehType.VEHICLE) * vehicleCount
-      statsData.exp += vehicleExp
-
-      val file = File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${uuid}.json")
       try {
-        file.parentFile?.mkdirs()
-        if (!file.exists()) file.createNewFile()
-        FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
-      } catch (e: Exception) {
-        plugin.logger.warning("[$threadName] ${pl.name} の保存失敗: ${e.message}")
-      }
+        val uuid = userList[i]
+        num++
+        val statsData = getStats(uuid)
+        val pl = Bukkit.getOfflinePlayer(uuid)
+        statsData.exp = 0
 
-      plugin.logger.info("$threadName: [$num/${userList.size}] ${pl.name} $exp")
+        statsData.setCount(BehType.LIKE, 0)
+        statsData.setCount(BehType.RECEIVE_LIKE, 0)
+
+        statsData.addCount(BehType.LIKE, userLikes.getOrDefault(uuid, 0))
+        statsData.addCount(BehType.RECEIVE_LIKE, userReceiveLikes.getOrDefault(uuid, 0))
+
+        var blockNum = 0
+        for (material in blocks) {
+          blockNum += pl.getStatistic(Statistic.USE_ITEM, material)
+        }
+        statsData.setCount(BehType.PLACE_BLOCK, 0)
+        statsData.addCount(BehType.PLACE_BLOCK, blockNum)
+
+        var move = 0
+        move += (pl.getStatistic(Statistic.WALK_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.SPRINT_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.FALL_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.CROUCH_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.WALK_ON_WATER_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.WALK_UNDER_WATER_ONE_CM) / 100)
+        move += (pl.getStatistic(Statistic.AVIATE_ONE_CM) / 100)
+        statsData.distance += move
+        statsData.setCount(BehType.MOVE, 0)
+        statsData.addCount(BehType.MOVE, move)
+
+        // VEHICLEの移動距離を計算（各種乗り物を含む）
+        var vehicle = 0
+        vehicle += (pl.getStatistic(Statistic.BOAT_ONE_CM) / 100)
+        vehicle += (pl.getStatistic(Statistic.HORSE_ONE_CM) / 100)
+        vehicle += (pl.getStatistic(Statistic.PIG_ONE_CM) / 100)
+        vehicle += (pl.getStatistic(Statistic.MINECART_ONE_CM) / 100)
+        vehicle += (pl.getStatistic(Statistic.STRIDER_ONE_CM) / 100)
+        statsData.distance += vehicle
+        statsData.setCount(BehType.VEHICLE, 0)
+        statsData.addCount(BehType.VEHICLE, vehicle)
+
+        val fly = ((pl.getStatistic(Statistic.FLY_ONE_CM) / 100))
+        statsData.distance += fly
+        statsData.setCount(BehType.FLY, 0)
+        statsData.addCount(BehType.FLY, fly)
+
+        statsData.setCount(BehType.JUMP, 0)
+        statsData.addCount(BehType.JUMP, pl.getStatistic(Statistic.JUMP))
+
+        val exp =
+          Calculator.expAmount(BehType.PLAY_TIME) *
+            ((pl.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20) / 60)
+        statsData.exp += exp
+
+        val chatCount = statsData.get(BehType.CHAT)
+        val chatExp = Calculator.expAmount(BehType.CHAT) * chatCount
+        statsData.exp += chatExp
+
+        val voteCount = statsData.get(BehType.VOTE)
+        val voteExp = Calculator.expAmount(BehType.VOTE) * voteCount
+        statsData.exp += voteExp
+
+        // 既存のVEHICLE数を取得
+        val vehicleCount = statsData.get(BehType.VEHICLE)
+
+        // VEHICLE数に応じた経験値を加算
+        val vehicleExp = Calculator.expAmount(BehType.VEHICLE) * vehicleCount
+        statsData.exp += vehicleExp
+
+        val file = File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${uuid}.json")
+        try {
+          file.parentFile?.mkdirs()
+          if (!file.exists()) file.createNewFile()
+          FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
+        } catch (e: Exception) {
+          plugin.logger.warning("[$threadName] ${pl.name} の保存失敗: ${e.message}")
+        }
+
+        plugin.logger.info("$threadName: [$num/${userList.size}] ${pl.name} $exp")
+      } catch (e: Exception) {
+        plugin.logger.severe("[$threadName] ユーザー統計処理エラー (index: $i): ${e.message}")
+        e.printStackTrace()
+      }
     }
   }
 
