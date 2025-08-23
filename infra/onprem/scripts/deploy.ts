@@ -13,9 +13,6 @@ if (secrets.ENVIRONMENT === 'local') {
   exit(1)
 }
 
-console.log(secrets)
-process.exit(0)
-
 const paths = {
   dist: 'dist',
   assets: 'assets',
