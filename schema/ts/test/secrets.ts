@@ -7,7 +7,7 @@ import { secrets } from '../src/secrets.ts'
 
 await suite(import.meta.filename, async () => {
   await test('secrets schema should match .env', async () => {
-    const dir = `${directory.root}/envs`
+    const dir = `${directory.root}/secrets`
     const environments = await readdir(dir)
     for (const environment of environments) {
       const path = join(dir, environment, '.env')
