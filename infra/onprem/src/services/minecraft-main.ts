@@ -4,14 +4,14 @@ import { secrets } from '@oyasaiserver/lib/secrets'
 import type { Service } from '@json-types/compose'
 
 export const minecraftMain: Service = {
-  container_name: 'minecraft-main',
   depends_on: ['mariadb'],
   image: 'itzg/minecraft-server:java24-graalvm',
   ports: [
     `${config.services.minecraft.port[secrets.ENVIRONMENT]}:${config.port.minecraft.value}/${config.port.minecraft.protocol}`,
     `${config.services.minecraftBedrock.port[secrets.ENVIRONMENT]}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`,
     '8192:8192/tcp', // vote
-    '8100:8100/tcp' // bluemap
+    '8100:8100/tcp', // bluemap,
+    '25575:25575/tcp' // rcon
   ],
   restart: 'unless-stopped',
   tty: true,
@@ -27,7 +27,8 @@ export const minecraftMain: Service = {
     PLUGINS: plugins.join(),
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
-    DISCORDSRV_TOKEN: secrets.DISCORDSRV_TOKEN
+    DISCORDSRV_TOKEN: secrets.DISCORDSRV_TOKEN,
+    RCON_PASSWORD: secrets.RCON_PASSWORD
   },
   volumes: ['./minecraft-main:/data']
 }

@@ -63,7 +63,7 @@ export class CloudflareStack extends TerraformStack {
     if (secrets.ENVIRONMENT === 'production') {
       new R2Bucket(this, envAwareId('r2-bucket'), {
         accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-        name: envAwareId('bucket')
+        name: secrets.R2_BUCKET_NAME
       })
     }
   }
