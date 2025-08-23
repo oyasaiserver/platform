@@ -1,6 +1,7 @@
 import type { Service } from '@json-types/compose'
 
 export const mariadb: Service = {
+  container_name: 'mariadb',
   image: 'mariadb:10.4.28',
   restart: 'unless-stopped',
   environment: {

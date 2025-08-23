@@ -13,7 +13,10 @@ export const secrets = z
     // cloudflare
     CLOUDFLARE_ACCOUNT_ID: z.string(),
     CLOUDFLARE_API_TOKEN: z.string(),
-    CLOUDFLARE_TUNNEL_SECRET: z.string(),
+    CLOUDFLARE_ACCESS_KEY_ID: z.string(),
+    CLOUDFLARE_SECRET_ACCESS_KEY: z.string(),
+    R2_BUCKET_NAME: z.string(),
+    RESTIC_PASSWORD: z.string(),
     API_ENDPOINT: z.url(),
     BEARER: z.string(),
     // github
@@ -24,6 +27,7 @@ export const secrets = z
     TF_API_TOKEN: z.string(),
     TF_TOKEN_app_terraform_io: z.string(),
     // plugins
-    DISCORDSRV_TOKEN: z.string()
+    DISCORDSRV_TOKEN: z.string(),
+    RCON_PASSWORD: z.string()
   })
   .readonly()
