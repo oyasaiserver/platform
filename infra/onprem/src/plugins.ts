@@ -31,6 +31,7 @@ export const plugins = [
   'https://github.com/Sonnykimee/SQLiteLib/releases/download/0.3.4/SQLiteLib-0.3.4.jar',
   'https://github.com/steve4744/TNTRun/releases/download/v9.33-SNAPSHOT.140/TNTRun_reloaded-9.33-SNAPSHOT.jar',
   'https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.11/bluemap-5.11-paper.jar',
+  'https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar',
   'https://www.spigotmc.org/resources/crackshot-guns.48301/download?version=592852',
   'https://www.spigotmc.org/resources/inventory-shop.47694/download?version=257036',
   'https://www.spigotmc.org/resources/simple-elevators-1-8-1-20.44462/download?version=601314',
