@@ -9,14 +9,10 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "bump": "taze latest --recursive --install --write",
     "codegen": "codegen && npm run format && ./gradlew spotlessApply",
     "format": "sort-package-json '**/package.json' && prettier . --write",
-    "lint": "oxlint --fix"
-  },
-  "dependencies": {
-    "zod": "^4.0.17",
-    "zx": "^8.8.1"
+    "lint": "oxlint --fix",
+    "update": "taze latest --recursive --install --write"
   },
   "devDependencies": {
     "@prettier/plugin-oxc": "^0.0.4",
@@ -26,6 +22,6 @@
     "sort-package-json": "^3.4.0",
     "taze": "^19.3.0",
     "typescript": "^5.9.2",
-    "wrangler": "^4.31.0"
+    "wrangler": "^4.32.0"
   }
 }
