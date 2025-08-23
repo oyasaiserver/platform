@@ -14,7 +14,8 @@ export const minecraftMainBackup: Service = {
     AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
     EXCLUDES: '*.jar,cache,logs,*.tmp,bluemap',
-    BACKUP_INTERVAL: '1h',
+    BACKUP_INTERVAL: '6h',
+    PRUNE_RESTIC_RETENTION: '--keep-daily 7 --keep-weekly 4 --keep-monthly 3',
     RESTIC_VERBOSE: true
   },
   volumes: ['./minecraft-main:/data:ro']
