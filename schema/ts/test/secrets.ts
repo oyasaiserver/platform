@@ -1,9 +1,8 @@
-import { readdir } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { suite, test } from 'node:test'
 import { parseEnv } from 'node:util'
 import { directory } from '@oyasaiserver/lib/directory'
-import { readFileContent } from '@oyasaiserver/lib/fs'
 import { secrets } from '../src/secrets.ts'
 
 await suite(import.meta.filename, async () => {
@@ -12,7 +11,7 @@ await suite(import.meta.filename, async () => {
     const environments = await readdir(dir)
     for (const environment of environments) {
       const path = join(dir, environment, '.env')
-      await readFileContent(path).then(parseEnv).then(secrets.parse)
+      await readFile(path, 'utf-8').then(parseEnv).then(secrets.parse)
     }
   })
 })

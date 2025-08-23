@@ -27,5 +27,3 @@ export const secrets = z
     DISCORDSRV_TOKEN: z.string()
   })
   .readonly()
-
-export type Secrets = z.infer<typeof secrets>

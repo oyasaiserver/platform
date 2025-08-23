@@ -2,7 +2,7 @@ import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record/index.js'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import { envAware } from '@oyasaiserver/lib/environment'
+import { envAwareId } from '../ids.ts'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
@@ -19,7 +19,7 @@ export class CloudflareStack extends TerraformStack {
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
-    new NamedCloudBackend(this, envAware(id))
+    new NamedCloudBackend(this, envAwareId(id))
 
     new CloudflareProvider(this, id, {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
@@ -30,7 +30,7 @@ export class CloudflareStack extends TerraformStack {
       status: 'active'
     })
 
-    const rootDnsRecord = new DnsRecord(this, envAware('root-dns-record'), {
+    const rootDnsRecord = new DnsRecord(this, envAwareId('root-dns-record'), {
       ttl: 1, // automatic
       zoneId: this.zoneId,
       name:
@@ -43,7 +43,7 @@ export class CloudflareStack extends TerraformStack {
     for (const worker of this.workers) {
       const domain = `${worker}.${rootDnsRecord.name}`
 
-      new DnsRecord(this, envAware(worker, 'dns-record'), {
+      new DnsRecord(this, envAwareId(worker, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
         name: domain.replace('.oyasai.io', ''),
@@ -52,10 +52,10 @@ export class CloudflareStack extends TerraformStack {
         content: this.dummyIp
       })
 
-      new WorkersRoute(this, envAware(worker, 'workers-route'), {
+      new WorkersRoute(this, envAwareId(worker, 'workers-route'), {
         zoneId: this.zoneId,
         pattern: `${domain}/*`,
-        script: envAware(worker)
+        script: envAwareId(worker)
       })
     }
   }
