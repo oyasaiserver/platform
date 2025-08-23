@@ -1,7 +1,7 @@
 import { config } from '../config.ts'
 import { plugins } from '../plugins.ts'
-import { secrets } from "@oyasaiserver/lib/secrets";
-import type { Service } from "@json-types/compose";
+import { secrets } from '@oyasaiserver/lib/secrets'
+import type { Service } from '@json-types/compose'
 
 export const minecraftMain: Service = {
   depends_on: ['mariadb'],
@@ -28,5 +28,5 @@ export const minecraftMain: Service = {
     // TODO more granular control over secrets
     DISCORDSRV_TOKEN: secrets.DISCORDSRV_TOKEN
   },
-  volumes: ['./minecraft-main:/data'],
+  volumes: ['./minecraft-main:/data']
 }
