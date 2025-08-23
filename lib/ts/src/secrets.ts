@@ -1,13 +1,14 @@
 import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
 import { secrets as secretsSchema } from '@oyasaiserver/schema/secrets'
+import { environment as environmentSchema } from '@oyasaiserver/schema/environment'
 import { directory } from './directory.ts'
 import { readFile } from 'node:fs/promises'
 import { env } from 'node:process'
 
-const environment = env.ENVIRONMENT
+const environment = environmentSchema.parse(env.ENVIRONMENT)
 
-const envfile = `${directory.root}/envs/${environment}/.env`
+const envfile = `${directory.root}/secrets/${environment}/.env`
 
 const content = await readFile(envfile)
 
