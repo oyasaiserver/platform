@@ -4,6 +4,7 @@ import { secrets } from '@oyasaiserver/lib/secrets'
 import type { Service } from '@json-types/compose'
 
 export const minecraftMain: Service = {
+  container_name: 'minecraft-main',
   depends_on: ['mariadb'],
   image: 'itzg/minecraft-server:java24-graalvm',
   ports: [
