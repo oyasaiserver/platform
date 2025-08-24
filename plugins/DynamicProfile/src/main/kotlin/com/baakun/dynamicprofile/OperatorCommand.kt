@@ -438,14 +438,14 @@ object OperatorCommand : CommandExecutor {
               player.sendMessage("インターバルは1分以上の整数で指定してください。")
               return true
             }
-            plugin.config.set("RecommendBroadcastIntervalMinutes", newSeconds)
+            plugin.config.set("RecommendBroadcastIntervalSeconds", newSeconds)
             plugin.saveConfig()
             plugin.reloadConfig()
             val intervalTicks = (newSeconds.coerceAtLeast(1)) * 20L
             plugin.restartRecommendBroadcaster(intervalTicks)
             player.sendMessage("おすすめ建築宣伝インターバルを${newSeconds}秒に設定しました。")
           } else {
-            player.sendMessage("/dpmanager recommendInterval [分]")
+            player.sendMessage("/dpmanager recommendInterval [秒]")
           }
         }
       }
@@ -516,7 +516,7 @@ object OperatorCommandCompleter : TabCompleter {
               )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
-            "recommendInterval" -> return mutableListOf("<分>")
+            "recommendInterval" -> return mutableListOf("<秒>")
           }
         }
         3 -> {
