@@ -10,7 +10,6 @@ export const plugins = [
   'https://github.com/Multiverse/Multiverse-Core/releases/download/5.1.2/multiverse-core-5.1.2.jar',
   'https://github.com/Multiverse/Multiverse-Portals/releases/download/5.1.0/multiverse-portals-5.1.0.jar',
   'https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar',
-  'https://github.com/XZot1K/DisplayShops/releases/download/2.0/DisplayShops_2.0.1.jar',
   'https://github.com/DevLeoko/AdvancedBan/releases/download/v2.3.0/AdvancedBan-Bundle-2.3.0-RELEASE.jar',
   'https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar',
   'https://github.com/ViaVersion/ViaVersion/releases/download/5.4.2/ViaVersion-5.4.2.jar',
