@@ -28,3 +28,5 @@ basicRequired: 1000
 #報酬チェストの位置, Default: [0.0, 0.0, 0.0] "world"
 RewardChestXYZ: [0.0, 0.0, 0.0]
 RewardChestWorld: 'world'
+# おすすめ建築宣伝のインターバル（秒単位、デフォルト600）
+RecommendBroadcastIntervalSeconds: 600

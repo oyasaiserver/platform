@@ -63,6 +63,16 @@ class DynamicProfile : JavaPlugin() {
     }
   }
 
+  private var recommendBroadcaster: RecommendBroadcaster? = null
+  private var recommendBroadcasterTask: BukkitRunnable? = null
+
+  fun restartRecommendBroadcaster(intervalTicks: Long) {
+    recommendBroadcasterTask?.cancel()
+    val broadcaster = RecommendBroadcaster(this)
+    recommendBroadcaster = broadcaster
+    recommendBroadcasterTask = broadcaster.startAndReturnTask(intervalTicks)
+  }
+
   override fun onEnable() {
     totalPlayTimes.left = System.currentTimeMillis()
     totalPlayTimes.right.addAll(
@@ -176,6 +186,10 @@ class DynamicProfile : JavaPlugin() {
     server.pluginManager.registerEvents(DailyEvent, this)
     server.pluginManager.registerEvents(GiftItem, this)
     server.pluginManager.registerEvents(SLEvents, this)
+
+    val intervalMinutes = config.getInt("RecommendBroadcastIntervalSeconds", 600)
+    val intervalTicks = (intervalMinutes.coerceAtLeast(1)) * 20L
+    restartRecommendBroadcaster(intervalTicks)
   }
 
   override fun onDisable() {
