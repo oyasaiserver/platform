@@ -39,14 +39,14 @@ object TitleGui {
       "&7ID: $titleId",
       "&b優先度: ${title.rarity}",
       "&a所有者数: ${title.owners.size}人",
+      "&eクリックで所有者リストを表示",
     )
 
-    if (title.description.isNotEmpty()) {
+    if (title.description!=null&&!title.description.isEmpty()) {
       itemLore.add("&7説明:")
       title.description.forEach { line -> itemLore.add(" &f$line") }
     }
 
-    itemLore.add("&eクリックで所有者リストを表示")
 
     val item = ItemStack(Material.NAME_TAG)
       .addText(

@@ -548,22 +548,10 @@ object OperatorCommandCompleter : TabCompleter {
                   return mutableListOf("新しい称号名")
                 }
                 "editDesc" -> {
-                  return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
-                }
-              }
-            }
-            "setCount" -> return mutableListOf("<Number>")
-          }
-        }
-        5 -> {
-          when (args[0]) {
-            "title" -> {
-              when (args[1]) {
-                "editDesc" -> {
                   val titleId = args[2].toIntOrNull()
                   if (titleId != null && allTitles.containsKey(titleId)) {
                     val title = getTitleFromId(titleId)
-                    val description = title.description
+                    val description = title.description?:mutableListOf()
                     if (description.isNotEmpty()) {
                       return mutableListOf(description[0])
                     }
@@ -572,22 +560,23 @@ object OperatorCommandCompleter : TabCompleter {
                 }
               }
             }
+            "setCount" -> return mutableListOf("<Number>")
           }
         }
       }
     }
 
-    if (args != null && args.size >= 6 && args[0] == "title" && args[1] == "editDesc") {
+    if (args != null && args.size >= 5 && args[0] == "title" && args[1] == "editDesc") {
       val titleId = args[2].toIntOrNull()
       if (titleId != null && allTitles.containsKey(titleId)) {
         val title = getTitleFromId(titleId)
-        val description = title.description
-        val lineNumber = args.size - 5
+        val description = title.description?:mutableListOf()
+        val lineNumber = args.size - 4
         if (lineNumber < description.size) {
           return mutableListOf(description[lineNumber])
         }
       }
-      val lineNumber = args.size - 4
+      val lineNumber = args.size - 3
       return mutableListOf("<説明文の${lineNumber}行目>")
     }
 
