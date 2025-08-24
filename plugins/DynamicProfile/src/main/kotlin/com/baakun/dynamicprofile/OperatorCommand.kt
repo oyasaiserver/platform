@@ -8,7 +8,7 @@ import com.baakun.dynamicprofile.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.exp.BehType
 import com.baakun.dynamicprofile.exp.Calculator
-import com.baakun.dynamicprofile.gui.TitleGui
+import com.baakun.dynamicprofile.profile.playerTitle.TitleGui
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.createNewTitle
@@ -490,8 +490,11 @@ object OperatorCommandCompleter : TabCompleter {
                 "add" -> return mutableListOf("<新しい称号の名前>")
                 "edit",
                 "remove",
-                "owners" ->
-                  return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
+                "owners" -> {
+                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
+                    .toMutableList()
+                  return mutableListOf(getTitleFromId(titleId).title)
+                }
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
                 "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
