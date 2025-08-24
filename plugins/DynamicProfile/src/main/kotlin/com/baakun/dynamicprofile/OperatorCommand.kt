@@ -397,6 +397,19 @@ object OperatorCommand : CommandExecutor {
                 title.title = args[3]
               }
             }
+            "editDesc" -> {
+              val title = allTitles.get(Integer.parseInt(args[2]))
+              if (title != null) {
+                val descList = args.toMutableList()
+                descList.removeAt(0)
+                descList.removeAt(0)
+                descList.removeAt(0)
+                title.description = descList
+                player.sendMessage("称号の説明を更新しました")
+              } else {
+                player.sendMessage("称号が見つかりません")
+              }
+            }
             "get" -> {
               val title = getTitleFromId(Integer.parseInt(args[2]))
               player.sendMessage(title.title)
@@ -478,6 +491,7 @@ object OperatorCommandCompleter : TabCompleter {
                 "edit",
                 "owners",
                 "player",
+                "editDesc",
               )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
@@ -501,6 +515,14 @@ object OperatorCommandCompleter : TabCompleter {
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
                 "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+                "editDesc" -> {
+                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
+                    .toMutableList()
+                  val titleText = getTitleFromId(titleId).title
+                    .replace(Regex("&x.{12}"), "")
+                    .replace(Regex("&."), "")
+                  return mutableListOf(titleText)
+                }
               }
             }
             "setCount" -> return BehType.entries.map { it.name }.toMutableList()
@@ -525,12 +547,48 @@ object OperatorCommandCompleter : TabCompleter {
                 "edit" -> {
                   return mutableListOf("新しい称号名")
                 }
+                "editDesc" -> {
+                  return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
+                }
               }
             }
             "setCount" -> return mutableListOf("<Number>")
           }
         }
+        5 -> {
+          when (args[0]) {
+            "title" -> {
+              when (args[1]) {
+                "editDesc" -> {
+                  val titleId = args[2].toIntOrNull()
+                  if (titleId != null && allTitles.containsKey(titleId)) {
+                    val title = getTitleFromId(titleId)
+                    val description = title.description
+                    if (description.isNotEmpty()) {
+                      return mutableListOf(description[0])
+                    }
+                  }
+                  return mutableListOf("<説明文の1行目>")
+                }
+              }
+            }
+          }
+        }
       }
+    }
+
+    if (args != null && args.size >= 6 && args[0] == "title" && args[1] == "editDesc") {
+      val titleId = args[2].toIntOrNull()
+      if (titleId != null && allTitles.containsKey(titleId)) {
+        val title = getTitleFromId(titleId)
+        val description = title.description
+        val lineNumber = args.size - 5
+        if (lineNumber < description.size) {
+          return mutableListOf(description[lineNumber])
+        }
+      }
+      val lineNumber = args.size - 4
+      return mutableListOf("<説明文の${lineNumber}行目>")
     }
 
     return null

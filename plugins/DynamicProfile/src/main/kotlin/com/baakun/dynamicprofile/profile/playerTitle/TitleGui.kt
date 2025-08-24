@@ -35,17 +35,26 @@ object TitleGui {
 
   /** 称号アイテムを作成 */
   private fun createTitleItem(title: Title, titleId: Int, clickAction: () -> Unit): ItemStack {
-    return ItemStack(Material.NAME_TAG)
+    val itemLore =mutableListOf(
+      "&7ID: $titleId",
+      "&b優先度: ${title.rarity}",
+      "&a所有者数: ${title.owners.size}人",
+    )
+
+    if (title.description.isNotEmpty()) {
+      itemLore.add("&7説明:")
+      title.description.forEach { line -> itemLore.add(" &f$line") }
+    }
+
+    itemLore.add("&eクリックで所有者リストを表示")
+
+    val item = ItemStack(Material.NAME_TAG)
       .addText(
         "&6${title.title}",
-        mutableListOf(
-          "&7ID: $titleId",
-          "&b優先度: ${title.rarity}",
-          "&a所有者数: ${title.owners.size}人",
-          "&eクリックで所有者リストを表示",
-        ),
+        itemLore,
       )
       .guiRun { clickAction() }
+    return item
   }
 
   private fun putNavigation(
