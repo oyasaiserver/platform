@@ -44,20 +44,16 @@ object MyProfile {
         statsData.title = -1
       }
     }
-    val titleLore =
-      mutableListOf(
-        "&a総プレイ時間: &7${statsData.getPlayTime()}",
-        "&a初ログイン: &7${statsData.getFirstPlayed()}",
-      )
-    if (statsData.title != -1) {
-      val currentTitle = getTitleFromId(statsData.title)
-      if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
-        titleLore.add("")
-        titleLore.add("&7称号の説明 &f:")
-        currentTitle.description.forEach { line -> titleLore.add(" &f$line") }
-      }
-    }
-    val playerHeadItem = Tools.getPlayerHead(player.uniqueId).addText(title, titleLore).allFlag()
+    val playerHeadItem =
+      Tools.getPlayerHead(player.uniqueId)
+        .addText(
+          title,
+          mutableListOf(
+            "&a総プレイ時間: &7${statsData.getPlayTime()}",
+            "&a初ログイン: &7${statsData.getFirstPlayed()}",
+          ),
+        )
+        .allFlag()
     /** ヘッドをクリックした際に、Loreの表示を切り替える */
     playerHeadItem.guiRun {
       player.playSound(
@@ -74,14 +70,6 @@ object MyProfile {
             "&a総プレイ時間: &7${statsData.getPlayTime()}",
             "&a初ログイン: &7${statsData.getFirstPlayed()}",
           )
-        if (statsData.title != -1) {
-          val currentTitle = getTitleFromId(statsData.title)
-          if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
-            list.add("")
-            list.add("&7称号の説明 &f:")
-            currentTitle.description.forEach { line -> list.add(" &f$line") }
-          }
-        }
         playerHeadItemStatus = false
       } else {
         list =

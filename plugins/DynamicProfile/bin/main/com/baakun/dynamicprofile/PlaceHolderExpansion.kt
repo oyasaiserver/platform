@@ -10,7 +10,7 @@ class PlaceHolderExpansion( //
   private val plugin: DynamicProfile
 ) : PlaceholderExpansion() {
   override fun getAuthor(): String {
-    return "Author"
+    return "Author" //
   }
 
   override fun getIdentifier(): String {

@@ -2,6 +2,7 @@ package com.baakun.dynamicprofile.profile.playerTitle
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
 import com.baakun.dynamicprofile.Tools
+import com.baakun.dynamicprofile.gui.TitleGui
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.File

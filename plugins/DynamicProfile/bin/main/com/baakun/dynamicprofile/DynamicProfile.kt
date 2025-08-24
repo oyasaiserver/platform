@@ -104,7 +104,6 @@ class DynamicProfile : JavaPlugin() {
                   }
                 if (uuid == null) {
                   logger.warning("Invalid file name (not UUID): $fileName, skipping.")
-
                   return@forEach
                 }
                 allUser.add(uuid)
