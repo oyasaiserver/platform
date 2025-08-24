@@ -1,4 +1,4 @@
-import type { Service } from '@oyasaiserver/json/store/compose_spec'
+import type { Service } from '@json-types/compose'
 
 export const mariadb: Service = {
   image: 'mariadb:10.4.28',

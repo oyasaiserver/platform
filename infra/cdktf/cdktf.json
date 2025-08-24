@@ -3,7 +3,7 @@
   "language": "typescript",
   "projectId": "1129dba1-c375-4ed0-ac92-258762707dd5",
   "terraformProviders": [
-    "cloudflare/cloudflare@5.8.2",
+    "cloudflare/cloudflare@5.8.4",
     "integrations/github@6.6.0"
   ]
 }

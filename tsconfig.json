@@ -24,11 +24,9 @@
   },
   "references": [
     { "path": "apps/wiki" },
-    { "path": "gen/json/ts" },
     { "path": "infra/cdktf" },
     { "path": "infra/onprem" },
     { "path": "lib/ts" },
-    { "path": "packages/codegen" },
     { "path": "schema/ts" }
   ],
   "files": []
