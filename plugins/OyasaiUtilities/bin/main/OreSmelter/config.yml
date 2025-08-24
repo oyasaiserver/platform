@@ -1,0 +1,7 @@
+# 変換リスト(↓書き方2通り)
+# - cobblestone to stone
+# - cobblestone -> stone
+smelter_item_list:
+  - raw_iron to iron_ingot
+  - raw_copper to copper_ingot
+  - raw_gold to gold_ingot

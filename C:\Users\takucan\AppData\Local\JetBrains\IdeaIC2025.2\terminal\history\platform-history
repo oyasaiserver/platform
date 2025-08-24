@@ -1,0 +1,495 @@
+cd
+cd C:\dev
+cat C:\dev
+cd /mnt/C/dev
+cat \\wsl.localhost\Ubuntu\mnt
+cd \\wsl.localhost\Ubuntu\mnt
+exit
+cd ..
+dir
+cd dev
+cd sleep-companions
+eas build --platform android --local
+npm
+eas
+npm install -g eas-cli
+eas
+npm install -g eas-cli-local-build-plugin
+expo
+a
+npm install --global expo-cli
+expo
+npm install --global expo-cli
+epo
+expo
+expo --version
+npm -v
+npm
+npm install
+expo --version
+npm update
+node
+sudo apt-get install curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+command -v nvm
+cd ./
+cd ../
+cd \\wsl.localhost\Ubuntu
+cat \\wsl.localhost\Ubuntu
+cd takuy-s/
+cd /mnt/
+cd c
+cd dev/sleep-companions/
+expo --version
+eas build --platform android --local
+curl -o- -L https://yarnpkg.com/install.sh | bash
+yarn --version
+yarn
+sudo apt-get install curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+command -v nvm
+nvm ls
+nvm install --lts
+nvm ls
+node --version
+npm --version
+cd ..
+cd dev
+cd sleep-companions/
+expo
+eas
+npm install --global expo-cli
+expo --version
+npm i -g expo-cli
+expo --version
+expo --versionaa
+npm install -g eas-cli-local-build-plugin
+expo
+eas build --platform android --profile preview --local
+yarn --version
+cd dev/sleep-companions/
+cd ../../
+cd dev/sleep-companions/
+eas build --platform android --local
+# 例: Ubuntuの場合
+sudo apt update
+sudo apt install openjdk-17-jdk
+# インストールされたパスを確認
+readlink -f $(which java)    # 例: /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# .bashrcや.zshrcに追記（パスは上記で確認したものに合わせてください）
+echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"' >> ~/.bashrc
+echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+echo $JAVA_HOME
+java -version
+rm package-lock.json
+eas build --platform android --local
+cd ~
+ls -a
+code ~/.bashrc
+source ~/.bashrc
+exit
+eas build --platform android --local
+cd../
+cd ..
+echo $ANDROID_HOME
+ls $ANDROID_HOME
+eas build --platform android --local
+cd..
+cd ..
+cd dev/sleep-companions/
+eas build --platform android --local
+cd ..
+cd dev
+cd sleep-companions
+eas build --platform android --local
+sudo apt-get update && sudo apt-get install ninja-build
+ninja --version
+echo $PATH
+eas build --platform android --local
+ls /mnt/c/Users/takucan/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cmake
+$ANDROID_HOME/tools/bin/sdkmanager "cmake;3.22.1"
+exit
+$ANDROID_HOME/tools/bin/sdkmanager "cmake;3.22.1"
+ls /mnt/c/Users/takucan/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cmake
+sudo apt-get update
+sudo apt-get install cmake
+cd android
+./gradlew clean
+./gradlew assembleDebug
+eas build --platform android --local
+cd ../../dev/sleep-companions
+eas build --platform android --local
+cd /mnt/c/Users/takucan/AppData/Local/Android/Sdk/cmake/3.22.1/bin
+ln -s cmake.exe cmake
+sudo apt-get update
+sudo apt-get install cmake
+cd ../../dev/sleep-companions
+cd ../../../../
+cd ../
+cd /dev/sleep-companions
+cd dev/sleep-companions
+eas build --platform android --local
+exit
+npm install -g generator-code
+npm install -g npm@11.5.2
+npx yo code
+npm install
+cd takuycode/
+npm install
+ls
+mkdir testcp
+cd testcp
+code .
+g++
+cd ..
+mkdir takuycode
+cd takuycode
+code .
+npx --package yo --package generator-code -- yo code
+cd ..
+rm -rf takuycode/
+npx --package yo --package generator-code -- yo code
+ls
+cd takuycode/
+npm install
+npm view @types/vscode versions
+ls
+vi package.json 
+vi package.json
+ls
+vi package.json
+npm install
+ls
+vi package.json
+ls
+vi package.json
+exit
+npm install
+npm i open
+npm uninstall open
+bd /home/takuy-s/takuycode/package.json;echo 'compile done!: '; /home/takuy-s/takuycode/package.out
+ls
+cd takuycode/
+npm install
+ls
+vi package.json 
+vim -r package.json
+npm install
+code .
+cd ..
+rm -rf takuycode/
+npx --package yo --package generator-code -- yo code
+cd takuycode/
+vi package.json 
+npm install
+cd ..
+rm -rf takuycode/
+npx --package yo --package generator-code -- yo code
+vi takuycode/package.json 
+cd takuycode
+npm install
+code .
+ssh-keygen -t ed25519 -C "takucancrafter@gmail.com" -f ~/.ssh/id_ed25519_personal
+ssh-keygen -t ed25519 -C "taku-c@ymail.ne.jp" -f ~/.ssh/id_ed25519_work
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519_personal
+ssh-add ~/.ssh/id_ed25519_work
+ssh-add -l
+cat ~/.ssh/id_ed25519_personal.pub
+cat ~/.ssh/id_ed25519_work.pub
+git remote -v
+# ssh-agent を起動（bash/zsh の場合）
+eval "$(ssh-agent -s)"
+# エージェントに鍵を追加
+ssh-add ~/.ssh/id_ed25519_personal
+ssh-add ~/.ssh/id_ed25519_work
+# 登録済みの鍵を確認
+ssh-add -l
+code ~/.ssh/config
+chmod 600 ~/.ssh/config
+chmod 600 ~/.ssh/id_ed25519_personal
+chmod 600 ~/.ssh/id_ed25519_work
+git remote -v
+git clone git@github-personaloyasaiserver/DynamicProfile.git
+git clone git@github-personal:oyasaiserver/DynamicProfile.git
+code ~/.ssh/config
+ssh -T git@github-personal
+ssh -T git@github-work
+code ~/.ssh/config
+code ~/.ssh/
+ssh -T git@github-work
+ssh -T git@github-personal
+ssh-keygen -t ed25519 -C "takucancrafter@gmail.com" -f ~/.ssh/id_ed25519_personal
+ssh-keygen -t ed25519 -C "taku-c@ymail.ne.jp" -f ~/.ssh/id_ed25519_work
+# ssh-agent を起動（bash/zsh の場合）
+eval "$(ssh-agent -s)"
+# エージェントに鍵を追加
+ssh-add ~/.ssh/id_ed25519_personal
+ssh-add ~/.ssh/id_ed25519_work
+# 登録済みの鍵を確認
+ssh-add -l
+cat ~/.ssh/id_ed25519_personal.pub
+cat ~/.ssh/id_ed25519_work.pub
+chmod 600 ~/.ssh/config
+chmod 600 ~/.ssh/id_ed25519_personal
+chmod 600 ~/.ssh/id_ed25519_work
+git remote -v
+ls
+git clone git@github-personal:oyasaiserver/DynamicProfile.git
+cd DynamicProfile/
+ssh -T git@github-personal
+ssh -T git@github-work
+git remote -v
+git config
+git config --list
+git config --local --list
+git config --global --list
+git show
+git commit
+ls
+cd .gitconfig
+git config user.name "takucan"
+git config user.email "takucancrafter@gmail.com"
+git commit
+git commit -m "hi"
+git show
+git push origin takucan
+git push -origin takucan
+git remote -v
+git status
+code .
+git branch
+git checkout takucan
+git branch
+java -version
+gradle -v
+ls /usr/lib/jvm/
+which java
+readlink -f /usr/lib/jvm/java-17-openjdk-amd64/bin/java | sed 's:/bin/java::'
+./gradlew clean build
+chmod +x ./gradlew
+./gradlew clean build
+gradle wrapper --gradle-version 8.7
+sudo apt install gradle -y
+gradle wrapper --gradle-version 8.7
+./gradlew clean build
+rm ./gradlew ./gradlew.bat
+gradle wrapper --gradle-version 8.7
+wget https://services.gradle.org/distributions/gradle-8.7-bin.zip -O /tmp/gradle-8.7-bin.zip && unzip -o /tmp/gradle-8.7-bin.zip -d /tmp/ && export PATH=/tmp/gradle-8.7/bin:$PATH && /tmp/gradle-8.7/bin/gradle wrapper --gradle-version 8.7
+/tmp/gradle-8.7/bin/gradle clean build
+ls /usr/lib/jvm/java-17-openjdk-amd64
+echo $JAVA_HOME
+git log --online
+git log --onelinee
+git log --oneline
+git checkout 4e88a5b
+$JAVA_HOME
+java -version
+./gradlew build
+sudo ./gradlew build
+sudo gradlew build
+sudo ./gradlew build
+sudo 
+sudo ./gradlew --refresh-dependencies
+/home/takuy-s/DynamicProfile/gradlew
+cd /home/takuy-s/DynamicProfile/gradlew
+cd /home/takuy-s/DynamicProfile/
+ls
+gradlew
+./gradlew
+sudo ./gradlew
+chmod +x ./gradlew
+sudo ./gradlew
+sudo ./gradlew build
+./gradlew build
+sed -i 's/\\\\//g' ./gradlew
+chmod +x ./gradlew
+./gradlew build
+gradle wrapper --gradle-version 7.6
+gradle wrapper --gradle-version 8.3
+./gradlew --refresh-dependencies
+gradlew initialize
+./gradlew initialize
+./gradlew.bat
+sudo ./gradlew.bat
+chmod +x ./gradlew.bat
+./gradlew.bat
+ls
+git status
+cd DynamicProfile/
+git status
+code .
+cd ..
+rm -rf DynamicProfile/
+cd
+ls
+git clone git@github-personal:oyasaiserver/DynamicProfile.git
+cd DynamicProfile/
+code .
+git checkout takucan
+$JAVA_HOME
+git status
+git show
+git commit -a
+git config user.email takucancrafter@gmail.com
+git config user.name "takucan"
+git commit -a
+git status
+git show --oneline
+git push origin takucan
+git pull origin takucan
+git pull --no-rebase origin takucan
+./gradlew build
+java -version
+cd ~
+cd platform/
+git branch checkout fix
+git branch
+git branch -d checkout
+git branch fix
+git branch
+git checkout fix
+git branch
+cd ..
+rm -rf platform/
+ls
+cd platform/
+./gradlew clean
+./gradlew build
+java -version
+git remote -v
+git -v
+git clone git@github-private:oyasaiserver/platform.git
+git clone git@github-work:oyasaiserver/platform.git
+code /home/takuy-s/.ssh/id_ed25519_work
+code /home/takuy-s/.ssh/
+ls
+rm -rf ./platform
+git clone git@github-personal:oyasaiserver/platform.git
+cd platform/
+git branch
+git branch fix
+git branch
+idea
+idea .
+ls
+cd ..
+ls
+git clone git@github-personal:oyasaiserver/platform.git
+java -version
+cd platform/
+idea .
+cd ..
+rm -rf platform/
+git clone git@github-personal:oyasaiserver/platform.git
+idea ./platform/
+./gradlew build
+./gradlew build --scan
+./gradlew build
+./gradlew clean build
+./gradlew clean
+./gradlew build
+./gradlew clean build
+./gradlew build
+java -version
+./gradlew :plugins:DynamicProfile:compileKotlin --stacktrace
+./gradlew build
+./gradlew :plugins:DynamicProfile:build --stacktrace
+./gradlew build
+./gradlew build --stacktraces
+./gradlew build --stacktrace
+./gradlew build
+gradlew clean build
+./gradlew clean build
+./gradlew build --stacktrace
+./gradlew build --info
+./gradlew build --debug
+git branch fix
+git checkout fix
+git checkout main
+git checkout fix
+./gradlew build
+git push origin fix
+./gradlew :spotlessApply
+cd platform/
+./gradlew clean
+./gradlew build
+cd ..
+git clone git@github-personal:oyasaiserver/platform.git
+rm -rf ./platform/
+git clone git@github-personal:oyasaiserver/platform.git
+rm -rf ./platform/
+git clone git@github-personal:oyasaiserver/platform.git
+mise
+mise install
+java -version
+./gradlew build
+./gradlew clean build
+./gradlew spotlessApply
+ls /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile
+ls /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/data
+ls /home/takuy-s/DynamicProfile/src/main/kotlin
+ls /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/CustomYaml.kt
+pwd
+sed -n '1,200p' /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/DynamicProfile.kt
+sed -n '200,350p' /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/DynamicProfile.kt
+grep -R "runTaskAsynchronously" -n src/main/kotlin
+sed -n '1,150p' /home/takuy-s/DynamicProfile/src/main/kotlin/com/baakun/dynamicprofile/DynamicProfile.kt
+mise
+echo "eval \"\$(/home/takuy-s/.local/bin/mise activate bash)\"" >> ~/.bashrc
+./gradlew clean
+./gradlew build
+git branch
+git checkout main
+git checkout fix
+curl https://mise.run | sh
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+mise doctor
+mise install
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+mise install
+curl https://mise.run | sh
+mise
+cd platform/
+npm install
+sudo apt update
+sudo apt install -y build-essential
+npm install
+npm run codegen
+git add .
+git commit
+git push origin fix
+mise doctor
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+mise install
+codegen
+npm run codegen
+npm install
+node
+git branch
+git push origin fix
+codegen
+git status
+git diff
+git add .
+npm run format
+./gradlew spotlessApply
+npm run codegen
+curl https://mise.run/ | sh
+npm run codegen
+add .
+git add .
+git status
+git push origin feat/plugins-dynamic-profile
+git add .
+git status
+git push origin feat/plugins-dynamic-profile
+npm run codegen
+git add .
+git commit -m "improved arrow buttons in SelectTitle.kt"
+git push origin feat/plugins-dynamic-profile
+cd /home/takuy-s/platform/plugins/DynamicProfile && ./gradlew build --stacktrace
+cd /home/takuy-s/platform/plugins/DynamicProfile && ./gradlew compileKotlin
+cd /home/takuy-s/platform && ./gradlew :plugins:DynamicProfile:compileKotlin
+cd /home/takuy-s/platform && find . -name "*.kt" -path "*/DynamicProfile/*" -exec kotlinc {} \; 2>&1 | head -20

@@ -1,0 +1,45 @@
+name: OyasaiUtilities
+description: 'おやさい鯖の小物Plugins'
+authors: [Srain3, takucan]
+website: 'https://github.com/OyasaiServer'
+main: icu.oyasai.utilities.Main
+api-version: '1.21'
+version: '0.1.0'
+
+commands:
+  orerepopreload:
+    description: 'OreReappearsのconfigリロードコマンド'
+  orerepopswitch:
+    description: 'OreReappearsの機能On/Off切り替え'
+  adminbp:
+    description: 'AdminBPのコマンド'
+    aliases: [abp]
+  oresmelter:
+    description: 'OreSmelterのコマンド'
+    aliases: [os]
+  uuid:
+    description: 'UUIDを容易にコピーするコマンド'
+  timerbar:
+    description: 'TimerBarのコマンド'
+    permission: oyasaiutilities.timerbar
+  back:
+    description: '前回TPした場所に戻る'
+    aliases: [bk]
+  forward:
+    description: 'これ以降にTPした場所に戻る'
+    aliases: [fow, fw]
+  tpdata:
+    description: '全てのプレイヤーのTP履歴を表示'
+    permission: oyasaiutilities.tpdata
+
+permissions:
+  oyasaiutilities.timerbar:
+    description: 'TimerBarコマンドの使用権限'
+  oyasaiutilities.tpdata:
+    default: op
+  cm.bypass:
+    description: 'CreativeManagementのバイパスする権限'
+    default: op
+  cm.bypass.spawn_egg:
+    description: 'CreativeManagementのSpawnEggバイパスする権限'
+    default: op

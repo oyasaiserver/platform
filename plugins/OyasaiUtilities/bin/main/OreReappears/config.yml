@@ -1,0 +1,23 @@
+# 有効化するワールド名リスト
+EnableWorldName:
+  - oreshigen
+
+# 有効化する鉱石名+直るまでのTick数+掘った時に入るお金(自動でこの額に×ドロップ数される)リスト
+# 掘った時に入るお金以外で売れば5円になる予定
+EnableBlockNameAndTickAndMoney:
+  - coal_ore 1000 5
+  - deepslate_coal_ore 1000 5
+  - iron_ore 1600 40
+  - deepslate_iron_ore 1600 40
+  - copper_ore 1600 20
+  - deepslate_copper_ore 1600 20
+  - gold_ore 2000 85
+  - deepslate_gold_ore 2000 85
+  - redstone_ore 1300 5
+  - deepslate_redstone_ore 1300 5
+  #- emerald_ore 20000 1995
+  #- deepslate_emerald_ore 20000 1995
+  - lapis_ore 1800 5
+  - deepslate_lapis_ore 1800 5
+  - diamond_ore 2600 70
+  - deepslate_diamond_ore 2600 70
