@@ -65,7 +65,6 @@ export class GitHubStack extends TerraformStack {
       },
       rules: {
         pullRequest: {
-          requiredApprovingReviewCount: 1,
           requireCodeOwnerReview: true,
           requiredReviewThreadResolution: true
         },

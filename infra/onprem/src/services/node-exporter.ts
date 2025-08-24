@@ -1,4 +1,4 @@
-import type { Service } from '@oyasaiserver/json/store/compose_spec'
+import type { Service } from '@json-types/compose'
 
 export const nodeExporter: Service = {
   image: 'prom/node-exporter:v1.9.1',
