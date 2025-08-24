@@ -8,9 +8,9 @@ import com.baakun.dynamicprofile.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.exp.BehType
 import com.baakun.dynamicprofile.exp.Calculator
-import com.baakun.dynamicprofile.profile.playerTitle.TitleGui
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
+import com.baakun.dynamicprofile.profile.playerTitle.TitleGui
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.createNewTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.deTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
@@ -505,22 +505,34 @@ object OperatorCommandCompleter : TabCompleter {
                 "edit",
                 "remove",
                 "owners" -> {
-                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
-                    .toMutableList()
-                  val titleText = getTitleFromId(titleId).title
-                    .replace(Regex("&x.{12}"), "")
-                    .replace(Regex("&."), "")
+                  val titleId =
+                    args[2].toIntOrNull()
+                      ?: return allTitles.keys
+                        .toList()
+                        .map { i: Int -> i.toString() }
+                        .toMutableList()
+                  val titleText =
+                    getTitleFromId(titleId)
+                      .title
+                      .replace(Regex("&x.{12}"), "")
+                      .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
                 "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
                 "editDesc" -> {
-                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
-                    .toMutableList()
-                  val titleText = getTitleFromId(titleId).title
-                    .replace(Regex("&x.{12}"), "")
-                    .replace(Regex("&."), "")
+                  val titleId =
+                    args[2].toIntOrNull()
+                      ?: return allTitles.keys
+                        .toList()
+                        .map { i: Int -> i.toString() }
+                        .toMutableList()
+                  val titleText =
+                    getTitleFromId(titleId)
+                      .title
+                      .replace(Regex("&x.{12}"), "")
+                      .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
               }
@@ -537,11 +549,17 @@ object OperatorCommandCompleter : TabCompleter {
                 }
                 "give",
                 "deprive" -> {
-                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
-                    .toMutableList()
-                  val titleText = getTitleFromId(titleId).title
-                    .replace(Regex("&x.{12}"), "")
-                    .replace(Regex("&."), "")
+                  val titleId =
+                    args[2].toIntOrNull()
+                      ?: return allTitles.keys
+                        .toList()
+                        .map { i: Int -> i.toString() }
+                        .toMutableList()
+                  val titleText =
+                    getTitleFromId(titleId)
+                      .title
+                      .replace(Regex("&x.{12}"), "")
+                      .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
                 "edit" -> {
@@ -551,7 +569,7 @@ object OperatorCommandCompleter : TabCompleter {
                   val titleId = args[2].toIntOrNull()
                   if (titleId != null && allTitles.containsKey(titleId)) {
                     val title = getTitleFromId(titleId)
-                    val description = title.description?:mutableListOf()
+                    val description = title.description ?: mutableListOf()
                     if (description.isNotEmpty()) {
                       return mutableListOf(description[0])
                     }
@@ -570,7 +588,7 @@ object OperatorCommandCompleter : TabCompleter {
       val titleId = args[2].toIntOrNull()
       if (titleId != null && allTitles.containsKey(titleId)) {
         val title = getTitleFromId(titleId)
-        val description = title.description?:mutableListOf()
+        val description = title.description ?: mutableListOf()
         val lineNumber = args.size - 4
         if (lineNumber < description.size) {
           return mutableListOf(description[lineNumber])

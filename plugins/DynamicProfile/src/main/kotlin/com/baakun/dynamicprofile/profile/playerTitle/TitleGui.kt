@@ -5,6 +5,8 @@ import com.baakun.dynamicprofile.Tools
 import com.baakun.dynamicprofile.Tools.addText
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -12,7 +14,6 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
 
 object TitleGui {
 
@@ -35,25 +36,21 @@ object TitleGui {
 
   /** 称号アイテムを作成 */
   private fun createTitleItem(title: Title, titleId: Int, clickAction: () -> Unit): ItemStack {
-    val itemLore =mutableListOf(
-      "&7ID: $titleId",
-      "&b優先度: ${title.rarity}",
-      "&a所有者数: ${title.owners.size}人",
-      "&eクリックで所有者リストを表示",
-    )
+    val itemLore =
+      mutableListOf(
+        "&7ID: $titleId",
+        "&b優先度: ${title.rarity}",
+        "&a所有者数: ${title.owners.size}人",
+        "&eクリックで所有者リストを表示",
+      )
 
-    if (title.description!=null&&!title.description.isEmpty()) {
+    if (title.description != null && !title.description.isEmpty()) {
       itemLore.add("&7説明:")
       title.description.forEach { line -> itemLore.add(" &f$line") }
     }
 
-
-    val item = ItemStack(Material.NAME_TAG)
-      .addText(
-        "&6${title.title}",
-        itemLore,
-      )
-      .guiRun { clickAction() }
+    val item =
+      ItemStack(Material.NAME_TAG).addText("&6${title.title}", itemLore).guiRun { clickAction() }
     return item
   }
 
@@ -106,7 +103,8 @@ object TitleGui {
     }
 
     val playerTitles = TitleUtils.getTitles(targetPlayer.uniqueId)
-    val sortedTitles = playerTitles.sortedByDescending { DynamicProfile.Companion.allTitles[it]?.rarity ?: 0 }
+    val sortedTitles =
+      playerTitles.sortedByDescending { DynamicProfile.Companion.allTitles[it]?.rarity ?: 0 }
     val totalPages = calculateTotalPages(sortedTitles.size)
 
     showPlayerTitlesPage(player, targetPlayerName, sortedTitles, 0, totalPages)
@@ -133,17 +131,18 @@ object TitleGui {
       GuiInventory.createInventory(INVENTORY_ROWS, "称号「$titleName」の所有者 (${page + 1}/$totalPages)")
 
     putGrayGlass(inv)
-
-    val titleItem =
-      ItemStack(Material.NAME_TAG)
-        .addText(
-          "&6$titleName",
-          mutableListOf(
-            "&7ID: $titleId",
-            "&b優先度: ${DynamicProfile.Companion.allTitles[titleId]?.rarity ?: 0}",
-            "&a所有者数: ${owners.size}人",
-          ),
-        )
+    val title = getTitleFromId(titleId)
+    val titleLore =
+      mutableListOf(
+        "&7ID: $titleId",
+        "&b優先度: ${DynamicProfile.allTitles[titleId]?.rarity ?: 0}",
+        "&a所有者数: ${owners.size}人",
+      )
+    if (title.description != null && !title.description.isEmpty()) {
+      titleLore.add("&7説明:")
+      title.description.forEach { line -> titleLore.add(" &f$line") }
+    }
+    val titleItem = ItemStack(Material.NAME_TAG).addText("&6$titleName", titleLore)
     inv.setItem(TITLE_INFO_SLOT, titleItem)
 
     // 所有者ヘッド

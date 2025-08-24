@@ -72,26 +72,21 @@ object OtherProfile {
         statsData.title = -1
       }
     }
-    val titleLore = mutableListOf(
-      "&a総プレイ時間: &7${statsData.getPlayTime()}",
-      "&a初ログイン: &7${statsData.getFirstPlayed()}",
-      "&a最終オンライン: &7${if (ofp.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}",
-    )
-    if (statsData.title != -1){
+    val titleLore =
+      mutableListOf(
+        "&a総プレイ時間: &7${statsData.getPlayTime()}",
+        "&a初ログイン: &7${statsData.getFirstPlayed()}",
+        "&a最終オンライン: &7${if (ofp.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}",
+      )
+    if (statsData.title != -1) {
       val currentTitle = getTitleFromId(statsData.title)
-      if (currentTitle.description!=null&&!currentTitle.description.isEmpty()) {
+      if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
         titleLore.add("")
         titleLore.add("&7称号の説明 &f:")
         currentTitle.description.forEach { line -> titleLore.add(" &f$line") }
       }
     }
-    val playerHeadItem =
-      Tools.getPlayerHead(ofp.uniqueId)
-        .addText(
-          title,
-          titleLore,
-        )
-        .allFlag()
+    val playerHeadItem = Tools.getPlayerHead(ofp.uniqueId).addText(title, titleLore).allFlag()
     /** ヘッドをクリックした際に、Loreの表示を切り替える */
     playerHeadItem.guiRun {
       sender.playSound(
@@ -109,9 +104,9 @@ object OtherProfile {
             "&a初ログイン: &7${statsData.getFirstPlayed()}",
             "&a最終オンライン: &7${if (ofp.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}",
           )
-        if (statsData.title != -1){
+        if (statsData.title != -1) {
           val currentTitle = getTitleFromId(statsData.title)
-          if (currentTitle.description!=null&&!currentTitle.description.isEmpty()) {
+          if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
             list.add("")
             list.add("&7称号の説明 &f:")
             currentTitle.description.forEach { line -> list.add(" &f$line") }

@@ -96,20 +96,19 @@ object SelectTitle {
       val currentTitle = getTitleFromId(titles[i])
       val title = ItemStack(Material.FILLED_MAP)
       val titleLore = mutableListOf<String>()
-      titleLore.addAll(mutableListOf(
-        "&a所有者数: &7${currentTitle.owners.size}",
-        "&aバリュー(表示優先度): &7${currentTitle.rarity}",
-      ))
-      if (currentTitle.description!=null&&!currentTitle.description.isEmpty()) {
+      titleLore.addAll(
+        mutableListOf(
+          "&a所有者数: &7${currentTitle.owners.size}",
+          "&aバリュー(表示優先度): &7${currentTitle.rarity}",
+        )
+      )
+      if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
         titleLore.add("")
         titleLore.add("&7称号の説明 &f:")
         currentTitle.description.forEach { line -> titleLore.add(" &f$line") }
       }
 
-      title.addText(
-        "&6[称号] ${currentTitle.title}",
-        titleLore,
-      )
+      title.addText("&6[称号] ${currentTitle.title}", titleLore)
       if (stats.title != -1 && stats.title == currentTitle.id) {
         title.addUnsafeEnchantment(Enchantment.MENDING, 1)
         title.addItemFlags(ItemFlag.HIDE_ENCHANTS)
