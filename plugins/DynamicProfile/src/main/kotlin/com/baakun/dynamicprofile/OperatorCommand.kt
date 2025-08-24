@@ -493,7 +493,10 @@ object OperatorCommandCompleter : TabCompleter {
                 "owners" -> {
                   val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
                     .toMutableList()
-                  return mutableListOf(getTitleFromId(titleId).title)
+                  val titleText = getTitleFromId(titleId).title
+                    .replace(Regex("&x.{12}"), "")
+                    .replace(Regex("&."), "")
+                  return mutableListOf(titleText)
                 }
                 "give",
                 "deprive" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
