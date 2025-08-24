@@ -515,7 +515,12 @@ object OperatorCommandCompleter : TabCompleter {
                 }
                 "give",
                 "deprive" -> {
-                  return allTitles.keys.toList().map { i: Int -> i.toString() }.toMutableList()
+                  val titleId = args[2].toIntOrNull() ?: return allTitles.keys.toList().map { i: Int -> i.toString() }
+                    .toMutableList()
+                  val titleText = getTitleFromId(titleId).title
+                    .replace(Regex("&x.{12}"), "")
+                    .replace(Regex("&."), "")
+                  return mutableListOf(titleText)
                 }
                 "edit" -> {
                   return mutableListOf("新しい称号名")
