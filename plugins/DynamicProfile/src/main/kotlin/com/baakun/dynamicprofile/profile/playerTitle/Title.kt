@@ -9,4 +9,5 @@ data class Title(
   @Expose var owners: MutableList<UUID> = mutableListOf(),
   @Expose var rarity: Int = 0,
   @Expose var createdAt: Long = System.currentTimeMillis(),
+  @Expose var description: MutableList<String> = mutableListOf("No Description"),
 ) {}
