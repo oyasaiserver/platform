@@ -428,6 +428,26 @@ object OperatorCommand : CommandExecutor {
             gson.fromJson(recoverFile.readText(StandardCharsets.UTF_8), Stats::class.java)
           currentStats.addAllCounts(recoverStats)
         }
+        "recommendInterval" -> {
+          if (args.size == 1) {
+            val seconds = plugin.config.getInt("RecommendBroadcastIntervalSeconds", 600)
+            player.sendMessage("現在のおすすめ建築宣伝インターバル: ${seconds}秒")
+          } else if (args.size == 2) {
+            val newSeconds = args[1].toIntOrNull()
+            if (newSeconds == null || newSeconds < 1) {
+              player.sendMessage("インターバルは1分以上の整数で指定してください。")
+              return true
+            }
+            plugin.config.set("RecommendBroadcastIntervalMinutes", newSeconds)
+            plugin.saveConfig()
+            plugin.reloadConfig()
+            val intervalTicks = (newSeconds.coerceAtLeast(1)) * 20L
+            plugin.restartRecommendBroadcaster(intervalTicks)
+            player.sendMessage("おすすめ建築宣伝インターバルを${newSeconds}秒に設定しました。")
+          } else {
+            player.sendMessage("/dpmanager recommendInterval [分]")
+          }
+        }
       }
     }
 
@@ -456,6 +476,7 @@ object OperatorCommandCompleter : TabCompleter {
             "title",
             "setCount",
             "repair",
+            "recommendInterval",
           )
         2 -> {
           when (args[0]) {
@@ -495,6 +516,7 @@ object OperatorCommandCompleter : TabCompleter {
               )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
+            "recommendInterval" -> return mutableListOf("<分>")
           }
         }
         3 -> {
