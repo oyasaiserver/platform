@@ -46,9 +46,7 @@ object ProfileUtil {
     if (statsData.introduction.isNotEmpty()) {
       titleLore.add("")
       titleLore.add("&7自己紹介 &f:")
-      statsData.introduction.split("\n").forEach { line ->
-        titleLore.add(" &f$line")
-      }
+      statsData.introduction.split("\n").forEach { line -> titleLore.add(" &f$line") }
     }
     if (statsData.title != -1) {
       val currentTitle = getTitleFromId(statsData.title)
@@ -82,9 +80,7 @@ object ProfileUtil {
               if (statsData.introduction.isNotEmpty()) {
                 add("")
                 add("&7自己紹介 &f：")
-                statsData.introduction.split("\n").forEach { line ->
-                  add(" &f$line")
-                }
+                statsData.introduction.split("\n").forEach { line -> add(" &f$line") }
               }
               if (statsData.title != -1) {
                 val currentTitle = getTitleFromId(statsData.title)

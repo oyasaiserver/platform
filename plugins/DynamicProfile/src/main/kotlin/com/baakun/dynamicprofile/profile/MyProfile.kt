@@ -15,7 +15,6 @@ import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.toFormat
 import com.github.srain3.sociallikes.datas.Data
-import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -148,12 +147,12 @@ object MyProfile {
         meta.addPage(statsData.introduction)
       }
       book.itemMeta = meta
-      if(player.inventory.firstEmpty() != -1) {
+      if (player.inventory.firstEmpty() != -1) {
         player.inventory.addItem(book)
         player.sendMessage("§a自己紹介編集用の本を開きました。内容を書いて閉じてください。")
         player.sendMessage("§7閉じた時点で内容が自己紹介として保存されます。")
-        player.sendMessage("§a変更せず終了する場合は、署名してください。")
-      }else{
+        player.sendMessage("§7変更せず終了する場合は、署名してください。")
+      } else {
         player.sendMessage("§cインベントリに空きがないため、自己紹介編集用の本を開けません。")
       }
     }

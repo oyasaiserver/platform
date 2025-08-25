@@ -188,7 +188,10 @@ class DynamicProfile : JavaPlugin() {
     server.pluginManager.registerEvents(DailyEvent, this)
     server.pluginManager.registerEvents(GiftItem, this)
     server.pluginManager.registerEvents(SLEvents, this)
-    server.pluginManager.registerEvents(com.baakun.dynamicprofile.listener.BookIntroListener(), this)
+    server.pluginManager.registerEvents(
+      com.baakun.dynamicprofile.listener.BookIntroListener(),
+      this,
+    )
 
     val intervalMinutes = config.getInt("RecommendBroadcastIntervalSeconds", 600)
     val intervalTicks = (intervalMinutes.coerceAtLeast(1)) * 20L
