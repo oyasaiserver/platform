@@ -149,7 +149,7 @@ object MyProfile {
       book.itemMeta = meta
       if (player.inventory.firstEmpty() != -1) {
         player.inventory.addItem(book)
-        player.sendMessage("§a自己紹介編集用の本を開きました。内容を書いて閉じてください。")
+        player.sendMessage("§a自己紹介編集用の本を付与しました。内容を書いて閉じてください。")
         player.sendMessage("§7閉じた時点で内容が自己紹介として保存されます。")
         player.sendMessage("§7変更せず終了する場合は、署名してください。")
       } else {
