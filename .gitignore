@@ -411,5 +411,5 @@ cdktf.log
 !gen/compose/compose.local.yaml
 
 # Local server
-infra/onprem/server
+infra/onprem/local
 !infra/onprem/assets/**/*.jar
