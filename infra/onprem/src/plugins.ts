@@ -39,8 +39,6 @@ export const plugins = [
   'https://spigotmc.org/resources/mypet.12725/download?version=556882',
   'https://spigotmc.org/resources/mycommand.22272/download?version=503879',
   'https://spigotmc.org/resources/join-commands.51758/download?version=546295',
-  'https://spigotmc.org/resources/tokenmanager.8610/download?version=494520',
-  'https://spigotmc.org/resources/zvoteparty-voting-plugin.95603/download?version=603989',
   'https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar',
   'https://cdn.modrinth.com/data/z4HZZnLr/versions/o8Ytdhc5/FastAsyncWorldEdit-Paper-2.13.1.jar',
   'https://cdn.modrinth.com/data/Lu3KuzdV/versions/anOhDobp/CoreProtect-CE-23.0.jar',

@@ -1,17 +1,12 @@
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
-import { cp, glob, rm, writeFile } from 'node:fs/promises'
+import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { exit } from 'node:process'
-import { join } from 'node:path'
-import { basename } from 'node:path'
+import { basename, join } from 'node:path'
 import { onpremInfra } from '@oyasaiserver/onprem'
-import { YAML } from 'zx'
-
-if (secrets.ENVIRONMENT === 'local') {
-  console.error('This script should not be run in the local environment.')
-  exit(1)
-}
+import { $, YAML } from 'zx'
+import type { CopyOptions, MakeDirectoryOptions } from 'node:fs'
 
 const paths = {
   dist: 'dist',
@@ -31,6 +26,17 @@ for await (const jar of jars) {
 }
 
 await writeFile('dist/compose.yaml', YAML.stringify(onpremInfra))
+
+if (secrets.ENVIRONMENT === 'local') {
+  const options: MakeDirectoryOptions & CopyOptions = { recursive: true }
+  await mkdir(secrets.ENVIRONMENT, options)
+  await cp('dist', secrets.ENVIRONMENT, options)
+  await cp('assets', secrets.ENVIRONMENT, options)
+  await $({
+    cwd: secrets.ENVIRONMENT
+  })`docker compose up --detach --wait`
+  exit(0)
+}
 
 await using ssh = await useSsh({
   host: secrets.PUBLIC_IPV4,
