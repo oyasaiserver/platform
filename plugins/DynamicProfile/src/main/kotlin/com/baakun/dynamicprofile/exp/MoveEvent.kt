@@ -1,6 +1,7 @@
 package com.baakun.dynamicprofile.exp
 
-import com.baakun.dynamicprofile.Tools.getStats
+import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.util.Tools.getStats
 import com.destroystokyo.paper.event.player.PlayerJumpEvent
 import io.papermc.paper.event.player.AsyncChatEvent
 import org.bukkit.entity.Player

@@ -1,24 +1,26 @@
 package com.baakun.dynamicprofile
 
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.plugin
+import com.baakun.dynamicprofile.command.DProfileCmd
+import com.baakun.dynamicprofile.command.LeaderBoardCommand
+import com.baakun.dynamicprofile.command.LeaderBoardCommandCompleter
+import com.baakun.dynamicprofile.command.OperatorCommand
+import com.baakun.dynamicprofile.command.OperatorCommandCompleter
 import com.baakun.dynamicprofile.data.Stats
-import com.baakun.dynamicprofile.exp.BehType
 import com.baakun.dynamicprofile.exp.DailyEvent
 import com.baakun.dynamicprofile.exp.MoveEvent
 import com.baakun.dynamicprofile.exp.SLEvents
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.NumberBanner
 import com.baakun.dynamicprofile.leaderBoard.LBStats
-import com.baakun.dynamicprofile.leaderBoard.LeaderBoardCommand
-import com.baakun.dynamicprofile.leaderBoard.LeaderBoardCommandCompleter
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.saveWeeklyLB
-import com.baakun.dynamicprofile.profile.DProfileCmd
-import com.baakun.dynamicprofile.profile.GiftItem
+import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.model.GiftItem
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.plugin
 import com.google.gson.GsonBuilder
 import java.io.File
 import java.io.FileWriter
@@ -168,7 +170,7 @@ class DynamicProfile : JavaPlugin() {
                 }
               }
             br.runTaskTimer(plugin, PLAYTIME_DELAY_TICKS, PLAYTIME_INTERVAL_TICKS)
-            playTimes.put(player, br)
+            playTimes[player] = br
           }
         },
       )

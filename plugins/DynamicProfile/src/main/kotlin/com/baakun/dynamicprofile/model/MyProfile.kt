@@ -1,21 +1,21 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.toFormat
-import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.command.DProfileCmd.addBlackStandGlass
+import com.baakun.dynamicprofile.command.DProfileCmd.commonFunc
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.gui.GuiItem.guiRunRight
 import com.baakun.dynamicprofile.gui.GuiItem.guiRunShiftRight
-import com.baakun.dynamicprofile.profile.DProfileCmd.addBlackStandGlass
-import com.baakun.dynamicprofile.profile.DProfileCmd.commonFunc
 import com.baakun.dynamicprofile.profile.playerTitle.SelectTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.toFormat
 import com.github.srain3.sociallikes.datas.Data
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -60,13 +60,7 @@ object MyProfile {
     val playerHeadItem = Tools.getPlayerHead(player.uniqueId).addText(title, titleLore).allFlag()
     /** ヘッドをクリックした際に、Loreの表示を切り替える */
     playerHeadItem.guiRun {
-      player.playSound(
-        player.eyeLocation,
-        org.bukkit.Sound.UI_BUTTON_CLICK,
-        SoundCategory.MASTER,
-        0.75F,
-        1F,
-      )
+      player.playSound(player.eyeLocation, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
       val list: MutableList<String>
       if (playerHeadItemStatus) {
         list =
@@ -167,13 +161,7 @@ object MyProfile {
 
     noticeSetting
       .guiRun {
-        player.playSound(
-          player.eyeLocation,
-          org.bukkit.Sound.UI_BUTTON_CLICK,
-          SoundCategory.MASTER,
-          0.75F,
-          1F,
-        )
+        player.playSound(player.eyeLocation, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
         statsData.notice = statsData.notice.not()
         noticeSetting.addText(
           "&aレベルアップをタイトルで通知する",
@@ -189,7 +177,7 @@ object MyProfile {
       .guiRun {
         player.playSound(
           player.eyeLocation,
-          org.bukkit.Sound.BLOCK_CHEST_OPEN,
+          Sound.BLOCK_CHEST_OPEN,
           SoundCategory.MASTER,
           0.75F,
           1F,

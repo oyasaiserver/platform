@@ -1,4 +1,4 @@
-package com.baakun.dynamicprofile
+package com.baakun.dynamicprofile.util
 
 data class TextFormat(
   val id: Int,

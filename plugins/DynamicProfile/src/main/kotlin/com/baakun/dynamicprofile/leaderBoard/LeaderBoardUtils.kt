@@ -1,7 +1,7 @@
 package com.baakun.dynamicprofile.leaderBoard
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
-import com.baakun.dynamicprofile.Tools
+import com.baakun.dynamicprofile.util.Tools
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.File

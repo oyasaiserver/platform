@@ -1,21 +1,21 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.color
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.toFormat
-import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.command.DProfileCmd.addBlackStandGlass
+import com.baakun.dynamicprofile.command.DProfileCmd.commonFunc
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
-import com.baakun.dynamicprofile.profile.DProfileCmd.addBlackStandGlass
-import com.baakun.dynamicprofile.profile.DProfileCmd.commonFunc
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.color
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.toFormat
 import com.github.srain3.sociallikes.datas.Data
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
+import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -89,13 +89,7 @@ object OtherProfile {
     val playerHeadItem = Tools.getPlayerHead(ofp.uniqueId).addText(title, titleLore).allFlag()
     /** ヘッドをクリックした際に、Loreの表示を切り替える */
     playerHeadItem.guiRun {
-      sender.playSound(
-        sender.location,
-        org.bukkit.Sound.UI_BUTTON_CLICK,
-        SoundCategory.MASTER,
-        0.75F,
-        1F,
-      )
+      sender.playSound(sender.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
       val list: MutableList<String>
       if (playerHeadItemStatus) {
         list =
@@ -186,13 +180,7 @@ object OtherProfile {
         )
         .allFlag()
         .guiRun {
-          viewer.playSound(
-            viewer.location,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
+          viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
           ofp.name?.let {
             viewer.closeInventory()
             val payGui = Pay.getPayAmountGUI(viewer, target)
@@ -208,13 +196,7 @@ object OtherProfile {
         )
         .allFlag()
         .guiRun {
-          viewer.playSound(
-            viewer.location,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
+          viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
           ofp.name?.let {
             viewer.closeInventory()
             val payGui = Pay.getTokenAmountGUI(viewer, target)
@@ -228,13 +210,7 @@ object OtherProfile {
         .addText("&fクリックで${target}へtpa要求を送る", mutableListOf("&7相手へテレポートしたい時用", "&7相手が許可するとテレポートする"))
         .allFlag()
         .guiRun {
-          viewer.playSound(
-            viewer.location,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
+          viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
           ofp.name?.let {
             viewer.closeInventory()
             viewer.performCommand("tpa $target")
@@ -255,13 +231,7 @@ object OtherProfile {
         )
         .allFlag()
         .guiRun {
-          viewer.playSound(
-            viewer.location,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
+          viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
           viewer.closeInventory()
 
           //                if (!viewer.isOp && viewer.gameMode != GameMode.CREATIVE) {

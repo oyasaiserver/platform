@@ -1,6 +1,6 @@
 package com.baakun.dynamicprofile.gui
 
-import com.baakun.dynamicprofile.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.allFlag
 import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.block.banner.Pattern

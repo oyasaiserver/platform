@@ -1,4 +1,4 @@
-package com.baakun.dynamicprofile
+package com.baakun.dynamicprofile.util
 
 import java.io.File
 import java.io.IOException

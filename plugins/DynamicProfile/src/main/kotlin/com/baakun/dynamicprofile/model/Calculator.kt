@@ -1,62 +1,61 @@
-package com.baakun.dynamicprofile.exp
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.plugin
-import com.baakun.dynamicprofile.exp.BehType.*
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.plugin
 import org.bukkit.OfflinePlayer
 
 object Calculator {
   fun expAmount(type: BehType): Int {
 
     return when (type) {
-      MOVE -> plugin.config.getInt("Move", 20) // Default: 20
+      BehType.MOVE -> plugin.config.getInt("Move", 20) // Default: 20
 
-      VEHICLE -> plugin.config.getInt("Vehicle", 20)
+      BehType.VEHICLE -> plugin.config.getInt("Vehicle", 20)
 
-      FLY -> plugin.config.getInt("Fly", 10) // Default: 10
+      BehType.FLY -> plugin.config.getInt("Fly", 10) // Default: 10
 
-      JUMP -> plugin.config.getInt("Jump", 40) // Default: 40
+      BehType.JUMP -> plugin.config.getInt("Jump", 40) // Default: 40
 
-      PLACE_BLOCK -> plugin.config.getInt("Block", 20) // Default: 20
+      BehType.PLACE_BLOCK -> plugin.config.getInt("Block", 20) // Default: 20
 
-      VOTE -> plugin.config.getInt("Vote", 30000) // Default: 30000
+      BehType.VOTE -> plugin.config.getInt("Vote", 30000) // Default: 30000
 
-      LIKE -> plugin.config.getInt("Like", 4000)
+      BehType.LIKE -> plugin.config.getInt("Like", 4000)
 
-      RECEIVE_LIKE -> plugin.config.getInt("ReceiveLike", 6000)
+      BehType.RECEIVE_LIKE -> plugin.config.getInt("ReceiveLike", 6000)
 
-      JOIN -> plugin.config.getInt("Join", 10000)
+      BehType.JOIN -> plugin.config.getInt("Join", 10000)
 
-      CHAT -> plugin.config.getInt("Chat", 300)
+      BehType.CHAT -> plugin.config.getInt("Chat", 300)
 
-      PLAY_TIME -> plugin.config.getInt("PlayTime", 300)
+      BehType.PLAY_TIME -> plugin.config.getInt("PlayTime", 300)
     }
   }
 
   fun enumToName(type: BehType): String {
 
     return when (type) {
-      MOVE -> "Move"
+      BehType.MOVE -> "Move"
 
-      VEHICLE -> "Vehicle"
+      BehType.VEHICLE -> "Vehicle"
 
-      FLY -> "Move"
+      BehType.FLY -> "Move"
 
-      JUMP -> "Jump"
+      BehType.JUMP -> "Jump"
 
-      PLACE_BLOCK -> "Block"
+      BehType.PLACE_BLOCK -> "Block"
 
-      VOTE -> "Vote"
+      BehType.VOTE -> "Vote"
 
-      LIKE -> "Like"
+      BehType.LIKE -> "Like"
 
-      RECEIVE_LIKE -> "ReceiveLike"
+      BehType.RECEIVE_LIKE -> "ReceiveLike"
 
-      JOIN -> "Join"
+      BehType.JOIN -> "Join"
 
-      CHAT -> "Chat"
+      BehType.CHAT -> "Chat"
 
-      PLAY_TIME -> "PlayTime"
+      BehType.PLAY_TIME -> "PlayTime"
     }
   }
 

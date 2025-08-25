@@ -1,12 +1,13 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.gui.NumberBanner
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -88,7 +89,7 @@ object Pay {
       gui.setItem(17 - chars.lastIndex + i, nb)
     }
 
-    from.playSound(from.location, org.bukkit.Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+    from.playSound(from.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
   }
 
   /** プレイヤーからプレイヤーへ/payする為のGUIを返す */
@@ -152,6 +153,6 @@ object Pay {
       gui.setItem(17 - chars.lastIndex + i, nb)
     }
 
-    from.playSound(from.location, org.bukkit.Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+    from.playSound(from.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
   }
 }

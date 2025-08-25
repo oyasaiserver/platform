@@ -1,7 +1,8 @@
 @file:Suppress("DEPRECATION")
 
-package com.baakun.dynamicprofile
+package com.baakun.dynamicprofile.util
 
+import com.baakun.dynamicprofile.DynamicProfile
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allStats
 import com.baakun.dynamicprofile.data.Stats

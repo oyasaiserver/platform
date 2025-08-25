@@ -1,4 +1,4 @@
-package com.baakun.dynamicprofile.exp
+package com.baakun.dynamicprofile.model
 
 enum class BehType {
   MOVE,

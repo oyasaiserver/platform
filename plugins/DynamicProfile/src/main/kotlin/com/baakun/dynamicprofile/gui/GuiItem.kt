@@ -1,6 +1,6 @@
 package com.baakun.dynamicprofile.gui
 
-import com.baakun.dynamicprofile.Tools
+import com.baakun.dynamicprofile.util.Tools
 import org.bukkit.NamespacedKey
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
