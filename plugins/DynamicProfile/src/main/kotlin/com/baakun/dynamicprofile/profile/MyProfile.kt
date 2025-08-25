@@ -39,7 +39,7 @@ object MyProfile {
       statsData = statsData,
       inventory = inventory,
       isSelfProfile = true,
-      soundPlayer = player
+      soundPlayer = player,
     )
 
     addMenuItems(inventory, player)
@@ -57,8 +57,8 @@ object MyProfile {
     inventory.setItem(10, setTitle)
 
     for (i in 0..4) {
-      val recommend = statsData.recommends[i] ?: -0
-      if (recommend == -0) {
+      val recommend = statsData.recommends[i] ?: -1
+      if (recommend == -1) {
         val noRecommend = ItemStack(Material.PAPER)
         noRecommend.addText("空スロット#${i + 1}", mutableListOf("右クリックして編集")).allFlag()
         noRecommend.guiRunRight {
@@ -90,7 +90,7 @@ object MyProfile {
           Recommended.display(player, i)
         }
         sign.guiRunShiftRight {
-          statsData.recommends[i] = -0
+          statsData.recommends[i] = -1
           player.sendMessage("§aおすすめを削除しました。")
           player.closeInventory()
           addMenuItems(inventory, player)
