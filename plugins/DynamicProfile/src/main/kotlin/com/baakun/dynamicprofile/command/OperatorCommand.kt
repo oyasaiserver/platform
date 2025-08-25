@@ -1,6 +1,7 @@
 package com.baakun.dynamicprofile.command
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
+import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
@@ -446,6 +447,16 @@ object OperatorCommand : CommandExecutor {
             player.sendMessage("おすすめ建築宣伝インターバルを${newSeconds}秒に設定しました。")
           } else {
             player.sendMessage("/dpmanager recommendInterval [秒]")
+          }
+        }
+        "setEmpty" -> {
+          allUser.forEach {
+            val recStats = getStats(it)
+            recStats.recommends.forEach { t, u ->
+              if ((u == 0 || u == -1)) {
+                recStats.recommends[t] = Integer.MIN_VALUE
+              }
+            }
           }
         }
       }
