@@ -1,5 +1,8 @@
 package com.baakun.dynamicprofile.model
 
+import com.baakun.dynamicprofile.data.Reward
+import com.baakun.dynamicprofile.gui.GuiInventory
+import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.util.Tools.addText
 import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.util.Tools.color
@@ -7,9 +10,6 @@ import com.baakun.dynamicprofile.util.Tools.econ
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
 import com.baakun.dynamicprofile.util.Tools.token
-import com.baakun.dynamicprofile.data.Reward
-import com.baakun.dynamicprofile.gui.GuiInventory
-import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.*

@@ -1,8 +1,8 @@
 package com.baakun.dynamicprofile
 
-import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import com.baakun.dynamicprofile.util.Tools.getStats
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
 

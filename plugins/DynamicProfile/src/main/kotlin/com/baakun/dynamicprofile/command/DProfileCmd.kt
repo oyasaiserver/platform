@@ -1,14 +1,15 @@
 package com.baakun.dynamicprofile.command
 
 import com.baakun.dynamicprofile.DynamicProfile
-import com.baakun.dynamicprofile.util.Tools
-import com.baakun.dynamicprofile.util.Tools.addText
-import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.model.MyProfile
 import com.baakun.dynamicprofile.model.OtherProfile
 import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
 import com.baakun.dynamicprofile.profile.playerSelect.RunType
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import kotlin.concurrent.thread
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -19,7 +20,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import kotlin.concurrent.thread
 
 /** /dprofileコマンドの処理 */
 object DProfileCmd : CommandExecutor {
@@ -95,13 +95,7 @@ object DProfileCmd : CommandExecutor {
         mutableListOf("&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"),
       )
       .guiRun {
-        viewer.playSound(
-          viewer.location,
-          Sound.UI_BUTTON_CLICK,
-          SoundCategory.MASTER,
-          0.75F,
-          1F,
-        )
+        viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
         PlayerSelect.display(viewer, RunType.OPEN_PROFILE)
       }
     inv.setItem(53, selectPlayer)

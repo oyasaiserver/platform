@@ -1,11 +1,11 @@
 package com.baakun.dynamicprofile.profile.playerTitle
 
 import com.baakun.dynamicprofile.DynamicProfile
-import com.baakun.dynamicprofile.util.Tools
-import com.baakun.dynamicprofile.util.Tools.addText
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
 import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

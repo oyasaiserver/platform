@@ -1,7 +1,7 @@
 package com.baakun.dynamicprofile.exp
 
-import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.api.LikeEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

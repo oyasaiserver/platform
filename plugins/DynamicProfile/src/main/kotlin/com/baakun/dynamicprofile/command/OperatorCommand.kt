@@ -1,15 +1,11 @@
 package com.baakun.dynamicprofile.command
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
-import com.baakun.dynamicprofile.util.Tools.getStats
-import com.baakun.dynamicprofile.util.Tools.levelGroups
-import com.baakun.dynamicprofile.util.Tools.plugin
-import com.baakun.dynamicprofile.util.Tools.rewardReceiveStatus
 import com.baakun.dynamicprofile.data.Stats
-import com.baakun.dynamicprofile.model.BehType
-import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.loadWeeklyLB
 import com.baakun.dynamicprofile.leaderBoard.LeaderBoardUtils.weeklyUpdate
+import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.profile.playerTitle.TitleGui
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.createNewTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.deTitle
@@ -18,6 +14,10 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.levelGroups
+import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.rewardReceiveStatus
 import com.github.srain3.sociallikes.datas.Data
 import com.google.gson.GsonBuilder
 import java.io.File
