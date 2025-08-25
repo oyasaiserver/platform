@@ -12,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 
 class RecommendBroadcaster(private val plugin: JavaPlugin) {
+  private var frameIndex = 0 // 0,1:普通枠 2:特別枠
+
   fun start(intervalTicks: Long) {
     object : BukkitRunnable() {
         override fun run() {
@@ -35,25 +37,26 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
   private fun broadcastRandomRecommend() {
     val onlinePlayers = Bukkit.getOnlinePlayers().toList()
     if (onlinePlayers.isEmpty()) return
-    val weightedList = mutableListOf<org.bukkit.entity.Player>()
-    for (player in onlinePlayers) {
-      val perm =
-        plugin.server.servicesManager
-          .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
-          ?.provider
 
-      val isSPVip = perm?.playerInGroup(player, "spdonator") == true
-      val isVip = perm?.playerInGroup(player, "donator") == true
-      val weight =
-        when {
-          isSPVip -> 3
-          isVip -> 2
-          else -> 1
-        }
-      repeat(weight) { weightedList.add(player) }
-    }
-    if (weightedList.isEmpty()) return
-    val player = weightedList.random()
+    // 権限プロバイダ取得
+    val perm =
+      plugin.server.servicesManager
+        .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
+        ?.provider
+
+    val targetPlayers =
+      when (frameIndex % 3) {
+        2 ->
+          onlinePlayers.filter { player ->
+            (perm?.playerInGroup(player, "spdonator") == true ||
+              perm?.playerInGroup(player, "donator") == true)
+          }
+        else -> onlinePlayers
+      }
+    frameIndex = (frameIndex + 1) % 3
+    if (targetPlayers.isEmpty()) return
+
+    val player = targetPlayers.random()
     val stats = getStats(player.uniqueId)
     val recommendIds = stats.recommends.values.filter { it != -1 }
     if (recommendIds.isEmpty()) return
