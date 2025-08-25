@@ -1,9 +1,12 @@
-package com.baakun.dynamicprofile.model
+package com.baakun.dynamicprofile.profile
 
 import com.baakun.dynamicprofile.command.DProfileCmd.addBlackStandGlass
 import com.baakun.dynamicprofile.command.DProfileCmd.commonFunc
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.model.Calculator
+import com.baakun.dynamicprofile.model.GiftItem
+import com.baakun.dynamicprofile.model.Pay
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
 import com.baakun.dynamicprofile.util.Tools
 import com.baakun.dynamicprofile.util.Tools.addText

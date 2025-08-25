@@ -3,7 +3,7 @@ package com.baakun.dynamicprofile.profile.playerSelect
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.baakun.dynamicprofile.model.Calculator
-import com.baakun.dynamicprofile.model.MyProfile
+import com.baakun.dynamicprofile.profile.MyProfile
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitles
 import com.baakun.dynamicprofile.util.Tools

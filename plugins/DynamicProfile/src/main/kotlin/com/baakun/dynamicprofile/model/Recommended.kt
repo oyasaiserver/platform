@@ -2,6 +2,7 @@ package com.baakun.dynamicprofile.model
 
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.profile.MyProfile
 import com.baakun.dynamicprofile.util.Tools.addText
 import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.util.Tools.getStats
