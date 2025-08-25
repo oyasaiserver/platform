@@ -58,7 +58,7 @@ object MyProfile {
 
     for (i in 0..4) {
       val recommend = statsData.recommends[i] ?: -1
-      if (recommend == -1) {
+      if (recommend == -1 || recommend == 0) {
         val noRecommend = ItemStack(Material.PAPER)
         noRecommend.addText("空スロット#${i + 1}", mutableListOf("右クリックして編集")).allFlag()
         noRecommend.guiRunRight {
