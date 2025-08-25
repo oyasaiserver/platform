@@ -52,7 +52,6 @@ object DailyEvent : Listener {
           }
         }
         .runTaskLater(plugin, 40L)
-      return
     }
     if (!allUser.contains(player.uniqueId)) allUser.add(player.uniqueId)
 

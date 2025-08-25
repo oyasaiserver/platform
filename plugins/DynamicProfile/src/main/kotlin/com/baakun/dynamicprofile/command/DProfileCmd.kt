@@ -2,8 +2,8 @@ package com.baakun.dynamicprofile.command
 
 import com.baakun.dynamicprofile.DynamicProfile
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
-import com.baakun.dynamicprofile.model.MyProfile
-import com.baakun.dynamicprofile.model.OtherProfile
+import com.baakun.dynamicprofile.profile.MyProfile
+import com.baakun.dynamicprofile.profile.OtherProfile
 import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
 import com.baakun.dynamicprofile.profile.playerSelect.RunType
 import com.baakun.dynamicprofile.util.Tools
