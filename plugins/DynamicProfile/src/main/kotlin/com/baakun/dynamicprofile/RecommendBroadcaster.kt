@@ -39,16 +39,20 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     if (onlinePlayers.isEmpty()) return
 
     // 権限プロバイダ取得
-    val perm = plugin.server.servicesManager
-      .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
-      ?.provider
+    val perm =
+      plugin.server.servicesManager
+        .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
+        ?.provider
 
-    val targetPlayers = when (frameIndex % 3) {
-      2 -> onlinePlayers.filter { player ->
-        (perm?.playerInGroup(player, "spdonator") == true || perm?.playerInGroup(player, "donator") == true)
+    val targetPlayers =
+      when (frameIndex % 3) {
+        2 ->
+          onlinePlayers.filter { player ->
+            (perm?.playerInGroup(player, "spdonator") == true ||
+              perm?.playerInGroup(player, "donator") == true)
+          }
+        else -> onlinePlayers
       }
-      else -> onlinePlayers
-    }
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
 
