@@ -73,7 +73,7 @@ object OtherProfile {
 
     for (i in 0..4) {
       val recommend = statsData.recommends[i] ?: -1
-      if (recommend == -1) {
+      if (recommend == -1 || recommend == 0) {
         val noRecommend = ItemStack(Material.PAPER)
         noRecommend.addText("空スロット#${i + 1}", mutableListOf("未設定")).allFlag()
         inventory.setItem(i + 12, noRecommend)

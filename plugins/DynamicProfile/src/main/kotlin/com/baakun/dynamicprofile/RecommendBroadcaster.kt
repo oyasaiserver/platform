@@ -57,7 +57,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
     val player = targetPlayers.random()
     val stats = getStats(player.uniqueId)
-    val recommendIds = stats.recommends.values.filter { it != -1 }
+    val recommendIds = stats.recommends.values.filter { it != -1 && it != 0 }
     if (recommendIds.isEmpty()) return
     val selected = recommendIds.random()
 
