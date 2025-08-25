@@ -119,15 +119,18 @@ object PlayerSelect {
             statsData.title = -1
           }
         }
-
-        head
-          .addText(
-            title,
-            mutableListOf(
-              "&a総プレイ時間: &7${statsData.getPlayTime()}",
-              "&a初ログイン; &7${statsData.getFirstPlayed()}",
-            ),
+        val headLore =
+          mutableListOf(
+            "&a総プレイ時間: &7${statsData.getPlayTime()}",
+            "&a初ログイン; &7${statsData.getFirstPlayed()}",
           )
+        if (statsData.introduction.isNotEmpty()) {
+          headLore.add("")
+          headLore.add("&7自己紹介 &f:")
+          statsData.introduction.split("\n").forEach { line -> headLore.add(" &f$line") }
+        }
+        head
+          .addText(title, headLore)
           .guiRun {
             player.playSound(
               player.eyeLocation,
