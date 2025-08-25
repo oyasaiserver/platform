@@ -43,6 +43,13 @@ object ProfileUtil {
         "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
       )
     }
+    if (statsData.introduction.isNotEmpty()) {
+      titleLore.add("")
+      titleLore.add("&7自己紹介 &f:")
+      statsData.introduction.split("\n").forEach { line ->
+        titleLore.add(" &f$line")
+      }
+    }
     if (statsData.title != -1) {
       val currentTitle = getTitleFromId(statsData.title)
       if (!currentTitle.description.isNullOrEmpty()) {
@@ -72,6 +79,13 @@ object ProfileUtil {
                 add(
                   "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
                 )
+              if (statsData.introduction.isNotEmpty()) {
+                add("")
+                add("&7自己紹介 &f：")
+                statsData.introduction.split("\n").forEach { line ->
+                  add(" &f$line")
+                }
+              }
               if (statsData.title != -1) {
                 val currentTitle = getTitleFromId(statsData.title)
                 if (!currentTitle.description.isNullOrEmpty()) {

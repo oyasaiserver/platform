@@ -15,6 +15,7 @@ import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.toFormat
 import com.github.srain3.sociallikes.datas.Data
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -29,7 +30,7 @@ object MyProfile {
 
     addBlackStandGlass(
       inventory,
-      arrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 27, 36, 45, 12, 13, 14, 15, 16, 51, 52, 53),
+      arrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 27, 36, 45, 46, 12, 13, 14, 15, 16, 51, 52, 53),
     )
     commonFunc(inventory, player, player.name)
 
@@ -134,5 +135,28 @@ object MyProfile {
       )
       .allFlag()
     inventory.setItem(52, receiveLevelRewards)
+
+    // 自己紹介編集ボタン
+    val editIntro = ItemStack(Material.WRITABLE_BOOK)
+    editIntro.addText("&a自己紹介を編集", mutableListOf("&7クリックして自己紹介文を本で編集", "&7閉じて完了"))
+    editIntro.guiRun {
+      player.closeInventory()
+      val book = ItemStack(Material.WRITABLE_BOOK)
+      val meta = book.itemMeta as org.bukkit.inventory.meta.BookMeta
+      meta.setCustomModelData(114514)
+      if (statsData.introduction.isNotEmpty()) {
+        meta.addPage(statsData.introduction)
+      }
+      book.itemMeta = meta
+      if(player.inventory.firstEmpty() != -1) {
+        player.inventory.addItem(book)
+        player.sendMessage("§a自己紹介編集用の本を開きました。内容を書いて閉じてください。")
+        player.sendMessage("§7閉じた時点で内容が自己紹介として保存されます。")
+        player.sendMessage("§a変更せず終了する場合は、署名してください。")
+      }else{
+        player.sendMessage("§cインベントリに空きがないため、自己紹介編集用の本を開けません。")
+      }
+    }
+    inventory.setItem(46, editIntro)
   }
 }

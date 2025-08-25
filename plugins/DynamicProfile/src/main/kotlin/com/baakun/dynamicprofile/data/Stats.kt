@@ -44,6 +44,7 @@ data class Stats(
   @Expose val friends: MutableList<UUID> = mutableListOf(),
   @Expose var title: Int = -1,
   var timePlayed: Int = 0,
+  @Expose var introduction: String = "",
 ) {
   fun addAllCounts(stats: Stats) {
     this.exp += stats.exp
