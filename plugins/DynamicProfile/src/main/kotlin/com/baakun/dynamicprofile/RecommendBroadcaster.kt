@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class RecommendBroadcaster(private val plugin: JavaPlugin) {
   private var frameIndex = 0 // 0,1:普通枠 2:特別枠
+  val EMPTY = Integer.MIN_VALUE
 
   fun start(intervalTicks: Long) {
     object : BukkitRunnable() {
@@ -45,19 +46,25 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
     val targetPlayers =
       when (frameIndex % 3) {
-        2 ->
-          onlinePlayers.filter { player ->
-            (perm?.playerInGroup(player, "spdonator") == true ||
-              perm?.playerInGroup(player, "donator") == true)
-          }
+        2 -> {
+          var filtered =
+            onlinePlayers.filter { player ->
+              (perm?.playerInGroup(player, "spdonator") == true ||
+                perm?.playerInGroup(player, "donator") == true) &&
+                getStats(player.uniqueId).recommends.isNotEmpty()
+            }
+          if (filtered.isEmpty()) filtered = onlinePlayers
+          filtered
+        }
+
         else -> onlinePlayers
       }
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
 
-    val player = targetPlayers.random()
+    val player = targetPlayers.filter { getStats(it.uniqueId).recommends.isNotEmpty() }.random()
     val stats = getStats(player.uniqueId)
-    val recommendIds = stats.recommends.values.filter { it != -1 && it != 0 }
+    val recommendIds = stats.recommends.values.filter { it != EMPTY }
     if (recommendIds.isEmpty()) return
     val selected = recommendIds.random()
 

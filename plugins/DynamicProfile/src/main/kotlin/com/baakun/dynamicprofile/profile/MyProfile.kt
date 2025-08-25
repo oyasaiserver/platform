@@ -23,6 +23,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 object MyProfile {
+  val EMPTY = Integer.MIN_VALUE
 
   fun display(player: Player) {
     val inventory = GuiInventory.createInventory(6, player.name)
@@ -57,8 +58,8 @@ object MyProfile {
     inventory.setItem(10, setTitle)
 
     for (i in 0..4) {
-      val recommend = statsData.recommends[i] ?: -1
-      if (recommend == -1 || recommend == 0) {
+      val recommend = statsData.recommends[i] ?: EMPTY
+      if (recommend == EMPTY) {
         val noRecommend = ItemStack(Material.PAPER)
         noRecommend.addText("空スロット#${i + 1}", mutableListOf("右クリックして編集")).allFlag()
         noRecommend.guiRunRight {
@@ -90,7 +91,7 @@ object MyProfile {
           Recommended.display(player, i)
         }
         sign.guiRunShiftRight {
-          statsData.recommends[i] = -1
+          statsData.recommends[i] = EMPTY
           player.sendMessage("§aおすすめを削除しました。")
           player.closeInventory()
           addMenuItems(inventory, player)

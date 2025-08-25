@@ -19,6 +19,8 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 object OtherProfile {
+  val EMPTY = Integer.MIN_VALUE
+
   fun display(sender: Player, target: String) {
     val ofpNullable = Bukkit.getOfflinePlayerIfCached(target)
     if (ofpNullable == null) {
@@ -72,8 +74,8 @@ object OtherProfile {
     val statsData = getStats(Bukkit.getOfflinePlayer(target).uniqueId)
 
     for (i in 0..4) {
-      val recommend = statsData.recommends[i] ?: -1
-      if (recommend == -1 || recommend == 0) {
+      val recommend = statsData.recommends[i] ?: EMPTY
+      if (recommend == EMPTY) {
         val noRecommend = ItemStack(Material.PAPER)
         noRecommend.addText("空スロット#${i + 1}", mutableListOf("未設定")).allFlag()
         inventory.setItem(i + 12, noRecommend)
