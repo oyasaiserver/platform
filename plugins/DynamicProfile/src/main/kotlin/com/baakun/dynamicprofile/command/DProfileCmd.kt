@@ -1,16 +1,17 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.command
 
-import com.baakun.dynamicprofile.DynamicProfile.Companion.perms
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.plugin
+import com.baakun.dynamicprofile.DynamicProfile
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
+import com.baakun.dynamicprofile.model.MyProfile
+import com.baakun.dynamicprofile.model.OtherProfile
 import com.baakun.dynamicprofile.profile.playerSelect.PlayerSelect
 import com.baakun.dynamicprofile.profile.playerSelect.RunType
-import kotlin.concurrent.thread
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -18,10 +19,11 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import kotlin.concurrent.thread
 
 /** /dprofileコマンドの処理 */
 object DProfileCmd : CommandExecutor {
-  private val required = plugin.config.getInt("Required", 100000)
+  private val required = Tools.plugin.config.getInt("Required", 100000)
 
   override fun onCommand(
     sender: CommandSender,
@@ -60,7 +62,7 @@ object DProfileCmd : CommandExecutor {
     thread { // Threadを使わないと、サーバーが固まる可能性があると表示され処理が止まる
       var standGlassPane = ItemStack(Material.LIME_STAINED_GLASS_PANE)
       standGlassPane.addText(" ", mutableListOf()).allFlag()
-      perms?.let { perms ->
+      DynamicProfile.Companion.perms?.let { perms ->
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.chukyu"))
           standGlassPane = ItemStack(Material.GREEN_STAINED_GLASS_PANE)
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.jokyu"))
@@ -95,7 +97,7 @@ object DProfileCmd : CommandExecutor {
       .guiRun {
         viewer.playSound(
           viewer.location,
-          org.bukkit.Sound.UI_BUTTON_CLICK,
+          Sound.UI_BUTTON_CLICK,
           SoundCategory.MASTER,
           0.75F,
           1F,

@@ -2,7 +2,7 @@
 
 package com.baakun.dynamicprofile.gui
 
-import com.baakun.dynamicprofile.Tools
+import com.baakun.dynamicprofile.util.Tools
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

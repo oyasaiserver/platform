@@ -1,14 +1,13 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.color
-import com.baakun.dynamicprofile.Tools.econ
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.plugin
-import com.baakun.dynamicprofile.Tools.token
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.color
+import com.baakun.dynamicprofile.util.Tools.econ
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.plugin
+import com.baakun.dynamicprofile.util.Tools.token
 import com.baakun.dynamicprofile.data.Reward
-import com.baakun.dynamicprofile.exp.Calculator
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import net.kyori.adventure.text.Component

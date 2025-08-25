@@ -1,6 +1,6 @@
 package com.baakun.dynamicprofile
 
-import com.baakun.dynamicprofile.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -38,7 +38,6 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     val onlinePlayers = Bukkit.getOnlinePlayers().toList()
     if (onlinePlayers.isEmpty()) return
 
-    // 権限プロバイダ取得
     val perm =
       plugin.server.servicesManager
         .getRegistration(net.milkbowl.vault.permission.Permission::class.java)

@@ -1,13 +1,13 @@
-package com.baakun.dynamicprofile.leaderBoard
+package com.baakun.dynamicprofile.command
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
-import com.baakun.dynamicprofile.Tools.getIndexes
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.getWeeklyLB
-import com.baakun.dynamicprofile.exp.Calculator.getExp
-import com.baakun.dynamicprofile.exp.Calculator.getLeve
-import com.baakun.dynamicprofile.leaderBoard.LBType.*
+import com.baakun.dynamicprofile.util.Tools.getIndexes
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.getWeeklyLB
+import com.baakun.dynamicprofile.model.Calculator.getExp
+import com.baakun.dynamicprofile.model.Calculator.getLeve
+import com.baakun.dynamicprofile.command.LBType.*
 import java.util.*
 import kotlin.concurrent.thread
 import org.bukkit.Bukkit

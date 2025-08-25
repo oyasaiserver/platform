@@ -1,7 +1,7 @@
 package com.baakun.dynamicprofile.leaderBoard
 
-import com.baakun.dynamicprofile.exp.BehType
-import com.baakun.dynamicprofile.exp.BehType.*
+import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.model.BehType.*
 import com.google.gson.annotations.Expose
 import java.util.*
 

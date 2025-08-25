@@ -1,14 +1,14 @@
 package com.baakun.dynamicprofile.profile.playerSelect
 
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.getIndexes
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.getIndexes
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
-import com.baakun.dynamicprofile.profile.MyProfile
+import com.baakun.dynamicprofile.model.MyProfile
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitleFromId
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.getTitles
 import org.bukkit.Bukkit

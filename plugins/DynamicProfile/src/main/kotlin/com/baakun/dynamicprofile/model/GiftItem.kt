@@ -1,11 +1,11 @@
 @file:Suppress("DEPRECATION")
 
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.color
-import com.baakun.dynamicprofile.Tools.econ
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.color
+import com.baakun.dynamicprofile.util.Tools.econ
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit

@@ -1,14 +1,15 @@
-package com.baakun.dynamicprofile.profile
+package com.baakun.dynamicprofile.model
 
-import com.baakun.dynamicprofile.Tools.addText
-import com.baakun.dynamicprofile.Tools.allFlag
-import com.baakun.dynamicprofile.Tools.getStats
-import com.baakun.dynamicprofile.Tools.toFormat
+import com.baakun.dynamicprofile.util.Tools.addText
+import com.baakun.dynamicprofile.util.Tools.allFlag
+import com.baakun.dynamicprofile.util.Tools.getStats
+import com.baakun.dynamicprofile.util.Tools.toFormat
 import com.baakun.dynamicprofile.gui.GuiInventory
 import com.baakun.dynamicprofile.gui.GuiItem.guiRun
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -49,7 +50,7 @@ object Recommended {
         if (page != maxPage) {
           player.playSound(
             player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
+            Sound.UI_BUTTON_CLICK,
             SoundCategory.MASTER,
             0.75F,
             1F,
@@ -64,7 +65,7 @@ object Recommended {
         if (page != 0) {
           player.playSound(
             player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
+            Sound.UI_BUTTON_CLICK,
             SoundCategory.MASTER,
             0.75F,
             1F,

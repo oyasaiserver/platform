@@ -1,12 +1,12 @@
 package com.baakun.dynamicprofile.data
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.UUIDMap
-import com.baakun.dynamicprofile.Tools
-import com.baakun.dynamicprofile.Tools.levelGroups
-import com.baakun.dynamicprofile.Tools.rewardReceiveStatus
-import com.baakun.dynamicprofile.Tools.toFormat
-import com.baakun.dynamicprofile.exp.BehType
-import com.baakun.dynamicprofile.exp.Calculator
+import com.baakun.dynamicprofile.util.Tools
+import com.baakun.dynamicprofile.util.Tools.levelGroups
+import com.baakun.dynamicprofile.util.Tools.rewardReceiveStatus
+import com.baakun.dynamicprofile.util.Tools.toFormat
+import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.leaderBoard.LBStats
 import com.google.gson.annotations.Expose
 import java.time.Duration
