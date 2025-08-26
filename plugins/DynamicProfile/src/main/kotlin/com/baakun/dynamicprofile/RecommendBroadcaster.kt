@@ -15,6 +15,9 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
   private var frameIndex = 0 // 0,1:普通枠 2:特別枠
   val EMPTY = Integer.MIN_VALUE
 
+  private val specialCache = mutableSetOf<java.util.UUID>()
+  private val normalCache = mutableSetOf<java.util.UUID>()
+
   fun start(intervalTicks: Long) {
     object : BukkitRunnable() {
         override fun run() {
@@ -44,25 +47,44 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
         ?.provider
 
-    val targetPlayers =
+    val (targetPlayers, cache) =
       when (frameIndex % 3) {
         2 -> {
-          var filtered =
+          // 特別枠
+          val filtered =
             onlinePlayers.filter { player ->
               (perm?.playerInGroup(player, "spdonator") == true ||
                 perm?.playerInGroup(player, "donator") == true) &&
                 getStats(player.uniqueId).recommends.isNotEmpty()
             }
-          if (filtered.isEmpty()) filtered = onlinePlayers
-          filtered
+          filtered to specialCache
         }
-
-        else -> onlinePlayers
+        else -> {
+          // 通常枠
+          val filtered =
+            onlinePlayers.filter { player -> getStats(player.uniqueId).recommends.isNotEmpty() }
+          filtered to normalCache
+        }
       }
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
 
-    val player = targetPlayers.filter { getStats(it.uniqueId).recommends.isNotEmpty() }.random()
+    // キャッシュされていないプレイヤーのみ抽出
+    val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
+    val player =
+      when {
+        uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
+        else -> {
+          // 全員キャッシュ済みならキャッシュをクリアして再試行
+          cache.clear()
+          val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
+          if (retryUncached.isEmpty()) return
+          retryUncached.random()
+        }
+      }
+    // 選出したプレイヤーをキャッシュに追加
+    cache.add(player.uniqueId)
+
     val stats = getStats(player.uniqueId)
     val recommendIds = stats.recommends.values.filter { it != EMPTY }
     if (recommendIds.isEmpty()) return
