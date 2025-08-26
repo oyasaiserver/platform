@@ -6,7 +6,7 @@ export const secrets = z
     DOTENV_PUBLIC_KEY: z.string(),
     ENVIRONMENT: environment,
     // onprem
-    PUBLIC_IPV4: z.ipv4(),
+    PUBLIC_IPV4: z.string(),
     SSH_PRIVATE_KEY: z.string(),
     SSH_USERNAME: z.string(),
     SSH_PASSWORD: z.string(),
