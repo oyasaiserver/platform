@@ -4,37 +4,32 @@ import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { exit } from 'node:process'
 import { basename, join } from 'node:path'
-import { onpremInfra } from '@oyasaiserver/onprem'
+import { createOnpremInfra } from '@oyasaiserver/onprem'
 import { $, YAML } from 'zx'
-import type { CopyOptions, MakeDirectoryOptions } from 'node:fs'
 
-const paths = {
-  dist: 'dist',
-  assets: 'assets',
-  plugins: 'minecraft-main/plugins'
-} as const
-
-await rm(paths.dist, {
+const rf = {
   recursive: true,
   force: true
-})
+} as const
+
+await rm('dist', rf)
 
 const jars = glob(`${directory.root}/plugins/*/build/libs/*.jar`)
 for await (const jar of jars) {
   const name = `${basename(jar).split('-')[0]}.jar`
-  await cp(jar, join(paths.dist, paths.plugins, name))
+  await cp(jar, join('dist/minecraft-main/plugins', name))
 }
 
-await writeFile('dist/compose.yaml', YAML.stringify(onpremInfra))
+await cp('assets', 'dist', rf)
+
+await writeFile('dist/compose.yaml', YAML.stringify(createOnpremInfra()))
 
 if (secrets.ENVIRONMENT === 'local') {
-  const options: MakeDirectoryOptions & CopyOptions = { recursive: true }
-  await mkdir(secrets.ENVIRONMENT, options)
-  await cp('dist', secrets.ENVIRONMENT, options)
-  await cp('assets', secrets.ENVIRONMENT, options)
+  await mkdir(secrets.ENVIRONMENT, rf)
+  await cp('dist', secrets.ENVIRONMENT, rf)
   await $({
     cwd: secrets.ENVIRONMENT
-  })`docker compose up --detach --wait`
+  })`docker compose up --detach --remove-orphans --wait`
   exit(0)
 }
 
@@ -52,9 +47,6 @@ const dir = `${base}/${secrets.ENVIRONMENT}`
 await ssh.$`sudo mkdir -p ${dir}`
 await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
 
-await ssh.$`cd ${dir} && docker compose down --remove-orphans`
-
-await ssh.putDirectory('assets', dir)
 await ssh.putDirectory('dist', dir)
 
 await ssh.$`cd ${dir} && docker compose up --detach --wait`

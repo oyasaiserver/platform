@@ -5,25 +5,28 @@ import { nodeExporter } from './services/node-exporter.ts'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import { minecraftMain } from './services/minecraft-main.ts'
 import { minecraftMainBackup } from './services/minecraft-main-backup.ts'
+import type { Compose } from '@json-types/compose'
 
-export const onpremInfra = {
-  services: {
-    mariadb,
-    'minecraft-main': minecraftMain,
+export function createOnpremInfra(): Readonly<Compose> {
+  return {
+    services: {
+      mariadb,
+      'minecraft-main': minecraftMain,
 
-    ...(secrets.ENVIRONMENT === 'production' && {
-      'minecraft-main-backup': minecraftMainBackup,
+      ...(secrets.ENVIRONMENT === 'production' && {
+        'minecraft-main-backup': minecraftMainBackup,
 
-      prometheus,
-      grafana,
-      'node-exporter': nodeExporter
-    })
-  },
+        prometheus,
+        grafana,
+        'node-exporter': nodeExporter
+      })
+    },
 
-  volumes: {
-    ...(secrets.ENVIRONMENT === 'production' && {
-      prometheus_data: {},
-      grafana_data: {}
-    })
+    volumes: {
+      ...(secrets.ENVIRONMENT === 'production' && {
+        prometheus_data: {},
+        grafana_data: {}
+      })
+    }
   }
-} as const
+}
