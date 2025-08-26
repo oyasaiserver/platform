@@ -77,9 +77,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
-      - run: ./gradlew build --parallel
-      - run: npm run deploy
-        working-directory: infra/onprem
+      - run: |
+          ./gradlew build --parallel
+          npm run deploy -w infra/onprem
         env:
           ENVIRONMENT: ${{ needs.envs.outputs.ENVIRONMENT }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}

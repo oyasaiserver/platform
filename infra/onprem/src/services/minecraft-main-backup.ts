@@ -10,7 +10,7 @@ export const minecraftMainBackup: Service = {
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     BACKUP_METHOD: 'restic',
     RESTIC_PASSWORD: secrets.RESTIC_PASSWORD,
-    RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/${secrets.R2_BUCKET_NAME}`,
+    RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/${secrets.R2_BUCKET_NAME}/minecraft-main-backup`,
     AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
     EXCLUDES: '*.jar,cache,logs,*.tmp,bluemap',
