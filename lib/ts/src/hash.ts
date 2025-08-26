@@ -1,6 +1,6 @@
-import { createHash } from 'crypto'
-import { readdir, readFile } from 'fs/promises'
-import { join, relative } from 'path'
+import { createHash } from 'node:crypto'
+import { readdir, readFile } from 'node:fs/promises'
+import { join, relative } from 'node:path'
 
 export async function hashDirectory(dir: string): Promise<string> {
   const hash = createHash('sha256')
