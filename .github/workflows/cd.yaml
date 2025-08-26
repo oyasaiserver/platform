@@ -71,7 +71,6 @@ jobs:
     needs:
       - envs
       - cdktf
-    if: needs.envs.outputs.ENVIRONMENT == 'production'
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
     steps:
