@@ -11,7 +11,7 @@ export const config = {
       memory: {
         production: '32G',
         development: '16G',
-        local: '3G'
+        local: '5G'
       }
     },
     minecraftBedrock: {
