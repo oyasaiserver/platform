@@ -1,5 +1,6 @@
 package com.baakun.dynamicprofile
 
+import com.baakun.dynamicprofile.util.Tools
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import net.kyori.adventure.text.Component
@@ -19,18 +20,6 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
   private val normalCache = mutableSetOf<java.util.UUID>()
   private val specialBuildingCache = mutableSetOf<Int>()
   private val normalBuildingCache = mutableSetOf<Int>()
-  private var mode: RecommendMode = RecommendMode.PLAYER_FIRST
-
-  fun setMode(newMode: RecommendMode) {
-    if (mode != newMode) {
-      mode = newMode
-      // モード切替時はキャッシュをクリア
-      specialCache.clear()
-      normalCache.clear()
-    }
-  }
-
-  fun getMode(): RecommendMode = mode
 
   fun start(intervalTicks: Long) {
     object : BukkitRunnable() {
@@ -82,7 +71,11 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
       }
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
-
+    val mode: RecommendMode = if (Tools.plugin.config.getInt("RecommendBroadcastMode", 0) == 0) {
+      RecommendMode.BUILDING_FIRST
+    } else {
+      RecommendMode.PLAYER_FIRST
+    }
     when (mode) {
       RecommendMode.PLAYER_FIRST -> {
         // プレイヤーから選ぶ
@@ -132,6 +125,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         sendRecommendMessage(player.name, selected)
       }
     }
+
   }
 
   private fun sendRecommendMessage(playerName: String, selected: Int) {
