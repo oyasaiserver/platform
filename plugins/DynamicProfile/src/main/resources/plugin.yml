@@ -29,3 +29,6 @@ commands:
     description: 'DynamicProfileの各種ステータスの週間リーダーボードを表示する'
     permission: dprofile.basic
     aliases: [dpwl]
+  dpsuki:
+    description: 'おすすめ建築の登録・削除コマンド'
+    permission: dprofile.basic
