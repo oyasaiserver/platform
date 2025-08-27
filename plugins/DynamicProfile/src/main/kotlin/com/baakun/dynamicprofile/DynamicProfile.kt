@@ -5,6 +5,7 @@ import com.baakun.dynamicprofile.command.LeaderBoardCommand
 import com.baakun.dynamicprofile.command.LeaderBoardCommandCompleter
 import com.baakun.dynamicprofile.command.OperatorCommand
 import com.baakun.dynamicprofile.command.OperatorCommandCompleter
+import com.baakun.dynamicprofile.command.RecommendCommand
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.exp.DailyEvent
 import com.baakun.dynamicprofile.exp.MoveEvent
@@ -177,6 +178,8 @@ class DynamicProfile : JavaPlugin() {
 
     server.getPluginCommand("dprofile")?.setExecutor(DProfileCmd)
     server.getPluginCommand("dpmanager")?.setExecutor(OperatorCommand)
+    server.getPluginCommand("dpsuki")?.setExecutor(RecommendCommand)
+
     server.getPluginCommand("dpmanager")?.setTabCompleter(OperatorCommandCompleter)
     server.getPluginCommand("dpleaderboard")?.setExecutor(LeaderBoardCommand)
     server.getPluginCommand("dpweeklyleaderboard")?.setExecutor(LeaderBoardCommand)

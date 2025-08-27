@@ -39,7 +39,13 @@ data class Stats(
   @Expose var notice: Boolean = true,
   @Expose
   var recommends: MutableMap<Int, Int> =
-    mutableMapOf(Pair(0, -1), Pair(1, -1), Pair(2, -1), Pair(3, -1), Pair(4, -1)),
+    mutableMapOf(
+      Pair(0, Int.MIN_VALUE),
+      Pair(1, Int.MIN_VALUE),
+      Pair(2, Int.MIN_VALUE),
+      Pair(3, Int.MIN_VALUE),
+      Pair(4, Int.MIN_VALUE),
+    ),
   @Expose var lastLogin: String = LocalDateTime.now().toString(),
   @Expose val friends: MutableList<UUID> = mutableListOf(),
   @Expose var title: Int = -1,
