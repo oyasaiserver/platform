@@ -19,16 +19,20 @@
    mise install
    ```
 
+2. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
 ### Structure
 
 ```
 .
 ├── apps        Web apps (e.g. wiki)
-├── envs        Environment secrets as code
-├── gen         Generated files
-├── infra       Terraform (cdktf) & onprem deployment
+├── infra       Terraform (cdktf) & onprem infra definition & deployment
 ├── lib         Shared library code
-├── packages    Buildable packages
 ├── plugins     Server plugins
-└── schema      Json & Zod schemas
+├── schema      Zod schemas
+└── secrets     Secrets as code
 ```

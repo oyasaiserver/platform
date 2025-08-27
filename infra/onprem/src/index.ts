@@ -3,15 +3,23 @@ import { prometheus } from './services/prometheus.ts'
 import { grafana } from './services/grafana.ts'
 import { nodeExporter } from './services/node-exporter.ts'
 import { secrets } from '@oyasaiserver/lib/secrets'
-import { minecraftMain } from './services/minecraft-main.ts'
+import { createMinecraftMain } from './services/minecraft-main.ts'
 import { minecraftMainBackup } from './services/minecraft-main-backup.ts'
 import type { Compose } from '@json-types/compose'
 
-export function createOnpremInfra(): Readonly<Compose> {
+interface CreateOnPremInfraParams {
+  sentinel: {
+    mineacraftMain: string
+  }
+}
+
+export function createOnpremInfra({
+  sentinel
+}: CreateOnPremInfraParams): Readonly<Compose> {
   return {
     services: {
       mariadb,
-      'minecraft-main': minecraftMain,
+      'minecraft-main': createMinecraftMain(sentinel.mineacraftMain),
 
       ...(secrets.ENVIRONMENT === 'production' && {
         'minecraft-main-backup': minecraftMainBackup,
