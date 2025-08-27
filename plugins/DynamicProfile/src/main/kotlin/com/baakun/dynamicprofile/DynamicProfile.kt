@@ -179,6 +179,7 @@ class DynamicProfile : JavaPlugin() {
     server.getPluginCommand("dprofile")?.setExecutor(DProfileCmd)
     server.getPluginCommand("dpmanager")?.setExecutor(OperatorCommand)
     server.getPluginCommand("dpsuki")?.setExecutor(RecommendCommand)
+    server.getPluginCommand("dpmanager")?.setExecutor(RecommendCommand)
 
     server.getPluginCommand("dpmanager")?.setTabCompleter(OperatorCommandCompleter)
     server.getPluginCommand("dpleaderboard")?.setExecutor(LeaderBoardCommand)
