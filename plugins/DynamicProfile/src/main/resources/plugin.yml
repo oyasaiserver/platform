@@ -32,4 +32,3 @@ commands:
   dpsuki:
     description: 'おすすめ建築の登録・削除コマンド'
     permission: dprofile.basic
-
