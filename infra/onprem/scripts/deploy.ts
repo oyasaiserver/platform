@@ -6,6 +6,7 @@ import { exit } from 'node:process'
 import { basename, join } from 'node:path'
 import { createOnpremInfra } from '@oyasaiserver/onprem'
 import { $, YAML } from 'zx'
+import { hashDirectory } from '@oyasaiserver/lib/hash'
 
 const rf = {
   recursive: true,
@@ -22,7 +23,13 @@ for await (const jar of jars) {
 
 await cp('assets', 'dist', rf)
 
-await writeFile('dist/compose.yaml', YAML.stringify(createOnpremInfra()))
+const onpremInfra = createOnpremInfra({
+  sentinel: {
+    mineacraftMain: await hashDirectory('dist/minecraft-main')
+  }
+})
+
+await writeFile('dist/compose.yaml', YAML.stringify(onpremInfra))
 
 if (secrets.ENVIRONMENT === 'local') {
   await mkdir(secrets.ENVIRONMENT, rf)
@@ -45,8 +52,8 @@ const base = '/opt/platform'
 const dir = `${base}/${secrets.ENVIRONMENT}`
 
 await ssh.$`sudo mkdir -p ${dir}`
-await ssh.$`sudo chown -R ${secrets.SSH_USERNAME}:${secrets.SSH_USERNAME} ${base}`
+await ssh.$`sudo chmod 777 ${dir}`
 
 await ssh.putDirectory('dist', dir)
 
-await ssh.$`cd ${dir} && docker compose up --detach --wait`
+await ssh.$`cd ${dir} && docker compose up --detach --remove-orphans --wait`

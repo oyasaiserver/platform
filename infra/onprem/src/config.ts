@@ -3,22 +3,10 @@ export const config = {
     minecraft: {
       version: '1.21.5',
       type: 'PURPUR',
-      port: {
-        production: 25565,
-        development: 25566,
-        local: 25565
-      },
       memory: {
         production: '32G',
-        development: '16G',
+        development: '12G',
         local: '5G'
-      }
-    },
-    minecraftBedrock: {
-      port: {
-        production: 19132,
-        development: 19133,
-        local: 19132
       }
     }
   },
