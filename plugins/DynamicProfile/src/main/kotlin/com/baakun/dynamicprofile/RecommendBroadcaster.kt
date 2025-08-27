@@ -29,6 +29,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
       normalCache.clear()
     }
   }
+
   fun getMode(): RecommendMode = mode
 
   fun start(intervalTicks: Long) {
@@ -50,7 +51,6 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     task.runTaskTimer(plugin, intervalTicks, intervalTicks)
     return task
   }
-
 
   private fun broadcastRandomRecommend() {
     val onlinePlayers = Bukkit.getOnlinePlayers().toList()
@@ -106,11 +106,17 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
       }
       RecommendMode.BUILDING_FIRST -> {
         // 看板を直接選ぶ
-        val allRecommends = targetPlayers.flatMap { player ->
-          getStats(player.uniqueId).recommends.values.filter { it != EMPTY }.map { id -> player to id }
-        }
+        val allRecommends =
+          targetPlayers.flatMap { player ->
+            getStats(player.uniqueId)
+              .recommends
+              .values
+              .filter { it != EMPTY }
+              .map { id -> player to id }
+          }
         if (allRecommends.isEmpty()) return
-        val buildingCache = if (cache === specialCache) specialBuildingCache else normalBuildingCache
+        val buildingCache =
+          if (cache === specialCache) specialBuildingCache else normalBuildingCache
         val uncached = allRecommends.filter { (_, id) -> id !in buildingCache }
         val (player, selected) =
           when {

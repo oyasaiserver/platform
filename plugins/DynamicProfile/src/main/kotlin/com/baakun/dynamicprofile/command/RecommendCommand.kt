@@ -19,11 +19,12 @@ object RecommendCommand : CommandExecutor {
     if (command.name == "dpmanager" && args.isNotEmpty() && args[0] == "recommendMode") {
       if (args.size == 1) {
         val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
-        val mode = if (modeConfig==0){
-          RecommendMode.BUILDING_FIRST
-        }else{
-          RecommendMode.PLAYER_FIRST
-        }
+        val mode =
+          if (modeConfig == 0) {
+            RecommendMode.BUILDING_FIRST
+          } else {
+            RecommendMode.PLAYER_FIRST
+          }
         sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
         return true
       }
@@ -34,7 +35,7 @@ object RecommendCommand : CommandExecutor {
         return true
       }
 
-      plugin.config.set("RecommendBroadcastMode", if (mode==RecommendMode.PLAYER_FIRST) 1 else 0)
+      plugin.config.set("RecommendBroadcastMode", if (mode == RecommendMode.PLAYER_FIRST) 1 else 0)
       plugin.saveConfig()
       sender.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
       return true
@@ -68,15 +69,16 @@ object RecommendCommand : CommandExecutor {
           return true
         }
         Data.getSLData(id)?.owner?.equals(sender.uniqueId)?.let {
-          if (!it){
+          if (!it) {
             sender.sendMessage("ID $id の建築はあなたのものではありません。")
             return true
           }
         }
-        Data.getSLData(id) ?: run {
-          sender.sendMessage("ID $id の建築は存在しません。")
-          return true
-        }
+        Data.getSLData(id)
+          ?: run {
+            sender.sendMessage("ID $id の建築は存在しません。")
+            return true
+          }
         stats.recommends[slot] = id
         sender.sendMessage("スロット$slot にID $id を登録しました。")
       }
