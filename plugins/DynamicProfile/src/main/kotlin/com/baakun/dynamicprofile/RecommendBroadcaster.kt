@@ -17,6 +17,20 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
   private val specialCache = mutableSetOf<java.util.UUID>()
   private val normalCache = mutableSetOf<java.util.UUID>()
+  private val specialBuildingCache = mutableSetOf<Int>()
+  private val normalBuildingCache = mutableSetOf<Int>()
+  private var mode: RecommendMode = RecommendMode.PLAYER_FIRST
+
+  fun setMode(newMode: RecommendMode) {
+    if (mode != newMode) {
+      mode = newMode
+      // モード切替時はキャッシュをクリア
+      specialCache.clear()
+      normalCache.clear()
+    }
+  }
+
+  fun getMode(): RecommendMode = mode
 
   fun start(intervalTicks: Long) {
     object : BukkitRunnable() {
@@ -69,40 +83,71 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
 
-    // キャッシュされていないプレイヤーのみ抽出
-    val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
-    val player =
-      when {
-        uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
-        else -> {
-          // 全員キャッシュ済みならキャッシュをクリアして再試行
-          cache.clear()
-          val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-          if (retryUncached.isEmpty()) return
-          retryUncached.random()
-        }
+    when (mode) {
+      RecommendMode.PLAYER_FIRST -> {
+        // プレイヤーから選ぶ
+        val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
+        val player =
+          when {
+            uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
+            else -> {
+              cache.clear()
+              val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
+              if (retryUncached.isEmpty()) return
+              retryUncached.random()
+            }
+          }
+        cache.add(player.uniqueId)
+        val stats = getStats(player.uniqueId)
+        val recommendIds = stats.recommends.values.filter { it != EMPTY }
+        if (recommendIds.isEmpty()) return
+        val selected = recommendIds.random()
+        sendRecommendMessage(player.name, selected)
       }
-    // 選出したプレイヤーをキャッシュに追加
-    cache.add(player.uniqueId)
+      RecommendMode.BUILDING_FIRST -> {
+        // 看板を直接選ぶ
+        val allRecommends =
+          targetPlayers.flatMap { player ->
+            getStats(player.uniqueId)
+              .recommends
+              .values
+              .filter { it != EMPTY }
+              .map { id -> player to id }
+          }
+        if (allRecommends.isEmpty()) return
+        val buildingCache =
+          if (cache === specialCache) specialBuildingCache else normalBuildingCache
+        val uncached = allRecommends.filter { (_, id) -> id !in buildingCache }
+        val (player, selected) =
+          when {
+            uncached.isNotEmpty() -> uncached.random()
+            else -> {
+              buildingCache.clear()
+              val retryUncached = allRecommends.filter { (_, id) -> id !in buildingCache }
+              if (retryUncached.isEmpty()) return
+              retryUncached.random()
+            }
+          }
+        buildingCache.add(selected)
+        sendRecommendMessage(player.name, selected)
+      }
+    }
+  }
 
-    val stats = getStats(player.uniqueId)
-    val recommendIds = stats.recommends.values.filter { it != EMPTY }
-    if (recommendIds.isEmpty()) return
-    val selected = recommendIds.random()
-
+  private fun sendRecommendMessage(playerName: String, selected: Int) {
     val message =
       Component.text()
         .appendNewline()
         .append(Component.text("【おすすめ建築】").color(NamedTextColor.LIGHT_PURPLE))
-        .append(Component.text(" ${player.name} さんの「"))
+        .append(Component.text(" ${playerName} さんの「"))
         .append(Component.text("${Data.getSLData(selected)?.title}").color(NamedTextColor.GREEN))
         .append(Component.text("」 ").color(NamedTextColor.WHITE))
+        .appendNewline()
         .append(
-          Component.text("/sltp ${selected}")
+          Component.text("/sltp ${selected} ")
             .color(NamedTextColor.WHITE)
             .decorate(TextDecoration.BOLD)
         )
-        .appendNewline()
         .append(Component.text(" §b[ここをクリックでテレポート]").color(NamedTextColor.AQUA))
         .clickEvent(ClickEvent.runCommand("/sltp $selected"))
         .hoverEvent(HoverEvent.showText(Component.text("クリックしてテレポート！")))
