@@ -71,11 +71,12 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
       }
     frameIndex = (frameIndex + 1) % 3
     if (targetPlayers.isEmpty()) return
-    val mode: RecommendMode = if (Tools.plugin.config.getInt("RecommendBroadcastMode", 0) == 0) {
-      RecommendMode.BUILDING_FIRST
-    } else {
-      RecommendMode.PLAYER_FIRST
-    }
+    val mode: RecommendMode =
+      if (Tools.plugin.config.getInt("RecommendBroadcastMode", 0) == 0) {
+        RecommendMode.BUILDING_FIRST
+      } else {
+        RecommendMode.PLAYER_FIRST
+      }
     when (mode) {
       RecommendMode.PLAYER_FIRST -> {
         // プレイヤーから選ぶ
@@ -125,7 +126,6 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         sendRecommendMessage(player.name, selected)
       }
     }
-
   }
 
   private fun sendRecommendMessage(playerName: String, selected: Int) {
