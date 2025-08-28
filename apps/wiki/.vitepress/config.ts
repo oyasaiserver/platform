@@ -10,9 +10,7 @@ export default defineConfig({
       provider: 'local'
     },
     logo: `https://avatars.githubusercontent.com/oyasaiserver`,
-    socialLinks: [
-      { icon: 'github', link: `https://github.com/oyasaiserver/platform` }
-    ],
+    socialLinks: [{ icon: 'github', link: `https://github.com/oyasaiserver/platform` }],
     sidebar: [
       {
         text: 'Examples',

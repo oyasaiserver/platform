@@ -7,10 +7,7 @@ import {
 } from 'node-ssh'
 
 type Ssh = Readonly<{
-  $(
-    pieces: TemplateStringsArray,
-    ...args: unknown[]
-  ): Promise<SSHExecCommandResponse>
+  $(pieces: TemplateStringsArray, ...args: unknown[]): Promise<SSHExecCommandResponse>
   put(localFile: string, remoteFile: string): Promise<void>
   putDirectory(
     localDirectory: string,
@@ -23,17 +20,12 @@ type SshConfig = Config & {
   verbose?: boolean
 }
 
-export async function useSsh(
-  config: SshConfig
-): Promise<Ssh & AsyncDisposable> {
+export async function useSsh(config: SshConfig): Promise<Ssh & AsyncDisposable> {
   const connection = new NodeSSH()
   await connection.connect(config)
   return {
     async $(pieces, ...args) {
-      const command = pieces.reduce(
-        (acc, piece, i) => acc + piece + (args[i] || ''),
-        ''
-      )
+      const command = pieces.reduce((acc, piece, i) => acc + piece + (args[i] || ''), '')
       if (config.verbose) {
         console.log(`$ ${command}`)
       }
@@ -56,9 +48,7 @@ export async function useSsh(
       options?: SSHGetPutDirectoryOptions
     ) {
       if (config.verbose) {
-        console.log(
-          `[sftp] uploading directory ${localDirectory} to ${remoteDirectory}`
-        )
+        console.log(`[sftp] uploading directory ${localDirectory} to ${remoteDirectory}`)
       }
       return connection.putDirectory(localDirectory, remoteDirectory, {
         concurrency: 5,

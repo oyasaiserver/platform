@@ -34,8 +34,7 @@ export class CloudflareStack extends TerraformStack {
     const rootDnsRecord = new DnsRecord(this, envAwareId('root-dns-record'), {
       ttl: 1, // automatic
       zoneId: this.zoneId,
-      name:
-        secrets.ENVIRONMENT === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
+      name: secrets.ENVIRONMENT === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
       type: 'A',
       proxied: false,
       content: secrets.PUBLIC_IPV4
