@@ -22,3 +22,16 @@ export async function hashDirectory(dir: string): Promise<string> {
   await processDirectory(dir)
   return hash.digest('hex')
 }
+
+export async function hashDirectories(
+  ...directories: string[]
+): Promise<string> {
+  const hash = createHash('sha256')
+
+  for (const dir of directories.sort()) {
+    const dirHash = await hashDirectory(dir)
+    hash.update(dirHash)
+  }
+
+  return hash.digest('hex')
+}
