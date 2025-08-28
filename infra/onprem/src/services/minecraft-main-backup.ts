@@ -8,7 +8,7 @@ const base = {
   AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
   RESTIC_VERBOSE: true,
   // bucket is production by default
-  RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/production/minecraft-main-backup`,
+  RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/production/minecraft-main-backup`
 }
 
 export const minecraftMainBackup: Service = {
@@ -21,7 +21,7 @@ export const minecraftMainBackup: Service = {
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     EXCLUDES: '*.jar,cache,logs,*.tmp,bluemap',
     BACKUP_INTERVAL: '6h',
-    PRUNE_RESTIC_RETENTION: '--keep-daily 7 --keep-weekly 4 --keep-monthly 3',
+    PRUNE_RESTIC_RETENTION: '--keep-daily 7 --keep-weekly 4 --keep-monthly 3'
   },
   volumes: ['./minecraft-main:/data:ro']
 }
