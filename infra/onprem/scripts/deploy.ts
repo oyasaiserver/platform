@@ -52,7 +52,7 @@ const base = '/opt/platform'
 const dir = `${base}/${secrets.ENVIRONMENT}`
 
 await ssh.$`sudo mkdir -p ${dir}`
-await ssh.$`sudo chmod 777 ${dir}`
+await ssh.$`sudo chmod -R 777 ${dir}`
 
 await ssh.putDirectory('dist', dir)
 
