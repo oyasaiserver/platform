@@ -6,7 +6,6 @@ import { exit } from 'node:process'
 import { basename, join } from 'node:path'
 import { onpremInfra } from '@oyasaiserver/onprem'
 import { $, YAML } from 'zx'
-import { hashDirectories } from '@oyasaiserver/lib/hash'
 
 const rf = {
   recursive: true,
