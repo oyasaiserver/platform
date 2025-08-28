@@ -4,9 +4,7 @@ import { join, relative } from 'node:path'
 import { directory } from './directory.ts'
 import ignore from 'ignore'
 
-export async function hashDirectories(
-  ...directories: string[]
-): Promise<string> {
+export async function hashDirectories(...directories: string[]): Promise<string> {
   const ignoreFile = await readFile(join(directory.root, '.gitignore'), 'utf-8')
   const gitignore = ignore().add(ignoreFile)
 
