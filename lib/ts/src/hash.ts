@@ -20,7 +20,7 @@ export async function hashDirectories(
     for (const file of files.sort()) {
       const path = join(file.parentPath, file.name)
       const relativePath = relative(directory.root, path)
-      if (file.isFile() && gitignore.ignores(relativePath)) {
+      if (file.isFile() && !gitignore.ignores(relativePath)) {
         hash.update(relativePath).update(await readFile(path))
       }
     }
