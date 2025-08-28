@@ -4,9 +4,9 @@ import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
 import { exit } from 'node:process'
 import { basename, join } from 'node:path'
-import { createOnpremInfra } from '@oyasaiserver/onprem'
+import { onpremInfra } from '@oyasaiserver/onprem'
 import { $, YAML } from 'zx'
-import { hashDirectory } from '@oyasaiserver/lib/hash'
+import { hashDirectories } from '@oyasaiserver/lib/hash'
 
 const rf = {
   recursive: true,
@@ -22,12 +22,6 @@ for await (const jar of jars) {
 }
 
 await cp('assets', 'dist', rf)
-
-const onpremInfra = createOnpremInfra({
-  sentinel: {
-    mineacraftMain: await hashDirectory('dist/minecraft-main')
-  }
-})
 
 await writeFile('dist/compose.yaml', YAML.stringify(onpremInfra))
 
