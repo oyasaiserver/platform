@@ -1,8 +1,6 @@
 package com.baakun.dynamicprofile.command
 
-import com.baakun.dynamicprofile.RecommendMode
 import com.baakun.dynamicprofile.util.Tools.getStats
-import com.baakun.dynamicprofile.util.Tools.plugin
 import com.github.srain3.sociallikes.datas.Data
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -16,30 +14,6 @@ object RecommendCommand : CommandExecutor {
     label: String,
     args: Array<out String>,
   ): Boolean {
-    if (command.name == "dpmanager" && args.isNotEmpty() && args[0] == "recommendMode") {
-      if (args.size == 1) {
-        val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
-        val mode =
-          if (modeConfig == 0) {
-            RecommendMode.BUILDING_FIRST
-          } else {
-            RecommendMode.PLAYER_FIRST
-          }
-        sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
-        return true
-      }
-      val modeArg = args[1].uppercase()
-      val mode = runCatching { RecommendMode.valueOf(modeArg) }.getOrNull()
-      if (mode == null) {
-        sender.sendMessage("無効なモードです。PLAYER_FIRST または BUILDING_FIRST を指定してください。")
-        return true
-      }
-
-      plugin.config.set("RecommendBroadcastMode", if (mode == RecommendMode.PLAYER_FIRST) 1 else 0)
-      plugin.saveConfig()
-      sender.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
-      return true
-    }
 
     if (command.name != "dpsuki") return false
     if (sender !is Player) {
