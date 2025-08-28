@@ -34,7 +34,7 @@ export const minecraftMain: Service = {
     DISCORDSRV_TOKEN: secrets.DISCORDSRV_TOKEN,
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     // TODO abstract this pattern
-    __ASSET_SENTINEL__: await hashDirectories(
+    __SENTINEL_HASH__: await hashDirectories(
       join(directory.root, 'plugins'),
       join(directory.root, 'infra/onprem/assets/minecraft-main')
     )
