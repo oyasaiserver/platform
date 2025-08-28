@@ -27,7 +27,7 @@ export const secrets = z
     TF_API_TOKEN: z.string(),
     TF_TOKEN_app_terraform_io: z.string(),
     // plugins
-    DISCORDSRV_TOKEN: z.string(),
+    DISCORD_TOKEN: z.string(),
     RCON_PASSWORD: z.string()
   })
   .readonly()

@@ -31,10 +31,11 @@ export const minecraftMain: Service = {
     PLUGINS: plugins.join(),
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
-    DISCORDSRV_TOKEN: secrets.DISCORDSRV_TOKEN,
+    DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     // TODO abstract this pattern
     __SENTINEL_HASH__: await hashDirectories(
+      join(directory.root, 'lib'),
       join(directory.root, 'plugins'),
       join(directory.root, 'infra/onprem/assets/minecraft-main')
     )
