@@ -449,10 +449,37 @@ object OperatorCommand : CommandExecutor {
             player.sendMessage("/dpmanager recommendInterval [秒]")
           }
         }
+        "recommendMode" -> {
+          if (args.size == 1) {
+            val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
+            val mode =
+              if (modeConfig == 0) {
+                com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+              } else {
+                com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
+              }
+            player.sendMessage("現在のおすすめ建築モード: ${mode.name}")
+            return true
+          }
+          val modeArg = args[1].uppercase()
+          val mode =
+            runCatching { com.baakun.dynamicprofile.RecommendMode.valueOf(modeArg) }.getOrNull()
+          if (mode == null) {
+            player.sendMessage("無効なモードです。PLAYER_FIRST または BUILDING_FIRST を指定してください。")
+            return true
+          }
+          plugin.config.set(
+            "RecommendBroadcastMode",
+            if (mode == com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST) 1 else 0,
+          )
+          plugin.saveConfig()
+          player.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
+          return true
+        }
         "setEmpty" -> {
           allUser.forEach {
             val recStats = getStats(it)
-            recStats.recommends.forEach { t, u ->
+            recStats.recommends.forEach { (t, u) ->
               if ((u == 0 || u == -1)) {
                 recStats.recommends[t] = Integer.MIN_VALUE
               }
@@ -528,6 +555,7 @@ object OperatorCommandCompleter : TabCompleter {
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
             "recommendInterval" -> return mutableListOf("<秒>")
+            "recommendMode" -> return mutableListOf("PLAYER_FIRST", "BUILDING_FIRST")
           }
         }
         3 -> {
