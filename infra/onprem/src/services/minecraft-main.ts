@@ -1,5 +1,5 @@
 import { config } from '../config.ts'
-import { plugins } from '../plugins.ts'
+import { plugins, spigetPlugins } from '../plugins.ts'
 import { secrets } from '@oyasaiserver/lib/secrets'
 import type { Service } from '@json-types/compose'
 import { hashDirectories } from '@oyasaiserver/lib/hash'
@@ -29,6 +29,7 @@ export const minecraftMain: Service = {
     LOG_TIMESTAMP: true,
     MEMORY: config.services.minecraft.memory[secrets.ENVIRONMENT],
     PLUGINS: plugins.join(),
+    SPIGET_RESOURCES: spigetPlugins.join(),
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
     DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,

@@ -27,18 +27,6 @@ export const plugins = [
   'https://github.com/steve4744/TNTRun/releases/download/v9.33-SNAPSHOT.140/TNTRun_reloaded-9.33-SNAPSHOT.jar',
   'https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.11/bluemap-5.11-paper.jar',
   'https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar',
-  'https://spigotmc.org/resources/crackshot-guns.48301/download?version=592852',
-  'https://spigotmc.org/resources/inventory-shop.47694/download?version=257036',
-  'https://spigotmc.org/resources/simple-elevators-1-8-1-20.44462/download?version=601314',
-  'https://spigotmc.org/resources/particlehats.1007/download?version=584502',
-  'https://spigotmc.org/resources/slot-machine.22023/download?version=596585',
-  'https://spigotmc.org/resources/placeholderapi.6245/download?version=541946',
-  'https://spigotmc.org/resources/bkcommonlib.39590/download?version=586975',
-  'https://spigotmc.org/resources/worldborder.60905/download?version=275003',
-  'https://spigotmc.org/resources/signshop.10997/download?version=504534',
-  'https://spigotmc.org/resources/mypet.12725/download?version=556882',
-  'https://spigotmc.org/resources/mycommand.22272/download?version=503879',
-  'https://spigotmc.org/resources/join-commands.51758/download?version=546295',
   'https://cdn.modrinth.com/data/FIlZB9L0/versions/GXo6GGY8/Terra-bukkit-6.6.3-BETA%2Bcc5258ce7-shaded.jar',
   'https://cdn.modrinth.com/data/z4HZZnLr/versions/o8Ytdhc5/FastAsyncWorldEdit-Paper-2.13.1.jar',
   'https://cdn.modrinth.com/data/Lu3KuzdV/versions/anOhDobp/CoreProtect-CE-23.0.jar',
@@ -47,4 +35,19 @@ export const plugins = [
   'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
   'https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar',
   'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar'
+] as const
+
+export const spigetPlugins = [
+  48301, // crackshot-guns
+  47694, // inventory-shop
+  44462, // simple-elevators-1-8-1-20
+  1007, // particlehats
+  22023, // slot-machine
+  6245, // placeholderapi
+  39590, // bkcommonlib
+  60905, // worldborder
+  10997, // signshop
+  12725, // mypet
+  22272, // mycommand
+  51758 // join-commands
 ] as const
