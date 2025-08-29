@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "codegen": "codegen && npm run format && ./gradlew spotlessApply",
     "format": "sort-package-json '**/package.json' && prettier . --write",
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
@@ -22,6 +21,6 @@
     "sort-package-json": "^3.4.0",
     "taze": "^19.3.0",
     "typescript": "^5.9.2",
-    "wrangler": "^4.33.0"
+    "wrangler": "^4.33.1"
   }
 }
