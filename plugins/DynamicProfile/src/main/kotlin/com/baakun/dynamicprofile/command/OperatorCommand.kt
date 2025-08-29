@@ -486,6 +486,24 @@ object OperatorCommand : CommandExecutor {
             }
           }
         }
+        "setSpecialFrameInterval" -> {
+          if (args.size == 1) {
+            val interval = plugin.config.getInt("specialFrameInterval", 3)
+            player.sendMessage("現在の特別枠インターバル: ${interval}回ごと")
+          } else if (args.size == 2) {
+            val newInterval = args[1].toIntOrNull()
+            if (newInterval == null || newInterval < 1) {
+              player.sendMessage("特別枠インターバルは1以上の整数で指定してください。")
+              return true
+            }
+            plugin.config.set("specialFrameInterval", newInterval)
+            plugin.saveConfig()
+            player.sendMessage("特別枠インターバルを${newInterval}回ごとに設定しました（config保存済み・即時反映）")
+          } else {
+            player.sendMessage("/dpmanager setSpecialFrameInterval [回数]")
+          }
+          return true
+        }
       }
     }
 

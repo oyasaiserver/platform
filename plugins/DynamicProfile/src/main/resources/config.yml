@@ -32,3 +32,5 @@ RewardChestWorld: 'world'
 RecommendBroadcastIntervalSeconds: 600
 # おすすめ建築宣伝モード（0: 看板から, 1: プレイヤーから デフォルト0）
 RecommendBroadcastMode: 0
+# おすすめ放送の特別枠の間隔（n回ごとに特別枠）
+specialFrameInterval: 3

@@ -13,7 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 
 class RecommendBroadcaster(private val plugin: JavaPlugin) {
-  private var frameIndex = 0 // 0,1:普通枠 2:特別枠
+  private var frameIndex = 0 // 0: 特別枠
+  private var specialFrameInterval = 3
   val EMPTY = Integer.MIN_VALUE
 
   private val specialCache = mutableSetOf<java.util.UUID>()
@@ -21,16 +22,9 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
   private val specialBuildingCache = mutableSetOf<Int>()
   private val normalBuildingCache = mutableSetOf<Int>()
 
-  fun start(intervalTicks: Long) {
-    object : BukkitRunnable() {
-        override fun run() {
-          broadcastRandomRecommend()
-        }
-      }
-      .runTaskTimer(plugin, intervalTicks, intervalTicks)
-  }
-
   fun startAndReturnTask(intervalTicks: Long): BukkitRunnable {
+    // configからspecialFrameIntervalを取得
+    specialFrameInterval = plugin.config.getInt("specialFrameInterval", 3)
     val task =
       object : BukkitRunnable() {
         override fun run() {
@@ -51,9 +45,8 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         ?.provider
 
     val (targetPlayers, cache) =
-      when (frameIndex % 3) {
-        2 -> {
-          // 特別枠
+      when (frameIndex % specialFrameInterval) {
+        0 -> { // 特別枠
           val filtered =
             onlinePlayers.filter { player ->
               (perm?.playerInGroup(player, "spdonator") == true ||
@@ -69,7 +62,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
           filtered to normalCache
         }
       }
-    frameIndex = (frameIndex + 1) % 3
+    frameIndex = (frameIndex + 1) % specialFrameInterval
     if (targetPlayers.isEmpty()) return
     val mode: RecommendMode =
       if (Tools.plugin.config.getInt("RecommendBroadcastMode", 0) == 0) {
