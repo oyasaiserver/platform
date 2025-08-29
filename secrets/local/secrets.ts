@@ -1,0 +1,25 @@
+import type { Env } from "../types.d.ts";
+
+export default {
+  DOTENV_PUBLIC_KEY: "030efc2bd0b198676bf6856e980f6c9d12e4cfcd5a4a7fb855cce5132fb14fc7ec",
+  ENVIRONMENT: "local",
+  PUBLIC_IPV4: "unset",
+  SSH_PRIVATE_KEY: "unset",
+  SSH_PASSWORD: "unset",
+  SSH_USERNAME: "unset",
+  CLOUDFLARE_ACCOUNT_ID: "unset",
+  CLOUDFLARE_API_TOKEN: "unset",
+  CLOUDFLARE_ACCESS_KEY_ID: "unset",
+  CLOUDFLARE_SECRET_ACCESS_KEY: "unset",
+  R2_BUCKET_NAME: "unset",
+  RESTIC_PASSWORD: "unset",
+  API_ENDPOINT: "unset",
+  BEARER: "unset",
+  GITHUB_APP_ID: "unset",
+  GITHUB_APP_INSTALLATION_ID: "unset",
+  GITHUB_APP_PEM_FILE: "unset",
+  TF_API_TOKEN: "unset",
+  TF_TOKEN_app_terraform_io: "unset",
+  DISCORD_TOKEN: "unset",
+  RCON_PASSWORD: "unset",
+} satisfies Env
