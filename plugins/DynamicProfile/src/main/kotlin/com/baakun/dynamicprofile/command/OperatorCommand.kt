@@ -498,7 +498,7 @@ object OperatorCommand : CommandExecutor {
             }
             plugin.config.set("specialFrameInterval", newInterval)
             plugin.saveConfig()
-            player.sendMessage("特別枠インターバルを${newInterval}回ごとに設定しました（config保存済み・即時反映）")
+            player.sendMessage("特別枠インターバルを${newInterval}回ごとに設定しました")
           } else {
             player.sendMessage("/dpmanager setSpecialFrameInterval [回数]")
           }
