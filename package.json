@@ -5,7 +5,7 @@
     "infra/*",
     "lib/ts",
     "packages/*",
-    "schema/ts"
+    "secrets"
   ],
   "scripts": {
     "build": "tsc --build",

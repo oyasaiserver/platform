@@ -27,7 +27,7 @@
     { "path": "infra/cdktf" },
     { "path": "infra/onprem" },
     { "path": "lib/ts" },
-    { "path": "schema/ts" }
+    { "path": "secrets" }
   ],
   "files": []
 }
