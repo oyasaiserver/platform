@@ -9,13 +9,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 export const minecraftMain: Service = {
   depends_on: ['mariadb'],
   image: 'itzg/minecraft-server:java24-graalvm',
-  ports: [
-    `${config.port.minecraft.value}:${config.port.minecraft.value}/${config.port.minecraft.protocol}`,
-    `${config.port.minecraftBedrock.value}:${config.port.minecraftBedrock.value}/${config.port.minecraftBedrock.protocol}`,
-    '8192:8192/tcp', // vote
-    '8100:8100/tcp', // bluemap,
-    '25575:25575/tcp' // rcon
-  ],
+  ports: [`25565:25565`, `19132:19132/udp`, '8192:8192', '8100:8100', '25575:25575'],
   restart: 'unless-stopped',
   tty: true,
   stdin_open: true,

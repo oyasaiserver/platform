@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { secrets } from './index.ts'
+import { secrets } from '@oyasaiserver/secrets'
 import { $, argv } from 'zx'
 import { env } from 'node:process'
 
