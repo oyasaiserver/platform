@@ -18,9 +18,9 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
   val EMPTY = Integer.MIN_VALUE
 
   private val specialCache = mutableSetOf<java.util.UUID>()
-  private val normalCache = mutableSetOf<java.util.UUID>()
+  val normalCache = mutableSetOf<java.util.UUID>()
   private val specialBuildingCache = mutableSetOf<Int>()
-  private val normalBuildingCache = mutableSetOf<Int>()
+  val normalBuildingCache = mutableSetOf<Int>()
 
   fun startAndReturnTask(intervalTicks: Long): BukkitRunnable {
     // configからspecialFrameIntervalを取得
