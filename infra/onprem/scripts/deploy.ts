@@ -1,4 +1,4 @@
-import { secrets } from '@oyasaiserver/lib/secrets'
+import { secrets } from '@oyasaiserver/secrets'
 import { useSsh } from '@oyasaiserver/lib/ssh'
 import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
