@@ -76,6 +76,20 @@ object DailyEvent : Listener {
       }
     br.runTaskTimer(plugin, 60 * 20, 60 * 20)
     playTimes[player] = br
+    val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
+    if (modeConfig == 0) {
+      plugin.recommendBroadcaster
+        ?.normalBuildingCache
+        ?.addAll(
+          getStats(player.uniqueId)
+            .recommends
+            .values
+            .filter { it != Integer.MIN_VALUE }
+            .filterIndexed { index, i -> index != 0 }
+        )
+    } else {
+      plugin.recommendBroadcaster?.normalCache?.add(player.uniqueId)
+    }
   }
 
   @EventHandler

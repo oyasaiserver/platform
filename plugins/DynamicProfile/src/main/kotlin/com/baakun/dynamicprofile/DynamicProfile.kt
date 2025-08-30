@@ -67,7 +67,7 @@ class DynamicProfile : JavaPlugin() {
     }
   }
 
-  private var recommendBroadcaster: RecommendBroadcaster? = null
+  var recommendBroadcaster: RecommendBroadcaster? = null
   private var recommendBroadcasterTask: BukkitRunnable? = null
 
   fun restartRecommendBroadcaster(intervalTicks: Long) {
