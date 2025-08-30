@@ -7,9 +7,6 @@
       "import": "./src/*.ts"
     }
   },
-  "bin": {
-    "secrets": "bin/secrets.ts"
-  },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.49.0",
     "ignore": "^7.0.5",

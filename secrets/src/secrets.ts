@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { secrets } from '../src/secrets.ts'
+import { secrets } from './index.ts'
 import { $, argv } from 'zx'
 import { env } from 'node:process'
 

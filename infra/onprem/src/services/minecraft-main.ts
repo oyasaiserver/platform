@@ -1,6 +1,6 @@
 import { config } from '../config.ts'
 import { plugins, spigetPlugins } from '../plugins.ts'
-import { secrets } from '@oyasaiserver/lib/secrets'
+import { secrets } from '@oyasaiserver/secrets'
 import type { Service } from '@json-types/compose'
 import { hashDirectories } from '@oyasaiserver/lib/hash'
 import { join } from 'node:path'

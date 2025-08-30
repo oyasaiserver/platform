@@ -1,5 +1,5 @@
 import type { Service } from '@json-types/compose'
-import { secrets } from '@oyasaiserver/lib/secrets'
+import { secrets } from '@oyasaiserver/secrets'
 
 export const mariadbBackup: Service = {
   depends_on: ['mariadb'],
