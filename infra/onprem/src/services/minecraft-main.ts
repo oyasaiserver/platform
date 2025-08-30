@@ -30,7 +30,7 @@ export const minecraftMain: Service = {
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     // TODO abstract this pattern
     __SENTINEL_HASH__: await hashDirectories(
-      join(directory.root, 'lib'),
+      join(directory.root, 'lib/kotlin'),
       join(directory.root, 'plugins'),
       join(directory.root, 'infra/onprem/assets/minecraft-main')
     )
