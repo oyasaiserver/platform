@@ -33,6 +33,11 @@ object NotNBTEvent : Listener {
         itemCloneEventCancel(event)
       }
     }
+
+    // ヘッドアイテムを複製できないようにする
+    if (event.cursor.type == Material.PLAYER_HEAD) {
+      itemCloneEventCancel(event)
+    }
   }
 
   /** 複製Eventキャンセル用 */
