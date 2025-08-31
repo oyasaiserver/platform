@@ -1,5 +1,5 @@
 import { config } from '../config.ts'
-import { plugins, spigetPlugins } from '../plugins.ts'
+import { plugins, productionOnlyPlugins, spigetPlugins } from '../plugins.ts'
 import { secrets } from '@oyasaiserver/secrets'
 import type { Service } from '@json-types/compose'
 import { hashDirectories } from '@oyasaiserver/lib/hash'
@@ -22,7 +22,10 @@ export const minecraftMain: Service = {
     ENABLE_ROLLING_LOGS: true,
     LOG_TIMESTAMP: true,
     MEMORY: config.services.minecraft.memory[secrets.ENVIRONMENT],
-    PLUGINS: plugins.join(),
+    PLUGINS: [
+      ...plugins,
+      ...(secrets.ENVIRONMENT === 'production' ? productionOnlyPlugins : [])
+    ].join(),
     SPIGET_RESOURCES: spigetPlugins.join(),
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
