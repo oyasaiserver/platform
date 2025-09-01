@@ -29,10 +29,15 @@
 
 ```
 .
-├── apps        Web apps (e.g. wiki)
-├── infra       Terraform (cdktf) & onprem infra definition & deployment
+├── apps        Web apps (e.g. wiki, api, etc.) that are deployed as CF workers
+├── infra       Terraform (cdktf) & onprem infra (compose)
 ├── lib         Shared library code
 ├── plugins     Server plugins
-├── schema      Zod schemas
 └── secrets     Secrets as code
 ```
+
+### How to Contribute
+
+1. Read the [conventional commits](https://www.conventionalcommits.org/ja/v1.0.0/) specification.
+2. Create a PR with title that follows the specification.
+3. Make sure to `./gradlew spotlessApply`, `npm run format`, and `npm run lint` before committing.
