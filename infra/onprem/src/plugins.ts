@@ -36,18 +36,19 @@ export const plugins = [
 ] as const
 
 export const spigetPlugins = [
-  48301, // crackshot-guns
-  47694, // inventory-shop
-  44462, // simple-elevators-1-8-1-20
   1007, // particlehats
-  22023, // slot-machine
-  6245, // placeholderapi
-  39590, // bkcommonlib
-  60905, // worldborder
   10997, // signshop
   12725, // mypet
+  22023, // slot-machine
   22272, // mycommand
-  51758 // join-commands
+  39590, // bkcommonlib
+  44462, // simple-elevators-1-8-1-20
+  47694, // inventory-shop
+  48301, // crackshot-guns
+  51758, // join-commands
+  60905, // worldborder
+  6245, // placeholderapi
+  69551 // lwc
 ] as const
 
 export const productionOnlyPlugins = [
