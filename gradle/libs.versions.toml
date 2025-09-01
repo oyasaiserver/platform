@@ -3,7 +3,7 @@ kotlin = "2.2.0"
 spotless = "7.0.4"
 purpur-api = "1.21.5-R0.1-SNAPSHOT"
 shadow = "9.0.0-beta17"
-fawe="2.13.0"
+fawe = "2.13.0"
 advancedchestsapi = "3.2-BETA"
 hikaricp = "5.0.1"
 log4j = "2.19.0"
@@ -11,6 +11,7 @@ oshi = "6.6.2"
 json-simple = "1.1.1"
 anvilgui = "1.6.3-SNAPSHOT"
 vault = "1.7"
+luckperms = "5.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -29,3 +30,4 @@ log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "lo
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
 vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms" }
