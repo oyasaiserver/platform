@@ -49,7 +49,6 @@ object OperatorCommand : CommandExecutor {
     userLikes: Map<UUID, Int>,
     userReceiveLikes: Map<UUID, Int>,
     threadName: String,
-    player: Player,
   ) {
     var num = 0
     for (i in start until end) {
@@ -147,8 +146,8 @@ object OperatorCommand : CommandExecutor {
     label: String,
     args: Array<out String>?,
   ): Boolean {
-    if (sender !is Player) return false
-    val player: Player = sender
+    // Allow non-player senders; only block commands that require Player-specific APIs.
+    val player: Player? = if (sender is Player) sender as Player else null
     if (!args.isNullOrEmpty()) {
       when (args[0]) {
         "updateLB" -> {
@@ -159,9 +158,13 @@ object OperatorCommand : CommandExecutor {
           plugin.reloadConfig()
           rewardReceiveStatus.reload()
           levelGroups.reload()
-          player.sendMessage("dpをコンフィグにリロードがしたよ。（日本語不自由）")
+          sender.sendMessage("dpをコンフィグにリロードがしたよ。（日本語不自由）")
         }
         "save" -> {
+          if (player == null) {
+            sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+            return true
+          }
           val statsData = getStats(player.uniqueId)
           Bukkit.getScheduler()
             .runTaskAsynchronously(
@@ -180,6 +183,10 @@ object OperatorCommand : CommandExecutor {
             )
         }
         "kakonoEXP" -> {
+          if (player == null) {
+            sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+            return true
+          }
           if (args[1] == "kakutei") {
             Bukkit.getScheduler()
               .runTaskAsynchronously(
@@ -246,7 +253,6 @@ object OperatorCommand : CommandExecutor {
                             userLikes,
                             userReceiveLikes,
                             "Thread 1",
-                            player,
                           )
                           plugin.server.logger.info("1ブロック目完了しました。")
                           player.sendMessage("1ブロック目かんりょうしました。")
@@ -264,7 +270,6 @@ object OperatorCommand : CommandExecutor {
                             userLikes,
                             userReceiveLikes,
                             "Thread 2",
-                            player,
                           )
                           plugin.server.logger.info("2ブロック目完了しました。")
                           player.sendMessage("2ブロック目かんりょうしました。")
@@ -282,12 +287,12 @@ object OperatorCommand : CommandExecutor {
             "*" -> {
               for (key in rewardReceiveStatus.getKeys(false)) {
                 rewardReceiveStatus.set(key, mutableListOf<String>())
-                player.sendMessage(Component.text("レベル $key の報酬の受け取り状況をリセットしました。"))
+                sender.sendMessage(Component.text("レベル $key の報酬の受け取り状況をリセットしました。"))
               }
             }
             else -> {
               rewardReceiveStatus.set(args[1], mutableListOf<String>())
-              player.sendMessage(Component.text("レベル ${args[1]} の報酬の受け取り状況をリセットしました。"))
+              sender.sendMessage(Component.text("レベル ${args[1]} の報酬の受け取り状況をリセットしました。"))
             }
           }
           rewardReceiveStatus.save()
@@ -295,21 +300,25 @@ object OperatorCommand : CommandExecutor {
         "required" -> {
           plugin.config.set("basicRequired", args[1].toInt())
           plugin.saveConfig()
-          player.sendMessage(Component.text("レベルアップに必要な基本経験値を ${args[1]} に設定しました"))
+          sender.sendMessage(Component.text("レベルアップに必要な基本経験値を ${args[1]} に設定しました"))
         }
         "noticeLvs" -> {
           val lvs = plugin.config.getIntegerList("noticeLvs")
           if (lvs.contains(args[1].toInt())) {
             lvs.remove(args[1].toInt())
-            player.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルから削除しました"))
+            sender.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルから削除しました"))
           } else {
             lvs.add(args[1].toInt())
-            player.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルに追加しました"))
+            sender.sendMessage(Component.text("レベル ${args[1]} を、サーバー内に通知するレベルに追加しました"))
           }
           plugin.config.set("noticeLvs", lvs)
           plugin.saveConfig()
         }
         "chest" -> {
+          if (player == null) {
+            sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+            return true
+          }
           if (
             player.getTargetBlock(null, 3).isEmpty ||
               player.getTargetBlock(null, 3).type != Material.CHEST
@@ -325,7 +334,7 @@ object OperatorCommand : CommandExecutor {
           )
           plugin.config.set("RewardChestWorld", player.world.name)
           plugin.saveConfig()
-          player.sendMessage(Component.text("報酬用チェストを設定しました"))
+          sender.sendMessage(Component.text("報酬用チェストを設定しました"))
         }
         "beh" -> {
           when (args[1]) {
@@ -340,7 +349,7 @@ object OperatorCommand : CommandExecutor {
             "Join" -> {
               plugin.config.set(args[1], args[2].toInt())
               plugin.saveConfig()
-              player.sendMessage(Component.text("${args[1]} をした際に得られる経験値を、${args[2]}に設定しました"))
+              sender.sendMessage(Component.text("${args[1]} をした際に得られる経験値を、${args[2]}に設定しました"))
             }
           }
         }
@@ -349,48 +358,58 @@ object OperatorCommand : CommandExecutor {
 
           when (arg) {
             "list" -> {
+              if (player == null) {
+                sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+                return true
+              }
               TitleGui.showAllTitlesGui(player)
             }
             "owners" -> {
               if (args.size < 3) {
-                player.sendMessage(
+                sender.sendMessage(
                   Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED)
                 )
                 return true
               }
               val titleId = args[2].toIntOrNull()
               if (titleId == null) {
-                player.sendMessage(Component.text("無効な称号IDです").color(NamedTextColor.RED))
+                sender.sendMessage(Component.text("無効な称号IDです").color(NamedTextColor.RED))
                 return true
               }
-              // GUIで称号所有者リストを表示
+              if (player == null) {
+                sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+                return true
+              }
               TitleGui.showTitleOwnersGui(player, titleId)
             }
             "player" -> {
+              if (player == null) {
+                sender.sendMessage("このコマンドはプレイヤーから実行してください。")
+                return true
+              }
               val targetPlayerName = if (args.size >= 3) args[2] else player.name
-              // GUIでプレイヤーの所有称号リストを表示
               TitleGui.showPlayerTitlesGui(player, targetPlayerName)
             }
             "give" -> {
-              player.sendMessage(
+              sender.sendMessage(
                 giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
               )
             }
             "add" -> {
-              player.sendMessage(createNewTitle(args[2], args[3].toInt()))
+              sender.sendMessage(createNewTitle(args[2], args[3].toInt()))
             }
             "remove" -> {
-              player.sendMessage(removeTitle(Integer.parseInt(args[2])))
+              sender.sendMessage(removeTitle(Integer.parseInt(args[2])))
             }
             "deprive" -> {
-              player.sendMessage(
+              sender.sendMessage(
                 deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
               )
             }
             "reload" -> {
               saveTitles()
               loadTitles()
-              player.sendMessage("リロードしました")
+              sender.sendMessage("リロードしました")
             }
             "edit" -> {
               val title = allTitles.get(Integer.parseInt(args[2]))
@@ -399,6 +418,7 @@ object OperatorCommand : CommandExecutor {
               }
             }
             "editDesc" -> {
+
               val title = allTitles.get(Integer.parseInt(args[2]))
               if (title != null) {
                 val descList = args.toMutableList()
@@ -406,14 +426,14 @@ object OperatorCommand : CommandExecutor {
                 descList.removeAt(0)
                 descList.removeAt(0)
                 title.description = descList
-                player.sendMessage("称号の説明を更新しました")
+                sender.sendMessage("称号の説明を更新しました")
               } else {
-                player.sendMessage("称号が見つかりません")
+                sender.sendMessage("称号が見つかりません")
               }
             }
             "get" -> {
               val title = getTitleFromId(Integer.parseInt(args[2]))
-              player.sendMessage(title.title)
+              sender.sendMessage(title.title)
             }
           }
         }
@@ -432,11 +452,11 @@ object OperatorCommand : CommandExecutor {
         "recommendInterval" -> {
           if (args.size == 1) {
             val seconds = plugin.config.getInt("RecommendBroadcastIntervalSeconds", 600)
-            player.sendMessage("現在のおすすめ建築宣伝インターバル: ${seconds}秒")
+            sender.sendMessage("現在のおすすめ建築宣伝インターバル: ${seconds}秒")
           } else if (args.size == 2) {
             val newSeconds = args[1].toIntOrNull()
             if (newSeconds == null || newSeconds < 1) {
-              player.sendMessage("インターバルは1分以上の整数で指定してください。")
+              sender.sendMessage("インターバルは1分以上の整数で指定してください。")
               return true
             }
             plugin.config.set("RecommendBroadcastIntervalSeconds", newSeconds)
@@ -444,9 +464,9 @@ object OperatorCommand : CommandExecutor {
             plugin.reloadConfig()
             val intervalTicks = (newSeconds.coerceAtLeast(1)) * 20L
             plugin.restartRecommendBroadcaster(intervalTicks)
-            player.sendMessage("おすすめ建築宣伝インターバルを${newSeconds}秒に設定しました。")
+            sender.sendMessage("おすすめ建築宣伝インターバルを${newSeconds}秒に設定しました。")
           } else {
-            player.sendMessage("/dpmanager recommendInterval [秒]")
+            sender.sendMessage("/dpmanager recommendInterval [秒]")
           }
         }
         "recommendMode" -> {
@@ -458,14 +478,14 @@ object OperatorCommand : CommandExecutor {
               } else {
                 com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
               }
-            player.sendMessage("現在のおすすめ建築モード: ${mode.name}")
+            sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
             return true
           }
           val modeArg = args[1].uppercase()
           val mode =
             runCatching { com.baakun.dynamicprofile.RecommendMode.valueOf(modeArg) }.getOrNull()
           if (mode == null) {
-            player.sendMessage("無効なモードです。PLAYER_FIRST または BUILDING_FIRST を指定してください。")
+            sender.sendMessage("無効なモードです。PLAYER_FIRST または BUILDING_FIRST を指定してください。")
             return true
           }
           plugin.config.set(
@@ -473,7 +493,7 @@ object OperatorCommand : CommandExecutor {
             if (mode == com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST) 1 else 0,
           )
           plugin.saveConfig()
-          player.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
+          sender.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
           return true
         }
         "setEmpty" -> {
@@ -489,18 +509,18 @@ object OperatorCommand : CommandExecutor {
         "setSpecialFrameInterval" -> {
           if (args.size == 1) {
             val interval = plugin.config.getInt("specialFrameInterval", 3)
-            player.sendMessage("現在の特別枠インターバル: ${interval}回ごと")
+            sender.sendMessage("現在の特別枠インターバル: ${interval}回ごと")
           } else if (args.size == 2) {
             val newInterval = args[1].toIntOrNull()
             if (newInterval == null || newInterval < 1) {
-              player.sendMessage("特別枠インターバルは1以上の整数で指定してください。")
+              sender.sendMessage("特別枠インターバルは1以上の整数で指定してください。")
               return true
             }
             plugin.config.set("specialFrameInterval", newInterval)
             plugin.saveConfig()
-            player.sendMessage("特別枠インターバルを${newInterval}回ごとに設定しました")
+            sender.sendMessage("特別枠インターバルを${newInterval}回ごとに設定しました")
           } else {
-            player.sendMessage("/dpmanager setSpecialFrameInterval [回数]")
+            sender.sendMessage("/dpmanager setSpecialFrameInterval [回数]")
           }
           return true
         }
@@ -648,7 +668,7 @@ object OperatorCommandCompleter : TabCompleter {
                   val titleId = args[2].toIntOrNull()
                   if (titleId != null && allTitles.containsKey(titleId)) {
                     val title = getTitleFromId(titleId)
-                    val description = title.description ?: mutableListOf()
+                    val description = title.description
                     if (description.isNotEmpty()) {
                       return mutableListOf(description[0])
                     }
@@ -667,7 +687,7 @@ object OperatorCommandCompleter : TabCompleter {
       val titleId = args[2].toIntOrNull()
       if (titleId != null && allTitles.containsKey(titleId)) {
         val title = getTitleFromId(titleId)
-        val description = title.description ?: mutableListOf()
+        val description = title.description
         val lineNumber = args.size - 4
         if (lineNumber < description.size) {
           return mutableListOf(description[lineNumber])
