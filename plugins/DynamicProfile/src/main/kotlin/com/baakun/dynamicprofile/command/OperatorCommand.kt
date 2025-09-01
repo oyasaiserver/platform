@@ -391,7 +391,9 @@ object OperatorCommand : CommandExecutor {
               TitleGui.showPlayerTitlesGui(player, targetPlayerName)
             }
             "give" -> {
-              sender.sendMessage(giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3])))
+              sender.sendMessage(
+                giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
+              )
             }
             "add" -> {
               sender.sendMessage(createNewTitle(args[2], args[3].toInt()))
