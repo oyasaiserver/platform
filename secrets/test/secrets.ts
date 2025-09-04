@@ -1,8 +1,8 @@
+import { directory } from '@oyasaiserver/lib/directory'
+import { schema } from '@oyasaiserver/secrets/schema'
 import { glob, readFile } from 'node:fs/promises'
 import { suite, test } from 'node:test'
 import { parseEnv } from 'node:util'
-import { directory } from '@oyasaiserver/lib/directory'
-import { schema } from '@oyasaiserver/secrets/schema'
 
 await suite(import.meta.filename, async () => {
   await test('secrets schema should match .env', async () => {

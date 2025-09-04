@@ -1,15 +1,15 @@
-import { mariadb } from './services/mariadb.ts'
-import { prometheus } from './services/prometheus.ts'
-import { grafana } from './services/grafana.ts'
-import { nodeExporter } from './services/node-exporter.ts'
+import type { Compose } from '@json-types/compose'
 import { secrets } from '@oyasaiserver/secrets'
-import { minecraftMain } from './services/minecraft-main.ts'
+import { grafana } from './services/grafana.ts'
+import { mariadbBackup } from './services/mariadb-backup.ts'
+import { mariadb } from './services/mariadb.ts'
 import {
   minecraftMainBackup,
   minecraftMainBackupRestore
 } from './services/minecraft-main-backup.ts'
-import type { Compose } from '@json-types/compose'
-import { mariadbBackup } from './services/mariadb-backup.ts'
+import { minecraftMain } from './services/minecraft-main.ts'
+import { nodeExporter } from './services/node-exporter.ts'
+import { prometheus } from './services/prometheus.ts'
 
 export const onpremInfra: Compose = {
   services: {

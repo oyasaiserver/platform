@@ -1,9 +1,9 @@
-import { parseEnv } from 'node:util'
 import { parse } from '@dotenvx/dotenvx'
+import { directory } from '@oyasaiserver/lib/directory'
 import { readFile } from 'node:fs/promises'
 import { env } from 'node:process'
+import { parseEnv } from 'node:util'
 import { schema } from './schema.ts'
-import { directory } from '@oyasaiserver/lib/directory'
 
 const envfile = `${directory.root}/secrets/${env.ENVIRONMENT ?? 'local'}/.env`
 

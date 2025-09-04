@@ -2,12 +2,9 @@ import { createHash } from 'node:crypto'
 import { readdir, readFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 import { directory } from './directory.ts'
-import ignore from 'ignore'
+import { gitignore } from './ignore.ts'
 
 export async function hashDirectories(...directories: string[]): Promise<string> {
-  const ignoreFile = await readFile(join(directory.root, '.gitignore'), 'utf-8')
-  const gitignore = ignore().add(ignoreFile)
-
   const hash = createHash('sha256')
 
   for (const dir of directories.sort()) {

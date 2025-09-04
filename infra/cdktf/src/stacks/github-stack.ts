@@ -1,14 +1,14 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
 import { BranchDefault } from '@cdktf/provider-github/lib/branch-default/index.js'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider/index.js'
-import { Repository } from '@cdktf/provider-github/lib/repository/index.js'
 import { RepositoryRuleset } from '@cdktf/provider-github/lib/repository-ruleset/index.js'
+import { Repository } from '@cdktf/provider-github/lib/repository/index.js'
 import { directory } from '@oyasaiserver/lib/directory'
+import { Yaml } from '@oyasaiserver/lib/yaml'
 import { secrets } from '@oyasaiserver/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
-import { YAML } from 'zx'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
 
 export class GitHubStack extends TerraformStack {
@@ -88,7 +88,7 @@ export class GitHubStack extends TerraformStack {
     return ['ci.yaml', 'pr.yaml'].flatMap(file => {
       const path = join(directory.root, '.github/workflows', file)
       const content = readFileSync(path).toString()
-      const { jobs } = YAML.parse(content)
+      const { jobs } = Yaml.parse(content)
       return Object.keys(jobs)
     })
   }
