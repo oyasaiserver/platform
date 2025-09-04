@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 import { secrets } from '@oyasaiserver/secrets'
+import { execSync } from 'node:child_process'
 import { env } from 'node:process'
-import { $, argv } from 'zx'
 
-await $({
+execSync(process.argv.slice(3).join(' '), {
   env: {
     ...env,
     ...secrets
   },
-  nothrow: true,
   stdio: 'inherit'
-})`${argv._}`
+})

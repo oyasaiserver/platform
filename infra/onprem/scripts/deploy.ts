@@ -1,11 +1,12 @@
 import { directory } from '@oyasaiserver/lib/directory'
 import { useSsh } from '@oyasaiserver/lib/ssh'
+import { Yaml } from '@oyasaiserver/lib/yaml'
 import { onpremInfra } from '@oyasaiserver/onprem'
 import { secrets } from '@oyasaiserver/secrets'
+import { execSync } from 'node:child_process'
 import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
 import { exit } from 'node:process'
-import { $, YAML } from 'zx'
 
 const rf = {
   recursive: true,
@@ -22,14 +23,14 @@ for await (const jar of jars) {
 
 await cp('assets', 'dist', rf)
 
-await writeFile('dist/compose.yaml', YAML.stringify(onpremInfra))
+await writeFile('dist/compose.yaml', Yaml.stringify(onpremInfra))
 
 if (secrets.ENVIRONMENT === 'local') {
   await mkdir(secrets.ENVIRONMENT, rf)
   await cp('dist', secrets.ENVIRONMENT, rf)
-  await $({
+  execSync(`docker compose up --detach --remove-orphans --wait`, {
     cwd: secrets.ENVIRONMENT
-  })`docker compose up --detach --remove-orphans --wait`
+  })
   exit(0)
 }
 
