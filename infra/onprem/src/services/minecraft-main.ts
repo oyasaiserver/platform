@@ -1,10 +1,10 @@
+import type { Service } from '@json-types/compose'
+import { directory } from '@oyasaiserver/lib/directory'
+import { hashDirectories } from '@oyasaiserver/lib/hash'
+import { secrets } from '@oyasaiserver/secrets'
+import { join } from 'node:path'
 import { config } from '../config.ts'
 import { plugins, productionOnlyPlugins, spigetPlugins } from '../plugins.ts'
-import { secrets } from '@oyasaiserver/secrets'
-import type { Service } from '@json-types/compose'
-import { hashDirectories } from '@oyasaiserver/lib/hash'
-import { join } from 'node:path'
-import { directory } from '@oyasaiserver/lib/directory'
 
 export const minecraftMain: Service = {
   depends_on: ['mariadb'],

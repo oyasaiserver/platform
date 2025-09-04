@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const schema = z
   .object({
     DOTENV_PUBLIC_KEY: z.string(),
-    ENVIRONMENT: z.enum(['production', 'development', 'local']).default('local').readonly(),
+    ENVIRONMENT: z.enum(['production', 'development', 'local']).default('local'),
     PUBLIC_IPV4: z.string(),
     SSH_PRIVATE_KEY: z.string(),
     SSH_USERNAME: z.string(),

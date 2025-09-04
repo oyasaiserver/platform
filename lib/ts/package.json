@@ -11,8 +11,5 @@
     "@dotenvx/dotenvx": "^1.49.0",
     "ignore": "^7.0.5",
     "node-ssh": "^13.2.1"
-  },
-  "devDependencies": {
-    "@types/semver": "^7.7.0"
   }
 }

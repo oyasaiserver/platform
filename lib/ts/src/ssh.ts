@@ -1,10 +1,10 @@
-import { EOL } from 'node:os'
 import {
   type Config,
   NodeSSH,
   type SSHExecCommandResponse,
   type SSHGetPutDirectoryOptions
 } from 'node-ssh'
+import { EOL } from 'node:os'
 
 type Ssh = Readonly<{
   $(pieces: TemplateStringsArray, ...args: unknown[]): Promise<SSHExecCommandResponse>

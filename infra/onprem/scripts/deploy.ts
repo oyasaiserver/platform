@@ -1,10 +1,10 @@
-import { secrets } from '@oyasaiserver/secrets'
-import { useSsh } from '@oyasaiserver/lib/ssh'
-import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
 import { directory } from '@oyasaiserver/lib/directory'
-import { exit } from 'node:process'
-import { basename, join } from 'node:path'
+import { useSsh } from '@oyasaiserver/lib/ssh'
 import { onpremInfra } from '@oyasaiserver/onprem'
+import { secrets } from '@oyasaiserver/secrets'
+import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
+import { basename, join } from 'node:path'
+import { exit } from 'node:process'
 import { $, YAML } from 'zx'
 
 const rf = {
