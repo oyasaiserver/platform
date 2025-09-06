@@ -13,9 +13,6 @@
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
   },
-  "dependencies": {
-    "zx": "^8.8.1"
-  },
   "devDependencies": {
     "@types/node": "^24.3.1",
     "oxlint": "^1.14.0",
