@@ -35,8 +35,6 @@ jobs:
       - envs
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
-    # TODO enable when we have apps to deploy
-    if: false
     strategy:
       matrix:
         app: [wiki]
