@@ -1,6 +1,6 @@
 import type { Service } from '@json-types/compose'
 import { directory } from '@oyasaiserver/lib/directory'
-import { hashDirectories } from '@oyasaiserver/lib/hash'
+import { hashdir } from '@oyasaiserver/lib/hash'
 import { secrets } from '@oyasaiserver/secrets'
 import { join } from 'node:path'
 import { config } from '../config.ts'
@@ -32,7 +32,7 @@ export const minecraftMain: Service = {
     DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
     RCON_PASSWORD: secrets.RCON_PASSWORD,
     // TODO abstract this pattern
-    __SENTINEL_HASH__: await hashDirectories(
+    __SENTINEL_HASH__: await hashdir(
       join(directory.root, 'lib/kotlin'),
       join(directory.root, 'plugins'),
       join(directory.root, 'infra/onprem/assets/minecraft-main')
