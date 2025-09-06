@@ -4,7 +4,7 @@ import { join, relative } from 'node:path'
 import { directory } from './directory.ts'
 import { gitignore } from './ignore.ts'
 
-export async function hashDirectories(...directories: string[]): Promise<string> {
+export async function hashdir(...directories: string[]): Promise<string> {
   const hash = createHash('sha256')
 
   for (const dir of directories.sort()) {

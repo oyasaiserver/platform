@@ -35,6 +35,8 @@ jobs:
       - envs
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
+    # TODO enable when we have apps to deploy
+    if: false
     strategy:
       matrix:
         app: [wiki]
@@ -70,7 +72,6 @@ jobs:
   deploy-onprem:
     needs:
       - envs
-      - cdktf
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
     steps:

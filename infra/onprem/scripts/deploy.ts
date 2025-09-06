@@ -1,5 +1,5 @@
 import { directory } from '@oyasaiserver/lib/directory'
-import { useSsh } from '@oyasaiserver/lib/ssh'
+import { sshConnection } from '@oyasaiserver/lib/ssh'
 import { onpremInfra } from '@oyasaiserver/onprem'
 import { secrets } from '@oyasaiserver/secrets'
 import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
@@ -33,7 +33,7 @@ if (secrets.ENVIRONMENT === 'local') {
   exit(0)
 }
 
-await using ssh = await useSsh({
+await using ssh = await sshConnection({
   host: secrets.PUBLIC_IPV4,
   username: secrets.SSH_USERNAME,
   password: secrets.SSH_PASSWORD,
