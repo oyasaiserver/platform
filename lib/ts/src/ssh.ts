@@ -20,7 +20,7 @@ type SshConfig = Config & {
   verbose?: boolean
 }
 
-export async function useSsh(config: SshConfig): Promise<Ssh & AsyncDisposable> {
+export async function sshConnection(config: SshConfig): Promise<Ssh & AsyncDisposable> {
   const connection = new NodeSSH()
   await connection.connect(config)
   return {
