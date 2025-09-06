@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "format": "sort-package-json '**/package.json' && prettier . --write",
+    "format": "sort-package-json '**/package.json' && prettier . --write --cache --log-level silent",
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
   },
