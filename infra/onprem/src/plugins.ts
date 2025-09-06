@@ -42,7 +42,7 @@ export const spigetPlugins = [
   22023, // slot-machine
   22272, // mycommand
   39590, // bkcommonlib
-  44462, // simple-elevators-1-8-1-20
+  44462, // simple-elevators
   47694, // inventory-shop
   48301, // crackshot-guns
   51758, // join-commands

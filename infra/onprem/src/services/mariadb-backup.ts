@@ -8,7 +8,7 @@ export const mariadbBackup: Service = {
   environment: {
     DB_SERVER: 'mariadb',
     DB_USER: 'root',
-    DB_PASS: 'pigg1524',
+    DB_PASS: secrets.MARIADB_PASSWORD,
     DB_DUMP_FREQUENCY: 360,
     DB_DUMP_TARGET: `s3://${secrets.R2_BUCKET_NAME}/mariadb-backup`,
     AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
