@@ -3,7 +3,7 @@ import { directory } from '@oyasaiserver/lib/directory'
 import { hashdir } from '@oyasaiserver/lib/hash'
 import { secrets } from '@oyasaiserver/secrets'
 import { join } from 'node:path'
-import { config } from '../config.ts'
+import { config, envAwareConfig } from '../config.ts'
 import { plugins, productionOnlyPlugins, spigetPlugins } from '../plugins.ts'
 
 export const minecraftMain: Service = {
@@ -21,7 +21,7 @@ export const minecraftMain: Service = {
     USE_MEOWICE_FLAGS: secrets.ENVIRONMENT !== 'local',
     ENABLE_ROLLING_LOGS: true,
     LOG_TIMESTAMP: true,
-    MEMORY: config.services.minecraft.memory[secrets.ENVIRONMENT],
+    MEMORY: envAwareConfig(config.services.minecraft.memory),
     PLUGINS: [
       ...plugins,
       ...(secrets.ENVIRONMENT === 'production' ? productionOnlyPlugins : [])

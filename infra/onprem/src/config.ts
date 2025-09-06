@@ -1,3 +1,5 @@
+import { secrets } from '@oyasaiserver/secrets'
+
 export const config = {
   services: {
     minecraft: {
@@ -11,3 +13,11 @@ export const config = {
     }
   }
 } as const
+
+export function envAwareConfig<P, D, L>(config: {
+  production: P
+  development: D
+  local: L
+}): P | D | L {
+  return config[secrets.ENVIRONMENT]
+}
