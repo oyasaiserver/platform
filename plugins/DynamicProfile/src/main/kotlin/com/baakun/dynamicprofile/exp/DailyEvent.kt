@@ -14,7 +14,6 @@ import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -105,7 +104,6 @@ object DailyEvent : Listener {
   fun vote(e: VotifierEvent) {
     val ofp = Bukkit.getOfflinePlayer(e.vote.username)
     val file = userStatsFile(ofp.uniqueId)
-    Bukkit.broadcast(Component.text("${e.vote.serviceName} 投票を検知: ${e.vote.username}"))
     val userStats = getStats(ofp.uniqueId)
     userStats.addCount(BehType.VOTE)
     writeJsonToFile(file, userStats)
