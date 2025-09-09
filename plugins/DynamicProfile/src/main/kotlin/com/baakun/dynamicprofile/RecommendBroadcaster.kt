@@ -51,14 +51,16 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
             onlinePlayers.filter { player ->
               (perm?.playerInGroup(player, "spdonator") == true ||
                 perm?.playerInGroup(player, "donator") == true) &&
-                getStats(player.uniqueId).recommends.isNotEmpty()
+                getStats(player.uniqueId).recommends.values.any { it != EMPTY }
             }
           filtered to specialCache
         }
         else -> {
           // 通常枠
           val filtered =
-            onlinePlayers.filter { player -> getStats(player.uniqueId).recommends.isNotEmpty() }
+            onlinePlayers.filter { player ->
+              getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+            }
           filtered to normalCache
         }
       }
@@ -140,8 +142,11 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         .hoverEvent(HoverEvent.showText(Component.text("クリックしてテレポート！")))
         .appendNewline()
         .build()
+    Bukkit.broadcast(message)
     Bukkit.getServer().onlinePlayers.forEach { it.sendMessage(message) }
     Bukkit.getServer().onlinePlayers.forEach {
+      if (getStats(it.uniqueId).recommends.values.all { v -> v == EMPTY })
+        it.sendMessage(Component.text("おすすめ建築を登録してね！").color(NamedTextColor.YELLOW))
       if (getStats(it.uniqueId).notice)
         it.playSound(it.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.5f)
     }
