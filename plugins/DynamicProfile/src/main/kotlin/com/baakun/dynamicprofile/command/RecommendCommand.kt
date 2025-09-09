@@ -29,13 +29,13 @@ object RecommendCommand : CommandExecutor {
     when (sub) {
       "add" -> {
         if (args.size < 3) {
-          sender.sendMessage("/dpsuki add <スロット番号> <建築ID>")
+          sender.sendMessage("/dpsuki add <スロット番号(1-5)> <建築ID>")
           return true
         }
         val slot = args[1].toIntOrNull()
         val id = args[2].toIntOrNull()
-        if (slot == null || slot !in 0..4) {
-          sender.sendMessage("スロット番号は0～4で指定してください。")
+        if (slot == null || slot !in 1..5) {
+          sender.sendMessage("スロット番号は1～5で指定してください。")
           return true
         }
         if (id == null) {
@@ -53,20 +53,20 @@ object RecommendCommand : CommandExecutor {
             sender.sendMessage("ID $id の建築は存在しません。")
             return true
           }
-        stats.recommends[slot] = id
+        stats.recommends[slot - 1] = id
         sender.sendMessage("スロット$slot にID $id を登録しました。")
       }
       "remove" -> {
         if (args.size < 2) {
-          sender.sendMessage("/dpsuki remove <スロット番号>")
+          sender.sendMessage("/dpsuki remove <スロット番号(1-5)>")
           return true
         }
         val slot = args[1].toIntOrNull()
-        if (slot == null || slot !in 0..4) {
-          sender.sendMessage("スロット番号は0～4で指定してください。")
+        if (slot == null || slot !in 1..5) {
+          sender.sendMessage("スロット番号は1～5で指定してください。")
           return true
         }
-        stats.recommends[slot] = Int.MIN_VALUE
+        stats.recommends[slot - 1] = Int.MIN_VALUE
         sender.sendMessage("スロット$slot を空にしました。")
       }
       else -> sender.sendMessage("/dpsuki <add|remove> <スロット番号> [建築ID]")
