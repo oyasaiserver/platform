@@ -1,11 +1,10 @@
 import { parse } from '@dotenvx/dotenvx'
-import { directory } from '@oyasaiserver/lib/directory'
 import { readFile } from 'node:fs/promises'
 import { env } from 'node:process'
 import { parseEnv } from 'node:util'
 import { schema } from './schema.ts'
 
-const envfile = `${directory.root}/secrets/${env.ENVIRONMENT ?? 'local'}/.env`
+const envfile = `${import.meta.dirname}/../${env.ENVIRONMENT ?? 'local'}/.env`
 
 export const secrets = schema.parse(
   parse(await readFile(envfile), {
