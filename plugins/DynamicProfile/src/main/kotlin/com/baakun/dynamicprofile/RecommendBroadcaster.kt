@@ -146,7 +146,11 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     Bukkit.getServer().onlinePlayers.forEach { it.sendMessage(message) }
     Bukkit.getServer().onlinePlayers.forEach {
       if (getStats(it.uniqueId).recommends.values.all { v -> v == EMPTY })
-        it.sendMessage(Component.text("おすすめ建築を登録してね！").color(NamedTextColor.YELLOW))
+        it.sendMessage(
+          Component.text("おすすめ建築が未登録です！ /dp から設定できます")
+            .color(NamedTextColor.YELLOW)
+            .hoverEvent(HoverEvent.showText(Component.text("/dp コマンドでおすすめ建築を登録できます！")))
+        )
       if (getStats(it.uniqueId).notice)
         it.playSound(it.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.5f)
     }
