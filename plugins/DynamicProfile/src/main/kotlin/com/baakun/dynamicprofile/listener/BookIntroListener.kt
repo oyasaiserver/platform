@@ -11,7 +11,7 @@ class BookIntroListener : Listener {
   fun onBookSign(event: PlayerEditBookEvent) {
     val player = event.player
     val bookMeta = event.newBookMeta
-
+    if (!bookMeta.hasCustomModelData()) return
     if (bookMeta.customModelData != 114514) return
     val stats = getStats(player.uniqueId)
 
