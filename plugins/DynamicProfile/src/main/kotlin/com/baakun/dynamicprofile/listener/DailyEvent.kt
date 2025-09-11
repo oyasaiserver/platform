@@ -5,13 +5,11 @@ import com.baakun.dynamicprofile.DynamicProfile.Companion.failedUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.playTimes
 import com.baakun.dynamicprofile.data.Stats
 import com.baakun.dynamicprofile.model.BehType
+import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
-import com.google.gson.GsonBuilder
 import com.vexsoftware.votifier.model.VotifierEvent
 import java.io.File
-import java.io.FileWriter
-import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.UUID
@@ -23,14 +21,13 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 object DailyEvent : Listener {
-  private fun gson() =
-    GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
-
   private fun userStatsFile(uuid: UUID) = File(plugin.dataFolder, "UserStatsJSON/$uuid.json")
 
   private fun <T> writeJsonToFile(file: File, obj: T, clazz: Class<T>? = null) {
-    FileWriter(file, StandardCharsets.UTF_8).use { writer ->
-      if (clazz != null) gson().toJson(obj, clazz, writer) else gson().toJson(obj, writer)
+    if (clazz != null) {
+      JsonUtils.toJsonFile(file, obj, clazz)
+    } else {
+      JsonUtils.toJsonFile(file, obj)
     }
   }
 

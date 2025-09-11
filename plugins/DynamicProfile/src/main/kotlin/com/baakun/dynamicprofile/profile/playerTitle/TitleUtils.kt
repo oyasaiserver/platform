@@ -1,11 +1,10 @@
 package com.baakun.dynamicprofile.profile.playerTitle
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allTitles
+import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.File
-import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.stream.Collectors
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player
 
 object TitleUtils {
   val titleFile = File(Tools.plugin.dataFolder.path + "/Titles.json")
-  val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
 
   fun loadTitles() {
     titleFile.parentFile.mkdirs()
@@ -22,13 +20,13 @@ object TitleUtils {
       titleFile.writeText("{}", StandardCharsets.UTF_8)
     }
     allTitles =
-      gson.fromJson(titleFile.readText(), object : TypeToken<MutableMap<Int, Title>>() {}.type)
+      JsonUtils.fromJsonFile(titleFile, object : TypeToken<MutableMap<Int, Title>>() {}.type)
   }
 
   fun saveTitles() {
     titleFile.parentFile.mkdirs()
     titleFile.createNewFile()
-    FileWriter(titleFile, StandardCharsets.UTF_8).use { writer -> gson.toJson(allTitles, writer) }
+    JsonUtils.toJsonFile(titleFile, allTitles, object : TypeToken<MutableMap<Int, Title>>() {}.type)
   }
 
   fun createNewTitle(title: String, rarity: Int): String {

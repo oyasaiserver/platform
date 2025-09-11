@@ -21,12 +21,10 @@ import com.baakun.dynamicprofile.model.GiftItem
 import com.baakun.dynamicprofile.profile.playerTitle.Title
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.plugin
-import com.google.gson.GsonBuilder
 import java.io.File
-import java.io.FileWriter
-import java.nio.charset.StandardCharsets
 import java.util.*
 import net.luckperms.api.LuckPerms
 import net.milkbowl.vault.permission.Permission
@@ -98,8 +96,6 @@ class DynamicProfile : JavaPlugin() {
       .runTaskAsynchronously(
         this,
         Runnable {
-          val gson =
-            GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
           try {
             loadTitles()
             loadWeeklyLB()
@@ -118,13 +114,11 @@ class DynamicProfile : JavaPlugin() {
                   }
                 if (uuid == null) {
                   logger.warning("Invalid file name (not UUID): $fileName, skipping.")
-
                   return@forEach
                 }
                 allUser.add(uuid)
                 try {
-                  val stats: Stats =
-                    gson.fromJson(file.readText(StandardCharsets.UTF_8), Stats::class.java)
+                  val stats: Stats = JsonUtils.fromJsonFile(file, Stats::class.java)
                   allStats[uuid] = stats
                 } catch (je: Exception) {
                   logger.warning("Failed to load stats for $uuid: ${je.message}")
@@ -150,21 +144,7 @@ class DynamicProfile : JavaPlugin() {
           for (player in Bukkit.getOnlinePlayers()) {
             val file =
               File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${player.uniqueId}.json")
-
-            file.parentFile.mkdir()
-            if (file.createNewFile()) {
-              logger.info("created new file for ${player.name}, ${player.uniqueId}")
-            }
-            val writer = FileWriter(file, StandardCharsets.UTF_8)
-            GsonBuilder()
-              .excludeFieldsWithoutExposeAnnotation()
-              .setPrettyPrinting()
-              .create()
-              .toJson(getStats(player.uniqueId), writer)
-
-            writer.flush()
-            writer.close()
-
+            JsonUtils.toJsonFile(file, getStats(player.uniqueId), Stats::class.java)
             val br =
               object : BukkitRunnable() {
                 override fun run() {
@@ -220,15 +200,7 @@ class DynamicProfile : JavaPlugin() {
       try {
         val userstats = getStats(player.uniqueId)
         val file = File(plugin.dataFolder, "UserStatsJSON/${player.uniqueId}.json")
-        file.parentFile.mkdirs()
-        file.createNewFile()
-        FileWriter(file, StandardCharsets.UTF_8).use { writer ->
-          GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation()
-            .setPrettyPrinting()
-            .create()
-            .toJson(userstats, writer)
-        }
+        JsonUtils.toJsonFile(file, userstats, Stats::class.java)
       } catch (e: Exception) {
         server.logger.warning("Failed to save data for ${player.name}: ${e.message}")
         e.printStackTrace()
