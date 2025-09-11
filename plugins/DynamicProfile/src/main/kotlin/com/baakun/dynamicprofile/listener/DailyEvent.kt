@@ -1,4 +1,4 @@
-package com.baakun.dynamicprofile.exp
+package com.baakun.dynamicprofile.listener
 
 import com.baakun.dynamicprofile.DynamicProfile.Companion.allUser
 import com.baakun.dynamicprofile.DynamicProfile.Companion.failedUser
@@ -14,6 +14,7 @@ import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -25,8 +26,7 @@ object DailyEvent : Listener {
   private fun gson() =
     GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
 
-  private fun userStatsFile(uuid: java.util.UUID) =
-    File(plugin.dataFolder, "UserStatsJSON/$uuid.json")
+  private fun userStatsFile(uuid: UUID) = File(plugin.dataFolder, "UserStatsJSON/$uuid.json")
 
   private fun <T> writeJsonToFile(file: File, obj: T, clazz: Class<T>? = null) {
     FileWriter(file, StandardCharsets.UTF_8).use { writer ->
