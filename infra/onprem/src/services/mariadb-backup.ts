@@ -5,6 +5,7 @@ export const mariadbBackup: Service = {
   depends_on: ['mariadb'],
   image: 'databack/mysql-backup',
   restart: 'unless-stopped',
+  command: 'dump',
   environment: {
     DB_SERVER: 'mariadb',
     DB_USER: 'root',
