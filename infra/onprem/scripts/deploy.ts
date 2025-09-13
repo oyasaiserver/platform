@@ -50,4 +50,4 @@ await ssh.$`sudo chmod -R 777 ${dir}`
 
 await ssh.putDirectory('dist', dir)
 
-await ssh.$`cd ${dir} && docker compose up --detach --remove-orphans --wait`
+await ssh.$`cd ${dir} && docker compose pull && docker compose up --detach --remove-orphans --wait`
