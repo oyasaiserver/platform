@@ -30,6 +30,7 @@ dependencies {
   compileOnly(group = "com.github.Realizedd", name = "TokenManager", version = "3.2.4") {
     isTransitive = false
   }
+  implementation(files("libs/ultimateadvancementapi-shadeable-2.6.0.jar"))
 }
 
 tasks.apply {
