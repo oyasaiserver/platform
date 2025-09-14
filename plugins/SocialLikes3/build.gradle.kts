@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm")
   id("com.gradleup.shadow")
+  `java-library`
 }
 
 repositories {

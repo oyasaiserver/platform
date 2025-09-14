@@ -20,8 +20,8 @@ dependencies {
   compileOnly("com.github.MilkBowl:VaultAPI:1.7")
   compileOnly("net.luckperms:api:5.4")
   compileOnly("com.github.Realizedd:TokenManager:3.2.4") { isTransitive = false }
-  compileOnly(fileTree("lib") { include("SocialLikes3-0.4.0.jar") })
   compileOnly(libs.purpur.api)
+  compileOnly(project(":plugins:SocialLikes3"))
 }
 
 configurations.configureEach {
