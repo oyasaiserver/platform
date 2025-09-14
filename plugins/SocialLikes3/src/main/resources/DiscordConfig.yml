@@ -1,0 +1,6 @@
+# ディスコードBotのTokenコードを入力
+Bot_Token: ''
+# ディスコード鯖の使うテキストchのIDを入力
+TextCH: ''
+# BlueMapのリンク作成用のサーバーアドレス指定
+Server_IP: 'localhost:8100'
