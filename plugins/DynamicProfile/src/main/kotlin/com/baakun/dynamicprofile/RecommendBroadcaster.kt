@@ -143,7 +143,6 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         .appendNewline()
         .build()
     Bukkit.broadcast(message)
-    Bukkit.getServer().onlinePlayers.forEach { it.sendMessage(message) }
     Bukkit.getServer().onlinePlayers.forEach {
       if (getStats(it.uniqueId).recommends.values.all { v -> v == EMPTY })
         it.sendMessage(
