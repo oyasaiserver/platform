@@ -8,7 +8,7 @@ import {
 } from './services/minecraft-main-backup.ts'
 import { minecraftMain } from './services/minecraft-main.ts'
 
-export const onpremInfra: Compose = {
+export const compose: Compose = {
   services: {
     mariadb,
     'minecraft-main': minecraftMain,

@@ -17,8 +17,8 @@ export const mariadbBackup: Service = {
     AWS_REGION: 'auto',
     AWS_ENDPOINT_URL: `https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
     DB_DUMP_COMPRESSION: 'gzip',
-    DB_DUMP_RETENTION: '7d',
-    DB_DEBUG: 'true'
+    DB_DUMP_RETENTION: '14d',
+    DB_DEBUG: true
   }
 }
 

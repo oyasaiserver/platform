@@ -1,7 +1,7 @@
 import { directory } from '@oyasaiserver/lib/directory'
 import { sshConnection } from '@oyasaiserver/lib/ssh'
 import { Yaml } from '@oyasaiserver/lib/yaml'
-import { onpremInfra } from '@oyasaiserver/onprem'
+import { compose } from '@oyasaiserver/onprem'
 import { secrets } from '@oyasaiserver/secrets'
 import { execSync } from 'node:child_process'
 import { cp, glob, mkdir, rm, writeFile } from 'node:fs/promises'
@@ -23,7 +23,7 @@ for await (const jar of jars) {
 
 await cp('assets', 'dist', rf)
 
-await writeFile('dist/compose.yaml', Yaml.stringify(onpremInfra))
+await writeFile('dist/compose.yaml', Yaml.stringify(compose))
 
 if (secrets.ENVIRONMENT === 'local') {
   await mkdir(secrets.ENVIRONMENT, rf)
