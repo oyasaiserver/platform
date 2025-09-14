@@ -37,6 +37,7 @@ export const plugins = [
 
 export const spigetPlugins = [
   1007, // particlehats
+  6245, // placeholderapi
   10997, // signshop
   12725, // mypet
   22023, // slot-machine
@@ -47,7 +48,6 @@ export const spigetPlugins = [
   48301, // crackshot-guns
   51758, // join-commands
   60905, // worldborder
-  6245, // placeholderapi
   69551 // lwc
 ] as const
 
