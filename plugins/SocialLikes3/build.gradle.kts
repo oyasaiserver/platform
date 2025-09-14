@@ -27,7 +27,9 @@ dependencies {
   implementation("org.javacord:javacord:3.8.0")
   compileOnly("net.luckperms:api:5.5")
   implementation("com.github.PryPurity:WorldBorder:v2.1.4")
-  compileOnly(group = "com.github.Realizedd", name = "TokenManager", version = "3.2.4") { isTransitive = false }
+  compileOnly(group = "com.github.Realizedd", name = "TokenManager", version = "3.2.4") {
+    isTransitive = false
+  }
 }
 
 tasks.apply {
