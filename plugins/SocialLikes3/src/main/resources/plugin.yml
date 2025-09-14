@@ -1,0 +1,39 @@
+name: SocialLikes3
+author: Srain3
+main: com.github.srain3.sociallikes.SocialLikes
+api-version: "1.20"
+version: "0.5.3"
+description: "Instead of SocialLikes(v3)"
+
+softdepend:
+  - PlaceholderAPI
+  - TokenManager
+  - Multiverse-Core
+  - DiscordSRV
+  - LuckPerms
+
+commands:
+  sltp:
+    description: "SL看板へ飛ぶコマンド"
+  slbuild:
+    description: "全ての建築一覧GUI"
+  sluser:
+    description: "ユーザー別の建築一覧GUI"
+  slupdate:
+    description: "SL看板のアップデートコマンド"
+  slsignget:
+    description: "SL看板の再入手コマンド"
+  slmenu:
+    description: "SLのメニューコマンド"
+  slnear:
+    description: "SL看板の現在位置に近いものを表示するコマンド"
+  vacanttp:
+    aliases: [vtp]
+    description: "SL看板の少ない地域へのテレポートコマンド"
+  slrankup:
+    description: "建築数とログイン数/ログイン率でランクアップ候補を確認するコマンド"
+
+permissions:
+  sociallikes3.slrankup:
+    description: "/slrankup commnad use permission"
+    default: op
