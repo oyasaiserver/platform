@@ -22,7 +22,7 @@ dependencies {
   implementation("com.github.stefvanschie.inventoryframework:IF:0.11.2")
   compileOnly("me.clip:placeholderapi:2.11.6")
   implementation("net.wesjd:anvilgui:1.10.8-SNAPSHOT")
-  api("com.frengor:ultimateadvancementapi-shadeable:2.5.2")
+  implementation("com.frengor:ultimateadvancementapi-shadeable:2.5.2")
   compileOnly("com.discordsrv:discordsrv:1.29.0")
   implementation("org.javacord:javacord:3.8.0")
   compileOnly("net.luckperms:api:5.5")
