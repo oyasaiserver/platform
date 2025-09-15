@@ -8,7 +8,6 @@
     }
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.49.0",
     "ignore": "^7.0.5",
     "node-ssh": "^13.2.1",
     "yaml": "^2.8.1"
