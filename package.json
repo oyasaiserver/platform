@@ -14,13 +14,13 @@
     "update": "taze latest --recursive --install --write"
   },
   "devDependencies": {
-    "@types/node": "^24.4.0",
-    "oxlint": "^1.15.0",
+    "@types/node": "^24.5.1",
+    "oxlint": "^1.16.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.2.0",
     "sort-package-json": "^3.4.0",
     "taze": "^19.6.0",
     "typescript": "^5.9.2",
-    "wrangler": "^4.36.0"
+    "wrangler": "^4.37.1"
   }
 }

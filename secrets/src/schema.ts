@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const schema = z
-  .object({
+  .strictObject({
     DOTENV_PUBLIC_KEY: z.string(),
     ENVIRONMENT: z.enum(['production', 'development', 'local']).default('local'),
     PUBLIC_IPV4: z.string(),

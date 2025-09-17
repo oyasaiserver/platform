@@ -1,4 +1,10 @@
-plugins { alias(libs.plugins.spotless) }
+import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
+import nl.littlerobots.vcu.plugin.versionSelector
+
+plugins {
+  alias(libs.plugins.spotless)
+  alias(libs.plugins.version.catalog.update)
+}
 
 buildscript {
   dependencies {
@@ -37,4 +43,8 @@ spotless {
     targetExclude("node_modules/**/*")
     googleJavaFormat()
   }
+}
+
+versionCatalogUpdate {
+  versionSelector(VersionSelectors.LATEST)
 }
