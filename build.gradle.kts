@@ -45,6 +45,4 @@ spotless {
   }
 }
 
-versionCatalogUpdate {
-  versionSelector(VersionSelectors.LATEST)
-}
+versionCatalogUpdate { versionSelector(VersionSelectors.LATEST) }
