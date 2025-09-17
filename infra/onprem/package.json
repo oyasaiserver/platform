@@ -4,10 +4,14 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts"
     }
   },
   "scripts": {
-    "deploy": "node scripts/deploy.ts"
+    "deploy": "node scripts/deploy.ts",
+    "test:integration": "node --test"
   },
   "devDependencies": {
     "@json-types/compose": "^0.10.0"
