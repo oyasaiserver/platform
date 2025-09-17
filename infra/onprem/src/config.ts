@@ -18,6 +18,6 @@ export function envAwareConfig<P, D, L>(config: {
   production: P
   development: D
   local: L
-}): P | D | L {
+}): Readonly<P | D | L> {
   return config[secrets.ENVIRONMENT]
 }

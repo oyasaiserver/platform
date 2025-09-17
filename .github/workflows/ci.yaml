@@ -37,3 +37,11 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run test --workspaces --if-present
+
+  test-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
+      - run: |
+          npm run test:integration --workspaces --if-present

@@ -4,12 +4,18 @@ import { hashdir } from '@oyasaiserver/lib/hash'
 import { secrets } from '@oyasaiserver/secrets'
 import { join } from 'node:path'
 import { config } from '../config.ts'
-import { plugins, productionOnlyPlugins, spigetPlugins } from '../plugins.ts'
+import { plugins } from '../plugins.ts'
 
 export const minecraftMain: Service = {
   depends_on: ['mariadb'],
   image: 'itzg/minecraft-server:java24-graalvm',
-  ports: [`25565:25565`, `19132:19132/udp`, '8192:8192', '8100:8100', '25575:25575'],
+  ports: [
+    '25565:25565', // java
+    '19132:19132/udp', // bedrock
+    '8192:8192', // votifier
+    '8100:8100', // bluemap
+    '25575:25575' // rcon
+  ],
   restart: 'unless-stopped',
   tty: true,
   stdin_open: true,
@@ -22,11 +28,9 @@ export const minecraftMain: Service = {
     ENABLE_ROLLING_LOGS: true,
     LOG_TIMESTAMP: true,
     MEMORY: config.services.minecraft.memory,
-    PLUGINS: [
-      ...plugins,
-      ...(secrets.ENVIRONMENT === 'production' ? productionOnlyPlugins : [])
-    ].join(),
-    SPIGET_RESOURCES: spigetPlugins.join(),
+    PLUGINS: plugins.urls.join(),
+    SPIGET_RESOURCES: plugins.spigetIds.join(),
+    MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
     DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
