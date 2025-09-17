@@ -22,10 +22,13 @@ object AnvilEdit : Listener {
 
       AnvilGUI.Builder().apply {
         itemLeft(paperItem)
-        onComplete { completion ->
-          if (!PlayerClickEvent.rgbRegex.matches(completion.text)) {
-            if (!PlayerClickEvent.htmlColorRegex.matches(completion.text)) {
-              return@onComplete listOf(
+        onClick { slot, stateSnapshot ->
+          if (slot != AnvilGUI.Slot.OUTPUT) {
+            return@onClick listOf()
+          }
+          if (!PlayerClickEvent.rgbRegex.matches(stateSnapshot.text)) {
+            if (!PlayerClickEvent.htmlColorRegex.matches(stateSnapshot.text)) {
+              return@onClick listOf(
                 AnvilGUI.ResponseAction { _, player ->
                   player.sendMessage(
                     ToolBox.colorMessage(
@@ -36,11 +39,10 @@ object AnvilEdit : Listener {
               )
             }
           }
-
-          val handMeta = completion.player.inventory.itemInMainHand.itemMeta
-          handMeta?.setDisplayName(completion.text)
-          completion.player.inventory.itemInMainHand.itemMeta = handMeta
-          return@onComplete listOf(AnvilGUI.ResponseAction.close())
+          val handMeta = stateSnapshot.player.inventory.itemInMainHand.itemMeta
+          handMeta?.setDisplayName(stateSnapshot.text)
+          stateSnapshot.player.inventory.itemInMainHand.itemMeta = handMeta
+          return@onClick listOf(AnvilGUI.ResponseAction.close())
         }
         plugin(ToolBox.pl)
         open(event.player)

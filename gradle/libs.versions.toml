@@ -1,33 +1,21 @@
 [versions]
-kotlin = "2.2.0"
-spotless = "7.0.4"
+anvilgui = "1.10.8-SNAPSHOT"
+kotlin = "2.2.20"
+luckperms = "5.5"
+# @pin
 purpur-api = "1.21.5-R0.1-SNAPSHOT"
-shadow = "9.0.0-beta17"
-fawe = "2.13.0"
-advancedchestsapi = "3.2-BETA"
-hikaricp = "5.0.1"
-log4j = "2.19.0"
-oshi = "6.6.2"
-json-simple = "1.1.1"
-anvilgui = "1.6.3-SNAPSHOT"
+shadow = "9.1.0"
+spotless = "7.2.1"
 vault = "1.7"
-luckperms = "5.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
 
 [libraries]
-kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-shadow-plugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
-purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api" }
-fawe-core = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Core", version.ref = "fawe" }
-fawe-bukkit = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe" }
-advancedchestsapi = { module = "com.github.DeadSilenceIV:AdvancedChestsAPI", version.ref = "advancedchestsapi" }
-hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
-oshi-core = { module = "com.github.oshi:oshi-core", version.ref = "oshi" }
-json-simple = { module = "com.googlecode.json-simple:json-simple", version.ref = "json-simple" }
-log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
-vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms" }
+purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api" }
+shadow-plugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
+vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
