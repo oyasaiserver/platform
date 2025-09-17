@@ -16,7 +16,10 @@ await suite(import.meta.filename, async () => {
   await test('spiget plugins', async () => {
     for (const id of productionPlugins.spigetIds) {
       const response = await fetch(`https://api.spiget.org/v2/resources/${id}/download`, {
-        method: 'HEAD'
+        method: 'HEAD',
+        headers: {
+          Accept: ['application/zip', 'application/java-archive', 'application/octet-stream'].join()
+        }
       })
       ok(response.ok, `Failed to fetch spiget plugin with id: ${id}`)
     }
