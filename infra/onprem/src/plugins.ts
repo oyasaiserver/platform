@@ -38,25 +38,25 @@ const basePlugins: Plugins = {
     114544 // skript
   ],
   modrinthProjects: [
-    'placeholderapi',
+    'bkcommonlib',
+    'coreprotect',
+    'decentholograms',
     'essentialsx',
     'essentialsx-chat-module',
     'essentialsx-spawn',
-    'plugmanx',
-    'multiverse-core',
-    'multiverse-portals',
-    'viaversion',
-    'fastasyncworldedit',
     'fastasyncvoxelsniper',
-    'coreprotect',
-    'worldguard',
+    'fastasyncworldedit',
     'luckperms',
     'lunachat',
-    'decentholograms',
-    'veinminer',
+    'multiverse-core',
+    'multiverse-portals',
+    'placeholderapi',
+    'plugmanx',
     'tab-was-taken',
     'terra',
-    'bkcommonlib'
+    'veinminer',
+    'viaversion',
+    'worldguard'
   ]
 } as const
 
