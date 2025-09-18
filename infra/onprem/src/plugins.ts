@@ -12,6 +12,7 @@ const basePlugins: Plugins = {
     'https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar',
     'https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar',
     'https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar',
+    'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
     'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar',
     'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
     'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot'
@@ -44,7 +45,6 @@ const basePlugins: Plugins = {
     'essentialsx',
     'essentialsx-chat-module',
     'essentialsx-spawn',
-    'fastasyncvoxelsniper',
     'fastasyncworldedit',
     'luckperms',
     'lunachat',
