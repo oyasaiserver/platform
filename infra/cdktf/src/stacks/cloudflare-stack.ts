@@ -1,3 +1,5 @@
+import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
+import { envAwareId } from '../ids.ts'
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record/index.js'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/index.js'
 import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
@@ -8,8 +10,6 @@ import { secrets } from '@oyasaiserver/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
-import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
-import { envAwareId } from '../ids.ts'
 
 export class CloudflareStack extends TerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
