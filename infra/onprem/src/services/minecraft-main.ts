@@ -31,6 +31,7 @@ export const minecraftMain: Service = {
     PLUGINS: plugins.urls.join(),
     SPIGET_RESOURCES: plugins.spigetIds.join(),
     MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
+    MODRINTH_ALLOWED_VERSION_TYPE: 'beta',
     ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
     // TODO more granular control over secrets
     DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
