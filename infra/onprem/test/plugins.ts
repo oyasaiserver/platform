@@ -1,9 +1,13 @@
+import { config } from '@oyasaiserver/onprem/config'
 import { productionPlugins } from '@oyasaiserver/onprem/plugins'
+import { ModrinthV2Client } from '@xmcl/modrinth'
 import { strictEqual } from 'node:assert'
 import { ok } from 'node:assert/strict'
 import { suite, test } from 'node:test'
 
 await suite(import.meta.filename, async () => {
+  const modrinthV2Client = new ModrinthV2Client()
+
   await test('urls are valid', async () => {
     for (const url of productionPlugins.urls) {
       const response = await fetch(url, {
@@ -26,10 +30,14 @@ await suite(import.meta.filename, async () => {
   })
 
   await test('modrinth plugins', async () => {
-    const url = new URL('https://api.modrinth.com/v2/projects')
-    url.searchParams.append('ids', JSON.stringify(productionPlugins.modrinthProjects))
-    const response = await fetch(url)
-    const json = (await response.json()) as unknown[]
-    strictEqual(productionPlugins.modrinthProjects.length, json.length)
+    const projects = await modrinthV2Client.getProjects(productionPlugins.modrinthProjects)
+    strictEqual(projects.length, productionPlugins.modrinthProjects.length)
+    const unsupportedPlugins = projects.filter(
+      ({ game_versions }) => !game_versions.includes(config.services.minecraft.version)
+    )
+    ok(
+      !unsupportedPlugins.length,
+      `Plugins not supporting server version: ${unsupportedPlugins.map(({ slug }) => slug).join(', ')}`
+    )
   })
 })
