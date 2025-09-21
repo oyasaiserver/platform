@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "format": "sort-package-json '**/package.json' && prettier . --write --log-level silent",
+    "format": "prettier . --write --log-level silent",
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
   },
@@ -18,9 +18,9 @@
     "@types/node": "^24.5.2",
     "oxlint": "^1.16.0",
     "prettier": "^3.6.2",
-    "sort-package-json": "^3.4.0",
-    "taze": "^19.6.0",
+    "prettier-plugin-packagejson": "^2.5.19",
+    "taze": "^19.7.0",
     "typescript": "^5.9.2",
-    "wrangler": "^4.37.1"
+    "wrangler": "^4.38.0"
   }
 }
