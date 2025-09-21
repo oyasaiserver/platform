@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "format": "prettier . --write --log-level silent",
+    "format": "prettier . --write",
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
   },
