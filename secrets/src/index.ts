@@ -1,8 +1,8 @@
-import { schema } from './schema.ts'
 import { parse } from '@dotenvx/dotenvx'
 import { readFile } from 'node:fs/promises'
 import { env } from 'node:process'
 import { parseEnv } from 'node:util'
+import { schema } from './schema.ts'
 
 const envfile = `${import.meta.dirname}/../${env.ENVIRONMENT ?? 'local'}/.env`
 

@@ -1,3 +1,4 @@
+import type { Compose } from '@json-types/compose'
 import { envAwareConfig } from './config.ts'
 import { mariadbBackup } from './services/mariadb-backup.ts'
 import { mariadb } from './services/mariadb.ts'
@@ -6,7 +7,6 @@ import {
   minecraftMainBackupRestore
 } from './services/minecraft-main-backup.ts'
 import { minecraftMain } from './services/minecraft-main.ts'
-import type { Compose } from '@json-types/compose'
 
 export const compose: Compose = {
   services: {

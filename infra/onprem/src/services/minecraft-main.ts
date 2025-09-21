@@ -1,10 +1,10 @@
-import { config } from '../config.ts'
-import { plugins } from '../plugins.ts'
 import type { Service } from '@json-types/compose'
 import { directory } from '@oyasaiserver/lib/directory'
 import { hashdir } from '@oyasaiserver/lib/hash'
 import { secrets } from '@oyasaiserver/secrets'
 import { join } from 'node:path'
+import { config } from '../config.ts'
+import { plugins } from '../plugins.ts'
 
 export const minecraftMain: Service = {
   depends_on: ['mariadb'],

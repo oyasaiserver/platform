@@ -1,8 +1,8 @@
-import { directory } from './directory.ts'
-import { gitignore } from './ignore.ts'
 import { createHash } from 'node:crypto'
 import { readdir, readFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
+import { directory } from './directory.ts'
+import { gitignore } from './ignore.ts'
 
 export async function hashdir(...directories: string[]): Promise<string> {
   const hash = createHash('sha256')
