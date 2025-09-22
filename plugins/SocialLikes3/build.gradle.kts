@@ -27,9 +27,7 @@ dependencies {
   implementation(libs.javacord)
   compileOnly(libs.luckperms.api)
   implementation(libs.worldborder)
-  compileOnly(libs.tokenmanager) {
-    isTransitive = false
-  }
+  compileOnly(libs.tokenmanager) { isTransitive = false }
   implementation(libs.ultimateadvancementapi)
 }
 
