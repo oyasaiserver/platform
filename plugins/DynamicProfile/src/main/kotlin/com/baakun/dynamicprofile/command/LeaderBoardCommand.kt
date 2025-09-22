@@ -32,8 +32,8 @@ object LeaderBoardCommandCompleter : TabCompleter {
     p0: CommandSender,
     p1: Command,
     p2: String,
-    p3: Array<out String>?,
-  ): MutableList<String>? {
+    p3: Array<out String>
+  ): List<String?>? {
 
     if (p3 != null) {
       when (p3.size) {
@@ -50,7 +50,7 @@ object LeaderBoardCommand : CommandExecutor {
     p0: CommandSender,
     p1: Command,
     p2: String,
-    p3: Array<out String>?,
+    p3: Array<out String>
   ): Boolean {
     val hi: MutableList<UUID> =
       if (p1.name.equals("dpleaderboard")) allUser else UUIDMap.keys.toMutableList()

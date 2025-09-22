@@ -11,16 +11,15 @@ repositories {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
-  implementation("com.google.code.gson:gson:2.11.0")
+  implementation(libs.kotlin.stdlib)
+  implementation(libs.gson)
 
-  compileOnly("me.clip:placeholderapi:2.11.5")
-  compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
-  compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
-  compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-  compileOnly("net.luckperms:api:5.4")
-  compileOnly("com.github.Realizedd:TokenManager:3.2.4") { isTransitive = false }
+  compileOnly(libs.placeholderapi)
   compileOnly(libs.purpur.api)
+  compileOnly(libs.nuvotifier)
+  compileOnly(libs.vault.api)
+  compileOnly(libs.luckperms.api)
+  compileOnly(libs.tokenmanager) { isTransitive = false }
   compileOnly(project(":plugins:SocialLikes3"))
 }
 

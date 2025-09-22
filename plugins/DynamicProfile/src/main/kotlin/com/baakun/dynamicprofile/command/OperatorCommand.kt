@@ -144,7 +144,7 @@ object OperatorCommand : CommandExecutor {
     sender: CommandSender,
     command: Command,
     label: String,
-    args: Array<out String>?,
+    args: Array<out String>,
   ): Boolean {
     // Allow non-player senders; only block commands that require Player-specific APIs.
     val player: Player? = if (sender is Player) sender as Player else null
@@ -536,7 +536,7 @@ object OperatorCommandCompleter : TabCompleter {
     sender: CommandSender,
     command: Command,
     alias: String,
-    args: Array<out String>?,
+    args: Array<out String>,
   ): MutableList<String>? {
 
     if (args != null) {

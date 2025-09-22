@@ -18,19 +18,19 @@ repositories {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
-  compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
-  implementation("com.github.stefvanschie.inventoryframework:IF:0.11.2")
-  compileOnly("me.clip:placeholderapi:2.11.6")
-  implementation("net.wesjd:anvilgui:1.10.8-SNAPSHOT")
-  compileOnly("com.discordsrv:discordsrv:1.29.0")
-  implementation("org.javacord:javacord:3.8.0")
-  compileOnly("net.luckperms:api:5.5")
-  implementation("com.github.PryPurity:WorldBorder:v2.1.4")
-  compileOnly(group = "com.github.Realizedd", name = "TokenManager", version = "3.2.4") {
+  implementation(libs.kotlin.stdlib)
+  compileOnly(libs.purpur.api)
+  implementation(libs.inventoryframework)
+  compileOnly(libs.placeholderapi)
+  implementation(libs.anvilgui)
+  compileOnly(libs.discordsrv)
+  implementation(libs.javacord)
+  compileOnly(libs.luckperms.api)
+  implementation(libs.worldborder)
+  compileOnly(libs.tokenmanager) {
     isTransitive = false
   }
-  implementation("com.frengor:ultimateadvancementapi:2.6.0")
+  implementation(libs.ultimateadvancementapi)
 }
 
 tasks.apply {
