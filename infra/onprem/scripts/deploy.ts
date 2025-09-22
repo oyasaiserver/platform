@@ -28,7 +28,7 @@ await writeFile('dist/compose.yaml', Yaml.stringify(compose))
 if (secrets.ENVIRONMENT === 'local') {
   await mkdir(secrets.ENVIRONMENT, rf)
   await cp('dist', secrets.ENVIRONMENT, rf)
-  execSync(`docker compose up --detach --remove-orphans --wait`, {
+  execSync('docker compose up --detach --remove-orphans --wait', {
     cwd: secrets.ENVIRONMENT
   })
   exit(0)
