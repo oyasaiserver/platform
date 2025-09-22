@@ -48,7 +48,7 @@ object NumberBanner {
           '2',
           listOf(
             Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.BLACK, PatternType.RHOMBUS_MIDDLE),
+            Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
             Pattern(DyeColor.BLACK, PatternType.BORDER),
@@ -69,7 +69,7 @@ object NumberBanner {
           '4',
           listOf(
             Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_MIRROR),
+            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
             Pattern(DyeColor.BLACK, PatternType.BORDER),
@@ -79,7 +79,7 @@ object NumberBanner {
           '5',
           listOf(
             Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.BLACK, PatternType.RHOMBUS_MIDDLE),
+            Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT),
             Pattern(DyeColor.BLACK, PatternType.BORDER),
@@ -120,7 +120,7 @@ object NumberBanner {
           '9',
           listOf(
             Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_MIRROR),
+            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
             Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
