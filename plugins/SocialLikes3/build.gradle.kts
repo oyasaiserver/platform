@@ -18,16 +18,16 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.kotlin.stdlib)
   compileOnly(libs.purpur.api)
-  implementation(libs.inventoryframework)
   compileOnly(libs.placeholderapi)
-  implementation(libs.anvilgui)
   compileOnly(libs.discordsrv)
-  implementation(libs.javacord)
   compileOnly(libs.luckperms.api)
-  implementation(libs.worldborder)
   compileOnly(libs.tokenmanager) { isTransitive = false }
+  implementation(libs.kotlin.stdlib)
+  implementation(libs.inventoryframework)
+  implementation(libs.anvilgui)
+  implementation(libs.javacord)
+  implementation(libs.worldborder)
   implementation(libs.ultimateadvancementapi)
 }
 

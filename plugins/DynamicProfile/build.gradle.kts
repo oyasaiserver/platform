@@ -11,9 +11,6 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.kotlin.stdlib)
-  implementation(libs.gson)
-
   compileOnly(libs.placeholderapi)
   compileOnly(libs.purpur.api)
   compileOnly(libs.nuvotifier)
@@ -21,6 +18,8 @@ dependencies {
   compileOnly(libs.luckperms.api)
   compileOnly(libs.tokenmanager) { isTransitive = false }
   compileOnly(project(":plugins:SocialLikes3"))
+  implementation(libs.kotlin.stdlib)
+  implementation(libs.gson)
 }
 
 configurations.configureEach {
