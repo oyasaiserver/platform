@@ -8,7 +8,7 @@ import {
 } from './services/minecraft-main-backup.ts'
 import { minecraftMain } from './services/minecraft-main.ts'
 
-export const compose: Compose = {
+export const compose: Readonly<Compose> = {
   services: {
     mariadb,
     'minecraft-main': minecraftMain,
@@ -22,6 +22,6 @@ export const compose: Compose = {
         'minecraft-main-backup-restore': minecraftMainBackupRestore
       },
       local: {}
-    } as const)
+    })
   }
-} as const
+}

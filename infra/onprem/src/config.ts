@@ -14,10 +14,17 @@ export const config = {
   }
 } as const
 
-export function envAwareConfig<P, D, L>(config: {
-  production: P
-  development: D
-  local: L
-}): Readonly<P | D | L> {
+export function envAwareConfig<const T extends Record<typeof secrets.ENVIRONMENT, any>>(
+  config: T
+): Readonly<T[keyof T]> {
   return config[secrets.ENVIRONMENT]
+}
+
+export function expandConfig<T extends Record<string, any[]>>(
+  base: T,
+  expension: Partial<T> = {}
+): T {
+  return Object.fromEntries(
+    Object.entries(base).map(([key, value]) => [key, value.concat(expension[key] ?? [])])
+  ) as T
 }
