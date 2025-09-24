@@ -1,4 +1,4 @@
-name: Setup node.js
+name: Setup Node.js
 
 runs:
   using: composite
