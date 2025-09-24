@@ -8,6 +8,7 @@
     }
   },
   "dependencies": {
+    "discord.js": "^14.22.1",
     "ignore": "^7.0.5",
     "node-ssh": "^13.2.1",
     "yaml": "^2.8.1"
