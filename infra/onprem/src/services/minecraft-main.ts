@@ -43,5 +43,11 @@ export const minecraftMain: Service = {
       join(directory.root, 'infra/onprem/assets/minecraft-main')
     )
   },
+  healthcheck: {
+    test: 'mc-health',
+    start_period: '1m',
+    interval: '5s',
+    retries: 20
+  },
   volumes: ['./minecraft-main:/data']
 }

@@ -1,11 +1,8 @@
 rootProject.name = "platform"
 
-include(
-  ":lib:kotlin",
-  ":plugins:Vertex",
-  ":plugins:PaintTools",
-  ":plugins:SocialLikes3",
-  ":plugins:TPswitch",
-  ":plugins:DynamicProfile",
-  ":plugins:OyasaiUtilities",
-)
+include(":lib:kotlin")
+
+file("plugins")
+  .listFiles()
+  .filter { it.isDirectory }
+  .forEach { dir -> include(":plugins:${dir.name}") }
