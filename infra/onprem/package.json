@@ -11,7 +11,8 @@
   },
   "scripts": {
     "deploy": "node scripts/deploy.ts",
-    "test:integration": "node --test"
+    "down": "node scripts/down.ts",
+    "test:integration": "npm run deploy && node --test"
   },
   "devDependencies": {
     "@json-types/compose": "^0.10.0",

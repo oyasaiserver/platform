@@ -7,10 +7,9 @@ type Plugins = Readonly<{
   urls: string[]
 }>
 
-const basePlugins: Plugins = {
+const local: Plugins = {
   modrinthProjects: [
     'bkcommonlib',
-    'coreprotect',
     'decentholograms',
     'essentialsx',
     'essentialsx-chat-module',
@@ -46,13 +45,10 @@ const basePlugins: Plugins = {
     SpigetId.TNTRUN_RELOADED,
     SpigetId.GSIT,
     SpigetId.LWC,
-    SpigetId.WORLD_BORDER,
     SpigetId.ZVOTEPARTY,
     SpigetId.SKRIPT
   ],
   urls: [
-    'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
-    'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
     // invalid version on modrinth
     'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
     // not published on spigot/modrinth
@@ -61,21 +57,24 @@ const basePlugins: Plugins = {
     'https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar',
     // spigot id is invalid
     'https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar',
+    // spiget id is invalid
+    'https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar',
     // okocraft fork
     'https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar',
     // not on spigot/modrinth
     'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar'
   ]
-} as const
+}
 
-const developmentPlugins: Plugins = expandConfig(basePlugins, {})
+const development: Plugins = expandConfig(local)
 
-export const productionPlugins: Plugins = expandConfig(basePlugins, {
-  modrinthProjects: ['discordsrv', 'bluemap']
+export const production: Plugins = expandConfig(development, {
+  modrinthProjects: ['discordsrv', 'bluemap', 'coreprotect'],
+  urls: [
+    // always use the latest build
+    'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
+    'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot'
+  ]
 })
 
-export const plugins: Plugins = envAwareConfig({
-  local: basePlugins,
-  development: basePlugins,
-  production: productionPlugins
-})
+export const plugins: Plugins = envAwareConfig({ local, development, production })

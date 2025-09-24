@@ -17,7 +17,6 @@ export const SpigetId = {
   TNTRUN_RELOADED: 53359,
   GSIT: 62325,
   LWC: 69551,
-  WORLD_BORDER: 80466,
   ZVOTEPARTY: 95603,
   SKRIPT: 114544
 } as const
