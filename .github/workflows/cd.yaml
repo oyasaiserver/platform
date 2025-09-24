@@ -39,7 +39,7 @@ jobs:
       matrix:
         app: [wiki]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --if-present
@@ -56,9 +56,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-node
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v3.1.2
       - run: |
           npm run build
           npm run deploy
@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.ENVIRONMENT }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - run: |
