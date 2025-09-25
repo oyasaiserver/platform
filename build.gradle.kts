@@ -1,5 +1,4 @@
 import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
-import nl.littlerobots.vcu.plugin.versionSelector
 
 plugins {
   alias(libs.plugins.spotless)
@@ -19,9 +18,8 @@ allprojects {
   repositories {
     mavenCentral()
     maven("https://repo.purpurmc.org/snapshots")
-    maven("https://maven.enginehub.org/repo")
-    maven("https://jitpack.io")
-    maven("https://repo.codemc.io/repository/maven-snapshots")
+    maven("https://nexus.frengor.com/repository/public/")
+    maven("https://nexus.scarsz.me/content/groups/public/")
   }
 }
 

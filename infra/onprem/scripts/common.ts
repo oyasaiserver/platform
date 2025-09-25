@@ -4,7 +4,6 @@ import { Yaml } from '@oyasaiserver/lib/yaml'
 import { compose } from '@oyasaiserver/onprem'
 import { secrets } from '@oyasaiserver/secrets'
 import { cp, glob, rm, writeFile } from 'node:fs/promises'
-import { EOL } from 'node:os'
 import { basename, join } from 'node:path'
 import { pickConfig } from '../src/config.ts'
 
@@ -47,13 +46,10 @@ export async function sendWebhookNotification(event: 'start' | 'end' | 'error'):
     embeds: [
       {
         ...embed,
-        description: [
-          ['Environment', secrets.ENVIRONMENT],
-          ['Triggered by', process.env.CI ? 'GitHub Actions' : 'CLI']
-        ]
-          .map(([k, v]) => `**${k}**: ${v}`)
-          .join(EOL),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        footer: {
+          text: `Triggered by ${process.env.CI ? 'GitHub Actions' : 'CLI'}`
+        }
       }
     ]
   })

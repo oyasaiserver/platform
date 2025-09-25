@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: '⚠️ Deploy to production ⚠️'
+        description: '⚠️ Manual deploy ⚠️'
         required: true
         default: production
         type: choice
