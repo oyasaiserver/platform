@@ -16,6 +16,7 @@ tokenmanager = "3.2.4"
 ultimateadvancementapi = "2.6.0"
 vault = "1.7.1"
 worldborder = "2.1.4"
+discord-webhooks = "0.8.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -24,6 +25,7 @@ version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
 [libraries]
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
 discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
+discord-webhooks = { module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 inventoryframework = { module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework" }
 javacord = { module = "org.javacord:javacord", version.ref = "javacord" }

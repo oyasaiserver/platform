@@ -2,10 +2,10 @@ package io.oyasai.lib.minecraft
 
 import org.bukkit.event.Listener
 
-abstract class Service : Listener {
-  open fun onLoad() {}
+interface Service : Listener {
+  fun onLoad() {}
 
-  open fun onEnable() {}
+  fun onEnable() {}
 
-  open fun onDisable() {}
+  fun onDisable() {}
 }
