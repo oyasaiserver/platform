@@ -1,7 +1,6 @@
 package io.oyasai.vertex.services.sentry
 
 import club.minnced.discord.webhook.WebhookClient
-import club.minnced.discord.webhook.send.WebhookEmbed
 import club.minnced.discord.webhook.send.WebhookEmbed.EmbedField
 import club.minnced.discord.webhook.send.WebhookEmbed.EmbedTitle
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
@@ -38,23 +37,28 @@ object SentryService : Service, Handler() {
     }
 
     val timestamp = Instant.ofEpochMilli(record.millis)
-    val title = EmbedTitle(
-      "🚨 **Platform Exception**",
-      null,
-    )
+    val title = EmbedTitle("🚨 **Platform Exception**", null)
     val stackTraceField =
-      EmbedField(false, "Stack Trace", "```${thrownToStackTrace(record.thrown).take(MAX_STACK_TRACE_LENGTH)}```")
+      EmbedField(
+        false,
+        "Stack Trace",
+        "```${thrownToStackTrace(record.thrown).take(MAX_STACK_TRACE_LENGTH)}```",
+      )
 
     WebhookEmbedBuilder()
-      .setTitle(title).setDescription("`${record.message}`").setColor(Color.RED.rgb and 0xFFFFFF)
-      .setTimestamp(timestamp).addField(stackTraceField).build().let { webhookClient.send(it) }
+      .setTitle(title)
+      .setDescription("`${record.message}`")
+      .setColor(Color.RED.rgb and 0xFFFFFF)
+      .setTimestamp(timestamp)
+      .addField(stackTraceField)
+      .build()
+      .let { webhookClient.send(it) }
   }
 
-  private fun thrownToStackTrace(thrown: Throwable): String = stringWriter.apply {
-    PrintWriter(stringWriter).use { pw ->
-      thrown.printStackTrace(pw)
-    }
-  }.toString()
+  private fun thrownToStackTrace(thrown: Throwable): String =
+    stringWriter
+      .apply { PrintWriter(stringWriter).use { pw -> thrown.printStackTrace(pw) } }
+      .toString()
 
   override fun flush() {}
 
