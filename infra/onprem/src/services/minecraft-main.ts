@@ -36,6 +36,7 @@ export const minecraftMain: Service = {
     // TODO more granular control over secrets
     DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
     RCON_PASSWORD: secrets.RCON_PASSWORD,
+    DISCORD_WEBHOOK_URL: secrets.DISCORD_WEBHOOK_URL,
     // TODO abstract this pattern
     __SENTINEL_HASH__: await hashdir(
       join(directory.root, 'lib/kotlin'),
