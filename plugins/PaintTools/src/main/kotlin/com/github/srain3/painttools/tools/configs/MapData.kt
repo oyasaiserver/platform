@@ -7,6 +7,7 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.util.logging.Level
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 import org.bukkit.entity.Player
 import org.bukkit.map.MapCanvas
@@ -130,7 +131,12 @@ object MapData {
             ToolBox.pl.logger.log(Level.SEVERE, "Could not save config to /img/${id}.png", ex)
           }
         }
-        var bufferedImage = ImageIO.read(pngFile)
+        var bufferedImage =
+          try {
+            ImageIO.read(pngFile)
+          } catch (_: IIOException) {
+            null
+          }
         if (bufferedImage == null) {
           bufferedImage = ImageIO.read(ToolBox.pl.getResource("newPNG.png"))
         }
