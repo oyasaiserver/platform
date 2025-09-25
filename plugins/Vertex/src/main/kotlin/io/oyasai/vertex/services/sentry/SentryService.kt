@@ -42,7 +42,9 @@ object SentryService : Service, Handler() {
       EmbedField(
         false,
         "Stack Trace",
-        "```${thrownToStackTrace(record.thrown).take(MAX_STACK_TRACE_LENGTH)}```",
+        "```${
+          record.thrown?.let { thrownToStackTrace(it).take(MAX_STACK_TRACE_LENGTH) } ?: "No stack trace available"
+        }```",
       )
 
     WebhookEmbedBuilder()
