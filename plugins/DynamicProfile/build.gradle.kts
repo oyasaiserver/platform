@@ -3,13 +3,6 @@ plugins {
   id("com.gradleup.shadow")
 }
 
-repositories {
-  mavenCentral()
-  maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-  maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
-  maven { url = uri("https://jitpack.io") } // VaultAPI, NuVotifier, TokenManager
-}
-
 dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.purpur.api)
