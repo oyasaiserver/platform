@@ -10,18 +10,13 @@ import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.System.getenv
 import java.time.Instant
-import java.util.logging.Handler
-import java.util.logging.Level
-import java.util.logging.LogRecord
-import java.util.logging.Logger
+import java.util.logging.*
 
 object SentryService : Service, Handler() {
   private val logger by lazy { Logger.getLogger("") }
-
   private val webhookClient = WebhookClient.withUrl(getenv("DISCORD_WEBHOOK_URL"))
-  private val stringWriter = StringWriter()
-
   private const val MAX_STACK_TRACE_LENGTH = 800
+  private const val RGB_MASK = 0xFFFFFF
 
   init {
     logger.addHandler(this)
@@ -35,32 +30,33 @@ object SentryService : Service, Handler() {
     if (record.level != Level.SEVERE) {
       return
     }
+    sendErrorNotification(
+      timestamp = Instant.ofEpochMilli(record.millis),
+      message = SimpleFormatter().formatMessage(record),
+      throwable = record.thrown,
+    )
+  }
 
-    val timestamp = Instant.ofEpochMilli(record.millis)
+  private fun sendErrorNotification(timestamp: Instant, message: String, throwable: Throwable?) {
     val title = EmbedTitle("🚨 **Platform Exception**", null)
-    val stackTraceField =
-      EmbedField(
-        false,
-        "Stack Trace",
-        "```${
-          record.thrown?.let { thrownToStackTrace(it).take(MAX_STACK_TRACE_LENGTH) } ?: "No stack trace available"
-        }```",
-      )
-
+    val stack =
+      throwable?.let { thrownToStackTrace(it) }?.take(MAX_STACK_TRACE_LENGTH) ?: "<unknown>"
+    val stackTraceField = EmbedField(false, "Stack Trace", "```$stack```")
     WebhookEmbedBuilder()
       .setTitle(title)
-      .setDescription("`${record.message}`")
-      .setColor(Color.RED.rgb and 0xFFFFFF)
+      .setDescription("`$message`")
+      .setColor(Color.RED.rgb and RGB_MASK)
       .setTimestamp(timestamp)
       .addField(stackTraceField)
       .build()
       .let { webhookClient.send(it) }
   }
 
-  private fun thrownToStackTrace(thrown: Throwable): String =
-    stringWriter
-      .apply { PrintWriter(stringWriter).use { pw -> thrown.printStackTrace(pw) } }
-      .toString()
+  private fun thrownToStackTrace(thrown: Throwable): String {
+    val sw = StringWriter()
+    PrintWriter(sw).use { thrown.printStackTrace(it) }
+    return sw.toString()
+  }
 
   override fun flush() {}
 
