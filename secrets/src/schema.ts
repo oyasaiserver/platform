@@ -24,6 +24,9 @@ export const schema = z
     DISCORD_TOKEN: z.string(),
     RCON_PASSWORD: z.string(),
     MARIADB_PASSWORD: z.string(),
-    DISCORD_WEBHOOK_URL: z.string()
+    DISCORD_WEBHOOK_URL: z.string(),
+    TLS_CA_PEM: z.string(),
+    TLS_CERT_PEM: z.string(),
+    TLS_KEY_PEM: z.string()
   })
   .readonly()

@@ -68,6 +68,7 @@ const local: Plugins = {
 
 const development: Plugins = expandConfig(local, {
   modrinthProjects: ['coreprotect'],
+  spigetIds: [],
   urls: [
     // always use the latest build
     'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',

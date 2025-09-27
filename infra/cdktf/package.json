@@ -2,14 +2,18 @@
   "name": "@oyasaiserver/cdktf",
   "type": "module",
   "scripts": {
-    "build": "cdktf get && cdktf synth",
-    "deploy": "secrets -- cdktf deploy '*' --auto-approve"
+    "build": "cdktf synth",
+    "deploy": "secrets -- cdktf deploy '*' --auto-approve",
+    "test:integration": "node --test"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "^13.5.1",
-    "constructs": "^10.4.2"
+    "@cdktf/provider-cloudflare": "^13.6.0",
+    "@cdktf/provider-docker": "^12.0.2",
+    "constructs": "^10.4.2",
+    "ignore": "^7.0.5"
   },
   "devDependencies": {
+    "@xmcl/modrinth": "^2.5.0",
     "cdktf": "^0.21.0",
     "cdktf-cli": "^0.21.0"
   }

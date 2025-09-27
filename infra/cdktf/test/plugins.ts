@@ -1,9 +1,9 @@
-import { config } from '@oyasaiserver/onprem/config'
-import { production } from '@oyasaiserver/onprem/plugins'
 import { ModrinthV2Client } from '@xmcl/modrinth'
 import { strictEqual } from 'node:assert'
 import { ok } from 'node:assert/strict'
 import { suite, test } from 'node:test'
+import { config } from '../src/config.ts'
+import { production } from '../src/plugins.ts'
 
 await suite(import.meta.filename, async () => {
   const modrinthV2Client = new ModrinthV2Client()

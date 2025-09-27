@@ -3,12 +3,12 @@ import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/inde
 import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import { directory } from '@oyasaiserver/lib/directory'
 import { secrets } from '@oyasaiserver/secrets'
 import { TerraformStack } from 'cdktf'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
+import { directory } from '../directory.ts'
 import { envAwareId } from '../ids.ts'
 
 export class CloudflareStack extends TerraformStack {

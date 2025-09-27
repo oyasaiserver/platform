@@ -14,13 +14,6 @@ export const config = {
   }
 } as const
 
-export function pickConfig<const K extends string, const V>(
-  key: K,
-  config: Record<K, V>
-): Readonly<V> {
-  return config[key]
-}
-
 export function envAwareConfig<const T extends Record<typeof secrets.ENVIRONMENT, any>>(
   config: T
 ): Readonly<T[keyof T]> {

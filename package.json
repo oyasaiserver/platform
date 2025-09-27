@@ -3,8 +3,6 @@
   "workspaces": [
     "apps/*",
     "infra/*",
-    "lib/ts",
-    "packages/*",
     "secrets"
   ],
   "scripts": {
@@ -14,14 +12,14 @@
     "update": "taze latest --recursive --install --write"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
-    "oxlint": "^1.18.0",
+    "@types/node": "^24.6.2",
+    "oxlint": "^1.19.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-packagejson": "^2.5.19",
     "prettier-plugin-sh": "^0.18.0",
     "taze": "^19.7.0",
-    "typescript": "^5.9.2",
-    "wrangler": "^4.40.2"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.42.0"
   }
 }
