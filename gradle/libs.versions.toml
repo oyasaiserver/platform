@@ -20,7 +20,7 @@ discord-webhooks = "0.8.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
+version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
 
 [libraries]
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
