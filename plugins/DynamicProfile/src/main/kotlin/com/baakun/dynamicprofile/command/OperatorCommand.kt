@@ -15,6 +15,7 @@ import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.giveTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.loadTitles
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.removeTitle
 import com.baakun.dynamicprofile.profile.playerTitle.TitleUtils.saveTitles
+import com.baakun.dynamicprofile.util.JsonUtils
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.baakun.dynamicprofile.util.Tools.levelGroups
 import com.baakun.dynamicprofile.util.Tools.plugin
@@ -499,12 +500,25 @@ object OperatorCommand : CommandExecutor {
         "setEmpty" -> {
           allUser.forEach {
             val recStats = getStats(it)
+            var changed = false
             recStats.recommends.forEach { (t, u) ->
               if ((u == 0 || u == -1)) {
                 recStats.recommends[t] = Integer.MIN_VALUE
+                changed = true
+              }
+            }
+            if (changed) {
+              try {
+                val userstats = getStats(it)
+                val file = File(plugin.dataFolder, "UserStatsJSON/${it}.json")
+                JsonUtils.toJsonFile(file, userstats, Stats::class.java)
+              } catch (e: Exception) {
+                plugin.logger.warning("Failed to save data for ${it}: ${e.message}")
+                e.printStackTrace()
               }
             }
           }
+          plugin.logger.info("Updated all users' empty recommends.")
         }
         "setSpecialFrameInterval" -> {
           if (args.size == 1) {
