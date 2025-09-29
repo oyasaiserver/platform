@@ -21,7 +21,6 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 object Data {
-  val worldBorder by lazy { WorldBorder() }
 
   /** [SLData]からPluginフォルダ内へファイル保存を行いつつCacheに無ければ追加する */
   fun save(data: SLData) {
@@ -358,7 +357,7 @@ object Data {
     val data = slNearData[loc.world.name]?.toMap() ?: return
     val biome = biomeStr?.let { Biome.valueOf(it) }
     val bordarData =
-      worldBorder.getWorldBorder(loc.world.name)
+      WorldBorder.plugin.getWorldBorder(loc.world.name)
         ?: run {
           player.sendMessage(Tools.socialLikesLOGO + "&eWorldBorderが無いため実行できません。".color())
           return
