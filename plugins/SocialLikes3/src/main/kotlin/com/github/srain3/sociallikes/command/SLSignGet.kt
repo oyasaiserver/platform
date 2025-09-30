@@ -57,7 +57,11 @@ object SLSignGet : CommandExecutor {
           } else {
             "oak_sign"
           }
-        }[item_name='\"${slData.title}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${slData.title}\",\"color\":\"green\"},{\"text\":\"${
+        }[item_name='\"${escapeForNBT(slData.title)}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${
+          escapeForNBT(
+            slData.title
+          )
+        }\",\"color\":\"green\"},{\"text\":\"${
           Bukkit.getOfflinePlayer(
             slData.owner
           ).name
@@ -72,7 +76,11 @@ object SLSignGet : CommandExecutor {
           } else {
             "oak_sign"
           }
-        }[item_name='\"${slData.title}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${slData.title}\",\"color\":\"green\"},{\"text\":\"${
+        }[item_name='\"${escapeForNBT(slData.title)}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${
+          escapeForNBT(
+            slData.title
+          )
+        }\",\"color\":\"green\"},{\"text\":\"${
           Bukkit.getOfflinePlayer(
             slData.owner
           ).name
@@ -80,4 +88,7 @@ object SLSignGet : CommandExecutor {
       )
     }
   }
+
+  private fun escapeForNBT(input: String): String =
+    input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'")
 }
