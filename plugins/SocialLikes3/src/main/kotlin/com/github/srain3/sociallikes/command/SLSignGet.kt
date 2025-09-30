@@ -90,5 +90,5 @@ object SLSignGet : CommandExecutor {
   }
 
   private fun escapeForNBT(input: String): String =
-    input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'")
+    input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'").replace("§", "\\u00A7")
 }
