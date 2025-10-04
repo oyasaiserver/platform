@@ -64,17 +64,23 @@ object DProfileCmd : CommandExecutor {
       standGlassPane.addText(" ", mutableListOf()).allFlag()
       DynamicProfile.perms?.let { perms ->
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.chukyu"))
-          standGlassPane = ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.jokyu"))
-          standGlassPane = ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.builder"))
-          standGlassPane = ItemStack(Material.PURPLE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.PURPLE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.takumi"))
-          standGlassPane = ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.blue"))
-          standGlassPane = ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.white"))
-          standGlassPane = ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+          standGlassPane =
+            ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
       }
 
       for (x in 1..8) {
