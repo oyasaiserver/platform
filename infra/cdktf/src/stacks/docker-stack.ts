@@ -2,7 +2,7 @@ import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
 import { secrets } from '@oyasaiserver/secrets'
-import { TerraformStack } from 'cdktf'
+import { Fn, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
@@ -23,9 +23,9 @@ export class DockerStack extends TerraformStack {
 
     new DockerProvider(this, envAwareId(id), {
       host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
-      caMaterial: secrets.TLS_CA_PEM,
-      certMaterial: secrets.TLS_CERT_PEM,
-      keyMaterial: secrets.TLS_KEY_PEM
+      caMaterial: Fn.sensitive(secrets.TLS_CA_PEM),
+      certMaterial: Fn.sensitive(secrets.TLS_CERT_PEM),
+      keyMaterial: Fn.sensitive(secrets.TLS_KEY_PEM)
     })
 
     const images = this.images(id)
@@ -35,7 +35,7 @@ export class DockerStack extends TerraformStack {
       name: 'mariadb',
       restart: 'unless-stopped',
       env: objectToEnv({
-        MARIADB_ROOT_PASSWORD: secrets.MARIADB_PASSWORD
+        MARIADB_ROOT_PASSWORD: Fn.sensitive(secrets.MARIADB_PASSWORD)
       }),
       volumes: [
         {
@@ -93,9 +93,9 @@ export class DockerStack extends TerraformStack {
         MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
         MODRINTH_ALLOWED_VERSION_TYPE: 'beta',
         ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-        DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
-        RCON_PASSWORD: secrets.RCON_PASSWORD,
-        DISCORD_WEBHOOK_URL: secrets.DISCORD_WEBHOOK_URL
+        DISCORDSRV_TOKEN: Fn.sensitive(secrets.DISCORD_TOKEN),
+        RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
+        DISCORD_WEBHOOK_URL: Fn.sensitive(secrets.DISCORD_WEBHOOK_URL)
       }),
       healthcheck: {
         test: ['mc-health'],
@@ -113,9 +113,9 @@ export class DockerStack extends TerraformStack {
 
     const r2CommonEnv = {
       BACKUP_METHOD: 'restic',
-      RESTIC_PASSWORD: secrets.RESTIC_PASSWORD,
-      AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
-      AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+      RESTIC_PASSWORD: Fn.sensitive(secrets.RESTIC_PASSWORD),
+      AWS_ACCESS_KEY_ID: Fn.sensitive(secrets.CLOUDFLARE_ACCESS_KEY_ID),
+      AWS_SECRET_ACCESS_KEY: Fn.sensitive(secrets.CLOUDFLARE_SECRET_ACCESS_KEY),
       RESTIC_VERBOSE: true,
       // bucket is production by default
       RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/production/minecraft-main-backup`
@@ -130,7 +130,7 @@ export class DockerStack extends TerraformStack {
         env: objectToEnv({
           ...r2CommonEnv,
           RCON_HOST: 'minecraft-main',
-          RCON_PASSWORD: secrets.RCON_PASSWORD,
+          RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
           EXCLUDES: '*.jar,cache,logs,*.tmp,bluemap',
           BACKUP_INTERVAL: '6h',
           PRUNE_RESTIC_RETENTION: '--keep-daily 7 --keep-weekly 4 --keep-monthly 3'
@@ -153,11 +153,11 @@ export class DockerStack extends TerraformStack {
         env: objectToEnv({
           DB_SERVER: 'mariadb',
           DB_USER: 'root',
-          DB_PASS: secrets.MARIADB_PASSWORD,
+          DB_PASS: Fn.sensitive(secrets.MARIADB_PASSWORD),
           DB_DUMP_FREQUENCY: 360,
           DB_DUMP_TARGET: `s3://${secrets.R2_BUCKET_NAME}/mariadb-backup`,
-          AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
-          AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+          AWS_ACCESS_KEY_ID: Fn.sensitive(secrets.CLOUDFLARE_ACCESS_KEY_ID),
+          AWS_SECRET_ACCESS_KEY: Fn.sensitive(secrets.CLOUDFLARE_SECRET_ACCESS_KEY),
           AWS_REGION: 'auto',
           AWS_ENDPOINT_URL: `https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
           DB_DUMP_COMPRESSION: 'gzip',
