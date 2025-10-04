@@ -62,19 +62,25 @@ object DProfileCmd : CommandExecutor {
     thread { // Threadを使わないと、サーバーが固まる可能性があると表示され処理が止まる
       var standGlassPane = ItemStack(Material.LIME_STAINED_GLASS_PANE)
       standGlassPane.addText(" ", mutableListOf()).allFlag()
-      DynamicProfile.Companion.perms?.let { perms ->
+      DynamicProfile.perms?.let { perms ->
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.chukyu"))
-          standGlassPane = ItemStack(Material.GREEN_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.jokyu"))
-          standGlassPane = ItemStack(Material.CYAN_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.builder"))
-          standGlassPane = ItemStack(Material.PURPLE_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.PURPLE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.takumi"))
-          standGlassPane = ItemStack(Material.RED_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.blue"))
-          standGlassPane = ItemStack(Material.BLUE_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.white"))
-          standGlassPane = ItemStack(Material.WHITE_STAINED_GLASS_PANE)
+          standGlassPane =
+            ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
       }
 
       for (x in 1..8) {
