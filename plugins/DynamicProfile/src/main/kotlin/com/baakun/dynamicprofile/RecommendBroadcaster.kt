@@ -44,7 +44,7 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
         ?.provider
 
-    val (targetPlayers, cache) =
+    val (targetPlayers, cache) = //targetPlayers: おススメ設定済み　かつ　枠に合致するプレイヤーのリスト
       when (frameIndex % specialFrameInterval) {
         0 -> { // 特別枠
           val filtered =
@@ -117,6 +117,36 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
               retryUncached.random()
             }
           }
+        buildingCache.add(selected)
+        sendRecommendMessage(player.name, selected)
+      }
+      RecommendMode.HYBRID -> {
+        // プレイヤーも建築も被らないように選ぶ
+        val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
+        val player = when {
+          uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
+          else -> {
+            cache.clear()
+            val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
+            if (retryUncached.isEmpty()) return
+            retryUncached.random()
+          }
+        }
+        val buildingCache = if (cache === specialCache) specialBuildingCache else normalBuildingCache
+        val stats = getStats(player.uniqueId)
+        val recommendIds = stats.recommends.values.filter { it != EMPTY }
+        if (recommendIds.isEmpty()) return
+        val uncachedBuildings = recommendIds.filter { it !in buildingCache }
+        val selected = when {
+          uncachedBuildings.isNotEmpty() -> uncachedBuildings.random()
+          else -> {
+            buildingCache.clear()
+            val retryUncached = recommendIds.filter { it !in buildingCache }
+            if (retryUncached.isEmpty()) return
+            retryUncached.random()
+          }
+        }
+        cache.add(player.uniqueId)
         buildingCache.add(selected)
         sendRecommendMessage(player.name, selected)
       }

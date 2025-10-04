@@ -473,29 +473,34 @@ object OperatorCommand : CommandExecutor {
         "recommendMode" -> {
           if (args.size == 1) {
             val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
-            val mode =
-              if (modeConfig == 0) {
-                com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
-              } else {
-                com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
-              }
+            val mode = when (modeConfig) {
+              0 -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+              1 -> com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
+              2 -> com.baakun.dynamicprofile.RecommendMode.HYBRID
+              else -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+            }
             sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
             return true
           }
-          val modeArg = args[1].uppercase()
-          val mode =
-            runCatching { com.baakun.dynamicprofile.RecommendMode.valueOf(modeArg) }.getOrNull()
-          if (mode == null) {
-            sender.sendMessage("無効なモードです。PLAYER_FIRST または BUILDING_FIRST を指定してください。")
-            return true
+          if (args.size == 2) {
+            val modeArg = args[1].uppercase()
+            val modeValue = when (modeArg) {
+              "BUILDING_FIRST" -> 0
+              "PLAYER_FIRST" -> 1
+              "HYBRID" -> 2
+              else -> null
+            }
+            if (modeValue != null) {
+              plugin.config.set("RecommendBroadcastMode", modeValue)
+              plugin.saveConfig()
+              plugin.reloadConfig()
+              sender.sendMessage("おすすめ建築モードを${modeArg}に設定しました。")
+              return true
+            } else {
+              sender.sendMessage("/dpmanager recommendMode [BUILDING_FIRST|PLAYER_FIRST|HYBRID]")
+              return true
+            }
           }
-          plugin.config.set(
-            "RecommendBroadcastMode",
-            if (mode == com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST) 1 else 0,
-          )
-          plugin.saveConfig()
-          sender.sendMessage("おすすめ建築モードを ${mode.name} に変更しました。")
-          return true
         }
         "setEmpty" -> {
           allUser.forEach {
@@ -567,6 +572,12 @@ object OperatorCommandCompleter : TabCompleter {
             "setCount",
             "repair",
             "recommendInterval",
+            "recommendMode",
+            "updateLB",
+            "save",
+//            "kakonoEXP",
+            "setEmpty",
+            "setSpecialFrameInterval",
           )
         2 -> {
           when (args[0]) {
@@ -607,7 +618,9 @@ object OperatorCommandCompleter : TabCompleter {
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
             "recommendInterval" -> return mutableListOf("<秒>")
-            "recommendMode" -> return mutableListOf("PLAYER_FIRST", "BUILDING_FIRST")
+            "recommendMode" -> return mutableListOf("PLAYER_FIRST", "BUILDING_FIRST", "HYBRID")
+            "setSpecialFrameInterval" -> return mutableListOf("<回数>")
+//            "kakonoEXP" -> return mutableListOf("kakutei")
           }
         }
         3 -> {
