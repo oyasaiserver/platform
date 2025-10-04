@@ -53,7 +53,15 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
                 perm?.playerInGroup(player, "donator") == true) &&
                 getStats(player.uniqueId).recommends.values.any { it != EMPTY }
             }
-          filtered to specialCache
+          if (filtered.isEmpty()) { // 通常枠Fallback
+            val normalFiltered =
+              onlinePlayers.filter { player ->
+                getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+              }
+            normalFiltered to normalCache
+          } else {
+            filtered to specialCache
+          }
         }
         else -> {
           // 通常枠
@@ -67,10 +75,11 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     frameIndex = (frameIndex + 1) % specialFrameInterval
     if (targetPlayers.isEmpty()) return
     val mode: RecommendMode =
-      if (Tools.plugin.config.getInt("RecommendBroadcastMode", 0) == 0) {
-        RecommendMode.BUILDING_FIRST
-      } else {
-        RecommendMode.PLAYER_FIRST
+      when (Tools.plugin.config.getInt("RecommendBroadcastMode", 0)) {
+        0 -> RecommendMode.BUILDING_FIRST
+        1 -> RecommendMode.PLAYER_FIRST
+        2 -> RecommendMode.HYBRID
+        else -> RecommendMode.BUILDING_FIRST
       }
     when (mode) {
       RecommendMode.PLAYER_FIRST -> {
