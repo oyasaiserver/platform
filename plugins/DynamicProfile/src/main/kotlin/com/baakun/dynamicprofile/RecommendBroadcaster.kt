@@ -53,7 +53,15 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
                 perm?.playerInGroup(player, "donator") == true) &&
                 getStats(player.uniqueId).recommends.values.any { it != EMPTY }
             }
-          filtered to specialCache
+          if (filtered.isEmpty()) { //通常枠Fallback
+            val normalFiltered =
+              onlinePlayers.filter { player ->
+                getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+              }
+            normalFiltered to normalCache
+          } else {
+            filtered to specialCache
+          }
         }
         else -> {
           // 通常枠
