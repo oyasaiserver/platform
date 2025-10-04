@@ -473,23 +473,25 @@ object OperatorCommand : CommandExecutor {
         "recommendMode" -> {
           if (args.size == 1) {
             val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
-            val mode = when (modeConfig) {
-              0 -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
-              1 -> com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
-              2 -> com.baakun.dynamicprofile.RecommendMode.HYBRID
-              else -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
-            }
+            val mode =
+              when (modeConfig) {
+                0 -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+                1 -> com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
+                2 -> com.baakun.dynamicprofile.RecommendMode.HYBRID
+                else -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+              }
             sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
             return true
           }
           if (args.size == 2) {
             val modeArg = args[1].uppercase()
-            val modeValue = when (modeArg) {
-              "BUILDING_FIRST" -> 0
-              "PLAYER_FIRST" -> 1
-              "HYBRID" -> 2
-              else -> null
-            }
+            val modeValue =
+              when (modeArg) {
+                "BUILDING_FIRST" -> 0
+                "PLAYER_FIRST" -> 1
+                "HYBRID" -> 2
+                else -> null
+              }
             if (modeValue != null) {
               plugin.config.set("RecommendBroadcastMode", modeValue)
               plugin.saveConfig()
@@ -575,7 +577,7 @@ object OperatorCommandCompleter : TabCompleter {
             "recommendMode",
             "updateLB",
             "save",
-//            "kakonoEXP",
+            //            "kakonoEXP",
             "setEmpty",
             "setSpecialFrameInterval",
           )
@@ -620,7 +622,7 @@ object OperatorCommandCompleter : TabCompleter {
             "recommendInterval" -> return mutableListOf("<秒>")
             "recommendMode" -> return mutableListOf("PLAYER_FIRST", "BUILDING_FIRST", "HYBRID")
             "setSpecialFrameInterval" -> return mutableListOf("<回数>")
-//            "kakonoEXP" -> return mutableListOf("kakutei")
+          //            "kakonoEXP" -> return mutableListOf("kakutei")
           }
         }
         3 -> {
