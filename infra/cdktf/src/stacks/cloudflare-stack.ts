@@ -4,7 +4,6 @@ import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
 import type { Secrets } from '@oyasaiserver/secrets'
-import { Fn } from 'cdktf'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
 import { directory } from '../directory.ts'
@@ -20,7 +19,7 @@ export class CloudflareStack extends OyasaiTerraformStack {
     super(scope, id, secrets)
 
     new CloudflareProvider(this, id, {
-      apiToken: Fn.sensitive(secrets.CLOUDFLARE_API_TOKEN)
+      apiToken: secrets.CLOUDFLARE_API_TOKEN
     })
 
     new ZoneDnssec(this, 'zone-dnssec', {
