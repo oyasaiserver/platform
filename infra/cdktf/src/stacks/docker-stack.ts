@@ -6,7 +6,7 @@ import { Fn } from 'cdktf'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory } from '../directory.ts'
-import { hashdirSync } from '../hash.ts'
+import { objectToEnv } from '../object.ts'
 import { envAwarePlugins } from '../plugins.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
@@ -28,8 +28,8 @@ export class DockerStack extends OyasaiTerraformStack {
         name: 'mariadb:10.4.28'
       }),
       minecraftMain: new Image(this, this.envAwareId(id, 'minecraft-main-image'), {
-        name: `minecraft-main-image:${hashdirSync(
-          join(directory.root, 'docker/minecraft-server'),
+        name: `minecraft-main-image:${directory.hashSync(
+          join(directory.root, 'infra/minecraft-server'),
           join(directory.root, 'lib/kotlin'),
           join(directory.root, 'plugins')
         )}`,
@@ -47,7 +47,7 @@ export class DockerStack extends OyasaiTerraformStack {
       image: images.mariadb.imageId,
       name: 'mariadb',
       restart: 'unless-stopped',
-      env: this.objectToEnv({
+      env: objectToEnv({
         MARIADB_ROOT_PASSWORD: Fn.sensitive(secrets.MARIADB_PASSWORD)
       }),
       volumes: [
@@ -97,7 +97,7 @@ export class DockerStack extends OyasaiTerraformStack {
             external: 25575
           }
         ],
-        env: this.objectToEnv({
+        env: objectToEnv({
           EULA: true,
           TYPE: 'PURPUR',
           VERSION: DockerStack.minecraftVersion,
@@ -149,7 +149,7 @@ export class DockerStack extends OyasaiTerraformStack {
         dependsOn: [minecraftMainContainer],
         image: images.minecraftBackup.imageId,
         restart: 'unless-stopped',
-        env: this.objectToEnv({
+        env: objectToEnv({
           ...r2CommonEnv,
           RCON_HOST: 'minecraft-main',
           RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
@@ -172,7 +172,7 @@ export class DockerStack extends OyasaiTerraformStack {
         image: 'databack/mysql-backup',
         restart: 'unless-stopped',
         command: ['dump'],
-        env: this.objectToEnv({
+        env: objectToEnv({
           DB_SERVER: 'mariadb',
           DB_USER: 'root',
           DB_PASS: Fn.sensitive(secrets.MARIADB_PASSWORD),

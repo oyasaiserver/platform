@@ -10,7 +10,7 @@ ok(command)
 
 spawn(command, args, {
   stdio: 'inherit',
-  env: await createSecrets().then(secrets => ({
+  env: await createSecrets(env).then(secrets => ({
     ...env,
     ...secrets
   }))

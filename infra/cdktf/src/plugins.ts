@@ -1,9 +1,10 @@
+import { mapValues } from './object.ts'
 import { SpigetId } from './spiget-id.ts'
 
-function expandConfig<T extends Record<string, any[]>>(base: T, expension: Partial<T> = {}): T {
-  return Object.fromEntries(
-    Object.entries(base).map(([key, value]) => [key, value.concat(expension[key] ?? [])])
-  ) as T
+function expandConfig<T extends Record<string, any[]>>(base: T, expansion: Partial<T> = {}): T {
+  return mapValues(base, (key, value) => {
+    return [...value, ...(expansion[key] ?? [])]
+  }) as T
 }
 
 type Plugins = Readonly<{
