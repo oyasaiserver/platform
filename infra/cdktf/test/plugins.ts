@@ -2,11 +2,12 @@ import { ModrinthV2Client } from '@xmcl/modrinth'
 import { strictEqual } from 'node:assert'
 import { ok } from 'node:assert/strict'
 import { suite, test } from 'node:test'
-import { production } from '../src/plugins.ts'
+import { envAwarePlugins } from '../src/plugins.ts'
 import { DockerStack } from '../src/stacks/docker-stack.ts'
 
 await suite(import.meta.filename, async () => {
   const modrinthV2Client = new ModrinthV2Client()
+  const plugins = envAwarePlugins.production
 
   const jarHeaders = ['application/zip', 'application/java-archive', 'application/octet-stream']
 
@@ -16,7 +17,7 @@ await suite(import.meta.filename, async () => {
   }
 
   await test('urls are valid', async () => {
-    for (const url of production.urls) {
+    for (const url of plugins.urls) {
       const response = await fetch(url, {
         method: 'HEAD'
       })
@@ -25,7 +26,7 @@ await suite(import.meta.filename, async () => {
   })
 
   await test('spiget plugins', async () => {
-    for (const id of production.spigetIds) {
+    for (const id of plugins.spigetIds) {
       const response = await fetch(`https://api.spiget.org/v2/resources/${id}/download`, {
         method: 'HEAD'
       })
@@ -34,8 +35,8 @@ await suite(import.meta.filename, async () => {
   })
 
   await test('modrinth plugins', async () => {
-    const projects = await modrinthV2Client.getProjects(production.modrinthProjects)
-    strictEqual(projects.length, production.modrinthProjects.length)
+    const projects = await modrinthV2Client.getProjects(plugins.modrinthProjects)
+    strictEqual(projects.length, plugins.modrinthProjects.length)
     const unsupportedPlugins = projects.filter(({ game_versions }) => {
       return !game_versions.includes(DockerStack.minecraftVersion)
     })

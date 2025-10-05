@@ -1,11 +1,5 @@
-import { mapValues } from './object.ts'
+import { expandObject } from './object.ts'
 import { SpigetId } from './spiget-id.ts'
-
-function expandConfig<T extends Record<string, any[]>>(base: T, expansion: Partial<T> = {}): T {
-  return mapValues(base, (key, value) => {
-    return [...value, ...(expansion[key] ?? [])]
-  }) as T
-}
 
 type Plugins = Readonly<{
   modrinthProjects: string[]
@@ -72,7 +66,7 @@ const local: Plugins = {
   ]
 }
 
-const development: Plugins = expandConfig(local, {
+const development: Plugins = expandObject(local, {
   modrinthProjects: ['coreprotect'],
   spigetIds: [],
   urls: [
@@ -82,7 +76,7 @@ const development: Plugins = expandConfig(local, {
   ]
 })
 
-export const production: Plugins = expandConfig(development, {
+const production: Plugins = expandObject(development, {
   modrinthProjects: ['discordsrv', 'bluemap']
 })
 

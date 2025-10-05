@@ -14,3 +14,12 @@ export function mapValues<T extends object, K extends keyof T, V>(
   }
   return result
 }
+
+export function expandObject<T extends Record<string, any[]>>(
+  base: T,
+  expansion: Partial<T> = {}
+): T {
+  return mapValues(base, (key, value) => {
+    return [...value, ...(expansion[key] ?? [])]
+  }) as T
+}
