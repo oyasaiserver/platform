@@ -1,4 +1,4 @@
-package io.oyasai.lib.minecraft
+package io.oyasai.vertex.services
 
 import org.bukkit.event.Listener
 

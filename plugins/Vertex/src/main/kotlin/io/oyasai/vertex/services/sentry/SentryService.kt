@@ -4,7 +4,7 @@ import club.minnced.discord.webhook.WebhookClient
 import club.minnced.discord.webhook.send.WebhookEmbed.EmbedField
 import club.minnced.discord.webhook.send.WebhookEmbed.EmbedTitle
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
-import io.oyasai.lib.minecraft.Service
+import io.oyasai.vertex.services.Service
 import java.awt.Color
 import java.io.PrintWriter
 import java.io.StringWriter
