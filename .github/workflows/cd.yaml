@@ -22,7 +22,6 @@ jobs:
       environment: ${{ steps.environment.outputs.ENVIRONMENT }}
     steps:
       - id: environment
-        # language=bash
         run: |
           ENVIRONMENT="development"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -34,19 +33,20 @@ jobs:
     needs:
       - envs
     runs-on: ubuntu-latest
-    environment: ${{ needs.envs.outputs.ENVIRONMENT }}
+    environment: ${{ needs.envs.outputs.environment }}
     strategy:
       matrix:
-        app: [wiki]
+        app:
+          - wiki
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --if-present
-          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.ENVIRONMENT }} > /dev/null
+          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null
         working-directory: apps/${{ matrix.app }}
         env:
-          ENVIRONMENT: ${{ needs.envs.outputs.ENVIRONMENT }}
+          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   cdktf:
@@ -54,9 +54,9 @@ jobs:
       - envs
       - deploy-apps
     runs-on: ubuntu-latest
-    environment: ${{ needs.envs.outputs.ENVIRONMENT }}
+    environment: ${{ needs.envs.outputs.environment }}
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - uses: hashicorp/setup-terraform@v3.1.2
@@ -67,5 +67,5 @@ jobs:
           npm run deploy
         working-directory: infra/cdktf
         env:
-          ENVIRONMENT: ${{ needs.envs.outputs.ENVIRONMENT }}
+          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
