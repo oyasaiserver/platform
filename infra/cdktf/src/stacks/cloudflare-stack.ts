@@ -3,24 +3,20 @@ import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/inde
 import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import { directory } from '@oyasaiserver/lib/directory'
-import { secrets } from '@oyasaiserver/secrets'
-import { TerraformStack } from 'cdktf'
+import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
-import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
-import { envAwareId } from '../ids.ts'
+import { directory } from '../directory.ts'
+import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class CloudflareStack extends TerraformStack {
+export class CloudflareStack extends OyasaiTerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
   private readonly workers = readdirSync(`${directory.root}/apps`)
 
-  public constructor(scope: Construct, id: string) {
-    super(scope, id)
-
-    new NamedCloudBackend(this, envAwareId(id))
+  public constructor(scope: Construct, id: string, secrets: Secrets) {
+    super(scope, id, secrets)
 
     new CloudflareProvider(this, id, {
       apiToken: secrets.CLOUDFLARE_API_TOKEN
@@ -31,7 +27,7 @@ export class CloudflareStack extends TerraformStack {
       status: 'active'
     })
 
-    const rootDnsRecord = new DnsRecord(this, envAwareId('root-dns-record'), {
+    const rootDnsRecord = new DnsRecord(this, this.envAwareId('root-dns-record'), {
       ttl: 1, // automatic
       zoneId: this.zoneId,
       name: secrets.ENVIRONMENT === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
@@ -43,7 +39,7 @@ export class CloudflareStack extends TerraformStack {
     for (const worker of this.workers) {
       const domain = `${worker}.${rootDnsRecord.name}`
 
-      new DnsRecord(this, envAwareId(worker, 'dns-record'), {
+      new DnsRecord(this, this.envAwareId(worker, 'dns-record'), {
         ttl: 1, // automatic
         zoneId: this.zoneId,
         name: domain.replace('.oyasai.io', ''),
@@ -52,14 +48,14 @@ export class CloudflareStack extends TerraformStack {
         content: this.dummyIp
       })
 
-      new WorkersRoute(this, envAwareId(worker, 'workers-route'), {
+      new WorkersRoute(this, this.envAwareId(worker, 'workers-route'), {
         zoneId: this.zoneId,
         pattern: `${domain}/*`,
-        script: envAwareId(worker)
+        script: this.envAwareId(worker)
       })
     }
 
-    new R2Bucket(this, envAwareId('r2-bucket'), {
+    new R2Bucket(this, this.envAwareId('r2-bucket'), {
       accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
       name: secrets.R2_BUCKET_NAME
     })

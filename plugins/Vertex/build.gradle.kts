@@ -6,7 +6,6 @@ plugins {
 dependencies {
   compileOnly(libs.purpur.api)
   implementation(libs.discord.webhooks)
-  implementation(project(":lib:kotlin"))
 }
 
 tasks.apply {

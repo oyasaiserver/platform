@@ -1,6 +1,6 @@
 package io.oyasai.vertex
 
-import io.oyasai.lib.minecraft.Service
+import io.oyasai.vertex.services.Service
 import io.oyasai.vertex.services.sentry.SentryService
 import io.oyasai.vertex.services.sociallikes.SocialLikesService
 import org.bukkit.plugin.java.JavaPlugin

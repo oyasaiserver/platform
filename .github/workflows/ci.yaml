@@ -8,6 +8,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  nocommit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: nobssoftware/nocommit@v3
+
   check:
     runs-on: ubuntu-latest
     steps:
