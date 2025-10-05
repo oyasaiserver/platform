@@ -35,7 +35,7 @@ export class DockerStack extends OyasaiTerraformStack {
         )}`,
         buildAttribute: {
           context: directory.root,
-          dockerfile: 'docker/minecraft-server/Dockerfile'
+          dockerfile: 'infra/minecraft-server/Dockerfile'
         }
       }),
       minecraftBackup: new Image(this, this.envAwareId(id, 'minecraft-backup-image'), {
