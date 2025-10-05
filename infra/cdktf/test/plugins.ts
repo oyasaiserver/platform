@@ -2,8 +2,8 @@ import { ModrinthV2Client } from '@xmcl/modrinth'
 import { strictEqual } from 'node:assert'
 import { ok } from 'node:assert/strict'
 import { suite, test } from 'node:test'
-import { config } from '../src/config.ts'
 import { production } from '../src/plugins.ts'
+import { DockerStack } from '../src/stacks/docker-stack.ts'
 
 await suite(import.meta.filename, async () => {
   const modrinthV2Client = new ModrinthV2Client()
@@ -36,9 +36,9 @@ await suite(import.meta.filename, async () => {
   await test('modrinth plugins', async () => {
     const projects = await modrinthV2Client.getProjects(production.modrinthProjects)
     strictEqual(projects.length, production.modrinthProjects.length)
-    const unsupportedPlugins = projects.filter(
-      ({ game_versions }) => !game_versions.includes(config.services.minecraft.version)
-    )
+    const unsupportedPlugins = projects.filter(({ game_versions }) => {
+      return !game_versions.includes(DockerStack.minecraftVersion)
+    })
     ok(
       !unsupportedPlugins.length,
       `Plugins not supporting server version: ${unsupportedPlugins.map(({ slug }) => slug).join(', ')}`

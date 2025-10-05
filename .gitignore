@@ -410,5 +410,5 @@ cdktf.log
 !packages/codegen/lib/*.jar
 !gen/compose/compose.local.yaml
 
-# Local server
-!docker/**/*.jar
+# Local dependencies
+!infra/**/*.jar

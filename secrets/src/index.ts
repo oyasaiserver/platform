@@ -2,22 +2,21 @@ import { parse } from '@dotenvx/dotenvx'
 import { readFile } from 'node:fs/promises'
 import { env } from 'node:process'
 import { parseEnv } from 'node:util'
+import type { output } from 'zod'
 import { schema } from './schema.ts'
 
-const envfile = `${import.meta.dirname}/../${env.ENVIRONMENT ?? 'local'}/.env`
+export type Secrets = Readonly<output<typeof schema>>
 
-export const secretsNoOverrides = schema.parse(
-  parse(await readFile(envfile), {
-    privateKey:
-      env.DOTENV_PRIVATE_KEY ||
-      (await readFile(`${envfile}.keys`, 'utf-8').then(it => parseEnv(it).DOTENV_PRIVATE_KEY))
+async function readPrivateKey(envfile: string): Promise<string | undefined> {
+  const content = await readFile(`${envfile}.keys`, 'utf-8')
+  return parseEnv(content).DOTENV_PRIVATE_KEY
+}
+
+export async function createSecrets(overrides: NodeJS.ProcessEnv = env): Promise<Secrets> {
+  const envfile = `${import.meta.dirname}/../${overrides.ENVIRONMENT ?? 'local'}/.env`
+  const content = await readFile(envfile)
+  const parsed = parse(content, {
+    privateKey: overrides.DOTENV_PRIVATE_KEY ?? (await readPrivateKey(envfile))
   })
-)
-
-export const secrets = schema.parse(
-  Object.fromEntries(
-    Object.entries(secretsNoOverrides).map(([key, value]) => {
-      return [key, env[key] ?? value]
-    })
-  )
-)
+  return schema.parse({ ...parsed, ...overrides })
+}

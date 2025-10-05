@@ -1,5 +1,10 @@
-import { envAwareConfig, expandConfig } from './config.ts'
 import { SpigetId } from './spiget-id.ts'
+
+function expandConfig<T extends Record<string, any[]>>(base: T, expension: Partial<T> = {}): T {
+  return Object.fromEntries(
+    Object.entries(base).map(([key, value]) => [key, value.concat(expension[key] ?? [])])
+  ) as T
+}
 
 type Plugins = Readonly<{
   modrinthProjects: string[]
@@ -80,4 +85,4 @@ export const production: Plugins = expandConfig(development, {
   modrinthProjects: ['discordsrv', 'bluemap']
 })
 
-export const plugins: Plugins = envAwareConfig({ local, development, production })
+export const envAwarePlugins = { local, development, production }

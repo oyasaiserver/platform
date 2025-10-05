@@ -1,40 +1,53 @@
 import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
-import { secrets } from '@oyasaiserver/secrets'
-import { Fn, TerraformStack } from 'cdktf'
+import type { Secrets } from '@oyasaiserver/secrets'
+import { Fn } from 'cdktf'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
-import { NamedCloudBackend } from '../backend/named-cloud-backend.ts'
-import { config } from '../config.ts'
 import { directory } from '../directory.ts'
 import { hashdirSync } from '../hash.ts'
-import { envAwareId } from '../ids.ts'
-import { plugins } from '../plugins.ts'
-import { objectToEnv } from '../utils.ts'
+import { envAwarePlugins } from '../plugins.ts'
+import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class DockerStack extends TerraformStack {
-  public constructor(scope: Construct, id: string) {
-    super(scope, id)
+export class DockerStack extends OyasaiTerraformStack {
+  public static readonly minecraftVersion = '1.21.5'
 
-    if (secrets.ENVIRONMENT !== 'local') {
-      new NamedCloudBackend(this, envAwareId(id))
-    }
+  public constructor(scope: Construct, id: string, secrets: Secrets) {
+    super(scope, id, secrets)
 
-    new DockerProvider(this, envAwareId(id), {
+    new DockerProvider(this, this.envAwareId(id), {
       host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
       caMaterial: Fn.sensitive(secrets.TLS_CA_PEM),
       certMaterial: Fn.sensitive(secrets.TLS_CERT_PEM),
       keyMaterial: Fn.sensitive(secrets.TLS_KEY_PEM)
     })
 
-    const images = this.images(id)
+    const images = {
+      mariadb: new Image(this, this.envAwareId(id, 'mariadb-image'), {
+        name: 'mariadb:10.4.28'
+      }),
+      minecraftMain: new Image(this, this.envAwareId(id, 'minecraft-main-image'), {
+        name: `minecraft-main-image:${hashdirSync(
+          join(directory.root, 'docker/minecraft-server'),
+          join(directory.root, 'lib/kotlin'),
+          join(directory.root, 'plugins')
+        )}`,
+        buildAttribute: {
+          context: directory.root,
+          dockerfile: 'docker/minecraft-server/Dockerfile'
+        }
+      }),
+      minecraftBackup: new Image(this, this.envAwareId(id, 'minecraft-backup-image'), {
+        name: 'itzg/mc-backup:latest'
+      })
+    } as const
 
-    const mariadbContainer = new Container(this, envAwareId(id, 'mariadb-container'), {
+    const mariadbContainer = new Container(this, this.envAwareId(id, 'mariadb-container'), {
       image: images.mariadb.imageId,
       name: 'mariadb',
       restart: 'unless-stopped',
-      env: objectToEnv({
+      env: this.objectToEnv({
         MARIADB_ROOT_PASSWORD: Fn.sensitive(secrets.MARIADB_PASSWORD)
       }),
       volumes: [
@@ -49,67 +62,76 @@ export class DockerStack extends TerraformStack {
       ]
     })
 
-    const minecraftMainContainer = new Container(this, envAwareId(id, 'minecraft-main-container'), {
-      image: images.minecraftMain.imageId,
-      name: 'minecraft-main',
-      dependsOn: [mariadbContainer],
-      restart: 'unless-stopped',
-      tty: true,
-      stdinOpen: true,
-      destroyGraceSeconds: 2 * 60,
-      ports: [
-        {
-          internal: 25565,
-          external: 25565
+    const plugins = this.envAwareConfig(envAwarePlugins)
+    const minecraftMainContainer = new Container(
+      this,
+      this.envAwareId(id, 'minecraft-main-container'),
+      {
+        image: images.minecraftMain.imageId,
+        name: 'minecraft-main',
+        dependsOn: [mariadbContainer],
+        restart: 'unless-stopped',
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        ports: [
+          {
+            internal: 25565,
+            external: 25565
+          },
+          {
+            internal: 19132,
+            external: 19132,
+            protocol: 'udp'
+          },
+          {
+            internal: 8192,
+            external: 8192
+          },
+          {
+            internal: 8100,
+            external: 8100
+          },
+          {
+            internal: 25575,
+            external: 25575
+          }
+        ],
+        env: this.objectToEnv({
+          EULA: true,
+          TYPE: 'PURPUR',
+          VERSION: DockerStack.minecraftVersion,
+          USE_MEOWICE_FLAGS: secrets.ENVIRONMENT !== 'local',
+          ENABLE_ROLLING_LOGS: true,
+          LOG_TIMESTAMP: true,
+          MEMORY: this.envAwareConfig({
+            production: '32G',
+            development: '12G',
+            local: '5G'
+          }),
+          PLUGINS: plugins.urls.join(),
+          SPIGET_RESOURCES: plugins.spigetIds.join(),
+          MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
+          MODRINTH_ALLOWED_VERSION_TYPE: 'beta',
+          ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
+          DISCORDSRV_TOKEN: Fn.sensitive(secrets.DISCORD_TOKEN),
+          RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
+          DISCORD_WEBHOOK_URL: Fn.sensitive(secrets.DISCORD_WEBHOOK_URL)
+        }),
+        healthcheck: {
+          test: ['mc-health'],
+          startPeriod: '1m',
+          interval: '5s',
+          retries: 20
         },
-        {
-          internal: 19132,
-          external: 19132,
-          protocol: 'udp'
-        },
-        {
-          internal: 8192,
-          external: 8192
-        },
-        {
-          internal: 8100,
-          external: 8100
-        },
-        {
-          internal: 25575,
-          external: 25575
-        }
-      ],
-      env: objectToEnv({
-        EULA: true,
-        TYPE: config.services.minecraft.type,
-        VERSION: config.services.minecraft.version,
-        USE_MEOWICE_FLAGS: secrets.ENVIRONMENT !== 'local',
-        ENABLE_ROLLING_LOGS: true,
-        LOG_TIMESTAMP: true,
-        MEMORY: config.services.minecraft.memory,
-        PLUGINS: plugins.urls.join(),
-        SPIGET_RESOURCES: plugins.spigetIds.join(),
-        MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
-        MODRINTH_ALLOWED_VERSION_TYPE: 'beta',
-        ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-        DISCORDSRV_TOKEN: Fn.sensitive(secrets.DISCORD_TOKEN),
-        RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
-        DISCORD_WEBHOOK_URL: Fn.sensitive(secrets.DISCORD_WEBHOOK_URL)
-      }),
-      healthcheck: {
-        test: ['mc-health'],
-        startPeriod: '1m',
-        interval: '5s',
-        retries: 20
-      },
-      volumes: [
-        {
-          containerPath: '/data',
-          hostPath: `/opt/platform/${secrets.ENVIRONMENT}/minecraft-main`
-        }
-      ]
-    })
+        volumes: [
+          {
+            containerPath: '/data',
+            hostPath: `/opt/platform/${secrets.ENVIRONMENT}/minecraft-main`
+          }
+        ]
+      }
+    )
 
     const r2CommonEnv = {
       BACKUP_METHOD: 'restic',
@@ -122,12 +144,12 @@ export class DockerStack extends TerraformStack {
     } as const
 
     if (secrets.ENVIRONMENT === 'production') {
-      new Container(this, envAwareId(id, 'minecraft-backup-container'), {
+      new Container(this, this.envAwareId(id, 'minecraft-backup-container'), {
         name: 'minecraft-main-backup',
         dependsOn: [minecraftMainContainer],
         image: images.minecraftBackup.imageId,
         restart: 'unless-stopped',
-        env: objectToEnv({
+        env: this.objectToEnv({
           ...r2CommonEnv,
           RCON_HOST: 'minecraft-main',
           RCON_PASSWORD: Fn.sensitive(secrets.RCON_PASSWORD),
@@ -144,13 +166,13 @@ export class DockerStack extends TerraformStack {
         ]
       })
 
-      new Container(this, envAwareId(id, 'mariadb-backup-container'), {
+      new Container(this, this.envAwareId(id, 'mariadb-backup-container'), {
         name: 'mariadb-backup',
         dependsOn: [mariadbContainer],
         image: 'databack/mysql-backup',
         restart: 'unless-stopped',
         command: ['dump'],
-        env: objectToEnv({
+        env: this.objectToEnv({
           DB_SERVER: 'mariadb',
           DB_USER: 'root',
           DB_PASS: Fn.sensitive(secrets.MARIADB_PASSWORD),
@@ -170,27 +192,5 @@ export class DockerStack extends TerraformStack {
     if (secrets.ENVIRONMENT === 'development') {
       // TODO restore mc data from backup
     }
-  }
-
-  private images(id: string) {
-    return {
-      mariadb: new Image(this, envAwareId(id, 'mariadb-image'), {
-        name: 'mariadb:10.4.28'
-      }),
-      minecraftMain: new Image(this, envAwareId(id, 'minecraft-main-image'), {
-        name: `minecraft-main-image:${hashdirSync(
-          join(directory.root, 'docker/minecraft-server'),
-          join(directory.root, 'lib/kotlin'),
-          join(directory.root, 'plugins')
-        )}`,
-        buildAttribute: {
-          context: directory.root,
-          dockerfile: 'docker/minecraft-server/Dockerfile'
-        }
-      }),
-      minecraftBackup: new Image(this, envAwareId(id, 'minecraft-backup-image'), {
-        name: 'itzg/mc-backup:latest'
-      })
-    } as const
   }
 }
