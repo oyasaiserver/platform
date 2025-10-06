@@ -18,7 +18,7 @@ export class DockerStack extends OyasaiTerraformStack {
   public constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id, secrets)
 
-    new DockerProvider(this, this.envAwareId(id), {
+    new DockerProvider(this, id, {
       host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
       caMaterial: secrets.TLS_CA_PEM,
       certMaterial: secrets.TLS_CERT_PEM,
@@ -26,10 +26,10 @@ export class DockerStack extends OyasaiTerraformStack {
     })
 
     const images = {
-      mariadb: new Image(this, this.envAwareId(id, 'mariadb-image'), {
+      mariadb: new Image(this, this.envAwareId('mariadb-image'), {
         name: 'mariadb:10.4.28'
       }),
-      minecraftMain: new Image(this, this.envAwareId(id, 'minecraft-main-image'), {
+      minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
         name: `minecraft-main-image:${directory.hashSync(
           join(directory.root, 'infra/minecraft-server'),
           join(directory.root, 'plugins')
@@ -39,16 +39,16 @@ export class DockerStack extends OyasaiTerraformStack {
           dockerfile: 'infra/minecraft-server/Dockerfile'
         }
       }),
-      minecraftBackup: new Image(this, this.envAwareId(id, 'minecraft-backup-image'), {
+      minecraftBackup: new Image(this, this.envAwareId('minecraft-backup-image'), {
         name: 'itzg/mc-backup:latest'
       })
     } as const
 
-    const network = new Network(this, this.envAwareId(id, 'network'), {
+    const network = new Network(this, this.envAwareId('network'), {
       name: 'network'
     })
 
-    const mariadbContainer = new Container(this, this.envAwareId(id, 'mariadb-container'), {
+    const mariadbContainer = new Container(this, this.envAwareId('mariadb-container'), {
       image: images.mariadb.imageId,
       name: 'mariadb',
       restart: 'unless-stopped',
@@ -71,7 +71,7 @@ export class DockerStack extends OyasaiTerraformStack {
     const plugins = this.envAwareConfig(envAwarePlugins)
     const minecraftMainContainer = new Container(
       this,
-      this.envAwareId(id, 'minecraft-main-container'),
+      this.envAwareId('minecraft-main-container'),
       {
         image: images.minecraftMain.imageId,
         name: 'minecraft-main',
@@ -152,7 +152,7 @@ export class DockerStack extends OyasaiTerraformStack {
     } as const
 
     if (secrets.ENVIRONMENT === 'production') {
-      new Container(this, this.envAwareId(id, 'minecraft-backup-container'), {
+      new Container(this, this.envAwareId('minecraft-backup-container'), {
         name: 'minecraft-main-backup',
         dependsOn: [minecraftMainContainer],
         image: images.minecraftBackup.imageId,
@@ -175,7 +175,7 @@ export class DockerStack extends OyasaiTerraformStack {
         ]
       })
 
-      new Container(this, this.envAwareId(id, 'mariadb-backup-container'), {
+      new Container(this, this.envAwareId('mariadb-backup-container'), {
         name: 'mariadb-backup',
         dependsOn: [mariadbContainer],
         image: 'databack/mysql-backup',
