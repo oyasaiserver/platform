@@ -1,5 +1,6 @@
 import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
+import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
 import type { Secrets } from '@oyasaiserver/secrets'
 import { Construct } from 'constructs'
@@ -11,6 +12,8 @@ import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
   public static readonly minecraftVersion = '1.21.5'
+
+  private workdir = `/opt/platform/${this.secrets.ENVIRONMENT}`
 
   public constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id, secrets)
@@ -41,6 +44,10 @@ export class DockerStack extends OyasaiTerraformStack {
       })
     } as const
 
+    const network = new Network(this, this.envAwareId(id, 'network'), {
+      name: 'network'
+    })
+
     const mariadbContainer = new Container(this, this.envAwareId(id, 'mariadb-container'), {
       image: images.mariadb.imageId,
       name: 'mariadb',
@@ -48,14 +55,15 @@ export class DockerStack extends OyasaiTerraformStack {
       env: objectToEnv({
         MARIADB_ROOT_PASSWORD: secrets.MARIADB_PASSWORD
       }),
+      networksAdvanced: [network],
       volumes: [
         {
           containerPath: '/var/lib/mysql',
-          hostPath: `/opt/platform/${secrets.ENVIRONMENT}/mariadb`
+          hostPath: join(this.workdir, 'mariadb')
         },
         {
           containerPath: '/docker-entrypoint-initdb.d',
-          hostPath: `/opt/platform/${secrets.ENVIRONMENT}/mariadb`
+          hostPath: join(this.workdir, 'mariadb')
         }
       ]
     })
@@ -72,6 +80,7 @@ export class DockerStack extends OyasaiTerraformStack {
         tty: true,
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
+        networksAdvanced: [network],
         ports: [
           {
             internal: 25565,
@@ -125,7 +134,7 @@ export class DockerStack extends OyasaiTerraformStack {
         volumes: [
           {
             containerPath: '/data',
-            hostPath: `/opt/platform/${secrets.ENVIRONMENT}/minecraft-main`
+            hostPath: join(this.workdir, 'minecraft-main')
           }
         ]
       }
@@ -146,6 +155,7 @@ export class DockerStack extends OyasaiTerraformStack {
         name: 'minecraft-main-backup',
         dependsOn: [minecraftMainContainer],
         image: images.minecraftBackup.imageId,
+        networksAdvanced: [network],
         restart: 'unless-stopped',
         env: objectToEnv({
           ...r2CommonEnv,
@@ -157,7 +167,7 @@ export class DockerStack extends OyasaiTerraformStack {
         }),
         volumes: [
           {
-            hostPath: `/opt/platform/${secrets.ENVIRONMENT}/minecraft-main`,
+            hostPath: join(this.workdir, 'minecraft-main'),
             containerPath: '/data',
             readOnly: true
           }
@@ -169,6 +179,7 @@ export class DockerStack extends OyasaiTerraformStack {
         dependsOn: [mariadbContainer],
         image: 'databack/mysql-backup',
         restart: 'unless-stopped',
+        networksAdvanced: [network],
         command: ['dump'],
         env: objectToEnv({
           DB_SERVER: 'mariadb',

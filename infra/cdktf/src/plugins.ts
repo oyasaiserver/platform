@@ -45,7 +45,6 @@ const local: Plugins = {
     SpigetId.TNTRUN_RELOADED,
     SpigetId.GSIT,
     SpigetId.LWC,
-    SpigetId.ZVOTEPARTY,
     SpigetId.SKRIPT
   ],
   urls: [

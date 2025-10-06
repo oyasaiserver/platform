@@ -6,7 +6,7 @@ import { Construct } from 'constructs'
  * An opinionated stack for managing Oyasai infrastructure.
  */
 export abstract class OyasaiTerraformStack extends TerraformStack {
-  private readonly secrets: Secrets
+  protected readonly secrets: Secrets
 
   protected constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id)
