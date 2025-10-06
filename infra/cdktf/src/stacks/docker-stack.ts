@@ -31,6 +31,7 @@ export class DockerStack extends OyasaiTerraformStack {
       }),
       minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
         name: `minecraft-main-image:${directory.hashSync(
+          join(directory.root, 'gradle'),
           join(directory.root, 'infra/minecraft-server'),
           join(directory.root, 'plugins')
         )}`,
