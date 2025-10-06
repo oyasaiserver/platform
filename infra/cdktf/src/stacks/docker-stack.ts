@@ -80,6 +80,7 @@ export class DockerStack extends OyasaiTerraformStack {
         tty: true,
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
+        init: true,
         networksAdvanced: [network],
         ports: [
           {
