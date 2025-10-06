@@ -9,7 +9,7 @@ luckperms = "5.5"
 nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
 # @pin
-purpur-api = "1.21.5-R0.1-SNAPSHOT"
+purpur-api = "1.21.9-R0.1-SNAPSHOT"
 shadow = "9.2.1"
 spotless = "8.0.0"
 tokenmanager = "3.2.4"
