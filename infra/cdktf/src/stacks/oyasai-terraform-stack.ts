@@ -32,8 +32,4 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
   ): Readonly<T[keyof T]> {
     return config[this.secrets.ENVIRONMENT]
   }
-
-  protected ifLocal<const T>(config: T, fallback: T): T {
-    return this.secrets.ENVIRONMENT === 'local' ? config : fallback
-  }
 }
