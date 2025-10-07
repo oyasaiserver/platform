@@ -13,7 +13,7 @@ import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 export class DockerStack extends OyasaiTerraformStack {
   public static readonly minecraftVersion = '1.21.5'
 
-  private workdir = join(this.ifLocal(directory.root, `/opt/platform`), this.secrets.ENVIRONMENT)
+  private workdir = join(this.ifLocal(directory.root, '/opt/platform'), this.secrets.ENVIRONMENT)
 
   public constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id, secrets)
