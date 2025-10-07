@@ -1,4 +1,4 @@
-FROM itzg/minecraft-server:java24-graalvm
+FROM itzg/minecraft-server:java25-graalvm
 
 COPY plugins/*.jar /overlays/plugins/
 
