@@ -13,17 +13,26 @@ import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 export class DockerStack extends OyasaiTerraformStack {
   public static readonly minecraftVersion = '1.21.5'
 
-  private workdir = `/opt/platform/${this.secrets.ENVIRONMENT}`
+  private workdir = join(
+    this.secrets.ENVIRONMENT === 'local' ? directory.root : '/opt/platform',
+    this.secrets.ENVIRONMENT
+  )
 
   public constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id, secrets)
 
-    new DockerProvider(this, id, {
-      host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
-      caMaterial: secrets.TLS_CA_PEM,
-      certMaterial: secrets.TLS_CERT_PEM,
-      keyMaterial: secrets.TLS_KEY_PEM
-    })
+    new DockerProvider(
+      this,
+      id,
+      this.secrets.ENVIRONMENT === 'local'
+        ? { host: 'unix:///var/run/docker.sock' }
+        : {
+            host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
+            caMaterial: secrets.TLS_CA_PEM,
+            certMaterial: secrets.TLS_CERT_PEM,
+            keyMaterial: secrets.TLS_KEY_PEM
+          }
+    )
 
     const images = {
       mariadb: new Image(this, this.envAwareId('mariadb-image'), {

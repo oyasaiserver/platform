@@ -412,3 +412,6 @@ cdktf.log
 
 # Local dependencies
 !infra/**/*.jar
+
+# Local infra
+local

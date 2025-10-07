@@ -1,5 +1,5 @@
 import type { Secrets } from '@oyasaiserver/secrets'
-import { CloudBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
+import { CloudBackend, LocalBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
 
 /**
@@ -12,7 +12,9 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
     super(scope, id)
     this.secrets = secrets
 
-    if (secrets.ENVIRONMENT !== 'local') {
+    if (secrets.ENVIRONMENT === 'local') {
+      new LocalBackend(this)
+    } else {
       new CloudBackend(this, {
         hostname: 'app.terraform.io',
         organization: 'oyasaiserver',
