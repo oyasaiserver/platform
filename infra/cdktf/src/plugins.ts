@@ -1,5 +1,5 @@
 import { expandObject } from './object.ts'
-import { SpigetId } from './spiget-id.ts'
+import { spigetId } from './spiget-id.ts'
 
 type Plugins = Readonly<{
   modrinthProjects: string[]
@@ -8,18 +8,21 @@ type Plugins = Readonly<{
 }>
 
 const local: Plugins = {
+  modrinthProjects: ['essentialsx', 'fastasyncworldedit', 'luckperms', 'plugmanx'],
+  spigetIds: [spigetId.protocolLib, spigetId.vault, spigetId.nuvotifier],
+  urls: []
+}
+
+const development: Plugins = expandObject(local, {
   modrinthProjects: [
     'bkcommonlib',
+    'coreprotect',
     'decentholograms',
-    'essentialsx',
     'essentialsx-chat-module',
     'essentialsx-spawn',
-    'fastasyncworldedit',
-    'luckperms',
     'multiverse-core',
     'multiverse-portals',
     'placeholderapi',
-    'plugmanx',
     'tab-was-taken',
     'terra',
     'veinminer',
@@ -27,27 +30,29 @@ const local: Plugins = {
     'worldguard'
   ],
   spigetIds: [
-    SpigetId.VENTURE_CHAT,
-    SpigetId.PARTICLE_HATS,
-    SpigetId.PROTOCOL_LIB,
-    SpigetId.ADVANCED_BAN,
-    SpigetId.SIGN_SHOP,
-    SpigetId.MY_PET,
-    SpigetId.NUVOTIFIER,
-    SpigetId.MINEPACKS,
-    SpigetId.SLOT_MACHINE,
-    SpigetId.MY_COMMAND,
-    SpigetId.VAULT,
-    SpigetId.SIMPLE_ELEVATORS,
-    SpigetId.INVENTORY_SHOP,
-    SpigetId.CRACKSHOT_GUNS,
-    SpigetId.JOIN_COMMANDS,
-    SpigetId.TNTRUN_RELOADED,
-    SpigetId.GSIT,
-    SpigetId.LWC,
-    SpigetId.SKRIPT
+    spigetId.ventureChat,
+    spigetId.particleHats,
+    spigetId.protocolLib,
+    spigetId.advancedBan,
+    spigetId.signShop,
+    spigetId.myPet,
+    spigetId.minepacks,
+    spigetId.slotMachine,
+    spigetId.myCommand,
+    spigetId.simpleElevator,
+    spigetId.inventoryShop,
+    spigetId.crackshotGuns,
+    spigetId.joinCommands,
+    spigetId.tntrunReloaded,
+    spigetId.gsit,
+    spigetId.lwc,
+    spigetId.skript,
+    spigetId.zVoteParty
   ],
   urls: [
+    // always use the latest build
+    'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
+    'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
     // invalid version on modrinth
     'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
     // not published on spigot/modrinth
@@ -62,16 +67,6 @@ const local: Plugins = {
     'https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar',
     // not on spigot/modrinth
     'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar'
-  ]
-}
-
-const development: Plugins = expandObject(local, {
-  modrinthProjects: ['coreprotect'],
-  spigetIds: [],
-  urls: [
-    // always use the latest build
-    'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
-    'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot'
   ]
 })
 

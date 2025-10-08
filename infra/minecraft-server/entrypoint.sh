@@ -2,10 +2,9 @@
 
 set -euo pipefail
 
-chown root -R /data/
+rsync -a /overlays/ /data/
 
-mkdir -p /data/plugins
-cp -f /plugins/* /data/plugins/
+chown root -R /data/
 
 # the original entrypoint script
 exec /image/scripts/start
