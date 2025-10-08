@@ -12,7 +12,7 @@ import { objectToEnv } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
-  public static readonly minecraftVersion = '1.21.5'
+  public static readonly minecraftVersion = '1.21.9'
 
   private workdir = join(
     this.secrets.ENVIRONMENT === 'local' ? directory.root : '/opt/platform',
