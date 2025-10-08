@@ -49,5 +49,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-terraform
       - run: |
           npm run test:integration --workspaces --if-present
