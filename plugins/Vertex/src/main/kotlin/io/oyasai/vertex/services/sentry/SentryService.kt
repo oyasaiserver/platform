@@ -14,9 +14,7 @@ import java.util.logging.*
 
 object SentryService : Service, Handler() {
   private val logger by lazy { Logger.getLogger("") }
-  private val webhookClient = runCatching {
-    WebhookClient.withUrl(getenv("DISCORD_WEBHOOK_URL"))
-  }
+  private val webhookClient = runCatching { WebhookClient.withUrl(getenv("DISCORD_WEBHOOK_URL")) }
   private const val MAX_STACK_TRACE_LENGTH = 800
   private const val RGB_MASK = 0xFFFFFF
 
@@ -40,7 +38,10 @@ object SentryService : Service, Handler() {
   }
 
   private fun sendErrorNotification(timestamp: Instant, message: String, throwable: Throwable?) {
-    val client = this.webhookClient.getOrElse { return }
+    val client =
+      this.webhookClient.getOrElse {
+        return
+      }
     val title = EmbedTitle("🚨 **Platform Exception**", null)
     val stack =
       throwable?.let { thrownToStackTrace(it) }?.take(MAX_STACK_TRACE_LENGTH) ?: "<unknown>"
