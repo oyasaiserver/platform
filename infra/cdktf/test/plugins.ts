@@ -35,10 +35,19 @@ await suite(import.meta.filename, async () => {
   })
 
   await test('modrinth plugins', async () => {
-    const projects = await modrinthV2Client.getProjects(plugins.modrinthProjects)
+    const taggedSlugs = plugins.modrinthProjects.toSorted()
+    const slugs = taggedSlugs.map(it => it.split(':')[0]!)
+    const projects = (await modrinthV2Client.getProjects(slugs)).toSorted((a, b) =>
+      a.slug.localeCompare(b.slug)
+    )
     strictEqual(projects.length, plugins.modrinthProjects.length)
-    const unsupportedPlugins = projects.filter(({ game_versions }) => {
-      return !game_versions.includes(DockerStack.minecraftVersion)
+    const unsupportedPlugins = projects.filter(({ slug, game_versions }, i) => {
+      const hasVersionTag = taggedSlugs[i]?.includes(':')
+      const isVersionSupported = game_versions.includes(DockerStack.minecraftVersion)
+      if (hasVersionTag && isVersionSupported) {
+        console.warn(`Plugin ${slug} has unnecessary version tag`)
+      }
+      return !hasVersionTag && !isVersionSupported
     })
     ok(
       !unsupportedPlugins.length,
