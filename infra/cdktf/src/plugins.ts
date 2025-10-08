@@ -25,6 +25,7 @@ const development: Plugins = expandObject(local, {
     modrinth.decentholograms,
     modrinth.essentialsxChatModule,
     modrinth.essentialsxSpawn,
+    modrinth.fastasyncvoxelsniper,
     modrinth.multiverseCore,
     modrinth.multiversePortals,
     modrinth.placeholderapi,
@@ -58,8 +59,6 @@ const development: Plugins = expandObject(local, {
     // always use the latest build
     'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot',
     'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot',
-    // invalid version on modrinth
-    'https://github.com/IntellectualSites/fastasyncvoxelsniper/releases/download/3.2.3/fastasyncvoxelsniper-3.2.3.jar',
     // not published on spigot/modrinth
     'https://github.com/Jikoo/OpenInv/releases/download/5.1.13/OpenInv.jar',
     // latest release is broken
