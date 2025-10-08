@@ -1,5 +1,5 @@
 import { expandObject } from './object.ts'
-import { spigetId } from './spiget-id.ts'
+import { modrinth, spiget } from './plugin-ids.ts'
 
 type Plugins = Readonly<{
   modrinthProjects: string[]
@@ -8,46 +8,51 @@ type Plugins = Readonly<{
 }>
 
 const local: Plugins = {
-  modrinthProjects: ['essentialsx', 'fastasyncworldedit', 'luckperms', 'plugmanx'],
-  spigetIds: [spigetId.protocolLib, spigetId.vault, spigetId.nuvotifier],
+  modrinthProjects: [
+    modrinth.essentialsx,
+    modrinth.fastasyncworldedit,
+    modrinth.luckperms,
+    modrinth.plugmanx
+  ],
+  spigetIds: [spiget.protocolLib, spiget.vault, spiget.nuvotifier],
   urls: []
 }
 
 const development: Plugins = expandObject(local, {
   modrinthProjects: [
-    'bkcommonlib',
-    'coreprotect',
-    'decentholograms',
-    'essentialsx-chat-module',
-    'essentialsx-spawn',
-    'multiverse-core',
-    'multiverse-portals',
-    'placeholderapi',
-    'tab-was-taken',
-    'terra',
-    'veinminer',
-    'viaversion',
-    'worldguard'
+    modrinth.bkcommonlib,
+    modrinth.coreprotect,
+    modrinth.decentholograms,
+    modrinth.essentialsxChatModule,
+    modrinth.essentialsxSpawn,
+    modrinth.multiverseCore,
+    modrinth.multiversePortals,
+    modrinth.placeholderapi,
+    modrinth.tabWasTaken,
+    modrinth.terra,
+    modrinth.veinminer,
+    modrinth.viaversion,
+    modrinth.worldguard
   ],
   spigetIds: [
-    spigetId.ventureChat,
-    spigetId.particleHats,
-    spigetId.protocolLib,
-    spigetId.advancedBan,
-    spigetId.signShop,
-    spigetId.myPet,
-    spigetId.minepacks,
-    spigetId.slotMachine,
-    spigetId.myCommand,
-    spigetId.simpleElevator,
-    spigetId.inventoryShop,
-    spigetId.crackshotGuns,
-    spigetId.joinCommands,
-    spigetId.tntrunReloaded,
-    spigetId.gsit,
-    spigetId.lwc,
-    spigetId.skript,
-    spigetId.zVoteParty
+    spiget.ventureChat,
+    spiget.particleHats,
+    spiget.protocolLib,
+    spiget.advancedBan,
+    spiget.signShop,
+    spiget.myPet,
+    spiget.minepacks,
+    spiget.slotMachine,
+    spiget.myCommand,
+    spiget.simpleElevator,
+    spiget.inventoryShop,
+    spiget.crackshotGuns,
+    spiget.joinCommands,
+    spiget.tntrunReloaded,
+    spiget.gsit,
+    spiget.lwc,
+    spiget.skript,
+    spiget.zVoteParty
   ],
   urls: [
     // always use the latest build
@@ -71,7 +76,7 @@ const development: Plugins = expandObject(local, {
 })
 
 const production: Plugins = expandObject(development, {
-  modrinthProjects: ['discordsrv', 'bluemap']
+  modrinthProjects: [modrinth.discordsrv, modrinth.bluemap]
 })
 
 export const envAwarePlugins = { local, development, production }
