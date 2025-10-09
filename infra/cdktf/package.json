@@ -6,6 +6,9 @@
     "deploy": "secrets -- cdktf deploy '*' --auto-approve",
     "test:integration": "node --test"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.6.0",
     "@cdktf/provider-docker": "^12.0.2",
@@ -13,7 +16,6 @@
     "ignore": "^7.0.5"
   },
   "devDependencies": {
-    "@xmcl/modrinth": "^2.5.0",
     "cdktf": "^0.21.0",
     "cdktf-cli": "^0.21.0"
   }

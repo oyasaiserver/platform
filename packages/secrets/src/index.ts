@@ -26,3 +26,8 @@ export async function createSecretsFromPath(path: PathLike): Promise<Secrets> {
     })
   )
 }
+
+export async function createSecrets(): Promise<Secrets> {
+  const path = join(import.meta.dirname, '../../../secrets')
+  return createSecretsFromPath(path)
+}
