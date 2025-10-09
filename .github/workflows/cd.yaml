@@ -69,3 +69,12 @@ jobs:
         env:
           ENVIRONMENT: ${{ needs.envs.outputs.environment }}
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+  actions-timeline:
+    needs:
+      - envs
+      - deploy-apps
+      - cdktf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Kesin11/actions-timeline@v2
