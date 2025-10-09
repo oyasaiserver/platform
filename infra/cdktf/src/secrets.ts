@@ -5,10 +5,10 @@ import { mapValues } from './object.ts'
 
 const whitelist = new Set<keyof Secrets>(['ENVIRONMENT'])
 
-const root = join(import.meta.dirname, '../../../secrets')
+const path = join(import.meta.dirname, '../../../secrets')
 
 export async function createTerraformSensitiveSecrets(): Promise<Secrets> {
-  const secrets = await createSecretsFromPath(root)
+  const secrets = await createSecretsFromPath(path)
   return mapValues(secrets, (key, value) => {
     return whitelist.has(key) ? value : Fn.sensitive(value)
   })
