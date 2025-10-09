@@ -1,4 +1,4 @@
-import type { Secrets } from '@oyasaiserver/secrets'
+import type { Environment, Secrets } from '@oyasaiserver/secrets'
 import { CloudBackend, LocalBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
 
@@ -27,7 +27,7 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
     return [...fragments, this.secrets.ENVIRONMENT].join('-')
   }
 
-  protected envAwareConfig<const T extends Record<Secrets['ENVIRONMENT'], any>>(
+  protected envAwareConfig<const T extends Record<Environment, any>>(
     config: T
   ): Readonly<T[keyof T]> {
     return config[this.secrets.ENVIRONMENT]
