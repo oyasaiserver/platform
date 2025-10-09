@@ -3,7 +3,7 @@
   "workspaces": [
     "apps/*",
     "infra/*",
-    "secrets"
+    "packages/*"
   ],
   "scripts": {
     "build": "tsc --build",

@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
-export const schema = z.object({
+export const environmentSchema = z.enum(['production', 'development', 'local']).default('local')
+
+export const secretsSchema = z.object({
   DOTENV_PUBLIC_KEY: z.string(),
-  ENVIRONMENT: z.enum(['production', 'development', 'local']),
+  ENVIRONMENT: environmentSchema,
   PUBLIC_IPV4: z.string(),
   CLOUDFLARE_ACCOUNT_ID: z.string(),
   CLOUDFLARE_API_TOKEN: z.string(),
