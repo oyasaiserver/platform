@@ -10,7 +10,7 @@ import { environmentSchema, secretsSchema } from './schema.ts'
 export type Environment = output<typeof environmentSchema>
 export type Secrets = Readonly<output<typeof secretsSchema>>
 
-export async function createSecrets(path: PathLike): Promise<Secrets> {
+export async function createSecretsFromPath(path: PathLike): Promise<Secrets> {
   const environment = environmentSchema.parse(env.ENVIRONMENT)
   const envfile = join(path.toString(), environment, '.env')
   const content = await readFile(envfile)
