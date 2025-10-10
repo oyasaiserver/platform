@@ -51,6 +51,7 @@ data class Stats(
   @Expose var title: Int = -1,
   var timePlayed: Int = 0,
   @Expose var introduction: String = "",
+  @Expose var promotions: PromotionHistory = PromotionHistory(),
 ) {
   fun addAllCounts(stats: Stats) {
     this.exp += stats.exp
