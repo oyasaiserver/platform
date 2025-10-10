@@ -1,13 +1,13 @@
 {
   "name": "@oyasaiserver/cdktf",
   "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "scripts": {
     "build": "cdktf synth",
     "deploy": "secrets -- cdktf deploy '*' --auto-approve",
     "test:integration": "node --test"
-  },
-  "exports": {
-    "./*": "./src/*.ts"
   },
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.6.0",

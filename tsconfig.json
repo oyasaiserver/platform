@@ -25,7 +25,7 @@
   "references": [
     { "path": "apps/wiki" },
     { "path": "infra/cdktf" },
-    { "path": "packages/plugins"},
+    { "path": "packages/plugins" },
     { "path": "packages/secrets" }
   ],
   "files": []
