@@ -63,12 +63,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: Kesin11/actions-timeline@v2
-
-  NOMERGE:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5.0.0
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run build
-        working-directory: packages/plugins
