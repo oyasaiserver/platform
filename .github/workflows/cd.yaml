@@ -64,6 +64,9 @@ jobs:
           ./gradlew build --parallel
       - run: |
           npm run build
+        working-directory: packages/plugins
+      - run: |
+          npm run build
           npm run deploy
         working-directory: infra/cdktf
         env:

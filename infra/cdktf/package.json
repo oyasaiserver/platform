@@ -1,6 +1,9 @@
 {
   "name": "@oyasaiserver/cdktf",
   "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "scripts": {
     "build": "cdktf synth",
     "deploy": "secrets -- cdktf deploy '*' --auto-approve",
@@ -13,7 +16,6 @@
     "ignore": "^7.0.5"
   },
   "devDependencies": {
-    "@xmcl/modrinth": "^2.5.0",
     "cdktf": "^0.21.0",
     "cdktf-cli": "^0.21.0"
   }

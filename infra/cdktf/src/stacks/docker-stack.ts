@@ -7,7 +7,6 @@ import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory } from '../directory.ts'
 import { objectToEnv } from '../object.ts'
-import { envAwarePlugins } from '../plugins.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
@@ -78,7 +77,6 @@ export class DockerStack extends OyasaiTerraformStack {
       ]
     })
 
-    const plugins = this.envAwareConfig(envAwarePlugins)
     const minecraftMainContainer = new Container(
       this,
       this.envAwareId('minecraft-main-container'),
@@ -127,10 +125,6 @@ export class DockerStack extends OyasaiTerraformStack {
             development: '12G',
             local: '5G'
           }),
-          PLUGINS: plugins.urls.join(),
-          SPIGET_RESOURCES: plugins.spigetIds.join(),
-          MODRINTH_PROJECTS: plugins.modrinthProjects.join(),
-          MODRINTH_ALLOWED_VERSION_TYPE: 'beta',
           ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
           DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
           RCON_PASSWORD: secrets.RCON_PASSWORD,
