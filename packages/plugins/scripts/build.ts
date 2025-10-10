@@ -14,9 +14,8 @@ if (import.meta.main) {
   await rm(dir, { force: true, recursive: true })
   await mkdir(dir)
 
-  for (const plugin of plugins) {
-    console.log(`Downloading ${JSON.stringify(plugin)}`)
-    const byte = await downloadJar(plugin)
+  const bytes = await Promise.all(plugins.map(downloadJar))
+  for (const byte of bytes) {
     ok(byte.byteLength)
     const path = format({
       dir,
