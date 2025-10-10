@@ -1,0 +1,11 @@
+server {
+  listen 80;
+  listen 443 ssl;
+
+  server_name oyasai.io www.oyasai.io;
+
+  ssl_certificate     /etc/ssl/certs/ssl-cert-snakeoil.pem;
+  ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+
+  return 301 https://${REDIRECT_TARGET}$request_uri;
+}

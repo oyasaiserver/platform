@@ -10,7 +10,7 @@ const local: PluginDefinition[] = [
   registry.nuvotifier
 ]
 
-const development: PluginDefinition[] = local.concat([
+const development: PluginDefinition[] = local.concat(
   registry.bkcommonlib,
   registry.coreprotect,
   registry.decentholograms,
@@ -51,8 +51,8 @@ const development: PluginDefinition[] = local.concat([
   registry.worldborder,
   registry.imageonmap,
   registry.chestcommands
-])
+)
 
-const production: PluginDefinition[] = development.concat([registry.discordsrv, registry.bluemap])
+const production: PluginDefinition[] = development.concat(registry.discordsrv, registry.bluemap)
 
 export const envAwarePlugins = { local, development, production }

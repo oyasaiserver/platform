@@ -34,11 +34,17 @@ export class DockerStack extends OyasaiTerraformStack {
     )
 
     const images = {
+      nginx: new Image(this, this.envAwareId('nginx-image'), {
+        name: `nginx:${directory.hashSync(join(directory.root, 'infra/nginx'))}`,
+        buildAttribute: {
+          context: join(directory.root, 'infra/nginx')
+        }
+      }),
       mariadb: new Image(this, this.envAwareId('mariadb-image'), {
         name: 'mariadb:10.4.28'
       }),
       minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
-        name: `minecraft-main-image:${directory.hashSync(
+        name: `minecraft-server:${directory.hashSync(
           join(directory.root, 'gradle'),
           join(directory.root, 'infra/minecraft-server'),
           join(directory.root, 'packages/plugins'),
@@ -56,6 +62,20 @@ export class DockerStack extends OyasaiTerraformStack {
 
     const network = new Network(this, this.envAwareId('network'), {
       name: 'network'
+    })
+
+    new Container(this, this.envAwareId('nginx-container'), {
+      name: 'nginx',
+      image: images.nginx.imageId,
+      restart: 'unless-stopped',
+      networksAdvanced: [network],
+      ports: [
+        { internal: 80, external: 80 },
+        { internal: 443, external: 443 }
+      ],
+      env: objectToEnv({
+        REDIRECT_TARGET: 'wiki.oyasai.io'
+      })
     })
 
     const mariadbContainer = new Container(this, this.envAwareId('mariadb-container'), {
@@ -92,27 +112,11 @@ export class DockerStack extends OyasaiTerraformStack {
         init: true,
         networksAdvanced: [network],
         ports: [
-          {
-            internal: 25565,
-            external: 25565
-          },
-          {
-            internal: 19132,
-            external: 19132,
-            protocol: 'udp'
-          },
-          {
-            internal: 8192,
-            external: 8192
-          },
-          {
-            internal: 8100,
-            external: 8100
-          },
-          {
-            internal: 25575,
-            external: 25575
-          }
+          { internal: 25565, external: 25565 },
+          { internal: 19132, external: 19132, protocol: 'udp' },
+          { internal: 8192, external: 8192 },
+          { internal: 8100, external: 8100 },
+          { internal: 25575, external: 25575 }
         ],
         env: objectToEnv({
           EULA: true,
