@@ -38,6 +38,9 @@ jobs:
       matrix:
         app:
           - wiki
+    env:
+      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -45,9 +48,6 @@ jobs:
           npm run build --if-present
           npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null
         working-directory: apps/${{ matrix.app }}
-        env:
-          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   cdktf:
     needs:
@@ -55,6 +55,9 @@ jobs:
       - deploy-apps
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.environment }}
+    env:
+      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-java
@@ -69,9 +72,6 @@ jobs:
           npm run build
           npm run deploy
         working-directory: infra/cdktf
-        env:
-          ENVIRONMENT: ${{ needs.envs.outputs.environment }}
-          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   actions-timeline:
     needs:
