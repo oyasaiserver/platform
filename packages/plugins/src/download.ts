@@ -46,10 +46,7 @@ export async function downloadJar(definition: PluginDefinition): Promise<Uint8Ar
   const url = await toDownloadUrl(definition)
   const response = await fetch(url)
   const jarHeaders = ['application/zip', 'application/java-archive', 'application/octet-stream']
-  ok(
-    jarHeaders.includes(response.headers.get('Content-Type') ?? ''),
-    `Invalid content type: ${url} ${response.headers.get('Content-Type')}`
-  )
+  ok(jarHeaders.includes(response.headers.get('Content-Type') ?? ''))
   const arrayBuffer = await response.arrayBuffer()
   return new Uint8Array(arrayBuffer)
 }

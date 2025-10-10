@@ -2,7 +2,6 @@ import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
-import { envAwarePlugins } from '@oyasaiserver/plugins'
 import type { Secrets } from '@oyasaiserver/secrets'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
@@ -78,7 +77,6 @@ export class DockerStack extends OyasaiTerraformStack {
       ]
     })
 
-    const plugins = this.envAwareConfig(envAwarePlugins)
     const minecraftMainContainer = new Container(
       this,
       this.envAwareId('minecraft-main-container'),
