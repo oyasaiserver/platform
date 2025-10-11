@@ -3,9 +3,11 @@ import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
 import type { Secrets } from '@oyasaiserver/secrets'
+import { hashPath } from 'cdktf/lib/private/fs.js'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
-import { directory, hashdirSync } from '../directory.ts'
+import { directory } from '../directory.ts'
+import { combineHash } from '../hash.ts'
 import { objectToEnv } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
@@ -38,7 +40,10 @@ export class DockerStack extends OyasaiTerraformStack {
         name: 'mariadb:10.4.28'
       }),
       minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
-        name: `minecraft-main-image:${this.computeMinecraftMainImageHash()}`,
+        name: `minecraft-main-image:${combineHash(
+          hashPath(join(directory.root, 'packages/plugins/jars')),
+          hashPath(join(directory.root, 'infra/minecraft-server'))
+        )}`,
         buildAttribute: {
           context: directory.root,
           dockerfile: 'infra/minecraft-server/Dockerfile'
@@ -202,17 +207,5 @@ export class DockerStack extends OyasaiTerraformStack {
     if (secrets.ENVIRONMENT === 'development') {
       // TODO restore mc data from backup
     }
-  }
-
-  private computeMinecraftMainImageHash(): string {
-    const hash = hashdirSync([
-      join(directory.root, 'gradle'),
-      join(directory.root, 'infra/minecraft-server'),
-      join(directory.root, 'plugins')
-    ])
-    try {
-      return hash + hashdirSync([join(directory.root, 'packages/plugins/dist')])
-    } catch {}
-    return hash
   }
 }

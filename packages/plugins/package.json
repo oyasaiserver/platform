@@ -6,7 +6,7 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "node scripts/build.ts",
+    "download": "node scripts/download.ts",
     "start": "node src/index.ts",
     "test:integration": "node --test"
   },

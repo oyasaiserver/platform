@@ -63,12 +63,15 @@ jobs:
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
-      - run: |
+      - name: Build plugins
+        run: |
           ./gradlew build --parallel
-      - run: |
-          npm run build
+      - name: Download plugins
+        run: |
+          npm run download
         working-directory: packages/plugins
-      - run: |
+      - name: Deploy infra
+        run: |
           npm run build
           npm run deploy
         working-directory: infra/cdktf
