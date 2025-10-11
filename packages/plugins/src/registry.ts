@@ -1,7 +1,24 @@
+import type { PathLike } from 'node:fs'
+import { format, join } from 'node:path'
+
+const path = {
+  static: join(import.meta.dirname, '../static'),
+  plugins: join(import.meta.dirname, '../../../plugins')
+} as const
+
+function toGradleBuildPath(name: string) {
+  return format({
+    dir: join(path.plugins, name, 'build/libs'),
+    name,
+    ext: '.jar'
+  })
+}
+
 export type PluginDefinition = Readonly<
-  | { type: 'github'; repo: string; tag: string; name: string }
-  | { type: 'spiget'; id: number }
   | { type: 'modrinth'; slug: string }
+  | { type: 'spiget'; id: number }
+  | { type: 'github'; owner: string; repo: string; tag: string; name: string }
+  | { type: 'local'; path: PathLike }
   | { type: 'url'; url: string }
 >
 
@@ -48,31 +65,78 @@ export const registry = {
   zvoteparty: { type: 'spiget', id: 95603 },
   skript: { type: 'spiget', id: 114544 },
 
-  openinv: { type: 'github', repo: 'JiKoo/OpenInv', tag: '5.1.14', name: 'OpenInv.jar' },
+  openinv: { type: 'github', owner: 'JiKoo', repo: 'OpenInv', tag: '5.1.14', name: 'OpenInv.jar' },
   lunachat: {
     type: 'github',
-    repo: 'f1w3/LunaChat',
+    owner: 'f1w3',
+    repo: 'LunaChat',
     tag: 'v3.0.16-fix',
     name: 'LunaChat.jar'
   },
   worldeditsui: {
     type: 'github',
-    repo: 'kennytv/WorldEditSUI',
+    owner: 'kennytv',
+    repo: 'WorldEditSUI',
     tag: '1.7.4',
     name: 'WorldEditSUI-1.7.4.jar'
   },
   worldborder: {
     type: 'github',
-    repo: 'PryPurity/WorldBorder',
+    owner: 'PryPurity',
+    repo: 'WorldBorder',
     tag: 'v2.1.5',
     name: 'WorldBorder.jar'
   },
   imageonmap: {
     type: 'github',
-    repo: 'okocraft/ImageOnMap',
+    owner: 'okocraft',
+    repo: 'ImageOnMap',
     tag: '5.1.1',
     name: 'ImageOnMap-5.1.1.jar'
   },
+
+  arceon: {
+    type: 'local',
+    path: join(path.static, 'Arceon.jar')
+  },
+  ezedits: {
+    type: 'local',
+    path: join(path.static, 'ezEdits.jar')
+  },
+  oyasaivehicles: {
+    type: 'local',
+    path: join(path.static, 'OyasaiVehicles.jar')
+  },
+  tokenmanager: {
+    type: 'local',
+    path: join(path.static, 'TokenManager.jar')
+  },
+
+  dynamicprofile: {
+    type: 'local',
+    path: toGradleBuildPath('DynamicProfile')
+  },
+  oyasaiutilities: {
+    type: 'local',
+    path: toGradleBuildPath('OyasaiUtilities')
+  },
+  painttools: {
+    type: 'local',
+    path: toGradleBuildPath('PaintTools')
+  },
+  sociallikes3: {
+    type: 'local',
+    path: toGradleBuildPath('SocialLikes3')
+  },
+  tpswitch: {
+    type: 'local',
+    path: toGradleBuildPath('TPswitch')
+  },
+  vertex: {
+    type: 'local',
+    path: toGradleBuildPath('Vertex')
+  },
+
   floodgate: {
     type: 'url',
     url: 'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot'
