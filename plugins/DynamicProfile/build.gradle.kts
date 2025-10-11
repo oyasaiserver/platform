@@ -25,7 +25,12 @@ configurations.configureEach {
 tasks.apply {
   jar { enabled = false }
 
-  shadowJar { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+  shadowJar {
+    archiveBaseName.set(project.name)
+    archiveClassifier.set("")
+    archiveVersion.set("")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  }
 
   build { dependsOn(shadowJar) }
 
