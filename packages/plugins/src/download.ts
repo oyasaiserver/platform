@@ -6,7 +6,6 @@ import { URL } from 'node:url'
 import type { PluginDefinition } from './registry.ts'
 
 function createVersionsRange(version: string, limit = 10): string[] {
-  // "look-up" for now
   const [major, minor, patch] = version.split('.').map(Number) as [number, number, number]
   return new Array(limit)
     .keys()
