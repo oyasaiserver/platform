@@ -1,6 +1,7 @@
 import { DockerStack } from '@oyasaiserver/cdktf/stacks/docker-stack'
 import { ModrinthV2Client } from '@xmcl/modrinth'
 import { ok } from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
 import { URL } from 'node:url'
 import type { PluginDefinition } from './registry.ts'
 
@@ -36,14 +37,20 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
     }
     case 'github': {
       return new URL(
-        `https://github.com/${definition.repo}/releases/download/${definition.tag}/${definition.name}`
+        `https://github.com/${definition.owner}/${definition.repo}/releases/download/${definition.tag}/${definition.name}`
       )
+    }
+    case 'local': {
+      return new URL(`file://${definition.path}`)
     }
   }
 }
 
 export async function downloadJar(definition: PluginDefinition): Promise<Uint8Array> {
   const url = await toDownloadUrl(definition)
+  if (url.protocol === 'file:') {
+    return readFile(url.pathname) // fetching `file:` protocol is not supported
+  }
   const response = await fetch(url)
   const jarHeaders = ['application/zip', 'application/java-archive', 'application/octet-stream']
   ok(jarHeaders.includes(response.headers.get('Content-Type') ?? ''))

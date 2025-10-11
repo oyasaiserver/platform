@@ -4,4 +4,4 @@
 infra/cdktf/**
 
 !plugins
-!packages/plugins/dist
+!packages/plugins/jars

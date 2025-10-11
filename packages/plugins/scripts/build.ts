@@ -1,27 +1,29 @@
-import { envAwarePlugins } from '@oyasaiserver/plugins'
+import { development, local, production } from '@oyasaiserver/plugins'
 import { downloadJar } from '@oyasaiserver/plugins/download'
+import { registry } from '@oyasaiserver/plugins/registry'
 import { createSecrets } from '@oyasaiserver/secrets'
-import { ok } from 'node:assert/strict'
-import { randomUUID } from 'node:crypto'
-import { mkdir, rm, writeFile } from 'node:fs/promises'
+import { glob, rm, writeFile } from 'node:fs/promises'
 import { format } from 'node:path'
 
 if (import.meta.main) {
   const secrets = await createSecrets()
-  const plugins = envAwarePlugins[secrets.ENVIRONMENT]
+  const envAwarePlugins = { development, local, production } as const
 
-  const dir = 'dist'
-  await rm(dir, { force: true, recursive: true })
-  await mkdir(dir)
+  const dir = 'jars'
 
-  const bytes = await Promise.all(plugins.map(downloadJar))
-  for (const byte of bytes) {
-    ok(byte.byteLength)
-    const path = format({
-      dir,
-      name: randomUUID(),
-      ext: '.jar'
-    })
+  for await (const file of glob(`${dir}/*.jar`)) {
+    await rm(file)
+  }
+
+  const downloaded = await Promise.all(
+    envAwarePlugins[secrets.ENVIRONMENT].map(async plugin => ({
+      name: plugin,
+      byte: await downloadJar(registry[plugin])
+    }))
+  )
+
+  for (const { name, byte } of downloaded) {
+    const path = format({ dir, name, ext: '.jar' })
     await writeFile(path, byte)
   }
 }
