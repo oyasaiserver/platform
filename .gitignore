@@ -411,7 +411,7 @@ cdktf.log
 !gen/compose/compose.local.yaml
 
 # Local dependencies
-!infra/**/*.jar
+!packages/plugins/static/*.jar
 
 # Local infra
 local

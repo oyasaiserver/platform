@@ -3,9 +3,11 @@ import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
 import type { Secrets } from '@oyasaiserver/secrets'
+import { hashPath } from 'cdktf/lib/private/fs.js'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory } from '../directory.ts'
+import { combineHash } from '../hash.ts'
 import { objectToEnv } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
@@ -38,11 +40,9 @@ export class DockerStack extends OyasaiTerraformStack {
         name: 'mariadb:10.4.28'
       }),
       minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
-        name: `minecraft-main-image:${directory.hashSync(
-          join(directory.root, 'gradle'),
-          join(directory.root, 'infra/minecraft-server'),
-          join(directory.root, 'packages/plugins'),
-          join(directory.root, 'plugins')
+        name: `minecraft-main-image:${combineHash(
+          hashPath(join(directory.root, 'packages/plugins/jars')),
+          hashPath(join(directory.root, 'infra/minecraft-server'))
         )}`,
         buildAttribute: {
           context: directory.root,
