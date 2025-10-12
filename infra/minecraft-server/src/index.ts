@@ -63,7 +63,8 @@ export const development: ReadonlyArray<RegistryId> = local.concat(
   'painttools',
   'sociallikes3',
   'tpswitch',
-  'vertex'
+  'vertex',
+  'pvparena'
 )
 
 export const production: ReadonlyArray<RegistryId> = development.concat('discordsrv', 'bluemap')
