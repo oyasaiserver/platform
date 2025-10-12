@@ -25,7 +25,7 @@
   "references": [
     { "path": "apps/wiki" },
     { "path": "infra/cdktf" },
-    { "path": "packages/plugins" },
+    { "path": "infra/minecraft-server" },
     { "path": "packages/secrets" }
   ],
   "files": []

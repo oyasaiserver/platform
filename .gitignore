@@ -411,7 +411,7 @@ cdktf.log
 !gen/compose/compose.local.yaml
 
 # Local dependencies
-!packages/plugins/static/*.jar
+!infra/minecraft-server/static/*.jar
 
 # Local infra
 local

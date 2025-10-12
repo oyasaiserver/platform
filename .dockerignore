@@ -1,6 +1,0 @@
-**
-
-!infra/**
-infra/cdktf/**
-
-!packages/plugins/jars
