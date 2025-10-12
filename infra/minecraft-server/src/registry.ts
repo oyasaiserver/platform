@@ -64,6 +64,7 @@ export const registry = {
   lwc: { type: 'spiget', id: 69551 },
   zvoteparty: { type: 'spiget', id: 95603 },
   skript: { type: 'spiget', id: 114544 },
+  pvparena: { type: 'spiget', id: 16584 },
 
   openinv: { type: 'github', owner: 'JiKoo', repo: 'OpenInv', tag: '5.1.14', name: 'OpenInv.jar' },
   lunachat: {
