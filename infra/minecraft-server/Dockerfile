@@ -1,8 +1,8 @@
 FROM itzg/minecraft-server:java24-graalvm
 
-COPY ./packages/plugins/jars/*.jar /overlays/plugins/
+COPY plugins/*.jar /overlays/plugins/
 
-COPY ./infra/minecraft-server/entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 

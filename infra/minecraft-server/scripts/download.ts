@@ -9,7 +9,7 @@ if (import.meta.main) {
   const secrets = await createSecrets()
   const envAwarePlugins = { development, local, production } as const
 
-  const dir = 'jars'
+  const dir = 'plugins'
 
   for await (const file of glob(`${dir}/*.jar`)) {
     await rm(file)
