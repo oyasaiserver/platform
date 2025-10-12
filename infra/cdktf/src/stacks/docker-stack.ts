@@ -35,19 +35,19 @@ export class DockerStack extends OyasaiTerraformStack {
           }
     )
 
-    const minecraftServerContext = join(directory.root, 'infra/minecraft-server')
+    const minecraftServerPath = join(directory.root, 'infra/minecraft-server')
     const images = {
       mariadb: new Image(this, this.envAwareId('mariadb-image'), {
         name: 'mariadb:10.4.28'
       }),
       minecraftMain: new Image(this, this.envAwareId('minecraft-main-image'), {
         name: `minecraft-main-image:${combineHash(
-          ['plugins', 'Dockerfile', 'entrypoint.sh'].map(path => {
-            return hashPath(join(minecraftServerContext, path))
+          ['plugins', 'Dockerfile', 'entrypoint.sh'].map(it => {
+            return hashPath(join(minecraftServerPath, it))
           })
         )}`,
         buildAttribute: {
-          context: minecraftServerContext
+          context: minecraftServerPath
         }
       }),
       minecraftBackup: new Image(this, this.envAwareId('minecraft-backup-image'), {
