@@ -1,0 +1,36 @@
+name: TokenManager
+main: me.realized.tokenmanager.TokenManagerPlugin
+version: @VERSION@
+softdepend: [PlaceholderAPI, Vault]
+api-version: 1.14
+
+author: Realized
+description: A simple economy plugin for your server.
+website: https://www.spigotmc.org/resources/tokenmanager.8610/
+
+commands:
+   token:
+     description: Main command of TokenManager.
+     aliases: [tokens]
+   tm:
+     description: Administrative command of TokenManager.
+     aliases: [tokenmanager]
+
+permissions:
+  tokenmanager.*:
+    description: Grants access to all TokenManager permissions.
+    children:
+      tokenmanager.use.*: true
+      tokenmanager.admin: true
+  tokenmanager.use.*:
+    description: Grants access to all sub commands of /token.
+    children:
+      tokenmanager.use: true
+      tokenmanager.use.send: true
+      tokenmanager.use.top: true
+      tokenmanager.use.shop: true
+      tokenmanager.use.balance.others: true
+      tokenmanager.use.sell: true
+      tokenmanager.use.sell.all: true
+      tokenmanager.use.worth: true
+      tokenmanager.use.worth.all: true

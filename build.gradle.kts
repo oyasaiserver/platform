@@ -1,6 +1,7 @@
 import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
 
 plugins {
+  java
   alias(libs.plugins.spotless)
   alias(libs.plugins.version.catalog.update)
 }
