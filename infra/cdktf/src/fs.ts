@@ -8,7 +8,7 @@ export const directory = {
 } as const
 
 export function hashPath(path: PathLike): string {
-  return _hashPath(path.toString())
+  return _hashPath(path.toString()).toLowerCase()
 }
 
 export function hashPaths(paths: readonly PathLike[]): string {
