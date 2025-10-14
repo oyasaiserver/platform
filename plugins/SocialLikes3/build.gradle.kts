@@ -1,5 +1,3 @@
-plugins { `java-library` }
-
 dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.placeholderapi)
