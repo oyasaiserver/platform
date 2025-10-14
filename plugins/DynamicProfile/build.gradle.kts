@@ -1,6 +1,4 @@
-plugins {
-  `java-library`
-}
+plugins { `java-library` }
 
 dependencies {
   compileOnly(libs.placeholderapi)
