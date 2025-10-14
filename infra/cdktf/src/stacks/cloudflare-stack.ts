@@ -6,7 +6,7 @@ import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
 import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
-import { directory } from '../directory.ts'
+import { directory } from '../fs.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class CloudflareStack extends OyasaiTerraformStack {
