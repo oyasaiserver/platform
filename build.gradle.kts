@@ -28,6 +28,7 @@ subprojects {
   if (!project.path.startsWith(":plugins:")) {
     return@subprojects
   }
+
   configurations.configureEach {
     resolutionStrategy.dependencySubstitution {
       substitute(module("org.bukkit:bukkit")).using(module(libs.purpur.api.get().toString()))
@@ -42,9 +43,8 @@ subprojects {
     }
 
     tasks.withType<ShadowJar>().configureEach {
-      archiveBaseName.set(project.name)
-      archiveClassifier.set("")
-      archiveVersion.set("")
+      archiveBaseName = project.name
+      archiveClassifier = ""
       duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
