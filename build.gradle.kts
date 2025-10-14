@@ -31,6 +31,7 @@ subprojects {
 
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
+  apply(plugin = "java-library")
 
   afterEvaluate {
     tasks.withType<Jar>().configureEach {
