@@ -59,6 +59,7 @@ export const development: ReadonlyArray<RegistryId> = local.concat(
   'oyasaivehicles',
   'tokenmanager',
   'dynamicprofile',
+  'oyasaiadmintools',
   'oyasaiutilities',
   'painttools',
   'sociallikes3',
