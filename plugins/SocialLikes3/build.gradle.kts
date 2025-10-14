@@ -1,8 +1,4 @@
-plugins {
-  kotlin("jvm")
-  id("com.gradleup.shadow")
-  `java-library`
-}
+plugins { `java-library` }
 
 dependencies {
   compileOnly(libs.purpur.api)

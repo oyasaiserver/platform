@@ -29,11 +29,8 @@ subprojects {
     return@subprojects
   }
 
-  configurations.configureEach {
-    resolutionStrategy.dependencySubstitution {
-      substitute(module("org.bukkit:bukkit")).using(module(libs.purpur.api.get().toString()))
-    }
-  }
+  apply(plugin = "org.jetbrains.kotlin.jvm")
+  apply(plugin = "com.gradleup.shadow")
 
   afterEvaluate {
     tasks.withType<Jar>().configureEach {
