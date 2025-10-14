@@ -14,37 +14,36 @@ import java.io.File
 import java.util.UUID
 
 object JsonUtils {
-    val gson = GsonBuilder().setPrettyPrinting().create()
+  val gson = GsonBuilder().setPrettyPrinting().create()
 
-    inline fun <reified T> toJson(data: T): String = gson.toJson(data)
+  inline fun <reified T> toJson(data: T): String = gson.toJson(data)
 
-    inline fun <reified T> fromJson(json: String): T {
-        val type = object : TypeToken<T>() {}.type
-        return gson.fromJson(json, type)
+  inline fun <reified T> fromJson(json: String): T {
+    val type = object : TypeToken<T>() {}.type
+    return gson.fromJson(json, type)
+  }
+
+  inline fun <reified T> readJsonFile(path: String, default: T): T {
+    val json = readFile(plugin?.dataFolder?.path + File.separator + path)
+    if (json.isBlank()) {
+      writeJsonFile(path, default)
+      return default
     }
+    return fromJson(json)
+  }
 
-    inline fun <reified T> readJsonFile(path: String, default: T): T {
-        val json = readFile(plugin?.dataFolder?.path + File.separator + path)
-        if (json.isBlank()) {
-            writeJsonFile(path, default)
-            return default
-        }
-        return fromJson(json)
+  inline fun <reified T> writeJsonFile(path: String, data: T) {
+    submitWriteTask { writeFile(plugin?.dataFolder?.path + File.separator + path, toJson(data)) }
+  }
+
+  fun saveUserJson(uuid: UUID) {
+    try {
+      val userstats = getStats(uuid)
+      val file = File(Tools.plugin.dataFolder, "UserStatsJSON/${uuid}.json")
+      JsonUtils.toJsonFile(file, userstats, Stats::class.java)
+    } catch (e: Exception) {
+      Tools.plugin.logger.warning("Failed to save data for ${uuid}: ${e.message}")
+      e.printStackTrace()
     }
-
-    inline fun <reified T> writeJsonFile(path: String, data: T) {
-        submitWriteTask { writeFile(plugin?.dataFolder?.path + File.separator + path,toJson(data)) }
-    }
-
-    fun saveUserJson(uuid: UUID) {
-        try {
-            val userstats = getStats(uuid)
-            val file = File(Tools.plugin.dataFolder, "UserStatsJSON/${uuid}.json")
-            JsonUtils.toJsonFile(file, userstats, Stats::class.java)
-        } catch (e: Exception) {
-            Tools.plugin.logger.warning("Failed to save data for ${uuid}: ${e.message}")
-            e.printStackTrace()
-        }
-    }
-
+  }
 }
