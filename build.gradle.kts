@@ -30,8 +30,7 @@ subprojects {
   }
   configurations.configureEach {
     resolutionStrategy.dependencySubstitution {
-      substitute(module("org.bukkit:bukkit"))
-        .using(module(libs.purpur.api.get().toString()))
+      substitute(module("org.bukkit:bukkit")).using(module(libs.purpur.api.get().toString()))
     }
   }
 
@@ -57,9 +56,7 @@ subprojects {
       filesMatching("plugin.yml") { expand(properties) }
     }
 
-    tasks.named("build") {
-      dependsOn("shadowJar")
-    }
+    tasks.named("build") { dependsOn("shadowJar") }
   }
 }
 

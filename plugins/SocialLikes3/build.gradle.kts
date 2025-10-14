@@ -17,4 +17,3 @@ dependencies {
   implementation(libs.worldborder)
   implementation(libs.ultimateadvancementapi)
 }
-
