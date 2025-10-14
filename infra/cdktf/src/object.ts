@@ -1,6 +1,4 @@
-export function objectToEnv(object: Readonly<Record<string, string | number | boolean>>): string[] {
-  return Object.entries(object).map(([key, value]) => [key, value].join('='))
-}
+import type { ContainerPorts } from '@cdktf/provider-docker/lib/container/index.js'
 
 export function mapValues<T extends object, K extends keyof T, V>(
   object: T,
@@ -13,4 +11,20 @@ export function mapValues<T extends object, K extends keyof T, V>(
     result[key] = predicate(key, value, object)
   }
   return result
+}
+
+export function objectToEnv(object: Readonly<Record<string, string | number | boolean>>): string[] {
+  return Object.entries(object).map(([key, value]) => [key, value].join('='))
+}
+
+export function objectToPorts(
+  mapping: Readonly<Record<'tcp' | 'udp', number[]>>
+): ContainerPorts[] {
+  return Object.entries(mapping).flatMap(([protocol, ports]) =>
+    ports.map(port => ({
+      internal: port,
+      external: port,
+      protocol
+    }))
+  )
 }

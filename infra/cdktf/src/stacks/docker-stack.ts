@@ -6,7 +6,7 @@ import type { Secrets } from '@oyasaiserver/secrets'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory, hashPaths } from '../fs.ts'
-import { objectToEnv } from '../object.ts'
+import { objectToEnv, objectToPorts } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
@@ -88,29 +88,10 @@ export class DockerStack extends OyasaiTerraformStack {
         destroyGraceSeconds: 2 * 60,
         init: true,
         networksAdvanced: [network],
-        ports: [
-          {
-            internal: 25565,
-            external: 25565
-          },
-          {
-            internal: 19132,
-            external: 19132,
-            protocol: 'udp'
-          },
-          {
-            internal: 8192,
-            external: 8192
-          },
-          {
-            internal: 8100,
-            external: 8100
-          },
-          {
-            internal: 25575,
-            external: 25575
-          }
-        ],
+        ports: objectToPorts({
+          tcp: [8100, 8192, 25565, 25575],
+          udp: [19132]
+        }),
         env: objectToEnv({
           EULA: true,
           TYPE: 'PURPUR',
