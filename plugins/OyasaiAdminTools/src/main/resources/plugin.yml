@@ -1,0 +1,25 @@
+name: OyasaiAdminTools
+version: '1.0-SNAPSHOT'
+main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
+api-version: '1.21'
+commands:
+  syokaku:
+    description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
+    usage: |
+      /syokaku promote <player>
+      /syokaku demote <player>
+      /syokaku getrank <player>
+      /syokaku iscandidate <player>
+      /syokaku seerequirements <rank>
+      /syokaku seeplayerinfo <player>
+    permission: oyasai.syokaku
+  syokakumanager:
+    permission: oyasai.syokakumanager
+
+permissions:
+    oyasai.syokaku:
+        description: syokakuコマンドの使用権限
+        default: op
+    oyasai.syokakumanager:
+        description: syokakumanagerコマンドの使用権限
+        default: op
