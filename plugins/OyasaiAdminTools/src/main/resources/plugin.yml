@@ -17,9 +17,9 @@ commands:
     permission: oyasai.syokakumanager
 
 permissions:
-    oyasai.syokaku:
-        description: syokakuコマンドの使用権限
-        default: op
-    oyasai.syokakumanager:
-        description: syokakumanagerコマンドの使用権限
-        default: op
+  oyasai.syokaku:
+    description: syokakuコマンドの使用権限
+    default: op
+  oyasai.syokakumanager:
+    description: syokakumanagerコマンドの使用権限
+    default: op
