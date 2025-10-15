@@ -1,6 +1,7 @@
 package io.oyasai.vertex
 
 import io.oyasai.vertex.services.Service
+import io.oyasai.vertex.services.http.HttpService
 import io.oyasai.vertex.services.sentry.SentryService
 import io.oyasai.vertex.services.sociallikes.SocialLikesService
 import org.bukkit.plugin.java.JavaPlugin
@@ -23,6 +24,6 @@ class Vertex : JavaPlugin() {
 
   companion object {
     val plugin by lazy { getPlugin(Vertex::class.java) }
-    val services = listOf<Service>(SentryService, SocialLikesService)
+    val services = listOf<Service>(SentryService, SocialLikesService, HttpService)
   }
 }

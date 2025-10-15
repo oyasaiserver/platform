@@ -88,7 +88,7 @@ export class DockerStack extends OyasaiTerraformStack {
         init: true,
         networksAdvanced: [network],
         ports: objectToPorts({
-          tcp: [8100, 8192, 25565, 25575],
+          tcp: [80, 443, 8100, 8192, 25565, 25575],
           udp: [19132]
         }),
         env: objectToEnv({
@@ -104,9 +104,10 @@ export class DockerStack extends OyasaiTerraformStack {
             local: '5G'
           }),
           ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-          DISCORDSRV_TOKEN: this.secrets.DISCORD_TOKEN,
-          RCON_PASSWORD: this.secrets.RCON_PASSWORD,
-          DISCORD_WEBHOOK_URL: this.secrets.DISCORD_WEBHOOK_URL
+          ENVIRONMENT: secrets.ENVIRONMENT,
+          DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
+          RCON_PASSWORD: secrets.RCON_PASSWORD,
+          DISCORD_WEBHOOK_URL: secrets.DISCORD_WEBHOOK_URL
         }),
         healthcheck: {
           test: ['mc-health'],

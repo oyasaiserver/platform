@@ -9,7 +9,6 @@ export const local: ReadonlyArray<RegistryId> = [
   'plugmanx',
   'protocollib',
   'vault',
-  'nuvotifier',
   'vertex'
 ]
 
@@ -68,4 +67,8 @@ export const development: ReadonlyArray<RegistryId> = local.concat(
   'pvparena'
 )
 
-export const production: ReadonlyArray<RegistryId> = development.concat('discordsrv', 'bluemap')
+export const production: ReadonlyArray<RegistryId> = development.concat(
+  'discordsrv',
+  'bluemap',
+  'nuvotifier'
+)

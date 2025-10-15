@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-rm /data/plugins/*.jar
+rm -rf /data/plugins/*.jar
 rm -rf /data/plugins/.paper-remapped
 
 rsync -a /overlays/ /data/
