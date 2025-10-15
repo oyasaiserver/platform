@@ -89,7 +89,7 @@ export class DockerStack extends OyasaiTerraformStack {
         init: true,
         networksAdvanced: [network],
         ports: ports({
-          tcp: [8100, 8192, 25565, 25575],
+          tcp: [80, 443, 8100, 8192, 25565, 25575],
           udp: [19132]
         }),
         env: envs({
@@ -105,7 +105,8 @@ export class DockerStack extends OyasaiTerraformStack {
             local: '5G'
           }),
           ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-          RCON_PASSWORD: this.secrets.RCON_PASSWORD
+          RCON_PASSWORD: secrets.RCON_PASSWORD,
+          ENVIRONMENT: secrets.ENVIRONMENT
         }),
         healthcheck: {
           test: ['mc-health'],
