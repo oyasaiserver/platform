@@ -11,6 +11,11 @@
     "lint": "oxlint --fix",
     "update": "taze latest --recursive --install --write"
   },
+  "dependencies": {
+    "next": "^15.5.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
   "devDependencies": {
     "@types/node": "^24.7.2",
     "oxlint": "^1.23.0",
