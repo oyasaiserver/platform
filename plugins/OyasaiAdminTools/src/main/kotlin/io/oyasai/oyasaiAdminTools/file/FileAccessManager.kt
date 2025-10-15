@@ -10,11 +10,15 @@ object FileAccessManager {
   private val workerThread = Thread {
     while (true) {
       val task = writeQueue.take()
+      if (task == null) {
+        Thread.sleep(50)
+        continue
+      }
       for (attempt in 1..RETRY_LIMIT){
         try{
           task()
           break
-        }catch (e: IOException){
+        }catch (e: Exception){
           if(attempt == RETRY_LIMIT){
             e.printStackTrace()
           } else {
