@@ -6,6 +6,7 @@ import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
+import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
 import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
@@ -57,8 +58,7 @@ object Demote : CommandExecutor {
                   api.userManager.saveUser(user)
                   val statsData = getStats(player.uniqueId)
                   val temp = statsData.promotions
-
-                  statsData.promotions.records.add(
+                  val record =
                     PromotionRecord(
                       type = PromotionType.DEMOTE,
                       newRank = previousRank.groupName,
@@ -76,9 +76,10 @@ object Demote : CommandExecutor {
                       lastLv = Calculator.getLevel(player),
                       lastExp = statsData.exp,
                     )
-                  )
+
+                  statsData.promotions.records.add(record)
                   JsonUtils.saveUserJson(player.uniqueId)
-                  //                        statsData.promotions = temp
+                  SendEmbedMessage.sendNotification(player.name, sender.name, record)
                   sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに降格させました。")
                 } else {
                   sender.sendMessage("§e${player.name}さんは既に最低ランクです。")

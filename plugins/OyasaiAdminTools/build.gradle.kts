@@ -5,4 +5,5 @@ dependencies {
   compileOnly(project(":plugins:DynamicProfile"))
   implementation(libs.kotlin.stdlib)
   implementation(libs.gson)
+  implementation(libs.discord.webhooks)
 }
