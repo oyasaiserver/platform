@@ -12,6 +12,7 @@ class OyasaiAdminTools : JavaPlugin() {
   override fun onEnable() {
     plugin = this
     // Plugin startup logic
+    plugin.saveDefaultConfig()
 
     this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
     this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
