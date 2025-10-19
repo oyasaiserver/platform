@@ -1,5 +1,13 @@
 name: setup-secrets
 
+inputs:
+  client-id:
+    description: "Infisical Client ID"
+    required: true
+  client-secret:
+    description: "Infisical Client Secret"
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -7,5 +15,5 @@ runs:
       with:
         project-slug: 'platform'
         env-slug: ${{ env.ENVIRONMENT }}
-        client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-        client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+        client-id: ${{ inputs.client-id }}
+        client-secret: ${{ inputs.client-secret }}
