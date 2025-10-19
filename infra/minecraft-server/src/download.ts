@@ -1,4 +1,4 @@
-import { ServicesStack } from '@oyasaiserver/cdktf/stacks/services-stack'
+import { DockerStack } from '@oyasaiserver/cdktf/stacks/docker-stack'
 import { ModrinthV2Client } from '@xmcl/modrinth'
 import { ok } from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
@@ -25,7 +25,7 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
     case 'modrinth': {
       const project = await modrinth.getProject(definition.slug)
       const versions = await modrinth.getProjectVersions(project.id, {
-        gameVersions: createVersionsRange(ServicesStack.minecraftVersion),
+        gameVersions: createVersionsRange(DockerStack.minecraftVersion),
         loaders: ['bukkit', 'paper', 'spigot']
       })
       const url = versions
