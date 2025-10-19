@@ -6,7 +6,7 @@
   },
   "scripts": {
     "build": "cdktf synth",
-    "deploy": "cdktf deploy 'cloud,services' --auto-approve",
+    "deploy": "cdktf deploy '*' --auto-approve",
     "deploy:secrets": "cdktf deploy 'secrets' --auto-approve",
     "test:integration": "node --test"
   },
