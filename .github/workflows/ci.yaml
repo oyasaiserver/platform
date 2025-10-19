@@ -61,6 +61,7 @@ jobs:
       matrix:
         stack: ['secrets']
         environment: ['development', 'production']
+    environment: ${{ matrix.environment }}
     env:
       ENVIRONMENT: ${{ matrix.environment }}
     steps:
