@@ -75,12 +75,12 @@ jobs:
       - name: Download plugins
         run: |
           npm run download:plugins
-        working-directory: infra/minecraft-server
+        working-directory: packages/minecraft-server
       - name: Deploy infra
         run: |
           npm run build
           npm run deploy
-        working-directory: infra/cdktf
+        working-directory: packages/cdktf
 
   actions-timeline:
     needs:

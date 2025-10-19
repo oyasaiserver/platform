@@ -1,5 +1,5 @@
+import { getEnvironment } from '@oyasaiserver/secrets/environment'
 import { App } from 'cdktf'
-import { getEnvironment } from './secrets.ts'
 import { CloudflareStack } from './stacks/cloudflare-stack.ts'
 import { DockerStack } from './stacks/docker-stack.ts'
 import { SecretsStack } from './stacks/secrets-stack.ts'

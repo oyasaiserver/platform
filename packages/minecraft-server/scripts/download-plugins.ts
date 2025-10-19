@@ -1,7 +1,7 @@
-import { getEnvironment } from '@oyasaiserver/cdktf/secrets'
 import { development, local, production } from '@oyasaiserver/plugins'
 import { downloadJar } from '@oyasaiserver/plugins/download'
 import { registry } from '@oyasaiserver/plugins/registry'
+import { getEnvironment } from '@oyasaiserver/secrets/environment'
 import { glob, rm, writeFile } from 'node:fs/promises'
 import { format } from 'node:path'
 
