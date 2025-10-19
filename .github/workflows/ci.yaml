@@ -68,7 +68,7 @@ jobs:
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
       - run: |
-          npm run diff:${{ matrix.environment }}
+          npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
 
   actions-timeline:
