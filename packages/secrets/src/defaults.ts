@@ -1,4 +1,4 @@
-export const secrets = {
+export const defaults = {
   PUBLIC_IPV4: '192.0.2.0',
   CLOUDFLARE_ACCOUNT_ID: 'unset',
   CLOUDFLARE_API_TOKEN: 'unset_unset_unset_unset_unset_unset_unset',
