@@ -2,10 +2,10 @@ name: setup-secrets
 
 inputs:
   client-id:
-    description: "Infisical Client ID"
+    description: 'Infisical Client ID'
     required: true
   client-secret:
-    description: "Infisical Client Secret"
+    description: 'Infisical Client Secret'
     required: true
 
 runs:
