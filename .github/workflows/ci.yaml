@@ -53,6 +53,24 @@ jobs:
       - run: |
           npm run test:integration --workspaces --if-present
 
+  cdktf-no-drift:
+    runs-on: ubuntu-latest
+    name: "cdktf-no-drift-${{ matrix.stack }}-${{ matrix.environment }}"
+    strategy:
+      fail-fast: true
+      matrix:
+        stack: [ "secrets" ]
+        environment: [ "development", "production" ]
+    env:
+      ENVIRONMENT: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-terraform
+      - run: |
+          npm run diff:${{ matrix.environment }}
+        working-directory: packages/cdktf
+
   actions-timeline:
     needs:
       - nocommit

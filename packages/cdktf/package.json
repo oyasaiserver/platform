@@ -8,6 +8,8 @@
     "build": "cdktf synth",
     "deploy": "cdktf deploy '*' --auto-approve",
     "deploy:secrets": "cdktf deploy 'secrets' --auto-approve",
+    "diff": "cdktf diff",
+    "diff:secrets": "cdktf diff 'secrets'",
     "test:integration": "node --test"
   },
   "dependencies": {

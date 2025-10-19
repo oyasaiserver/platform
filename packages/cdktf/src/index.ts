@@ -10,9 +10,6 @@ const app = new App()
 
 if (environment !== 'local') {
   new CloudflareStack(app, 'cloudflare')
-}
-
-if (environment === 'production') {
   new SecretsStack(app, 'secrets')
 }
 
