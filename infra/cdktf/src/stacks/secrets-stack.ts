@@ -1,0 +1,45 @@
+import type { Construct } from 'constructs'
+import { Project } from 'terraform-providers/infisical/project'
+import { ProjectEnvironment } from 'terraform-providers/infisical/project-environment'
+import { InfisicalProvider } from 'terraform-providers/infisical/provider'
+import { Secret } from 'terraform-providers/infisical/secret'
+import { defaults, nonLocalEnvironments, type SecretKey } from '../secrets.ts'
+import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
+
+export class SecretsStack extends OyasaiTerraformStack {
+  public constructor(scope: Construct, id: string) {
+    super(scope, id)
+
+    new InfisicalProvider(this, id, {
+      auth: {
+        universal: {
+          clientId: this.secrets.INFISICAL_CLIENT_ID,
+          clientSecret: this.secrets.INFISICAL_CLIENT_SECRET
+        }
+      }
+    })
+
+    const project = new Project(this, 'project', {
+      name: 'platform',
+      slug: 'platform'
+    })
+
+    for (const environment of nonLocalEnvironments) {
+      new ProjectEnvironment(this, `project-environment-${environment}`, {
+        projectId: project.id,
+        name: environment,
+        slug: environment
+      })
+
+      for (const key of Object.keys(defaults) as SecretKey[]) {
+        new Secret(this, `secret-${key}-${environment}`, {
+          workspaceId: project.id,
+          envSlug: environment,
+          folderPath: '/',
+          name: key,
+          value: this.secrets[key]
+        })
+      }
+    }
+  }
+}

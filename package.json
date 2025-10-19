@@ -12,6 +12,7 @@
     "update": "taze latest --recursive --install --write"
   },
   "devDependencies": {
+    "@infisical/cli": "^0.43.12",
     "@types/node": "^24.7.2",
     "oxlint": "^1.23.0",
     "prettier": "^3.6.2",

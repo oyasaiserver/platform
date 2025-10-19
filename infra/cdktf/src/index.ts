@@ -1,15 +1,21 @@
 import { App } from 'cdktf'
-import { createTerraformSensitiveSecrets } from './secrets.ts'
-import { CloudflareStack } from './stacks/cloudflare-stack.ts'
-import { DockerStack } from './stacks/docker-stack.ts'
+import { getEnvironment } from './secrets.ts'
+import { CloudStack } from './stacks/cloud-stack.ts'
+import { SecretsStack } from './stacks/secrets-stack.ts'
+import { ServicesStack } from './stacks/services-stack.ts'
+
+const environment = getEnvironment()
 
 const app = new App()
 
-const secrets = await createTerraformSensitiveSecrets()
-
-if (secrets.ENVIRONMENT !== 'local') {
-  new CloudflareStack(app, 'cloudflare', secrets)
+if (environment !== 'local') {
+  new CloudStack(app, 'cloud')
 }
-new DockerStack(app, 'docker', secrets)
+
+if (environment === 'production') {
+  new SecretsStack(app, 'secrets')
+}
+
+new ServicesStack(app, 'services')
 
 app.synth()

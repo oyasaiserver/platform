@@ -3,23 +3,22 @@ import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/inde
 import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
 import { readdirSync } from 'node:fs'
 import { directory } from '../fs.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class CloudflareStack extends OyasaiTerraformStack {
+export class CloudStack extends OyasaiTerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
   private readonly workers = readdirSync(`${directory.root}/apps`)
 
-  public constructor(scope: Construct, id: string, secrets: Secrets) {
-    super(scope, id, secrets)
+  public constructor(scope: Construct, id: string) {
+    super(scope, id)
 
     new CloudflareProvider(this, id, {
-      apiToken: secrets.CLOUDFLARE_API_TOKEN
+      apiToken: this.secrets.CLOUDFLARE_API_TOKEN
     })
 
     new ZoneDnssec(this, 'zone-dnssec', {
@@ -30,10 +29,10 @@ export class CloudflareStack extends OyasaiTerraformStack {
     const rootDnsRecord = new DnsRecord(this, this.envAwareId('root-dns-record'), {
       ttl: 1, // automatic
       zoneId: this.zoneId,
-      name: secrets.ENVIRONMENT === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
+      name: this.environment === 'production' ? 'oyasai.io' : 'dev.oyasai.io',
       type: 'A',
       proxied: false,
-      content: secrets.PUBLIC_IPV4
+      content: this.secrets.PUBLIC_IPV4
     })
 
     for (const worker of this.workers) {
@@ -56,8 +55,8 @@ export class CloudflareStack extends OyasaiTerraformStack {
     }
 
     new R2Bucket(this, this.envAwareId('r2-bucket'), {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-      name: secrets.R2_BUCKET_NAME
+      accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+      name: this.secrets.R2_BUCKET_NAME
     })
   }
 }
