@@ -64,13 +64,13 @@ jobs:
     env:
       ENVIRONMENT: ${{ matrix.environment }}
     steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-terraform
       - uses: ./.github/actions/setup-secrets
         with:
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      - uses: actions/checkout@v5.0.0
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-terraform
       - run: |
           npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
