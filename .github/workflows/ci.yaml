@@ -61,10 +61,13 @@ jobs:
       matrix:
         stack: ['secrets']
         environment: ['development', 'production']
-    environment: ${{ matrix.environment }}
     env:
       ENVIRONMENT: ${{ matrix.environment }}
     steps:
+      - uses: ./.github/actions/setup-secrets
+        with:
+          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
+          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
