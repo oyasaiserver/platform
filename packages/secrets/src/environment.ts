@@ -1,9 +1,7 @@
 import { ok } from 'node:assert'
 import { env } from 'node:process'
 
-export const nonLocalEnvironments = ['development', 'production'] as const
-
-export const environments = [...nonLocalEnvironments, 'local'] as const
+export const environments = ['local', 'development', 'production'] as const
 
 export type Environment = (typeof environments)[number]
 

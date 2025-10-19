@@ -55,12 +55,12 @@ jobs:
 
   cdktf-no-drift:
     runs-on: ubuntu-latest
-    name: "cdktf-no-drift-${{ matrix.stack }}-${{ matrix.environment }}"
+    name: 'cdktf-no-drift-${{ matrix.stack }}-${{ matrix.environment }}'
     strategy:
       fail-fast: true
       matrix:
-        stack: [ "secrets" ]
-        environment: [ "development", "production" ]
+        stack: ['secrets']
+        environment: ['development', 'production']
     env:
       ENVIRONMENT: ${{ matrix.environment }}
     steps:
