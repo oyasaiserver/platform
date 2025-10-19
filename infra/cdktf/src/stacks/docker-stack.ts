@@ -8,7 +8,7 @@ import { directory, hashPaths } from '../fs.ts'
 import { objectToEnv, objectToPorts } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class ServicesStack extends OyasaiTerraformStack {
+export class DockerStack extends OyasaiTerraformStack {
   public static readonly minecraftVersion = '1.21.5'
 
   private workdir = join(
@@ -94,7 +94,7 @@ export class ServicesStack extends OyasaiTerraformStack {
         env: objectToEnv({
           EULA: true,
           TYPE: 'PURPUR',
-          VERSION: ServicesStack.minecraftVersion,
+          VERSION: DockerStack.minecraftVersion,
           USE_MEOWICE_FLAGS: this.environment !== 'local',
           ENABLE_ROLLING_LOGS: true,
           LOG_TIMESTAMP: true,

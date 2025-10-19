@@ -1,21 +1,21 @@
 import { App } from 'cdktf'
 import { getEnvironment } from './secrets.ts'
-import { CloudStack } from './stacks/cloud-stack.ts'
+import { CloudflareStack } from './stacks/cloudflare-stack.ts'
+import { DockerStack } from './stacks/docker-stack.ts'
 import { SecretsStack } from './stacks/secrets-stack.ts'
-import { ServicesStack } from './stacks/services-stack.ts'
 
 const environment = getEnvironment()
 
 const app = new App()
 
 if (environment !== 'local') {
-  new CloudStack(app, 'cloud')
+  new CloudflareStack(app, 'cloudflare')
 }
 
 if (environment === 'production') {
   new SecretsStack(app, 'secrets')
 }
 
-new ServicesStack(app, 'services')
+new DockerStack(app, 'docker')
 
 app.synth()
