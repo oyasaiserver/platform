@@ -1,7 +1,8 @@
+import { createSecrets, type Secrets } from '@oyasaiserver/secrets'
+import { getEnvironment, type Environment } from '@oyasaiserver/secrets/environment'
 import { CloudBackend, Fn, LocalBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
 import { mapValues } from '../object.ts'
-import { createSecrets, type Environment, getEnvironment, type Secrets } from '../secrets.ts'
 
 /**
  * An opinionated stack for managing Oyasai infrastructure.

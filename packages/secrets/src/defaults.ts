@@ -1,0 +1,23 @@
+export const defaults = {
+  PUBLIC_IPV4: '192.0.2.0',
+  CLOUDFLARE_ACCOUNT_ID: 'unset',
+  CLOUDFLARE_API_TOKEN: 'unset_unset_unset_unset_unset_unset_unset',
+  CLOUDFLARE_SECRET_ACCESS_KEY: 'unset',
+  CLOUDFLARE_ACCESS_KEY_ID: 'unset',
+  R2_BUCKET_NAME: 'unset',
+  RESTIC_PASSWORD: 'unset',
+  GITHUB_APP_ID: 'unset',
+  GITHUB_APP_INSTALLATION_ID: 'unset',
+  GITHUB_APP_PEM_FILE: 'unset',
+  TF_API_TOKEN: 'unset',
+  TF_TOKEN_app_terraform_io: 'unset',
+  DISCORD_TOKEN: 'unset',
+  RCON_PASSWORD: 'unset',
+  MARIADB_PASSWORD: 'unset',
+  DISCORD_WEBHOOK_URL: 'unset',
+  TLS_CA_PEM: 'unset',
+  TLS_CERT_PEM: 'unset',
+  TLS_KEY_PEM: 'unset',
+  INFISICAL_CLIENT_ID: 'unset',
+  INFISICAL_CLIENT_SECRET: 'unset'
+} as const

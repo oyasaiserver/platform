@@ -1,9 +1,10 @@
+import type { SecretKey } from '@oyasaiserver/secrets'
+import { nonLocalEnvironments } from '@oyasaiserver/secrets/environment'
 import type { Construct } from 'constructs'
 import { Project } from 'terraform-providers/infisical/project'
 import { ProjectEnvironment } from 'terraform-providers/infisical/project-environment'
 import { InfisicalProvider } from 'terraform-providers/infisical/provider'
 import { Secret } from 'terraform-providers/infisical/secret'
-import { defaults, nonLocalEnvironments, type SecretKey } from '../secrets.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class SecretsStack extends OyasaiTerraformStack {
@@ -31,7 +32,7 @@ export class SecretsStack extends OyasaiTerraformStack {
         slug: environment
       })
 
-      for (const key of Object.keys(defaults) as SecretKey[]) {
+      for (const key of Object.keys(this.secrets) as SecretKey[]) {
         new Secret(this, `secret-${key}-${environment}`, {
           workspaceId: project.id,
           envSlug: environment,

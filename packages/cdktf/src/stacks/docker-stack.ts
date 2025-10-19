@@ -32,7 +32,7 @@ export class DockerStack extends OyasaiTerraformStack {
           }
     )
 
-    const minecraftServerPath = join(directory.root, 'infra/minecraft-server')
+    const minecraftServerPath = join(directory.root, 'packages/minecraft-server')
     const images = {
       mariadb: new Image(this, this.envAwareId('mariadb-image'), {
         name: 'mariadb:10.4.28'
