@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      #  NOMERGE
+      - feat/infisical
   workflow_dispatch:
     inputs:
       environment:
@@ -40,10 +42,10 @@ jobs:
           - wiki
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
-      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/setup-secrets
       - run: |
           npm run build --if-present
           npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null
@@ -57,12 +59,12 @@ jobs:
     environment: ${{ needs.envs.outputs.environment }}
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
-      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-secrets
       - name: Build plugins
         run: |
           ./gradlew build --parallel

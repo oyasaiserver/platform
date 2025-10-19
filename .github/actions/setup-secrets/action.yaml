@@ -1,0 +1,11 @@
+name: setup-secrets
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: infisical/secrets-action@v1.0.9
+      with:
+        project-slug: 'platform'
+        env-slug: ${{ env.ENVIRONMENT }}
+        client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
+        client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}

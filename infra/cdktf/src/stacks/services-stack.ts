@@ -2,34 +2,33 @@ import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
-import type { Secrets } from '@oyasaiserver/secrets'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory, hashPaths } from '../fs.ts'
 import { objectToEnv, objectToPorts } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class DockerStack extends OyasaiTerraformStack {
+export class ServicesStack extends OyasaiTerraformStack {
   public static readonly minecraftVersion = '1.21.5'
 
   private workdir = join(
-    this.secrets.ENVIRONMENT === 'local' ? directory.root : '/opt/platform',
-    this.secrets.ENVIRONMENT
+    this.environment === 'local' ? directory.root : '/opt/platform',
+    this.environment
   )
 
-  public constructor(scope: Construct, id: string, secrets: Secrets) {
-    super(scope, id, secrets)
+  public constructor(scope: Construct, id: string) {
+    super(scope, id)
 
     new DockerProvider(
       this,
       id,
-      this.secrets.ENVIRONMENT === 'local'
+      this.environment === 'local'
         ? { host: 'unix:///var/run/docker.sock' }
         : {
-            host: `tcp://${secrets.PUBLIC_IPV4}:2376`,
-            caMaterial: secrets.TLS_CA_PEM,
-            certMaterial: secrets.TLS_CERT_PEM,
-            keyMaterial: secrets.TLS_KEY_PEM
+            host: `tcp://${this.secrets.PUBLIC_IPV4}:2376`,
+            caMaterial: this.secrets.TLS_CA_PEM,
+            certMaterial: this.secrets.TLS_CERT_PEM,
+            keyMaterial: this.secrets.TLS_KEY_PEM
           }
     )
 
@@ -60,7 +59,7 @@ export class DockerStack extends OyasaiTerraformStack {
       name: 'mariadb',
       restart: 'unless-stopped',
       env: objectToEnv({
-        MARIADB_ROOT_PASSWORD: secrets.MARIADB_PASSWORD
+        MARIADB_ROOT_PASSWORD: this.secrets.MARIADB_PASSWORD
       }),
       networksAdvanced: [network],
       volumes: [
@@ -95,8 +94,8 @@ export class DockerStack extends OyasaiTerraformStack {
         env: objectToEnv({
           EULA: true,
           TYPE: 'PURPUR',
-          VERSION: DockerStack.minecraftVersion,
-          USE_MEOWICE_FLAGS: secrets.ENVIRONMENT !== 'local',
+          VERSION: ServicesStack.minecraftVersion,
+          USE_MEOWICE_FLAGS: this.environment !== 'local',
           ENABLE_ROLLING_LOGS: true,
           LOG_TIMESTAMP: true,
           MEMORY: this.envAwareConfig({
@@ -105,9 +104,9 @@ export class DockerStack extends OyasaiTerraformStack {
             local: '5G'
           }),
           ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-          DISCORDSRV_TOKEN: secrets.DISCORD_TOKEN,
-          RCON_PASSWORD: secrets.RCON_PASSWORD,
-          DISCORD_WEBHOOK_URL: secrets.DISCORD_WEBHOOK_URL
+          DISCORDSRV_TOKEN: this.secrets.DISCORD_TOKEN,
+          RCON_PASSWORD: this.secrets.RCON_PASSWORD,
+          DISCORD_WEBHOOK_URL: this.secrets.DISCORD_WEBHOOK_URL
         }),
         healthcheck: {
           test: ['mc-health'],
@@ -126,15 +125,15 @@ export class DockerStack extends OyasaiTerraformStack {
 
     const r2CommonEnv = {
       BACKUP_METHOD: 'restic',
-      RESTIC_PASSWORD: secrets.RESTIC_PASSWORD,
-      AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
-      AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+      RESTIC_PASSWORD: this.secrets.RESTIC_PASSWORD,
+      AWS_ACCESS_KEY_ID: this.secrets.CLOUDFLARE_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY: this.secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
       RESTIC_VERBOSE: true,
       // bucket is production by default
-      RESTIC_REPOSITORY: `s3:https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/production/minecraft-main-backup`
+      RESTIC_REPOSITORY: `s3:https://${this.secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/production/minecraft-main-backup`
     } as const
 
-    if (secrets.ENVIRONMENT === 'production') {
+    if (this.environment === 'production') {
       new Container(this, this.envAwareId('minecraft-backup-container'), {
         name: 'minecraft-main-backup',
         dependsOn: [minecraftMainContainer],
@@ -144,7 +143,7 @@ export class DockerStack extends OyasaiTerraformStack {
         env: objectToEnv({
           ...r2CommonEnv,
           RCON_HOST: 'minecraft-main',
-          RCON_PASSWORD: secrets.RCON_PASSWORD,
+          RCON_PASSWORD: this.secrets.RCON_PASSWORD,
           EXCLUDES: '*.jar,cache,logs,*.tmp,bluemap',
           BACKUP_INTERVAL: '6h',
           PRUNE_RESTIC_RETENTION: '--keep-daily 7 --keep-weekly 4 --keep-monthly 3'
@@ -168,13 +167,13 @@ export class DockerStack extends OyasaiTerraformStack {
         env: objectToEnv({
           DB_SERVER: 'mariadb',
           DB_USER: 'root',
-          DB_PASS: secrets.MARIADB_PASSWORD,
+          DB_PASS: this.secrets.MARIADB_PASSWORD,
           DB_DUMP_FREQUENCY: 360,
-          DB_DUMP_TARGET: `s3://${secrets.R2_BUCKET_NAME}/mariadb-backup`,
-          AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
-          AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+          DB_DUMP_TARGET: `s3://${this.secrets.R2_BUCKET_NAME}/mariadb-backup`,
+          AWS_ACCESS_KEY_ID: this.secrets.CLOUDFLARE_ACCESS_KEY_ID,
+          AWS_SECRET_ACCESS_KEY: this.secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
           AWS_REGION: 'auto',
-          AWS_ENDPOINT_URL: `https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+          AWS_ENDPOINT_URL: `https://${this.secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
           DB_DUMP_COMPRESSION: 'gzip',
           DB_DUMP_RETENTION: '14d',
           DB_DEBUG: true
@@ -182,7 +181,7 @@ export class DockerStack extends OyasaiTerraformStack {
       })
     }
 
-    if (secrets.ENVIRONMENT === 'development') {
+    if (this.environment === 'development') {
       // TODO restore mc data from backup
     }
   }

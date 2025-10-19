@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "vitepress build",
-    "deploy": "secrets -- wrangler deploy",
+    "deploy": "wrangler deploy",
     "dev": "vitepress dev",
     "preview": "vitepress preview"
   },
