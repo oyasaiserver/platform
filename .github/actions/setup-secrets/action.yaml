@@ -15,5 +15,5 @@ runs:
       with:
         project-slug: 'platform'
         env-slug: ${{ env.ENVIRONMENT }}
-        client-id: ${{ inputs.client-id }}
-        client-secret: ${{ inputs.client-secret }}
+        client-id: 'nocomit'
+        client-secret: 'nocomit'
