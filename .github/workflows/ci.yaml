@@ -72,6 +72,7 @@ jobs:
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: |
+          set -e
           npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
         env:
