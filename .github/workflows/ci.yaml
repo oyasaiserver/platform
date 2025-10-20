@@ -57,7 +57,6 @@ jobs:
     runs-on: ubuntu-latest
     name: 'cdktf-no-drift-${{ matrix.stack }}-${{ matrix.environment }}'
     strategy:
-      fail-fast: true
       matrix:
         stack: ['secrets']
         environment: ['development', 'production']
@@ -72,7 +71,6 @@ jobs:
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: |
-          set -e
           npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
         env:
