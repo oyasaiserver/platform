@@ -63,7 +63,6 @@ jobs:
         environment: ['development', 'production']
     env:
       ENVIRONMENT: ${{ matrix.environment }}
-      TF_CLI_ARGS_plan: '-detailed-exitcode'
     steps:
       - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/setup-node
@@ -75,6 +74,8 @@ jobs:
       - run: |
           npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
+        env:
+          TF_CLI_ARGS_plan: '-detailed-exitcode'
 
   actions-timeline:
     needs:
