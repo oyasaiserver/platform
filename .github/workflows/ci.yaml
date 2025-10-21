@@ -67,8 +67,8 @@ jobs:
       - uses: ./.github/actions/setup-terraform
       - uses: ./.github/actions/setup-secrets
         with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          client-id: ${{ secrets.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID }}
+          client-secret: ${{ secrets.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET }}
       - run: |
           npm run diff:${{ matrix.stack }}
         working-directory: packages/cdktf
