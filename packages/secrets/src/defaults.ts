@@ -19,5 +19,6 @@ export const defaults = {
   TLS_CERT_PEM: 'unset',
   TLS_KEY_PEM: 'unset',
   INFISICAL_CLIENT_ID: 'unset',
-  INFISICAL_CLIENT_SECRET: 'unset'
+  INFISICAL_CLIENT_SECRET: 'unset',
+  NOMERGE: 'nomerge'
 } as const
