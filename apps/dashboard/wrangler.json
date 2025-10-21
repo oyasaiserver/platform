@@ -3,9 +3,7 @@
   "main": ".open-next/worker.js",
   "minify": true,
   "compatibility_date": "2025-03-25",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
