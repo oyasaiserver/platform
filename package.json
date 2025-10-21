@@ -20,6 +20,6 @@
     "prettier-plugin-sh": "^0.18.0",
     "taze": "^19.8.1",
     "typescript": "^5.9.3",
-    "wrangler": "^4.43.0"
+    "wrangler": "^4.44.0"
   }
 }
