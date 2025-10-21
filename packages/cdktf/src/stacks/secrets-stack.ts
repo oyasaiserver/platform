@@ -10,7 +10,14 @@ export class SecretsStack extends OyasaiTerraformStack {
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
-    new InfisicalProvider(this, id)
+    new InfisicalProvider(this, id, {
+      auth: {
+        universal: {
+          clientId: this.secrets.INFISICAL_CLIENT_ID,
+          clientSecret: this.secrets.INFISICAL_CLIENT_SECRET
+        }
+      }
+    })
 
     const project = new DataInfisicalProjects(this, 'project', {
       slug: 'platform'
