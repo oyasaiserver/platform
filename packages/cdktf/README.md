@@ -22,24 +22,22 @@ Secrets Stack は他と異なり、自動ではなく **手動デプロイ** が
 - development: `"dev"`
 
 1. デフォルト値を定義する（ローカル環境用）
+   `packages/secrets/src/defaults.ts`
 
-`packages/secrets/src/defaults.ts`
-
-```diff
-export const defaults = {
-  ...
-+ HELLO_WORLD: "unset"
-}
-```
-
+   ```diff
+   export const defaults = {
+   ...
+   + HELLO_WORLD: "unset"
+   }
+   ```
 2. 各環境にデプロイする
 
-```
-# production
-HELLO_WORLD="prod" ENVIRONMENT=production infisical run --env=production -- npm run deploy:secrets -w packages/cdktf
-```
+  ```shell
+  # production
+  HELLO_WORLD="prod" ENVIRONMENT=production infisical run --env=production -- npm run deploy:secrets -w packages/cdktf
+  ```
 
-```
-# development
-HELLO_WORLD="dev" ENVIRONMENT=development infisical run --env=development -- npm run deploy:secrets -w packages/cdktf
-```
+  ```shell
+  # development
+  HELLO_WORLD="dev" ENVIRONMENT=development infisical run --env=development -- npm run deploy:secrets -w packages/cdktf
+  ```
