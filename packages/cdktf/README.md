@@ -20,8 +20,13 @@ Secrets Stack は他と異なり、自動ではなく **手動デプロイ** が
 
 - production: `"prod"`
 - development: `"dev"`
+- local (デフォルト): `"unset"`
 
-1. デフォルト値を定義する（ローカル環境用）
+1. Infisical にログイン
+   ```shell
+   infisical login
+   ```
+2. デフォルト値を定義する（ローカル環境用）
    `packages/secrets/src/defaults.ts`
 
    ```diff
@@ -31,7 +36,7 @@ Secrets Stack は他と異なり、自動ではなく **手動デプロイ** が
    }
    ```
 
-2. 各環境にデプロイする
+3. 各環境にデプロイする
 
 ```shell
 # production
