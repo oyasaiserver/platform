@@ -8,6 +8,7 @@
     "build": "cdktf synth",
     "deploy": "cdktf deploy '*' --auto-approve",
     "deploy:secrets": "cdktf deploy 'secrets' --auto-approve",
+    "deploy:github": "cdktf deploy 'github' --auto-approve",
     "diff": "cdktf diff",
     "diff:secrets": "cdktf diff 'secrets'",
     "test:integration": "node --test"
@@ -17,7 +18,8 @@
     "@cdktf/provider-docker": "^12.0.2",
     "@cdktf/provider-github": "^15.0.0",
     "constructs": "^10.4.2",
-    "terraform-providers": "^0.0.15"
+    "terraform-providers": "^0.0.15",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "cdktf": "^0.21.0",
