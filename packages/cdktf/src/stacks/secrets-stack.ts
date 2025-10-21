@@ -1,6 +1,6 @@
 import type { SecretKey } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
-import { Project } from 'terraform-providers/infisical/project'
+import { DataInfisicalProjects } from 'terraform-providers/infisical/data-infisical-projects'
 import { ProjectEnvironment } from 'terraform-providers/infisical/project-environment'
 import { InfisicalProvider } from 'terraform-providers/infisical/provider'
 import { Secret } from 'terraform-providers/infisical/secret'
@@ -19,12 +19,11 @@ export class SecretsStack extends OyasaiTerraformStack {
       }
     })
 
-    const project = new Project(this, 'project', {
-      name: 'platform',
+    const project = new DataInfisicalProjects(this, 'project', {
       slug: 'platform'
     })
 
-    new ProjectEnvironment(this, this.envAwareId('project-environment'), {
+    const environment = new ProjectEnvironment(this, this.envAwareId('project-environment'), {
       projectId: project.id,
       name: this.environment,
       slug: this.environment
@@ -33,7 +32,7 @@ export class SecretsStack extends OyasaiTerraformStack {
     for (const key of Object.keys(this.secrets) as SecretKey[]) {
       new Secret(this, this.envAwareId('secret', key), {
         workspaceId: project.id,
-        envSlug: this.environment,
+        envSlug: environment.slug,
         folderPath: '/',
         name: key,
         value: this.secrets[key]
