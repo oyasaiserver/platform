@@ -17,7 +17,5 @@ export const defaults = {
   DISCORD_WEBHOOK_URL: 'unset',
   TLS_CA_PEM: 'unset',
   TLS_CERT_PEM: 'unset',
-  TLS_KEY_PEM: 'unset',
-  INFISICAL_CLIENT_ID: 'unset',
-  INFISICAL_CLIENT_SECRET: 'unset'
+  TLS_KEY_PEM: 'unset'
 } as const
