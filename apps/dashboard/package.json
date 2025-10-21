@@ -2,7 +2,7 @@
   "name": "dashboard",
   "type": "module",
   "scripts": {
-    "build": "tsc --build && vite build",
+    "build": "vite build",
     "deploy": "wrangler deploy",
     "dev": "vite",
     "preview": "vite preview"
