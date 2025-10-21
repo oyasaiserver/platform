@@ -3,9 +3,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc --build && vite build",
+    "deploy": "wrangler deploy",
     "dev": "vite",
-    "preview": "vite preview",
-    "deploy": "wrangler deploy"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
