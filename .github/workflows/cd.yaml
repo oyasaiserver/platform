@@ -37,6 +37,7 @@ jobs:
     strategy:
       matrix:
         app:
+          - dashboard
           - wiki
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
