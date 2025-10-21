@@ -55,7 +55,6 @@ jobs:
 
   cdktf-no-drift:
     runs-on: ubuntu-latest
-    name: 'cdktf-no-drift-${{ matrix.stack }}-${{ matrix.environment }}'
     strategy:
       matrix:
         stack: ['secrets']
