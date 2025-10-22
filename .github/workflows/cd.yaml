@@ -38,6 +38,7 @@ jobs:
       matrix:
         app:
           - dashboard
+          - hello-world
           - wiki
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
@@ -50,7 +51,7 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: |
           npm run build --if-present
-          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }} > /dev/null
+          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }}
         working-directory: apps/${{ matrix.app }}
 
   cdktf:
