@@ -10,7 +10,6 @@
     "deploy:github": "cdktf deploy 'github' --auto-approve",
     "deploy:secrets": "cdktf deploy 'secrets' --auto-approve",
     "diff": "cdktf diff",
-    "diff:github": "cdktf diff 'github' --auto-approve",
     "diff:secrets": "cdktf diff 'secrets'",
     "test:integration": "node --test"
   },
