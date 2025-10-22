@@ -39,8 +39,6 @@ jobs:
         app:
           - dashboard
           - wiki
-    env:
-      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -59,8 +57,6 @@ jobs:
       - deploy-apps
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.environment }}
-    env:
-      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-java

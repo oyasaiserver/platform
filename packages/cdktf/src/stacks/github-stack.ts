@@ -1,3 +1,4 @@
+import { ActionsEnvironmentVariable } from '@cdktf/provider-github/lib/actions-environment-variable/index.js'
 import { DataGithubRepository } from '@cdktf/provider-github/lib/data-github-repository/index.js'
 import { GithubProvider } from '@cdktf/provider-github/lib/provider/index.js'
 import { RepositoryEnvironment } from '@cdktf/provider-github/lib/repository-environment/index.js'
@@ -21,9 +22,20 @@ export class GitHubStack extends OyasaiTerraformStack {
       name: 'platform'
     })
 
-    new RepositoryEnvironment(this, this.envAwareId('repository-environment'), {
+    const repositoryEnvironment = new RepositoryEnvironment(
+      this,
+      this.envAwareId('repository-environment'),
+      {
+        repository: repository.name,
+        environment: this.environment
+      }
+    )
+
+    new ActionsEnvironmentVariable(this, this.envAwareId('actions-environment-variable'), {
       repository: repository.name,
-      environment: this.environment
+      environment: repositoryEnvironment.environment,
+      variableName: 'ENVIRONMENT',
+      value: this.environment
     })
   }
 }
