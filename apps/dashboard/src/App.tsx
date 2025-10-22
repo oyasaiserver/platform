@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 import data from './app/dashboard/data.json'
 
-export default function App() {
+export function App() {
   return (
     <SidebarProvider
       style={
