@@ -38,6 +38,7 @@ jobs:
       matrix:
         app:
           - dashboard
+          - hello-world
           - wiki
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
