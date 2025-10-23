@@ -12,11 +12,10 @@ jobs:
         run: |
           [[ "$GITHUB_BASE_REF" == main ]]
 
-  pr-title-lint:
+  pr-title:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
     steps:
-      - uses: amannn/action-semantic-pull-request@v6.1.1
+      - run: |
+          <<<"$PR_TITLE" grep '^\(build\|chore\|ci\|docs\|feat\|fix\|perf\|p\?refactor\|revert\|style\|test\)\(([a-zA-Z0-9_-]\+)\)\?!\?: '
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: "${{ github.event.pull_request.title }}"
