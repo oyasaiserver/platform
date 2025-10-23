@@ -18,4 +18,4 @@ jobs:
       - run: |
           <<<"$PR_TITLE" grep '^\(build\|chore\|ci\|docs\|feat\|fix\|perf\|p\?refactor\|revert\|style\|test\)\(([a-zA-Z0-9_-]\+)\)\?!\?: '
         env:
-          PR_TITLE: "${{ github.event.pull_request.title }}"
+          PR_TITLE: '${{ github.event.pull_request.title }}'
