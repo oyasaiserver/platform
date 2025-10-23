@@ -17,13 +17,11 @@ object HttpService : Service {
   @OptIn(DelicateCoroutinesApi::class)
   override fun onEnable() {
     httpJob = GlobalScope.launch {
-      httpServer = embeddedServer(factory = CIO, port = 80) {
+      httpServer = embeddedServer(factory = CIO) {
+        install(Resources)
         routing {
-          install(Resources)
-          routing {
-            get<Health> {
-              call.respondText("OK")
-            }
+          get<Health> {
+            call.respondText("OK")
           }
         }
       }.start(wait = false)
@@ -31,9 +29,7 @@ object HttpService : Service {
   }
 
   override fun onDisable() {
+    runBlocking { httpJob?.cancelAndJoin() }
     httpServer?.stop()
-    runBlocking {
-      httpJob?.cancelAndJoin()
-    }
   }
 }
