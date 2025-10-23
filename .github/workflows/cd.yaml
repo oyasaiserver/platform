@@ -45,14 +45,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: |
           npm run build --if-present
           npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }}
         working-directory: apps/${{ matrix.app }}
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }},
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }},
 
   cdktf:
     needs:
@@ -67,10 +66,6 @@ jobs:
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Build plugins
         run: |
           ./gradlew build --parallel
@@ -83,6 +78,28 @@ jobs:
           npm run build
           npm run deploy
         working-directory: packages/cdktf
+        env:
+          PUBLIC_IPV4: ${{ secrets.PUBLIC_IPV4 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          RESTIC_PASSWORD: ${{ secrets.RESTIC_PASSWORD }}
+          GH_APP_ID: ${{ secrets.GH_APP_ID }}
+          GH_APP_INSTALLATION_ID: ${{ secrets.GH_APP_INSTALLATION_ID }}
+          GH_APP_PEM_FILE: ${{ secrets.GH_APP_PEM_FILE }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          RCON_PASSWORD: ${{ secrets.RCON_PASSWORD }}
+          MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TLS_CA_PEM: ${{ secrets.TLS_CA_PEM }}
+          TLS_CERT_PEM: ${{ secrets.TLS_CERT_PEM }}
+          TLS_KEY_PEM: ${{ secrets.TLS_KEY_PEM }}
+          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
 
   actions-timeline:
     needs:

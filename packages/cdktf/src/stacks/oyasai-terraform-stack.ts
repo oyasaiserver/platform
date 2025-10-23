@@ -1,5 +1,5 @@
-import { createSecrets, type Secrets } from '@oyasaiserver/secrets'
-import { getEnvironment, type Environment } from '@oyasaiserver/secrets/environment'
+import { createSecrets } from '@oyasaiserver/secrets'
+import { type Environment, getEnvironment } from '@oyasaiserver/secrets/environment'
 import { CloudBackend, Fn, LocalBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
 import { mapValues } from '../object.ts'
@@ -8,13 +8,11 @@ import { mapValues } from '../object.ts'
  * An opinionated stack for managing Oyasai infrastructure.
  */
 export abstract class OyasaiTerraformStack extends TerraformStack {
-  protected readonly environment: Environment
-  protected readonly secrets: Secrets
+  protected readonly environment = getEnvironment()
+  protected readonly secrets = this.createTerraformSensitiveSecrets()
 
   protected constructor(scope: Construct, id: string) {
     super(scope, id)
-    this.environment = getEnvironment()
-    this.secrets = this.createTerraformSensitiveSecrets(this.environment)
 
     if (this.environment === 'local') {
       new LocalBackend(this)
@@ -37,9 +35,10 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
     return config[this.environment]
   }
 
-  private createTerraformSensitiveSecrets(environment: Environment): Secrets {
-    return mapValues(createSecrets(environment), (_, value) => {
-      return Fn.sensitive(value)
+  private createTerraformSensitiveSecrets() {
+    const secrets = createSecrets()
+    return mapValues(secrets, (_, value) => {
+      return Fn.sensitive(value) as string
     })
   }
 }
