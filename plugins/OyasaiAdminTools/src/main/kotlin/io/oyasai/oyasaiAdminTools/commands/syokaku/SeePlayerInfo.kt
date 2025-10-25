@@ -3,6 +3,7 @@ package io.oyasai.oyasaiAdminTools.commands.syokaku
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
+import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -41,38 +42,43 @@ object SeePlayerInfo : CommandExecutor {
         if (lastPromo != null) DateTimeUtils.parseToJST(lastPromo.date)
         else DateTimeUtils.getCurrentJST()
       sender.sendMessage("§e${playerName}さんの情報:")
-      sender.sendMessage(
-        " - 最後の昇格日: ${lastPromo?.date} (${
-                    ChronoUnit.DAYS.between(
-                        lastPromoDate,
-                        DateTimeUtils.getCurrentJST(),
-                    )
-                }日前)"
-      )
-      sender.sendMessage(" - 初回ログイン: ${statsData.getFirstPlayed()}")
-      sender.sendMessage(" - 最終ログイン: ${statsData.getLastOnlineTime()}")
-      sender.sendMessage(" - ログイン回数: ${statsData.join}回")
-      sender.sendMessage(" - 総プレイ時間: ${statsData.getPlayTime()}")
-      sender.sendMessage(" - 建築数: ${builds.size}個")
-      if (builds.isNotEmpty()) {
-        val firstBuild = builds.minByOrNull { it.time }
-        val lastBuild = builds.maxByOrNull { it.time }
+      val rankFuture = PermsUtils.getCurrentRank(player.uniqueId)
+
+      rankFuture.thenAccept { rank ->
+        sender.sendMessage(" - §a現在のランク: §r${rank?.name} (ID: ${rank?.groupName})")
         sender.sendMessage(
-          " - 初建築: ${DateTimeUtils.formatToString(firstBuild?.time ?: LocalDateTime.now())}, 経過日数: ${
-                        ChronoUnit.DAYS.between(
-                            firstBuild?.time,
-                            LocalDateTime.now(),
-                        )
-                    }"
+          " - §a最後の昇格日: §e${lastPromo?.date} (${
+            ChronoUnit.DAYS.between(
+              lastPromoDate,
+              DateTimeUtils.getCurrentJST(),
+            )
+          }日前)"
         )
-        sender.sendMessage(
-          " - 最終建築: ${DateTimeUtils.formatToString(lastBuild?.time ?: LocalDateTime.now())}, 経過日数: ${
-                        ChronoUnit.DAYS.between(
-                            lastBuild?.time,
-                            LocalDateTime.now(),
-                        )
-                    }"
-        )
+        sender.sendMessage(" - §a初回ログイン: §e${statsData.getFirstPlayed()}")
+        sender.sendMessage(" - §a最終ログイン: §e${statsData.getLastOnlineTime()}")
+        sender.sendMessage(" - §aログイン回数: §e${statsData.join}回")
+        sender.sendMessage(" - §a総プレイ時間: §e${statsData.getPlayTime()}")
+        sender.sendMessage(" - §a建築数: §e${builds.size}個")
+        if (builds.isNotEmpty()) {
+          val firstBuild = builds.minByOrNull { it.time }
+          val lastBuild = builds.maxByOrNull { it.time }
+          sender.sendMessage(
+            " - §a初建築: §e${DateTimeUtils.formatToString(firstBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
+              ChronoUnit.DAYS.between(
+                firstBuild?.time,
+                LocalDateTime.now(),
+              )
+            }"
+          )
+          sender.sendMessage(
+            " - §a最終建築: §e${DateTimeUtils.formatToString(lastBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
+              ChronoUnit.DAYS.between(
+                lastBuild?.time,
+                LocalDateTime.now(),
+              )
+            }"
+          )
+        }
       }
     } else {
       // GUI一覧表示・チャットで1個ずつ表示
