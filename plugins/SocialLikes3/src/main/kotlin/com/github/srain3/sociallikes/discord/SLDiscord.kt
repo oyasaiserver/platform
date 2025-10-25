@@ -11,7 +11,6 @@ import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.UserBuild
 import github.scarsz.discordsrv.DiscordSRV
 import java.awt.Color
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -169,7 +168,7 @@ object SLDiscord {
         .addField(
           "Author: " +
             Bukkit.getPlayer(slData.owner)?.name +
-            " | ${slData.time.atZone(ZoneId.of("Asia/Tokyo")).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+            " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
           "BlueMap: ${blueMapURL(slData.loc)}",
         )
         .setColor(Color.PINK)
@@ -213,7 +212,7 @@ object SLDiscord {
             .addField(
               "Author: " +
                 Bukkit.getPlayer(slData.owner)?.name +
-                " | ${slData.time.atZone(ZoneId.of("Asia/Tokyo")).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+                " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
               "BlueMap: ${blueMapURL(slData.loc)}",
             )
             .setColor(Color.PINK)
