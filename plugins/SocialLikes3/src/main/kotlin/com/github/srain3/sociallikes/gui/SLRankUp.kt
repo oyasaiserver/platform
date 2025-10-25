@@ -11,6 +11,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -101,7 +102,11 @@ object SLRankUp {
 
   private fun headItems(rankFilter: List<String>, lastOnlineDay: Int): MutableList<ItemStack> {
     val list = mutableListOf<ItemStack>()
-    val beforeTime = LocalDateTime.now().minusDays(lastOnlineDay.toLong())
+    val beforeTime =
+      LocalDateTime.now()
+        .atZone(ZoneId.of("Asia/Tokyo"))
+        .toLocalDateTime()
+        .minusDays(lastOnlineDay.toLong())
     data
       .toList()
       .sortedWith(

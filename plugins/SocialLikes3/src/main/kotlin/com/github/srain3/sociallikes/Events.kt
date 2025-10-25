@@ -13,6 +13,7 @@ import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLSignLikes
 import com.github.srain3.sociallikes.gui.UserBuild
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.ClickEvent
@@ -107,7 +108,7 @@ object Events : Listener {
       SLData(
         id,
         e.block.location,
-        LocalDateTime.now(),
+        LocalDateTime.now().atZone(ZoneId.of("Asia/Tokyo")).toLocalDateTime(),
         e.player.uniqueId,
         title,
         mutableListOf(),

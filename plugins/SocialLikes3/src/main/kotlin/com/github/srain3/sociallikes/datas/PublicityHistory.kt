@@ -2,6 +2,7 @@ package com.github.srain3.sociallikes.datas
 
 import com.github.srain3.sociallikes.CustomYaml
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.UUID
 import kotlin.math.max
 
@@ -33,7 +34,7 @@ object PublicityHistory {
   }
 
   fun addData(user: UUID, slid: Int) {
-    val time = LocalDateTime.now()
+    val time = LocalDateTime.now().atZone(ZoneId.of("Asia/Tokyo")).toLocalDateTime()
     val dataID = lastID + 1
     lastID++
 
