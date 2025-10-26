@@ -81,7 +81,7 @@ object Demote : CommandExecutor {
 
                   statsData.promotions.records.add(record)
                   JsonUtils.saveUserJson(player.uniqueId)
-                  SendEmbedMessage.sendNotification(player.name, sender.name, record)
+                  SendEmbedMessage.sendNotification(player.uniqueId, player.name, sender.name, record)
                   sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに降格させました。")
                 } else {
                   sender.sendMessage("§e${player.name}さんは既に最低ランクです。")

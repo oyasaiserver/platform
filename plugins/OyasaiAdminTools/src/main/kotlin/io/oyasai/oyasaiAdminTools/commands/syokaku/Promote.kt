@@ -116,7 +116,7 @@ object Promote : CommandExecutor {
                                   statsData.move += 100
                                 }
                                 JsonUtils.saveUserJson(player.uniqueId)
-                                SendEmbedMessage.sendNotification(player.name, sender.name, record)
+                                SendEmbedMessage.sendNotification(player.uniqueId,player.name, sender.name, record)
                                 sender.sendMessage(
                                   "§a${player.name}さんを§e${nextRank.name}§aに昇格させました。"
                                 )
