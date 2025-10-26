@@ -8,11 +8,17 @@ import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.rank.RankManager
+import java.util.UUID
 
 object SendEmbedMessage {
   var url = plugin.config.getString("webhook-url", "") ?: ""
 
-  fun sendNotification(targetName: String?, promoterName: String?, record: PromotionRecord) {
+  fun sendNotification(
+    targetUUID: UUID,
+    targetName: String?,
+    promoterName: String?,
+    record: PromotionRecord,
+  ) {
     val prevRank = RankManager.getRankByGroupName(record.previousRank)
     val newRank = RankManager.getRankByGroupName(record.newRank)
     if (prevRank == null || newRank == null) {
@@ -38,6 +44,7 @@ object SendEmbedMessage {
         .append("最後の建築: ${lastBuildID}\n")
         .append("建築数: ${record.builds}\n")
         .append("レベル: ${record.lastLv}\n")
+        .append("${targetUUID}\n")
         .toString()
 
     val client = WebhookClient.withUrl(url)
