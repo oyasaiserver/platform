@@ -73,6 +73,7 @@ object LoadPast : CommandExecutor {
                       isForced = false,
                       date = DateTimeUtils.formatToString(time),
                       note = "Auto recovered",
+                      playedSec = 0L,
                       lastBuildID = lastBuild?.id ?: Integer.MIN_VALUE,
                       builds = buildCount,
                       lastLv = 0,

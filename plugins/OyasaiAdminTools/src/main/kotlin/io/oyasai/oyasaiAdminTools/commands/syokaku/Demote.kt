@@ -14,6 +14,7 @@ import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
+import org.bukkit.Statistic
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -67,6 +68,7 @@ object Demote : CommandExecutor {
                       isForced = false,
                       date = DateTimeUtils.formatToString(DateTimeUtils.getCurrentJST()),
                       note = note,
+                      playedSec = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L,
                       lastBuildID =
                         Data.getSLDataAll()
                           .filter { it.owner == player.uniqueId }

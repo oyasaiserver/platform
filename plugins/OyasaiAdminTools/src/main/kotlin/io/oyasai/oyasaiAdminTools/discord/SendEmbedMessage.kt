@@ -34,6 +34,7 @@ object SendEmbedMessage {
 
     val info =
       StringBuilder()
+        .append("プレイ時間: ${record.playedSec/3600}時間\n")
         .append("最後の建築: ${lastBuildID}\n")
         .append("建築数: ${record.builds}\n")
         .append("レベル: ${record.lastLv}\n")

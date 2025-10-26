@@ -14,6 +14,7 @@ import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
+import org.bukkit.Statistic
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -92,6 +93,8 @@ object Promote : CommandExecutor {
                                     date =
                                       DateTimeUtils.formatToString(DateTimeUtils.getCurrentJST()),
                                     note = note,
+                                    playedSec =
+                                      player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L,
                                     lastBuildID =
                                       Data.getSLDataAll()
                                         .filter { it.owner == player.uniqueId }
