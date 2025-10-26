@@ -68,7 +68,7 @@ object Demote : CommandExecutor {
                       isForced = false,
                       date = DateTimeUtils.formatToString(DateTimeUtils.getCurrentJST()),
                       note = note,
-                      playedSec = player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20L,
+                      playedSec = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L,
                       lastBuildID =
                         Data.getSLDataAll()
                           .filter { it.owner == player.uniqueId }
