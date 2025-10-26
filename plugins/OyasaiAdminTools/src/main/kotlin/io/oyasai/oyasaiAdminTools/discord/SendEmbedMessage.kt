@@ -13,7 +13,12 @@ import java.util.UUID
 object SendEmbedMessage {
   var url = plugin.config.getString("webhook-url", "") ?: ""
 
-  fun sendNotification(targetUUID: UUID, targetName: String?, promoterName: String?, record: PromotionRecord) {
+  fun sendNotification(
+    targetUUID: UUID,
+    targetName: String?,
+    promoterName: String?,
+    record: PromotionRecord,
+  ) {
     val prevRank = RankManager.getRankByGroupName(record.previousRank)
     val newRank = RankManager.getRankByGroupName(record.newRank)
     if (prevRank == null || newRank == null) {
