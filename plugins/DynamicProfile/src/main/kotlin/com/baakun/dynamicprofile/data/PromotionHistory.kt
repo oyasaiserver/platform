@@ -18,6 +18,7 @@ data class PromotionRecord(
   @Expose
   val date: String = LocalDateTime.MIN.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),
   @Expose val note: String = "",
+  @Expose val playedSec: Long = 0L,
   @Expose val lastBuildID: Int = Integer.MIN_VALUE,
   @Expose val builds: Int = 0,
   @Expose val lastLv: Int = 0,
