@@ -18,6 +18,8 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
     this.getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
     this.getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
+    this.getCommand("playermanager")?.setExecutor(PlayerManagerCommandExecutor)
+    this.getCommand("playermanager")?.tabCompleter = PlayerManagerCommandExecutor
   }
 
   override fun onDisable() {
