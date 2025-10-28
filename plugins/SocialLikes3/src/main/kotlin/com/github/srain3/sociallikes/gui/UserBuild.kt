@@ -215,6 +215,17 @@ object UserBuild {
       ?.get(idKey, PersistentDataType.INTEGER)
   }
 
+  /** 時間から前のユーザー別新着LikeのIDを返す、ない場合null */
+  fun timeToPrevID(localDateTime: LocalDateTime, uuid: UUID): Int? {
+    val ite = userBuildItem[uuid]?.asIterable()?.sortedByDescending { it.key }
+    return ite
+      ?.find { it.key < localDateTime }
+      ?.value
+      ?.itemMeta
+      ?.persistentDataContainer
+      ?.get(idKey, PersistentDataType.INTEGER)
+  }
+
   /** オンラインプレイヤー一覧GUIを表示する */
   fun openOnlinePlayerGUI(p: HumanEntity) {
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p1".color())

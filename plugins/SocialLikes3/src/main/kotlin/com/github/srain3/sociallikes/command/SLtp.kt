@@ -92,6 +92,50 @@ object SLtp : CommandExecutor {
             sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
             return true
           }
+      } else if (args[0] == "back") {
+        val time =
+          userLastTimeStamp[sender.uniqueId]
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
+              return true
+            }
+        val getID =
+          AllBuild.timeToPrevID(time)
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e 前の新着Likeは有りませんでした".color())
+              return true
+            }
+
+        Data.getSLData(getID)
+          ?: run {
+            sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
+            return true
+          }
+      } else if (args[0] == "uback") {
+        val time =
+          userLastTimeStamp[sender.uniqueId]
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&r 一度sltpを行ってください".color())
+              return true
+            }
+        val getOwnerUUID =
+          AllBuild.timeToUser(time)
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの前の建築を返せませんでした".color())
+              return true
+            }
+        val getID =
+          UserBuild.timeToPrevID(time, getOwnerUUID)
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e 前の新着Likeは有りませんでした".color())
+              return true
+            }
+
+        Data.getSLData(getID)
+          ?: run {
+            sender.sendMessage(Tools.socialLikesLOGO + " &cID:${getID}は存在しません".color())
+            return true
+          }
       } else {
         return true
       }
