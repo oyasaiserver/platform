@@ -8,10 +8,10 @@ import org.bukkit.entity.Player
 
 object TeleportOffline : CommandExecutor {
   override fun onCommand(
-      sender: CommandSender,
-      command: Command,
-      label: String,
-      args: Array<out String>,
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("This command is only for players.")

@@ -7,8 +7,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 
 object PlayerManagerCommandExecutor : CommandExecutor, TabCompleter {
-  private val subCommands =
-    listOf("tpoffline")
+  private val subCommands = listOf("tpoffline")
 
   override fun onCommand(
     sender: CommandSender,
@@ -21,13 +20,7 @@ object PlayerManagerCommandExecutor : CommandExecutor, TabCompleter {
       return false
     }
     return when (args[0].lowercase()) {
-      "tpoffline" ->
-        TeleportOffline.onCommand(
-          sender,
-          command,
-          label,
-          args.drop(1).toTypedArray(),
-        )
+      "tpoffline" -> TeleportOffline.onCommand(sender, command, label, args.drop(1).toTypedArray())
       else -> {
         sender.sendMessage("§c不明なサブコマンドです。")
         false
@@ -35,6 +28,7 @@ object PlayerManagerCommandExecutor : CommandExecutor, TabCompleter {
     }
     return true
   }
+
   override fun onTabComplete(
     sender: CommandSender,
     command: Command,
