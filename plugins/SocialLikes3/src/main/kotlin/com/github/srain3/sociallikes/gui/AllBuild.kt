@@ -186,6 +186,17 @@ object AllBuild {
       ?.get(idKey, PersistentDataType.INTEGER)
   }
 
+  /** 時間から前の新着LikeのIDを返す、ない場合null */
+  fun timeToPrevID(localDateTime: LocalDateTime): Int? {
+    val ite = allBuildItem.asIterable()
+    return ite
+      .find { it.key < localDateTime }
+      ?.value
+      ?.itemMeta
+      ?.persistentDataContainer
+      ?.get(idKey, PersistentDataType.INTEGER)
+  }
+
   /** 時間から作者を返す、ない場合null */
   fun timeToUser(localDateTime: LocalDateTime): UUID? {
     val id =
