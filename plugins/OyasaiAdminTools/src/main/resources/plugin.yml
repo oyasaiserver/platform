@@ -15,6 +15,11 @@ commands:
     permission: oyasai.syokaku
   syokakumanager:
     permission: oyasai.syokakumanager
+  playermanager:
+    aliases:
+      - pm
+      - pmanager
+    permission: oyasai.playermanager
 
 permissions:
   oyasai.syokaku:
@@ -22,4 +27,7 @@ permissions:
     default: op
   oyasai.syokakumanager:
     description: syokakumanagerコマンドの使用権限
+    default: op
+  oyasai.playermanager:
+    description: playermanagerコマンドの使用権限
     default: op
