@@ -168,6 +168,7 @@ object SeePlayerInfo : CommandExecutor {
               isForced,
               date,
               note,
+              playedSec,
               lastBuildID,
               builds,
               lastLv,
@@ -185,6 +186,7 @@ object SeePlayerInfo : CommandExecutor {
             )
             lore.add(Component.text("§e備考: §f${note}"))
             lore.add(Component.text("§e特例昇格: §f${if (isForced) "はい" else "いいえ"}"))
+            lore.add(Component.text("§eプレイ時間: §f${playedSec/3600}時間"))
             lore.add(Component.text("§e最後の建築ID: §f${lastBuildID}"))
             lore.add(Component.text("§e建築数: §f${builds}"))
             lore.add(Component.text("§e昇格時点のレベル: §f${lastLv}"))
