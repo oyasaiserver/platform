@@ -126,9 +126,7 @@ object SeePlayerInfo : CommandExecutor {
               .appendNewline()
               .append(Component.text(" - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}"))
               .appendNewline()
-              .append(
-                Component.text(" - プレイ時間: ${record.playedSec/3600}時間")
-              )
+              .append(Component.text(" - プレイ時間: ${record.playedSec/3600}時間"))
               .appendNewline()
               .append(
                 Component.text(" - 最後の建築ID: ${record.lastBuildID}")
