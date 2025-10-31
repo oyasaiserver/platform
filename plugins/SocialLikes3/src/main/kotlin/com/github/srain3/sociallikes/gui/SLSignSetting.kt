@@ -19,7 +19,6 @@ import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
-import net.luckperms.api.LuckPermsProvider
 import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -136,8 +135,8 @@ object SLSignSetting {
               "&aSLTP看板を入手する",
               mutableListOf(
                 "※SL看板ではありません。",
-                "※クリエ権限あり: ${sltpSignCostCreative}pt / それ以外: ${sltpSignCost}pt"
-              )
+                "※クリエ権限あり: ${sltpSignCostCreative}pt / それ以外: ${sltpSignCost}pt",
+              ),
             )
         ) {
           val player = it.whoClicked as Player
@@ -145,9 +144,7 @@ object SLSignSetting {
           if (token != null && token.getTokens(player) != null) {
             val cost = if (Tools.canUseCreative(player)) sltpSignCostCreative else sltpSignCost
             if (token.getTokens(player).asLong < cost) {
-              player.sendMessage(
-                "${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。"
-              )
+              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。")
             } else {
               val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
               token.removeTokens(player, cost)

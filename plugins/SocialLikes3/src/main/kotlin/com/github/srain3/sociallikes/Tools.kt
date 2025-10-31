@@ -29,12 +29,13 @@ object Tools {
   }
 
   fun canUseCreative(player: Player): Boolean {
-    val nodes = listOf(
-      "minecraft.command.gamemode",
-      "bukkit.command.gamemode",
-      "essentials.gamemode",
-      "essentials.gamemode.creative",
-    )
+    val nodes =
+      listOf(
+        "minecraft.command.gamemode",
+        "bukkit.command.gamemode",
+        "essentials.gamemode",
+        "essentials.gamemode.creative",
+      )
     if (player.isOp) return true
     return nodes.any { node -> player.hasPermission(node) }
   }
