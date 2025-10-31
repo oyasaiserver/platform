@@ -98,7 +98,7 @@ object SLSignSetting {
             } else {
               val command = "/sltp ${slData.id}"
 
-              val sltpSignItem = createCommandSignItem(Material.OAK_SIGN, slData)
+              val sltpSignItem = createCommandSignItem(sign.type, slData)
               token.removeTokens(player, cost)
               player.inventory.addItem(sltpSignItem)
               player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
