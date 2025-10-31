@@ -14,6 +14,7 @@ import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import java.util.UUID
 import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -31,7 +32,6 @@ import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-import java.util.UUID
 
 object SLSignSetting {
 
@@ -46,7 +46,8 @@ object SLSignSetting {
   private fun asItemSignMaterial(material: Material): Material {
     val name = material.name
     return when {
-      name.endsWith("_WALL_HANGING_SIGN") -> Material.valueOf(name.replace("_WALL_HANGING_SIGN", "_HANGING_SIGN"))
+      name.endsWith("_WALL_HANGING_SIGN") ->
+        Material.valueOf(name.replace("_WALL_HANGING_SIGN", "_HANGING_SIGN"))
       name.endsWith("_HANGING_SIGN") -> material
       name.endsWith("_WALL_SIGN") -> Material.valueOf(name.replace("_WALL_SIGN", "_SIGN"))
       name.endsWith("_SIGN") -> material
@@ -65,19 +66,42 @@ object SLSignSetting {
     val signState = meta.blockState as Sign
 
     val front = signState.getSide(Side.FRONT)
-    front.line(0, Component.text("(SocialTeleport)").
-      clickEvent(ClickEvent.runCommand("/sltp ${slData.id}")).color(TextColor.color(0, 170, 0)))
+    front.line(
+      0,
+      Component.text("(SocialTeleport)")
+        .clickEvent(ClickEvent.runCommand("/sltp ${slData.id}"))
+        .color(TextColor.color(0, 170, 0)),
+    )
     front.line(1, Component.text("[${slData.title}]").color(TextColor.color(85, 255, 85)))
-    front.line(2, Component.text("${(Bukkit.getOfflinePlayer(slData.owner).name)}").color(TextColor.color(255, 255, 255)))
-    front.line(3, Component.text("SLID: ").color(TextColor.color(170, 170, 170)).append(Component.text(slData.id).color(TextColor.color(255, 170, 0))))
+    front.line(
+      2,
+      Component.text("${(Bukkit.getOfflinePlayer(slData.owner).name)}")
+        .color(TextColor.color(255, 255, 255)),
+    )
+    front.line(
+      3,
+      Component.text("SLID: ")
+        .color(TextColor.color(170, 170, 170))
+        .append(Component.text(slData.id).color(TextColor.color(255, 170, 0))),
+    )
 
     signState.isWaxed = true
 
     signState.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
-    signState.persistentDataContainer.set(sltpSignUUIDKey, PersistentDataType.STRING, owner.toString())
+    signState.persistentDataContainer.set(
+      sltpSignUUIDKey,
+      PersistentDataType.STRING,
+      owner.toString(),
+    )
     meta.blockState = signState
 
-    meta.itemName((Component.text("SLTP看板 ").color(TextColor.color(85, 255, 85)).append(Component.text("(${slData.title}, ID: ${slData.id})").color(TextColor.color(255, 85, 255)))))
+    meta.itemName(
+      (Component.text("SLTP看板 ")
+        .color(TextColor.color(85, 255, 85))
+        .append(
+          Component.text("(${slData.title}, ID: ${slData.id})").color(TextColor.color(255, 85, 255))
+        ))
+    )
     item.itemMeta = meta
     return item
   }
@@ -110,22 +134,22 @@ object SLSignSetting {
         ) {
           val player = it.whoClicked as Player
           val token: TokenManager? = getTokenManager()
-          if (token != null&&token.getTokens(player)!=null){
-            if (token.getTokens(player).asLong < sltpSignCost){
-              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${sltpSignCost}pt必要です。")
+          if (token != null && token.getTokens(player) != null) {
+            if (token.getTokens(player).asLong < sltpSignCost) {
+              player.sendMessage(
+                "${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${sltpSignCost}pt必要です。"
+              )
             } else {
               val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
               token.removeTokens(player, sltpSignCost)
               player.inventory.addItem(sltpSignItem)
               player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
               player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
-
             }
           }
-
         },
         0,
-        2
+        2,
       )
       addItem(
         GuiItem(
