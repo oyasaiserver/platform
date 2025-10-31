@@ -18,7 +18,6 @@ import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.util.RGBLike
 import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -43,7 +42,7 @@ object SLSignSetting {
   val sltpSignKey = NamespacedKey(plugin, "SocialLikes_TPsign")
   private fun createCommandSignItem(
     material: Material = Material.OAK_SIGN,
-    slData: SLData
+    slData: SLData,
   ): ItemStack {
     val item = ItemStack(material)
     val meta = item.itemMeta as org.bukkit.inventory.meta.BlockStateMeta
@@ -61,6 +60,8 @@ object SLSignSetting {
     signState.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
 
     meta.blockState = signState
+
+    meta.itemName().append(Component.text("SLTP看板").color(TextColor.color(85, 255, 85)).append(Component.text("(ID: ${slData.id})").color(TextColor.color(255, 85, 255))))
     item.itemMeta = meta
     return item
   }
@@ -80,26 +81,25 @@ object SLSignSetting {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
+    val config = CustomYaml("sltpsign.yml")
+    val sltpSignCost = config.getLong("priceSltpSign", 100L)
+
     val pane = StaticPane(0, 0, 9, 3)
     pane.apply {
       addItem(
         GuiItem(
           ItemStack(Material.ENDER_EYE)
             .allFlag()
-            .addText("&aSLTP看板を入手する", mutableListOf(""))
+            .addText("&aSLTP看板を入手する", mutableListOf("※SL看板ではありません。", "※${sltpSignCost}pt消費します。"))
         ) {
           val player = it.whoClicked as Player
           val token: TokenManager? = getTokenManager()
           if (token != null&&token.getTokens(player)!=null){
-            val config = CustomYaml("sltpsign.yml")
-            val cost = config.getLong("priceSltpSign", 100L)
-            if (token.getTokens(player).asLong < cost){
-              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。")
+            if (token.getTokens(player).asLong < sltpSignCost){
+              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${sltpSignCost}pt必要です。")
             } else {
-              val command = "/sltp ${slData.id}"
-
               val sltpSignItem = createCommandSignItem(sign.type, slData)
-              token.removeTokens(player, cost)
+              token.removeTokens(player, sltpSignCost)
               player.inventory.addItem(sltpSignItem)
               player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
               player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
