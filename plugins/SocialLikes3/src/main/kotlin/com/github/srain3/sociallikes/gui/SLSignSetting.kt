@@ -1,18 +1,28 @@
 package com.github.srain3.sociallikes.gui
 
+import com.github.srain3.sociallikes.CustomYaml
 import com.github.srain3.sociallikes.Events
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.Tools.getTokenManager
+import com.github.srain3.sociallikes.Tools.plugin
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import me.realized.tokenmanager.api.TokenManager
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.util.RGBLike
 import net.wesjd.anvilgui.AnvilGUI
+import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.block.BlockFace
 import org.bukkit.block.Sign
@@ -29,6 +39,31 @@ object SLSignSetting {
   private val hangingRegex = Regex("""HANGING""")
   // 壁付きかどうか
   private val wallRegex = Regex("""WALL""")
+
+  val sltpSignKey = NamespacedKey(plugin, "SocialLikes_TPsign")
+  private fun createCommandSignItem(
+    material: Material = Material.OAK_SIGN,
+    slData: SLData
+  ): ItemStack {
+    val item = ItemStack(material)
+    val meta = item.itemMeta as org.bukkit.inventory.meta.BlockStateMeta
+    val signState = meta.blockState as Sign
+
+    val front = signState.getSide(Side.FRONT)
+    front.line(0, Component.text("(SocialTeleport)").
+      clickEvent(ClickEvent.runCommand("/sltp ${slData.id}")).color(TextColor.color(0, 170, 0)))
+    front.line(1, Component.text("[${slData.title}]").color(TextColor.color(85, 255, 85)))
+    front.line(2, Component.text("${(Bukkit.getOfflinePlayer(slData.owner).name)}").color(TextColor.color(255, 255, 255)))
+    front.line(3, Component.text("SLID: ").color(TextColor.color(170, 170, 170)).append(Component.text(slData.id).color(TextColor.color(255, 170, 0))))
+
+    signState.isWaxed = true
+
+    signState.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
+
+    meta.blockState = signState
+    item.itemMeta = meta
+    return item
+  }
 
   fun createGUI(sign: Sign, slData: SLData): ChestGui {
     val gui =
@@ -47,6 +82,35 @@ object SLSignSetting {
 
     val pane = StaticPane(0, 0, 9, 3)
     pane.apply {
+      addItem(
+        GuiItem(
+          ItemStack(Material.ENDER_EYE)
+            .allFlag()
+            .addText("&aSLTP看板を入手する", mutableListOf(""))
+        ) {
+          val player = it.whoClicked as Player
+          val token: TokenManager? = getTokenManager()
+          if (token != null&&token.getTokens(player)!=null){
+            val config = CustomYaml("sltpsign.yml")
+            val cost = config.getLong("priceSltpSign", 100L)
+            if (token.getTokens(player).asLong < cost){
+              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。")
+            } else {
+              val command = "/sltp ${slData.id}"
+
+              val sltpSignItem = createCommandSignItem(Material.OAK_SIGN, slData)
+              token.removeTokens(player, cost)
+              player.inventory.addItem(sltpSignItem)
+              player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
+              player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
+
+            }
+          }
+
+        },
+        0,
+        2
+      )
       addItem(
         GuiItem(
           ItemStack(Material.OAK_SIGN)
