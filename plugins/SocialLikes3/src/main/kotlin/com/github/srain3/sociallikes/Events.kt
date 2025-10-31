@@ -11,6 +11,7 @@ import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLSignLikes
+import com.github.srain3.sociallikes.gui.SLSignSetting
 import com.github.srain3.sociallikes.gui.UserBuild
 import java.time.LocalDateTime
 import java.util.*
@@ -480,6 +481,7 @@ object Events : Listener {
       // 旧Like看板の場合イベントキャンセルのみ行う
       e.isCancelled = true
     }
+    if (block.persistentDataContainer.has(SLSignSetting.sltpSignKey)) e.isCancelled = true
   }
 
   private val sl3Regex = Regex(""""sociallikes3:sociallikes_id":[0-9]+""")

@@ -31,6 +31,7 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("slsignget")?.setExecutor(SLSignGet)
     server.getPluginCommand("slmenu")?.setExecutor(SLMenu)
     server.getPluginCommand("slnear")?.setExecutor(SLNear)
+    server.getPluginCommand("slsignbreak")?.setExecutor(SLTPSignBreak)
     server.getPluginCommand("vacanttp")?.setExecutor(VacantTeleport)
     server.getPluginCommand("vacanttp")?.tabCompleter = VacantTeleportTAB
     server.getPluginCommand("slrankup")?.setExecutor(SLRankUp)
