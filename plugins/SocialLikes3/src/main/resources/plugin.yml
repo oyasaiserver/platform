@@ -32,6 +32,8 @@ commands:
     description: 'SL看板の少ない地域へのテレポートコマンド'
   slrankup:
     description: '建築数とログイン数/ログイン率でランクアップ候補を確認するコマンド'
+  slsignbreak:
+    description: 'SLTP看板を破壊するコマンド'
 
 permissions:
   sociallikes3.slrankup:

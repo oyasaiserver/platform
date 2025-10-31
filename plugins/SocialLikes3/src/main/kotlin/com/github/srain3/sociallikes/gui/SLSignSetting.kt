@@ -31,6 +31,7 @@ import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import java.util.UUID
 
 object SLSignSetting {
 
@@ -40,11 +41,26 @@ object SLSignSetting {
   private val wallRegex = Regex("""WALL""")
 
   val sltpSignKey = NamespacedKey(plugin, "SocialLikes_TPsign")
-  private fun createCommandSignItem(
+  val sltpSignUUIDKey = NamespacedKey(plugin, "SocialLikes_TPsign_owner")
+
+  private fun asItemSignMaterial(material: Material): Material {
+    val name = material.name
+    return when {
+      name.endsWith("_WALL_HANGING_SIGN") -> Material.valueOf(name.replace("_WALL_HANGING_SIGN", "_HANGING_SIGN"))
+      name.endsWith("_HANGING_SIGN") -> material
+      name.endsWith("_WALL_SIGN") -> Material.valueOf(name.replace("_WALL_SIGN", "_SIGN"))
+      name.endsWith("_SIGN") -> material
+      else -> Material.OAK_SIGN
+    }
+  }
+
+  fun createCommandSignItem(
     material: Material = Material.OAK_SIGN,
     slData: SLData,
+    owner: UUID,
   ): ItemStack {
-    val item = ItemStack(material)
+    val itemMaterial = asItemSignMaterial(material)
+    val item = ItemStack(itemMaterial)
     val meta = item.itemMeta as org.bukkit.inventory.meta.BlockStateMeta
     val signState = meta.blockState as Sign
 
@@ -58,10 +74,10 @@ object SLSignSetting {
     signState.isWaxed = true
 
     signState.persistentDataContainer.set(sltpSignKey, PersistentDataType.INTEGER, slData.id)
-
+    signState.persistentDataContainer.set(sltpSignUUIDKey, PersistentDataType.STRING, owner.toString())
     meta.blockState = signState
 
-    meta.itemName().append(Component.text("SLTP看板").color(TextColor.color(85, 255, 85)).append(Component.text("(ID: ${slData.id})").color(TextColor.color(255, 85, 255))))
+    meta.itemName((Component.text("SLTP看板 ").color(TextColor.color(85, 255, 85)).append(Component.text("(${slData.title}, ID: ${slData.id})").color(TextColor.color(255, 85, 255)))))
     item.itemMeta = meta
     return item
   }
@@ -98,7 +114,7 @@ object SLSignSetting {
             if (token.getTokens(player).asLong < sltpSignCost){
               player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${sltpSignCost}pt必要です。")
             } else {
-              val sltpSignItem = createCommandSignItem(sign.type, slData)
+              val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
               token.removeTokens(player, sltpSignCost)
               player.inventory.addItem(sltpSignItem)
               player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
