@@ -122,7 +122,8 @@ object SLSignSetting {
     gui.setOnTopDrag { it.isCancelled = true }
 
     val config = CustomYaml("sltpsign.yml")
-    val sltpSignCost = config.getLong("priceSltpSign", 100L)
+    val sltpSignCostCreative = config.getLong("priceSltpSignCreative", 100L)
+    val sltpSignCost = config.getLong("priceSltpSign", 50L)
 
     val pane = StaticPane(0, 0, 9, 3)
     pane.apply {
@@ -130,18 +131,23 @@ object SLSignSetting {
         GuiItem(
           ItemStack(Material.ENDER_EYE)
             .allFlag()
-            .addText("&aSLTP看板を入手する", mutableListOf("※SL看板ではありません。", "※${sltpSignCost}pt消費します。"))
+            .addText(
+              "&aSLTP看板を入手する",
+              mutableListOf(
+                "※SL看板ではありません。",
+                "※クリエ権限あり: ${sltpSignCostCreative}pt / それ以外: ${sltpSignCost}pt",
+              ),
+            )
         ) {
           val player = it.whoClicked as Player
           val token: TokenManager? = getTokenManager()
           if (token != null && token.getTokens(player) != null) {
-            if (token.getTokens(player).asLong < sltpSignCost) {
-              player.sendMessage(
-                "${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${sltpSignCost}pt必要です。"
-              )
+            val cost = if (Tools.canUseCreative(player)) sltpSignCostCreative else sltpSignCost
+            if (token.getTokens(player).asLong < cost) {
+              player.sendMessage("${Tools.socialLikesLOGO} &cSLTP看板の取得には投票ポイントが${cost}pt必要です。")
             } else {
               val sltpSignItem = createCommandSignItem(sign.type, slData, player.uniqueId)
-              token.removeTokens(player, sltpSignCost)
+              token.removeTokens(player, cost)
               player.inventory.addItem(sltpSignItem)
               player.sendMessage("${Tools.socialLikesLOGO} &aSLTP看板を付与しました。".color())
               player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
