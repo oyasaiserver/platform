@@ -6,6 +6,7 @@ import me.realized.tokenmanager.api.TokenManager
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
@@ -25,6 +26,17 @@ object Tools {
     } else {
       null
     }
+  }
+
+  fun canUseCreative(player: Player): Boolean {
+    val nodes = listOf(
+      "minecraft.command.gamemode",
+      "bukkit.command.gamemode",
+      "essentials.gamemode",
+      "essentials.gamemode.creative",
+    )
+    if (player.isOp) return true
+    return nodes.any { node -> player.hasPermission(node) }
   }
 
   /** &を§へ変換 */
