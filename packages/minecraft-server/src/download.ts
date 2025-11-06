@@ -24,11 +24,10 @@ async function getModrinthBestMatchVersion(
   if (match) {
     return match
   }
-  const fallbacks = await client.getProjectVersions(project.id, {
+  const [fallback] = await client.getProjectVersions(project.id, {
     gameVersions: createVersionsRange(version),
     loaders
   })
-  const fallback = fallbacks.at(-1)
   ok(fallback, `No compatible version found for ${project.slug}`)
   return fallback
 }
