@@ -1,17 +1,35 @@
 import { DockerStack } from '@oyasaiserver/cdktf/stacks/docker-stack'
-import { ModrinthV2Client } from '@xmcl/modrinth'
+import { ModrinthV2Client, type Project, type ProjectVersion } from '@xmcl/modrinth'
 import { ok } from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { URL } from 'node:url'
 import type { PluginDefinition } from './registry.ts'
 
-function createVersionsRange(version: string, limit = 10): string[] {
-  // "look-up" for now
+function createVersionsRange(version: string, limit = 5): string[] {
+  // "look-up" patch versions for now
   const [major, minor, patch] = version.split('.').map(Number) as [number, number, number]
   return new Array(limit)
     .keys()
     .map(i => [major, minor, patch + i].join('.'))
     .toArray()
+}
+
+async function getModrinthBestMatchVersion(
+  client: ModrinthV2Client,
+  project: Project,
+  version: string
+): Promise<ProjectVersion> {
+  const loaders = ['paper', 'spigot', 'spigot']
+  const [match] = await client.getProjectVersions(project.id, { gameVersions: [version], loaders })
+  if (match) {
+    return match
+  }
+  const [fallback] = await client.getProjectVersions(project.id, {
+    gameVersions: createVersionsRange(version),
+    loaders
+  })
+  ok(fallback, `No compatible version found for ${project.slug}`)
+  return fallback
 }
 
 async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
@@ -24,24 +42,13 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
     }
     case 'modrinth': {
       const project = await modrinth.getProject(definition.slug)
-      const versions = await modrinth
-        .getProjectVersions(project.id, {
-          gameVersions: createVersionsRange(DockerStack.minecraftVersion),
-          loaders: ['bukkit', 'paper', 'spigot']
-        })
-        .then(versions =>
-          versions.toSorted((a, b) => b.date_published.localeCompare(a.date_published))
-        )
-      const match = versions.find(version =>
-        version.game_versions.includes(DockerStack.minecraftVersion)
+      const version = await getModrinthBestMatchVersion(
+        modrinth,
+        project,
+        DockerStack.minecraftVersion
       )
-      const url =
-        match?.files?.at(0)?.url ??
-        versions
-          .flatMap(version => version.files)
-          .map(file => file.url)
-          .at(0)
-      ok(url, `No compatible version found for ${definition.slug}`)
+      const url = version.files.flatMap(file => file.url)?.at(0)
+      ok(url, `No download URL found for modrinth plugin:${definition.slug}`)
       return new URL(url)
     }
     case 'github': {
