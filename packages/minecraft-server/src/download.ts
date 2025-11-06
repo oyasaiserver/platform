@@ -28,10 +28,15 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
         gameVersions: createVersionsRange(DockerStack.minecraftVersion),
         loaders: ['bukkit', 'paper', 'spigot']
       })
-      const url = versions
-        .flatMap(version => version.files)
-        .flatMap(file => file.url)
-        .at(0)
+      const match = versions.find(version =>
+        version.game_versions.includes(DockerStack.minecraftVersion)
+      )
+      const url = match
+        ? match.files.at(0)?.url
+        : versions
+            .flatMap(version => version.files)
+            .flatMap(file => file.url)
+            .at(0)
       ok(url, `No compatible version found for ${definition.slug}`)
       return new URL(url)
     }
