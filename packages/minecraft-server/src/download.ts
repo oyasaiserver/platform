@@ -24,19 +24,20 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
     }
     case 'modrinth': {
       const project = await modrinth.getProject(definition.slug)
-      const versions = await modrinth.getProjectVersions(project.id, {
-        gameVersions: createVersionsRange(DockerStack.minecraftVersion),
-        loaders: ['bukkit', 'paper', 'spigot']
-      })
+      const versions = (
+        await modrinth.getProjectVersions(project.id, {
+          gameVersions: createVersionsRange(DockerStack.minecraftVersion),
+          loaders: ['bukkit', 'paper', 'spigot']
+        })
+      ).toSorted((a, b) => b.date_published.localeCompare(a.date_published))
       const match = versions.find(version =>
         version.game_versions.includes(DockerStack.minecraftVersion)
       )
       const url = match
         ? match.files.at(0)?.url
         : versions
-            .sort((a, b) => b.date_published.localeCompare(a.date_published))
             .flatMap(version => version.files)
-            .flatMap(file => file.url)
+            .map(file => file.url)
             .at(0)
       ok(url, `No compatible version found for ${definition.slug}`)
       return new URL(url)
