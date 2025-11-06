@@ -19,15 +19,16 @@ async function getModrinthBestMatchVersion(
   project: Project,
   version: string
 ): Promise<ProjectVersion> {
-  const loaders = ['paper', 'spigot', 'spigot']
+  const loaders = ['paper', 'spigot', 'bukkit']
   const [match] = await client.getProjectVersions(project.id, { gameVersions: [version], loaders })
   if (match) {
     return match
   }
-  const [fallback] = await client.getProjectVersions(project.id, {
+  const fallbacks = await client.getProjectVersions(project.id, {
     gameVersions: createVersionsRange(version),
     loaders
   })
+  const fallback = fallbacks.at(-1)
   ok(fallback, `No compatible version found for ${project.slug}`)
   return fallback
 }
@@ -47,7 +48,7 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
         project,
         DockerStack.minecraftVersion
       )
-      const url = version.files.flatMap(file => file.url)?.at(0)
+      const url = version.files.map(file => file.url)?.at(0)
       ok(url, `No download URL found for modrinth plugin:${definition.slug}`)
       return new URL(url)
     }
