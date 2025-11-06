@@ -24,12 +24,14 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
     }
     case 'modrinth': {
       const project = await modrinth.getProject(definition.slug)
-      const versions = (
-        await modrinth.getProjectVersions(project.id, {
+      const versions = await modrinth
+        .getProjectVersions(project.id, {
           gameVersions: createVersionsRange(DockerStack.minecraftVersion),
           loaders: ['bukkit', 'paper', 'spigot']
         })
-      ).toSorted((a, b) => b.date_published.localeCompare(a.date_published))
+        .then(versions =>
+          versions.toSorted((a, b) => b.date_published.localeCompare(a.date_published))
+        )
       const match = versions.find(version =>
         version.game_versions.includes(DockerStack.minecraftVersion)
       )
