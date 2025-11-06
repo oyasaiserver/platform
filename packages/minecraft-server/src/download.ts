@@ -34,9 +34,7 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
       const url = match
         ? match.files.at(0)?.url
         : versions
-            .sort(
-              (a, b) => new Date(b.date_published).getTime() - new Date(a.date_published).getTime()
-            )
+            .sort((a, b) => b.date_published.localeCompare(a.date_published))
             .flatMap(version => version.files)
             .flatMap(file => file.url)
             .at(0)
