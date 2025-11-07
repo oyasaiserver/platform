@@ -1,8 +1,6 @@
-import { registry } from './registry.ts'
+import { type RegistryId } from './plugin-registry.ts'
 
-type RegistryId = keyof typeof registry
-
-export const local: ReadonlyArray<RegistryId> = [
+export const local: RegistryId[] = [
   'essentialsx',
   'fastasyncworldedit',
   'luckperms',
@@ -13,7 +11,7 @@ export const local: ReadonlyArray<RegistryId> = [
   'vertex'
 ]
 
-export const development: ReadonlyArray<RegistryId> = local.concat(
+export const development: RegistryId[] = local.concat(
   'bkcommonlib',
   'coreprotect',
   'decentholograms',
@@ -68,4 +66,4 @@ export const development: ReadonlyArray<RegistryId> = local.concat(
   'pvparena'
 )
 
-export const production: ReadonlyArray<RegistryId> = development.concat('discordsrv', 'bluemap')
+export const production: RegistryId[] = development.concat('discordsrv', 'bluemap')

@@ -14,6 +14,10 @@ function toGradleBuildPath(name: string) {
   })
 }
 
+function toStaticPath(name: string) {
+  return join(path.static, name)
+}
+
 export type PluginDefinition = Readonly<
   | { type: 'modrinth'; slug: string }
   | { type: 'spiget'; id: number }
@@ -22,7 +26,7 @@ export type PluginDefinition = Readonly<
   | { type: 'url'; url: string }
 >
 
-export const registry = {
+export const pluginRegistry = {
   bkcommonlib: { type: 'modrinth', slug: 'bkcommonlib' },
   coreprotect: { type: 'modrinth', slug: 'coreprotect' },
   decentholograms: { type: 'modrinth', slug: 'decentholograms' },
@@ -98,19 +102,19 @@ export const registry = {
 
   arceon: {
     type: 'local',
-    path: join(path.static, 'Arceon.jar')
+    path: toStaticPath('Arceon.jar')
   },
   ezedits: {
     type: 'local',
-    path: join(path.static, 'ezEdits.jar')
+    path: toStaticPath('ezEdits.jar')
   },
   oyasaivehicles: {
     type: 'local',
-    path: join(path.static, 'OyasaiVehicles.jar')
+    path: toStaticPath('OyasaiVehicles.jar')
   },
   tokenmanager: {
     type: 'local',
-    path: join(path.static, 'TokenManager.jar')
+    path: toStaticPath('TokenManager.jar')
   },
 
   dynamicprofile: {
@@ -155,3 +159,5 @@ export const registry = {
     url: 'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar'
   }
 } as const satisfies Record<string, PluginDefinition>
+
+export type RegistryId = keyof typeof pluginRegistry
