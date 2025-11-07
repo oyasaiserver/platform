@@ -1,8 +1,7 @@
 package io.oyasai.vertex
 
 import io.oyasai.vertex.services.Service
-import io.oyasai.vertex.services.sentry.SentryService
-import io.oyasai.vertex.services.sociallikes.SocialLikesService
+import io.oyasai.vertex.services.schematics.SchematicsService
 import org.bukkit.plugin.java.JavaPlugin
 
 class Vertex : JavaPlugin() {
@@ -11,9 +10,15 @@ class Vertex : JavaPlugin() {
   }
 
   override fun onEnable() {
-    services.forEach {
-      server.pluginManager.registerEvents(it, this)
-      it.onEnable()
+    services.forEach { service ->
+      server.pluginManager.registerEvents(service, this)
+      service.commands.forEach { command ->
+        server.commandMap.run {
+          knownCommands.values.removeIf { it.name == command.name }
+          register(command.name, command)
+        }
+      }
+      service.onEnable()
     }
   }
 
@@ -23,6 +28,6 @@ class Vertex : JavaPlugin() {
 
   companion object {
     val plugin by lazy { getPlugin(Vertex::class.java) }
-    val services = listOf<Service>(SentryService, SocialLikesService)
+    val services = listOf<Service>(SchematicsService)
   }
 }
