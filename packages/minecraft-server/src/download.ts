@@ -1,39 +1,43 @@
 import { DockerStack } from '@oyasaiserver/cdktf/stacks/docker-stack'
-import { ModrinthV2Client, type Project, type ProjectVersion } from '@xmcl/modrinth'
+import { ModrinthV2Client, type ProjectVersion } from '@xmcl/modrinth'
 import { ok } from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { URL } from 'node:url'
 import type { PluginDefinition } from './registry.ts'
 
-function createVersionsRange(version: string, limit = 5): string[] {
-  // "look-up" patch versions for now
+function incrementPatch(version: string): string {
   const [major, minor, patch] = version.split('.').map(Number) as [number, number, number]
-  return new Array(limit)
-    .keys()
-    .map(i => [major, minor, patch + i].join('.'))
-    .toArray()
+  return [major, minor, patch + 1].join('.')
 }
 
-async function getModrinthBestMatchVersion(
-  client: ModrinthV2Client,
-  project: Project,
-  version: string
+async function getModrinthBestMatchProjectVersion(
+  slug: string,
+  version: string,
+  maxDelta = 5
 ): Promise<ProjectVersion> {
   const loaders = ['paper', 'spigot', 'bukkit']
-  const [match] = await client.getProjectVersions(project.id, { gameVersions: [version], loaders })
-  if (match) {
-    return match
+
+  const client = new ModrinthV2Client()
+  const project = await client.getProject(slug)
+
+  async function go(version: string, depth: number): Promise<ProjectVersion> {
+    if (depth > maxDelta) {
+      throw new Error(`No compatible version found for modrinth plugin:${slug}`)
+    }
+    const [projectVersion] = await client.getProjectVersions(project.id, {
+      gameVersions: [version],
+      loaders
+    })
+    if (projectVersion) {
+      return projectVersion
+    }
+    return go(incrementPatch(version), depth + 1)
   }
-  const [fallback] = await client.getProjectVersions(project.id, {
-    gameVersions: createVersionsRange(version),
-    loaders
-  })
-  ok(fallback, `No compatible version found for ${project.slug}`)
-  return fallback
+
+  return go(version, 0)
 }
 
 async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
-  const modrinth = new ModrinthV2Client()
   switch (definition.type) {
     case 'url':
       return new URL(definition.url)
@@ -41,10 +45,8 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
       return new URL(`https://api.spiget.org/v2/resources/${definition.id}/download`)
     }
     case 'modrinth': {
-      const project = await modrinth.getProject(definition.slug)
-      const version = await getModrinthBestMatchVersion(
-        modrinth,
-        project,
+      const version = await getModrinthBestMatchProjectVersion(
+        definition.slug,
         DockerStack.minecraftVersion
       )
       const url = version.files.map(file => file.url)?.at(0)
