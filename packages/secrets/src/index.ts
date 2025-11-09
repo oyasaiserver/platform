@@ -1,19 +1,27 @@
-import { mapValues } from '@oyasaiserver/cdktf/object'
-import { ok } from 'node:assert'
+import { parse } from '@dotenvx/dotenvx'
+import { readFileSync } from 'fs'
+import { deepStrictEqual, ok } from 'node:assert/strict'
+import { join } from 'node:path'
 import { env } from 'node:process'
-import { defaults } from './defaults.ts'
-import type { Environment } from './environment.ts'
+import { readEnvironment } from './environment.ts'
+import { secrets, type Secrets } from './secrets.ts'
 
-export type SecretKey = keyof typeof defaults
+export type { Secrets } from './secrets.ts'
 
-export type Secrets = Readonly<Record<SecretKey, string>>
+export function createSecrets(): Secrets {
+  const envs = readEnvs()
+  const privateKey = env.DOTENV_PRIVATE_KEY
+  ok(privateKey)
+  const parsed = {
+    ...parse<Secrets>(envs, { privateKey }),
+    DOTENV_PRIVATE_KEY: privateKey
+  }
+  deepStrictEqual(Object.keys(parsed), secrets)
+  return parsed
+}
 
-export function createSecrets(environemnt: Environment): Secrets {
-  return environemnt === 'local'
-    ? defaults
-    : mapValues(defaults, key => {
-        const value = env[key]
-        ok(value, `Missing required secret: ${key}`)
-        return value
-      })
+export function readEnvs(environment = readEnvironment()): string {
+  const directory = join(import.meta.dirname, '../../../secrets')
+  const envfile = join(directory.toString(), environment, '.env')
+  return readFileSync(envfile).toString()
 }
