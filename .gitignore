@@ -195,10 +195,6 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
-.env.keys
-!secrets/local/.env.keys
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -415,3 +411,7 @@ cdktf.log
 
 # Local infra
 local
+
+# dotenv environment variable files
+.env.keys
+!secrets/local

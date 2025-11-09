@@ -1,18 +1,16 @@
-import { getEnvironment } from '@oyasaiserver/secrets/environment'
+import { isLocal } from '@oyasaiserver/secrets/environment'
 import { App } from 'cdktf'
 import { CloudflareStack } from './stacks/cloudflare-stack.ts'
 import { DockerStack } from './stacks/docker-stack.ts'
 import { GitHubStack } from './stacks/github-stack.ts'
-import { SecretsStack } from './stacks/secrets-stack.ts'
-
-const environment = getEnvironment()
+import { InfisicalStack } from './stacks/infisical-stack.ts'
 
 const app = new App()
 
-if (environment !== 'local') {
+if (!isLocal()) {
   new CloudflareStack(app, 'cloudflare')
   new GitHubStack(app, 'github')
-  new SecretsStack(app, 'secrets')
+  new InfisicalStack(app, 'secrets')
 }
 
 new DockerStack(app, 'docker')

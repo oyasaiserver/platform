@@ -6,7 +6,7 @@ import { Secret } from 'terraform-providers/infisical/secret'
 import { objectKeys } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
-export class SecretsStack extends OyasaiTerraformStack {
+export class InfisicalStack extends OyasaiTerraformStack {
   public constructor(scope: Construct, id: string) {
     super(scope, id)
 
