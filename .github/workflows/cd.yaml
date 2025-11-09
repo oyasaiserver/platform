@@ -29,35 +29,9 @@ jobs:
           fi
           echo "ENVIRONMENT=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
 
-  deploy-apps:
-    needs:
-      - envs
-    runs-on: ubuntu-latest
-    environment: ${{ needs.envs.outputs.environment }}
-    strategy:
-      matrix:
-        app:
-          - dashboard
-          - hello-world
-          - wiki
-    env:
-      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
-    steps:
-      - uses: actions/checkout@v5
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      - run: |
-          npm run build --if-present
-          npm run deploy -- --name ${{ matrix.app }}-${{ needs.envs.outputs.environment }}
-        working-directory: apps/${{ matrix.app }}
-
   cdktf:
     needs:
       - envs
-      - deploy-apps
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.environment }}
     env:
@@ -78,16 +52,17 @@ jobs:
         run: |
           npm run download-plugins
         working-directory: packages/minecraft-server
+      - name: Build everything
+        run: |
+          npm run build --workspaces --if-present
       - name: Deploy infra
         run: |
-          npm run build
           npm run deploy
         working-directory: packages/cdktf
 
   actions-timeline:
     needs:
       - envs
-      - deploy-apps
       - cdktf
     runs-on: ubuntu-latest
     steps:

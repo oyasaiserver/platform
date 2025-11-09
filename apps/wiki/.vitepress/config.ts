@@ -1,8 +1,7 @@
-// FIXME - can't import json module directly in config
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  srcDir: 'src/pages',
+  srcDir: 'src',
   title: 'web',
   description: 'A VitePress Site',
   themeConfig: {

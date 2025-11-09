@@ -1,4 +1,5 @@
 {
+  "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "hello-world",
   "compatibility_date": "2025-04-03",
   "assets": {

@@ -3,11 +3,10 @@
   "type": "module",
   "scripts": {
     "build": "vitepress build",
-    "deploy": "wrangler deploy",
     "dev": "vitepress dev",
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "vitepress": "^2.0.0-alpha.7"
+    "vitepress": "^2.0.0-alpha.12"
   }
 }
