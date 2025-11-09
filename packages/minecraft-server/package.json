@@ -7,8 +7,5 @@
   },
   "scripts": {
     "download-plugins": "node scripts/download-plugins.ts"
-  },
-  "dependencies": {
-    "@xmcl/modrinth": "^2.5.0"
   }
 }
