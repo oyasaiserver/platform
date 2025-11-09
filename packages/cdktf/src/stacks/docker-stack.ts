@@ -5,7 +5,7 @@ import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory, hashPaths } from '../fs.ts'
-import { objectToEnv, objectToPorts } from '../object.ts'
+import { envs, ports } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
@@ -58,7 +58,7 @@ export class DockerStack extends OyasaiTerraformStack {
       image: images.mariadb.imageId,
       name: 'mariadb',
       restart: 'unless-stopped',
-      env: objectToEnv({
+      env: envs({
         MARIADB_ROOT_PASSWORD: this.secrets.MARIADB_PASSWORD
       }),
       networksAdvanced: [network],
@@ -87,11 +87,11 @@ export class DockerStack extends OyasaiTerraformStack {
         destroyGraceSeconds: 2 * 60,
         init: true,
         networksAdvanced: [network],
-        ports: objectToPorts({
+        ports: ports({
           tcp: [8100, 8192, 25565, 25575],
           udp: [19132]
         }),
-        env: objectToEnv({
+        env: envs({
           EULA: true,
           TYPE: 'PURPUR',
           VERSION: DockerStack.minecraftVersion,
@@ -140,7 +140,7 @@ export class DockerStack extends OyasaiTerraformStack {
         image: images.minecraftBackup.imageId,
         networksAdvanced: [network],
         restart: 'unless-stopped',
-        env: objectToEnv({
+        env: envs({
           ...r2CommonEnv,
           RCON_HOST: 'minecraft-main',
           RCON_PASSWORD: this.secrets.RCON_PASSWORD,
@@ -164,7 +164,7 @@ export class DockerStack extends OyasaiTerraformStack {
         restart: 'unless-stopped',
         networksAdvanced: [network],
         command: ['dump'],
-        env: objectToEnv({
+        env: envs({
           DB_SERVER: 'mariadb',
           DB_USER: 'root',
           DB_PASS: this.secrets.MARIADB_PASSWORD,

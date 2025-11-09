@@ -1,7 +1,0 @@
-import { WorkerEntrypoint } from 'cloudflare:workers'
-
-export default class extends WorkerEntrypoint {
-  override async fetch(request: Request) {
-    return this.env.assets.fetch(request)
-  }
-}
