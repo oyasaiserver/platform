@@ -76,7 +76,7 @@ jobs:
           ./gradlew build --parallel
       - name: Download plugins
         run: |
-          npm run download:plugins
+          npm run download-plugins
         working-directory: packages/minecraft-server
       - name: Deploy infra
         run: |

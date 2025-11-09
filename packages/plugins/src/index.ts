@@ -1,6 +1,7 @@
-import { type RegistryId } from './plugin-registry.ts'
+import type { Environment } from '@oyasaiserver/secrets/environment'
+import { type RegistryId } from './registry.ts'
 
-export const local: RegistryId[] = [
+const local: RegistryId[] = [
   'essentialsx',
   'fastasyncworldedit',
   'luckperms',
@@ -11,7 +12,7 @@ export const local: RegistryId[] = [
   'vertex'
 ]
 
-export const development: RegistryId[] = local.concat(
+const development: RegistryId[] = local.concat(
   'bkcommonlib',
   'coreprotect',
   'decentholograms',
@@ -66,4 +67,10 @@ export const development: RegistryId[] = local.concat(
   'pvparena'
 )
 
-export const production: RegistryId[] = development.concat('discordsrv', 'bluemap')
+const production: RegistryId[] = development.concat('discordsrv', 'bluemap')
+
+export const plugins: Record<Environment, readonly RegistryId[]> = {
+  local,
+  development,
+  production
+}

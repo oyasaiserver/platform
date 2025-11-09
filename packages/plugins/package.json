@@ -1,0 +1,14 @@
+{
+  "name": "@oyasaiserver/plugins",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test:integration": "node --test"
+  },
+  "dependencies": {
+    "@xmcl/modrinth": "^2.5.0"
+  }
+}

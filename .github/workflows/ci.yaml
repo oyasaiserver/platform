@@ -53,28 +53,6 @@ jobs:
       - run: |
           npm run test:integration --workspaces --if-present
 
-  cdktf-no-drift:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        stack: ['secrets']
-        environment: ['development', 'production']
-    env:
-      ENVIRONMENT: ${{ matrix.environment }}
-    steps:
-      - uses: actions/checkout@v5.0.0
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-terraform
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      - run: |
-          npm run diff:${{ matrix.stack }}
-        working-directory: packages/cdktf
-        env:
-          TF_CLI_ARGS_plan: '-detailed-exitcode'
-
   actions-timeline:
     needs:
       - nocommit

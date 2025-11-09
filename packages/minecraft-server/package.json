@@ -6,10 +6,6 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "download:plugins": "node scripts/download-plugins.ts",
-    "test:integration": "node --test"
-  },
-  "dependencies": {
-    "@xmcl/modrinth": "^2.5.0"
+    "download-plugins": "node scripts/download-plugins.ts"
   }
 }
