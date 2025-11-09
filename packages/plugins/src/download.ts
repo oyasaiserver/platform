@@ -5,7 +5,7 @@ import type { PathLike } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { URL } from 'node:url'
-import { type PluginDefinition, pluginRegistry, type RegistryId } from './plugin-registry.ts'
+import { type PluginDefinition, registry, type RegistryId } from './registry.ts'
 
 function incrementPatch(version: string): string {
   const [major, minor, patch] = version.split('.').map(Number) as [number, number, number]
@@ -80,7 +80,7 @@ export async function downloadJar(definition: PluginDefinition): Promise<Uint8Ar
 
 export async function downloadPlugins(dir: PathLike, ids: readonly RegistryId[]): Promise<void> {
   for (const id of ids) {
-    const bytes = await downloadJar(pluginRegistry[id])
+    const bytes = await downloadJar(registry[id])
     const path = join(dir.toString(), `${id}.jar`)
     await writeFile(path, bytes)
   }

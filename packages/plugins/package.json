@@ -1,12 +1,12 @@
 {
-  "name": "@oyasaiserver/minecraft-server",
+  "name": "@oyasaiserver/plugins",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "download-plugins": "node scripts/download-plugins.ts"
+    "test:integration": "node --test"
   },
   "dependencies": {
     "@xmcl/modrinth": "^2.5.0"

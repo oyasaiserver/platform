@@ -26,7 +26,7 @@ export type PluginDefinition = Readonly<
   | { type: 'url'; url: string }
 >
 
-export const pluginRegistry = {
+export const registry = {
   bkcommonlib: { type: 'modrinth', slug: 'bkcommonlib' },
   coreprotect: { type: 'modrinth', slug: 'coreprotect' },
   decentholograms: { type: 'modrinth', slug: 'decentholograms' },
@@ -160,4 +160,4 @@ export const pluginRegistry = {
   }
 } as const satisfies Record<string, PluginDefinition>
 
-export type RegistryId = keyof typeof pluginRegistry
+export type RegistryId = keyof typeof registry
