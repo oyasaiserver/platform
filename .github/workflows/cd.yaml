@@ -41,10 +41,6 @@ jobs:
       - uses: ./.github/actions/setup-java
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Build plugins
         run: |
           ./gradlew build --parallel
@@ -52,13 +48,12 @@ jobs:
         run: |
           npm run download-plugins
         working-directory: packages/minecraft-server
-      - name: Build everything
+      - name: Deploy
         run: |
           npm run build --workspaces --if-present
-      - name: Deploy infra
-        run: |
-          npm run deploy
-        working-directory: packages/cdktf
+          npm run deploy -w packages/cdktf
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
   actions-timeline:
     needs:
