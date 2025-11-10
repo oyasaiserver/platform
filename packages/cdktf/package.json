@@ -12,8 +12,7 @@
   "dependencies": {
     "@cdktf/provider-cloudflare": "^13.7.0",
     "@cdktf/provider-docker": "^12.0.2",
-    "@cdktf/provider-github": "^15.1.3",
-    "terraform-providers": "^0.0.15"
+    "@cdktf/provider-github": "^15.1.3"
   },
   "devDependencies": {
     "@cloudflare/workers-utils": "^0.0.2",
