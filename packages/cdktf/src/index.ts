@@ -10,7 +10,7 @@ const app = new App()
 if (!isLocal()) {
   new CloudflareStack(app, 'cloudflare')
   new GitHubStack(app, 'github')
-  new InfisicalStack(app, 'secrets')
+  new InfisicalStack(app, 'infisical')
 }
 
 new DockerStack(app, 'docker')
