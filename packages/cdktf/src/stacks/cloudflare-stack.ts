@@ -10,6 +10,7 @@ import { WorkersDeployment } from '@cdktf/provider-cloudflare/lib/workers-deploy
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
 import type { RawConfig } from '@cloudflare/workers-utils'
+import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -20,8 +21,8 @@ export class CloudflareStack extends OyasaiTerraformStack {
   private readonly zoneId = '3a06bb11a935fe62b10f7ee4a312e85d'
   private readonly dummyIp = '192.0.2.1' // RFC 5737 - reserved for documentation
 
-  public constructor(scope: Construct, id: string) {
-    super(scope, id)
+  public constructor(scope: Construct, id: string, secrets: Secrets) {
+    super(scope, id, secrets)
 
     new CloudflareProvider(this, id, {
       apiToken: this.secrets.CLOUDFLARE_API_TOKEN

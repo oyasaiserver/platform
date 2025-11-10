@@ -2,6 +2,7 @@ import { Container } from '@cdktf/provider-docker/lib/container/index.js'
 import { Image } from '@cdktf/provider-docker/lib/image/index.js'
 import { Network } from '@cdktf/provider-docker/lib/network/index.js'
 import { DockerProvider } from '@cdktf/provider-docker/lib/provider/index.js'
+import type { Secrets } from '@oyasaiserver/secrets'
 import { Construct } from 'constructs'
 import { join } from 'node:path'
 import { directory, hashPaths } from '../fs.ts'
@@ -16,8 +17,8 @@ export class DockerStack extends OyasaiTerraformStack {
     this.environment
   )
 
-  public constructor(scope: Construct, id: string) {
-    super(scope, id)
+  public constructor(scope: Construct, id: string, secrets: Secrets) {
+    super(scope, id, secrets)
 
     new DockerProvider(
       this,

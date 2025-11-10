@@ -1,3 +1,4 @@
+import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
 import { DataInfisicalProjects } from 'terraform-providers/infisical/data-infisical-projects'
 import { ProjectEnvironment } from 'terraform-providers/infisical/project-environment'
@@ -5,8 +6,8 @@ import { InfisicalProvider } from 'terraform-providers/infisical/provider'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class InfisicalStack extends OyasaiTerraformStack {
-  public constructor(scope: Construct, id: string) {
-    super(scope, id)
+  public constructor(scope: Construct, id: string, secrets: Secrets) {
+    super(scope, id, secrets)
 
     new InfisicalProvider(this, id, {
       auth: {
