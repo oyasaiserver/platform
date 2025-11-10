@@ -6,11 +6,10 @@ import { suite, test } from 'node:test'
 import { CloudflareStack } from '../../src/stacks/cloudflare-stack.ts'
 import { DockerStack } from '../../src/stacks/docker-stack.ts'
 import { GitHubStack } from '../../src/stacks/github-stack.ts'
-import { InfisicalStack } from '../../src/stacks/infisical-stack.ts'
 
 await suite(import.meta.filename, async () => {
   const secrets = createSecrets()
-  const Stacks = [DockerStack, CloudflareStack, InfisicalStack, GitHubStack] as const
+  const Stacks = [DockerStack, CloudflareStack, GitHubStack] as const
 
   for (const Stack of Stacks) {
     const app = Testing.app()
