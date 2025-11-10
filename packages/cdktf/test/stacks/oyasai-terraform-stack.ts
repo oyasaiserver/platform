@@ -10,7 +10,7 @@ import { InfisicalStack } from '../../src/stacks/infisical-stack.ts'
 
 await suite(import.meta.filename, async () => {
   const secrets = createSecrets()
-  const Stacks = [DockerStack, CloudflareStack, InfisicalStack, GitHubStack]
+  const Stacks = [DockerStack, CloudflareStack, InfisicalStack, GitHubStack] as const
 
   for (const Stack of Stacks) {
     const app = Testing.app()
