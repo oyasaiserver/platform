@@ -1,8 +1,7 @@
 import type { Secrets } from '@oyasaiserver/secrets'
-import { type Environment, readEnvironment } from '@oyasaiserver/secrets/environment'
+import { type Environment } from '@oyasaiserver/secrets/environment'
 import { CloudBackend, LocalBackend, NamedCloudWorkspace, TerraformStack } from 'cdktf'
 import { Construct } from 'constructs'
-import { createTerraformSensitiveSecrets } from '../secrets.ts'
 
 /**
  * An opinionated stack for managing Oyasai infrastructure.
@@ -11,10 +10,10 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
   protected readonly environment: Environment
   protected readonly secrets: Secrets
 
-  protected constructor(scope: Construct, id: string) {
+  protected constructor(scope: Construct, id: string, secrets: Secrets) {
     super(scope, id)
-    this.environment = readEnvironment()
-    this.secrets = createTerraformSensitiveSecrets()
+    this.secrets = secrets
+    this.environment = secrets.ENVIRONMENT
 
     if (this.environment === 'local') {
       new LocalBackend(this)

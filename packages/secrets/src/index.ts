@@ -1,27 +1,21 @@
-import { parse } from '@dotenvx/dotenvx'
-import { readFileSync } from 'fs'
-import { deepStrictEqual, ok } from 'node:assert/strict'
-import { join } from 'node:path'
+import { mapValues } from '@oyasaiserver/cdktf/object'
+import { ok } from 'node:assert'
 import { env } from 'node:process'
+import { defaults } from './defaults.ts'
 import { readEnvironment } from './environment.ts'
-import { secrets, type Secrets } from './secrets.ts'
 
-export type { Secrets } from './secrets.ts'
-
-export function createSecrets(): Secrets {
-  const envs = readEnvs()
-  const privateKey = env.DOTENV_PRIVATE_KEY
-  ok(privateKey)
-  const parsed = {
-    ...parse<Secrets>(envs, { privateKey }),
-    DOTENV_PRIVATE_KEY: privateKey
-  }
-  deepStrictEqual(Object.keys(parsed), secrets)
-  return parsed
+export type Secrets = Readonly<Record<keyof typeof defaults, string>> & {
+  ENVIRONMENT: 'local' | 'development' | 'production'
 }
 
-export function readEnvs(environment = readEnvironment()): string {
-  const directory = join(import.meta.dirname, '../../../secrets')
-  const envfile = join(directory.toString(), environment, '.env')
-  return readFileSync(envfile).toString()
+export function createSecrets(): Secrets {
+  const environment = readEnvironment()
+  if (environment === 'local') {
+    return defaults
+  }
+  return mapValues<Secrets, string>(defaults, key => {
+    const value = env[key]
+    ok(value, `Environment variable ${key} is not set.`)
+    return value
+  }) as Secrets
 }

@@ -1,3 +1,4 @@
+import { createSecrets } from '@oyasaiserver/secrets'
 import { Testing } from 'cdktf'
 import { toBeValidTerraform } from 'cdktf/lib/testing/matchers.js'
 import { ok } from 'node:assert'
@@ -8,12 +9,13 @@ import { GitHubStack } from '../../src/stacks/github-stack.ts'
 import { InfisicalStack } from '../../src/stacks/infisical-stack.ts'
 
 await suite(import.meta.filename, async () => {
-  const Stacks = [DockerStack, CloudflareStack, InfisicalStack, GitHubStack]
+  const secrets = createSecrets()
+  const Stacks = [DockerStack, CloudflareStack, InfisicalStack, GitHubStack] as const
 
   for (const Stack of Stacks) {
     const app = Testing.app()
     const id = Stack.name.toLowerCase().replace('stack', '')
-    const stack = new Stack(app, id)
+    const stack = new Stack(app, id, secrets)
     const synth = Testing.fullSynth(stack)
 
     await test(`valid terraform - ${id}`, async () => {
