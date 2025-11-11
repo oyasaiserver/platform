@@ -1,6 +1,7 @@
 import { DnsRecord } from '@cdktf/provider-cloudflare/lib/dns-record/index.js'
 import { CloudflareProvider } from '@cdktf/provider-cloudflare/lib/provider/index.js'
 import { R2Bucket } from '@cdktf/provider-cloudflare/lib/r2-bucket/index.js'
+import type { WorkerVersionModules } from '@cdktf/provider-cloudflare/lib/worker-version/index.js'
 import {
   WorkerVersion,
   type WorkerVersionConfig
@@ -9,12 +10,11 @@ import { Worker } from '@cdktf/provider-cloudflare/lib/worker/index.js'
 import { WorkersDeployment } from '@cdktf/provider-cloudflare/lib/workers-deployment/index.js'
 import { WorkersRoute } from '@cdktf/provider-cloudflare/lib/workers-route/index.js'
 import { ZoneDnssec } from '@cdktf/provider-cloudflare/lib/zone-dnssec/index.js'
-import type { RawConfig } from '@cloudflare/workers-utils'
 import type { Secrets } from '@oyasaiserver/secrets'
 import type { Construct } from 'constructs'
-import { readdirSync, readFileSync } from 'node:fs'
+import { globSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { directory } from '../fs.ts'
+import { directory, readJsonFileSync } from '../fs.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class CloudflareStack extends OyasaiTerraformStack {
@@ -42,6 +42,7 @@ export class CloudflareStack extends OyasaiTerraformStack {
       content: this.secrets.PUBLIC_IPV4
     })
 
+    console.log(JSON.stringify(this.getApps(), null, 2))
     for (const { name, config } of this.getApps()) {
       const domain = `${name}.${rootDnsRecord.name}`
 
@@ -58,7 +59,10 @@ export class CloudflareStack extends OyasaiTerraformStack {
         name: this.envAwareId(name),
         accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
         observability: {
-          enabled: true
+          enabled: true,
+          logs: {
+            enabled: true
+          }
         }
       })
 
@@ -100,36 +104,36 @@ export class CloudflareStack extends OyasaiTerraformStack {
   private getApps() {
     const dir = join(directory.root, 'apps')
     return readdirSync(dir).map(name => {
-      const path = join(dir, name, 'wrangler.json')
-      const content = readFileSync(path).toString()
-      const config = JSON.parse(content) as RawConfig
+      const path = join(dir, name)
       return {
         name,
-        config: this.toWorkerVersionConfig(config, dir, name)
+        config: this.packageJsonToWorkerVersionConfig(path)
       }
     })
   }
 
-  /**
-   * Naive, incomplete RawConfig -> WorkerVersionConfig conversion. But we want to limit the worker
-   * features anyway to avoid depending on CF specific features.
-   */
-  private toWorkerVersionConfig(
-    config: RawConfig,
-    dir: string,
-    name: string
+  private packageJsonToWorkerVersionConfig(
+    dir: string
   ): Omit<WorkerVersionConfig, 'accountId' | 'workerId'> {
-    if (config.main) {
-      config.main = join(dir, name, config.main)
-    }
-    if (config.assets) {
-      config.assets.directory = join(dir, name, config.assets.directory || 'dist')
-    }
+    const packageJson = readJsonFileSync(join(dir, 'package.json'))
     return {
-      mainModule: config.main,
-      assets: config.assets,
-      compatibilityDate: config.compatibility_date,
-      compatibilityFlags: config.compatibility_flags
+      mainModule: packageJson.main?.replace('dist/', ''),
+      modules: packageJson.main
+        ? globSync(join(dir, 'dist/**/*.js')).map(file => {
+            return {
+              contentFile: file,
+              contentType: 'application/javascript+module',
+              name: file.replace(join(dir, 'dist') + '/', '')
+            } satisfies WorkerVersionModules
+          })
+        : [],
+      assets: {
+        directory: join(dir, 'dist')
+      },
+      compatibilityFlags: ['nodejs_compat'],
+      // Minimal compatibility date to enable `nodejs_compat_v2`
+      // https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
+      compatibilityDate: '2024-09-23'
       // TODO: respect SPA?
     }
   }

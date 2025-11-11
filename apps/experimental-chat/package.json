@@ -1,0 +1,8 @@
+{
+  "name": "@oyasaiserver/experimental-chat",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  }
+}
