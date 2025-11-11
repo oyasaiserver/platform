@@ -4,7 +4,6 @@
   "compilerOptions": {
     "noEmit": false,
     "rootDir": "src",
-    "outDir": "dist",
-    "types": ["@cloudflare/workers-types"]
+    "outDir": "dist"
   }
 }
