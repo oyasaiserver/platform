@@ -3,8 +3,6 @@ export const defaults = {
   CLOUDFLARE_ACCOUNT_ID: 'xxx',
   CLOUDFLARE_API_TOKEN: 'unset_unset_unset_unset_unset_unset_unset',
   CLOUDFLARE_SECRET_ACCESS_KEY: 'xxx',
-  DISCORD_TOKEN: 'xxx',
-  DISCORD_WEBHOOK_URL: 'xxx',
   ENVIRONMENT: 'local',
   GITHUB_APP_ID: 'xxx',
   GITHUB_APP_INSTALLATION_ID: 'xxx',
