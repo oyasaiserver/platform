@@ -42,7 +42,6 @@ export class CloudflareStack extends OyasaiTerraformStack {
       content: this.secrets.PUBLIC_IPV4
     })
 
-    console.log(JSON.stringify(this.getApps(), null, 2))
     for (const { name, config } of this.getApps()) {
       const domain = `${name}.${rootDnsRecord.name}`
 

@@ -15,10 +15,10 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@infisical/cli": "^0.43.23",
+    "@infisical/cli": "^0.43.24",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.3",
-    "@types/react-dom": "^19.2.2",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
