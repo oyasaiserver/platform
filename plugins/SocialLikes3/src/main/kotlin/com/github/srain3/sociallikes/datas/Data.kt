@@ -7,10 +7,11 @@ import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLRankUp
 import com.github.srain3.sociallikes.gui.UserBuild
-import com.wimbli.WorldBorder.WorldBorder
+import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.floor
 import kotlin.math.max
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -196,93 +197,93 @@ object Data {
     val dir = Tools.getFolderToFolder("data") ?: return
     Bukkit.getLogger().info("[SL3] File Loading...")
     Thread(
-        {
-          val ids = mutableSetOf<Int>()
-          loading = false
-          dir.forEach dir@{
-            // SocialLikes3/data/???-???(dir)/ココのファイル全てのlist
-            val files = Tools.getFolderToFile(it) ?: return@dir
-            files.forEach file@{ file ->
-              // ID.ymlを読み込む
-              val yml = CustomYamlFile(file)
-              // ファイルから値を取り出す
-              val id = yml.getInt("id", -1)
-              val worldStr = yml.getString("loc.world") ?: return@file
-              val x = yml.getDouble("loc.x")
-              val y = yml.getDouble("loc.y")
-              val z = yml.getDouble("loc.z")
-              val time = LocalDateTime.parse(yml.getString("time"))
-              val owner = UUID.fromString(yml.getString("owner"))
-              val title = yml.getString("title") ?: return@file
-              val likesStr = yml.getStringList("likes")
-              val check = yml.getBoolean("check", false)
-              val comment = yml.getString("comment") ?: "No comment"
-              val textID = yml.getLong("DiscordTextID", 0)
+      {
+        val ids = mutableSetOf<Int>()
+        loading = false
+        dir.forEach dir@{
+          // SocialLikes3/data/???-???(dir)/ココのファイル全てのlist
+          val files = Tools.getFolderToFile(it) ?: return@dir
+          files.forEach file@{ file ->
+            // ID.ymlを読み込む
+            val yml = CustomYamlFile(file)
+            // ファイルから値を取り出す
+            val id = yml.getInt("id", -1)
+            val worldStr = yml.getString("loc.world") ?: return@file
+            val x = yml.getDouble("loc.x")
+            val y = yml.getDouble("loc.y")
+            val z = yml.getDouble("loc.z")
+            val time = LocalDateTime.parse(yml.getString("time"))
+            val owner = UUID.fromString(yml.getString("owner"))
+            val title = yml.getString("title") ?: return@file
+            val likesStr = yml.getStringList("likes")
+            val check = yml.getBoolean("check", false)
+            val comment = yml.getString("comment") ?: "No comment"
+            val textID = yml.getLong("DiscordTextID", 0)
 
-              // 比較して大きいIDへ更新する
-              lastID = max(lastID, id)
-              // 存在するidリストへ保存する
-              ids.add(id)
+            // 比較して大きいIDへ更新する
+            lastID = max(lastID, id)
+            // 存在するidリストへ保存する
+            ids.add(id)
 
-              // locationへ変換
-              val world =
-                Bukkit.getServer().getWorld(worldStr)
-                  ?: run {
-                    Tools.plugin.logger.warning("ID:$id world $worldStr does not exist!")
-                    // return@file
-                    null
-                  }
-              val loc = Location(world, x, y, z)
+            // locationへ変換
+            val world =
+              Bukkit.getServer().getWorld(worldStr)
+                ?: run {
+                  Tools.plugin.logger.warning("ID:$id world $worldStr does not exist!")
+                  // return@file
+                  null
+                }
+            val loc = Location(world, x, y, z)
 
-              // likesのStringListからUUIDListへ変換
-              val likes: MutableList<UUID> = mutableListOf()
-              likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
+            // likesのStringListからUUIDListへ変換
+            val likes: MutableList<UUID> = mutableListOf()
+            likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
 
-              // Cacheへ入れる
-              val slData =
-                SLData(id, loc, time, owner, title, likes, check, comment, worldStr, textID)
-              val list = dataMap[it.name] ?: mutableListOf()
-              list.add(slData)
-              dataMap[it.name] = list
+            // Cacheへ入れる
+            val slData =
+              SLData(id, loc, time, owner, title, likes, check, comment, worldStr, textID)
+            val list = dataMap[it.name] ?: mutableListOf()
+            list.add(slData)
+            dataMap[it.name] = list
 
-              // userLikes数を加算する
-              userLikesInt[owner] = (userLikesInt[owner] ?: 0) + likes.count()
+            // userLikes数を加算する
+            userLikesInt[owner] = (userLikesInt[owner] ?: 0) + likes.count()
+          }
+        }
+
+        try {
+          AllBuild.createItem(dataMap.toMap())
+        } catch (_: Exception) {
+          Tools.plugin.logger.severe("AllBuild.createItemにエラー")
+        }
+
+        if (lastID >= 1) {
+          for (i in 1..lastID) {
+            if (!ids.contains(i)) {
+              emptyIDList.add(i)
             }
           }
+        } else if (lastID < 0) {
+          lastID = 0
+        }
 
-          try {
-            AllBuild.createItem(dataMap.toMap())
-          } catch (_: Exception) {
-            Tools.plugin.logger.severe("AllBuild.createItemにエラー")
-          }
+        try {
+          slNearLoadTask()
+        } catch (e: Exception) {
+          Tools.plugin.logger.severe("slNearLoadTaskにエラー: ${e.toString()}")
+        }
 
-          if (lastID >= 1) {
-            for (i in 1..lastID) {
-              if (!ids.contains(i)) {
-                emptyIDList.add(i)
-              }
-            }
-          } else if (lastID < 0) {
-            lastID = 0
-          }
+        try {
+          SLRankUp.createDataTask()
+        } catch (e: Exception) {
+          Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
+        }
 
-          try {
-            slNearLoadTask()
-          } catch (e: Exception) {
-            Tools.plugin.logger.severe("slNearLoadTaskにエラー: ${e.toString()}")
-          }
-
-          try {
-            SLRankUp.createDataTask()
-          } catch (e: Exception) {
-            Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
-          }
-
-          loading = true
-          Bukkit.getLogger().info("[SL3] Load completion!")
-        },
-        "SL3-loadFileToDataCache",
-      )
+        loading = true
+        Bukkit.getLogger().info("[SL3] Load completion!")
+      },
+      "SL3-loadFileToDataCache",
+    )
       .start()
   }
 
@@ -351,121 +352,135 @@ object Data {
     }
   }
 
+  /** worldborder.yml からボーダー情報を読む */
+  private fun getBorderChunkRange(loc: Location): IntArray? {
+    val file = File(Tools.plugin.dataFolder, "worldborder.yml")
+    if (!file.exists()) return null
+
+    val yml = CustomYamlFile(file)
+    val base = loc.world.name
+
+    val cx = yml.getDouble("$base.centerX", Double.NaN)
+    val cz = yml.getDouble("$base.centerZ", Double.NaN)
+    val rx = yml.getDouble("$base.radiusX", Double.NaN)
+    val rz = yml.getDouble("$base.radiusZ", Double.NaN)
+
+    if (cx.isNaN() || cz.isNaN() || rx.isNaN() || rz.isNaN() || rx <= 0.0 || rz <= 0.0) return null
+
+    val minCX = floor((cx - rx) / 16.0).toInt()
+    val maxCX = floor((cx + rx) / 16.0).toInt()
+    val minCZ = floor((cz - rz) / 16.0).toInt()
+    val maxCZ = floor((cz + rz) / 16.0).toInt()
+
+    return intArrayOf(minCX, maxCX, minCZ, maxCZ)
+  }
+
   @Suppress("UnstableApiUsage", "removal")
   fun vacantTPTask(player: Player, radius: Int, maxCount: Int, biomeStr: String?) {
     val loc = player.location.clone()
     val data = slNearData[loc.world.name]?.toMap() ?: return
     val biome = biomeStr?.let { Biome.valueOf(it) }
-    val bordarData =
-      WorldBorder.plugin.getWorldBorder(loc.world.name)
+
+    val chunkRange =
+      getBorderChunkRange(loc)
         ?: run {
-          player.sendMessage(Tools.socialLikesLOGO + "&eWorldBorderが無いため実行できません。".color())
+          player.sendMessage(Tools.socialLikesLOGO + "&eコンフィグにWorldBorderが設定されていません。".color())
           return
         }
-    val maxCX = (bordarData.x + bordarData.radiusX).toInt().shr(4)
-    val minCX = (bordarData.x - bordarData.radiusX).toInt().shr(4)
-    val maxCZ = (bordarData.z + bordarData.radiusZ).toInt().shr(4)
-    val minCZ = (bordarData.z - bordarData.radiusZ).toInt().shr(4)
+    val minCX = chunkRange[0]
+    val maxCX = chunkRange[1]
+    val minCZ = chunkRange[2]
+    val maxCZ = chunkRange[3]
 
-    val r =
-      if (radius > 0) {
-        radius
-      } else {
-        1
-      }
-    val c =
-      if (maxCount >= 0) {
-        maxCount
-      } else {
-        0
-      }
+    val r = if (radius > 0) radius else 1
+    val c = if (maxCount >= 0) maxCount else 0
 
     player.sendMessage(Tools.socialLikesLOGO + "&f空き地を探しています...".color())
 
     Thread {
-        var switch = true
-        var totalCount = 0
-        var biomeCount = 0
-        while (switch) {
-          val randomCX = (minCX..maxCX).random()
-          val randomCZ = (minCZ..maxCZ).random()
+      var switch = true
+      var totalCount = 0
+      var biomeCount = 0
+      while (switch) {
+        val randomCX = (minCX..maxCX).random()
+        val randomCZ = (minCZ..maxCZ).random()
 
-          if (biome != null) {
-            biomeCount++
-            val x = randomCX * 16 + 8
-            val z = randomCZ * 16 + 8
-            val hitBiome = loc.world.getBiome(x, 200, z)
-            if (biome.name() != hitBiome.name()) {
-              if (biomeCount >= 33) {
-                object : BukkitRunnable() {
-                    override fun run() {
-                      player.sendMessage(Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color())
-                    }
-                  }
-                  .runTask(Tools.plugin)
-                switch = false
-              }
-              continue
-            }
-          }
-
-          var count = 0
-          for (x in randomCX - r..randomCX + r) {
-            for (z in randomCZ - r..randomCZ + r) {
-              val slDataSet = data[x]?.get(z) ?: continue
-              count += slDataSet.size
-            }
-          }
-
-          if (count <= c) {
-            val x = randomCX * 16 + 8
-            val z = randomCZ * 16 + 8
-            object : BukkitRunnable() {
+        if (biome != null) {
+          biomeCount++
+          val x = randomCX * 16 + 8
+          val z = randomCZ * 16 + 8
+          val hitBiome = loc.world.getBiome(x, 200, z)
+          if (biome.name() != hitBiome.name()) {
+            if (biomeCount >= 33) {
+              object : BukkitRunnable() {
                 override fun run() {
-                  var switchY = true
-                  val sLoc =
-                    Location(loc.world, x.toDouble(), 321.0, z.toDouble(), loc.yaw, loc.pitch)
-                  while (switchY) {
-                    if (sLoc.block.isPassable) {
-                      if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
-                        switchY = false
-                        continue
-                      }
-                      if (
-                        sLoc.block.getRelative(BlockFace.DOWN).blockData.material == Material.WATER
-                      ) {
-                        switchY = false
-                        continue
-                      }
-                    }
-                    sLoc.y -= 1.0
-                    if (sLoc.y <= -64.0) {
-                      player.sendMessage(Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color())
-                      return
-                    }
-                  }
-                  Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    "tp ${player.name} $x ${sLoc.y} $z",
-                  )
+                  player.sendMessage(Tools.socialLikesLOGO + "&eバイオームが見つかりませんでした。".color())
                 }
               }
-              .runTask(Tools.plugin)
-            switch = false
-          }
-          totalCount++
-          if (totalCount >= 33) {
-            object : BukkitRunnable() {
-                override fun run() {
-                  player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
-                }
-              }
-              .runTask(Tools.plugin)
-            switch = false
+                .runTask(Tools.plugin)
+              switch = false
+            }
+            continue
           }
         }
-        return@Thread
+
+        var count = 0
+        for (x in randomCX - r..randomCX + r) {
+          for (z in randomCZ - r..randomCZ + r) {
+            val slDataSet = data[x]?.get(z) ?: continue
+            count += slDataSet.size
+          }
+        }
+
+        if (count <= c) {
+          val x = randomCX * 16 + 8
+          val z = randomCZ * 16 + 8
+          object : BukkitRunnable() {
+            override fun run() {
+              var switchY = true
+              val sLoc =
+                Location(loc.world, x.toDouble(), 321.0, z.toDouble(), loc.yaw, loc.pitch)
+              while (switchY) {
+                if (sLoc.block.isPassable) {
+                  if (!sLoc.block.getRelative(BlockFace.DOWN).isPassable) {
+                    switchY = false
+                    continue
+                  }
+                  if (
+                    sLoc.block.getRelative(BlockFace.DOWN).blockData.material == Material.WATER
+                  ) {
+                    switchY = false
+                    continue
+                  }
+                }
+                sLoc.y -= 1.0
+                if (sLoc.y <= -64.0) {
+                  player.sendMessage(Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color())
+                  return
+                }
+              }
+              Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(),
+                "tp ${player.name} $x ${sLoc.y} $z",
+              )
+            }
+          }
+            .runTask(Tools.plugin)
+          switch = false
+        }
+        totalCount++
+        if (totalCount >= 33) {
+          object : BukkitRunnable() {
+            override fun run() {
+              player.sendMessage(Tools.socialLikesLOGO + "&e空き地が見つかりませんでした。".color())
+            }
+          }
+            .runTask(Tools.plugin)
+          switch = false
+        }
       }
+      return@Thread
+    }
       .start()
   }
 }

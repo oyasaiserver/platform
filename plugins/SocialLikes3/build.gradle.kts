@@ -8,6 +8,5 @@ dependencies {
   implementation(libs.inventoryframework)
   implementation(libs.anvilgui)
   implementation(libs.javacord)
-  implementation(libs.worldborder)
   implementation(libs.ultimateadvancementapi)
 }
