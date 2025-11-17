@@ -7,10 +7,11 @@ import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLRankUp
 import com.github.srain3.sociallikes.gui.UserBuild
-import com.wimbli.WorldBorder.WorldBorder
+import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.floor
 import kotlin.math.max
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -351,34 +352,48 @@ object Data {
     }
   }
 
+  /** worldborder.yml からボーダー情報を読む */
+  private fun getBorderChunkRange(loc: Location): IntArray? {
+    val file = File(Tools.plugin.dataFolder, "worldborder.yml")
+    if (!file.exists()) return null
+
+    val yml = CustomYamlFile(file)
+    val base = loc.world.name
+
+    val cx = yml.getDouble("$base.centerX", Double.NaN)
+    val cz = yml.getDouble("$base.centerZ", Double.NaN)
+    val rx = yml.getDouble("$base.radiusX", Double.NaN)
+    val rz = yml.getDouble("$base.radiusZ", Double.NaN)
+
+    if (cx.isNaN() || cz.isNaN() || rx.isNaN() || rz.isNaN() || rx <= 0.0 || rz <= 0.0) return null
+
+    val minCX = floor((cx - rx) / 16.0).toInt()
+    val maxCX = floor((cx + rx) / 16.0).toInt()
+    val minCZ = floor((cz - rz) / 16.0).toInt()
+    val maxCZ = floor((cz + rz) / 16.0).toInt()
+
+    return intArrayOf(minCX, maxCX, minCZ, maxCZ)
+  }
+
   @Suppress("UnstableApiUsage", "removal")
   fun vacantTPTask(player: Player, radius: Int, maxCount: Int, biomeStr: String?) {
     val loc = player.location.clone()
     val data = slNearData[loc.world.name]?.toMap() ?: return
     val biome = biomeStr?.let { Biome.valueOf(it) }
-    val bordarData =
-      WorldBorder.plugin.getWorldBorder(loc.world.name)
+
+    val chunkRange =
+      getBorderChunkRange(loc)
         ?: run {
-          player.sendMessage(Tools.socialLikesLOGO + "&eWorldBorderが無いため実行できません。".color())
+          player.sendMessage(Tools.socialLikesLOGO + "&eコンフィグにWorldBorderが設定されていません。".color())
           return
         }
-    val maxCX = (bordarData.x + bordarData.radiusX).toInt().shr(4)
-    val minCX = (bordarData.x - bordarData.radiusX).toInt().shr(4)
-    val maxCZ = (bordarData.z + bordarData.radiusZ).toInt().shr(4)
-    val minCZ = (bordarData.z - bordarData.radiusZ).toInt().shr(4)
+    val minCX = chunkRange[0]
+    val maxCX = chunkRange[1]
+    val minCZ = chunkRange[2]
+    val maxCZ = chunkRange[3]
 
-    val r =
-      if (radius > 0) {
-        radius
-      } else {
-        1
-      }
-    val c =
-      if (maxCount >= 0) {
-        maxCount
-      } else {
-        0
-      }
+    val r = if (radius > 0) radius else 1
+    val c = if (maxCount >= 0) maxCount else 0
 
     player.sendMessage(Tools.socialLikesLOGO + "&f空き地を探しています...".color())
 
