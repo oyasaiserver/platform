@@ -29,6 +29,7 @@ const development: RegistryId[] = local.concat(
   'worldguard',
   'venturechat',
   'particlehats',
+  'skinsrestorer',
   'protocollib',
   'advancedban',
   'signshop',
