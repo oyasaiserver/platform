@@ -47,7 +47,7 @@ export const registry = {
   plugmanx: { type: 'modrinth', slug: 'plugmanx' },
   discordsrv: { type: 'modrinth', slug: 'discordsrv' },
   bluemap: { type: 'modrinth', slug: 'bluemap' },
-  skinsrestorer: { type: 'modrinth', slug: 'skinsrestorer'},
+  skinsrestorer: { type: 'modrinth', slug: 'skinsrestorer' },
 
   venturechat: { type: 'spiget', id: 771 },
   particlehats: { type: 'spiget', id: 1007 },
