@@ -10,7 +10,7 @@
     "test:integration": "node --test"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "^13.7.0",
+    "@cdktf/provider-cloudflare": "^13.8.0",
     "@cdktf/provider-docker": "^12.0.2",
     "@cdktf/provider-github": "15.2.0"
   },
