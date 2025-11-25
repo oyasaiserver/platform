@@ -11,13 +11,13 @@ jobs:
   nocommit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: nobssoftware/nocommit@v3
 
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-node
       - run: |
           npm run lint
@@ -27,7 +27,7 @@ jobs:
   spotless:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-java
       - run: |
           ./gradlew spotlessCheck --parallel
@@ -35,7 +35,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --workspaces --if-present
@@ -43,7 +43,7 @@ jobs:
   build-plugins:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-java
       - run: |
           ./gradlew build --parallel
@@ -51,7 +51,7 @@ jobs:
   test-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-node
       - run: |
           npm run test --workspaces --if-present
@@ -59,7 +59,7 @@ jobs:
   test-integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
       - uses: ./.github/actions/setup-node
       - uses: ./.github/actions/setup-terraform
       - run: |
