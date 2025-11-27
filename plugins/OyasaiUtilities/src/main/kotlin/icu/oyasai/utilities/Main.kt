@@ -3,6 +3,7 @@ package icu.oyasai.utilities
 import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
+import icu.oyasai.utilities.menu_gui.MenuCommand
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
@@ -29,6 +30,7 @@ class Main : JavaPlugin() {
     server.getPluginCommand("back")?.setExecutor(TPathCmd) // TPathのコマンド
     server.getPluginCommand("forward")?.setExecutor(TPathCmd) // TPathのコマンド
     server.getPluginCommand("tpdata")?.setExecutor(TPathCmd) // TPathのコマンド
+    server.getPluginCommand("menu")?.setExecutor(MenuCommand) // Menuのコマンド
 
     OreReappears.onEnable() // OreReappearsの有効化
     AdminBP.onEnable()
