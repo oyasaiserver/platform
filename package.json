@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc --build",
     "format": "prettier . --write",
-    "lint": "oxlint --fix",
-    "update": "taze latest --recursive --install --write"
+    "lint": "oxlint --fix"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -24,7 +23,6 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-packagejson": "^2.5.19",
     "prettier-plugin-sh": "^0.18.0",
-    "taze": "^19.9.2",
     "typescript": "^5.9.3"
   }
 }
