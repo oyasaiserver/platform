@@ -4,13 +4,12 @@ on:
   pull_request:
 
 jobs:
-  merging-into-main:
+  merging-into-master:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.0
-      - name: Ensure target branch is main
-        run: |
-          [[ "$GITHUB_BASE_REF" == main ]]
+      - run: |
+          [[ "$GITHUB_BASE_REF" == master ]]
 
   pr-title-lint:
     runs-on: ubuntu-latest
