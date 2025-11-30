@@ -7,7 +7,7 @@ import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
+import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
 import io.oyasai.oyasaiAdminTools.rank.RankManager
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
@@ -116,11 +116,13 @@ object Promote : CommandExecutor {
                                   statsData.move += 100
                                 }
                                 JsonUtils.saveUserJson(player.uniqueId)
-                                SendEmbedMessage.sendNotification(
+                                PromotionNotifier.notifyAll(
                                   player.uniqueId,
                                   player.name,
+                                  nextRank.name,
                                   sender.name,
                                   record,
+                                  nextRank.special,
                                 )
                                 sender.sendMessage(
                                   "§a${player.name}さんを§e${nextRank.name}§aに昇格させました。"
