@@ -8,4 +8,5 @@ data class Rank(
   val minJoinDays: Int = 0,
   val minElapse: Int = 0,
   val minBuilds: Int = 0,
+  val special: Boolean = false,
 )
