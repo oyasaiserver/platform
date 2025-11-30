@@ -6,7 +6,6 @@ import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
 import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
 import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils

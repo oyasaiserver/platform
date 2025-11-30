@@ -4,10 +4,9 @@ import com.baakun.dynamicprofile.data.PromotionRecord
 import com.baakun.dynamicprofile.data.PromotionType
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
-import io.oyasai.oyasaiAdminTools.rank.Rank
+import java.util.UUID
 import org.bukkit.Bukkit
 import org.bukkit.Sound
-import java.util.UUID
 
 object PromotionNotifier {
 
@@ -21,23 +20,25 @@ object PromotionNotifier {
     val action = if (record.type == PromotionType.PROMOTE) "昇格" else "降格"
     val by = promotedBy ?: "Unknown"
     val name = targetName ?: "Unknown"
-    Bukkit.getScheduler().runTask(plugin, Runnable {
-
-      val message = "§a${name}さんが§e${newRankName}§aに${action}しました！！ by $by"
-      Bukkit.getOnlinePlayers().forEach {
-        if (it.name.equals(name, ignoreCase = true)) {
-          it.sendMessage("§6おめでとうございます！§r $message")
-          it.playSound(it, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1F, 1F)
-        } else {
-          it.sendMessage(message)
-          it.playSound(it, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 2F)
-        }
-        if (special){
-          it.playSound(it, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1F, 1F)
-        }
-      }
-
-    })
+    Bukkit.getScheduler()
+      .runTask(
+        plugin,
+        Runnable {
+          val message = "§a${name}さんが§e${newRankName}§aに${action}しました！！ by $by"
+          Bukkit.getOnlinePlayers().forEach {
+            if (it.name.equals(name, ignoreCase = true)) {
+              it.sendMessage("§6おめでとうございます！§r $message")
+              it.playSound(it, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1F, 1F)
+            } else {
+              it.sendMessage(message)
+              it.playSound(it, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 2F)
+            }
+            if (special) {
+              it.playSound(it, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1F, 1F)
+            }
+          }
+        },
+      )
   }
 
   fun notifyDiscord(
