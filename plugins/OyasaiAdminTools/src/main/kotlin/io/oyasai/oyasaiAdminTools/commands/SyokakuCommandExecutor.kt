@@ -17,7 +17,15 @@ import org.bukkit.command.TabCompleter
 
 object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
   private val subCommands =
-    listOf("promote", "demote", "getrank", "iscandidate", "seerequirements", "seeplayerinfo", "confirm")
+    listOf(
+      "promote",
+      "demote",
+      "getrank",
+      "iscandidate",
+      "seerequirements",
+      "seeplayerinfo",
+      "confirm",
+    )
 
   override fun onCommand(
     sender: CommandSender,

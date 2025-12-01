@@ -16,10 +16,16 @@ object PromotionNotificationStorer {
     pendingNotifications.add(notification)
 
     // 5分後に自動削除
-    val task = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-      pendingNotifications.removeIf { it.targetUUID.toString() == uuid }
-      tasks.remove(uuid)
-    }, 20 * 60 * 5)
+    val task =
+      Bukkit.getScheduler()
+        .runTaskLater(
+          plugin,
+          Runnable {
+            pendingNotifications.removeIf { it.targetUUID.toString() == uuid }
+            tasks.remove(uuid)
+          },
+          20 * 60 * 5,
+        )
     tasks[uuid] = task
   }
 
