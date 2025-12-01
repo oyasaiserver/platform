@@ -50,7 +50,18 @@ object PromotionNotifier {
     SendEmbedMessage.sendNotification(targetUUID, targetName, promoterName, record)
   }
 
-  fun notifyAll(
+  fun notifyAll(notification: PromotionNotification){
+    notifyAll(
+      notification.targetUUID,
+      notification.targetName,
+      notification.newRankName,
+      notification.promoterName,
+      notification.record,
+      notification.special,
+    )
+  }
+
+  private fun notifyAll(
     targetUUID: UUID,
     targetName: String?,
     newRankName: String,
