@@ -17,14 +17,14 @@ object PromotionNotifier {
     record: PromotionRecord,
     special: Boolean,
   ) {
-    val action = if (record.type == PromotionType.PROMOTE) "昇格" else "降格"
-    val by = promotedBy ?: "Unknown"
+    val action = if (record.type == PromotionType.PROMOTE) "§6「↑昇格↑」" else "§c「↓降格↓」"
+    val by = if (promotedBy != null) "§7(実行: $promotedBy)" else ""
     val name = targetName ?: "Unknown"
     Bukkit.getScheduler()
       .runTask(
         plugin,
         Runnable {
-          val message = "§a${name}さんが§e${newRankName}§aに${action}しました！！ by $by"
+          val message = "§a${name} さんが 「§e${newRankName}」 §aに${action}§aしました！！$by"
           Bukkit.getOnlinePlayers().forEach {
             if (it.name.equals(name, ignoreCase = true)) {
               it.sendMessage("§6おめでとうございます！§r $message")
@@ -50,7 +50,18 @@ object PromotionNotifier {
     SendEmbedMessage.sendNotification(targetUUID, targetName, promoterName, record)
   }
 
-  fun notifyAll(
+  fun notifyAll(notification: PromotionNotification) {
+    notifyAll(
+      notification.targetUUID,
+      notification.targetName,
+      notification.newRankName,
+      notification.promoterName,
+      notification.record,
+      notification.special,
+    )
+  }
+
+  private fun notifyAll(
     targetUUID: UUID,
     targetName: String?,
     newRankName: String,

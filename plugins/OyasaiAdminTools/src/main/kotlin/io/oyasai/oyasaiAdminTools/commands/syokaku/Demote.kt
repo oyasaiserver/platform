@@ -6,7 +6,8 @@ import com.baakun.dynamicprofile.model.Calculator
 import com.baakun.dynamicprofile.util.Tools.getStats
 import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
+import io.oyasai.oyasaiAdminTools.notifications.PromotionNotification
+import io.oyasai.oyasaiAdminTools.notifications.PromotionNotificationStorer
 import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
@@ -81,15 +82,18 @@ object Demote : CommandExecutor {
 
                   statsData.promotions.records.add(record)
                   JsonUtils.saveUserJson(player.uniqueId)
-                  PromotionNotifier.notifyAll(
-                    player.uniqueId,
-                    player.name,
-                    previousRank.name,
-                    sender.name,
-                    record,
-                    previousRank.special,
-                  )
-                  sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに降格させました。")
+                  val notification =
+                    PromotionNotification(
+                      player.uniqueId,
+                      player.name ?: "Unknown",
+                      previousRank.name,
+                      sender.name,
+                      record,
+                      previousRank.special,
+                    )
+                  PromotionNotificationStorer.storePendingNotification(notification)
+                  sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。")
+                  sender.sendMessage("§e/syokaku confirm ${player.name} §aで§c「↓降格↓」§a通知を送信できます。")
                 } else {
                   sender.sendMessage("§e${player.name}さんは既に最低ランクです。")
                 }

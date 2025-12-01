@@ -1,11 +1,13 @@
 package io.oyasai.oyasaiAdminTools.commands
 
+import io.oyasai.oyasaiAdminTools.commands.syokaku.Confirm
 import io.oyasai.oyasaiAdminTools.commands.syokaku.Demote
 import io.oyasai.oyasaiAdminTools.commands.syokaku.GetRank
 import io.oyasai.oyasaiAdminTools.commands.syokaku.IsCandidate
 import io.oyasai.oyasaiAdminTools.commands.syokaku.Promote
 import io.oyasai.oyasaiAdminTools.commands.syokaku.SeePlayerInfo
 import io.oyasai.oyasaiAdminTools.commands.syokaku.SeeRequirements
+import io.oyasai.oyasaiAdminTools.notifications.PromotionNotificationStorer
 import io.oyasai.oyasaiAdminTools.rank.RankManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -15,7 +17,15 @@ import org.bukkit.command.TabCompleter
 
 object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
   private val subCommands =
-    listOf("promote", "demote", "getrank", "iscandidate", "seerequirements", "seeplayerinfo")
+    listOf(
+      "promote",
+      "demote",
+      "getrank",
+      "iscandidate",
+      "seerequirements",
+      "seeplayerinfo",
+      "confirm",
+    )
 
   override fun onCommand(
     sender: CommandSender,
@@ -36,6 +46,7 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
         SeeRequirements.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "seeplayerinfo" ->
         SeePlayerInfo.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      "confirm" -> Confirm.onCommand(sender, command, label, args.drop(1).toTypedArray())
       else -> {
         sender.sendMessage("§c不明なサブコマンドです。")
         false
@@ -63,6 +74,8 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
               .filter { it.startsWith(args[1], ignoreCase = true) }
           "seerequirements" ->
             RankManager.ranks.map { it.name }.filter { it.startsWith(args[1], ignoreCase = true) }
+          "confirm" ->
+            PromotionNotificationStorer.getAllPendingNotifications().map { it.targetName }
           else -> emptyList()
         }
       args.size == 3 && args[0].equals("seeplayerinfo", ignoreCase = true) -> {
