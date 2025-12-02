@@ -1,4 +1,4 @@
-package icu.oyasai.utilities.teleport
+package icu.oyasai.utilities.tpath
 
 import icu.oyasai.utilities.OyasaiUtilities.color
 import org.bukkit.command.Command

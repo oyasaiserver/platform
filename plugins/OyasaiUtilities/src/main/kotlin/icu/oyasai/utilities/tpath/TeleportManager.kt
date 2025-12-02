@@ -1,4 +1,4 @@
-package icu.oyasai.utilities.teleport
+package icu.oyasai.utilities.tpath
 
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap

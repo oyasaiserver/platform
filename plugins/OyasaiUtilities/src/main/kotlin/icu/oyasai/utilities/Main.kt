@@ -8,8 +8,8 @@ import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
 import icu.oyasai.utilities.oresmelter.OreSmelterEvent
-import icu.oyasai.utilities.teleport.BackForwardCmd
-import icu.oyasai.utilities.teleport.TeleportListener
+import icu.oyasai.utilities.tpath.BackForwardCmd
+import icu.oyasai.utilities.tpath.TeleportListener
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
