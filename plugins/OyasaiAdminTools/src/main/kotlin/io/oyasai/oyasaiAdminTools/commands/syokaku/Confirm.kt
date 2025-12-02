@@ -24,7 +24,7 @@ object Confirm : CommandExecutor {
     val notification =
       PromotionNotificationStorer.getPendingNotification(player.uniqueId.toString())
     if (notification != null) {
-      PromotionNotifier.notifyAll(notification)
+      PromotionNotifier.notifyServer(notification)
       PromotionNotificationStorer.removePendingNotification(player.uniqueId.toString())
     } else {
       sender.sendMessage("§c${player.name}さんの確認待ち昇格通知は見つかりません。")
