@@ -24,10 +24,10 @@ object PromotionNotifier {
       .runTask(
         plugin,
         Runnable {
-          val message = "§a${name} さんが §e「${newRankName}§e」 §aに${action}§aしました！！$by"
+          val message = "§6おめでとう！ §a${name} さんが §e「${newRankName}§e」 §aに${action}§aしました！！$by"
           Bukkit.getOnlinePlayers().forEach {
             if (it.name.equals(name, ignoreCase = true)) {
-              it.sendMessage("§6おめでとうございます！§r $message")
+              it.sendMessage(message)
               it.playSound(it, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1F, 1F)
             } else {
               it.sendMessage(message)
