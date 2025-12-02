@@ -24,7 +24,7 @@ object PromotionNotifier {
       .runTask(
         plugin,
         Runnable {
-          val message = "§a${name} さんが 「§e${newRankName}」 §aに${action}§aしました！！$by"
+          val message = "§a${name} さんが §e「${newRankName}§e」 §aに${action}§aしました！！$by"
           Bukkit.getOnlinePlayers().forEach {
             if (it.name.equals(name, ignoreCase = true)) {
               it.sendMessage("§6おめでとうございます！§r $message")
