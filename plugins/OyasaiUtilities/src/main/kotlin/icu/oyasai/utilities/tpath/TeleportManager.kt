@@ -1,10 +1,10 @@
 package icu.oyasai.utilities.teleport
 
-import org.bukkit.Location
-import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
+import org.bukkit.Location
+import org.bukkit.entity.Player
 
 object TeleportManager {
   private val back = ConcurrentHashMap<UUID, ConcurrentLinkedDeque<Location>>()
@@ -19,7 +19,13 @@ object TeleportManager {
   }
 
   // back/forwardによるTPを無視
-  fun pushIgnore(player: Player) { ignoreNext.add(player.uniqueId) }  fun shouldIgnore(player: Player): Boolean { return ignoreNext.remove(player.uniqueId) }
+  fun pushIgnore(player: Player) {
+    ignoreNext.add(player.uniqueId)
+  }
+
+  fun shouldIgnore(player: Player): Boolean {
+    return ignoreNext.remove(player.uniqueId)
+  }
 
   fun getBack(player: Player): Location? {
     val b = back[player.uniqueId] ?: return null
@@ -37,5 +43,9 @@ object TeleportManager {
     return f.removeFirst()
   }
 
-  fun clear(player: Player) { back.remove(player.uniqueId); forward.remove(player.uniqueId); ignoreNext.remove(player.uniqueId) }
+  fun clear(player: Player) {
+    back.remove(player.uniqueId)
+    forward.remove(player.uniqueId)
+    ignoreNext.remove(player.uniqueId)
+  }
 }
