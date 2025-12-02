@@ -8,6 +8,7 @@ import com.github.srain3.sociallikes.datas.Data
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.notifications.PromotionNotification
 import io.oyasai.oyasaiAdminTools.notifications.PromotionNotificationStorer
+import io.oyasai.oyasaiAdminTools.notifications.PromotionNotifier
 import io.oyasai.oyasaiAdminTools.rank.RankManager.getPreviousRank
 import io.oyasai.oyasaiAdminTools.utils.DateTimeUtils
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
@@ -91,6 +92,7 @@ object Demote : CommandExecutor {
                       record,
                       previousRank.special,
                     )
+                  PromotionNotifier.notifyDiscord(notification)
                   PromotionNotificationStorer.storePendingNotification(notification)
                   sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。")
                   sender.sendMessage("§e/syokaku confirm ${player.name} §aで§c「↓降格↓」§a通知を送信できます。")

@@ -10,7 +10,7 @@ import org.bukkit.Sound
 
 object PromotionNotifier {
 
-  fun notifyServer(
+  private fun notifyServer(
     targetName: String?,
     newRankName: String,
     promotedBy: String?,
@@ -41,13 +41,32 @@ object PromotionNotifier {
       )
   }
 
-  fun notifyDiscord(
+  private fun notifyDiscord(
     targetUUID: UUID,
     targetName: String?,
     promoterName: String?,
     record: PromotionRecord,
   ) {
     SendEmbedMessage.sendNotification(targetUUID, targetName, promoterName, record)
+  }
+
+  fun notifyDiscord(notification: PromotionNotification) {
+    notifyDiscord(
+      notification.targetUUID,
+      notification.targetName,
+      notification.promoterName,
+      notification.record,
+    )
+  }
+
+  fun notifyServer(notification: PromotionNotification) {
+    notifyServer(
+      notification.targetName,
+      notification.newRankName,
+      notification.promoterName,
+      notification.record,
+      notification.special,
+    )
   }
 
   fun notifyAll(notification: PromotionNotification) {
