@@ -1,8 +1,13 @@
 package io.oyasai.oyasaiAdminTools
 
-import io.oyasai.oyasaiAdminTools.commands.*
+import io.oyasai.oyasaiAdminTools.commands.GrieferCommandExecutor
+import io.oyasai.oyasaiAdminTools.commands.PlayerManagerCommandExecutor
+import io.oyasai.oyasaiAdminTools.commands.SyokakuCommandExecutor
+import io.oyasai.oyasaiAdminTools.commands.SyokakuManagerCommandExecutor
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+
 
 class OyasaiAdminTools : JavaPlugin() {
   companion object {
@@ -14,12 +19,18 @@ class OyasaiAdminTools : JavaPlugin() {
     // Plugin startup logic
     plugin.saveDefaultConfig()
 
+    val commandMap = Bukkit.getCommandMap()
+    val knownCommands = commandMap.knownCommands
+    knownCommands.remove("advancedban:ban")
+
     this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
     this.getCommand("syokaku")?.tabCompleter = SyokakuCommandExecutor
     this.getCommand("syokakumanager")?.setExecutor(SyokakuManagerCommandExecutor)
     this.getCommand("syokakumanager")?.tabCompleter = SyokakuManagerCommandExecutor
     this.getCommand("playermanager")?.setExecutor(PlayerManagerCommandExecutor)
     this.getCommand("playermanager")?.tabCompleter = PlayerManagerCommandExecutor
+    this.getCommand("ban")?.setExecutor(GrieferCommandExecutor)
+    this.getCommand("ban")?.tabCompleter = GrieferCommandExecutor
   }
 
   override fun onDisable() {

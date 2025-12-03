@@ -2,7 +2,11 @@ name: OyasaiAdminTools
 version: '1.0-SNAPSHOT'
 main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: '1.21'
+softdepend:
+  - AdvancedBan
 commands:
+  ban:
+    aliases: ['oyasaiban', 'aban', 'tempban']
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
     usage: |

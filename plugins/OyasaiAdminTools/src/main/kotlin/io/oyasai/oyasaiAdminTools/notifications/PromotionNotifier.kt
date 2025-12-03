@@ -47,7 +47,7 @@ object PromotionNotifier {
     promoterName: String?,
     record: PromotionRecord,
   ) {
-    SendEmbedMessage.sendNotification(targetUUID, targetName, promoterName, record)
+    SendEmbedMessage.sendPromotionNotification(targetUUID, targetName, promoterName, record)
   }
 
   fun notifyDiscord(notification: PromotionNotification) {
