@@ -20,6 +20,7 @@ class OyasaiAdminTools : JavaPlugin() {
 
     val commandMap = Bukkit.getCommandMap()
     val knownCommands = commandMap.knownCommands
+    knownCommands.remove("ban")
     knownCommands.remove("advancedban:ban")
 
     this.getCommand("syokaku")?.setExecutor(SyokakuCommandExecutor)
