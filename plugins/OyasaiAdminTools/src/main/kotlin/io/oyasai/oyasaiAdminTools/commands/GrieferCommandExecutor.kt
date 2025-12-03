@@ -45,7 +45,7 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
         Bukkit.getOnlinePlayers()
           .map { it.name }
           .filter { it.startsWith(args[0], ignoreCase = true) }
-      2 -> listOf("1mo", "2w", "3d")
+      2 -> listOf("1mo", "2w", "3d", "4h", "5m", "6s")
       3 -> listOf("あらし")
       else -> emptyList()
     }
