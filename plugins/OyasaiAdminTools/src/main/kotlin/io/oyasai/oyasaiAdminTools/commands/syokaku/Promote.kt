@@ -127,8 +127,7 @@ object Promote : CommandExecutor {
                                     record,
                                     nextRank.special,
                                   )
-                                PromotionNotifier.notifyDiscord(notification)
-                                PromotionNotificationStorer.storePendingNotification(notification)
+                                PromotionNotifier.notifyAll(notification)
                                 sender.sendMessage(
                                   "§a${player.name}さんを§e${nextRank.name}§aに§6「↑昇格↑」§aさせました。"
                                 )

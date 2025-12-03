@@ -92,8 +92,7 @@ object Demote : CommandExecutor {
                       record,
                       previousRank.special,
                     )
-                  PromotionNotifier.notifyDiscord(notification)
-                  PromotionNotificationStorer.storePendingNotification(notification)
+                  PromotionNotifier.notifyAll(notification)
                   sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。")
                   sender.sendMessage("§e/syokaku confirm ${player.name} §aで§c「↓降格↓」§a通知を送信できます。")
                 } else {

@@ -46,7 +46,7 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
         SeeRequirements.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "seeplayerinfo" ->
         SeePlayerInfo.onCommand(sender, command, label, args.drop(1).toTypedArray())
-      "confirm" -> Confirm.onCommand(sender, command, label, args.drop(1).toTypedArray())
+//      "confirm" -> Confirm.onCommand(sender, command, label, args.drop(1).toTypedArray())
       else -> {
         sender.sendMessage("§c不明なサブコマンドです。")
         false
