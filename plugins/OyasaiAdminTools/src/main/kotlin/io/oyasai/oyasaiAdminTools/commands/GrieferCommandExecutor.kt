@@ -2,6 +2,7 @@ package io.oyasai.oyasaiAdminTools.commands
 
 import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
 import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -27,6 +28,10 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
         }
         if (Bukkit.dispatchCommand(sender, "tempban ${args.joinToString(" ")}")) {
           SendEmbedMessage.sendBanNotification(args[0], sender.name, args[1], args[2])
+          Bukkit.getOnlinePlayers().forEach {
+            it.playSound(it.eyeLocation, Sound.ITEM_MACE_SMASH_GROUND_HEAVY, 1.0f, 2.0f)
+            it.sendMessage("§4§l[ＢＡＮ] §f§l${args[0]} §fが§c§lBAN§fされました。")
+          }
         }
         return true
       }
