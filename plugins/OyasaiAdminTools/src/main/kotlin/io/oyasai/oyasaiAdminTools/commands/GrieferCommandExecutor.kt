@@ -1,6 +1,5 @@
 package io.oyasai.oyasaiAdminTools.commands
 
-import io.oyasai.oyasaiAdminTools.commands.playerManager.TeleportOffline
 import io.oyasai.oyasaiAdminTools.discord.SendEmbedMessage
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -21,12 +20,12 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
       return false
     }
     when (command.name.lowercase()) {
-      "ban"-> {
+      "ban" -> {
         if (args.size < 3) {
           sender.sendMessage("§cUsage: /ban <名前> <期間> <理由>")
           return false
         }
-        if (Bukkit.dispatchCommand(sender, "tempban ${args.joinToString(" ")}")){
+        if (Bukkit.dispatchCommand(sender, "tempban ${args.joinToString(" ")}")) {
           SendEmbedMessage.sendBanNotification(args[0], sender.name, args[1], args[2])
         }
         return true
@@ -42,7 +41,10 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
     args: Array<out String>,
   ): List<String> {
     return when (args.size) {
-      1 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
+      1 ->
+        Bukkit.getOnlinePlayers()
+          .map { it.name }
+          .filter { it.startsWith(args[0], ignoreCase = true) }
       2 -> listOf("1mo", "2w", "3d")
       3 -> listOf("あらし")
       else -> emptyList()

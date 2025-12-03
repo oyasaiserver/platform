@@ -8,7 +8,6 @@ import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
-
 class OyasaiAdminTools : JavaPlugin() {
   companion object {
     lateinit var plugin: OyasaiAdminTools
