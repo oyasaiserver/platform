@@ -408,6 +408,7 @@ cdktf.log
 
 # Local dependencies
 !packages/plugins/static/*.jar
+!packages/plugins/gen/*.jar
 
 # Local infra
 local

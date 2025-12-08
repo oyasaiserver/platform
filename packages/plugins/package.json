@@ -6,6 +6,7 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
+    "download": "node scripts/download.ts",
     "test:integration": "node --test"
   },
   "dependencies": {
