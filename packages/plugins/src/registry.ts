@@ -34,7 +34,7 @@ export const registry = {
   essentialsxchat: { type: 'modrinth', slug: 'essentialsx-chat-module' },
   essentialsxspawn: { type: 'modrinth', slug: 'essentialsx-spawn' },
   // fastasyncworldedit: { type: 'modrinth', slug: 'fastasyncworldedit' },
-  fastasyncvoxelsniper: { type: 'modrinth', slug: 'fastasyncvoxelsniper' },
+  // fastasyncvoxelsniper: { type: 'modrinth', slug: 'fastasyncvoxelsniper' },
   multiversecore: { type: 'modrinth', slug: 'multiverse-core' },
   multiverseprotals: { type: 'modrinth', slug: 'multiverse-portals' },
   placeholderapi: { type: 'modrinth', slug: 'placeholderapi' },
@@ -120,6 +120,10 @@ export const registry = {
   fastasyncworldedit: {
     type: 'local',
     path: toStaticPath('FastAsyncWorldEdit.jar')
+  },
+  fastasyncvoxelsniper: {
+    type: 'local',
+    path: toStaticPath('FastAsyncVoxelSniper.jar')
   },
 
   dynamicprofile: {
