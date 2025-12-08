@@ -7,7 +7,7 @@ jobs:
   merging-into-master:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
       - run: |
           [[ "$GITHUB_BASE_REF" == master ]]
 
