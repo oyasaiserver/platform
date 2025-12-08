@@ -1,26 +1,26 @@
 [versions]
 anvilgui = "1.10.10-SNAPSHOT"
 discord-webhooks = "0.8.4"
-discordsrv = "1.30.1"
+discordsrv = "1.30.3"
 gson = "2.13.2"
-inventoryframework = "0.11.3"
+inventoryframework = "0.11.5"
 javacord = "3.8.0"
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 luckperms = "5.5"
 nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
 # @pin
-purpur-api = "1.21.5-R0.1-SNAPSHOT"
-shadow = "9.2.1"
-spotless = "8.0.0"
+purpur-api = "1.21.10-R0.1-SNAPSHOT"
+shadow = "9.3.0"
+spotless = "8.1.0"
 tokenmanager = "3.2.4"
-ultimateadvancementapi = "2.7.0"
+ultimateadvancementapi = "2.7.1"
 vault = "1.7.1"
 worldborder = "2.1.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
+version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
 
 [libraries]
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
