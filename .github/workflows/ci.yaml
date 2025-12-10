@@ -69,7 +69,9 @@ jobs:
     needs:
       - nocommit
       - check
+      - spotless
       - build
+      - build-plugins
       - test-unit
       - test-integration
     runs-on: ubuntu-latest
