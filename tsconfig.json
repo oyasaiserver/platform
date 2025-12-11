@@ -24,7 +24,6 @@
   },
   "references": [
     { "path": "apps/hello-world" },
-    { "path": "apps/hello-world" },
     { "path": "apps/wiki" },
     { "path": "packages/cdktf" },
     { "path": "packages/minecraft-server" },

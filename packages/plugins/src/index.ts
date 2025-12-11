@@ -8,6 +8,7 @@ const local: RegistryId[] = [
   'plugmanx',
   'protocollib',
   'vault',
+  'nuvotifier',
   'vertex'
 ]
 
@@ -67,11 +68,7 @@ const development: RegistryId[] = local.concat(
   'pvparena'
 )
 
-const production: RegistryId[] = development.concat(
-  'discordsrv',
-  'bluemap',
-  'nuvotifier'
-)
+const production: RegistryId[] = development.concat('discordsrv', 'bluemap')
 
 export const plugins: Record<Environment, readonly RegistryId[]> = {
   local,
