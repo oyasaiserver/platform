@@ -1,6 +1,7 @@
 package io.oyasai.vertex
 
 import io.oyasai.vertex.services.Service
+import io.oyasai.vertex.services.http.HttpService
 import io.oyasai.vertex.services.schematics.SchematicsService
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -28,6 +29,6 @@ class Vertex : JavaPlugin() {
 
   companion object {
     val plugin by lazy { getPlugin(Vertex::class.java) }
-    val services = listOf<Service>(SchematicsService)
+    val services = listOf<Service>(SchematicsService, HttpService)
   }
 }

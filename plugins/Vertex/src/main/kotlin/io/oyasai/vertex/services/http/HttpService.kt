@@ -10,7 +10,7 @@ import io.oyasai.vertex.services.Service
 import io.oyasai.vertex.services.http.handlers.Health
 import kotlinx.coroutines.*
 
-object HttpService : Service {
+object HttpService : Service() {
   private var httpServer: EmbeddedServer<CIOApplicationEngine, CIOApplicationEngine.Configuration>? = null
   private var httpJob: Job? = null
 

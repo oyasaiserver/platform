@@ -6,9 +6,9 @@ import org.bukkit.event.Listener
 abstract class Service : Listener {
   open val commands: List<Command> = listOf()
 
-  fun onLoad() {}
+  open fun onLoad() {}
 
-  fun onEnable() {}
+  open fun onEnable() {}
 
-  fun onDisable() {}
+  open fun onDisable() {}
 }
