@@ -105,7 +105,7 @@ export class DockerStack extends OyasaiTerraformStack {
             local: '5G'
           }),
           ICON: 'https://avatars.githubusercontent.com/oyasaiserver',
-          RCON_PASSWORD: secrets.RCON_PASSWORD
+          RCON_PASSWORD: this.secrets.RCON_PASSWORD
         }),
         healthcheck: {
           test: ['mc-health'],
