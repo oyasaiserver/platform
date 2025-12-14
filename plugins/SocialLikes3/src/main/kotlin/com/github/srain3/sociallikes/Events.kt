@@ -20,7 +20,6 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -573,13 +572,9 @@ object Events : Listener {
     if (placedState !is Sign) return
 
     val front = placedState.getSide(Side.FRONT)
-    frontLines.forEachIndexed { index, component ->
-      front.line(index, component ?: Component.empty())
-    }
+    frontLines.forEachIndexed { index, component -> front.line(index, component) }
     val back = placedState.getSide(Side.BACK)
-    backLines.forEachIndexed { index, component ->
-      back.line(index, component ?: Component.empty())
-    }
+    backLines.forEachIndexed { index, component -> back.line(index, component) }
 
     placedState.isWaxed = waxed
     placedState.persistentDataContainer.set(
