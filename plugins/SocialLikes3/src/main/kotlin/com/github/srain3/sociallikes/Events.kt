@@ -20,6 +20,7 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -39,6 +40,7 @@ import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BlockStateMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -547,5 +549,51 @@ object Events : Listener {
     sign.isWaxed = true
     sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, slData.id)
     sign.update(true)
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun handleTeleportSignPlace(e: BlockPlaceEvent) {
+    val itemMeta = e.itemInHand.itemMeta as? BlockStateMeta ?: return
+    val sourceSign = itemMeta.blockState as? Sign ?: return
+    val teleportId =
+      sourceSign.persistentDataContainer.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER)
+        ?: return
+    val ownerId =
+      sourceSign.persistentDataContainer.get(
+        SLSignSetting.sltpSignUUIDKey,
+        PersistentDataType.STRING,
+      )
+
+    val frontLines = (0 until 4).map { sourceSign.getSide(Side.FRONT).line(it) }
+    val backLines = (0 until 4).map { sourceSign.getSide(Side.BACK).line(it) }
+    val waxed = sourceSign.isWaxed
+    val placedBlock = e.blockPlaced
+
+    val placedState = placedBlock.state
+    if (placedState !is Sign) return
+
+    val front = placedState.getSide(Side.FRONT)
+    frontLines.forEachIndexed { index, component ->
+      front.line(index, component ?: Component.empty())
+    }
+    val back = placedState.getSide(Side.BACK)
+    backLines.forEachIndexed { index, component ->
+      back.line(index, component ?: Component.empty())
+    }
+
+    placedState.isWaxed = waxed
+    placedState.persistentDataContainer.set(
+      SLSignSetting.sltpSignKey,
+      PersistentDataType.INTEGER,
+      teleportId,
+    )
+    if (ownerId != null) {
+      placedState.persistentDataContainer.set(
+        SLSignSetting.sltpSignUUIDKey,
+        PersistentDataType.STRING,
+        ownerId,
+      )
+    }
+    placedState.update(true)
   }
 }

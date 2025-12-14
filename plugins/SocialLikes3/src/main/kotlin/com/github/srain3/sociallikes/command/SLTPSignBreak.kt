@@ -34,7 +34,10 @@ object SLTPSignBreak : CommandExecutor {
     }
 
     val container = state.persistentDataContainer
-    if (!container.has(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER)) return false
+    if (!container.has(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER)) {
+      sender.sendMessage("§cこの看板はSLTP看板ではありません")
+      return false
+    }
 
     val id = container.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: 0
     val data = Data.getSLData(id)
