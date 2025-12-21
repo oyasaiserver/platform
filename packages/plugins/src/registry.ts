@@ -142,6 +142,10 @@ export const registry = {
     type: 'local',
     path: toGradleBuildPath('SocialLikes3')
   },
+  socialvotes: {
+    type: 'local',
+    path: toGradleBuildPath('SocialVotes')
+  },
   tpswitch: {
     type: 'local',
     path: toGradleBuildPath('TPswitch')
