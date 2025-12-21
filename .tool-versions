@@ -1,3 +1,4 @@
 nodejs 24.10.0
-java temurin-24.0.1+9
+java temurin-25.0.1+8
 terraform 1.13.1
+docker-cli 29.1.2
