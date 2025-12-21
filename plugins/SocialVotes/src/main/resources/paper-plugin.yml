@@ -1,0 +1,21 @@
+name: SocialVotes
+version: 1.0.0
+description: SocialVotes - sign voting plugin
+main: com.github.sahyuya.socialvotes.SocialVotes
+api-version: '1.21.5'
+commands:
+  socialvotes:
+    description: SocialVotes main command
+    aliases: [sv]
+    usage: /<command> <subcommand>
+  svupdate:
+    description: Update sign location after moving signs
+  svtp:
+    description: Teleport to a registered SV sign by id
+permissions:
+  socialvotes.admin:
+    description: Admin permission for SocialVotes
+    default: op
+  socialvotes.use:
+    description: Use SocialVotes (open GUI, vote)
+    default: true
