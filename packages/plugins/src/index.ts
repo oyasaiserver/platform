@@ -63,6 +63,7 @@ const development: RegistryId[] = local.concat(
   'oyasaiutilities',
   'painttools',
   'sociallikes3',
+  'socialvotes',
   'tpswitch',
   'vertex',
   'pvparena'
