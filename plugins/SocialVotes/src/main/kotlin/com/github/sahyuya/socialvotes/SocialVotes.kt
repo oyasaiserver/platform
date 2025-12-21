@@ -9,94 +9,87 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class SocialVotes : JavaPlugin() {
 
-    companion object {
-        lateinit var instance: SocialVotes
-            private set
-        lateinit var dataManager: DataManager
-            private set
-        lateinit var SV_SIGN_ID_KEY: NamespacedKey
-    }
+  companion object {
+    lateinit var instance: SocialVotes
+      private set
 
-    override fun onEnable() {
+    lateinit var dataManager: DataManager
+      private set
 
-        instance = this
+    lateinit var SV_SIGN_ID_KEY: NamespacedKey
+  }
 
-        SV_SIGN_ID_KEY = NamespacedKey(this, "sv_sign_id")
+  override fun onEnable() {
 
-        dataManager = DataManager(this)
-        dataManager.load()
+    instance = this
 
-        // --- Commands ---
-        registerPaperCommand(
-            name = "socialvotes",
-            aliases = listOf("sv"),
-            executor = SvCommand(),
-            tabCompleter = SvTabCompleter()
-        )
+    SV_SIGN_ID_KEY = NamespacedKey(this, "sv_sign_id")
 
-        registerPaperCommand(
-            name = "svupdate",
-            executor = SvUpdateCommand()
-        )
+    dataManager = DataManager(this)
+    dataManager.load()
 
-        registerPaperCommand(
-            name = "svtp",
-            executor = TpCommand()
-        )
+    // --- Commands ---
+    registerPaperCommand(
+      name = "socialvotes",
+      aliases = listOf("sv"),
+      executor = SvCommand(),
+      tabCompleter = SvTabCompleter(),
+    )
 
-        // --- Listeners ---
-        server.pluginManager.registerEvents(SignCreateListener(), this)
-        server.pluginManager.registerEvents(SignClickListener(), this)
-        server.pluginManager.registerEvents(ProtectEditListener(), this)
-        server.pluginManager.registerEvents(ProtectListener(), this)
-        server.pluginManager.registerEvents(ChatInput, this)
+    registerPaperCommand(name = "svupdate", executor = SvUpdateCommand())
 
+    registerPaperCommand(name = "svtp", executor = TpCommand())
 
-        logger.info("SocialVotes enabled.")
-    }
+    // --- Listeners ---
+    server.pluginManager.registerEvents(SignCreateListener(), this)
+    server.pluginManager.registerEvents(SignClickListener(), this)
+    server.pluginManager.registerEvents(ProtectEditListener(), this)
+    server.pluginManager.registerEvents(ProtectListener(), this)
+    server.pluginManager.registerEvents(ChatInput, this)
 
-    override fun onDisable() {
-        dataManager.save()
-        logger.info("SocialVotes disabled.")
-    }
+    logger.info("SocialVotes enabled.")
+  }
 
-    private fun registerPaperCommand(
-        name: String,
-        aliases: List<String> = emptyList(),
-        executor: CommandExecutor,
-        tabCompleter: TabCompleter? = null
-    ) {
+  override fun onDisable() {
+    dataManager.save()
+    logger.info("SocialVotes disabled.")
+  }
 
-        val command = object : Command(name) {
+  private fun registerPaperCommand(
+    name: String,
+    aliases: List<String> = emptyList(),
+    executor: CommandExecutor,
+    tabCompleter: TabCompleter? = null,
+  ) {
 
-            override fun execute(
-                sender: CommandSender,
-                label: String,
-                args: Array<out String>
-            ): Boolean {
-                return executor.onCommand(sender, this, label, args)
-            }
+    val command =
+      object : Command(name) {
 
-            override fun tabComplete(
-                sender: CommandSender,
-                alias: String,
-                args: Array<out String>
-            ): MutableList<String> {
-                return tabCompleter
-                    ?.onTabComplete(sender, this, alias, args)
-                    ?.toMutableList()
-                    ?: mutableListOf()
-            }
+        override fun execute(
+          sender: CommandSender,
+          label: String,
+          args: Array<out String>,
+        ): Boolean {
+          return executor.onCommand(sender, this, label, args)
         }
 
-        command.aliases = aliases
+        override fun tabComplete(
+          sender: CommandSender,
+          alias: String,
+          args: Array<out String>,
+        ): MutableList<String> {
+          return tabCompleter?.onTabComplete(sender, this, alias, args)?.toMutableList()
+            ?: mutableListOf()
+        }
+      }
 
-        val server = server
-        val field = server.javaClass.getDeclaredField("commandMap")
-        field.isAccessible = true
-        val commandMap = field.get(server) as CommandMap
+    command.aliases = aliases
 
-        commandMap.register(name, command)
-    }
+    val server = server
+    val field = server.javaClass.getDeclaredField("commandMap")
+    field.isAccessible = true
+    val commandMap = field.get(server) as CommandMap
 
+    commandMap.register(name, command)
+  }
 }

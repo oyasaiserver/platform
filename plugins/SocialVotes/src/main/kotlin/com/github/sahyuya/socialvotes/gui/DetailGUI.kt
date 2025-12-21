@@ -7,12 +7,12 @@ import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGO
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGOSHORT
 import com.github.sahyuya.socialvotes.util.TimeUtil
+import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import java.util.*
 
 object DetailGUI {
   private val signViewMap: MutableMap<UUID, Int> = mutableMapOf()
@@ -38,15 +38,12 @@ object DetailGUI {
     // 情報
     val signStatus = if (sign.showVotes) "§a公開" else "§c非公開"
     inv.setItem(
-      2, item(
+      2,
+      item(
         Material.OAK_SIGN,
         "§a看板情報",
-        listOf(
-          "§7名前: §f${sign.name}",
-          "§7ID: §f${sign.id}",
-          "§7得票表示: $signStatus"
-        )
-      )
+        listOf("§7名前: §f${sign.name}", "§7ID: §f${sign.id}", "§7得票表示: $signStatus"),
+      ),
     )
 
     val group = sign.group?.let { SocialVotes.dataManager.groupByName[it] }
@@ -64,11 +61,11 @@ object DetailGUI {
             add("§7グループ上限: §e${group.maxVotesPerPlayer}")
             add("§7期間:")
             addAll(TimeUtil.formatPeriod(group.startTime, group.endTime))
-          }
+          },
         )
       } else {
         item(Material.PAPER, "§bグループ情報", listOf("§cグループ未所属"))
-      }
+      },
     )
 
     // 公開切替
@@ -110,7 +107,6 @@ object DetailGUI {
     targets.add(p)
 
     when (slot) {
-
       0 -> SimpleGUI.open(p, sign)
       18 -> ResultGUI.open(p, sign)
 
@@ -141,25 +137,25 @@ object DetailGUI {
         p.sendMessage("§aグループの得票公開を切り替えました。")
       }
 
-      3 -> startChat(
-        p, signId, ChatInput.Action.SET_SIGN_MAX,
-        "最大投票数を入力してください。（数字以外=変更なし）"
-      )
+      3 -> startChat(p, signId, ChatInput.Action.SET_SIGN_MAX, "最大投票数を入力してください。（数字以外=変更なし）")
 
-      12 -> startChat(
-        p, signId, ChatInput.Action.SET_GROUP_MAX,
-        "最大投票数を入力してください。（数字以外=変更なし）"
-      )
+      12 -> startChat(p, signId, ChatInput.Action.SET_GROUP_MAX, "最大投票数を入力してください。（数字以外=変更なし）")
 
-      21 -> startChat(
-        p, signId, ChatInput.Action.SET_START_TIME,
-        "開始時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)"
-      )
+      21 ->
+        startChat(
+          p,
+          signId,
+          ChatInput.Action.SET_START_TIME,
+          "開始時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)",
+        )
 
-      22 -> startChat(
-        p, signId, ChatInput.Action.SET_END_TIME,
-        "終了時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)"
-      )
+      22 ->
+        startChat(
+          p,
+          signId,
+          ChatInput.Action.SET_END_TIME,
+          "終了時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)",
+        )
 
       7 -> {
         // ① この看板の全投票を合計
@@ -226,15 +222,12 @@ object DetailGUI {
 
       26 -> {
         if (group == null) return
-        group.signIds.toList().forEach {
-          dm.removeSignById(it)
-        }
+        group.signIds.toList().forEach { dm.removeSignById(it) }
         dm.groupByName.remove(group.name)
         dm.save()
         p.closeInventory()
         val message = SVLOGO + "${p.name}§eがグループ§6${group.name}§eと所属SV看板を消去しました。"
         targets.forEach { it.sendMessage(message) }
-
       }
     }
   }
