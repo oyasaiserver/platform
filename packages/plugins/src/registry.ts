@@ -154,6 +154,10 @@ export const registry = {
     type: 'local',
     path: toGradleBuildPath('Vertex')
   },
+  oyasaipets: {
+    type: 'local',
+    path: toGradleBuildPath('OyasaiPets')
+  },
 
   floodgate: {
     type: 'url',
