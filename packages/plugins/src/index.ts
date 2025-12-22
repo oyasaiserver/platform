@@ -66,7 +66,8 @@ const development: RegistryId[] = local.concat(
   'socialvotes',
   'tpswitch',
   'vertex',
-  'pvparena'
+  'pvparena',
+  'oyasaipets'
 )
 
 const production: RegistryId[] = development.concat('discordsrv', 'bluemap')
