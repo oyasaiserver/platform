@@ -7,36 +7,18 @@ import { join } from 'node:path'
 import { URL } from 'node:url'
 import { type PluginDefinition, registry, type RegistryId } from './registry.ts'
 
-function incrementPatch(version: string): string {
-  const [major, minor, patch] = version.split('.').map(Number) as [number, number, number]
-  return [major, minor, patch + 1].join('.')
-}
-
 async function getModrinthBestMatchProjectVersion(
   slug: string,
-  version: string,
-  maxDelta = 5
+  version: string
 ): Promise<ProjectVersion> {
-  const loaders = ['paper', 'spigot', 'bukkit']
-
   const client = new ModrinthV2Client()
   const project = await client.getProject(slug)
-
-  async function go(version: string, depth: number): Promise<ProjectVersion> {
-    if (depth > maxDelta) {
-      throw new Error(`No compatible version found for modrinth plugin:${slug}`)
-    }
-    const [projectVersion] = await client.getProjectVersions(project.id, {
-      gameVersions: [version],
-      loaders
-    })
-    if (projectVersion) {
-      return projectVersion
-    }
-    return go(incrementPatch(version), depth + 1)
-  }
-
-  return go(version, 0)
+  const [projectVersion] = await client.getProjectVersions(project.id, {
+    gameVersions: [version],
+    loaders: ['paper', 'spigot', 'bukkit']
+  })
+  ok(projectVersion)
+  return projectVersion
 }
 
 async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
@@ -47,11 +29,11 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
       return new URL(`https://api.spiget.org/v2/resources/${definition.id}/download`)
     }
     case 'modrinth': {
-      const version = await getModrinthBestMatchProjectVersion(
+      const { files } = await getModrinthBestMatchProjectVersion(
         definition.slug,
         DockerStack.minecraftVersion
       )
-      const url = version.files.map(file => file.url)?.at(0)
+      const url = files.map(file => file.url)?.at(0)
       ok(url, `No download URL found for modrinth plugin:${definition.slug}`)
       return new URL(url)
     }
