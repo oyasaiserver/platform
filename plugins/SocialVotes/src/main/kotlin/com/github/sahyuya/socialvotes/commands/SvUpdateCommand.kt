@@ -6,13 +6,18 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class SvUpdateCommand : CommandExecutor {
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender !is Player) {
-            sender.sendMessage("プレイヤーのみ実行できます。")
-            return true
-        }
-        UpdateModeManager.watchPlayer(sender.uniqueId)
-        sender.sendMessage("更新したいSV看板を右クリックでアップデートできます。\n(看板以外をクリックで追加状態を解除)")
-        return true
+  override fun onCommand(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>,
+  ): Boolean {
+    if (sender !is Player) {
+      sender.sendMessage("プレイヤーのみ実行できます。")
+      return true
     }
+    UpdateModeManager.watchPlayer(sender.uniqueId)
+    sender.sendMessage("更新したいSV看板を右クリックでアップデートできます。\n(看板以外をクリックで追加状態を解除)")
+    return true
+  }
 }
