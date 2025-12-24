@@ -7,15 +7,15 @@ import org.bukkit.event.player.PlayerSignOpenEvent
 
 class ProtectEditListener : Listener {
 
-    @EventHandler
-    fun onSignEdit(e: PlayerSignOpenEvent) {
+  @EventHandler
+  fun onSignEdit(e: PlayerSignOpenEvent) {
 
-        // SV看板かどうかを判定
-        val loc = e.sign.location
-        val sv = SocialVotes.dataManager.locationToId[loc]
-        if (sv != null) {
-            // 編集画面を開かせない
-            e.isCancelled = true
-        }
+    // SV看板かどうかを判定
+    val loc = e.sign.location
+    val sv = SocialVotes.dataManager.locationToId[loc]
+    if (sv != null) {
+      // 編集画面を開かせない
+      e.isCancelled = true
     }
+  }
 }
