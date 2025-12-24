@@ -26,9 +26,9 @@ object ChatInput : Listener {
 
   data class InputState(val action: Action, val signId: Int)
 
-  /* =====================
-  外部呼び出し用 API
-  ===================== */
+  // =====================
+  // 外部呼び出し用 API
+  // =====================
   private val states = mutableMapOf<UUID, InputState>()
 
   fun start(uuid: UUID, state: InputState) {
@@ -39,9 +39,9 @@ object ChatInput : Listener {
     states.remove(uuid)
   }
 
-  /* =====================
-  チャット入力処理
-  ===================== */
+  // =====================
+  // チャット入力処理
+  // =====================
   @EventHandler
   fun onChat(e: AsyncPlayerChatEvent) {
     val p = e.player
@@ -59,9 +59,9 @@ object ChatInput : Listener {
 
     when (state.action) {
 
-      /* ---------------------
-      看板名変更
-      --------------------- */
+    // ---------------------
+    // 看板名変更
+    // ---------------------
       Action.RENAME_SIGN -> {
         if (msg.isBlank()) {
           NotifyUtil.success(p, "§c変更をキャンセルしました。")
@@ -79,9 +79,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      制作者名変更
-      --------------------- */
+      // ---------------------
+      // 制作者名変更
+      // ---------------------
       Action.SET_CREATOR_DISPLAY -> {
         sign.creatorDisplayName = msg.ifBlank { null }
 
@@ -97,9 +97,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      作者追加
-      --------------------- */
+      // ---------------------
+      // 作者追加
+      // ---------------------
       Action.ADD_CREATOR -> {
 
         if (msg.isBlank()) {
@@ -134,9 +134,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      作者削除
-      --------------------- */
+      // ---------------------
+      // 作者削除
+      // ---------------------
       Action.REMOVE_CREATOR -> {
         val target = Bukkit.getOfflinePlayer(msg)
         val uuid = target.uniqueId
@@ -164,9 +164,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      看板単体 最大投票数
-      --------------------- */
+      // ---------------------
+      // 看板単体 最大投票数
+      // ---------------------
       Action.SET_SIGN_MAX -> {
         val v = msg.toIntOrNull()
         if (v == null || v <= 0) {
@@ -188,9 +188,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      グループ全体 最大投票数
-      --------------------- */
+      // ---------------------
+      // グループ全体 最大投票数
+      // ---------------------
       Action.SET_GROUP_MAX -> {
         val groupName = sign.group
         if (groupName == null) {
@@ -228,9 +228,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      グループ　投票開始時刻
-      --------------------- */
+      // ---------------------
+      // グループ　投票開始時刻
+      // ---------------------
       Action.SET_START_TIME -> {
         if (msg.isBlank()) return
         group ?: return
@@ -250,9 +250,9 @@ object ChatInput : Listener {
           )
       }
 
-      /* ---------------------
-      グループ　投票終了時刻
-      --------------------- */
+      // ---------------------
+      // グループ　投票終了時刻
+      // ---------------------
       Action.SET_END_TIME -> {
         if (msg.isBlank()) return
         group ?: return
