@@ -17,7 +17,7 @@ async function getModrinthBestMatchProjectVersion(
     gameVersions: [version],
     loaders: ['paper', 'spigot', 'bukkit']
   })
-  ok(projectVersion)
+  ok(projectVersion, `No project version found for modrinth plugin: ${slug}`)
   return projectVersion
 }
 
@@ -34,7 +34,7 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
         DockerStack.minecraftVersion
       )
       const url = files.map(file => file.url)?.at(0)
-      ok(url, `No download URL found for modrinth plugin:${definition.slug}`)
+      ok(url, `No download URL found for modrinth plugin: ${definition.slug}`)
       return new URL(url)
     }
     case 'github': {
