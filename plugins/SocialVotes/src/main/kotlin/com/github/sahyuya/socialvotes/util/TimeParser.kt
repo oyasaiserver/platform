@@ -4,10 +4,12 @@ import com.github.sahyuya.socialvotes.SocialVotes
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.TimeZone
 
 object TimeParser {
 
-  private val TOKEN_REGEX = Regex("(\\d+)(y|m|d|h|min)")
+  private val TOKEN_REGEX = Regex("(\\d+)(y|M|d|h|min)")
+  private val JST: TimeZone = TimeZone.getTimeZone("Asia/Tokyo")
 
   fun parse(input: String): Long? {
 
@@ -18,7 +20,7 @@ object TimeParser {
       return -1L
     }
 
-    val now = Calendar.getInstance()
+    val now = Calendar.getInstance(JST)
 
     var year: Int? = null
     var month: Int? = null
@@ -30,7 +32,7 @@ object TimeParser {
       val value = m.groupValues[1].toInt()
       when (m.groupValues[2]) {
         "y" -> year = value
-        "m" -> month = value
+        "M" -> month = value
         "d" -> day = value
         "h" -> hour = value
         "min" -> minute = value
@@ -40,7 +42,7 @@ object TimeParser {
     // 必須チェック
     if (day == null || hour == null) return null
 
-    val cal = Calendar.getInstance()
+    val cal = Calendar.getInstance(JST)
     cal.clear()
 
     cal.set(Calendar.YEAR, year ?: now.get(Calendar.YEAR))
@@ -57,7 +59,8 @@ object TimeParser {
 
 object TimeUtil {
 
-  private val FORMAT = SimpleDateFormat("yyyy/MM/dd HH:mm")
+  private val JST: TimeZone = TimeZone.getTimeZone("Asia/Tokyo")
+  private val FORMAT = SimpleDateFormat("yyyy/MM/dd HH:mm").apply { timeZone = JST }
 
   fun format(time: Long?): String {
     return if (time == null) {

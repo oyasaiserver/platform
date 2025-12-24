@@ -3,6 +3,7 @@ package com.github.sahyuya.socialvotes.gui
 import com.github.sahyuya.socialvotes.ChatInput
 import com.github.sahyuya.socialvotes.SocialVotes
 import com.github.sahyuya.socialvotes.data.SVSign
+import com.github.sahyuya.socialvotes.util.NotifyUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGO
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGOSHORT
@@ -116,10 +117,11 @@ object DetailGUI {
         SignDisplayUtil.updateSingle(sign)
         open(p, sign)
         p.sendMessage("§a看板の得票公開を切り替えました。")
+        if (sign.showVotes) NotifyUtil.toggleOn(p) else NotifyUtil.toggleOff(p)
       }
       13 -> {
         if (group == null) {
-          p.sendMessage("§cグループ未所属です。")
+          NotifyUtil.error(p, "§cグループ未所属です。")
           return
         }
         // グループ公開状態を反転
@@ -134,6 +136,7 @@ object DetailGUI {
         SignDisplayUtil.updateGroup(group)
         open(p, sign)
         p.sendMessage("§aグループの得票公開を切り替えました。")
+        if (sign.showVotes) NotifyUtil.toggleOn(p) else NotifyUtil.toggleOff(p)
       }
 
       3 -> startChat(p, signId, ChatInput.Action.SET_SIGN_MAX, "最大投票数を入力してください。（数字以外=変更なし）")
@@ -145,7 +148,7 @@ object DetailGUI {
           p,
           signId,
           ChatInput.Action.SET_START_TIME,
-          "開始時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)",
+          "開始時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
         )
 
       22 ->
@@ -153,7 +156,7 @@ object DetailGUI {
           p,
           signId,
           ChatInput.Action.SET_END_TIME,
-          "終了時刻を入力してください。（0で変更なし）\n入力例:2025y12m31d23h59min(d,hの入力は必須)",
+          "終了時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
         )
 
       7 -> {
@@ -182,7 +185,7 @@ object DetailGUI {
         // ⑤ 表示更新
         updateSignDisplay(sign)
         val message = SVLOGO + "${p.name}§eが§6「${sign.name}」(ID:${sign.id})§eの全プレイヤー投票をリセットしました。"
-        targets.forEach { it.sendMessage(message) }
+        NotifyUtil.notifyPlayers(targets, message)
       }
       8 -> {
         if (group == null) return
@@ -205,7 +208,7 @@ object DetailGUI {
         dm.playerVotes.remove(gName)
         dm.save()
         val message = SVLOGO + "${p.name}§eがグループ§6$gName§eの全プレイヤー投票をリセットしました。"
-        targets.forEach { it.sendMessage(message) }
+        NotifyUtil.notifyPlayers(targets, message)
       }
 
       25 -> {
@@ -213,7 +216,7 @@ object DetailGUI {
         dm.removeSignById(sign.id)
         p.closeInventory()
         val message = SVLOGO + "${p.name}§eが§6「${sign.name}」(ID:${sign.id})§eを消去しました。"
-        targets.forEach { it.sendMessage(message) }
+        NotifyUtil.notifyPlayers(targets, message)
         // 所属SV看板が0になったら自動通知
         dm.notifyIfAutoDelete(groupName.toString())
       }
@@ -224,7 +227,7 @@ object DetailGUI {
         dm.save()
         p.closeInventory()
         val message = SVLOGO + "${p.name}§eがグループ§6${group.name}§eと所属SV看板を消去しました。"
-        targets.forEach { it.sendMessage(message) }
+        NotifyUtil.notifyPlayers(targets, message)
       }
     }
   }

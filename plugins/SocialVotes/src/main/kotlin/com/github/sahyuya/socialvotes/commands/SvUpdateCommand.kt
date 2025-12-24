@@ -17,7 +17,7 @@ class SvUpdateCommand : CommandExecutor {
       return true
     }
     UpdateModeManager.watchPlayer(sender.uniqueId)
-    sender.sendMessage("更新したいSV看板を右クリックすることでアップデートできます。")
+    sender.sendMessage("更新したいSV看板を右クリックでアップデートできます。\n(看板以外をクリックで追加状態を解除)")
     return true
   }
 }

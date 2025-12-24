@@ -5,6 +5,7 @@ import com.github.sahyuya.socialvotes.commands.AddModeManager
 import com.github.sahyuya.socialvotes.commands.RemoveModeManager
 import com.github.sahyuya.socialvotes.commands.UpdateModeManager
 import com.github.sahyuya.socialvotes.gui.*
+import com.github.sahyuya.socialvotes.util.NotifyUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGOSHORT
 import org.bukkit.Material
@@ -45,24 +46,24 @@ class SignClickListener : Listener {
       val sign =
         dm.signById[signId]
           ?: run {
-            p.sendMessage("SV看板データが存在しません。")
+            NotifyUtil.invalid(p, "SV看板データが存在しません。")
             return
           }
 
       if (sign.group != null) {
-        p.sendMessage("この看板は既にグループに所属しています。")
+        NotifyUtil.invalid(p, "この看板は既にグループに所属しています。")
         return
       }
 
       val group =
         dm.groupByName[groupName]
           ?: run {
-            p.sendMessage("そのグループは存在しません。")
+            NotifyUtil.invalid(p, "そのグループは存在しません。")
             return
           }
 
       if (group.signIds.size >= 45) {
-        p.sendMessage("45個を超えるため追加できません。")
+        NotifyUtil.invalid(p, "45個を超えるため追加できません。")
         return
       }
 
@@ -70,7 +71,7 @@ class SignClickListener : Listener {
       sign.group = groupName
       dm.save()
 
-      p.sendMessage("「${sign.name}」(ID:${sign.id}) をグループ $groupName に追加しました。")
+      NotifyUtil.success(p, "「${sign.name}」(ID:${sign.id}) をグループ $groupName に追加しました。")
       SignDisplayUtil.applyFormat(state, sign)
       state.update(true)
       return
@@ -84,21 +85,21 @@ class SignClickListener : Listener {
       val sign =
         dm.signById[signId]
           ?: run {
-            p.sendMessage("SV看板データが存在しません。")
+            NotifyUtil.invalid(p, "SV看板データが存在しません。")
             return
           }
 
       val groupName =
         sign.group
           ?: run {
-            p.sendMessage("この看板はグループに所属していません。")
+            NotifyUtil.invalid(p, "この看板はグループに所属していません。")
             return
           }
 
       val group = dm.groupByName[groupName] ?: return
 
       if (!p.isOp && group.owner != p.uniqueId) {
-        p.sendMessage("この操作はグループ作成者またはOPのみ可能です。")
+        NotifyUtil.invalid(p, "この操作はグループ作成者またはOPのみ可能です。")
         return
       }
 
@@ -106,7 +107,7 @@ class SignClickListener : Listener {
       group.signIds.remove(sign.id)
       dm.save()
 
-      p.sendMessage("「${sign.name}」(ID:${sign.id}) をグループから除外しました。")
+      NotifyUtil.success(p, "「${sign.name}」(ID:${sign.id}) をグループから除外しました。")
       SignDisplayUtil.applyFormat(state, sign)
       state.update(true)
       return
@@ -128,7 +129,7 @@ class SignClickListener : Listener {
       // 新看板にID再付与
       dm.writeSignIdToBlock(state, signId)
 
-      p.sendMessage("「${svSign.name}」(ID:${signId}) の座標を更新しました。")
+      NotifyUtil.success(p, "「${svSign.name}」(ID:${signId}) の座標を更新しました。")
 
       SignDisplayUtil.applyFormat(state, svSign)
       state.update(true)
@@ -154,7 +155,7 @@ class SignClickListener : Listener {
     val group = sign.group?.let { dm.groupByName[it] }
 
     if (sign.creators.contains(uuid)) {
-      p.sendActionBar("自身が作成したSV看板には投票できません。")
+      NotifyUtil.invalid(p, "自身が作成したSV看板には投票できません。")
       return
     }
 
@@ -162,13 +163,13 @@ class SignClickListener : Listener {
       val g = dm.groupByName[gName]
       g?.startTime?.let {
         if (now < it) {
-          p.sendActionBar("投票期間外です（開始前）")
+          NotifyUtil.invalid(p, "投票期間外です（開始前）")
           return
         }
       }
       g?.endTime?.let {
         if (now >= it) {
-          p.sendActionBar("投票期間外です（終了）")
+          NotifyUtil.invalid(p, "投票期間外です（終了）")
           return
         }
       }
@@ -187,7 +188,7 @@ class SignClickListener : Listener {
       }
 
     if (effectiveSignLimit != null && usedOnSign >= effectiveSignLimit) {
-      p.sendActionBar("この看板への投票上限に到達しています")
+      NotifyUtil.invalid(p, "この看板への投票上限に到達しています")
       return
     }
 
@@ -196,10 +197,9 @@ class SignClickListener : Listener {
       val usedInGroup = gmap.getOrDefault(uuid, 0)
 
       if (usedInGroup >= group.maxVotesPerPlayer) {
-        p.sendActionBar("このグループでの投票上限に到達しています")
+        NotifyUtil.invalid(p, "このグループでの投票上限に到達しています")
         return
       }
-
       gmap[uuid] = usedInGroup + 1
     }
 
@@ -207,7 +207,7 @@ class SignClickListener : Listener {
     sign.votes++
 
     dm.save()
-    p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.2f)
+    p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 2.0f)
     p.sendActionBar("§a「${sign.name}」(ID:${sign.id})に投票しました！")
     SignDisplayUtil.applyFormat(state, sign)
     state.update(true)
@@ -255,6 +255,7 @@ class SignClickListener : Listener {
     RemoveModeManager.cancel(p.uniqueId)
     UpdateModeManager.cancel(p.uniqueId)
     if (notify) {
+      p.playSound(p.location, Sound.BLOCK_IRON_DOOR_CLOSE, 1.0f, 1.0f)
       p.sendMessage("SV看板以外をクリックしたため、操作状態を解除しました。")
     }
   }

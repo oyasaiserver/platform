@@ -1,5 +1,6 @@
 package com.github.sahyuya.socialvotes
 
+import com.github.sahyuya.socialvotes.util.NotifyUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.TimeParser
 import java.util.UUID
@@ -49,7 +50,7 @@ object ChatInput : Listener {
     val dm = SocialVotes.dataManager
     val sign = dm.signById[state.signId]
     if (sign == null) {
-      p.sendMessage("§c対象の看板が存在しません。")
+      NotifyUtil.error(p, "§c対象の看板が存在しません。")
       cancel(p.uniqueId)
       return
     }
@@ -63,7 +64,7 @@ object ChatInput : Listener {
       --------------------- */
       Action.RENAME_SIGN -> {
         if (msg.isBlank()) {
-          p.sendMessage("§c変更をキャンセルしました。")
+          NotifyUtil.success(p, "§c変更をキャンセルしました。")
           return
         }
         sign.name = msg
@@ -73,7 +74,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateSingle(sign)
-              p.sendMessage("§a看板名を「$msg」に変更しました。")
+              NotifyUtil.success(p, "§a看板名を「$msg」に変更しました。")
             },
           )
       }
@@ -91,7 +92,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateSingle(sign)
-              p.sendMessage("§a制作者表示名を更新しました。")
+              NotifyUtil.success(p, "§a制作者表示名を更新しました。")
             },
           )
       }
@@ -102,7 +103,7 @@ object ChatInput : Listener {
       Action.ADD_CREATOR -> {
 
         if (msg.isBlank()) {
-          p.sendMessage("§7変更は行われませんでした。")
+          NotifyUtil.success(p, "§7変更は行われませんでした。")
           return
         }
 
@@ -111,12 +112,12 @@ object ChatInput : Listener {
         val uuid = target.uniqueId
 
         if (target.name == null) {
-          p.sendMessage("§cプレイヤー $msg は存在しません。")
+          NotifyUtil.error(p, "§cプレイヤー $msg は存在しません。")
           return
         }
 
         if (sign.creators.contains(uuid)) {
-          p.sendMessage("§e${target.name} は既に投票対象に含まれています。")
+          NotifyUtil.error(p, "§e${target.name} は既に投票対象に含まれています。")
           return
         }
 
@@ -126,7 +127,10 @@ object ChatInput : Listener {
         Bukkit.getScheduler()
           .runTask(
             SocialVotes.instance,
-            Runnable { p.sendMessage("§a${target.name} を投票対象プレイヤーとして追加しました。") },
+            Runnable {
+              SignDisplayUtil.updateSingle(sign)
+              NotifyUtil.success(p, "§a${target.name} を投票対象プレイヤーとして追加しました。")
+            },
           )
       }
 
@@ -138,12 +142,12 @@ object ChatInput : Listener {
         val uuid = target.uniqueId
 
         if (!sign.creators.contains(uuid)) {
-          p.sendMessage("§cそのプレイヤーは制作者ではありません。")
+          NotifyUtil.error(p, "§cそのプレイヤーは制作者ではありません。")
           return
         }
 
         if (sign.creators.size <= 1) {
-          p.sendMessage("§c制作者は最低1人必要です。")
+          NotifyUtil.error(p, "§c制作者は最低1人必要です。")
           return
         }
 
@@ -155,7 +159,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateSingle(sign)
-              p.sendMessage("§a${target.name} を制作者から削除しました。")
+              NotifyUtil.success(p, "§a${target.name} を制作者から削除しました。")
             },
           )
       }
@@ -166,7 +170,7 @@ object ChatInput : Listener {
       Action.SET_SIGN_MAX -> {
         val v = msg.toIntOrNull()
         if (v == null || v <= 0) {
-          p.sendMessage("§7変更は行われませんでした。")
+          NotifyUtil.success(p, "§7変更は行われませんでした。")
           return
         }
         // グループ制限を超えないよう補正
@@ -179,7 +183,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateSingle(sign)
-              p.sendMessage("§a看板の最大投票数を $newValue 票に設定しました。")
+              NotifyUtil.success(p, "§a看板の最大投票数を $newValue 票に設定しました。")
             },
           )
       }
@@ -190,19 +194,19 @@ object ChatInput : Listener {
       Action.SET_GROUP_MAX -> {
         val groupName = sign.group
         if (groupName == null) {
-          p.sendMessage("§cこの看板はグループに属していません。")
+          NotifyUtil.error(p, "§cこの看板はグループに属していません。")
           cancel(p.uniqueId)
           return
         }
         val group = dm.groupByName[groupName]
         if (group == null) {
-          p.sendMessage("§cグループが存在しません。")
+          NotifyUtil.error(p, "§cグループが存在しません。")
           cancel(p.uniqueId)
           return
         }
         val v = msg.toIntOrNull()
         if (v == null || v <= 0) {
-          p.sendMessage("§7変更は行われませんでした。")
+          NotifyUtil.success(p, "§7変更は行われませんでした。")
           return
         }
         group.maxVotesPerPlayer = v
@@ -219,7 +223,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateGroup(group)
-              p.sendMessage("§aグループ全体の最大投票数を $v 票に変更しました。")
+              NotifyUtil.success(p, "§aグループ全体の最大投票数を $v 票に変更しました。")
             },
           )
       }
@@ -241,7 +245,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateGroup(group)
-              p.sendMessage("§a時刻設定を更新しました。")
+              NotifyUtil.success(p, "§a時刻設定を更新しました。")
             },
           )
       }
@@ -263,7 +267,7 @@ object ChatInput : Listener {
             SocialVotes.instance,
             Runnable {
               SignDisplayUtil.updateGroup(group)
-              p.sendMessage("§a時刻設定を更新しました。")
+              NotifyUtil.success(p, "§a時刻設定を更新しました。")
             },
           )
       }

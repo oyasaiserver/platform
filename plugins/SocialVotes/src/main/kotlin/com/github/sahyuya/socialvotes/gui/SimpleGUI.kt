@@ -3,6 +3,7 @@ package com.github.sahyuya.socialvotes.gui
 import com.github.sahyuya.socialvotes.ChatInput
 import com.github.sahyuya.socialvotes.SocialVotes
 import com.github.sahyuya.socialvotes.data.SVSign
+import com.github.sahyuya.socialvotes.util.NotifyUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil
 import com.github.sahyuya.socialvotes.util.SignDisplayUtil.SVLOGOSHORT
 import com.github.sahyuya.socialvotes.util.TimeUtil
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -35,7 +37,8 @@ object SimpleGUI {
     val inv: Inventory = Bukkit.createInventory(null, 27, SVLOGOSHORT + "簡易GUI")
 
     val dm = SocialVotes.dataManager
-    val df = SimpleDateFormat("yyyy/MM/dd HH:mm")
+    val df =
+      SimpleDateFormat("yyyy/MM/dd HH:mm").apply { timeZone = TimeZone.getTimeZone("Asia/Tokyo") }
 
     val creatorLore = mutableListOf<String>()
     creatorLore.add("§f制作者:")
@@ -158,7 +161,8 @@ object SimpleGUI {
       // 看板名変更
       11 -> {
         if (!canCreatorEdit) {
-          p.sendMessage("§c制作者またはOPのみ操作できます。")
+          p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1.0f, 0.5f)
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
           return
         }
         ChatInput.start(uuid, ChatInput.InputState(ChatInput.Action.RENAME_SIGN, sign.id))
@@ -169,7 +173,8 @@ object SimpleGUI {
       // 制作者表示名変更
       12 -> {
         if (!canCreatorEdit) {
-          p.sendMessage("§c制作者またはOPのみ操作できます。")
+          p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1.0f, 0.5f)
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
           return
         }
         ChatInput.start(uuid, ChatInput.InputState(ChatInput.Action.SET_CREATOR_DISPLAY, sign.id))
@@ -180,7 +185,8 @@ object SimpleGUI {
       // 制作者追加
       13 -> {
         if (!canCreatorEdit) {
-          p.sendMessage("§c制作者またはOPのみ操作できます。")
+          p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1.0f, 0.5f)
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
           return
         }
         ChatInput.start(uuid, ChatInput.InputState(ChatInput.Action.ADD_CREATOR, sign.id))
@@ -191,7 +197,8 @@ object SimpleGUI {
       // 制作者削除
       14 -> {
         if (!canCreatorEdit) {
-          p.sendMessage("§c制作者またはOPのみ操作できます。")
+          p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1.0f, 0.5f)
+          NotifyUtil.error(p, "§c制作者またはOPのみ操作できます。")
           return
         }
         ChatInput.start(uuid, ChatInput.InputState(ChatInput.Action.REMOVE_CREATOR, sign.id))
@@ -202,7 +209,7 @@ object SimpleGUI {
       // 個別看板リセット
       15 -> {
         if (!TimeUtil.isVotePeriod(sign.group)) {
-          p.sendMessage("§c投票期間外のためリセットできません。")
+          NotifyUtil.error(p, "§c投票期間外のためリセットできません。")
           return
         }
         val map = dm.playerVotesPerSign[sign.id] ?: mutableMapOf()
@@ -225,13 +232,13 @@ object SimpleGUI {
         dm.save()
         updateSignDisplay(sign)
         open(p, sign)
-        p.sendMessage("§a看板 ${sign.id} のあなたの個別投票をリセットしました。")
+        NotifyUtil.success(p, "§a看板 ${sign.id} のあなたの個別投票をリセットしました。")
       }
 
       // 個別グループリセット
       16 -> {
         if (!TimeUtil.isVotePeriod(sign.group)) {
-          p.sendMessage("§c投票期間外のためリセットできません。")
+          NotifyUtil.error(p, "§c投票期間外のためリセットできません。")
           return
         }
         val gName = sign.group ?: return
@@ -242,7 +249,7 @@ object SimpleGUI {
 
         val usedGroup = gmap.getOrDefault(uuid, 0)
         if (usedGroup <= 0) {
-          p.sendMessage("§eグループ $gName のあなたの票はすでに0です。")
+          NotifyUtil.error(p, "§eグループ $gName のあなたの票はすでに0です。")
           return
         }
         // ▼ グループ内全看板を処理
@@ -266,7 +273,7 @@ object SimpleGUI {
 
         dm.save()
         open(p, sign)
-        p.sendMessage("§aグループ $gName のあなたの票をリセットしました。")
+        NotifyUtil.success(p, "§aグループ $gName のあなたの票をリセットしました。")
       }
 
       // 詳細設定
