@@ -59,9 +59,9 @@ object ChatInput : Listener {
 
     when (state.action) {
 
-    // ---------------------
-    // 看板名変更
-    // ---------------------
+      // ---------------------
+      // 看板名変更
+      // ---------------------
       Action.RENAME_SIGN -> {
         if (msg.isBlank()) {
           NotifyUtil.success(p, "§c変更をキャンセルしました。")
