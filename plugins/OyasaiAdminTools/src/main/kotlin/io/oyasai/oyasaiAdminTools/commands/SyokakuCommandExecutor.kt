@@ -6,7 +6,6 @@ import io.oyasai.oyasaiAdminTools.commands.syokaku.IsCandidate
 import io.oyasai.oyasaiAdminTools.commands.syokaku.Promote
 import io.oyasai.oyasaiAdminTools.commands.syokaku.SeePlayerInfo
 import io.oyasai.oyasaiAdminTools.commands.syokaku.SeeRequirements
-import io.oyasai.oyasaiAdminTools.notifications.PromotionNotificationStorer
 import io.oyasai.oyasaiAdminTools.rank.RankManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -16,14 +15,7 @@ import org.bukkit.command.TabCompleter
 
 object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
   private val subCommands =
-    listOf(
-      "promote",
-      "demote",
-      "getrank",
-      "iscandidate",
-      "seerequirements",
-      "seeplayerinfo"
-    )
+    listOf("promote", "demote", "getrank", "iscandidate", "seerequirements", "seeplayerinfo")
 
   override fun onCommand(
     sender: CommandSender,
