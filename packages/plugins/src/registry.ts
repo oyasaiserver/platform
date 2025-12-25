@@ -109,10 +109,6 @@ export const registry = {
     type: 'local',
     path: toStaticPath('ezEdits.jar')
   },
-  oyasaivehicles: {
-    type: 'local',
-    path: toStaticPath('OyasaiVehicles.jar')
-  },
   tokenmanager: {
     type: 'local',
     path: toStaticPath('TokenManager.jar')

@@ -1,25 +1,11 @@
 import { DockerStack } from '@oyasaiserver/cdktf/stacks/docker-stack'
-import { ModrinthV2Client, type ProjectVersion } from '@xmcl/modrinth'
+import { ModrinthV2Client } from '@xmcl/modrinth'
 import { ok } from 'node:assert/strict'
 import type { PathLike } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { URL } from 'node:url'
 import { type PluginDefinition, registry, type RegistryId } from './registry.ts'
-
-async function getModrinthBestMatchProjectVersion(
-  slug: string,
-  version: string
-): Promise<ProjectVersion> {
-  const client = new ModrinthV2Client()
-  const project = await client.getProject(slug)
-  const [projectVersion] = await client.getProjectVersions(project.id, {
-    gameVersions: [version],
-    loaders: ['paper', 'spigot', 'bukkit']
-  })
-  ok(projectVersion, `No project version found for modrinth plugin: ${slug}`)
-  return projectVersion
-}
 
 async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
   switch (definition.type) {
@@ -29,11 +15,16 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
       return new URL(`https://api.spiget.org/v2/resources/${definition.id}/download`)
     }
     case 'modrinth': {
-      const { files } = await getModrinthBestMatchProjectVersion(
-        definition.slug,
-        DockerStack.minecraftVersion
-      )
-      const url = files.map(file => file.url)?.at(0)
+      const client = new ModrinthV2Client()
+      const project = await client.getProject(definition.slug)
+      const projectVersions = await client.getProjectVersions(project.id, {
+        gameVersions: [DockerStack.minecraftVersion],
+        loaders: ['paper', 'spigot', 'bukkit']
+      })
+      const url = projectVersions
+        .flatMap(version => version.files)
+        .map(file => file.url)
+        .at(0)
       ok(url, `No download URL found for modrinth plugin: ${definition.slug}`)
       return new URL(url)
     }

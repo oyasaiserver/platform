@@ -59,7 +59,6 @@ const development: RegistryId[] = local.concat(
   'chestcommands',
   'arceon',
   'ezedits',
-  'oyasaivehicles',
   'tokenmanager',
   'dynamicprofile',
   'oyasaiadmintools',
