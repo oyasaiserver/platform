@@ -93,7 +93,6 @@ object Demote : CommandExecutor {
                     )
                   PromotionNotifier.notifyAll(notification)
                   sender.sendMessage("§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。")
-                  sender.sendMessage("§e/syokaku confirm ${player.name} §aで§c「↓降格↓」§a通知を送信できます。")
                 } else {
                   sender.sendMessage("§e${player.name}さんは既に最低ランクです。")
                 }

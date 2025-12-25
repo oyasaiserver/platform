@@ -130,9 +130,6 @@ object Promote : CommandExecutor {
                                 sender.sendMessage(
                                   "§a${player.name}さんを§e${nextRank.name}§aに§6「↑昇格↑」§aさせました。"
                                 )
-                                sender.sendMessage(
-                                  "§e/syokaku confirm ${player.name} §aで§6「↑昇格↑」§a通知を送信できます。"
-                                )
                               },
                             )
                         }

@@ -22,8 +22,7 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
       "getrank",
       "iscandidate",
       "seerequirements",
-      "seeplayerinfo",
-      "confirm",
+      "seeplayerinfo"
     )
 
   override fun onCommand(
@@ -45,7 +44,6 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
         SeeRequirements.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "seeplayerinfo" ->
         SeePlayerInfo.onCommand(sender, command, label, args.drop(1).toTypedArray())
-      //      "confirm" -> Confirm.onCommand(sender, command, label, args.drop(1).toTypedArray())
       else -> {
         sender.sendMessage("§c不明なサブコマンドです。")
         false
@@ -73,8 +71,6 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
               .filter { it.startsWith(args[1], ignoreCase = true) }
           "seerequirements" ->
             RankManager.ranks.map { it.name }.filter { it.startsWith(args[1], ignoreCase = true) }
-          "confirm" ->
-            PromotionNotificationStorer.getAllPendingNotifications().map { it.targetName }
           else -> emptyList()
         }
       args.size == 3 && args[0].equals("seeplayerinfo", ignoreCase = true) -> {
