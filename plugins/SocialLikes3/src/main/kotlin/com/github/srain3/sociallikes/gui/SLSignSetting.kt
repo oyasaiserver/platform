@@ -402,6 +402,33 @@ object SLSignSetting {
       )
       addItem(
         GuiItem(
+          ItemStack(Material.BAMBOO_SIGN)
+            .allFlag()
+            .addText("&aペールオークの看板へ変更する", mutableListOf("&7材質をペールオークへ変えます"))
+        ) {
+          val oldMaterialName = sign.type.name
+          val newMaterial =
+            if (hangingRegex.containsMatchIn(oldMaterialName)) {
+              if (wallRegex.containsMatchIn(oldMaterialName)) {
+                Material.PALE_OAK_WALL_HANGING_SIGN
+              } else {
+                Material.PALE_OAK_HANGING_SIGN
+              }
+            } else {
+              if (wallRegex.containsMatchIn(oldMaterialName)) {
+                Material.PALE_OAK_WALL_SIGN
+              } else {
+                Material.PALE_OAK_SIGN
+              }
+            }
+          changeSignType(sign, newMaterial, slData.id)
+          it.whoClicked.closeInventory()
+        },
+        3,
+        1,
+      )
+      addItem(
+        GuiItem(
           ItemStack(Material.CRIMSON_SIGN)
             .allFlag()
             .addText("&a真紅の看板へ変更する", mutableListOf("&7材質を真紅へ変えます"))
