@@ -402,7 +402,7 @@ object SLSignSetting {
       )
       addItem(
         GuiItem(
-          ItemStack(Material.BAMBOO_SIGN)
+          ItemStack(Material.PALE_OAK_SIGN)
             .allFlag()
             .addText("&aペールオークの看板へ変更する", mutableListOf("&7材質をペールオークへ変えます"))
         ) {
