@@ -21,6 +21,10 @@ object SimpleGUI {
   // 追加：GUIを開いたプレイヤーごとに signID を保持する
   private val signViewMap: MutableMap<UUID, Int> = mutableMapOf()
 
+  fun forget(uuid: UUID) {
+    signViewMap.remove(uuid)
+  }
+
   private fun item(material: Material, name: String, lore: List<String> = listOf()): ItemStack {
     val it = ItemStack(material)
     val meta = it.itemMeta!!

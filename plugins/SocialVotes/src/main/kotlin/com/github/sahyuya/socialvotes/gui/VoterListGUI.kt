@@ -24,6 +24,12 @@ object VoterListGUI {
   private val pageMap = mutableMapOf<UUID, Int>()
   private val sortMap = mutableMapOf<UUID, SortMode>()
 
+  fun forget(uuid: UUID) {
+    signMap.remove(uuid)
+    pageMap.remove(uuid)
+    sortMap.remove(uuid)
+  }
+
   private fun gray(): ItemStack =
     ItemStack(Material.GRAY_STAINED_GLASS_PANE).apply {
       itemMeta = itemMeta!!.apply { setDisplayName(" ") }
