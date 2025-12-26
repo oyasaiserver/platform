@@ -1,0 +1,11 @@
+{
+  "name": "@oyasaiserver/minecraft-main",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "download-plugins": "node scripts/download-plugins.ts"
+  }
+}
