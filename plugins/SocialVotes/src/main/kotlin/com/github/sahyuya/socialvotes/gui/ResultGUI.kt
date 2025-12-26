@@ -15,6 +15,11 @@ object ResultGUI {
   private val viewMap: MutableMap<UUID, Int> = mutableMapOf()
   private val sortModeMap: MutableMap<UUID, SortMode> = mutableMapOf()
 
+  fun forget(uuid: UUID) {
+    viewMap.remove(uuid)
+    sortModeMap.remove(uuid)
+  }
+
   enum class SortMode {
     REGISTER,
     VOTES_DESC,

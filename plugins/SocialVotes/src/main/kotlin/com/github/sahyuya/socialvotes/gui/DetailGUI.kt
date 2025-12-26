@@ -18,6 +18,10 @@ import org.bukkit.inventory.ItemStack
 object DetailGUI {
   private val signViewMap: MutableMap<UUID, Int> = mutableMapOf()
 
+  fun forget(uuid: UUID) {
+    signViewMap.remove(uuid)
+  }
+
   private fun item(mat: Material, name: String, lore: List<String> = listOf()): ItemStack {
     val it = ItemStack(mat)
     val meta = it.itemMeta!!
