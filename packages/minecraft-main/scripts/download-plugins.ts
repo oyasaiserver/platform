@@ -1,8 +1,8 @@
 import { downloadPlugins } from '@oyasaiserver/plugins/download'
+import { type RegistryId } from '@oyasaiserver/plugins/registry'
+import type { Environment } from '@oyasaiserver/secrets/environment'
 import { readEnvironment } from '@oyasaiserver/secrets/environment'
 import { glob, rm } from 'node:fs/promises'
-import type { Environment } from '@oyasaiserver/secrets/environment'
-import { type RegistryId } from '@oyasaiserver/plugins/registry'
 
 const local: RegistryId[] = [
   'essentialsx',
