@@ -44,7 +44,7 @@ jobs:
       - name: Download plugins
         run: |
           npm run download-plugins
-        working-directory: packages/minecraft-server
+        working-directory: packages/minecraft-main
       - uses: ./.github/actions/setup-secrets
         with:
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}

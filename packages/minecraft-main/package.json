@@ -1,5 +1,5 @@
 {
-  "name": "@oyasaiserver/minecraft-server",
+  "name": "@oyasaiserver/minecraft-main",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",

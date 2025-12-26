@@ -1,5 +1,8 @@
+import { downloadPlugins } from '@oyasaiserver/plugins/download'
+import { type RegistryId } from '@oyasaiserver/plugins/registry'
 import type { Environment } from '@oyasaiserver/secrets/environment'
-import { type RegistryId } from './registry.ts'
+import { readEnvironment } from '@oyasaiserver/secrets/environment'
+import { glob, rm } from 'node:fs/promises'
 
 const local: RegistryId[] = [
   'essentialsx',
@@ -72,8 +75,19 @@ const development: RegistryId[] = local.concat(
 
 const production: RegistryId[] = development.concat('discordsrv', 'bluemap')
 
-export const plugins: Record<Environment, readonly RegistryId[]> = {
+const plugins: Record<Environment, readonly RegistryId[]> = {
   local,
   development,
   production
+}
+
+if (import.meta.main) {
+  const environment = readEnvironment()
+  const dir = 'plugins'
+
+  for await (const file of glob(`${dir}/*.jar`)) {
+    await rm(file)
+  }
+
+  await downloadPlugins(dir, plugins[environment])
 }
