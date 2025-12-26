@@ -23,7 +23,6 @@ class QuitListener : Listener {
     ChatInput.cancel(uuid)
 
     // GUIの閲覧状態解除（メモリリーク防止）
-    // ※ 各GUIオブジェクトに `forget(uuid)` のようなメソッドを追加してください
     SimpleGUI.forget(uuid)
     DetailGUI.forget(uuid)
     ResultGUI.forget(uuid)
