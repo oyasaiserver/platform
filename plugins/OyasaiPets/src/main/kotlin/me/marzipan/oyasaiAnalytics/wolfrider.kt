@@ -4,6 +4,8 @@ import io.papermc.paper.entity.LookAnchor
 import io.papermc.paper.event.player.AsyncChatEvent
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
+import java.util.Locale
+import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.*
@@ -28,8 +30,6 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import java.util.Locale
-import java.util.UUID
 
 class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
@@ -118,7 +118,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   private var LivingEntity.isSilentMode: Boolean
     get() = (persistentDataContainer.get(KEY_SILENT, PersistentDataType.BYTE) ?: 0).toInt() == 1
-    set(value) = persistentDataContainer.set(KEY_SILENT, PersistentDataType.BYTE, if (value) 1 else 0)
+    set(value) =
+      persistentDataContainer.set(KEY_SILENT, PersistentDataType.BYTE, if (value) 1 else 0)
 
   private var LivingEntity.particleType: Int
     get() = persistentDataContainer.get(KEY_PARTICLE, PersistentDataType.INTEGER) ?: 0
@@ -136,8 +137,10 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   // ★追加: ホバリング状態
   private var LivingEntity.isHovering: Boolean
-    get() = (persistentDataContainer.get(KEY_HOVER_STATE, PersistentDataType.BYTE) ?: 0).toInt() == 1
-    set(value) = persistentDataContainer.set(KEY_HOVER_STATE, PersistentDataType.BYTE, if (value) 1 else 0)
+    get() =
+      (persistentDataContainer.get(KEY_HOVER_STATE, PersistentDataType.BYTE) ?: 0).toInt() == 1
+    set(value) =
+      persistentDataContainer.set(KEY_HOVER_STATE, PersistentDataType.BYTE, if (value) 1 else 0)
 
   // --- Commands ---
   override fun onCommand(
@@ -232,7 +235,10 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
     return when (args.size) {
       1 -> {
-        val completions = PetRegistry.officialPets.map { it.name.lowercase() } + listOf("food") + if (sender.isOp) listOf("toy") else emptyList()
+        val completions =
+          PetRegistry.officialPets.map { it.name.lowercase() } +
+            listOf("food") +
+            if (sender.isOp) listOf("toy") else emptyList()
         val result = if (sender.isOp) completions + "exp" else completions
         result.filter { it.startsWith(args[0].lowercase()) }.toMutableList()
       }
@@ -240,7 +246,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
         val arg1 = args[0].lowercase()
         if (arg1 == "exp") {
           if (!sender.isOp) return mutableListOf()
-          EntityType.entries.filter { it.isSpawnable && it.isAlive }
+          EntityType.entries
+            .filter { it.isSpawnable && it.isAlive }
             .map { it.name.lowercase() }
             .filter { it.startsWith(args[1].lowercase()) }
             .toMutableList()
@@ -296,23 +303,24 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     if (spec.category == PetCategory.FLYING) {
       // 着地するまで下方向に力を加え続けるタスク
       object : BukkitRunnable() {
-        override fun run() {
-          // エンティティが無効、死亡、または誰かが乗った場合は終了
-          if (!entity.isValid || entity.isDead || !entity.passengers.isEmpty()) {
-            cancel()
-            return
+          override fun run() {
+            // エンティティが無効、死亡、または誰かが乗った場合は終了
+            if (!entity.isValid || entity.isDead || !entity.passengers.isEmpty()) {
+              cancel()
+              return
+            }
+            // 地面に着いたら終了
+            if (entity.isOnGround) {
+              cancel()
+              return
+            }
+            // ゆっくり降下
+            val vel = entity.velocity
+            vel.y = -0.2
+            entity.velocity = vel
           }
-          // 地面に着いたら終了
-          if (entity.isOnGround) {
-            cancel()
-            return
-          }
-          // ゆっくり降下
-          val vel = entity.velocity
-          vel.y = -0.2
-          entity.velocity = vel
         }
-      }.runTaskTimer(this, 0L, 1L)
+        .runTaskTimer(this, 0L, 1L)
     }
   }
 
@@ -324,7 +332,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     checkAndMigrateOwner(entity, player)
     val isOwner = isOwner(entity, player)
 
-    val plainName = entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
+    val plainName =
+      entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
     if (entity.ownerId == null && !plainName.contains("'s Big ")) return
 
     event.isCancelled = true
@@ -365,13 +374,14 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     var seat = tandemSeats[pet.uniqueId]
     if (seat == null || !seat.isValid) {
       val loc = pet.location.clone().subtract(pet.location.direction.multiply(1.2))
-      seat = pet.world.spawn(loc, ArmorStand::class.java) {
-        it.isVisible = false
-        it.isMarker = true
-        it.isSmall = true
-        it.setGravity(false)
-        it.setBasePlate(false)
-      }
+      seat =
+        pet.world.spawn(loc, ArmorStand::class.java) {
+          it.isVisible = false
+          it.isMarker = true
+          it.isSmall = true
+          it.setGravity(false)
+          it.setBasePlate(false)
+        }
       tandemSeats[pet.uniqueId] = seat
     }
 
@@ -410,12 +420,9 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   }
 
   private fun handleThrowToy(player: Player, item: ItemStack, toySpec: PetSpec) {
-    val pet = player.getNearbyEntities(15.0, 10.0, 15.0)
-      .filterIsInstance<LivingEntity>()
-      .firstOrNull {
-        it.type == toySpec.entityType &&
-          isOwner(it, player) &&
-          it.passengers.isEmpty()
+    val pet =
+      player.getNearbyEntities(15.0, 10.0, 15.0).filterIsInstance<LivingEntity>().firstOrNull {
+        it.type == toySpec.entityType && isOwner(it, player) && it.passengers.isEmpty()
       }
 
     if (pet != null) {
@@ -453,12 +460,9 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   }
 
   private fun handleFishingToy(player: Player, toySpec: PetSpec) {
-    val pet = player.getNearbyEntities(15.0, 10.0, 15.0)
-      .filterIsInstance<LivingEntity>()
-      .firstOrNull {
-        it.type == toySpec.entityType &&
-          isOwner(it, player) &&
-          it.passengers.isEmpty()
+    val pet =
+      player.getNearbyEntities(15.0, 10.0, 15.0).filterIsInstance<LivingEntity>().firstOrNull {
+        it.type == toySpec.entityType && isOwner(it, player) && it.passengers.isEmpty()
       }
 
     if (pet != null) {
@@ -532,10 +536,11 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val player = event.whoClicked as? Player ?: return
     val item = event.currentItem ?: return
 
-    val entity = openedGuis[event.view.topInventory]
-      ?: return player.closeInventory().also {
-        player.sendMessage(Component.text("操作対象のペットが見つかりません。", RED))
-      }
+    val entity =
+      openedGuis[event.view.topInventory]
+        ?: return player.closeInventory().also {
+          player.sendMessage(Component.text("操作対象のペットが見つかりません。", RED))
+        }
 
     if (!entity.isValid) {
       player.closeInventory()
@@ -551,7 +556,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
         player.sendMessage(Component.text("新しい名前をチャットに入力してください。(例: amanda)", AQUA))
         player.sendMessage(Component.text("--------------------------------", YELLOW))
       }
-      Material.LIME_WOOL, Material.RED_WOOL -> {
+      Material.LIME_WOOL,
+      Material.RED_WOOL -> {
         entity.isSilentMode = !entity.isSilentMode
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
         openInfoGui(player, entity)
@@ -589,12 +595,16 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
     val msg = PlainTextComponentSerializer.plainText().serialize(event.message())
     if (entity.isValid && !msg.equals("cancel", true)) {
-      Bukkit.getScheduler().runTask(this, Runnable {
-        entity.customName(LegacyComponentSerializer.legacyAmpersand().deserialize(msg))
-        entity.isCustomNameVisible = true
-        player.sendMessage(Component.text("名前を変更しました！", GREEN))
-        entity.world.playSound(entity.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
-      })
+      Bukkit.getScheduler()
+        .runTask(
+          this,
+          Runnable {
+            entity.customName(LegacyComponentSerializer.legacyAmpersand().deserialize(msg))
+            entity.isCustomNameVisible = true
+            player.sendMessage(Component.text("名前を変更しました！", GREEN))
+            entity.world.playSound(entity.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+          },
+        )
     } else {
       player.sendMessage(Component.text("変更をキャンセルしました。", RED))
     }
@@ -635,7 +645,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   private fun spawnAndMountEntity(player: Player, type: EntityType, variantName: String?) {
     val spec = PetRegistry.get(type)
-    val entity = player.world.spawnEntity(player.location.add(0.0, 1.0, 0.0), type) as? LivingEntity ?: return
+    val entity =
+      player.world.spawnEntity(player.location.add(0.0, 1.0, 0.0), type) as? LivingEntity ?: return
 
     setupPetEntity(entity, spec, player)
 
@@ -653,11 +664,16 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
     updateStats(entity, 0, spec)
 
-    Bukkit.getScheduler().runTaskLater(this, Runnable {
-      entity.addPassenger(player)
-      mountCooldowns[player.uniqueId] = System.currentTimeMillis()
-      startControlTask(player, entity)
-    }, 2L)
+    Bukkit.getScheduler()
+      .runTaskLater(
+        this,
+        Runnable {
+          entity.addPassenger(player)
+          mountCooldowns[player.uniqueId] = System.currentTimeMillis()
+          startControlTask(player, entity)
+        },
+        2L,
+      )
 
     player.sendMessage(Component.text("巨大な ${type.name} を召喚しました！", AQUA))
   }
@@ -668,89 +684,96 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val returnItemStack = spec.createToyItem()
     val holdingMat = returnItemStack.type
 
-    val task = object : BukkitRunnable() {
-      var phase = 0
-      val runSpeed = 0.35
+    val task =
+      object : BukkitRunnable() {
+        var phase = 0
+        val runSpeed = 0.35
 
-      override fun run() {
-        if (!entity.isValid || entity.isDead || !player.isOnline) {
-          cleanup(true)
-          return
-        }
-        if (!entity.passengers.isEmpty()) {
-          cleanup(true)
-          return
-        }
-        if (phase == 0) {
-          if (!toyItem.isValid) {
-            cleanup(false)
+        override fun run() {
+          if (!entity.isValid || entity.isDead || !player.isOnline) {
+            cleanup(true)
             return
           }
-          val targetLoc = toyItem.location
-          val dist = entity.location.distance(targetLoc)
-          if (dist < 1.5) {
-            toyItem.remove()
-            entity.equipment?.setItemInMainHand(returnItemStack)
-            entity.world.playSound(entity.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
-            phase = 1
-          } else {
-            moveTo(entity, targetLoc, runSpeed)
+          if (!entity.passengers.isEmpty()) {
+            cleanup(true)
+            return
           }
-        } else {
-          if (entity.equipment?.itemInMainHand?.type != holdingMat) {
-            entity.equipment?.setItemInMainHand(returnItemStack)
-          }
-          val targetLoc = player.location
-          val dist = entity.location.distance(targetLoc)
-          if (dist < 2.5) {
-            player.sendMessage(Component.text("えらい！", GREEN))
-            entity.world.spawnParticle(Particle.HEART, entity.location.add(0.0, 1.0, 0.0), 3)
-            entity.world.playSound(entity.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
-
-            entity.equipment?.setItemInMainHand(null)
-
-            val dirToPlayer = player.location.toVector().subtract(entity.location.toVector()).normalize()
-            val dropLoc = entity.location.add(0.0, 0.5, 0.0).add(dirToPlayer)
-
-            val dropped = entity.world.dropItem(dropLoc, returnItemStack)
-            dropped.setGravity(spec.toyGravity)
-            dropped.pickupDelay = 20
-
-            if (spec.toyGravity) {
-              dropped.velocity = Vector(0, 0, 0)
-            } else {
-              dropped.velocity = Vector(0, 0, 0)
+          if (phase == 0) {
+            if (!toyItem.isValid) {
+              cleanup(false)
+              return
             }
-
-            cleanup(false)
+            val targetLoc = toyItem.location
+            val dist = entity.location.distance(targetLoc)
+            if (dist < 1.5) {
+              toyItem.remove()
+              entity.equipment?.setItemInMainHand(returnItemStack)
+              entity.world.playSound(entity.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
+              phase = 1
+            } else {
+              moveTo(entity, targetLoc, runSpeed)
+            }
           } else {
-            moveTo(entity, targetLoc, runSpeed)
+            if (entity.equipment?.itemInMainHand?.type != holdingMat) {
+              entity.equipment?.setItemInMainHand(returnItemStack)
+            }
+            val targetLoc = player.location
+            val dist = entity.location.distance(targetLoc)
+            if (dist < 2.5) {
+              player.sendMessage(Component.text("えらい！", GREEN))
+              entity.world.spawnParticle(Particle.HEART, entity.location.add(0.0, 1.0, 0.0), 3)
+              entity.world.playSound(entity.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+
+              entity.equipment?.setItemInMainHand(null)
+
+              val dirToPlayer =
+                player.location.toVector().subtract(entity.location.toVector()).normalize()
+              val dropLoc = entity.location.add(0.0, 0.5, 0.0).add(dirToPlayer)
+
+              val dropped = entity.world.dropItem(dropLoc, returnItemStack)
+              dropped.setGravity(spec.toyGravity)
+              dropped.pickupDelay = 20
+
+              if (spec.toyGravity) {
+                dropped.velocity = Vector(0, 0, 0)
+              } else {
+                dropped.velocity = Vector(0, 0, 0)
+              }
+
+              cleanup(false)
+            } else {
+              moveTo(entity, targetLoc, runSpeed)
+            }
           }
         }
-      }
-      fun moveTo(e: LivingEntity, loc: Location, speed: Double) {
-        val targetVec = loc.toVector().subtract(e.location.toVector()).normalize().multiply(speed)
 
-        if (spec.category == PetCategory.FLYING || (spec.category == PetCategory.WATER && e.isInWater)) {
-          e.velocity = targetVec
-        } else {
-          targetVec.y = e.velocity.y
-          e.velocity = targetVec
+        fun moveTo(e: LivingEntity, loc: Location, speed: Double) {
+          val targetVec = loc.toVector().subtract(e.location.toVector()).normalize().multiply(speed)
+
+          if (
+            spec.category == PetCategory.FLYING ||
+              (spec.category == PetCategory.WATER && e.isInWater)
+          ) {
+            e.velocity = targetVec
+          } else {
+            targetVec.y = e.velocity.y
+            e.velocity = targetVec
+          }
+
+          e.lookAt(loc, LookAnchor.EYES)
         }
 
-        e.lookAt(loc, LookAnchor.EYES)
-      }
-      fun cleanup(dropItem: Boolean) {
-        if (dropItem) {
-          entity.equipment?.setItemInMainHand(null)
-          val drop = entity.world.dropItem(entity.location, returnItemStack)
-          drop.setGravity(spec.toyGravity)
-          if (!spec.toyGravity) drop.velocity = Vector(0,0,0)
+        fun cleanup(dropItem: Boolean) {
+          if (dropItem) {
+            entity.equipment?.setItemInMainHand(null)
+            val drop = entity.world.dropItem(entity.location, returnItemStack)
+            drop.setGravity(spec.toyGravity)
+            if (!spec.toyGravity) drop.velocity = Vector(0, 0, 0)
+          }
+          this.cancel()
+          activeFetchTasks.remove(entity.uniqueId)
         }
-        this.cancel()
-        activeFetchTasks.remove(entity.uniqueId)
       }
-    }
     task.runTaskTimer(this, 0L, 1L)
     activeFetchTasks[entity.uniqueId] = task
   }
@@ -797,7 +820,9 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     }
 
     meta.displayName(Component.text("収納された: ", GOLD).append(currentName))
-    meta.lore(listOf(Component.text("右クリックで解放", GRAY), Component.text("ID: ${pid.take(8)}...", DARK_GRAY)))
+    meta.lore(
+      listOf(Component.text("右クリックで解放", GRAY), Component.text("ID: ${pid.take(8)}...", DARK_GRAY))
+    )
     meta.addEnchant(Enchantment.UNBREAKING, 1, true)
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
     item.itemMeta = meta
@@ -864,131 +889,141 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val spec = PetRegistry.get(entity.type)
 
     object : BukkitRunnable() {
-      override fun run() {
-        if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
-          if (entity.isValid) entity.isSilent = false
-          cancel()
-          return
-        }
-        if (entity is Sittable) entity.isSitting = false
-
-        val level = entity.foodLevel
-        val progress = level.toDouble() / MAX_FOOD_LEVEL
-
-        var speed = spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress
-        entity.isSilent = entity.isSilentMode
-
-        val inWater = entity.isInWater
-
-        when (spec.category) {
-          PetCategory.LAND -> {
-            if (inWater && entity.skillType != 2) speed *= 0.3
+        override fun run() {
+          if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
+            if (entity.isValid) entity.isSilent = false
+            cancel()
+            return
           }
-          PetCategory.WATER -> {
-            if (inWater) speed *= 1.2 else speed *= 0.6
-          }
-          PetCategory.FLYING -> {
-            if (inWater) speed *= 0.3
-          }
-        }
+          if (entity is Sittable) entity.isSitting = false
 
-        val now = System.currentTimeMillis()
-        val isDashing = now < dashEndTimes.getOrDefault(player.uniqueId, 0L)
-        val input = player.currentInput
-        val dir = player.location.direction.setY(0).normalize()
-        val right = dir.clone().crossProduct(Vector(0, 1, 0))
-        val velocity = Vector(0, 0, 0)
+          val level = entity.foodLevel
+          val progress = level.toDouble() / MAX_FOOD_LEVEL
 
-        if (input.isForward) velocity.add(dir)
-        if (input.isBackward) velocity.subtract(dir)
-        if (input.isLeft) velocity.subtract(right)
-        if (input.isRight) velocity.add(right)
+          var speed = spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress
+          entity.isSilent = entity.isSilentMode
 
-        // 水生生物: 水中上下
-        if (spec.category == PetCategory.WATER && inWater) {
-          if (input.isForward || input.isBackward) {
-            velocity.y = player.location.direction.y * speed
-          }
-        }
+          val inWater = entity.isInWater
 
-        if (isDashing) {
-          spawnParticles(entity)
-        } else {
-          if (velocity.lengthSquared() > 0) {
-            velocity.normalize().multiply(speed)
-            if (spec.category != PetCategory.WATER || !inWater) {
-              velocity.y = entity.velocity.y
+          when (spec.category) {
+            PetCategory.LAND -> {
+              if (inWater && entity.skillType != 2) speed *= 0.3
             }
-            if (inWater && input.isJump && spec.category != PetCategory.WATER) {
-              velocity.y = 0.4
+            PetCategory.WATER -> {
+              if (inWater) speed *= 1.2 else speed *= 0.6
             }
-            entity.velocity = velocity
+            PetCategory.FLYING -> {
+              if (inWater) speed *= 0.3
+            }
+          }
+
+          val now = System.currentTimeMillis()
+          val isDashing = now < dashEndTimes.getOrDefault(player.uniqueId, 0L)
+          val input = player.currentInput
+          val dir = player.location.direction.setY(0).normalize()
+          val right = dir.clone().crossProduct(Vector(0, 1, 0))
+          val velocity = Vector(0, 0, 0)
+
+          if (input.isForward) velocity.add(dir)
+          if (input.isBackward) velocity.subtract(dir)
+          if (input.isLeft) velocity.subtract(right)
+          if (input.isRight) velocity.add(right)
+
+          // 水生生物: 水中上下
+          if (spec.category == PetCategory.WATER && inWater) {
+            if (input.isForward || input.isBackward) {
+              velocity.y = player.location.direction.y * speed
+            }
+          }
+
+          if (isDashing) {
             spawnParticles(entity)
-          }
-        }
-
-        // ジャンプ・飛行処理
-        if (spec.category == PetCategory.FLYING) {
-          if (input.isJump) {
-            val vel = entity.velocity
-            vel.y = 0.4
-            entity.velocity = vel
-            if (entity.ticksLived % 5 == 0) {
-              entity.world.spawnParticle(Particle.CLOUD, entity.location, 1, 0.0, 0.0, 0.0, 0.01)
-            }
-          } else if (!entity.isOnGround) {
-            // ★修正: ホバリングスキル実装 (SkillType 2)
-            if (entity.skillType == 2 && entity.isHovering) {
-              // ホバリング (静止)
-              val vel = entity.velocity
-              vel.y = 0.0
-              entity.velocity = vel
-              if (entity.ticksLived % 10 == 0) {
-                entity.world.spawnParticle(Particle.END_ROD, entity.location, 1, 0.1, 0.0, 0.1, 0.0)
-              }
-            } else {
-              // スローフォーリング
-              val vel = entity.velocity
-              vel.y = -0.15
-              entity.velocity = vel
-            }
-          }
-        } else {
-          // 陸・水 (ジャンプ)
-          if (input.isJump && entity.isOnGround && !inWater) {
-            entity.velocity = entity.velocity.setY(spec.jumpPower)
-          }
-        }
-
-        entity.setRotation(player.location.yaw, 0f)
-
-        // タンデム座席
-        val seat = tandemSeats[entity.uniqueId]
-        if (seat != null) {
-          if (!seat.isValid || seat.passengers.isEmpty()) {
-            seat.remove()
-            tandemSeats.remove(entity.uniqueId)
           } else {
-            val offset = entity.location.direction.clone().setY(0).normalize().multiply(-1.2)
-            val seatLoc = entity.location.clone().add(offset).add(0.0, 0.5, 0.0)
-            seatLoc.yaw = entity.location.yaw
-            seatLoc.pitch = entity.location.pitch
-            seat.teleport(seatLoc)
+            if (velocity.lengthSquared() > 0) {
+              velocity.normalize().multiply(speed)
+              if (spec.category != PetCategory.WATER || !inWater) {
+                velocity.y = entity.velocity.y
+              }
+              if (inWater && input.isJump && spec.category != PetCategory.WATER) {
+                velocity.y = 0.4
+              }
+              entity.velocity = velocity
+              spawnParticles(entity)
+            }
+          }
+
+          // ジャンプ・飛行処理
+          if (spec.category == PetCategory.FLYING) {
+            if (input.isJump) {
+              val vel = entity.velocity
+              vel.y = 0.4
+              entity.velocity = vel
+              if (entity.ticksLived % 5 == 0) {
+                entity.world.spawnParticle(Particle.CLOUD, entity.location, 1, 0.0, 0.0, 0.0, 0.01)
+              }
+            } else if (!entity.isOnGround) {
+              // ★修正: ホバリングスキル実装 (SkillType 2)
+              if (entity.skillType == 2 && entity.isHovering) {
+                // ホバリング (静止)
+                val vel = entity.velocity
+                vel.y = 0.0
+                entity.velocity = vel
+                if (entity.ticksLived % 10 == 0) {
+                  entity.world.spawnParticle(
+                    Particle.END_ROD,
+                    entity.location,
+                    1,
+                    0.1,
+                    0.0,
+                    0.1,
+                    0.0,
+                  )
+                }
+              } else {
+                // スローフォーリング
+                val vel = entity.velocity
+                vel.y = -0.15
+                entity.velocity = vel
+              }
+            }
+          } else {
+            // 陸・水 (ジャンプ)
+            if (input.isJump && entity.isOnGround && !inWater) {
+              entity.velocity = entity.velocity.setY(spec.jumpPower)
+            }
+          }
+
+          entity.setRotation(player.location.yaw, 0f)
+
+          // タンデム座席
+          val seat = tandemSeats[entity.uniqueId]
+          if (seat != null) {
+            if (!seat.isValid || seat.passengers.isEmpty()) {
+              seat.remove()
+              tandemSeats.remove(entity.uniqueId)
+            } else {
+              val offset = entity.location.direction.clone().setY(0).normalize().multiply(-1.2)
+              val seatLoc = entity.location.clone().add(offset).add(0.0, 0.5, 0.0)
+              seatLoc.yaw = entity.location.yaw
+              seatLoc.pitch = entity.location.pitch
+              seat.teleport(seatLoc)
+            }
           }
         }
       }
-    }.runTaskTimer(this, 0L, 1L)
+      .runTaskTimer(this, 0L, 1L)
   }
 
   private fun spawnParticles(entity: LivingEntity) {
     val pType = entity.particleType
     if (pType == 4) return
-    val particle = when (pType) {
-      1 -> Particle.FLAME
-      2 -> Particle.SOUL_FIRE_FLAME
-      3 -> Particle.HEART
-      else -> Particle.ELECTRIC_SPARK
-    }
+    val particle =
+      when (pType) {
+        1 -> Particle.FLAME
+        2 -> Particle.SOUL_FIRE_FLAME
+        3 -> Particle.HEART
+        else -> Particle.ELECTRIC_SPARK
+      }
     entity.world.spawnParticle(particle, entity.location, 5, 0.5, 0.2, 0.5, 0.0)
   }
 
@@ -997,8 +1032,19 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     entity.world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1.2f)
     entity.world.spawnParticle(Particle.EXPLOSION_EMITTER, entity.location.add(0.0, 1.0, 0.0), 1)
     entity.getNearbyEntities(8.0, 4.0, 8.0).forEach { target ->
-      if (target is LivingEntity && target != player && target != entity && target !in entity.passengers) {
-        val vec = target.location.toVector().subtract(entity.location.toVector()).normalize().multiply(1.5).setY(0.8)
+      if (
+        target is LivingEntity &&
+          target != player &&
+          target != entity &&
+          target !in entity.passengers
+      ) {
+        val vec =
+          target.location
+            .toVector()
+            .subtract(entity.location.toVector())
+            .normalize()
+            .multiply(1.5)
+            .setY(0.8)
         target.velocity = vec
         target.damage(2.0, entity)
       }
@@ -1023,54 +1069,116 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val level = entity.foodLevel
     val spec = PetRegistry.get(entity.type)
 
-    fun item(mat: Material, name: String, color: NamedTextColor, vararg lore: Component) = ItemStack(mat).apply {
-      itemMeta = itemMeta.apply {
-        displayName(Component.text(name, color))
-        lore(lore.toList())
+    fun item(mat: Material, name: String, color: NamedTextColor, vararg lore: Component) =
+      ItemStack(mat).apply {
+        itemMeta =
+          itemMeta.apply {
+            displayName(Component.text(name, color))
+            lore(lore.toList())
+          }
       }
-    }
 
     val nameComp = entity.customName() ?: Component.text("不明")
-    inv.setItem(0, item(Material.NAME_TAG, "名前: ", AQUA, nameComp, Component.text("クリックで変更", GREEN)))
+    inv.setItem(
+      0,
+      item(Material.NAME_TAG, "名前: ", AQUA, nameComp, Component.text("クリックで変更", GREEN)),
+    )
 
     val vName = VariantHandler.getVariantNameFromEntity(entity)
     val typeName = if (vName != null) "${entity.type.name} ($vName)" else entity.type.name
     val eggMat = Material.getMaterial("${entity.type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
-    inv.setItem(1, item(eggMat, "種類: $typeName", YELLOW, Component.text("カテゴリ: ${spec.category}", GRAY)))
+    inv.setItem(
+      1,
+      item(eggMat, "種類: $typeName", YELLOW, Component.text("カテゴリ: ${spec.category}", GRAY)),
+    )
 
     val silent = entity.isSilentMode
-    val (sIcon, sText, sColor) = if (silent) Triple(Material.RED_WOOL, "静寂 (無音)", RED) else Triple(Material.LIME_WOOL, "通常 (音あり)", GREEN)
-    inv.setItem(2, item(sIcon, "サイレント: ${if (silent) "ON" else "OFF"}", WHITE, Component.text(sText, sColor), Component.text("クリックで切替", GRAY)))
+    val (sIcon, sText, sColor) =
+      if (silent) Triple(Material.RED_WOOL, "静寂 (無音)", RED)
+      else Triple(Material.LIME_WOOL, "通常 (音あり)", GREEN)
+    inv.setItem(
+      2,
+      item(
+        sIcon,
+        "サイレント: ${if (silent) "ON" else "OFF"}",
+        WHITE,
+        Component.text(sText, sColor),
+        Component.text("クリックで切替", GRAY),
+      ),
+    )
 
     val skill = entity.skillType
 
-    val (skName, skColor, skDesc) = when (skill) {
-      0 -> Triple("咆哮 (Roar)", GOLD, "左クリックで範囲攻撃")
-      1 -> Triple("突進 (Dash)", AQUA, "左クリックで高速移動")
-      2 -> {
-        if (spec.category == PetCategory.FLYING) {
-          Triple("ホバリング (Hover)", LIGHT_PURPLE, "左クリックでホバリングON/OFF")
-        } else {
-          Triple("水泳 (Aqua)", BLUE, "水中速度低下を無効化")
+    val (skName, skColor, skDesc) =
+      when (skill) {
+        0 -> Triple("咆哮 (Roar)", GOLD, "左クリックで範囲攻撃")
+        1 -> Triple("突進 (Dash)", AQUA, "左クリックで高速移動")
+        2 -> {
+          if (spec.category == PetCategory.FLYING) {
+            Triple("ホバリング (Hover)", LIGHT_PURPLE, "左クリックでホバリングON/OFF")
+          } else {
+            Triple("水泳 (Aqua)", BLUE, "水中速度低下を無効化")
+          }
         }
+        else -> Triple("OFF", GRAY, "スキル無効")
       }
-      else -> Triple("OFF", GRAY, "スキル無効")
-    }
 
-    inv.setItem(3, item(Material.IRON_SWORD, "スキル設定", skColor, Component.text("現在: $skName", WHITE), Component.text(skDesc, YELLOW), Component.text("クリックで変更", GREEN)))
+    inv.setItem(
+      3,
+      item(
+        Material.IRON_SWORD,
+        "スキル設定",
+        skColor,
+        Component.text("現在: $skName", WHITE),
+        Component.text(skDesc, YELLOW),
+        Component.text("クリックで変更", GREEN),
+      ),
+    )
 
     val scaleStr = "%.1f".format(entity.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0)
-    val speedStr = "%.1f".format(spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * (level.toDouble() / MAX_FOOD_LEVEL))
-    inv.setItem(4, item(Material.COOKED_BEEF, "育成ステータス", GOLD, Component.text("フード: $level / $MAX_FOOD_LEVEL", GRAY).replaceText { it.match(level.toString()).replacement(Component.text(level.toString(), YELLOW)) }, Component.text("サイズ: $scaleStr 倍", GRAY), Component.text("速度: $speedStr", GRAY)))
+    val speedStr =
+      "%.1f"
+        .format(
+          spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * (level.toDouble() / MAX_FOOD_LEVEL)
+        )
+    inv.setItem(
+      4,
+      item(
+        Material.COOKED_BEEF,
+        "育成ステータス",
+        GOLD,
+        Component.text("フード: $level / $MAX_FOOD_LEVEL", GRAY).replaceText {
+          it.match(level.toString()).replacement(Component.text(level.toString(), YELLOW))
+        },
+        Component.text("サイズ: $scaleStr 倍", GRAY),
+        Component.text("速度: $speedStr", GRAY),
+      ),
+    )
 
     val pNames = listOf("電気", "炎", "青炎", "ハート", "なし")
     val pColors = listOf(YELLOW, RED, AQUA, LIGHT_PURPLE, GRAY)
     val pType = entity.particleType
-    inv.setItem(6, item(Material.BLAZE_POWDER, "エフェクト設定", GOLD, Component.text("現在: ", GRAY).append(Component.text(pNames.getOrElse(pType) { "?" }, pColors.getOrElse(pType) { WHITE })), Component.text("クリックで変更", GREEN)))
+    inv.setItem(
+      6,
+      item(
+        Material.BLAZE_POWDER,
+        "エフェクト設定",
+        GOLD,
+        Component.text("現在: ", GRAY)
+          .append(
+            Component.text(pNames.getOrElse(pType) { "?" }, pColors.getOrElse(pType) { WHITE })
+          ),
+        Component.text("クリックで変更", GREEN),
+      ),
+    )
 
-    inv.setItem(7, item(Material.CHEST, "ペットをしまう", LIGHT_PURPLE, Component.text("アイテム化して持ち運ぶ", GRAY)))
+    inv.setItem(
+      7,
+      item(Material.CHEST, "ペットをしまう", LIGHT_PURPLE, Component.text("アイテム化して持ち運ぶ", GRAY)),
+    )
 
-    val hp = "${entity.health.toInt()} / ${entity.getAttribute(Attribute.MAX_HEALTH)?.value?.toInt()}"
+    val hp =
+      "${entity.health.toInt()} / ${entity.getAttribute(Attribute.MAX_HEALTH)?.value?.toInt()}"
     inv.setItem(8, item(Material.RED_DYE, "体力", RED, Component.text(hp, WHITE)))
 
     player.openInventory(inv)
@@ -1093,29 +1201,38 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   private fun updateStats(entity: LivingEntity, level: Int, spec: PetSpec) {
     val progress = level.toDouble() / MAX_FOOD_LEVEL
-    val scale = spec.scaleRange.start + (spec.scaleRange.endInclusive - spec.scaleRange.start) * progress
+    val scale =
+      spec.scaleRange.start + (spec.scaleRange.endInclusive - spec.scaleRange.start) * progress
     entity.getAttribute(Attribute.SCALE)?.baseValue = scale
   }
 
   private fun checkAndMigrateOwner(entity: LivingEntity, player: Player) {
-    val plainName = entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
+    val plainName =
+      entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
     if (entity.ownerId == null && plainName.startsWith("${player.name}'s Big ")) {
       entity.ownerId = player.uniqueId.toString()
     }
   }
 
-  private fun isOwner(entity: LivingEntity, player: Player) = entity.ownerId == player.uniqueId.toString()
+  private fun isOwner(entity: LivingEntity, player: Player) =
+    entity.ownerId == player.uniqueId.toString()
 
-  private fun isPetFood(item: ItemStack): Boolean = item.type == Material.COOKED_BEEF && PlainTextComponentSerializer.plainText().serialize(item.itemMeta?.displayName() ?: Component.empty()).contains("魔法のペットフード")
+  private fun isPetFood(item: ItemStack): Boolean =
+    item.type == Material.COOKED_BEEF &&
+      PlainTextComponentSerializer.plainText()
+        .serialize(item.itemMeta?.displayName() ?: Component.empty())
+        .contains("魔法のペットフード")
 
-  private fun createPetFoodItem() = ItemStack(Material.COOKED_BEEF).apply {
-    itemMeta = itemMeta.apply {
-      displayName(Component.text("★ 魔法のペットフード", GOLD))
-      lore(listOf(Component.text("右クリックで与える", YELLOW)))
-      addEnchant(Enchantment.UNBREAKING, 1, true)
-      addItemFlags(ItemFlag.HIDE_ENCHANTS)
+  private fun createPetFoodItem() =
+    ItemStack(Material.COOKED_BEEF).apply {
+      itemMeta =
+        itemMeta.apply {
+          displayName(Component.text("★ 魔法のペットフード", GOLD))
+          lore(listOf(Component.text("右クリックで与える", YELLOW)))
+          addEnchant(Enchantment.UNBREAKING, 1, true)
+          addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        }
     }
-  }
 }
 
 // ==========================================
@@ -1123,15 +1240,15 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 // ==========================================
 
 enum class PetCategory {
-  LAND,   // 陸上型: 水中で遅い
-  WATER,  // 水棲型: 水中で速い、陸で遅い
-  FLYING  // 飛行型: ジャンプで上昇、スローフォーリング
+  LAND, // 陸上型: 水中で遅い
+  WATER, // 水棲型: 水中で速い、陸で遅い
+  FLYING, // 飛行型: ジャンプで上昇、スローフォーリング
 }
 
 enum class ToyType {
   NONE,
-  THROW_FETCH,  // 投げて取ってくる
-  FISHING_ROD   // 釣竿で遊ぶ
+  THROW_FETCH, // 投げて取ってくる
+  FISHING_ROD, // 釣竿で遊ぶ
 }
 
 // MOBごとの仕様定義
@@ -1146,120 +1263,169 @@ data class PetSpec(
   val toyName: String? = null,
   val toyType: ToyType = ToyType.NONE,
   // ★ 追加: おもちゃが重力の影響を受けるか (Allay用)
-  val toyGravity: Boolean = true
+  val toyGravity: Boolean = true,
 ) {
   fun createToyItem(): ItemStack {
     if (toyMaterial == null || toyName == null) return ItemStack(Material.AIR)
     return ItemStack(toyMaterial).apply {
-      itemMeta = itemMeta.apply {
-        displayName(Component.text("★ $toyName", if (toyType == ToyType.FISHING_ROD) LIGHT_PURPLE else YELLOW))
-        val desc = when (toyType) {
-          ToyType.THROW_FETCH -> "右クリックで投げて遊ぶ (${entityType.name.lowercase()}用)"
-          ToyType.FISHING_ROD -> "投げてジャンプさせる (${entityType.name.lowercase()}用)"
-          else -> ""
+      itemMeta =
+        itemMeta.apply {
+          displayName(
+            Component.text(
+              "★ $toyName",
+              if (toyType == ToyType.FISHING_ROD) LIGHT_PURPLE else YELLOW,
+            )
+          )
+          val desc =
+            when (toyType) {
+              ToyType.THROW_FETCH -> "右クリックで投げて遊ぶ (${entityType.name.lowercase()}用)"
+              ToyType.FISHING_ROD -> "投げてジャンプさせる (${entityType.name.lowercase()}用)"
+              else -> ""
+            }
+          lore(listOf(Component.text(desc, GRAY)))
+          addEnchant(Enchantment.UNBREAKING, 1, true)
+          addItemFlags(ItemFlag.HIDE_ENCHANTS)
         }
-        lore(listOf(Component.text(desc, GRAY)))
-        addEnchant(Enchantment.UNBREAKING, 1, true)
-        addItemFlags(ItemFlag.HIDE_ENCHANTS)
-      }
     }
   }
 }
 
 object PetRegistry {
   // 公式サポートMOBリスト
-  val officialPets = setOf(
-    EntityType.WOLF,
-    EntityType.CAT,
-    EntityType.CHICKEN,
-    EntityType.DOLPHIN,
-    EntityType.PARROT,
-    EntityType.FOX,
-    EntityType.FROG,
-    EntityType.ALLAY
-  )
+  val officialPets =
+    setOf(
+      EntityType.WOLF,
+      EntityType.CAT,
+      EntityType.CHICKEN,
+      EntityType.DOLPHIN,
+      EntityType.PARROT,
+      EntityType.FOX,
+      EntityType.FROG,
+      EntityType.ALLAY,
+    )
 
   private val defaultSpec = PetSpec(PetCategory.LAND, entityType = EntityType.PIG)
 
-  private val specs = mapOf(
-    // --- 陸上系 ---
-    EntityType.WOLF to PetSpec(
-      category = PetCategory.LAND,
-      entityType = EntityType.WOLF,
-      baseSpeed = 0.6, maxSpeed = 1.2,
-      jumpPower = 0.6,
-      toyMaterial = Material.BONE, toyName = "骨のおもちゃ", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.CAT to PetSpec(
-      category = PetCategory.LAND,
-      entityType = EntityType.CAT,
-      baseSpeed = 0.7, maxSpeed = 1.3,
-      jumpPower = 0.9,
-      scaleRange = 1.2..2.2,
-      toyMaterial = Material.FISHING_ROD, toyName = "猫じゃらし", toyType = ToyType.FISHING_ROD
-    ),
-    EntityType.FOX to PetSpec(
-      category = PetCategory.LAND,
-      entityType = EntityType.FOX,
-      baseSpeed = 0.7, maxSpeed = 1.3,
-      jumpPower = 0.7,
-      toyMaterial = Material.SWEET_BERRIES, toyName = "ベリーのおもちゃ", toyType = ToyType.THROW_FETCH
-    ),
+  private val specs =
+    mapOf(
+      // --- 陸上系 ---
+      EntityType.WOLF to
+        PetSpec(
+          category = PetCategory.LAND,
+          entityType = EntityType.WOLF,
+          baseSpeed = 0.6,
+          maxSpeed = 1.2,
+          jumpPower = 0.6,
+          toyMaterial = Material.BONE,
+          toyName = "骨のおもちゃ",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.CAT to
+        PetSpec(
+          category = PetCategory.LAND,
+          entityType = EntityType.CAT,
+          baseSpeed = 0.7,
+          maxSpeed = 1.3,
+          jumpPower = 0.9,
+          scaleRange = 1.2..2.2,
+          toyMaterial = Material.FISHING_ROD,
+          toyName = "猫じゃらし",
+          toyType = ToyType.FISHING_ROD,
+        ),
+      EntityType.FOX to
+        PetSpec(
+          category = PetCategory.LAND,
+          entityType = EntityType.FOX,
+          baseSpeed = 0.7,
+          maxSpeed = 1.3,
+          jumpPower = 0.7,
+          toyMaterial = Material.SWEET_BERRIES,
+          toyName = "ベリーのおもちゃ",
+          toyType = ToyType.THROW_FETCH,
+        ),
 
-    // --- 水棲系 ---
-    EntityType.DOLPHIN to PetSpec(
-      category = PetCategory.WATER,
-      entityType = EntityType.DOLPHIN,
-      baseSpeed = 0.5, maxSpeed = 1.0,
-      scaleRange = 1.2..2.2,
-      toyMaterial = Material.SNOWBALL, toyName = "ビーチボール", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.AXOLOTL to PetSpec(
-      category = PetCategory.WATER,
-      entityType = EntityType.AXOLOTL,
-      baseSpeed = 0.5, maxSpeed = 1.0,
-      scaleRange = 1.0..2.0,
-      toyMaterial = Material.TROPICAL_FISH_BUCKET, toyName = "お魚バケツ", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.FROG to PetSpec(
-      category = PetCategory.WATER,
-      entityType = EntityType.FROG,
-      baseSpeed = 0.5, maxSpeed = 1.0,
-      jumpPower = 1.2,
-      scaleRange = 1.0..2.0,
-      toyMaterial = Material.SLIME_BALL, toyName = "スライムボール", toyType = ToyType.THROW_FETCH
-    ),
+      // --- 水棲系 ---
+      EntityType.DOLPHIN to
+        PetSpec(
+          category = PetCategory.WATER,
+          entityType = EntityType.DOLPHIN,
+          baseSpeed = 0.5,
+          maxSpeed = 1.0,
+          scaleRange = 1.2..2.2,
+          toyMaterial = Material.SNOWBALL,
+          toyName = "ビーチボール",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.AXOLOTL to
+        PetSpec(
+          category = PetCategory.WATER,
+          entityType = EntityType.AXOLOTL,
+          baseSpeed = 0.5,
+          maxSpeed = 1.0,
+          scaleRange = 1.0..2.0,
+          toyMaterial = Material.TROPICAL_FISH_BUCKET,
+          toyName = "お魚バケツ",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.FROG to
+        PetSpec(
+          category = PetCategory.WATER,
+          entityType = EntityType.FROG,
+          baseSpeed = 0.5,
+          maxSpeed = 1.0,
+          jumpPower = 1.2,
+          scaleRange = 1.0..2.0,
+          toyMaterial = Material.SLIME_BALL,
+          toyName = "スライムボール",
+          toyType = ToyType.THROW_FETCH,
+        ),
 
-    // --- 飛行系 ---
-    EntityType.PARROT to PetSpec(
-      category = PetCategory.FLYING,
-      entityType = EntityType.PARROT,
-      baseSpeed = 0.5, maxSpeed = 1.0,
-      scaleRange = 1.0..2.0,
-      toyMaterial = Material.WHEAT_SEEDS, toyName = "種のおもちゃ", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.CHICKEN to PetSpec(
-      category = PetCategory.FLYING,
-      entityType = EntityType.CHICKEN,
-      baseSpeed = 0.4, maxSpeed = 0.9,
-      toyMaterial = Material.MELON_SEEDS, toyName = "スイカの種", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.BEE to PetSpec(
-      category = PetCategory.FLYING,
-      entityType = EntityType.BEE,
-      baseSpeed = 0.6, maxSpeed = 1.1,
-      scaleRange = 1.0..2.0,
-      toyMaterial = Material.HONEY_BOTTLE, toyName = "ハチミツ", toyType = ToyType.THROW_FETCH
-    ),
-    EntityType.ALLAY to PetSpec(
-      category = PetCategory.FLYING,
-      entityType = EntityType.ALLAY,
-      baseSpeed = 0.6, maxSpeed = 1.2,
-      scaleRange = 1.0..2.0,
-      toyMaterial = Material.AMETHYST_SHARD, toyName = "キラキラ", toyType = ToyType.THROW_FETCH,
-      toyGravity = false // ★ Allayのおもちゃは空中に浮く
+      // --- 飛行系 ---
+      EntityType.PARROT to
+        PetSpec(
+          category = PetCategory.FLYING,
+          entityType = EntityType.PARROT,
+          baseSpeed = 0.5,
+          maxSpeed = 1.0,
+          scaleRange = 1.0..2.0,
+          toyMaterial = Material.WHEAT_SEEDS,
+          toyName = "種のおもちゃ",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.CHICKEN to
+        PetSpec(
+          category = PetCategory.FLYING,
+          entityType = EntityType.CHICKEN,
+          baseSpeed = 0.4,
+          maxSpeed = 0.9,
+          toyMaterial = Material.MELON_SEEDS,
+          toyName = "スイカの種",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.BEE to
+        PetSpec(
+          category = PetCategory.FLYING,
+          entityType = EntityType.BEE,
+          baseSpeed = 0.6,
+          maxSpeed = 1.1,
+          scaleRange = 1.0..2.0,
+          toyMaterial = Material.HONEY_BOTTLE,
+          toyName = "ハチミツ",
+          toyType = ToyType.THROW_FETCH,
+        ),
+      EntityType.ALLAY to
+        PetSpec(
+          category = PetCategory.FLYING,
+          entityType = EntityType.ALLAY,
+          baseSpeed = 0.6,
+          maxSpeed = 1.2,
+          scaleRange = 1.0..2.0,
+          toyMaterial = Material.AMETHYST_SHARD,
+          toyName = "キラキラ",
+          toyType = ToyType.THROW_FETCH,
+          toyGravity = false, // ★ Allayのおもちゃは空中に浮く
+        ),
     )
-  )
 
   fun get(type: EntityType): PetSpec = specs[type] ?: defaultSpec.copy(entityType = type)
 
@@ -1267,16 +1433,16 @@ object PetRegistry {
 
   fun findSpecByToy(item: ItemStack): PetSpec? {
     if (!item.hasItemMeta()) return null
-    val name = PlainTextComponentSerializer.plainText().serialize(item.itemMeta.displayName() ?: Component.empty())
+    val name =
+      PlainTextComponentSerializer.plainText()
+        .serialize(item.itemMeta.displayName() ?: Component.empty())
     return specs.values.find { spec ->
       spec.toyMaterial == item.type && name.contains(spec.toyName ?: "")
     }
   }
 
   fun getAllToyItems(): List<ItemStack> {
-    return officialPets.mapNotNull { type ->
-      specs[type]?.createToyItem()
-    }
+    return officialPets.mapNotNull { type -> specs[type]?.createToyItem() }
   }
 }
 
@@ -1295,7 +1461,8 @@ object VariantHandler {
       EntityType.AXOLOTL -> Axolotl.Variant.entries.map { it.name }
       EntityType.PARROT -> Parrot.Variant.entries.map { it.name }
       EntityType.RABBIT -> Rabbit.Type.entries.map { it.name }
-      EntityType.LLAMA, EntityType.TRADER_LLAMA -> Llama.Color.entries.map { it.name }
+      EntityType.LLAMA,
+      EntityType.TRADER_LLAMA -> Llama.Color.entries.map { it.name }
       EntityType.HORSE -> Horse.Color.entries.map { it.name }
       EntityType.MOOSHROOM -> MushroomCow.Variant.entries.map { it.name }
       EntityType.PANDA -> Panda.Gene.entries.map { it.name }
@@ -1310,10 +1477,22 @@ object VariantHandler {
     val name = variantName.uppercase(Locale.ROOT)
     runCatching {
       when (entity) {
-        is Wolf -> applyRegistryVariant(entity, RegistryKey.WOLF_VARIANT, variantName) { e, v -> e.variant = v }
-        is Cat -> applyRegistryVariant(entity, RegistryKey.CAT_VARIANT, variantName) { e, v -> e.catType = v }
-        is Frog -> applyRegistryVariant(entity, RegistryKey.FROG_VARIANT, variantName) { e, v -> e.variant = v }
-        is Villager -> applyRegistryVariant(entity, RegistryKey.VILLAGER_TYPE, variantName) { e, v -> e.villagerType = v }
+        is Wolf ->
+          applyRegistryVariant(entity, RegistryKey.WOLF_VARIANT, variantName) { e, v ->
+            e.variant = v
+          }
+        is Cat ->
+          applyRegistryVariant(entity, RegistryKey.CAT_VARIANT, variantName) { e, v ->
+            e.catType = v
+          }
+        is Frog ->
+          applyRegistryVariant(entity, RegistryKey.FROG_VARIANT, variantName) { e, v ->
+            e.variant = v
+          }
+        is Villager ->
+          applyRegistryVariant(entity, RegistryKey.VILLAGER_TYPE, variantName) { e, v ->
+            e.villagerType = v
+          }
 
         is Axolotl -> entity.variant = Axolotl.Variant.valueOf(name)
         is Parrot -> entity.variant = Parrot.Variant.valueOf(name)
@@ -1349,21 +1528,20 @@ object VariantHandler {
   }
 
   private fun <T : Keyed> getRegistryNames(key: RegistryKey<T>): List<String> {
-    return RegistryAccess.registryAccess()
-      .getRegistry(key)
-      .map { it.key().value() }
+    return RegistryAccess.registryAccess().getRegistry(key).map { it.key().value() }
   }
 
   private fun <T : Keyed, E : LivingEntity> applyRegistryVariant(
     entity: E,
     key: RegistryKey<T>,
     name: String,
-    applier: (E, T) -> Unit
+    applier: (E, T) -> Unit,
   ) {
     val registry = RegistryAccess.registryAccess().getRegistry(key)
-    val variant = registry.firstOrNull {
-      it.key().value().equals(name, true) || it.key().toString().equals(name, true)
-    }
+    val variant =
+      registry.firstOrNull {
+        it.key().value().equals(name, true) || it.key().toString().equals(name, true)
+      }
     if (variant != null) {
       applier(entity, variant)
     }
