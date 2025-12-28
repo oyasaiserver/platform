@@ -9,8 +9,7 @@ kotlin = "2.3.0"
 luckperms = "5.5"
 nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
-# @pin
-purpur-api = "1.21.11-R0.1-SNAPSHOT"
+purpur-api = "1.21.8-R0.1-SNAPSHOT"
 shadow = "9.3.0"
 spotless = "8.1.0"
 tokenmanager = "3.2.4"
@@ -20,7 +19,6 @@ worldborder = "2.1.4"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
 
 [libraries]
 anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
