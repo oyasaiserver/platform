@@ -127,14 +127,13 @@ export class CloudflareStack extends OyasaiTerraformStack {
           })
         : [],
       assets: {
-        // TODO: respect SPA?
-        config: {},
         directory: join(dir, 'dist')
       },
       compatibilityFlags: ['nodejs_compat'],
       // Minimal compatibility date to enable `nodejs_compat_v2`
       // https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
       compatibilityDate: '2024-09-23'
+      // TODO: respect SPA?
     }
   }
 }
