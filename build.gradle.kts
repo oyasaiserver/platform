@@ -1,8 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-plugins {
-  alias(libs.plugins.spotless)
-}
+plugins { alias(libs.plugins.spotless) }
 
 buildscript {
   dependencies {
