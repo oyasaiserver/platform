@@ -1,5 +1,0 @@
-name: setup-terraform
-runs:
-  using: composite
-  steps:
-    - uses: hashicorp/setup-terraform@v3.1.2
