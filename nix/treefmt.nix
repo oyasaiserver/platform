@@ -12,6 +12,9 @@
           prettier = {
             enable = true;
           };
+          ktfmt = {
+            enable = true;
+          };
         };
       };
     }
