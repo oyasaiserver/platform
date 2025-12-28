@@ -1,10 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
 
-plugins {
-  alias(libs.plugins.spotless)
-  alias(libs.plugins.version.catalog.update)
-}
+plugins { alias(libs.plugins.spotless) }
 
 buildscript {
   dependencies {
@@ -77,5 +73,3 @@ spotless {
     googleJavaFormat()
   }
 }
-
-versionCatalogUpdate { versionSelector(VersionSelectors.LATEST) }
