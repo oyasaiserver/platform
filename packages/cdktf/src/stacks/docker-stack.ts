@@ -10,7 +10,7 @@ import { envs, ports } from '../object.ts'
 import { OyasaiTerraformStack } from './oyasai-terraform-stack.ts'
 
 export class DockerStack extends OyasaiTerraformStack {
-  public static readonly minecraftVersion = '1.21.5'
+  public static readonly minecraftVersion = '1.21.8'
 
   private workdir = join(
     this.environment === 'local' ? directory.root : '/opt/platform',
@@ -99,6 +99,7 @@ export class DockerStack extends OyasaiTerraformStack {
           USE_MEOWICE_FLAGS: this.environment !== 'local',
           ENABLE_ROLLING_LOGS: true,
           LOG_TIMESTAMP: true,
+          MOTD: `§l§r                 §b§lOyasai§f§lServer§7 [v${DockerStack.minecraftVersion}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！`,
           MEMORY: this.envAwareConfig({
             production: '32G',
             development: '12G',
