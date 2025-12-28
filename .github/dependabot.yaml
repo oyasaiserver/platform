@@ -8,6 +8,8 @@ updates:
       all:
         patterns:
           - '*'
+        exclude-patterns:
+          - '@cdktf'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
