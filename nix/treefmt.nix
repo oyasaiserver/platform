@@ -4,9 +4,14 @@
     { ... }:
     {
       treefmt = {
-        programs.nixfmt = {
-          enable = true;
-          strict = true;
+        programs = {
+          nixfmt = {
+            enable = true;
+            strict = true;
+          };
+          prettier = {
+            enable = true;
+          };
         };
       };
     }
