@@ -4,8 +4,6 @@ on:
   push:
     braches:
       - master
-      # NOMERGE
-      - feat/1-21-10
   workflow_dispatch:
     inputs:
       environment:
