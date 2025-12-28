@@ -10,10 +10,10 @@ object SyokakuManagerCommandExecutor : CommandExecutor, TabCompleter {
   private val subCommands = listOf("loadpast")
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (args.isEmpty()) {
       sender.sendMessage("§cサブコマンドを指定してください。")
@@ -29,10 +29,10 @@ object SyokakuManagerCommandExecutor : CommandExecutor, TabCompleter {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): List<String?>? {
     return when {
       args.size == 1 -> subCommands.filter { it.startsWith(args[0], ignoreCase = true) }

@@ -70,13 +70,13 @@ object ChatInput : Listener {
         sign.name = msg
         dm.save()
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateSingle(sign)
-              NotifyUtil.success(p, "§a看板名を「$msg」に変更しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateSingle(sign)
+                  NotifyUtil.success(p, "§a看板名を「$msg」に変更しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -88,13 +88,13 @@ object ChatInput : Listener {
         dm.save()
 
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateSingle(sign)
-              NotifyUtil.success(p, "§a制作者表示名を更新しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateSingle(sign)
+                  NotifyUtil.success(p, "§a制作者表示名を更新しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -125,13 +125,13 @@ object ChatInput : Listener {
         dm.save()
 
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateSingle(sign)
-              NotifyUtil.success(p, "§a${target.name} を投票対象プレイヤーとして追加しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateSingle(sign)
+                  NotifyUtil.success(p, "§a${target.name} を投票対象プレイヤーとして追加しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -155,13 +155,13 @@ object ChatInput : Listener {
         dm.save()
 
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateSingle(sign)
-              NotifyUtil.success(p, "§a${target.name} を制作者から削除しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateSingle(sign)
+                  NotifyUtil.success(p, "§a${target.name} を制作者から削除しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -179,13 +179,13 @@ object ChatInput : Listener {
         sign.maxVotesPerSign = newValue
         dm.save()
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateSingle(sign)
-              NotifyUtil.success(p, "§a看板の最大投票数を $newValue 票に設定しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateSingle(sign)
+                  NotifyUtil.success(p, "§a看板の最大投票数を $newValue 票に設定しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -219,13 +219,13 @@ object ChatInput : Listener {
         }
         dm.save()
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateGroup(group)
-              NotifyUtil.success(p, "§aグループ全体の最大投票数を $v 票に変更しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateGroup(group)
+                  NotifyUtil.success(p, "§aグループ全体の最大投票数を $v 票に変更しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -241,13 +241,13 @@ object ChatInput : Listener {
         }
         dm.save()
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateGroup(group)
-              NotifyUtil.success(p, "§a時刻設定を更新しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateGroup(group)
+                  NotifyUtil.success(p, "§a時刻設定を更新しました。")
+                },
+            )
       }
 
       /* ---------------------
@@ -263,13 +263,13 @@ object ChatInput : Listener {
         }
         dm.save()
         Bukkit.getScheduler()
-          .runTask(
-            SocialVotes.instance,
-            Runnable {
-              SignDisplayUtil.updateGroup(group)
-              NotifyUtil.success(p, "§a時刻設定を更新しました。")
-            },
-          )
+            .runTask(
+                SocialVotes.instance,
+                Runnable {
+                  SignDisplayUtil.updateGroup(group)
+                  NotifyUtil.success(p, "§a時刻設定を更新しました。")
+                },
+            )
       }
     }
   }

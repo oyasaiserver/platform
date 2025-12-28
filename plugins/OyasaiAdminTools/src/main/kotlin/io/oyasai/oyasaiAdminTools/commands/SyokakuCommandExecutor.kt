@@ -15,13 +15,13 @@ import org.bukkit.command.TabCompleter
 
 object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
   private val subCommands =
-    listOf("promote", "demote", "getrank", "iscandidate", "seerequirements", "seeplayerinfo")
+      listOf("promote", "demote", "getrank", "iscandidate", "seerequirements", "seeplayerinfo")
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (args.isEmpty()) {
       sender.sendMessage("§cサブコマンドを指定してください。")
@@ -33,9 +33,9 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
       "getrank" -> GetRank.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "iscandidate" -> IsCandidate.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "seerequirements" ->
-        SeeRequirements.onCommand(sender, command, label, args.drop(1).toTypedArray())
+          SeeRequirements.onCommand(sender, command, label, args.drop(1).toTypedArray())
       "seeplayerinfo" ->
-        SeePlayerInfo.onCommand(sender, command, label, args.drop(1).toTypedArray())
+          SeePlayerInfo.onCommand(sender, command, label, args.drop(1).toTypedArray())
       else -> {
         sender.sendMessage("§c不明なサブコマンドです。")
         false
@@ -44,27 +44,29 @@ object SyokakuCommandExecutor : CommandExecutor, TabCompleter {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
   ): List<String> {
     return when {
       args.size == 1 -> subCommands.filter { it.startsWith(args[0], ignoreCase = true) }
       args.size == 2 ->
-        when (args[0].lowercase()) {
-          "promote",
-          "demote",
-          "getrank",
-          "iscandidate",
-          "seeplayerinfo" ->
-            Bukkit.getOnlinePlayers()
-              .map { it.name }
-              .filter { it.startsWith(args[1], ignoreCase = true) }
-          "seerequirements" ->
-            RankManager.ranks.map { it.name }.filter { it.startsWith(args[1], ignoreCase = true) }
-          else -> emptyList()
-        }
+          when (args[0].lowercase()) {
+            "promote",
+            "demote",
+            "getrank",
+            "iscandidate",
+            "seeplayerinfo" ->
+                Bukkit.getOnlinePlayers()
+                    .map { it.name }
+                    .filter { it.startsWith(args[1], ignoreCase = true) }
+            "seerequirements" ->
+                RankManager.ranks
+                    .map { it.name }
+                    .filter { it.startsWith(args[1], ignoreCase = true) }
+            else -> emptyList()
+          }
       args.size == 3 && args[0].equals("seeplayerinfo", ignoreCase = true) -> {
         mutableListOf("1", "gui")
       }

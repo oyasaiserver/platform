@@ -7,10 +7,10 @@ import org.bukkit.command.CommandSender
 
 object OreReappearsCommand : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name == "orerepopreload") {
       if (!sender.isOp) return false
@@ -21,8 +21,8 @@ object OreReappearsCommand : CommandExecutor {
     if (command.name == "orerepopswitch") {
       if (!sender.isOp) return false
       sender.sendMessage(
-        "[OreReappears] 機能を${if (OreReappears.switching()) {"&c無効化"} else {"&a有効化"}}&rしました".color()
-      )
+          "[OreReappears] 機能を${if (OreReappears.switching()) {"&c無効化"} else {"&a有効化"}}&rしました"
+              .color())
       return true
     }
     return false

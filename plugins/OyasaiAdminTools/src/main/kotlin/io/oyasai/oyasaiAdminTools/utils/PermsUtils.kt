@@ -12,13 +12,13 @@ object PermsUtils {
     val api = LuckPermsProvider.get()
 
     return api.userManager
-      .loadUser(player)
-      .thenApplyAsync({ user ->
-        val inheritedGroups: MutableCollection<Group> = user.getInheritedGroups(user.queryOptions)
-        // userに対しての、過去のPermission操作タイムスタンプを取得
+        .loadUser(player)
+        .thenApplyAsync({ user ->
+          val inheritedGroups: MutableCollection<Group> = user.getInheritedGroups(user.queryOptions)
+          // userに対しての、過去のPermission操作タイムスタンプを取得
 
-        return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> g.name == group }
-      })
+          return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> g.name == group }
+        })
   }
 
   fun getCurrentRank(player: UUID): CompletableFuture<io.oyasai.oyasaiAdminTools.rank.Rank?> {
@@ -27,9 +27,9 @@ object PermsUtils {
       val inheritedGroups = user.getInheritedGroups(user.queryOptions)
       // inheritedGroupsの中で一番gradeが高いものを取得
       val currentGroup =
-        inheritedGroups
-          .mapNotNull { group -> RankManager.getRankByGroupName(group.name) }
-          .maxByOrNull { it.grade }
+          inheritedGroups
+              .mapNotNull { group -> RankManager.getRankByGroupName(group.name) }
+              .maxByOrNull { it.grade }
       return@thenApplyAsync currentGroup
     }
   }

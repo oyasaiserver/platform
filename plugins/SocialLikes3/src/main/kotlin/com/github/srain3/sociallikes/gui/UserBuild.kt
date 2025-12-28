@@ -46,12 +46,11 @@ object UserBuild {
 
     val pagePane = PaginatedPane(0, 0, 9, 5)
     pagePane.populateWithItemStacks(
-      userBuildItem[user.uniqueId]?.toSortedMap(reverseOrder())?.values?.toList() ?: listOf()
-    )
+        userBuildItem[user.uniqueId]?.toSortedMap(reverseOrder())?.values?.toList() ?: listOf())
     pagePane.setOnClick {
       val id =
-        it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
-          ?: return@setOnClick
+          it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+              ?: return@setOnClick
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
@@ -59,85 +58,77 @@ object UserBuild {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page > 0) {
-          pagePane.setPage(pagePane.page - 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page > 0) {
+                pagePane.setPage(pagePane.page - 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page < pagePane.pages - 1) {
-          pagePane.setPage(pagePane.page + 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page < pagePane.pages - 1) {
+                pagePane.setPage(pagePane.page + 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r ${name}の建築 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     if (FollowBuild.isFollow(user.uniqueId, player)) {
       navigation.addItem(
-        GuiItem(
-          ItemStack(Material.TOTEM_OF_UNDYING).apply {
-            allFlag()
-            addText("&eフォローを外す", mutableListOf())
-          }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-          FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, true)
-          event.whoClicked.sendMessage(
-            Tools.socialLikesLOGO + "&r ${user.name}さんへのフォローを外しました".color()
-          )
-        },
-        6,
-        0,
+          GuiItem(
+              ItemStack(Material.TOTEM_OF_UNDYING).apply {
+                allFlag()
+                addText("&eフォローを外す", mutableListOf())
+              }) { event: InventoryClickEvent ->
+                event.whoClicked.closeInventory()
+                FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, true)
+                event.whoClicked.sendMessage(
+                    Tools.socialLikesLOGO + "&r ${user.name}さんへのフォローを外しました".color())
+              },
+          6,
+          0,
       )
     } else {
       navigation.addItem(
-        GuiItem(
-          ItemStack(Material.TOTEM_OF_UNDYING).apply {
-            allFlag()
-            addText("&aフォローする", mutableListOf())
-          }
-        ) { event: InventoryClickEvent ->
-          event.whoClicked.closeInventory()
-          FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, false)
-          event.whoClicked.sendMessage(
-            Tools.socialLikesLOGO + "&r ${user.name}さんをフォローしました！".color()
-          )
-          event.whoClicked.sendMessage(
-            Tools.socialLikesLOGO + "&r \"/slmenu\"のフォロー建築一覧から建築を確認できます".color()
-          )
-        },
-        6,
-        0,
+          GuiItem(
+              ItemStack(Material.TOTEM_OF_UNDYING).apply {
+                allFlag()
+                addText("&aフォローする", mutableListOf())
+              }) { event: InventoryClickEvent ->
+                event.whoClicked.closeInventory()
+                FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, false)
+                event.whoClicked.sendMessage(
+                    Tools.socialLikesLOGO + "&r ${user.name}さんをフォローしました！".color())
+                event.whoClicked.sendMessage(
+                    Tools.socialLikesLOGO + "&r \"/slmenu\"のフォロー建築一覧から建築を確認できます".color())
+              },
+          6,
+          0,
       )
     }
     gui.addPane(navigation)
@@ -150,13 +141,13 @@ object UserBuild {
   fun createItem(dataMap: Map<String, MutableList<SLData>>) {
     userBuildItem.clear()
     Thread(
-        {
-          dataMap.values.forEach { list -> list.forEach { slData -> createSignItem(slData) } }
-          userBuildItem.toSortedMap()
-        },
-        "SL3-UserBuildGUIItem",
-      )
-      .start()
+            {
+              dataMap.values.forEach { list -> list.forEach { slData -> createSignItem(slData) } }
+              userBuildItem.toSortedMap()
+            },
+            "SL3-UserBuildGUIItem",
+        )
+        .start()
   }
 
   /** 更新されたデータのGUIアイテムを作成する */
@@ -184,19 +175,19 @@ object UserBuild {
     val item = ItemStack(Material.OAK_SIGN)
     item.allFlag()
     item.addText(
-      "&f>>&a${slData.title} &rID:${slData.id}",
-      mutableListOf(
-        "&3制作者:&f ${
+        "&f>>&a${slData.title} &rID:${slData.id}",
+        mutableListOf(
+            "&3制作者:&f ${
                 try {
                     Bukkit.getOfflinePlayer(slData.owner).name
                 } catch (_: Exception) {
                     "不明"
                 }
             }",
-        "&3イイね:&f ${slData.likes.count()}",
-        "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
-        "&7&nクリックでテレポート&r&7します",
-      ),
+            "&3イイね:&f ${slData.likes.count()}",
+            "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
+            "&7&nクリックでテレポート&r&7します",
+        ),
     )
     addItemMetaID(item, slData.id)
     val map = userBuildItem[slData.owner] ?: mutableMapOf()
@@ -207,23 +198,21 @@ object UserBuild {
   /** 時間から次のユーザー別新着LikeのIDを返す、ない場合null */
   fun timeToNextID(localDateTime: LocalDateTime, uuid: UUID): Int? {
     val ite = userBuildItem[uuid]?.asIterable()?.sortedByDescending { it.key }
-    return ite
-      ?.findLast { it.key > localDateTime }
-      ?.value
-      ?.itemMeta
-      ?.persistentDataContainer
-      ?.get(idKey, PersistentDataType.INTEGER)
+    return ite?.findLast { it.key > localDateTime }
+        ?.value
+        ?.itemMeta
+        ?.persistentDataContainer
+        ?.get(idKey, PersistentDataType.INTEGER)
   }
 
   /** 時間から前のユーザー別新着LikeのIDを返す、ない場合null */
   fun timeToPrevID(localDateTime: LocalDateTime, uuid: UUID): Int? {
     val ite = userBuildItem[uuid]?.asIterable()?.sortedByDescending { it.key }
-    return ite
-      ?.find { it.key < localDateTime }
-      ?.value
-      ?.itemMeta
-      ?.persistentDataContainer
-      ?.get(idKey, PersistentDataType.INTEGER)
+    return ite?.find { it.key < localDateTime }
+        ?.value
+        ?.itemMeta
+        ?.persistentDataContainer
+        ?.get(idKey, PersistentDataType.INTEGER)
   }
 
   /** オンラインプレイヤー一覧GUIを表示する */
@@ -243,7 +232,7 @@ object UserBuild {
     pagePane.setOnClick {
       val meta = it.currentItem?.itemMeta ?: return@setOnClick
       val playerUUIDStr =
-        meta.persistentDataContainer.get(key, PersistentDataType.STRING) ?: return@setOnClick
+          meta.persistentDataContainer.get(key, PersistentDataType.STRING) ?: return@setOnClick
       val uuid = UUID.fromString(playerUUIDStr)
       val offlinePlayer = Bukkit.getOfflinePlayer(uuid)
       it.whoClicked.closeInventory()
@@ -253,61 +242,57 @@ object UserBuild {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page > 0) {
-          pagePane.setPage(pagePane.page - 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page > 0) {
+                pagePane.setPage(pagePane.page - 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page < pagePane.pages - 1) {
-          pagePane.setPage(pagePane.page + 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page < pagePane.pages - 1) {
+                pagePane.setPage(pagePane.page + 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r オンラインプレイヤー p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.NAME_TAG).apply {
-          allFlag()
-          addText("&eプレイヤー名で検索", mutableListOf("&7オフラインのプレイヤーを探します"))
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-        offlinePlayerSearch(event.whoClicked as Player)
-      },
-      6,
-      0,
+        GuiItem(
+            ItemStack(Material.NAME_TAG).apply {
+              allFlag()
+              addText("&eプレイヤー名で検索", mutableListOf("&7オフラインのプレイヤーを探します"))
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+              offlinePlayerSearch(event.whoClicked as Player)
+            },
+        6,
+        0,
     )
     gui.addPane(navigation)
 
@@ -336,10 +321,10 @@ object UserBuild {
   private fun offlinePlayerSearch(player: Player) {
     AnvilGUI.Builder().apply {
       itemLeft(
-        ItemStack(Material.PLAYER_HEAD)
-          .allFlag()
-          .addText("ここにプレイヤー名", mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです"))
-      )
+          ItemStack(Material.PLAYER_HEAD)
+              .allFlag()
+              .addText(
+                  "ここにプレイヤー名", mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです")))
       onClick { slot, e ->
         if (slot != AnvilGUI.Slot.OUTPUT) {
           return@onClick listOf()
@@ -348,11 +333,11 @@ object UserBuild {
         if (e.text.isNotBlank()) {
           val sPlayer = Bukkit.getOfflinePlayer(e.text)
           object : BukkitRunnable() {
-              override fun run() {
-                createGUI(sPlayer, player).show(player)
+                override fun run() {
+                  createGUI(sPlayer, player).show(player)
+                }
               }
-            }
-            .runTaskLater(Tools.plugin, 1)
+              .runTaskLater(Tools.plugin, 1)
           e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
           return@onClick listOf(AnvilGUI.ResponseAction.close())
         } else {

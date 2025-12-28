@@ -15,10 +15,10 @@ object SendEmbedMessage {
   var url_ban = plugin.config.getString("webhook-ban-url", "") ?: ""
 
   fun sendBanNotification(
-    targetName: String,
-    bannerName: String?,
-    reason: String,
-    duration: String,
+      targetName: String,
+      bannerName: String?,
+      reason: String,
+      duration: String,
   ) {
     if (url_ban.isEmpty()) {
       plugin.logger.warning("Webhook URL is not set.")
@@ -27,24 +27,24 @@ object SendEmbedMessage {
     val client = WebhookClient.withUrl(url_ban)
 
     val emb =
-      WebhookEmbedBuilder()
-        .setColor(0xFF0000)
-        .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
-        .setTitle(WebhookEmbed.EmbedTitle("プレイヤーがBANされました", null))
-        .setDescription("対象: $targetName")
-        .addField(WebhookEmbed.EmbedField(true, "執行", bannerName ?: "Unknown"))
-        .addField(WebhookEmbed.EmbedField(true, "期間", duration))
-        .addField(WebhookEmbed.EmbedField(false, "理由", reason))
-        .build()
+        WebhookEmbedBuilder()
+            .setColor(0xFF0000)
+            .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
+            .setTitle(WebhookEmbed.EmbedTitle("プレイヤーがBANされました", null))
+            .setDescription("対象: $targetName")
+            .addField(WebhookEmbed.EmbedField(true, "執行", bannerName ?: "Unknown"))
+            .addField(WebhookEmbed.EmbedField(true, "期間", duration))
+            .addField(WebhookEmbed.EmbedField(false, "理由", reason))
+            .build()
     val message = WebhookMessageBuilder().addEmbeds(emb).build()
     client.send(message)
   }
 
   fun sendPromotionNotification(
-    targetUUID: UUID,
-    targetName: String?,
-    promoterName: String?,
-    record: PromotionRecord,
+      targetUUID: UUID,
+      targetName: String?,
+      promoterName: String?,
+      record: PromotionRecord,
   ) {
     val prevRank = RankManager.getRankByGroupName(record.previousRank)
     val newRank = RankManager.getRankByGroupName(record.newRank)
@@ -58,40 +58,39 @@ object SendEmbedMessage {
     }
     val color = if (record.type == PromotionType.PROMOTE) 0x00FF00 else 0xFF0000
     val title =
-      if (record.type == PromotionType.PROMOTE) if (record.isForced) "**特例**昇格！" else "昇格！"
-      else "降格！"
+        if (record.type == PromotionType.PROMOTE) if (record.isForced) "**特例**昇格！" else "昇格！"
+        else "降格！"
     val rotate = if (record.type == PromotionType.PROMOTE) "" else "y=140"
 
     val lastBuildID =
-      if (record.lastBuildID == Integer.MIN_VALUE) "なし（何故）" else record.lastBuildID.toString()
+        if (record.lastBuildID == Integer.MIN_VALUE) "なし（何故）" else record.lastBuildID.toString()
 
     val info =
-      StringBuilder()
-        .append("プレイ時間: ${record.playedSec/3600}時間\n")
-        .append("最後の建築: ${lastBuildID}\n")
-        .append("建築数: ${record.builds}\n")
-        .append("レベル: ${record.lastLv}\n")
-        .append("${targetUUID}\n")
-        .toString()
+        StringBuilder()
+            .append("プレイ時間: ${record.playedSec/3600}時間\n")
+            .append("最後の建築: ${lastBuildID}\n")
+            .append("建築数: ${record.builds}\n")
+            .append("レベル: ${record.lastLv}\n")
+            .append("${targetUUID}\n")
+            .toString()
 
     val client = WebhookClient.withUrl(url_promotion)
     val emb =
-      WebhookEmbedBuilder()
-        .setColor(color)
-        .setTitle(WebhookEmbed.EmbedTitle(title, null))
-        .setDescription("対象: ${targetName}")
-        .addField(WebhookEmbed.EmbedField(true, "元のランク", prevRank.name))
-        .addField(WebhookEmbed.EmbedField(true, "新しいランク", newRank.name))
-        .addField(WebhookEmbed.EmbedField(false, "備考", record.note))
-        .addField(WebhookEmbed.EmbedField(false, "情報", info))
-        .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
-        .setFooter(
-          WebhookEmbed.EmbedFooter(
-            "Promoted by ${promoterName}・業務ありがとう",
-            "https://vzge.me/bust/${promoterName}?${rotate}",
-          )
-        )
-        .build()
+        WebhookEmbedBuilder()
+            .setColor(color)
+            .setTitle(WebhookEmbed.EmbedTitle(title, null))
+            .setDescription("対象: ${targetName}")
+            .addField(WebhookEmbed.EmbedField(true, "元のランク", prevRank.name))
+            .addField(WebhookEmbed.EmbedField(true, "新しいランク", newRank.name))
+            .addField(WebhookEmbed.EmbedField(false, "備考", record.note))
+            .addField(WebhookEmbed.EmbedField(false, "情報", info))
+            .setThumbnailUrl("https://vzge.me/bust/${targetName}?y=-40")
+            .setFooter(
+                WebhookEmbed.EmbedFooter(
+                    "Promoted by ${promoterName}・業務ありがとう",
+                    "https://vzge.me/bust/${promoterName}?${rotate}",
+                ))
+            .build()
     val message = WebhookMessageBuilder().addEmbeds(emb).build()
     client.send(message)
   }

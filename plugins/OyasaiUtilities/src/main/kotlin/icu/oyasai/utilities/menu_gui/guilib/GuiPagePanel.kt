@@ -18,11 +18,11 @@ import org.bukkit.inventory.ItemStack
  * @param itemList (Option)アイテムリスト
  */
 class GuiPagePanel(
-  val posX: Int,
-  val posY: Int,
-  x: Int,
-  y: Int,
-  itemList: MutableMap<Int, MutableList<ItemStack?>> = mutableMapOf(),
+    val posX: Int,
+    val posY: Int,
+    x: Int,
+    y: Int,
+    itemList: MutableMap<Int, MutableList<ItemStack?>> = mutableMapOf(),
 ) : GuiPage(x, y, itemList) {
   /** 渡されたインベントリに現在のページ内アイテムをセットする */
   fun reflash(inv: Inventory): Boolean {
@@ -42,24 +42,24 @@ class GuiPagePanel(
 
   fun nextPageItem(material: Material = Material.WHITE_WOOL): ItemStack {
     return ItemStack(material)
-      .guiClickEvent {
-        if (nextPage()) {
-          it.clickSound()
-          reflash(it.clickedInventory ?: return@guiClickEvent)
+        .guiClickEvent {
+          if (nextPage()) {
+            it.clickSound()
+            reflash(it.clickedInventory ?: return@guiClickEvent)
+          }
         }
-      }
-      .text("&aNext Page", listOf("&7次のページへ"))
+        .text("&aNext Page", listOf("&7次のページへ"))
   }
 
   fun backPageItem(material: Material = Material.WHITE_WOOL): ItemStack {
     return ItemStack(material)
-      .guiClickEvent {
-        if (backPage()) {
-          it.clickSound()
-          reflash(it.clickedInventory ?: return@guiClickEvent)
+        .guiClickEvent {
+          if (backPage()) {
+            it.clickSound()
+            reflash(it.clickedInventory ?: return@guiClickEvent)
+          }
         }
-      }
-      .text("&aBack Page", listOf("&7前のページへ"))
+        .text("&aBack Page", listOf("&7前のページへ"))
   }
 }
 

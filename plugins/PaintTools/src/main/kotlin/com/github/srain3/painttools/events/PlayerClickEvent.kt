@@ -34,14 +34,14 @@ object PlayerClickEvent : Listener {
     var clickFace = event.blockFace
     val faceVec = faceVec(clickFace)
     val entityList =
-      clickBlock.world.getNearbyEntities(
-        clickBlock.location.clone().add(faceVec.x + 0.5, faceVec.y + 0.5, faceVec.z + 0.5),
-        0.5,
-        0.5,
-        0.5,
-      ) {
-        it is ItemFrame
-      }
+        clickBlock.world.getNearbyEntities(
+            clickBlock.location.clone().add(faceVec.x + 0.5, faceVec.y + 0.5, faceVec.z + 0.5),
+            0.5,
+            0.5,
+            0.5,
+        ) {
+          it is ItemFrame
+        }
     if (entityList.isEmpty()) return
 
     val frame = (entityList.first() ?: return) as ItemFrame
@@ -56,10 +56,10 @@ object PlayerClickEvent : Listener {
 
     val mapMeta = frame.item.itemMeta as MapMeta
     val id =
-      mapMeta.persistentDataContainer.get(
-        NamespacedKey(ToolBox.pl, "ID"),
-        PersistentDataType.INTEGER,
-      ) ?: return
+        mapMeta.persistentDataContainer.get(
+            NamespacedKey(ToolBox.pl, "ID"),
+            PersistentDataType.INTEGER,
+        ) ?: return
     if (!MapIdList.checkID(id)) return
     val view = mapMeta.mapView ?: return
     val mMap = MapData.loadMapData(id)
@@ -73,111 +73,111 @@ object PlayerClickEvent : Listener {
 
     // L=>true R=>false
     val lrSwitch =
-      when (event.action) {
-        Action.RIGHT_CLICK_BLOCK -> {
-          // 0..2tickでイベントを更に起こしてマウスクリックでも続けて書きやすく
-          if (!event.player.isSneaking) {
-            // ここでイベントループを防ぐ
-            if (event !is RepeatStopEvent) {
-              if (!event.isCancelled) {
-                if (!MapIdList.checkLockID(id)) {
-                  for (i in 1..1) {
-                    object : BukkitRunnable() {
-                        override fun run() {
-                          val newEvent = RepeatStopEvent(event)
-                          newEvent.isCancelled = true
-                          Bukkit.getServer().pluginManager.callEvent(newEvent)
-                        }
-                      }
-                      .runTaskLater(ToolBox.pl, i.toLong())
+        when (event.action) {
+          Action.RIGHT_CLICK_BLOCK -> {
+            // 0..2tickでイベントを更に起こしてマウスクリックでも続けて書きやすく
+            if (!event.player.isSneaking) {
+              // ここでイベントループを防ぐ
+              if (event !is RepeatStopEvent) {
+                if (!event.isCancelled) {
+                  if (!MapIdList.checkLockID(id)) {
+                    for (i in 1..1) {
+                      object : BukkitRunnable() {
+                            override fun run() {
+                              val newEvent = RepeatStopEvent(event)
+                              newEvent.isCancelled = true
+                              Bukkit.getServer().pluginManager.callEvent(newEvent)
+                            }
+                          }
+                          .runTaskLater(ToolBox.pl, i.toLong())
+                    }
                   }
                 }
               }
             }
+            false
           }
-          false
-        }
-        Action.LEFT_CLICK_BLOCK -> {
-          true
-        }
-        else -> {
-          null
-        }
-      } ?: return
+          Action.LEFT_CLICK_BLOCK -> {
+            true
+          }
+          else -> {
+            null
+          }
+        } ?: return
 
     if (event.player.hasPermission("painttools.canvas.use")) {
       if (!MapIdList.checkLockID(id)) {
         if (ToolBox.checkDye(event.item?.type)) {
           val javaColor =
-            when (handItem.type.name.replace("_DYE", "")) {
-              "WHITE" -> {
-                Color(255, 255, 255, 255)
-              }
+              when (handItem.type.name.replace("_DYE", "")) {
+                "WHITE" -> {
+                  Color(255, 255, 255, 255)
+                }
 
-              "ORANGE" -> {
-                Color(255, 165, 0, 255)
-              }
+                "ORANGE" -> {
+                  Color(255, 165, 0, 255)
+                }
 
-              "MAGENTA" -> {
-                Color(255, 0, 255, 255)
-              }
+                "MAGENTA" -> {
+                  Color(255, 0, 255, 255)
+                }
 
-              "LIGHT_BLUE" -> {
-                Color(0, 255, 255, 255)
-              }
+                "LIGHT_BLUE" -> {
+                  Color(0, 255, 255, 255)
+                }
 
-              "YELLOW" -> {
-                Color(255, 255, 0, 255)
-              }
+                "YELLOW" -> {
+                  Color(255, 255, 0, 255)
+                }
 
-              "LIME" -> {
-                Color(0, 255, 0, 255)
-              }
+                "LIME" -> {
+                  Color(0, 255, 0, 255)
+                }
 
-              "PINK" -> {
-                Color(255, 128, 255, 255)
-              }
+                "PINK" -> {
+                  Color(255, 128, 255, 255)
+                }
 
-              "GRAY" -> {
-                Color(128, 128, 128, 255)
-              }
+                "GRAY" -> {
+                  Color(128, 128, 128, 255)
+                }
 
-              "LIGHT_GRAY" -> {
-                Color(192, 192, 192, 255)
-              }
+                "LIGHT_GRAY" -> {
+                  Color(192, 192, 192, 255)
+                }
 
-              "CYAN" -> {
-                Color(0, 128, 128, 255)
-              }
+                "CYAN" -> {
+                  Color(0, 128, 128, 255)
+                }
 
-              "PURPLE" -> {
-                Color(128, 0, 128, 255)
-              }
+                "PURPLE" -> {
+                  Color(128, 0, 128, 255)
+                }
 
-              "BLUE" -> {
-                Color(0, 0, 255, 255)
-              }
+                "BLUE" -> {
+                  Color(0, 0, 255, 255)
+                }
 
-              "BROWN" -> {
-                Color(130, 64, 16, 255)
-              }
+                "BROWN" -> {
+                  Color(130, 64, 16, 255)
+                }
 
-              "GREEN" -> {
-                Color(0, 128, 0, 255)
-              }
+                "GREEN" -> {
+                  Color(0, 128, 0, 255)
+                }
 
-              "RED" -> {
-                Color(255, 0, 0, 255)
-              }
+                "RED" -> {
+                  Color(255, 0, 0, 255)
+                }
 
-              "BLACK" -> {
-                Color(0, 0, 0, 255)
-              }
+                "BLACK" -> {
+                  Color(0, 0, 0, 255)
+                }
 
-              else -> {
-                Color(1, 1, 1, 0)
+                else -> {
+                  Color(1, 1, 1, 0)
+                }
               }
-            }
           if (lrSwitch) {
             buketPaint(sneak, pos, clickFace, mMap, javaColor)
           } else {
@@ -189,12 +189,12 @@ object PlayerClickEvent : Listener {
             buketPaint(sneak, pos, clickFace, mMap, Color(1, 1, 1, 0))
           } else {
             paint(
-              sneak,
-              pos,
-              clickFace,
-              mMap,
-              Color(1, 1, 1, 0),
-              userBrushSize[event.player.uniqueId] ?: 2,
+                sneak,
+                pos,
+                clickFace,
+                mMap,
+                Color(1, 1, 1, 0),
+                userBrushSize[event.player.uniqueId] ?: 2,
             )
           }
         } else if (event.item?.type == Material.FEATHER) {
@@ -202,18 +202,18 @@ object PlayerClickEvent : Listener {
           if (featherMeta.hasDisplayName()) {
             val dName = featherMeta.displayName
             var javaColor =
-              if (rgbRegex.matches(dName)) {
-                val split = dName.split(",")
-                val red = split[0].toIntOrNull() ?: return
-                val green = split[1].toIntOrNull() ?: return
-                val blue = split[2].toIntOrNull() ?: return
-                Color(red, green, blue)
-              } else if (htmlColorRegex.matches(dName)) {
-                Color.decode("#" + dName.replace("#", ""))
-              } else {
-                event.player.sendMessage(ToolBox.colorMessage("[PaintTools] &c有効なカラーコードではありません!"))
-                return
-              }
+                if (rgbRegex.matches(dName)) {
+                  val split = dName.split(",")
+                  val red = split[0].toIntOrNull() ?: return
+                  val green = split[1].toIntOrNull() ?: return
+                  val blue = split[2].toIntOrNull() ?: return
+                  Color(red, green, blue)
+                } else if (htmlColorRegex.matches(dName)) {
+                  Color.decode("#" + dName.replace("#", ""))
+                } else {
+                  event.player.sendMessage(ToolBox.colorMessage("[PaintTools] &c有効なカラーコードではありません!"))
+                  return
+                }
             if (javaColor.red == 1 && javaColor.green == 1 && javaColor.blue == 1) {
               javaColor = Color(1, 1, 1, 0)
             }
@@ -221,12 +221,12 @@ object PlayerClickEvent : Listener {
               buketPaint(sneak, pos, clickFace, mMap, javaColor)
             } else {
               paint(
-                sneak,
-                pos,
-                clickFace,
-                mMap,
-                javaColor,
-                userBrushSize[event.player.uniqueId] ?: 2,
+                  sneak,
+                  pos,
+                  clickFace,
+                  mMap,
+                  javaColor,
+                  userBrushSize[event.player.uniqueId] ?: 2,
               )
             }
           }
@@ -259,9 +259,8 @@ object PlayerClickEvent : Listener {
   }
 
   val rgbRegex =
-    Regex(
-      """(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})"""
-    )
+      Regex(
+          """(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}),(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})""")
   val htmlColorRegex = Regex("""#?[0-9a-fA-F]{6}""")
 
   private fun faceVec(face: BlockFace): Vector {
@@ -277,12 +276,12 @@ object PlayerClickEvent : Listener {
   }
 
   private fun paint(
-    sneak: Boolean,
-    pos: Vector,
-    facing: BlockFace,
-    mapData: MapDataCash,
-    javaColor: Color,
-    size: Int,
+      sneak: Boolean,
+      pos: Vector,
+      facing: BlockFace,
+      mapData: MapDataCash,
+      javaColor: Color,
+      size: Int,
   ) {
     if (!sneak) {
       var x = (pos.x.absoluteValue * 128).roundToInt().absoluteValue
@@ -348,12 +347,12 @@ object PlayerClickEvent : Listener {
   }
 
   private fun grayPaint(
-    sneak: Boolean,
-    pos: Vector,
-    facing: BlockFace,
-    mapData: MapDataCash,
-    gray: Boolean,
-    size: Int,
+      sneak: Boolean,
+      pos: Vector,
+      facing: BlockFace,
+      mapData: MapDataCash,
+      gray: Boolean,
+      size: Int,
   ) {
     if (!sneak) {
       var x = (pos.x.absoluteValue * 128).roundToInt().absoluteValue
@@ -425,29 +424,29 @@ object PlayerClickEvent : Listener {
     if (x1 < 0 || x1 > 127 || y1 < 0 || y1 > 127) return null
     val color = mapData.cash[(x1 + 1) + (y1 * 128)] ?: return null
     var newRed =
-      if (gray) {
-        (color.red * 0.75).toInt()
-      } else {
-        (color.red * 1.25).toInt()
-      }
+        if (gray) {
+          (color.red * 0.75).toInt()
+        } else {
+          (color.red * 1.25).toInt()
+        }
     if (newRed !in 0..255) {
       newRed = 255
     }
     var newGreen =
-      if (gray) {
-        (color.green * 0.75).toInt()
-      } else {
-        (color.green * 1.25).toInt()
-      }
+        if (gray) {
+          (color.green * 0.75).toInt()
+        } else {
+          (color.green * 1.25).toInt()
+        }
     if (newGreen !in 0..255) {
       newGreen = 255
     }
     var newBlue =
-      if (gray) {
-        (color.blue * 0.75).toInt()
-      } else {
-        (color.blue * 1.25).toInt()
-      }
+        if (gray) {
+          (color.blue * 0.75).toInt()
+        } else {
+          (color.blue * 1.25).toInt()
+        }
     if (newBlue !in 0..255) {
       newBlue = 255
     }
@@ -461,11 +460,11 @@ object PlayerClickEvent : Listener {
   }
 
   private fun buketPaint(
-    sneak: Boolean,
-    pos: Vector,
-    facing: BlockFace,
-    mapData: MapDataCash,
-    javaColor: Color,
+      sneak: Boolean,
+      pos: Vector,
+      facing: BlockFace,
+      mapData: MapDataCash,
+      javaColor: Color,
   ) {
     var x = (pos.x.absoluteValue * 128).roundToInt().absoluteValue
     val y = 128 - (pos.y.absoluteValue * 128).roundToInt().absoluteValue
@@ -530,11 +529,11 @@ object PlayerClickEvent : Listener {
   }
 
   private fun buketPaint(
-    sneak: Boolean,
-    pos: Vector,
-    facing: BlockFace,
-    mapData: MapDataCash,
-    gray: Boolean,
+      sneak: Boolean,
+      pos: Vector,
+      facing: BlockFace,
+      mapData: MapDataCash,
+      gray: Boolean,
   ) {
     var x = (pos.x.absoluteValue * 128).roundToInt().absoluteValue
     val y = 128 - (pos.y.absoluteValue * 128).roundToInt().absoluteValue
@@ -612,11 +611,11 @@ object PlayerClickEvent : Listener {
   }
 
   private fun buketTaskFill(
-    selectColor: Color,
-    mapData: MapDataCash,
-    javaColor: Color,
-    x: Int,
-    y: Int,
+      selectColor: Color,
+      mapData: MapDataCash,
+      javaColor: Color,
+      x: Int,
+      y: Int,
   ) {
     if (x < 0 || x > 127 || y < 0 || y > 127) return
     if (mapData.cash[(x + 1) + (y * 128)] != selectColor) return

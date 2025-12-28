@@ -29,65 +29,65 @@ object PlayerSelect {
     val playerSize = Bukkit.getOnlinePlayers().size
 
     val maxPage: Int =
-      if (playerSize <= 45) {
-        0
-      } else {
-        if (playerSize % 45 != 0) {
-          (playerSize / 45) + 1
+        if (playerSize <= 45) {
+          0
         } else {
-          (playerSize / 45)
+          if (playerSize % 45 != 0) {
+            (playerSize / 45) + 1
+          } else {
+            (playerSize / 45)
+          }
         }
-      }
 
     val nextPage = ItemStack(Material.ARROW)
     val previousPage = ItemStack(Material.ARROW)
     nextPage
-      .guiRun {
-        if (page < maxPage) {
-          player.playSound(
-            player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page += 1
-          heads(player, page, inventory, type)
+        .guiRun {
+          if (page < maxPage) {
+            player.playSound(
+                player.eyeLocation,
+                org.bukkit.Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page += 1
+            heads(player, page, inventory, type)
+          }
         }
-      }
-      .allFlag()
+        .allFlag()
     previousPage
-      .guiRun {
-        if (page > 0) {
-          player.playSound(
-            player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page -= 1
-          heads(player, page, inventory, type)
+        .guiRun {
+          if (page > 0) {
+            player.playSound(
+                player.eyeLocation,
+                org.bukkit.Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page -= 1
+            heads(player, page, inventory, type)
+          }
         }
-      }
-      .allFlag()
+        .allFlag()
     inventory.setItem(53, nextPage)
     inventory.setItem(45, previousPage)
 
     val myProfile = Tools.getPlayerHead(player.uniqueId)
     myProfile
-      .addText("&a自分のプロフィールを開く", mutableListOf())
-      .guiRun {
-        player.playSound(
-          player.eyeLocation,
-          org.bukkit.Sound.UI_BUTTON_CLICK,
-          SoundCategory.MASTER,
-          0.75F,
-          1F,
-        )
-        MyProfile.display(player)
-      }
-      .allFlag()
+        .addText("&a自分のプロフィールを開く", mutableListOf())
+        .guiRun {
+          player.playSound(
+              player.eyeLocation,
+              org.bukkit.Sound.UI_BUTTON_CLICK,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
+          )
+          MyProfile.display(player)
+        }
+        .allFlag()
     inventory.setItem(49, myProfile)
 
     player.openInventory(inventory)
@@ -120,28 +120,28 @@ object PlayerSelect {
           }
         }
         val headLore =
-          mutableListOf(
-            "&a総プレイ時間: &7${statsData.getPlayTime()}",
-            "&a初ログイン; &7${statsData.getFirstPlayed()}",
-          )
+            mutableListOf(
+                "&a総プレイ時間: &7${statsData.getPlayTime()}",
+                "&a初ログイン; &7${statsData.getFirstPlayed()}",
+            )
         if (statsData.introduction.isNotEmpty()) {
           headLore.add("")
           headLore.add("&7自己紹介 &f:")
           statsData.introduction.split("\n").forEach { line -> headLore.add(" &f$line") }
         }
         head
-          .addText(title, headLore)
-          .guiRun {
-            player.playSound(
-              player.eyeLocation,
-              org.bukkit.Sound.UI_BUTTON_CLICK,
-              SoundCategory.MASTER,
-              0.75F,
-              1F,
-            )
-            PlayerSelectRun.run(player, currentPlayer, type)
-          }
-          .allFlag()
+            .addText(title, headLore)
+            .guiRun {
+              player.playSound(
+                  player.eyeLocation,
+                  org.bukkit.Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
+              PlayerSelectRun.run(player, currentPlayer, type)
+            }
+            .allFlag()
 
         inventory.setItem(slot, head)
       }

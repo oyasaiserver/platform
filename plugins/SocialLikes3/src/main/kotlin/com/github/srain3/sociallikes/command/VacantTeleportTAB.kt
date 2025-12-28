@@ -15,10 +15,10 @@ object VacantTeleportTAB : TabCompleter {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != "vacanttp") return null
     if (sender !is Player) return null

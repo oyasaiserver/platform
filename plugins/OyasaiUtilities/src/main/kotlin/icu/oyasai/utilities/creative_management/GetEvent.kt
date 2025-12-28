@@ -60,52 +60,52 @@ object GetEvent : Listener {
     if (e.blockPlaced.type.isAir) return
     if (e.player.gameMode != GameMode.CREATIVE) return
     e.blockPlaced.state.setMetadata(
-      META_TAG,
-      object : MetadataValue {
-        override fun value(): Any? {
-          return true
-        }
+        META_TAG,
+        object : MetadataValue {
+          override fun value(): Any? {
+            return true
+          }
 
-        override fun asInt(): Int {
-          return 1
-        }
+          override fun asInt(): Int {
+            return 1
+          }
 
-        override fun asFloat(): Float {
-          return 1F
-        }
+          override fun asFloat(): Float {
+            return 1F
+          }
 
-        override fun asDouble(): Double {
-          return 1.0
-        }
+          override fun asDouble(): Double {
+            return 1.0
+          }
 
-        override fun asLong(): Long {
-          return 1L
-        }
+          override fun asLong(): Long {
+            return 1L
+          }
 
-        override fun asShort(): Short {
-          return 1
-        }
+          override fun asShort(): Short {
+            return 1
+          }
 
-        override fun asByte(): Byte {
-          return 1
-        }
+          override fun asByte(): Byte {
+            return 1
+          }
 
-        override fun asBoolean(): Boolean {
-          return true
-        }
+          override fun asBoolean(): Boolean {
+            return true
+          }
 
-        override fun asString(): String {
-          return "true"
-        }
+          override fun asString(): String {
+            return "true"
+          }
 
-        override fun getOwningPlugin(): Plugin? {
-          return plugin
-        }
+          override fun getOwningPlugin(): Plugin? {
+            return plugin
+          }
 
-        override fun invalidate() {
-          return
-        }
-      },
+          override fun invalidate() {
+            return
+          }
+        },
     )
   }
 
@@ -125,12 +125,10 @@ object GetEvent : Listener {
       }
     }
     val block = e.clickedBlock ?: return
-    if (
-      block.type == Material.CHISELED_BOOKSHELF ||
+    if (block.type == Material.CHISELED_BOOKSHELF ||
         block.type == Material.DECORATED_POT ||
         block.type == Material.CAMPFIRE ||
-        block.type == Material.SOUL_CAMPFIRE
-    ) {
+        block.type == Material.SOUL_CAMPFIRE) {
       if (block.hasMetadata(META_TAG)) {
         // クリエブロック
         if (e.player.gameMode != GameMode.CREATIVE) {
@@ -269,10 +267,8 @@ object GetEvent : Listener {
       e.item.itemStack.editMeta { it.persistentDataContainer.remove(NAMESPACE) }
       return
     }
-    if (
-      e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
-        e.item.persistentDataContainer.has(NAMESPACE)
-    ) {
+    if (e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
+        e.item.persistentDataContainer.has(NAMESPACE)) {
       if (e.player.gameMode != GameMode.CREATIVE) {
         // クリエじゃないので拾えない
         e.isCancelled = true
@@ -303,20 +299,15 @@ object GetEvent : Listener {
     val i2 = e.target
     if (i1.persistentDataContainer.has(NAMESPACE) && i2.persistentDataContainer.has(NAMESPACE)) {
       return
-    } else if (
-      (!i1.persistentDataContainer.has(NAMESPACE) && !i2.persistentDataContainer.has(NAMESPACE))
-    ) {
+    } else if ((!i1.persistentDataContainer.has(NAMESPACE) &&
+        !i2.persistentDataContainer.has(NAMESPACE))) {
       return
     }
-    if (
-      i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-        i2.itemStack.persistentDataContainer.has(NAMESPACE)
-    ) {
+    if (i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+        i2.itemStack.persistentDataContainer.has(NAMESPACE)) {
       return
-    } else if (
-      (!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-        !i2.itemStack.persistentDataContainer.has(NAMESPACE))
-    ) {
+    } else if ((!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+        !i2.itemStack.persistentDataContainer.has(NAMESPACE))) {
       return
     }
     // 片方がクリエアイテム
@@ -335,16 +326,14 @@ object GetEvent : Listener {
   fun itemFrameEvent(e: PlayerItemFrameChangeEvent) {
     if (e.isCancelled) return
     if (e.action != PlayerItemFrameChangeEvent.ItemFrameChangeAction.PLACE) {
-      if (
-        e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
-          e.player.gameMode == GameMode.CREATIVE
-      ) {
+      if (e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
+          e.player.gameMode == GameMode.CREATIVE) {
         if (!e.itemStack.persistentDataContainer.has(NAMESPACE)) {
           // サバイバルアイテムを外した場合
           val item = e.itemStack.clone()
           val loc = e.itemFrame.location.clone().add(0.0, 0.125, 0.0)
           val vec =
-            Vector(0.0, 0.2, 0.15).rotateAroundY(Math.toRadians(Random.nextDouble(0.0, 360.0)))
+              Vector(0.0, 0.2, 0.15).rotateAroundY(Math.toRadians(Random.nextDouble(0.0, 360.0)))
           loc.world.dropItemNaturally(loc, item).velocity = vec
         }
       }

@@ -31,9 +31,9 @@ object VoterListGUI {
   }
 
   private fun gray(): ItemStack =
-    ItemStack(Material.GRAY_STAINED_GLASS_PANE).apply {
-      itemMeta = itemMeta!!.apply { setDisplayName(" ") }
-    }
+      ItemStack(Material.GRAY_STAINED_GLASS_PANE).apply {
+        itemMeta = itemMeta!!.apply { setDisplayName(" ") }
+      }
 
   private fun head(player: OfflinePlayer, count: Int): ItemStack {
     val it = ItemStack(Material.PLAYER_HEAD)
@@ -60,13 +60,13 @@ object VoterListGUI {
     /* ---------- ソート ---------- */
 
     val sorted =
-      when (sortMap[p.uniqueId]) {
-        SortMode.COUNT -> rawMap.entries.sortedByDescending { it.value }
+        when (sortMap[p.uniqueId]) {
+          SortMode.COUNT -> rawMap.entries.sortedByDescending { it.value }
 
-        SortMode.NAME -> rawMap.entries.sortedBy { Bukkit.getOfflinePlayer(it.key).name ?: "" }
+          SortMode.NAME -> rawMap.entries.sortedBy { Bukkit.getOfflinePlayer(it.key).name ?: "" }
 
-        else -> rawMap.entries.toList() // LATEST
-      }
+          else -> rawMap.entries.toList() // LATEST
+        }
 
     /* ---------- ページ補正 ---------- */
 
@@ -94,46 +94,47 @@ object VoterListGUI {
 
     // ソート切替
     inv.setItem(
-      45,
-      ItemStack(Material.HOPPER).apply {
-        itemMeta =
-          itemMeta!!.apply {
-            val sort = sortMap[p.uniqueId] ?: SortMode.LATEST
-            setDisplayName(
-              when (sort) {
-                SortMode.LATEST -> "§e最新投票順"
-                SortMode.COUNT -> "§e投票数降順"
-                SortMode.NAME -> "§eプレイヤー名順"
+        45,
+        ItemStack(Material.HOPPER).apply {
+          itemMeta =
+              itemMeta!!.apply {
+                val sort = sortMap[p.uniqueId] ?: SortMode.LATEST
+                setDisplayName(
+                    when (sort) {
+                      SortMode.LATEST -> "§e最新投票順"
+                      SortMode.COUNT -> "§e投票数降順"
+                      SortMode.NAME -> "§eプレイヤー名順"
+                    })
               }
-            )
-          }
-      },
+        },
     )
 
     // 前へ
     inv.setItem(
-      48,
-      ItemStack(Material.ARROW).apply { itemMeta = itemMeta!!.apply { setDisplayName("§a前へ") } },
+        48,
+        ItemStack(Material.ARROW).apply { itemMeta = itemMeta!!.apply { setDisplayName("§a前へ") } },
     )
 
     // ページ表示
     inv.setItem(
-      49,
-      ItemStack(Material.PAPER).apply {
-        itemMeta = itemMeta!!.apply { setDisplayName("§eページ ${safePage + 1}") }
-      },
+        49,
+        ItemStack(Material.PAPER).apply {
+          itemMeta = itemMeta!!.apply { setDisplayName("§eページ ${safePage + 1}") }
+        },
     )
 
     // 次へ
     inv.setItem(
-      50,
-      ItemStack(Material.ARROW).apply { itemMeta = itemMeta!!.apply { setDisplayName("§a次へ") } },
+        50,
+        ItemStack(Material.ARROW).apply { itemMeta = itemMeta!!.apply { setDisplayName("§a次へ") } },
     )
 
     // 戻る
     inv.setItem(
-      53,
-      ItemStack(Material.BARRIER).apply { itemMeta = itemMeta!!.apply { setDisplayName("§c戻る") } },
+        53,
+        ItemStack(Material.BARRIER).apply {
+          itemMeta = itemMeta!!.apply { setDisplayName("§c戻る") }
+        },
     )
 
     p.openInventory(inv)
@@ -154,11 +155,11 @@ object VoterListGUI {
       // ソート切替
       45 -> {
         sort =
-          when (sort) {
-            SortMode.LATEST -> SortMode.COUNT
-            SortMode.COUNT -> SortMode.NAME
-            SortMode.NAME -> SortMode.LATEST
-          }
+            when (sort) {
+              SortMode.LATEST -> SortMode.COUNT
+              SortMode.COUNT -> SortMode.NAME
+              SortMode.NAME -> SortMode.LATEST
+            }
         sortMap[p.uniqueId] = sort
         open(p, sign, 0)
       }

@@ -17,10 +17,10 @@ object OreSmelter : CommandExecutor {
   val convertMaterial = mutableMapOf<Material, Material>()
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "oresmelter") return false
     if (sender !is Player) return false

@@ -66,7 +66,7 @@ object Calculator {
     while (true) {
       var hikuExp = ((level + 4) * ref)
       if (hikuExp > plugin.config.getInt("maxRequired", 70000))
-        hikuExp = plugin.config.getInt("maxRequired", 70000)
+          hikuExp = plugin.config.getInt("maxRequired", 70000)
       if (remainExp - hikuExp >= 0) {
         remainExp -= hikuExp
         level += 1
@@ -100,7 +100,7 @@ object Calculator {
     for (i in 0..<maxLevel) {
       var additional = (i + 4) * plugin.config.getInt("basicRequired", 2000)
       if (additional > plugin.config.getInt("maxRequired", 70000))
-        additional = plugin.config.getInt("maxRequired", 70000)
+          additional = plugin.config.getInt("maxRequired", 70000)
       exp += additional
     }
     return exp

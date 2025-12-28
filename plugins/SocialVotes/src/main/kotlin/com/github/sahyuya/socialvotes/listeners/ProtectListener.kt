@@ -45,8 +45,8 @@ class ProtectListener : Listener {
 
   /** 看板の依存ブロックを正確に取得 */
   private fun getAttachedBlock(
-    signBlock: org.bukkit.block.Block,
-    data: org.bukkit.block.data.BlockData,
+      signBlock: org.bukkit.block.Block,
+      data: org.bukkit.block.data.BlockData,
   ): org.bukkit.block.Block? {
 
     return when (data) {

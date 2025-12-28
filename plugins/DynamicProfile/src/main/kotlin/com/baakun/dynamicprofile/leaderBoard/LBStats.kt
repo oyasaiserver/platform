@@ -6,18 +6,18 @@ import com.google.gson.annotations.Expose
 import java.util.*
 
 data class LBStats(
-  @Expose var uuid: UUID = UUID.randomUUID(),
-  @Expose var exp: Int = 0,
-  @Expose var move: Int = 0,
-  @Expose var vehicle: Int = 0,
-  @Expose var fly: Int = 0,
-  @Expose var jump: Int = 0,
-  @Expose var block: Int = 0,
-  @Expose var chat: Int = 0,
-  @Expose var vote: Int = 0,
-  @Expose var like: Int = 0,
-  @Expose var receiveLike: Int = 0,
-  @Expose var join: Int = 0,
+    @Expose var uuid: UUID = UUID.randomUUID(),
+    @Expose var exp: Int = 0,
+    @Expose var move: Int = 0,
+    @Expose var vehicle: Int = 0,
+    @Expose var fly: Int = 0,
+    @Expose var jump: Int = 0,
+    @Expose var block: Int = 0,
+    @Expose var chat: Int = 0,
+    @Expose var vote: Int = 0,
+    @Expose var like: Int = 0,
+    @Expose var receiveLike: Int = 0,
+    @Expose var join: Int = 0,
 ) {
   /**
    * 動作タイプと回数を入力し、プレイヤーのStatsに登録する。

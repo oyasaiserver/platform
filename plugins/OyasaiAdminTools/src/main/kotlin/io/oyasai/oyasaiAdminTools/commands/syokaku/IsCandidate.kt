@@ -16,10 +16,10 @@ import org.bukkit.command.CommandSender
 
 object IsCandidate : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     val dynamicProfilePlugin = Bukkit.getPluginManager().getPlugin("DynamicProfile")
     if (dynamicProfilePlugin == null || !dynamicProfilePlugin.isEnabled) {
@@ -45,39 +45,39 @@ object IsCandidate : CommandExecutor {
 
       getCurrentRank(player.uniqueId).thenAccept { currentRank ->
         Bukkit.getScheduler()
-          .runTask(
-            plugin,
-            Runnable {
-              if (currentRank != null) {
+            .runTask(
+                plugin,
+                Runnable {
+                  if (currentRank != null) {
 
-                val next = getNextRank(currentRank)
-                if (next == null) {
-                  sender.sendMessage("§e${player.name}さんは既に最高ランクです。")
-                } else {
-                  val messageHour =
-                    "プレイ時間: $hour/${next.minPlayTimeHours}時間 ${if (hour >= next.minPlayTimeHours) "§a(達成)" else "§c(未達成)"}"
-                  val messageJoinDays =
-                    "ログイン日数: $joinDays/${next.minJoinDays}日 ${if (joinDays >= next.minJoinDays) "§a(達成)" else "§c(未達成)"}"
-                  val messageElapse =
-                    "経過日数: ${ChronoUnit.DAYS.between( DateTimeUtils.unixToJST(player.firstPlayed), DateTimeUtils.getCurrentJST())}/${next.minElapse}日 ${if (ChronoUnit.DAYS.between(
+                    val next = getNextRank(currentRank)
+                    if (next == null) {
+                      sender.sendMessage("§e${player.name}さんは既に最高ランクです。")
+                    } else {
+                      val messageHour =
+                          "プレイ時間: $hour/${next.minPlayTimeHours}時間 ${if (hour >= next.minPlayTimeHours) "§a(達成)" else "§c(未達成)"}"
+                      val messageJoinDays =
+                          "ログイン日数: $joinDays/${next.minJoinDays}日 ${if (joinDays >= next.minJoinDays) "§a(達成)" else "§c(未達成)"}"
+                      val messageElapse =
+                          "経過日数: ${ChronoUnit.DAYS.between( DateTimeUtils.unixToJST(player.firstPlayed), DateTimeUtils.getCurrentJST())}/${next.minElapse}日 ${if (ChronoUnit.DAYS.between(
                                     DateTimeUtils.unixToJST(player.firstPlayed),DateTimeUtils.getCurrentJST(),) >= next.minElapse) "§a(達成)" else "§c(未達成)"}"
-                  val messageBuildCount =
-                    "建築数: $buildCount/${next.minBuilds}個 ${if (buildCount >= next.minBuilds) "§a(達成)" else "§c(未達成)"}"
-                  sender.sendMessage(messageHour)
-                  sender.sendMessage(messageJoinDays)
-                  sender.sendMessage(messageElapse)
-                  sender.sendMessage(messageBuildCount)
-                  if (nextRank != null) {
-                    sender.sendMessage("§a${player.name}さんは§e${nextRank.name}§aの昇格候補です。")
+                      val messageBuildCount =
+                          "建築数: $buildCount/${next.minBuilds}個 ${if (buildCount >= next.minBuilds) "§a(達成)" else "§c(未達成)"}"
+                      sender.sendMessage(messageHour)
+                      sender.sendMessage(messageJoinDays)
+                      sender.sendMessage(messageElapse)
+                      sender.sendMessage(messageBuildCount)
+                      if (nextRank != null) {
+                        sender.sendMessage("§a${player.name}さんは§e${nextRank.name}§aの昇格候補です。")
+                      } else {
+                        sender.sendMessage("§e${player.name}さんはまだ昇格条件を満たしていません。")
+                      }
+                    }
                   } else {
-                    sender.sendMessage("§e${player.name}さんはまだ昇格条件を満たしていません。")
+                    sender.sendMessage("§c${player.name}さんのランクが見つかりません。")
                   }
-                }
-              } else {
-                sender.sendMessage("§c${player.name}さんのランクが見つかりません。")
-              }
-            },
-          )
+                },
+            )
       }
     }
     return true

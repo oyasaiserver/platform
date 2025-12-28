@@ -7,10 +7,10 @@ import org.bukkit.entity.Player
 
 object TimerCmd : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "timerbar") return false
     if (!sender.hasPermission("oyasaiutilities.timerbar")) return false

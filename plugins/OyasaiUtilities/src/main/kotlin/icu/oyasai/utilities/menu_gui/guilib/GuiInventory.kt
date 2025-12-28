@@ -25,10 +25,10 @@ object GuiInventory : Listener {
    * @param lock trueの場合は下部インベントリの操作をキャンセルする
    */
   fun createInventory(
-    type: InventoryType,
-    title: String,
-    keep: Boolean = false,
-    lock: Boolean = true,
+      type: InventoryType,
+      title: String,
+      keep: Boolean = false,
+      lock: Boolean = true,
   ): Inventory {
     val inv = Bukkit.createInventory(null, type, title)
     invList[inv] = Pair(keep, lock)
@@ -44,10 +44,10 @@ object GuiInventory : Listener {
    * @param lock trueの場合は下部インベントリの操作をキャンセルする
    */
   fun createInventory(
-    line: Int,
-    title: String,
-    keep: Boolean = false,
-    lock: Boolean = true,
+      line: Int,
+      title: String,
+      keep: Boolean = false,
+      lock: Boolean = true,
   ): Inventory {
     val inv = Bukkit.createInventory(null, 9 * line, title)
     invList[inv] = Pair(keep, lock)
@@ -59,11 +59,9 @@ object GuiInventory : Listener {
     // invListに存在しないインベントリのイベントの場合return
     if (!invList.contains(e.view.topInventory)) return
     GuiItem.itemToRun(e)
-    if (
-      invList[e.view.topInventory]?.second == true &&
-        e.clickedInventory?.type == InventoryType.PLAYER
-    )
-      e.isCancelled = true
+    if (invList[e.view.topInventory]?.second == true &&
+        e.clickedInventory?.type == InventoryType.PLAYER)
+        e.isCancelled = true
   }
 
   @EventHandler
@@ -91,10 +89,10 @@ object GuiInventory : Listener {
   }
 
   fun InventoryClickEvent.clickSound(
-    sound: Sound = Sound.UI_BUTTON_CLICK,
-    category: SoundCategory = SoundCategory.MASTER,
-    volume: Float = 1f,
-    pitch: Float = 1f,
+      sound: Sound = Sound.UI_BUTTON_CLICK,
+      category: SoundCategory = SoundCategory.MASTER,
+      volume: Float = 1f,
+      pitch: Float = 1f,
   ) {
     (this.whoClicked as Player).playSound(this.whoClicked, sound, category, volume, pitch)
   }

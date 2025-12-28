@@ -8,10 +8,10 @@ import org.bukkit.entity.Player
 /** コマンド「/painttools」のTab補完を処理する */
 object PaintToolsCmdTab : TabCompleter {
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != "painttools") return null
     if (!sender.hasPermission("painttools.command.painttools")) return null

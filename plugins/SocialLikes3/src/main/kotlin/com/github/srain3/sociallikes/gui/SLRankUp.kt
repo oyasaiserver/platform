@@ -50,48 +50,45 @@ object SLRankUp {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page > 0) {
-          pagePane.setPage(pagePane.page - 1)
-          gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page > 0) {
+                pagePane.setPage(pagePane.page - 1)
+                gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page < pagePane.pages - 1) {
-          pagePane.setPage(pagePane.page + 1)
-          gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page < pagePane.pages - 1) {
+                pagePane.setPage(pagePane.page + 1)
+                gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     gui.addPane(navigation)
 
@@ -103,37 +100,38 @@ object SLRankUp {
     val list = mutableListOf<ItemStack>()
     val beforeTime = LocalDateTime.now().minusDays(lastOnlineDay.toLong())
     data
-      .toList()
-      .sortedWith(
-        Comparator.comparingInt<Pair<UUID, RankUpData>?> { it.second.buildCount }
-          .thenComparingLong { it.second.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L }
-      )
-      .toMap()
-      .forEach { (_, rud) ->
-        val player = Bukkit.getOfflinePlayer(rud.user)
-        val rank = getRank(player.uniqueId)
-        if (!rankFilter.contains(rank)) return@forEach
-        if (!beforeTime.isBefore(rud.lastOnlineTime())) return@forEach
+        .toList()
+        .sortedWith(
+            Comparator.comparingInt<Pair<UUID, RankUpData>?> { it.second.buildCount }
+                .thenComparingLong {
+                  it.second.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L
+                })
+        .toMap()
+        .forEach { (_, rud) ->
+          val player = Bukkit.getOfflinePlayer(rud.user)
+          val rank = getRank(player.uniqueId)
+          if (!rankFilter.contains(rank)) return@forEach
+          if (!beforeTime.isBefore(rud.lastOnlineTime())) return@forEach
 
-        val item = ItemStack(Material.PLAYER_HEAD)
-        val meta = item.itemMeta as SkullMeta
-        meta.setOwningPlayer(player)
-        item.itemMeta = meta
+          val item = ItemStack(Material.PLAYER_HEAD)
+          val meta = item.itemMeta as SkullMeta
+          meta.setOwningPlayer(player)
+          item.itemMeta = meta
 
-        item.allFlag()
-        item.addText(
-          player.name,
-          mutableListOf(
-            "&f現ランク: $rank",
-            "&f初ログイン: &e${rud.firstLogin?.format(format)}",
-            "&f最終オンライン: &e${rud.lastOnlineTime()?.format(format)}",
-            "&f経過日数: ${rud.numberOfDaysElapsed()}",
-            "&f建築数: ${rud.buildCount}",
-          ),
-        )
+          item.allFlag()
+          item.addText(
+              player.name,
+              mutableListOf(
+                  "&f現ランク: $rank",
+                  "&f初ログイン: &e${rud.firstLogin?.format(format)}",
+                  "&f最終オンライン: &e${rud.lastOnlineTime()?.format(format)}",
+                  "&f経過日数: ${rud.numberOfDaysElapsed()}",
+                  "&f建築数: ${rud.buildCount}",
+              ),
+          )
 
-        list.add(item)
-      }
+          list.add(item)
+        }
 
     return list
   }

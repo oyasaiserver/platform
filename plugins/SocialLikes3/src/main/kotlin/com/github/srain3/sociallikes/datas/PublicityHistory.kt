@@ -13,23 +13,23 @@ object PublicityHistory {
 
   fun loadYAML() {
     Thread(
-        {
-          yaml.getKeys(false).forEach { num ->
-            val timeStr = yaml.getString("${num}.TimeStamp") ?: return@forEach
-            val time = LocalDateTime.parse(timeStr) ?: return@forEach
-            val userStr = yaml.getString("${num}.User") ?: return@forEach
-            val user = UUID.fromString(userStr) ?: return@forEach
-            val id = yaml.getInt("${num}.SLID", -999999)
-            if (id == -999999) return@forEach
-            val dataID = num.toIntOrNull() ?: return@forEach
+            {
+              yaml.getKeys(false).forEach { num ->
+                val timeStr = yaml.getString("${num}.TimeStamp") ?: return@forEach
+                val time = LocalDateTime.parse(timeStr) ?: return@forEach
+                val userStr = yaml.getString("${num}.User") ?: return@forEach
+                val user = UUID.fromString(userStr) ?: return@forEach
+                val id = yaml.getInt("${num}.SLID", -999999)
+                if (id == -999999) return@forEach
+                val dataID = num.toIntOrNull() ?: return@forEach
 
-            data[dataID] = PublicityData(dataID, time, user, id)
-            lastID = max(lastID, dataID)
-          }
-        },
-        "SL3-loadPublicityHistoryData",
-      )
-      .start()
+                data[dataID] = PublicityData(dataID, time, user, id)
+                lastID = max(lastID, dataID)
+              }
+            },
+            "SL3-loadPublicityHistoryData",
+        )
+        .start()
   }
 
   fun addData(user: UUID, slid: Int) {

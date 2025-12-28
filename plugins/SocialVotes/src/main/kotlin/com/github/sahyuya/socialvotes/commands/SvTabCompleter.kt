@@ -16,10 +16,10 @@ class SvTabCompleter : TabCompleter {
   private val opCommands = listOf("allclear", "delhere")
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
   ): MutableList<String> {
 
     val dm = SocialVotes.dataManager
@@ -57,8 +57,8 @@ class SvTabCompleter : TabCompleter {
         "list" -> allowedGroups.map { it.name }.filter { it.startsWith(input) }.toMutableList()
 
         "allclear" ->
-          if (sender.isOp) dm.groupByName.keys.filter { it.startsWith(input) }.toMutableList()
-          else mutableListOf()
+            if (sender.isOp) dm.groupByName.keys.filter { it.startsWith(input) }.toMutableList()
+            else mutableListOf()
 
         else -> mutableListOf()
       }

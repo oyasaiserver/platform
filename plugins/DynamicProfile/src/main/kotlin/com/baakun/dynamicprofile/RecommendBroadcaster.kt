@@ -26,11 +26,11 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     // configからspecialFrameIntervalを取得
     specialFrameInterval = plugin.config.getInt("specialFrameInterval", 3)
     val task =
-      object : BukkitRunnable() {
-        override fun run() {
-          broadcastRandomRecommend()
+        object : BukkitRunnable() {
+          override fun run() {
+            broadcastRandomRecommend()
+          }
         }
-      }
     task.runTaskTimer(plugin, intervalTicks, intervalTicks)
     return task
   }
@@ -40,61 +40,61 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
     if (onlinePlayers.isEmpty()) return
 
     val perm =
-      plugin.server.servicesManager
-        .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
-        ?.provider
+        plugin.server.servicesManager
+            .getRegistration(net.milkbowl.vault.permission.Permission::class.java)
+            ?.provider
 
     val (targetPlayers, cache) = // targetPlayers: おススメ設定済み　かつ　枠に合致するプレイヤーのリスト
-      when (frameIndex % specialFrameInterval) {
-        0 -> { // 特別枠
-          val filtered =
-            onlinePlayers.filter { player ->
-              (perm?.playerInGroup(player, "spdonator") == true ||
-                perm?.playerInGroup(player, "donator") == true) &&
-                getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+        when (frameIndex % specialFrameInterval) {
+          0 -> { // 特別枠
+            val filtered =
+                onlinePlayers.filter { player ->
+                  (perm?.playerInGroup(player, "spdonator") == true ||
+                      perm?.playerInGroup(player, "donator") == true) &&
+                      getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+                }
+            if (filtered.isEmpty()) { // 通常枠Fallback
+              val normalFiltered =
+                  onlinePlayers.filter { player ->
+                    getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+                  }
+              normalFiltered to normalCache
+            } else {
+              filtered to specialCache
             }
-          if (filtered.isEmpty()) { // 通常枠Fallback
-            val normalFiltered =
-              onlinePlayers.filter { player ->
-                getStats(player.uniqueId).recommends.values.any { it != EMPTY }
-              }
-            normalFiltered to normalCache
-          } else {
-            filtered to specialCache
+          }
+          else -> {
+            // 通常枠
+            val filtered =
+                onlinePlayers.filter { player ->
+                  getStats(player.uniqueId).recommends.values.any { it != EMPTY }
+                }
+            filtered to normalCache
           }
         }
-        else -> {
-          // 通常枠
-          val filtered =
-            onlinePlayers.filter { player ->
-              getStats(player.uniqueId).recommends.values.any { it != EMPTY }
-            }
-          filtered to normalCache
-        }
-      }
     frameIndex = (frameIndex + 1) % specialFrameInterval
     if (targetPlayers.isEmpty()) return
     val mode: RecommendMode =
-      when (Tools.plugin.config.getInt("RecommendBroadcastMode", 0)) {
-        0 -> RecommendMode.BUILDING_FIRST
-        1 -> RecommendMode.PLAYER_FIRST
-        2 -> RecommendMode.HYBRID
-        else -> RecommendMode.BUILDING_FIRST
-      }
+        when (Tools.plugin.config.getInt("RecommendBroadcastMode", 0)) {
+          0 -> RecommendMode.BUILDING_FIRST
+          1 -> RecommendMode.PLAYER_FIRST
+          2 -> RecommendMode.HYBRID
+          else -> RecommendMode.BUILDING_FIRST
+        }
     when (mode) {
       RecommendMode.PLAYER_FIRST -> {
         // プレイヤーから選ぶ
         val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
         val player =
-          when {
-            uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
-            else -> {
-              cache.clear()
-              val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-              if (retryUncached.isEmpty()) return
-              retryUncached.random()
+            when {
+              uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
+              else -> {
+                cache.clear()
+                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
+                if (retryUncached.isEmpty()) return
+                retryUncached.random()
+              }
             }
-          }
         cache.add(player.uniqueId)
         val stats = getStats(player.uniqueId)
         val recommendIds = stats.recommends.values.filter { it != EMPTY }
@@ -105,27 +105,27 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
       RecommendMode.BUILDING_FIRST -> {
         // 看板を直接選ぶ
         val allRecommends =
-          targetPlayers.flatMap { player ->
-            getStats(player.uniqueId)
-              .recommends
-              .values
-              .filter { it != EMPTY }
-              .map { id -> player to id }
-          }
+            targetPlayers.flatMap { player ->
+              getStats(player.uniqueId)
+                  .recommends
+                  .values
+                  .filter { it != EMPTY }
+                  .map { id -> player to id }
+            }
         if (allRecommends.isEmpty()) return
         val buildingCache =
-          if (cache === specialCache) specialBuildingCache else normalBuildingCache
+            if (cache === specialCache) specialBuildingCache else normalBuildingCache
         val uncached = allRecommends.filter { (_, id) -> id !in buildingCache }
         val (player, selected) =
-          when {
-            uncached.isNotEmpty() -> uncached.random()
-            else -> {
-              buildingCache.clear()
-              val retryUncached = allRecommends.filter { (_, id) -> id !in buildingCache }
-              if (retryUncached.isEmpty()) return
-              retryUncached.random()
+            when {
+              uncached.isNotEmpty() -> uncached.random()
+              else -> {
+                buildingCache.clear()
+                val retryUncached = allRecommends.filter { (_, id) -> id !in buildingCache }
+                if (retryUncached.isEmpty()) return
+                retryUncached.random()
+              }
             }
-          }
         buildingCache.add(selected)
         sendRecommendMessage(player.name, selected)
       }
@@ -133,31 +133,31 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
         // プレイヤーも建築も被らないように選ぶ
         val uncachedPlayers = targetPlayers.filter { it.uniqueId !in cache }
         val player =
-          when {
-            uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
-            else -> {
-              cache.clear()
-              val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
-              if (retryUncached.isEmpty()) return
-              retryUncached.random()
+            when {
+              uncachedPlayers.isNotEmpty() -> uncachedPlayers.random()
+              else -> {
+                cache.clear()
+                val retryUncached = targetPlayers.filter { it.uniqueId !in cache }
+                if (retryUncached.isEmpty()) return
+                retryUncached.random()
+              }
             }
-          }
         val buildingCache =
-          if (cache === specialCache) specialBuildingCache else normalBuildingCache
+            if (cache === specialCache) specialBuildingCache else normalBuildingCache
         val stats = getStats(player.uniqueId)
         val recommendIds = stats.recommends.values.filter { it != EMPTY }
         if (recommendIds.isEmpty()) return
         val uncachedBuildings = recommendIds.filter { it !in buildingCache }
         val selected =
-          when {
-            uncachedBuildings.isNotEmpty() -> uncachedBuildings.random()
-            else -> {
-              buildingCache.clear()
-              val retryUncached = recommendIds.filter { it !in buildingCache }
-              if (retryUncached.isEmpty()) return
-              retryUncached.random()
+            when {
+              uncachedBuildings.isNotEmpty() -> uncachedBuildings.random()
+              else -> {
+                buildingCache.clear()
+                val retryUncached = recommendIds.filter { it !in buildingCache }
+                if (retryUncached.isEmpty()) return
+                retryUncached.random()
+              }
             }
-          }
         cache.add(player.uniqueId)
         buildingCache.add(selected)
         sendRecommendMessage(player.name, selected)
@@ -167,33 +167,32 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
 
   private fun sendRecommendMessage(playerName: String, selected: Int) {
     val message =
-      Component.text()
-        .appendNewline()
-        .append(Component.text("【おすすめ建築】").color(NamedTextColor.LIGHT_PURPLE))
-        .append(Component.text(" ${playerName} さんの「"))
-        .append(Component.text("${Data.getSLData(selected)?.title}").color(NamedTextColor.GREEN))
-        .append(Component.text("」 ").color(NamedTextColor.WHITE))
-        .appendNewline()
-        .append(
-          Component.text("/sltp ${selected} ")
-            .color(NamedTextColor.WHITE)
-            .decorate(TextDecoration.BOLD)
-        )
-        .append(Component.text(" §b[ここをクリックでテレポート]").color(NamedTextColor.AQUA))
-        .clickEvent(ClickEvent.runCommand("/sltp $selected"))
-        .hoverEvent(HoverEvent.showText(Component.text("クリックしてテレポート！")))
-        .appendNewline()
-        .build()
+        Component.text()
+            .appendNewline()
+            .append(Component.text("【おすすめ建築】").color(NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(" ${playerName} さんの「"))
+            .append(
+                Component.text("${Data.getSLData(selected)?.title}").color(NamedTextColor.GREEN))
+            .append(Component.text("」 ").color(NamedTextColor.WHITE))
+            .appendNewline()
+            .append(
+                Component.text("/sltp ${selected} ")
+                    .color(NamedTextColor.WHITE)
+                    .decorate(TextDecoration.BOLD))
+            .append(Component.text(" §b[ここをクリックでテレポート]").color(NamedTextColor.AQUA))
+            .clickEvent(ClickEvent.runCommand("/sltp $selected"))
+            .hoverEvent(HoverEvent.showText(Component.text("クリックしてテレポート！")))
+            .appendNewline()
+            .build()
     Bukkit.broadcast(message)
     Bukkit.getServer().onlinePlayers.forEach {
       if (getStats(it.uniqueId).recommends.values.all { v -> v == EMPTY })
-        it.sendMessage(
-          Component.text("おすすめ建築が未登録です！ /dp から設定できます")
-            .color(NamedTextColor.YELLOW)
-            .hoverEvent(HoverEvent.showText(Component.text("/dp コマンドでおすすめ建築を登録できます！")))
-        )
+          it.sendMessage(
+              Component.text("おすすめ建築が未登録です！ /dp から設定できます")
+                  .color(NamedTextColor.YELLOW)
+                  .hoverEvent(HoverEvent.showText(Component.text("/dp コマンドでおすすめ建築を登録できます！"))))
       if (getStats(it.uniqueId).notice)
-        it.playSound(it.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.5f)
+          it.playSound(it.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.5f)
     }
   }
 }

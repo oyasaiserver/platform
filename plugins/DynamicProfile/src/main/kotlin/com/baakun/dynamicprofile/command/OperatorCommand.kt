@@ -40,16 +40,16 @@ import org.bukkit.entity.Player
 object OperatorCommand : CommandExecutor {
   var last = 0L
   private val gson =
-    GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
+      GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
 
   private fun processUserStats(
-    userList: List<UUID>,
-    start: Int,
-    end: Int,
-    blocks: List<Material>,
-    userLikes: Map<UUID, Int>,
-    userReceiveLikes: Map<UUID, Int>,
-    threadName: String,
+      userList: List<UUID>,
+      start: Int,
+      end: Int,
+      blocks: List<Material>,
+      userLikes: Map<UUID, Int>,
+      userReceiveLikes: Map<UUID, Int>,
+      threadName: String,
   ) {
     var num = 0
     for (i in start until end) {
@@ -105,8 +105,8 @@ object OperatorCommand : CommandExecutor {
         statsData.addCount(BehType.JUMP, pl.getStatistic(Statistic.JUMP))
 
         val exp =
-          Calculator.expAmount(BehType.PLAY_TIME) *
-            ((pl.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20) / 60)
+            Calculator.expAmount(BehType.PLAY_TIME) *
+                ((pl.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20) / 60)
         statsData.exp += exp
 
         val chatCount = statsData.get(BehType.CHAT)
@@ -142,10 +142,10 @@ object OperatorCommand : CommandExecutor {
   }
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     // Allow non-player senders; only block commands that require Player-specific APIs.
     val player: Player? = if (sender is Player) sender as Player else null
@@ -168,20 +168,22 @@ object OperatorCommand : CommandExecutor {
           }
           val statsData = getStats(player.uniqueId)
           Bukkit.getScheduler()
-            .runTaskAsynchronously(
-              plugin,
-              Runnable {
-                val file =
-                  File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${player.uniqueId}.json")
-                try {
-                  file.parentFile?.mkdirs()
-                  if (!file.exists()) file.createNewFile()
-                  FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
-                } catch (e: Exception) {
-                  plugin.logger.warning("保存失敗: ${e.message}")
-                }
-              },
-            )
+              .runTaskAsynchronously(
+                  plugin,
+                  Runnable {
+                    val file =
+                        File(
+                            plugin.dataFolder.absolutePath +
+                                "/UserStatsJSON/${player.uniqueId}.json")
+                    try {
+                      file.parentFile?.mkdirs()
+                      if (!file.exists()) file.createNewFile()
+                      FileWriter(file).use { writer -> gson.toJson(statsData, writer) }
+                    } catch (e: Exception) {
+                      plugin.logger.warning("保存失敗: ${e.message}")
+                    }
+                  },
+              )
         }
         "kakonoEXP" -> {
           if (player == null) {
@@ -190,97 +192,97 @@ object OperatorCommand : CommandExecutor {
           }
           if (args[1] == "kakutei") {
             Bukkit.getScheduler()
-              .runTaskAsynchronously(
-                plugin,
-                Runnable {
-                  try {
-                    val allUser: MutableList<UUID> = mutableListOf()
-                    val slDatas = Data.getSLDataAll()
-                    val userLikes = mutableMapOf<UUID, Int>()
-                    val userReceiveLikes = mutableMapOf<UUID, Int>()
-                    val allUserLock = Any()
-                    val userLikesLock = Any()
-                    val userReceiveLikesLock = Any()
+                .runTaskAsynchronously(
+                    plugin,
+                    Runnable {
+                      try {
+                        val allUser: MutableList<UUID> = mutableListOf()
+                        val slDatas = Data.getSLDataAll()
+                        val userLikes = mutableMapOf<UUID, Int>()
+                        val userReceiveLikes = mutableMapOf<UUID, Int>()
+                        val allUserLock = Any()
+                        val userLikesLock = Any()
+                        val userReceiveLikesLock = Any()
 
-                    for (data in slDatas) {
-                      for (likeuser in data.likes) {
-                        synchronized(allUserLock) {
-                          if (!allUser.contains(likeuser)) {
-                            allUser.add(likeuser)
-                            if (System.currentTimeMillis() - last > 1000) {
-                              last = System.currentTimeMillis()
-                              plugin.logger.info("working")
+                        for (data in slDatas) {
+                          for (likeuser in data.likes) {
+                            synchronized(allUserLock) {
+                              if (!allUser.contains(likeuser)) {
+                                allUser.add(likeuser)
+                                if (System.currentTimeMillis() - last > 1000) {
+                                  last = System.currentTimeMillis()
+                                  plugin.logger.info("working")
+                                }
+                              }
+                            }
+                            synchronized(userLikesLock) {
+                              userLikes[likeuser] = userLikes.getOrDefault(likeuser, 0) + 1
+                            }
+                            synchronized(userReceiveLikesLock) {
+                              userReceiveLikes[data.owner] =
+                                  userReceiveLikes.getOrDefault(data.owner, 0) + 1
+                            }
+                          }
+                          synchronized(allUserLock) {
+                            if (!allUser.contains(data.owner)) {
+                              allUser.add(data.owner)
+                              if (System.currentTimeMillis() - last > 1000) {
+                                last = System.currentTimeMillis()
+                                plugin.logger.info("working.")
+                              }
                             }
                           }
                         }
-                        synchronized(userLikesLock) {
-                          userLikes[likeuser] = userLikes.getOrDefault(likeuser, 0) + 1
-                        }
-                        synchronized(userReceiveLikesLock) {
-                          userReceiveLikes[data.owner] =
-                            userReceiveLikes.getOrDefault(data.owner, 0) + 1
-                        }
-                      }
-                      synchronized(allUserLock) {
-                        if (!allUser.contains(data.owner)) {
-                          allUser.add(data.owner)
-                          if (System.currentTimeMillis() - last > 1000) {
-                            last = System.currentTimeMillis()
-                            plugin.logger.info("working.")
+                        player.sendMessage("allUserのサイズ" + allUser.size)
+
+                        val blocks: MutableList<Material> = mutableListOf()
+                        for (material in Material.entries) {
+                          if (material.isBlock) {
+                            blocks.add(material)
                           }
                         }
-                      }
-                    }
-                    player.sendMessage("allUserのサイズ" + allUser.size)
+                        val alllUserSize = allUser.size
+                        val half = (alllUserSize + 1) / 2 // 奇数時は切り上げ
 
-                    val blocks: MutableList<Material> = mutableListOf()
-                    for (material in Material.entries) {
-                      if (material.isBlock) {
-                        blocks.add(material)
+                        Bukkit.getScheduler()
+                            .runTaskAsynchronously(
+                                plugin,
+                                Runnable {
+                                  processUserStats(
+                                      allUser,
+                                      0,
+                                      half,
+                                      blocks,
+                                      userLikes,
+                                      userReceiveLikes,
+                                      "Thread 1",
+                                  )
+                                  plugin.server.logger.info("1ブロック目完了しました。")
+                                  player.sendMessage("1ブロック目かんりょうしました。")
+                                },
+                            )
+                        Bukkit.getScheduler()
+                            .runTaskAsynchronously(
+                                plugin,
+                                Runnable {
+                                  processUserStats(
+                                      allUser,
+                                      half,
+                                      alllUserSize,
+                                      blocks,
+                                      userLikes,
+                                      userReceiveLikes,
+                                      "Thread 2",
+                                  )
+                                  plugin.server.logger.info("2ブロック目完了しました。")
+                                  player.sendMessage("2ブロック目かんりょうしました。")
+                                },
+                            )
+                      } catch (e: Exception) {
+                        e.printStackTrace()
                       }
-                    }
-                    val alllUserSize = allUser.size
-                    val half = (alllUserSize + 1) / 2 // 奇数時は切り上げ
-
-                    Bukkit.getScheduler()
-                      .runTaskAsynchronously(
-                        plugin,
-                        Runnable {
-                          processUserStats(
-                            allUser,
-                            0,
-                            half,
-                            blocks,
-                            userLikes,
-                            userReceiveLikes,
-                            "Thread 1",
-                          )
-                          plugin.server.logger.info("1ブロック目完了しました。")
-                          player.sendMessage("1ブロック目かんりょうしました。")
-                        },
-                      )
-                    Bukkit.getScheduler()
-                      .runTaskAsynchronously(
-                        plugin,
-                        Runnable {
-                          processUserStats(
-                            allUser,
-                            half,
-                            alllUserSize,
-                            blocks,
-                            userLikes,
-                            userReceiveLikes,
-                            "Thread 2",
-                          )
-                          plugin.server.logger.info("2ブロック目完了しました。")
-                          player.sendMessage("2ブロック目かんりょうしました。")
-                        },
-                      )
-                  } catch (e: Exception) {
-                    e.printStackTrace()
-                  }
-                },
-              )
+                    },
+                )
           }
         }
         "receiveStatus" -> {
@@ -320,18 +322,16 @@ object OperatorCommand : CommandExecutor {
             sender.sendMessage("このコマンドはプレイヤーから実行してください。")
             return true
           }
-          if (
-            player.getTargetBlock(null, 3).isEmpty ||
-              player.getTargetBlock(null, 3).type != Material.CHEST
-          )
-            return false
+          if (player.getTargetBlock(null, 3).isEmpty ||
+              player.getTargetBlock(null, 3).type != Material.CHEST)
+              return false
           plugin.config.set(
-            "RewardChestXYZ",
-            arrayListOf(
-              player.getTargetBlock(null, 3).x,
-              player.getTargetBlock(null, 3).y,
-              player.getTargetBlock(null, 3).z,
-            ),
+              "RewardChestXYZ",
+              arrayListOf(
+                  player.getTargetBlock(null, 3).x,
+                  player.getTargetBlock(null, 3).y,
+                  player.getTargetBlock(null, 3).z,
+              ),
           )
           plugin.config.set("RewardChestWorld", player.world.name)
           plugin.saveConfig()
@@ -368,8 +368,7 @@ object OperatorCommand : CommandExecutor {
             "owners" -> {
               if (args.size < 3) {
                 sender.sendMessage(
-                  Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED)
-                )
+                    Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED))
                 return true
               }
               val titleId = args[2].toIntOrNull()
@@ -393,8 +392,7 @@ object OperatorCommand : CommandExecutor {
             }
             "give" -> {
               sender.sendMessage(
-                giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
-              )
+                  giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3])))
             }
             "add" -> {
               sender.sendMessage(createNewTitle(args[2], args[3].toInt()))
@@ -404,8 +402,7 @@ object OperatorCommand : CommandExecutor {
             }
             "deprive" -> {
               sender.sendMessage(
-                deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
-              )
+                  deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3])))
             }
             "reload" -> {
               saveTitles()
@@ -447,7 +444,7 @@ object OperatorCommand : CommandExecutor {
           val currentStats = getStats(uuid)
           val recoverFile = File(plugin.dataFolder.absolutePath + "/recoverfiles/${uuid}.json")
           val recoverStats: Stats =
-            gson.fromJson(recoverFile.readText(StandardCharsets.UTF_8), Stats::class.java)
+              gson.fromJson(recoverFile.readText(StandardCharsets.UTF_8), Stats::class.java)
           currentStats.addAllCounts(recoverStats)
         }
         "recommendInterval" -> {
@@ -474,24 +471,24 @@ object OperatorCommand : CommandExecutor {
           if (args.size == 1) {
             val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
             val mode =
-              when (modeConfig) {
-                0 -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
-                1 -> com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
-                2 -> com.baakun.dynamicprofile.RecommendMode.HYBRID
-                else -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
-              }
+                when (modeConfig) {
+                  0 -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+                  1 -> com.baakun.dynamicprofile.RecommendMode.PLAYER_FIRST
+                  2 -> com.baakun.dynamicprofile.RecommendMode.HYBRID
+                  else -> com.baakun.dynamicprofile.RecommendMode.BUILDING_FIRST
+                }
             sender.sendMessage("現在のおすすめ建築モード: ${mode.name}")
             return true
           }
           if (args.size == 2) {
             val modeArg = args[1].uppercase()
             val modeValue =
-              when (modeArg) {
-                "BUILDING_FIRST" -> 0
-                "PLAYER_FIRST" -> 1
-                "HYBRID" -> 2
-                else -> null
-              }
+                when (modeArg) {
+                  "BUILDING_FIRST" -> 0
+                  "PLAYER_FIRST" -> 1
+                  "HYBRID" -> 2
+                  else -> null
+                }
             if (modeValue != null) {
               plugin.config.set("RecommendBroadcastMode", modeValue)
               plugin.saveConfig()
@@ -554,50 +551,50 @@ object OperatorCommand : CommandExecutor {
 
 object OperatorCommandCompleter : TabCompleter {
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
   ): MutableList<String>? {
 
     if (args != null) {
       when (args.size) {
         1 ->
-          return mutableListOf(
-            "required",
-            "chest",
-            "beh",
-            "noticeLvs",
-            "receiveStatus",
-            "reloadConfig",
-            "title",
-            "setCount",
-            "repair",
-            "recommendInterval",
-            "recommendMode",
-            "updateLB",
-            "save",
-            //            "kakonoEXP",
-            "setEmpty",
-            "setSpecialFrameInterval",
-          )
+            return mutableListOf(
+                "required",
+                "chest",
+                "beh",
+                "noticeLvs",
+                "receiveStatus",
+                "reloadConfig",
+                "title",
+                "setCount",
+                "repair",
+                "recommendInterval",
+                "recommendMode",
+                "updateLB",
+                "save",
+                //            "kakonoEXP",
+                "setEmpty",
+                "setSpecialFrameInterval",
+            )
         2 -> {
           when (args[0]) {
             "required" -> return mutableListOf("100000", "50000")
             "beh" ->
-              return mutableListOf(
-                "Move",
-                "Vehicle",
-                "Fly",
-                "Jump",
-                "Block",
-                "Vote",
-                "Like",
-                "ReceiveLike",
-                "Join",
-                "Chat",
-                "PlayTime",
-              )
+                return mutableListOf(
+                    "Move",
+                    "Vehicle",
+                    "Fly",
+                    "Jump",
+                    "Block",
+                    "Vote",
+                    "Like",
+                    "ReceiveLike",
+                    "Join",
+                    "Chat",
+                    "PlayTime",
+                )
             "noticeLvs" -> return plugin.config.getStringList("noticeLvs")
             "receiveStatus" -> {
               val list = rewardReceiveStatus.getKeys(false).toMutableList()
@@ -605,18 +602,18 @@ object OperatorCommandCompleter : TabCompleter {
               return list
             }
             "title" ->
-              return mutableListOf(
-                "list",
-                "add",
-                "remove",
-                "give",
-                "deprive",
-                "reload",
-                "edit",
-                "owners",
-                "player",
-                "editDesc",
-              )
+                return mutableListOf(
+                    "list",
+                    "add",
+                    "remove",
+                    "give",
+                    "deprive",
+                    "reload",
+                    "edit",
+                    "owners",
+                    "player",
+                    "editDesc",
+                )
             "repair",
             "setCount" -> return mutableListOf("<UUID>")
             "recommendInterval" -> return mutableListOf("<秒>")
@@ -634,16 +631,16 @@ object OperatorCommandCompleter : TabCompleter {
                 "remove",
                 "owners" -> {
                   val titleId =
-                    args[2].toIntOrNull()
-                      ?: return allTitles.keys
-                        .toList()
-                        .map { i: Int -> i.toString() }
-                        .toMutableList()
+                      args[2].toIntOrNull()
+                          ?: return allTitles.keys
+                              .toList()
+                              .map { i: Int -> i.toString() }
+                              .toMutableList()
                   val titleText =
-                    getTitleFromId(titleId)
-                      .title
-                      .replace(Regex("&x.{12}"), "")
-                      .replace(Regex("&."), "")
+                      getTitleFromId(titleId)
+                          .title
+                          .replace(Regex("&x.{12}"), "")
+                          .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
                 "give",
@@ -651,16 +648,16 @@ object OperatorCommandCompleter : TabCompleter {
                 "player" -> return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
                 "editDesc" -> {
                   val titleId =
-                    args[2].toIntOrNull()
-                      ?: return allTitles.keys
-                        .toList()
-                        .map { i: Int -> i.toString() }
-                        .toMutableList()
+                      args[2].toIntOrNull()
+                          ?: return allTitles.keys
+                              .toList()
+                              .map { i: Int -> i.toString() }
+                              .toMutableList()
                   val titleText =
-                    getTitleFromId(titleId)
-                      .title
-                      .replace(Regex("&x.{12}"), "")
-                      .replace(Regex("&."), "")
+                      getTitleFromId(titleId)
+                          .title
+                          .replace(Regex("&x.{12}"), "")
+                          .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
               }
@@ -678,16 +675,16 @@ object OperatorCommandCompleter : TabCompleter {
                 "give",
                 "deprive" -> {
                   val titleId =
-                    args[2].toIntOrNull()
-                      ?: return allTitles.keys
-                        .toList()
-                        .map { i: Int -> i.toString() }
-                        .toMutableList()
+                      args[2].toIntOrNull()
+                          ?: return allTitles.keys
+                              .toList()
+                              .map { i: Int -> i.toString() }
+                              .toMutableList()
                   val titleText =
-                    getTitleFromId(titleId)
-                      .title
-                      .replace(Regex("&x.{12}"), "")
-                      .replace(Regex("&."), "")
+                      getTitleFromId(titleId)
+                          .title
+                          .replace(Regex("&x.{12}"), "")
+                          .replace(Regex("&."), "")
                   return mutableListOf(titleText)
                 }
                 "edit" -> {

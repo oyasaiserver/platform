@@ -20,38 +20,38 @@ import net.kyori.adventure.title.Title
 import org.bukkit.*
 
 data class Stats(
-  @Expose var uuid: String = UUID.randomUUID().toString(),
-  @Expose var exp: Int = 0,
-  @Expose var move: Int = 0,
-  @Expose var vehicle: Int = 0,
-  @Expose var fly: Int = 0,
-  @Expose var jump: Int = 0,
-  @Expose var block: Int = 0,
-  @Expose var chat: Int = 0,
-  @Expose var vote: Int = 0,
-  @Expose var like: Int = 0,
-  @Expose var receiveLike: Int = 0,
-  @Expose var join: Int = 0,
-  @Expose var playTime: Int = 0,
-  @Expose var distance: Double = 0.0,
-  @Expose var lastCheck: Long = 0L,
-  @Expose var lastLv: Int = 0,
-  @Expose var notice: Boolean = true,
-  @Expose
-  var recommends: MutableMap<Int, Int> =
-    mutableMapOf(
-      Pair(0, Int.MIN_VALUE),
-      Pair(1, Int.MIN_VALUE),
-      Pair(2, Int.MIN_VALUE),
-      Pair(3, Int.MIN_VALUE),
-      Pair(4, Int.MIN_VALUE),
-    ),
-  @Expose var lastLogin: String = LocalDateTime.now().toString(),
-  @Expose val friends: MutableList<UUID> = mutableListOf(),
-  @Expose var title: Int = -1,
-  var timePlayed: Int = 0,
-  @Expose var introduction: String = "",
-  @Expose var promotions: PromotionHistory = PromotionHistory(),
+    @Expose var uuid: String = UUID.randomUUID().toString(),
+    @Expose var exp: Int = 0,
+    @Expose var move: Int = 0,
+    @Expose var vehicle: Int = 0,
+    @Expose var fly: Int = 0,
+    @Expose var jump: Int = 0,
+    @Expose var block: Int = 0,
+    @Expose var chat: Int = 0,
+    @Expose var vote: Int = 0,
+    @Expose var like: Int = 0,
+    @Expose var receiveLike: Int = 0,
+    @Expose var join: Int = 0,
+    @Expose var playTime: Int = 0,
+    @Expose var distance: Double = 0.0,
+    @Expose var lastCheck: Long = 0L,
+    @Expose var lastLv: Int = 0,
+    @Expose var notice: Boolean = true,
+    @Expose
+    var recommends: MutableMap<Int, Int> =
+        mutableMapOf(
+            Pair(0, Int.MIN_VALUE),
+            Pair(1, Int.MIN_VALUE),
+            Pair(2, Int.MIN_VALUE),
+            Pair(3, Int.MIN_VALUE),
+            Pair(4, Int.MIN_VALUE),
+        ),
+    @Expose var lastLogin: String = LocalDateTime.now().toString(),
+    @Expose val friends: MutableList<UUID> = mutableListOf(),
+    @Expose var title: Int = -1,
+    var timePlayed: Int = 0,
+    @Expose var introduction: String = "",
+    @Expose var promotions: PromotionHistory = PromotionHistory(),
 ) {
   fun addAllCounts(stats: Stats) {
     this.exp += stats.exp
@@ -69,18 +69,18 @@ data class Stats(
 
   fun getLBStats(): LBStats {
     return LBStats(
-      UUID.fromString(uuid),
-      exp,
-      move,
-      vehicle,
-      fly,
-      jump,
-      block,
-      chat,
-      vote,
-      like,
-      receiveLike,
-      join,
+        UUID.fromString(uuid),
+        exp,
+        move,
+        vehicle,
+        fly,
+        jump,
+        block,
+        chat,
+        vote,
+        like,
+        receiveLike,
+        join,
     )
   }
 
@@ -196,46 +196,42 @@ data class Stats(
         // 権限付与
         levelGroup.getString(newLevel.toString())?.let { group ->
           Tools.plugin.server.dispatchCommand(
-            Tools.plugin.server.consoleSender,
-            "lp user ${onlinePlayer.name} parent add $group",
+              Tools.plugin.server.consoleSender,
+              "lp user ${onlinePlayer.name} parent add $group",
           )
         }
         // 通知
         if (this.notice) {
           Bukkit.getLogger()
-            .info(
-              "${onlinePlayer.name} さんのレベルが $newLevel に上がりました！, LastAction: $type, Exp: $currentExp -> ${currentExp + expGain}"
-            )
+              .info(
+                  "${onlinePlayer.name} さんのレベルが $newLevel に上がりました！, LastAction: $type, Exp: $currentExp -> ${currentExp + expGain}")
           onlinePlayer.playSound(
-            onlinePlayer.eyeLocation,
-            Sound.ENTITY_PLAYER_LEVELUP,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
+              onlinePlayer.eyeLocation,
+              Sound.ENTITY_PLAYER_LEVELUP,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
           )
           onlinePlayer.sendMessage(Component.text("§e/dpl コマンドであなたのサーバー内順位を確認！"))
           onlinePlayer.sendMessage(Component.text("§6/dp コマンドでプロフィールを確認！"))
           onlinePlayer.sendMessage(Component.text("§7レベルアップ時のタイトル通知は、自分のプロフィールからオフにすることができます。"))
           onlinePlayer.showTitle(
-            Title.title(
-              Component.text("§e§lLEVEL UP!"),
-              Component.text("§6You are now Lv. $newLevel !"),
-              Title.Times.times(
-                Duration.ofNanos(500),
-                Duration.ofSeconds(3),
-                Duration.ofMillis(500),
-              ),
-            )
-          )
+              Title.title(
+                  Component.text("§e§lLEVEL UP!"),
+                  Component.text("§6You are now Lv. $newLevel !"),
+                  Title.Times.times(
+                      Duration.ofNanos(500),
+                      Duration.ofSeconds(3),
+                      Duration.ofMillis(500),
+                  ),
+              ))
         } else {
           onlinePlayer.sendMessage(Component.text("§6You are now Lv. $newLevel !"))
         }
         if (Tools.plugin.config.getIntegerList("noticeLvs").contains(newLevel)) {
           Bukkit.broadcast(
-            Component.text(
-              "[§eLEVEL UP!§f] §a${onlinePlayer.name} §fさんのレベルが §6$newLevel §fに上がりました！"
-            )
-          )
+              Component.text(
+                  "[§eLEVEL UP!§f] §a${onlinePlayer.name} §fさんのレベルが §6$newLevel §fに上がりました！"))
         }
       }
       if (onlinePlayer.isOnline) lastLv = newLevel
@@ -249,32 +245,32 @@ data class Stats(
    * @param count 動作をした回数
    */
   fun set(type: BehType, count: Int) =
-    when (type) {
-      BehType.MOVE -> move = count
-      BehType.VEHICLE -> vehicle = count
-      BehType.FLY -> fly = count
-      BehType.JUMP -> jump = count
-      BehType.PLACE_BLOCK -> block = count
-      BehType.CHAT -> chat = count
-      BehType.VOTE -> vote = count
-      BehType.LIKE -> like = count
-      BehType.RECEIVE_LIKE -> receiveLike = count
-      BehType.JOIN -> join = count
-      BehType.PLAY_TIME -> playTime = count
-    }
+      when (type) {
+        BehType.MOVE -> move = count
+        BehType.VEHICLE -> vehicle = count
+        BehType.FLY -> fly = count
+        BehType.JUMP -> jump = count
+        BehType.PLACE_BLOCK -> block = count
+        BehType.CHAT -> chat = count
+        BehType.VOTE -> vote = count
+        BehType.LIKE -> like = count
+        BehType.RECEIVE_LIKE -> receiveLike = count
+        BehType.JOIN -> join = count
+        BehType.PLAY_TIME -> playTime = count
+      }
 
   fun get(type: BehType): Int =
-    when (type) {
-      BehType.MOVE -> move
-      BehType.VEHICLE -> vehicle
-      BehType.FLY -> fly
-      BehType.JUMP -> jump
-      BehType.PLACE_BLOCK -> block
-      BehType.CHAT -> chat
-      BehType.VOTE -> vote
-      BehType.LIKE -> like
-      BehType.RECEIVE_LIKE -> receiveLike
-      BehType.JOIN -> join
-      BehType.PLAY_TIME -> playTime
-    }
+      when (type) {
+        BehType.MOVE -> move
+        BehType.VEHICLE -> vehicle
+        BehType.FLY -> fly
+        BehType.JUMP -> jump
+        BehType.PLACE_BLOCK -> block
+        BehType.CHAT -> chat
+        BehType.VOTE -> vote
+        BehType.LIKE -> like
+        BehType.RECEIVE_LIKE -> receiveLike
+        BehType.JOIN -> join
+        BehType.PLAY_TIME -> playTime
+      }
 }

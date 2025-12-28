@@ -23,7 +23,7 @@ object LevelReward {
   /** リワード受け取り画面を開く */
   fun display(player: Player) {
     val world =
-      plugin.config.getString("RewardChestWorld", "lifeworld")?.let { Bukkit.getWorld(it) }
+        plugin.config.getString("RewardChestWorld", "lifeworld")?.let { Bukkit.getWorld(it) }
     val XYZList = plugin.config.getDoubleList("RewardChestXYZ")
     val statsData = getStats(player.uniqueId)
     val loc = Location(world, XYZList[0], XYZList[1], XYZList[2])
@@ -48,13 +48,12 @@ object LevelReward {
             Material.IRON_INGOT -> {
               val text = reward.lores
               text.add(
-                econ?.format(item.itemMeta.displayName.split(",").get(1).toDouble()).toString()
-              )
+                  econ?.format(item.itemMeta.displayName.split(",").get(1).toDouble()).toString())
 
               reward.runnables.add {
                 econ?.depositPlayer(
-                  Bukkit.getOfflinePlayer(player.uniqueId),
-                  item.itemMeta.displayName.split(",").get(1).toDouble(),
+                    Bukkit.getOfflinePlayer(player.uniqueId),
+                    item.itemMeta.displayName.split(",").get(1).toDouble(),
                 )
               }
             }
@@ -72,10 +71,10 @@ object LevelReward {
 
               reward.runnables.add {
                 Bukkit.getServer()
-                  .dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    "milepoint add ${item.itemMeta.displayName.split(",").get(1)}",
-                  )
+                    .dispatchCommand(
+                        Bukkit.getConsoleSender(),
+                        "milepoint add ${item.itemMeta.displayName.split(",").get(1)}",
+                    )
               }
             }
             Material.SHULKER_BOX -> {
@@ -108,27 +107,27 @@ object LevelReward {
       for (reward in rewards.values) {
         val displayItem = ItemStack(Material.CHEST)
         displayItem
-          .addText("&a[Lv.${reward.lv}] &fレベル報酬", reward.lores)
-          .guiRun {
-            if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
-              player.playSound(player.eyeLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5F, 1F)
-              player.closeInventory()
-              val message =
-                Component.text("クリエイティブ状態だと受け取れません。（クリックしてサバイバルに変更）")
-                  .clickEvent(ClickEvent.runCommand("/gamemode survival ${player.name}"))
-                  .hoverEvent(Component.text("クリックしてサバイバルモードに変更"))
-              player.sendMessage(message)
-            } else {
-              player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
-              player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
-              statsData.addReceiveRewardStatus(reward.lv)
-              for (run in reward.runnables) {
-                run.run()
+            .addText("&a[Lv.${reward.lv}] &fレベル報酬", reward.lores)
+            .guiRun {
+              if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
+                player.playSound(player.eyeLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5F, 1F)
+                player.closeInventory()
+                val message =
+                    Component.text("クリエイティブ状態だと受け取れません。（クリックしてサバイバルに変更）")
+                        .clickEvent(ClickEvent.runCommand("/gamemode survival ${player.name}"))
+                        .hoverEvent(Component.text("クリックしてサバイバルモードに変更"))
+                player.sendMessage(message)
+              } else {
+                player.playSound(player.eyeLocation, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1F)
+                player.sendMessage(Component.text("&6[Lv.${reward.lv}] &fのレベル報酬を受け取りました！".color()))
+                statsData.addReceiveRewardStatus(reward.lv)
+                for (run in reward.runnables) {
+                  run.run()
+                }
+                display(player) // 開きなおす(表示の順番を詰める)
               }
-              display(player) // 開きなおす(表示の順番を詰める)
             }
-          }
-          .allFlag()
+            .allFlag()
         inventory.addItem(displayItem)
       }
       player.openInventory(inventory)

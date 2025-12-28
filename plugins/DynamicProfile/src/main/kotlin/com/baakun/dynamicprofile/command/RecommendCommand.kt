@@ -9,10 +9,10 @@ import org.bukkit.entity.Player
 
 object RecommendCommand : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
 
     if (command.name != "dpsuki") return false
@@ -49,10 +49,10 @@ object RecommendCommand : CommandExecutor {
           }
         }
         Data.getSLData(id)
-          ?: run {
-            sender.sendMessage("ID $id の建築は存在しません。")
-            return true
-          }
+            ?: run {
+              sender.sendMessage("ID $id の建築は存在しません。")
+              return true
+            }
         stats.recommends[slot - 1] = id
         sender.sendMessage("スロット$slot にID $id を登録しました。")
       }

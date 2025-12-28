@@ -26,10 +26,10 @@ object DProfileCmd : CommandExecutor {
   private val required = Tools.plugin.config.getInt("Required", 100000)
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "dprofile") return false
 
@@ -64,23 +64,25 @@ object DProfileCmd : CommandExecutor {
       standGlassPane.addText(" ", mutableListOf()).allFlag()
       DynamicProfile.perms?.let { perms ->
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.chukyu"))
-          standGlassPane =
-            ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.GREEN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.jokyu"))
-          standGlassPane =
-            ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.CYAN_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.builder"))
-          standGlassPane =
-            ItemStack(Material.PURPLE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.PURPLE_STAINED_GLASS_PANE)
+                    .addText(" ", mutableListOf())
+                    .allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.takumi"))
-          standGlassPane =
-            ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.RED_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.blue"))
-          standGlassPane =
-            ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.BLUE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
         if (perms.playerHas("*", Bukkit.getOfflinePlayer(target), "group.white"))
-          standGlassPane =
-            ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
+            standGlassPane =
+                ItemStack(Material.WHITE_STAINED_GLASS_PANE).addText(" ", mutableListOf()).allFlag()
       }
 
       for (x in 1..8) {
@@ -93,17 +95,18 @@ object DProfileCmd : CommandExecutor {
 
     // プレイヤー選択画面を開く
     val headPlayer =
-      Bukkit.getOnlinePlayers().toList().get((0..Bukkit.getOnlinePlayers().size - 1).random())
+        Bukkit.getOnlinePlayers().toList().get((0..Bukkit.getOnlinePlayers().size - 1).random())
     val selectPlayer = Tools.getPlayerHead(headPlayer.uniqueId)
     selectPlayer
-      .addText(
-        "&a他プレイヤーのプロフィールを開く",
-        mutableListOf("&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"),
-      )
-      .guiRun {
-        viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
-        PlayerSelect.display(viewer, RunType.OPEN_PROFILE)
-      }
+        .addText(
+            "&a他プレイヤーのプロフィールを開く",
+            mutableListOf(
+                "&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"),
+        )
+        .guiRun {
+          viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+          PlayerSelect.display(viewer, RunType.OPEN_PROFILE)
+        }
     inv.setItem(53, selectPlayer)
   }
 }

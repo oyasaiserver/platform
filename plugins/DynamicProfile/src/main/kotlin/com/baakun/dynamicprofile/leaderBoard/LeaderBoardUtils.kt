@@ -19,16 +19,16 @@ object LeaderBoardUtils {
     lbFile.parentFile.mkdirs()
     if (lbFile.createNewFile()) lbFile.writeText("{}", StandardCharsets.UTF_8)
     UUIDMap =
-      JsonUtils.fromJsonFile(lbFile, object : TypeToken<MutableMap<UUID, LBStats>>() {}.type)
+        JsonUtils.fromJsonFile(lbFile, object : TypeToken<MutableMap<UUID, LBStats>>() {}.type)
   }
 
   fun saveWeeklyLB() {
     latestFile.parentFile.mkdirs()
     latestFile.createNewFile()
     JsonUtils.toJsonFile(
-      latestFile,
-      UUIDMap,
-      object : TypeToken<MutableMap<UUID, LBStats>>() {}.type,
+        latestFile,
+        UUIDMap,
+        object : TypeToken<MutableMap<UUID, LBStats>>() {}.type,
     )
   }
 

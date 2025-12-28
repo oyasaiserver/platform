@@ -72,8 +72,8 @@ object TimeUtil {
 
   fun formatPeriod(start: Long?, end: Long?): List<String> {
     return listOf(
-      if (start == null) " §7開始: 未設定（常時可）" else " §7開始: §e${format(start)}",
-      if (end == null) " §7終了: 未設定（常時可）" else " §7終了: §e${format(end)}",
+        if (start == null) " §7開始: 未設定（常時可）" else " §7開始: §e${format(start)}",
+        if (end == null) " §7終了: 未設定（常時可）" else " §7終了: §e${format(end)}",
     )
   }
 

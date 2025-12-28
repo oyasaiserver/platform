@@ -38,8 +38,8 @@ object SearchBuild {
     pagePane.populateWithItemStacks(itemList)
     pagePane.setOnClick {
       val id =
-        it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
-          ?: return@setOnClick
+          it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+              ?: return@setOnClick
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
@@ -47,50 +47,47 @@ object SearchBuild {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page > 0) {
-          pagePane.setPage(pagePane.page - 1)
-          gui.title =
-            Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page > 0) {
+                pagePane.setPage(pagePane.page - 1)
+                gui.title =
+                    Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page < pagePane.pages - 1) {
-          pagePane.setPage(pagePane.page + 1)
-          gui.title =
-            Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page < pagePane.pages - 1) {
+                pagePane.setPage(pagePane.page + 1)
+                gui.title =
+                    Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     gui.addPane(navigation)
 
@@ -112,13 +109,13 @@ object SearchBuild {
     val item = ItemStack(Material.OAK_SIGN)
     item.allFlag()
     item.addText(
-      "&f>>&a${slData.title} &rID:${slData.id}",
-      mutableListOf(
-        "&3制作者:&f ${Bukkit.getOfflinePlayer(slData.owner).name}",
-        "&3イイね:&f ${slData.likes.count()}",
-        "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
-        "&7&nクリックでテレポート&r&7します",
-      ),
+        "&f>>&a${slData.title} &rID:${slData.id}",
+        mutableListOf(
+            "&3制作者:&f ${Bukkit.getOfflinePlayer(slData.owner).name}",
+            "&3イイね:&f ${slData.likes.count()}",
+            "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
+            "&7&nクリックでテレポート&r&7します",
+        ),
     )
     addItemMetaID(item, slData.id)
     return item
@@ -128,10 +125,10 @@ object SearchBuild {
   fun offlinePlayerSearch(player: Player) {
     AnvilGUI.Builder().apply {
       itemLeft(
-        ItemStack(Material.OAK_SIGN)
-          .allFlag()
-          .addText("ここに探したい建築名", mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"))
-      )
+          ItemStack(Material.OAK_SIGN)
+              .allFlag()
+              .addText(
+                  "ここに探したい建築名", mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです")))
       onClick { slot, e ->
         if (slot != AnvilGUI.Slot.OUTPUT) {
           return@onClick listOf()
@@ -140,21 +137,21 @@ object SearchBuild {
         if (e.text.isNotBlank()) {
           player.sendMessage(Tools.socialLikesLOGO + "&r 検索中です…".color())
           Thread {
-              // 検索処理
-              val regex = Regex(e.text)
-              val slDataList = Data.getSLDataAll()
-              val hitSLDataList = slDataList.filter { regex.containsMatchIn(it.title) }
-              val gui = createGUI(hitSLDataList, e.text)
-              object : BukkitRunnable() {
-                  override fun run() {
-                    if (player.isOnline) {
-                      gui.show(player)
+                // 検索処理
+                val regex = Regex(e.text)
+                val slDataList = Data.getSLDataAll()
+                val hitSLDataList = slDataList.filter { regex.containsMatchIn(it.title) }
+                val gui = createGUI(hitSLDataList, e.text)
+                object : BukkitRunnable() {
+                      override fun run() {
+                        if (player.isOnline) {
+                          gui.show(player)
+                        }
+                      }
                     }
-                  }
-                }
-                .runTaskLater(Tools.plugin, 2)
-            }
-            .start()
+                    .runTaskLater(Tools.plugin, 2)
+              }
+              .start()
 
           e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
           return@onClick listOf(AnvilGUI.ResponseAction.close())

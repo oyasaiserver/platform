@@ -36,32 +36,33 @@ object PublicityHistoryGUI {
 
     val itemList = mutableListOf<ItemStack>()
     val thread =
-      Thread(
-        {
-          PublicityHistory.getData()
-            .toList()
-            .sortedByDescending { it.first }
-            .toMap()
-            .values
-            .forEach { pData ->
-              try {
-                createSignItem(pData)?.let { itemList.add(it) }
-              } catch (e: Exception) {
-                e.printStackTrace()
-                Bukkit.getLogger().warning("宣伝履歴GUIのアイテム作成に失敗しました: ${pData.slid} by ${pData.user}")
-              }
-            }
-        },
-        "SL3-createPublicityHistoryGUI",
-      )
+        Thread(
+            {
+              PublicityHistory.getData()
+                  .toList()
+                  .sortedByDescending { it.first }
+                  .toMap()
+                  .values
+                  .forEach { pData ->
+                    try {
+                      createSignItem(pData)?.let { itemList.add(it) }
+                    } catch (e: Exception) {
+                      e.printStackTrace()
+                      Bukkit.getLogger()
+                          .warning("宣伝履歴GUIのアイテム作成に失敗しました: ${pData.slid} by ${pData.user}")
+                    }
+                  }
+            },
+            "SL3-createPublicityHistoryGUI",
+        )
     thread.start()
 
     val pagePane = PaginatedPane(0, 0, 9, 5)
     pagePane.populateWithItemStacks(itemList)
     pagePane.setOnClick {
       val id =
-        it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
-          ?: return@setOnClick
+          it.currentItem?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+              ?: return@setOnClick
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
@@ -69,48 +70,45 @@ object PublicityHistoryGUI {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page > 0) {
-          pagePane.setPage(pagePane.page - 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page > 0) {
+                pagePane.setPage(pagePane.page - 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pagePane.page < pagePane.pages - 1) {
-          pagePane.setPage(pagePane.page + 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pagePane.page < pagePane.pages - 1) {
+                pagePane.setPage(pagePane.page + 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r 宣伝履歴 p${pagePane.page + 1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     gui.addPane(navigation)
 
@@ -133,9 +131,9 @@ object PublicityHistoryGUI {
     val item = ItemStack(Material.OAK_SIGN)
     item.allFlag()
     item.addText(
-      "&f>>&a${slData.title} &rID:${slData.id}",
-      mutableListOf(
-        "&3制作者:&f ${
+        "&f>>&a${slData.title} &rID:${slData.id}",
+        mutableListOf(
+            "&3制作者:&f ${
                     try {
                         Bukkit.getOfflinePlayer(slData.owner).name
                     } catch (e: Exception) {
@@ -143,11 +141,11 @@ object PublicityHistoryGUI {
                         "不明"
                     }
                 }",
-        "&3イイね:&f ${slData.likes.count()}",
-        "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
-        "&7&nクリックでテレポート&r&7します",
-        " ",
-        "&d宣伝者:&f ${
+            "&3イイね:&f ${slData.likes.count()}",
+            "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
+            "&7&nクリックでテレポート&r&7します",
+            " ",
+            "&d宣伝者:&f ${
                     try {
                         Bukkit.getOfflinePlayer(pData.user).name
                     } catch (e: Exception) {
@@ -155,8 +153,8 @@ object PublicityHistoryGUI {
                         "不明"
                     }
                 }",
-        "&d宣伝日:&f ${pData.timeStamp.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}",
-      ),
+            "&d宣伝日:&f ${pData.timeStamp.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}",
+        ),
     )
     addItemMetaID(item, slData.id)
     return item

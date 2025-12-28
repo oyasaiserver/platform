@@ -49,25 +49,25 @@ object ResultGUI {
     if (group != null) {
 
       val signs =
-        group.signIds
-          .mapNotNull { dm.signById[it] }
-          .let { sort(it, sortModeMap[p.uniqueId]!!) }
-          .take(45)
+          group.signIds
+              .mapNotNull { dm.signById[it] }
+              .let { sort(it, sortModeMap[p.uniqueId]!!) }
+              .take(45)
 
       for ((index, s) in signs.withIndex()) {
         inv.setItem(
-          index,
-          item(
-            Material.OAK_SIGN,
-            "§a${s.name}",
-            listOf(
-              "§7ID: §f${s.id}",
-              "§7得票数: §e${s.votes}",
-              "§7公開: ${if (s.showVotes) "§a公開" else "§c非公開"}",
-              "",
-              "§eクリックで投票者一覧",
+            index,
+            item(
+                Material.OAK_SIGN,
+                "§a${s.name}",
+                listOf(
+                    "§7ID: §f${s.id}",
+                    "§7得票数: §e${s.votes}",
+                    "§7公開: ${if (s.showVotes) "§a公開" else "§c非公開"}",
+                    "",
+                    "§eクリックで投票者一覧",
+                ),
             ),
-          ),
         )
       }
     }
@@ -81,21 +81,20 @@ object ResultGUI {
 
     // ソート切替
     inv.setItem(
-      45,
-      ItemStack(Material.HOPPER).apply {
-        itemMeta =
-          itemMeta!!.apply {
-            val sort = sortModeMap[p.uniqueId] ?: SortMode.REGISTER
-            setDisplayName(
-              when (sort) {
-                SortMode.REGISTER -> "§e登録順"
-                SortMode.VOTES_DESC -> "§e投票数降順"
-                SortMode.NAME -> "§eSV看板名順"
-                SortMode.ID -> "§eID名順"
+        45,
+        ItemStack(Material.HOPPER).apply {
+          itemMeta =
+              itemMeta!!.apply {
+                val sort = sortModeMap[p.uniqueId] ?: SortMode.REGISTER
+                setDisplayName(
+                    when (sort) {
+                      SortMode.REGISTER -> "§e登録順"
+                      SortMode.VOTES_DESC -> "§e投票数降順"
+                      SortMode.NAME -> "§eSV看板名順"
+                      SortMode.ID -> "§eID名順"
+                    })
               }
-            )
-          }
-      },
+        },
     )
 
     // 戻る
@@ -128,13 +127,13 @@ object ResultGUI {
       // ---- ソート切替 ----
       45 -> {
         val next =
-          when (sortModeMap[p.uniqueId]) {
-            SortMode.REGISTER -> SortMode.VOTES_DESC
-            SortMode.VOTES_DESC -> SortMode.NAME
-            SortMode.NAME -> SortMode.ID
-            SortMode.ID -> SortMode.REGISTER
-            else -> SortMode.REGISTER
-          }
+            when (sortModeMap[p.uniqueId]) {
+              SortMode.REGISTER -> SortMode.VOTES_DESC
+              SortMode.VOTES_DESC -> SortMode.NAME
+              SortMode.NAME -> SortMode.ID
+              SortMode.ID -> SortMode.REGISTER
+              else -> SortMode.REGISTER
+            }
         sortModeMap[p.uniqueId] = next
         open(p, sign)
       }

@@ -29,18 +29,19 @@ object MyProfile {
     val inventory = GuiInventory.createInventory(6, player.name)
 
     addBlackStandGlass(
-      inventory,
-      arrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 27, 36, 45, 46, 12, 13, 14, 15, 16, 51, 52, 53),
+        inventory,
+        arrayOf(
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 27, 36, 45, 46, 12, 13, 14, 15, 16, 51, 52, 53),
     )
     commonFunc(inventory, player, player.name)
 
     val statsData = getStats(player.uniqueId)
     ProfileUtil.setupProfileHead(
-      player = player,
-      statsData = statsData,
-      inventory = inventory,
-      isSelfProfile = true,
-      soundPlayer = player,
+        player = player,
+        statsData = statsData,
+        inventory = inventory,
+        isSelfProfile = true,
+        soundPlayer = player,
     )
 
     addMenuItems(inventory, player)
@@ -72,14 +73,14 @@ object MyProfile {
         val sign = ItemStack(Material.OAK_SIGN)
         if (signData != null) {
           sign.addText(
-            "&f>>&a${signData.title} &fID:${signData.id}",
-            mutableListOf(
-              "&3イイね: ${signData.likes.size}",
-              "&3作成日: ${signData.time.toFormat()}",
-              "&f&nクリックしてテレポート",
-              "右クリックして編集",
-              "Shift+右クリックで登録解除",
-            ),
+              "&f>>&a${signData.title} &fID:${signData.id}",
+              mutableListOf(
+                  "&3イイね: ${signData.likes.size}",
+                  "&3作成日: ${signData.time.toFormat()}",
+                  "&f&nクリックしてテレポート",
+                  "右クリックして編集",
+                  "Shift+右クリックで登録解除",
+              ),
           )
         }
         sign.guiRun {
@@ -102,38 +103,39 @@ object MyProfile {
     val noticeSetting = ItemStack(Material.BELL)
 
     noticeSetting
-      .guiRun {
-        player.playSound(player.eyeLocation, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
-        statsData.notice = statsData.notice.not()
-        noticeSetting.addText(
-          "&aレベルアップをタイトルで通知する",
-          mutableListOf("&f" + if (statsData.notice) "はい" else "いいえ"),
-        )
-        inventory.setItem(51, noticeSetting)
-      }
-      .addText("&aレベルアップをタイトルで通知する", mutableListOf("&f" + if (statsData.notice) "はい" else "いいえ"))
+        .guiRun {
+          player.playSound(
+              player.eyeLocation, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+          statsData.notice = statsData.notice.not()
+          noticeSetting.addText(
+              "&aレベルアップをタイトルで通知する",
+              mutableListOf("&f" + if (statsData.notice) "はい" else "いいえ"),
+          )
+          inventory.setItem(51, noticeSetting)
+        }
+        .addText("&aレベルアップをタイトルで通知する", mutableListOf("&f" + if (statsData.notice) "はい" else "いいえ"))
     inventory.setItem(51, noticeSetting)
 
     val receiveLevelRewards = ItemStack(Material.CHEST)
     receiveLevelRewards
-      .guiRun {
-        player.playSound(
-          player.eyeLocation,
-          Sound.BLOCK_CHEST_OPEN,
-          SoundCategory.MASTER,
-          0.75F,
-          1F,
+        .guiRun {
+          player.playSound(
+              player.eyeLocation,
+              Sound.BLOCK_CHEST_OPEN,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
+          )
+          LevelReward.display(player)
+        }
+        .addText(
+            "&aレベル報酬を受け取る",
+            mutableListOf(
+                "&7現在のレベル: &6${Calculator.getLevel(player)}",
+                "&7次のレベルまで: &3${Calculator.getExpFromLevel(Calculator.getLevel(player)+1)-statsData.exp}",
+            ),
         )
-        LevelReward.display(player)
-      }
-      .addText(
-        "&aレベル報酬を受け取る",
-        mutableListOf(
-          "&7現在のレベル: &6${Calculator.getLevel(player)}",
-          "&7次のレベルまで: &3${Calculator.getExpFromLevel(Calculator.getLevel(player)+1)-statsData.exp}",
-        ),
-      )
-      .allFlag()
+        .allFlag()
     inventory.setItem(52, receiveLevelRewards)
 
     // 自己紹介編集ボタン

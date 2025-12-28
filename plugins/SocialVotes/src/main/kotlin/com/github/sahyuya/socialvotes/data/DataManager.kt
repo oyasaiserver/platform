@@ -54,10 +54,9 @@ class DataManager(private val plugin: Plugin) {
       val sec = sSec.getConfigurationSection(idStr) ?: return@forEach
       val id = idStr.toInt()
       val creators =
-        sec
-          .getStringList("creators")
-          .mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
-          .toMutableSet()
+          sec.getStringList("creators")
+              .mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
+              .toMutableSet()
 
       // 最低1人保証（安全策）
       if (creators.isEmpty()) {
@@ -65,21 +64,21 @@ class DataManager(private val plugin: Plugin) {
       }
 
       val sign =
-        SVSign(
-          id = id,
-          world = sec.getString("world", "")!!,
-          x = sec.getInt("x"),
-          y = sec.getInt("y"),
-          z = sec.getInt("z"),
-          name = sec.getString("name", "SVSign")!!,
-          creators = creators,
-          creatorDisplayName = sec.getString("creatorDisplayName"),
-          votes = sec.getInt("votes", 0),
-          showVotes = sec.getBoolean("showVotes", true),
-          group = sec.getString("group", null),
-          maxVotesPerSign = sec.getInt("maxVotesPerSign", 1),
-          createdAt = sec.getLong("createdAt", System.currentTimeMillis()),
-        )
+          SVSign(
+              id = id,
+              world = sec.getString("world", "")!!,
+              x = sec.getInt("x"),
+              y = sec.getInt("y"),
+              z = sec.getInt("z"),
+              name = sec.getString("name", "SVSign")!!,
+              creators = creators,
+              creatorDisplayName = sec.getString("creatorDisplayName"),
+              votes = sec.getInt("votes", 0),
+              showVotes = sec.getBoolean("showVotes", true),
+              group = sec.getString("group", null),
+              maxVotesPerSign = sec.getInt("maxVotesPerSign", 1),
+              createdAt = sec.getLong("createdAt", System.currentTimeMillis()),
+          )
 
       signById[id] = sign
 
@@ -96,16 +95,16 @@ class DataManager(private val plugin: Plugin) {
     gSec?.getKeys(false)?.forEach { name ->
       val sec = gSec.getConfigurationSection(name) ?: return@forEach
       val group =
-        SVGroup(
-          name = name,
-          signIds = sec.getIntegerList("signIds").toMutableList(),
-          owner = UUID.fromString(sec.getString("owner")),
-          maxVotesPerPlayer = sec.getInt("maxVotesPerPlayer", 1),
-          showVotesGroup = sec.getBoolean("showVotesGroup", true),
-          sortMode = sec.getString("sortMode", "id")!!,
-          startTime = sec.getLong("startTime").takeIf { it >= 0 },
-          endTime = sec.getLong("endTime").takeIf { it >= 0 },
-        )
+          SVGroup(
+              name = name,
+              signIds = sec.getIntegerList("signIds").toMutableList(),
+              owner = UUID.fromString(sec.getString("owner")),
+              maxVotesPerPlayer = sec.getInt("maxVotesPerPlayer", 1),
+              showVotesGroup = sec.getBoolean("showVotesGroup", true),
+              sortMode = sec.getString("sortMode", "id")!!,
+              startTime = sec.getLong("startTime").takeIf { it >= 0 },
+              endTime = sec.getLong("endTime").takeIf { it >= 0 },
+          )
       groupByName[name] = group
     }
 
@@ -206,19 +205,20 @@ class DataManager(private val plugin: Plugin) {
   fun registerSign(loc: Location, name: String, creators: UUID): SVSign {
     val id = nextId()
     val sign =
-      SVSign(
-        id = id,
-        world = loc.world!!.name,
-        x = loc.blockX,
-        y = loc.blockY,
-        z = loc.blockZ,
-        name = name,
-        creators = mutableSetOf(creators),
-      )
+        SVSign(
+            id = id,
+            world = loc.world!!.name,
+            x = loc.blockX,
+            y = loc.blockY,
+            z = loc.blockZ,
+            name = name,
+            creators = mutableSetOf(creators),
+        )
 
     signById[id] = sign
     locationToId[
-      Location(loc.world, loc.blockX.toDouble(), loc.blockY.toDouble(), loc.blockZ.toDouble())] = id
+        Location(loc.world, loc.blockX.toDouble(), loc.blockY.toDouble(), loc.blockZ.toDouble())] =
+        id
 
     val state = loc.block.state as? Sign
     if (state != null) {
@@ -242,9 +242,9 @@ class DataManager(private val plugin: Plugin) {
     // ===== locationToId から削除 =====
     locationToId.keys.removeIf {
       it.world.name == sign.world &&
-        it.blockX == sign.x &&
-        it.blockY == sign.y &&
-        it.blockZ == sign.z
+          it.blockX == sign.x &&
+          it.blockY == sign.y &&
+          it.blockZ == sign.z
     }
     // ===== グループ紐付け解除 =====
     sign.group?.let { gName -> groupByName[gName]?.signIds?.remove(id) }
@@ -261,9 +261,9 @@ class DataManager(private val plugin: Plugin) {
     // 古い Location を除去
     locationToId.keys.removeIf {
       it.world.name == sign.world &&
-        it.blockX == sign.x &&
-        it.blockY == sign.y &&
-        it.blockZ == sign.z
+          it.blockX == sign.x &&
+          it.blockY == sign.y &&
+          it.blockZ == sign.z
     }
 
     // 新位置へ更新

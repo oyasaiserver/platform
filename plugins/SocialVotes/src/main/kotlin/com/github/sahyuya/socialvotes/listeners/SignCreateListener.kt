@@ -24,18 +24,18 @@ class SignCreateListener : Listener {
 
     // 1tick後に確実にstateを更新
     Bukkit.getScheduler()
-      .runTask(
-        SocialVotes.instance,
-        Runnable {
-          val state = loc.block.state
-          if (state is Sign) {
+        .runTask(
+            SocialVotes.instance,
+            Runnable {
+              val state = loc.block.state
+              if (state is Sign) {
 
-            // 表示を更新
-            SignDisplayUtil.applyFormat(state, sv)
-            state.update(true, false)
-          }
-        },
-      )
+                // 表示を更新
+                SignDisplayUtil.applyFormat(state, sv)
+                state.update(true, false)
+              }
+            },
+        )
 
     e.player.sendMessage("SV看板を登録しました (ID:${sv.id})")
   }

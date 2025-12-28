@@ -29,7 +29,7 @@ object GiftItem : Listener {
 
   fun getGiftGui(toPlayer: Player): Inventory {
     val inventory =
-      Bukkit.createInventory(null, InventoryType.SHULKER_BOX, "gift box 送信先: ${toPlayer.name}")
+        Bukkit.createInventory(null, InventoryType.SHULKER_BOX, "gift box 送信先: ${toPlayer.name}")
     giftInventory[inventory] = toPlayer
     return inventory
   }
@@ -68,13 +68,13 @@ object GiftItem : Listener {
     shulkerBoxItem.addText("&6GiftBox", mutableListOf("&7${e.player.name}さんのプレゼント"))
 
     val drop =
-      if (toPlayer.inventory.storageContents.contains(null)) {
-        toPlayer.inventory.addItem(shulkerBoxItem)
-        false
-      } else {
-        toPlayer.world.dropItem(toPlayer.location, shulkerBoxItem)
-        true
-      }
+        if (toPlayer.inventory.storageContents.contains(null)) {
+          toPlayer.inventory.addItem(shulkerBoxItem)
+          false
+        } else {
+          toPlayer.world.dropItem(toPlayer.location, shulkerBoxItem)
+          true
+        }
     toPlayer.sendMessage("[ｷﾞﾌﾄ] &a${e.player.name}さん&eから受け取りました！".color())
     if (drop) {
       toPlayer.sendMessage("[ｷﾞﾌﾄ] &cインベントリが満タンのため足元へドロップしました".color())
@@ -86,7 +86,7 @@ object GiftItem : Listener {
 
   private fun recordGifts(from: HumanEntity, to: Player, shulkerBoxMeta: BlockStateMeta) {
     val world =
-      Tools.plugin.config.getString("giftRecordWorld", "lifeworld")?.let { Bukkit.getWorld(it) }
+        Tools.plugin.config.getString("giftRecordWorld", "lifeworld")?.let { Bukkit.getWorld(it) }
     val locs = Tools.plugin.config.getDoubleList("giftRecordWorldChestXYZ")
     //        val shulkerBoxItem = ItemStack((if (from.gameMode == GameMode.CREATIVE||from.gameMode
     // == GameMode.SPECTATOR) Material.WHITE_SHULKER_BOX else Material.SHULKER_BOX))
@@ -96,10 +96,9 @@ object GiftItem : Listener {
     shulkerBoxItem.itemMeta = shulkerBoxMeta
     shulkerBoxItem.addUnsafeEnchantment(Enchantment.MENDING, 1)
     shulkerBoxItem.addText(
-      "${from.name} → ${to.name}",
-      mutableListOf(
-        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH時mm分ss秒"))
-      ),
+        "${from.name} → ${to.name}",
+        mutableListOf(
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH時mm分ss秒"))),
     )
     db.inventory.addItem(shulkerBoxItem)
   }
