@@ -5,14 +5,24 @@
     {
       treefmt = {
         programs = {
+          # keep-sorted start block=yes
+          actionlint = {
+            enable = true;
+          };
+          jsonfmt = {
+            enable = true;
+          };
+          keep-sorted = {
+            enable = true;
+          };
+          ktfmt = {
+            enable = true;
+          };
           nixfmt = {
             enable = true;
             strict = true;
           };
           prettier = {
-            enable = true;
-          };
-          ktfmt = {
             enable = true;
           };
           shfmt = {
@@ -25,9 +35,7 @@
           yamlfmt = {
             enable = true;
           };
-          jsonfmt = {
-            enable = true;
-          };
+          # keep-sorted end
         };
       };
     }
