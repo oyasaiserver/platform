@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    braches:
+    branches:
       - master
   workflow_dispatch:
     inputs:
