@@ -1,5 +1,4 @@
 name: setup-java
-
 runs:
   using: composite
   steps:

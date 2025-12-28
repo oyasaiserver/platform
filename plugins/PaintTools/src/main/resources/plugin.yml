@@ -3,7 +3,6 @@ author: Srain3
 main: com.github.srain3.painttools.PaintTools
 api-version: 1.19
 version: '1.6.1'
-
 commands:
   painttools:
     description: 'PaintTools plugin command.'
@@ -11,7 +10,6 @@ commands:
   toumeigakubuti:
     aliases: ['toumei', 'invisibleframe']
     description: 'Frame transparency'
-
 permissions:
   painttools.command.painttools.canvas:
     description: '/painttools canvas command'

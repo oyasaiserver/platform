@@ -1,19 +1,15 @@
 name: CI
-
 on:
   pull_request:
-
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
-
 jobs:
   nocommit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.1
       - uses: nobssoftware/nocommit@v3
-
   check:
     runs-on: ubuntu-latest
     steps:
@@ -23,15 +19,6 @@ jobs:
           npm run lint
           npm run format
           test -z "$(git status --porcelain)"
-
-  spotless:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-java
-      - run: |
-          ./gradlew spotlessCheck --parallel
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +26,6 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run build --workspaces --if-present
-
   build-plugins:
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +33,6 @@ jobs:
       - uses: ./.github/actions/setup-java
       - run: |
           ./gradlew build --parallel
-
   test-unit:
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +40,6 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: |
           npm run test --workspaces --if-present
-
   test-integration:
     runs-on: ubuntu-latest
     steps:
@@ -64,12 +48,10 @@ jobs:
       - uses: ./.github/actions/setup-terraform
       - run: |
           npm run test:integration --workspaces --if-present
-
   actions-timeline:
     needs:
       - nocommit
       - check
-      - spotless
       - build
       - build-plugins
       - test-unit

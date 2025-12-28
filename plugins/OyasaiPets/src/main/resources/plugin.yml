@@ -2,14 +2,12 @@ name: OyasaiAnalytics
 version: 1.0-SNAPSHOT
 main: me.marzipan.oyasaiAnalytics.BigWolfPlugin
 api-version: 1.21
-
 commands:
   bigwolf:
     description: 狼を召喚する
     usage: /bigwolf
     permission: bigwolf.admin
     permission-message: §cあなたにはこのコマンドを実行する権限がありません。
-
 permissions:
   bigwolf.admin:
     description: 管理者専用権限

@@ -1,5 +1,4 @@
 name: setup-terraform
-
 runs:
   using: composite
   steps:

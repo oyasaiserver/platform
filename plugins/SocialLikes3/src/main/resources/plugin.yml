@@ -4,14 +4,12 @@ main: com.github.srain3.sociallikes.SocialLikes
 api-version: '1.20'
 version: '0.5.3'
 description: 'Instead of SocialLikes(v3)'
-
 softdepend:
   - PlaceholderAPI
   - TokenManager
   - Multiverse-Core
   - DiscordSRV
   - LuckPerms
-
 commands:
   sltp:
     description: 'SL看板へ飛ぶコマンド'
@@ -34,7 +32,6 @@ commands:
     description: '建築数とログイン数/ログイン率でランクアップ候補を確認するコマンド'
   slsignbreak:
     description: 'SLTP看板を破壊するコマンド'
-
 permissions:
   sociallikes3.slrankup:
     description: '/slrankup commnad use permission'

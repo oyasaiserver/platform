@@ -24,7 +24,6 @@ commands:
       - pm
       - pmanager
     permission: oyasai.playermanager
-
 permissions:
   oyasai.syokaku:
     description: syokakuコマンドの使用権限

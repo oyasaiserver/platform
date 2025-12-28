@@ -7,14 +7,12 @@ description: '既存TPの機能改善'
 website: 'https://github.com/Srain3/TPswitch'
 softdepend:
   - LuckPerms
-
 commands:
   tpset:
     description: 'Teleport setting.'
     usage: '/<command> [option]'
     permission: tpswitch.tpset
     permission-message: '§4No permission!!!'
-
 permissions:
   tpswitch.tpset:
     description: 'Teleport setting permission.'

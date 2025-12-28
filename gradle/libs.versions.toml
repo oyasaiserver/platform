@@ -1,3 +1,22 @@
+[libraries]
+anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
+discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
+discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
+gson = {module = "com.google.code.gson:gson", version.ref = "gson"}
+inventoryframework = {module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework"}
+javacord = {module = "org.javacord:javacord", version.ref = "javacord"}
+kotlin-plugin = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
+kotlin-stdlib = {module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"}
+luckperms-api = {module = "net.luckperms:api", version.ref = "luckperms"}
+nuvotifier = {module = "com.github.NuVotifier:NuVotifier", version.ref = "nuvotifier"}
+placeholderapi = {module = "me.clip:placeholderapi", version.ref = "placeholderapi"}
+purpur-api = {module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api"}
+shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow"}
+tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
+ultimateadvancementapi = {module = "com.frengor:ultimateadvancementapi-shadeable", version.ref = "ultimateadvancementapi"}
+vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
+worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
+
 [versions]
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
@@ -11,30 +30,7 @@ nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
 purpur-api = "1.21.8-R0.1-SNAPSHOT"
 shadow = "9.3.0"
-spotless = "8.1.0"
 tokenmanager = "3.2.4"
 ultimateadvancementapi = "2.7.2"
 vault = "1.7.1"
 worldborder = "2.1.4"
-
-[plugins]
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-
-[libraries]
-anvilgui = { module = "net.wesjd:anvilgui", version.ref = "anvilgui" }
-discord-webhooks = { module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks" }
-discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-inventoryframework = { module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework" }
-javacord = { module = "org.javacord:javacord", version.ref = "javacord" }
-kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms" }
-nuvotifier = { module = "com.github.NuVotifier:NuVotifier", version.ref = "nuvotifier" }
-placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
-purpur-api = { module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api" }
-shadow-plugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
-tokenmanager = { module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager" }
-ultimateadvancementapi = { module = "com.frengor:ultimateadvancementapi-shadeable", version.ref = "ultimateadvancementapi" }
-vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
-worldborder = { module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder" }

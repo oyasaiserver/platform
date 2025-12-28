@@ -15,6 +15,19 @@
           ktfmt = {
             enable = true;
           };
+          shfmt = {
+            enable = true;
+            simplify = false;
+          };
+          toml-sort = {
+            enable = true;
+          };
+          yamlfmt = {
+            enable = true;
+          };
+          jsonfmt = {
+            enable = true;
+          };
         };
       };
     }

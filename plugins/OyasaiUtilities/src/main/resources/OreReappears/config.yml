@@ -1,7 +1,6 @@
 # 有効化するワールド名リスト
 EnableWorldName:
   - oreshigen
-
 # 有効化する鉱石名+直るまでのTick数+掘った時に入るお金(自動でこの額に×ドロップ数される)リスト
 # 掘った時に入るお金以外で売れば5円になる予定
 EnableBlockNameAndTickAndMoney:

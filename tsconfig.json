@@ -23,12 +23,24 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "apps/hello-world" },
-    { "path": "apps/wiki" },
-    { "path": "packages/cdktf" },
-    { "path": "packages/minecraft-main" },
-    { "path": "packages/plugins" },
-    { "path": "packages/secrets" }
+    {
+      "path": "apps/hello-world"
+    },
+    {
+      "path": "apps/wiki"
+    },
+    {
+      "path": "packages/cdktf"
+    },
+    {
+      "path": "packages/minecraft-main"
+    },
+    {
+      "path": "packages/plugins"
+    },
+    {
+      "path": "packages/secrets"
+    }
   ],
   "files": []
 }

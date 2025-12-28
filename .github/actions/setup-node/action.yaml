@@ -1,5 +1,4 @@
 name: setup-node
-
 runs:
   using: composite
   steps:

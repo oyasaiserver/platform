@@ -20,9 +20,7 @@ Join: 10000
 Chat: 300
 #１分につき, Default: 300
 PlayTime: 300
-
 noticeLvs: []
-
 #レベルアップに必要な基本Exp, Default: 1000
 basicRequired: 1000
 #報酬チェストの位置, Default: [0.0, 0.0, 0.0] "world"

@@ -1,8 +1,6 @@
 name: PR
-
 on:
   pull_request:
-
 jobs:
   merging-into-master:
     runs-on: ubuntu-latest
@@ -10,7 +8,6 @@ jobs:
       - uses: actions/checkout@v6.0.1
       - run: |
           [[ "$GITHUB_BASE_REF" == master ]]
-
   pr-title-lint:
     runs-on: ubuntu-latest
     permissions:

@@ -1,5 +1,4 @@
 name: setup-secrets
-
 inputs:
   client-id:
     description: 'Infisical Client ID'
@@ -7,7 +6,6 @@ inputs:
   client-secret:
     description: 'Infisical Client Secret'
     required: true
-
 runs:
   using: 'composite'
   steps:

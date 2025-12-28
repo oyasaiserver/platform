@@ -5,7 +5,6 @@ website: 'https://github.com/OyasaiServer'
 main: icu.oyasai.utilities.Main
 api-version: '1.21'
 version: '0.1.0'
-
 commands:
   orerepopreload:
     description: 'OreReappearsのconfigリロードコマンド'
@@ -34,7 +33,6 @@ commands:
   menu:
     description: 'メニューを開く(ChestCommandsへのフック)'
     aliases: [omu, om]
-
 permissions:
   oyasaiutilities.timerbar:
     description: 'TimerBarコマンドの使用権限'

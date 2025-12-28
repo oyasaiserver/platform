@@ -1,7 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-plugins { alias(libs.plugins.spotless) }
-
 buildscript {
   dependencies {
     classpath(libs.kotlin.plugin)
@@ -51,25 +49,5 @@ subprojects {
     }
 
     tasks.named("build") { dependsOn("shadowJar") }
-  }
-}
-
-spotless {
-  isEnforceCheck = false
-
-  kotlin {
-    target("**/*.kt")
-    ktfmt().googleStyle()
-  }
-
-  kotlinGradle {
-    target("**/*.gradle.kts")
-    ktfmt().googleStyle()
-  }
-
-  java {
-    target("**/*.java")
-    targetExclude("node_modules/**/*")
-    googleJavaFormat()
   }
 }
