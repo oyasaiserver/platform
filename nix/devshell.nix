@@ -8,6 +8,7 @@
           nodejs_24
           javaPackages.compiler.temurin-bin.jdk-25
           terraform
+          gradle_9-unwrapped
         ];
       };
     }

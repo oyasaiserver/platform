@@ -5,7 +5,8 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "tsc && cdktf synth",
+    "build": "tsc",
+    "synth": "cdktf synth",
     "deploy": "cdktf deploy '*' --auto-approve",
     "deploy:cloudflare": "cdktf deploy 'cloudflare' --auto-approve",
     "test:integration": "node --test"
@@ -14,12 +15,12 @@
     "@cdktf/provider-cloudflare": "13.7.0",
     "@cdktf/provider-docker": "12.0.3",
     "@cdktf/provider-github": "15.3.1",
-    "@oyasaiserver/secrets": "file:../secrets"
+    "@oyasaiserver/secrets": "file:../secrets",
+    "cdktf": "^0.21.0",
+    "cdktf-cli": "^0.21.0"
   },
   "devDependencies": {
     "@types/node": "25.0.3",
-    "cdktf": "^0.21.0",
-    "cdktf-cli": "^0.21.0",
     "typescript": "5.9.3"
   }
 }

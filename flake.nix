@@ -41,6 +41,47 @@
             nodejs = pkgs.nodejs_24;
             jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
             gradle = pkgs.gradle_9-unwrapped;
+
+            pl2nixOverlay = final: prev: {
+              mkNpmModule =
+                args:
+                let
+                  orig = prev.mkNpmModule args;
+                in
+                orig.overrideAttrs (
+                  self:
+                  lib.optionalAttrs (builtins.pathExists (self.src + "/tsconfig.json")) {
+                    nativeBuildInputs =
+                      self.nativeBuildInputs or [ ]
+                      ++ (with pkgs; [
+                        jq
+                        moreutils
+                        # jsonlint strips json5 comments, which trip up jq.
+                        python3Packages.demjson3
+                      ]);
+                    prePatch = orig.prePatch or "" + ''
+                      jsonlint -S -f tsconfig.json | jq --arg tsconfig ${./tsconfig.json} '
+                        if has("extends")
+                        then .extends = $tsconfig
+                        else .
+                        end
+                      ' | sponge tsconfig.json
+                    '';
+                  }
+                );
+            };
+
+            callPackage = lib.callPackageWith (
+              pkgs
+              // {
+                inherit jdk nodejs;
+                inherit (inputs) pyproject-build-systems pyproject-nix uv2nix;
+                package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
+                  inherit nodejs;
+                  overrideScope = pl2nixOverlay;
+                };
+              }
+            );
           in
           {
             _module.args = {
@@ -50,6 +91,7 @@
               };
             };
             packages = {
+              # Split up each into separate derivations
               _plugins = gradle2nix.builders.${system}.buildGradlePackage {
                 pname = "plugins";
                 src = ./.;
@@ -69,7 +111,7 @@
               };
             }
             // lib.packagesFromDirectoryRecursive {
-              callPackage = lib.callPackage;
+              inherit callPackage;
               directory = ./packages;
             };
             checks = lib.concatMapAttrs (k: v: { "build-${k}" = v; }) self'.packages;
