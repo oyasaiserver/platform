@@ -61,7 +61,6 @@ jobs:
       - nocommit
       - nix-flake-show
       - nix-flake-check
-      - check
       - build
       - build-plugins
       - test-unit
