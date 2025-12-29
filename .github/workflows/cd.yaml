@@ -1,64 +1,75 @@
-name: CD
+name: CI
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "⚠️ Manual deploy ⚠️"
-        required: true
-        default: production
-        type: choice
-        options:
-          - production
-          - development
+  pull_request:
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 jobs:
-  envs:
+  nocommit:
     runs-on: ubuntu-latest
-    outputs:
-      environment: ${{ steps.environment.outputs.ENVIRONMENT }}
     steps:
-      - id: environment
-        run: |
-          ENVIRONMENT="development"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            ENVIRONMENT="${{ github.event.inputs.environment }}"
-          fi
-          echo "ENVIRONMENT=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
-  cdktf:
-    needs:
-      - envs
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: nobssoftware/nocommit@5c3cf9519fe40b80b0954d254085b67b532a5dc3
+  nix-flake-show:
     runs-on: ubuntu-latest
-    environment: ${{ needs.envs.outputs.environment }}
-    env:
-      ENVIRONMENT: ${{ needs.envs.outputs.environment }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - run: nix flake show
+  nix-flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - run: nix flake check
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
       - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
-      - name: Build plugins
-        run: |
-          ./gradlew build --parallel
-      - name: Download plugins
-        run: |
-          npm ci
-          npm run download-plugins
-        working-directory: packages/minecraft-main
-      - uses: ./.github/actions/setup-secrets
-        with:
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      - name: Deploy
-        run: |
+      - run: |
           npm ci
           npm run build --workspaces --if-present
-          npm run deploy -w packages/cdktf
+  build-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+      - run: |
+          ./gradlew build --parallel
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+      - run: |
+          npm ci
+          npm run test --workspaces --if-present
+  test-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+      - run: |
+          npm ci
+          npm run test:integration --workspaces --if-present
   actions-timeline:
     needs:
-      - envs
-      - cdktf
+      - nocommit
+      - nix-flake-show
+      - nix-flake-check
+      - build
+      - build-plugins
+      - test-unit
+      - test-integration
     runs-on: ubuntu-latest
     steps:
       - uses: Kesin11/actions-timeline@54d513e0b5ff1158f1cf8321108d666a5a6c1fca
