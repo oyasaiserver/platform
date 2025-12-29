@@ -1,22 +1,22 @@
 name: TPswitch
 main: com.github.srain3.TPswitch
-version: '0.1.7'
-api-version: '1.16'
+version: "0.1.7"
+api-version: "1.16"
 author: Srain3
-description: '既存TPの機能改善'
-website: 'https://github.com/Srain3/TPswitch'
+description: "既存TPの機能改善"
+website: "https://github.com/Srain3/TPswitch"
 softdepend:
   - LuckPerms
 commands:
   tpset:
-    description: 'Teleport setting.'
-    usage: '/<command> [option]'
+    description: "Teleport setting."
+    usage: "/<command> [option]"
     permission: tpswitch.tpset
-    permission-message: '§4No permission!!!'
+    permission-message: "§4No permission!!!"
 permissions:
   tpswitch.tpset:
-    description: 'Teleport setting permission.'
+    description: "Teleport setting permission."
     default: true
   tpswitch.tpignore:
-    description: 'Teleport setting ignore permission.'
+    description: "Teleport setting ignore permission."
     default: op
