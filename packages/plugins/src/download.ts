@@ -5,14 +5,20 @@ import type { PathLike } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { URL } from "node:url";
-import { type PluginDefinition, registry, type RegistryId } from "./registry.ts";
+import {
+  type PluginDefinition,
+  registry,
+  type RegistryId,
+} from "./registry.ts";
 
 async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
   switch (definition.type) {
     case "url":
       return new URL(definition.url);
     case "spiget": {
-      return new URL(`https://api.spiget.org/v2/resources/${definition.id}/download`);
+      return new URL(
+        `https://api.spiget.org/v2/resources/${definition.id}/download`,
+      );
     }
     case "modrinth": {
       const client = new ModrinthV2Client();
@@ -39,19 +45,28 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
   }
 }
 
-export async function downloadJar(definition: PluginDefinition): Promise<Uint8Array> {
+export async function downloadJar(
+  definition: PluginDefinition,
+): Promise<Uint8Array> {
   const url = await toDownloadUrl(definition);
   if (url.protocol === "file:") {
     return readFile(url.pathname); // fetching `file:` protocol is not supported
   }
   const response = await fetch(url);
-  const jarHeaders = ["application/zip", "application/java-archive", "application/octet-stream"];
+  const jarHeaders = [
+    "application/zip",
+    "application/java-archive",
+    "application/octet-stream",
+  ];
   ok(jarHeaders.includes(response.headers.get("Content-Type") ?? ""));
   const arrayBuffer = await response.arrayBuffer();
   return new Uint8Array(arrayBuffer);
 }
 
-export async function downloadPlugins(dir: PathLike, ids: readonly RegistryId[]): Promise<void> {
+export async function downloadPlugins(
+  dir: PathLike,
+  ids: readonly RegistryId[],
+): Promise<void> {
   for (const id of ids) {
     const bytes = await downloadJar(registry[id]);
     const path = join(dir.toString(), `${id}.jar`);

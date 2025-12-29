@@ -20,6 +20,9 @@
           };
           mdformat = {
             enable = true;
+            settings = {
+              wrap = 80;
+            };
           };
           mdsh = {
             enable = true;

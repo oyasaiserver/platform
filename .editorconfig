@@ -9,4 +9,4 @@ indent_style = space
 indent_size = 2
 
 [*.ts]
-max_line_length = 100
+max_line_length = 80

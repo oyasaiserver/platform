@@ -71,7 +71,13 @@ export const registry = {
   skript: { type: "spiget", id: 114544 },
   pvparena: { type: "spiget", id: 16584 },
 
-  openinv: { type: "github", owner: "JiKoo", repo: "OpenInv", tag: "5.1.14", name: "OpenInv.jar" },
+  openinv: {
+    type: "github",
+    owner: "JiKoo",
+    repo: "OpenInv",
+    tag: "5.1.14",
+    name: "OpenInv.jar",
+  },
   lunachat: {
     type: "github",
     owner: "f1w3",

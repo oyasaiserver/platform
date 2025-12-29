@@ -33,14 +33,18 @@ export class CloudflareStack extends OyasaiTerraformStack {
       status: "active",
     });
 
-    const rootDnsRecord = new DnsRecord(this, this.envAwareId("root-dns-record"), {
-      ttl: 1, // automatic
-      zoneId: this.zoneId,
-      name: this.environment === "production" ? "oyasai.io" : "dev.oyasai.io",
-      type: "A",
-      proxied: false,
-      content: this.secrets.PUBLIC_IPV4,
-    });
+    const rootDnsRecord = new DnsRecord(
+      this,
+      this.envAwareId("root-dns-record"),
+      {
+        ttl: 1, // automatic
+        zoneId: this.zoneId,
+        name: this.environment === "production" ? "oyasai.io" : "dev.oyasai.io",
+        type: "A",
+        proxied: false,
+        content: this.secrets.PUBLIC_IPV4,
+      },
+    );
 
     for (const { name, config } of this.getApps()) {
       const domain = `${name}.${rootDnsRecord.name}`;
@@ -65,11 +69,15 @@ export class CloudflareStack extends OyasaiTerraformStack {
         },
       });
 
-      const workerVersion = new WorkerVersion(this, this.envAwareId(name, "worker-version"), {
-        accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
-        workerId: worker.id,
-        ...config,
-      });
+      const workerVersion = new WorkerVersion(
+        this,
+        this.envAwareId(name, "worker-version"),
+        {
+          accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+          workerId: worker.id,
+          ...config,
+        },
+      );
 
       const workersDeployment = new WorkersDeployment(
         this,

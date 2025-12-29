@@ -17,11 +17,15 @@ export function objectKeys<const T extends object>(object: T): (keyof T)[] {
   return Object.keys(object) as (keyof T)[];
 }
 
-export function envs(object: Readonly<Record<string, string | number | boolean>>): string[] {
+export function envs(
+  object: Readonly<Record<string, string | number | boolean>>,
+): string[] {
   return Object.entries(object).map(([key, value]) => [key, value].join("="));
 }
 
-export function ports(mapping: Readonly<Record<"tcp" | "udp", number[]>>): ContainerPorts[] {
+export function ports(
+  mapping: Readonly<Record<"tcp" | "udp", number[]>>,
+): ContainerPorts[] {
   return Object.entries(mapping).flatMap(([protocol, ports]) =>
     ports.map((port) => ({
       internal: port,

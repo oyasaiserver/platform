@@ -40,40 +40,50 @@ export class DockerStack extends OyasaiTerraformStack {
       }),
       minecraftMain: new Image(this, this.envAwareId("minecraft-main-image"), {
         name: `minecraft-main-image:${hashPaths(
-          ["plugins", "Dockerfile", "entrypoint.sh"].map((it) => join(minecraftMainPath, it)),
+          ["plugins", "Dockerfile", "entrypoint.sh"].map((it) =>
+            join(minecraftMainPath, it),
+          ),
         )}`,
         buildAttribute: {
           context: minecraftMainPath,
         },
       }),
-      minecraftBackup: new Image(this, this.envAwareId("minecraft-backup-image"), {
-        name: "itzg/mc-backup:latest",
-      }),
+      minecraftBackup: new Image(
+        this,
+        this.envAwareId("minecraft-backup-image"),
+        {
+          name: "itzg/mc-backup:latest",
+        },
+      ),
     } as const;
 
     const network = new Network(this, this.envAwareId("network"), {
       name: "network",
     });
 
-    const mariadbContainer = new Container(this, this.envAwareId("mariadb-container"), {
-      image: images.mariadb.imageId,
-      name: "mariadb",
-      restart: "unless-stopped",
-      env: envs({
-        MARIADB_ROOT_PASSWORD: this.secrets.MARIADB_PASSWORD,
-      }),
-      networksAdvanced: [network],
-      volumes: [
-        {
-          containerPath: "/var/lib/mysql",
-          hostPath: join(this.workdir, "mariadb"),
-        },
-        {
-          containerPath: "/docker-entrypoint-initdb.d",
-          hostPath: join(this.workdir, "mariadb"),
-        },
-      ],
-    });
+    const mariadbContainer = new Container(
+      this,
+      this.envAwareId("mariadb-container"),
+      {
+        image: images.mariadb.imageId,
+        name: "mariadb",
+        restart: "unless-stopped",
+        env: envs({
+          MARIADB_ROOT_PASSWORD: this.secrets.MARIADB_PASSWORD,
+        }),
+        networksAdvanced: [network],
+        volumes: [
+          {
+            containerPath: "/var/lib/mysql",
+            hostPath: join(this.workdir, "mariadb"),
+          },
+          {
+            containerPath: "/docker-entrypoint-initdb.d",
+            hostPath: join(this.workdir, "mariadb"),
+          },
+        ],
+      },
+    );
 
     const minecraftMainContainer = new Container(
       this,
@@ -146,7 +156,8 @@ export class DockerStack extends OyasaiTerraformStack {
           RCON_PASSWORD: this.secrets.RCON_PASSWORD,
           EXCLUDES: "*.jar,cache,logs,*.tmp,bluemap",
           BACKUP_INTERVAL: "6h",
-          PRUNE_RESTIC_RETENTION: "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+          PRUNE_RESTIC_RETENTION:
+            "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
         }),
         volumes: [
           {
