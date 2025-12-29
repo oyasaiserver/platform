@@ -18,6 +18,12 @@
           ktfmt = {
             enable = true;
           };
+          mdformat = {
+            enable = true;
+          };
+          mdsh = {
+            enable = true;
+          };
           nixfmt = {
             enable = true;
             strict = true;
