@@ -41,7 +41,6 @@
             nodejs = pkgs.nodejs_24;
             jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
             gradle = pkgs.gradle_9-unwrapped;
-
             pl2nixOverlay = final: prev: {
               mkNpmModule =
                 args:
@@ -70,7 +69,6 @@
                   }
                 );
             };
-
             callPackage = lib.callPackageWith (
               pkgs
               // {
