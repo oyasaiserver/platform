@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
-      - uses: DeterminateSystems/magic-nix-cache-action@4b5df5f2f2393f10fc346297a46deec91a5969e0
+      - uses: DeterminateSystems/magic-nix-cache-action@c2f46a0afa5f95fd4c184a533afd280c68cf63ff
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
         run: |
