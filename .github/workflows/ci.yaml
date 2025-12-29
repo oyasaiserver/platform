@@ -55,6 +55,7 @@ jobs:
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - run: |
+          npm ci
           npm run test:integration --workspaces --if-present
   actions-timeline:
     needs:
