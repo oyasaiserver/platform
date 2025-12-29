@@ -35,14 +35,14 @@ jobs:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-java
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-terraform
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
         run: |
           ./gradlew build --parallel
       - name: Download plugins
         run: |
+          npm ci
           npm run download-plugins
         working-directory: packages/minecraft-main
       - uses: ./.github/actions/setup-secrets
@@ -51,6 +51,7 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
+          npm ci
           npm run build --workspaces --if-present
           npm run deploy -w packages/cdktf
   actions-timeline:

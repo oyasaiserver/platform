@@ -10,47 +10,57 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: nobssoftware/nocommit@5c3cf9519fe40b80b0954d254085b67b532a5dc3
-  check:
+  nix-flake-show:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run lint
-          npm run format
-          test -z "$(git status --porcelain)"
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - run: nix flake show
+  nix-flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - run: nix flake check
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-node
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - run: |
+          npm ci
           npm run build --workspaces --if-present
   build-plugins:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-java
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - run: |
           ./gradlew build --parallel
   test-unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-node
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - run: |
+          npm ci
           npm run test --workspaces --if-present
   test-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-terraform
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - run: |
           npm run test:integration --workspaces --if-present
   actions-timeline:
     needs:
       - nocommit
+      - nix-flake-show
+      - nix-flake-check
       - check
       - build
       - build-plugins
