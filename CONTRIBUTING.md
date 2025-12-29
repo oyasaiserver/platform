@@ -45,4 +45,4 @@ chore(deps): update dependencies
 
 ## コードレビュー
 
-Platform では CODEOWNERS に沿ってレビュー担当者が自動アサインされます。1 approval でマージ可能です。
+CODEOWNERS に沿ってレビュー担当者が自動アサインされます。1 approval でマージ可能です。
