@@ -55,11 +55,9 @@
                       ++ (with pkgs; [
                         jq
                         moreutils
-                        # jsonlint strips json5 comments, which trip up jq.
-                        python3Packages.demjson3
                       ]);
                     prePatch = orig.prePatch or "" + ''
-                      jsonlint -S -f tsconfig.json | jq --arg tsconfig ${./tsconfig.json} '
+                      cat tsconfig.json | jq --arg tsconfig ${./tsconfig.json} '
                         if has("extends")
                         then .extends = $tsconfig
                         else .
@@ -89,7 +87,7 @@
               };
             };
             packages = {
-              # Split up each into separate derivations
+              # TODO: Split up each into separate derivations
               _plugins = gradle2nix.builders.${system}.buildGradlePackage {
                 pname = "plugins";
                 src = ./.;
