@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
       - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
-      - run: nix run .#nix-flake-check-changed
+      - run: nix flake check -L
   nix-flake-health:
     runs-on: ubuntu-latest
     steps:
