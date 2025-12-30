@@ -55,8 +55,10 @@ jobs:
           npm ci
           npm run download-plugins
         working-directory: packages/minecraft-main
-      - uses: ./.github/actions/setup-secrets
+      - uses: infisical/secrets-action@v1.0.15
         with:
+          project-slug: "platform"
+          env-slug: ${{ env.ENVIRONMENT }}
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
