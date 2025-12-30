@@ -37,10 +37,19 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
       - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      # FIXME: super ugly, non-nix deployment. Fix my nixifying cdktf (or switching to terranix)
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
         run: |
           gradle build --parallel
+      - name: Download plugins deps
+        run: |
+          npm ci
+        working-directory: packages/plugins
+      - name: Download cdktf deps
+        run: |
+          npm ci
+        working-directory: packages/cdktf
       - name: Download plugins
         run: |
           npm ci
@@ -52,7 +61,6 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
-          npm ci
           npm run synth
           npm run deploy
         working-directory: packages/cdktf
