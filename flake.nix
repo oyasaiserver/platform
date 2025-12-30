@@ -17,6 +17,12 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
+    anterior-tools = {
+      url = "github:anteriorcore/tools";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
   outputs =
     {
@@ -25,6 +31,7 @@
       treefmt-nix,
       devshell,
       gradle2nix,
+      anterior-tools,
       ...
     }@inputs:
     let
@@ -32,6 +39,7 @@
         perSystem =
           {
             self',
+            inputs',
             system,
             pkgs,
             lib,
@@ -87,6 +95,7 @@
               };
             };
             packages = {
+              inherit (inputs'.anterior-tools.packages) nix-flake-check-changed;
               # TODO: Split up each into separate derivations
               _plugins = gradle2nix.builders.${system}.buildGradlePackage {
                 pname = "plugins";
