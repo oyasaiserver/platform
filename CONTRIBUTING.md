@@ -22,13 +22,15 @@ Docker 実行環境があると、本番に近い形のインフラ環境で Pla
 
 ## コード規約
 
-Nix により管理されています。コードのフォーマットを行うには
+### フォーマット
+
+フォーマットされていないコードは受け付けられません。フォーマットを行うには：
 
 ```
 $ nix fmt
 ```
 
-と実行してください。フォーマットされていないコードは受け付けられません。
+と実行してください。
 
 ### PR規約
 
@@ -41,6 +43,35 @@ PR のタイトルは [Conventional Commits](https://www.conventionalcommits.org
 feat: add some feature
 fix(infra): resolve issue with deployment
 chore(deps): update dependencies
+```
+
+## テスト
+
+CI では、全てのパッケージをビルドし、（もし存在するなら）テストを実行します。ローカルで行うには：
+
+```
+$ nix flake check -L
+```
+
+と実行してください。
+
+## ローカル開発
+
+> 現在工事中。[`process-compose`](https://github.com/F1bonacc1/process-compose)
+> を使用した環境を構築中です。
+
+### プラグイン開発
+
+devshell に必要なツールは全て入っています。 全てのプラグインをビルドしたい場合は、レポジトリのルートで：
+
+```
+$ gradle build --parallel
+```
+
+特定のプラグインをビルドしたい場合は：
+
+```
+$ gradle :plugins:<name>:build
 ```
 
 ## コードレビュー
