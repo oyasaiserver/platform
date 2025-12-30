@@ -40,9 +40,10 @@ jobs:
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
         run: |
-          ./gradlew build --parallel
+          gradle build --parallel
       - name: Download plugins
         run: |
+          npm ci
           npm run download-plugins
         working-directory: packages/minecraft-main
       - uses: ./.github/actions/setup-secrets
@@ -51,8 +52,10 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
-          npm run build --workspaces --if-present
-          npm run deploy -w packages/cdktf
+          npm ci
+          npm run synth
+          npm run deploy
+        working-directory: packages/cdktf
   actions-timeline:
     needs:
       - envs

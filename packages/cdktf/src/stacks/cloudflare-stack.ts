@@ -109,14 +109,16 @@ export class CloudflareStack extends OyasaiTerraformStack {
   }
 
   private getApps() {
-    const dir = join(directory.root, "apps");
-    return readdirSync(dir).map((name) => {
-      const path = join(dir, name);
-      return {
-        name,
-        config: this.packageJsonToWorkerVersionConfig(path),
-      };
-    });
+    return[]
+    // FIXME: until we nixify cdktf
+    // const dir = join(directory.root, "apps");
+    // return readdirSync(dir).map((name) => {
+    //   const path = join(dir, name);
+    //   return {
+    //     name,
+    //     config: this.packageJsonToWorkerVersionConfig(path),
+    //   };
+    // });
   }
 
   private packageJsonToWorkerVersionConfig(
