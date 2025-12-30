@@ -108,7 +108,10 @@ export class CloudflareStack extends OyasaiTerraformStack {
     });
   }
 
-  private getApps() {
+  private getApps(): {
+    name: string;
+    config: Omit<WorkerVersionConfig, "accountId" | "workerId">;
+  }[] {
     return [];
     // FIXME: until we nixify cdktf
     // const dir = join(directory.root, "apps");
