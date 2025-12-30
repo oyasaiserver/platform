@@ -109,7 +109,7 @@ export class CloudflareStack extends OyasaiTerraformStack {
   }
 
   private getApps() {
-    return[]
+    return [];
     // FIXME: until we nixify cdktf
     // const dir = join(directory.root, "apps");
     // return readdirSync(dir).map((name) => {
