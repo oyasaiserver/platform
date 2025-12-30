@@ -20,24 +20,24 @@ object ToolBox {
   }
 
   val dyeList =
-    listOf(
-      Material.WHITE_DYE,
-      Material.LIGHT_GRAY_DYE,
-      Material.GRAY_DYE,
-      Material.BLACK_DYE,
-      Material.BROWN_DYE,
-      Material.RED_DYE,
-      Material.ORANGE_DYE,
-      Material.YELLOW_DYE,
-      Material.LIME_DYE,
-      Material.GREEN_DYE,
-      Material.CYAN_DYE,
-      Material.LIGHT_BLUE_DYE,
-      Material.BLUE_DYE,
-      Material.PURPLE_DYE,
-      Material.MAGENTA_DYE,
-      Material.PINK_DYE,
-    )
+      listOf(
+          Material.WHITE_DYE,
+          Material.LIGHT_GRAY_DYE,
+          Material.GRAY_DYE,
+          Material.BLACK_DYE,
+          Material.BROWN_DYE,
+          Material.RED_DYE,
+          Material.ORANGE_DYE,
+          Material.YELLOW_DYE,
+          Material.LIME_DYE,
+          Material.GREEN_DYE,
+          Material.CYAN_DYE,
+          Material.LIGHT_BLUE_DYE,
+          Material.BLUE_DYE,
+          Material.PURPLE_DYE,
+          Material.MAGENTA_DYE,
+          Material.PINK_DYE,
+      )
 
   fun checkDye(material: Material?): Boolean {
     return dyeList.contains(material ?: return false)

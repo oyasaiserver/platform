@@ -32,54 +32,54 @@ object SelectTitle {
     val nextPage = ItemStack(Material.ARROW)
     val previousPage = ItemStack(Material.ARROW)
     nextPage
-      .guiRun {
-        if (page < maxPage) {
-          player.playSound(
-            player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page++
-          titles(player, page, inventory)
+        .guiRun {
+          if (page < maxPage) {
+            player.playSound(
+                player.eyeLocation,
+                org.bukkit.Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page++
+            titles(player, page, inventory)
+          }
         }
-      }
-      .addText("&a次のページへ", mutableListOf())
-      .allFlag()
+        .addText("&a次のページへ", mutableListOf())
+        .allFlag()
     previousPage
-      .guiRun {
-        if (page > 0) {
-          player.playSound(
-            player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page--
-          titles(player, page, inventory)
+        .guiRun {
+          if (page > 0) {
+            player.playSound(
+                player.eyeLocation,
+                org.bukkit.Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page--
+            titles(player, page, inventory)
+          }
         }
-      }
-      .addText("&a前のページへ", mutableListOf())
-      .allFlag()
+        .addText("&a前のページへ", mutableListOf())
+        .allFlag()
     inventory.setItem(53, nextPage)
     inventory.setItem(45, previousPage)
 
     val myProfile = Tools.getPlayerHead(player.uniqueId)
     myProfile
-      .addText("&a自分のプロフィールに戻る", mutableListOf())
-      .guiRun {
-        player.playSound(
-          player.eyeLocation,
-          org.bukkit.Sound.UI_BUTTON_CLICK,
-          SoundCategory.MASTER,
-          0.75F,
-          1F,
-        )
-        MyProfile.display(player)
-      }
-      .allFlag()
+        .addText("&a自分のプロフィールに戻る", mutableListOf())
+        .guiRun {
+          player.playSound(
+              player.eyeLocation,
+              org.bukkit.Sound.UI_BUTTON_CLICK,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
+          )
+          MyProfile.display(player)
+        }
+        .allFlag()
     inventory.setItem(49, myProfile)
 
     player.openInventory(inventory)
@@ -97,11 +97,10 @@ object SelectTitle {
       val title = ItemStack(Material.FILLED_MAP)
       val titleLore = mutableListOf<String>()
       titleLore.addAll(
-        mutableListOf(
-          "&a所有者数: &7${currentTitle.owners.size}",
-          "&aバリュー(表示優先度): &7${currentTitle.rarity}",
-        )
-      )
+          mutableListOf(
+              "&a所有者数: &7${currentTitle.owners.size}",
+              "&aバリュー(表示優先度): &7${currentTitle.rarity}",
+          ))
       if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
         titleLore.add("")
         titleLore.add("&7称号の説明 &f:")
@@ -114,29 +113,29 @@ object SelectTitle {
         title.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         title.guiRun {
           player.playSound(
-            player.eyeLocation,
-            org.bukkit.Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
+              player.eyeLocation,
+              org.bukkit.Sound.UI_BUTTON_CLICK,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
           )
           stats.title = -1
           display(player)
         }
       } else {
         title
-          .guiRun {
-            player.playSound(
-              player.eyeLocation,
-              org.bukkit.Sound.UI_BUTTON_CLICK,
-              SoundCategory.MASTER,
-              0.75F,
-              1F,
-            )
-            stats.title = currentTitle.id
-            display(player)
-          }
-          .allFlag()
+            .guiRun {
+              player.playSound(
+                  player.eyeLocation,
+                  org.bukkit.Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
+              stats.title = currentTitle.id
+              display(player)
+            }
+            .allFlag()
       }
       inventory.setItem(slot, title)
     }

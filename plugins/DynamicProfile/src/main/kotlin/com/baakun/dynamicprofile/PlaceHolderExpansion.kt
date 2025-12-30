@@ -7,7 +7,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
 
 class PlaceHolderExpansion( //
-  private val plugin: DynamicProfile
+    private val plugin: DynamicProfile
 ) : PlaceholderExpansion() {
   override fun getAuthor(): String {
     return "Author"

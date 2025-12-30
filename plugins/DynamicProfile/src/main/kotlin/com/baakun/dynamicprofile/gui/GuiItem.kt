@@ -58,17 +58,17 @@ object GuiItem {
     val clickItem = e.currentItem ?: return
     val idLong = clickItem.itemMeta.persistentDataContainer.get(key, PersistentDataType.LONG)
     val idLongright =
-      clickItem.itemMeta.persistentDataContainer.get(keyright, PersistentDataType.LONG)
+        clickItem.itemMeta.persistentDataContainer.get(keyright, PersistentDataType.LONG)
     val idLongshiftright =
-      clickItem.itemMeta.persistentDataContainer.get(keyshiftright, PersistentDataType.LONG)
+        clickItem.itemMeta.persistentDataContainer.get(keyshiftright, PersistentDataType.LONG)
     val run =
-      if (e.isRightClick && e.isShiftClick) {
-        cacheShiftRight[idLongshiftright] ?: cacheRight[idLongright] ?: cache[idLong]
-      } else if (e.isRightClick) {
-        cacheRight[idLongright] ?: cache[idLong]
-      } else {
-        cache[idLong]
-      }
+        if (e.isRightClick && e.isShiftClick) {
+          cacheShiftRight[idLongshiftright] ?: cacheRight[idLongright] ?: cache[idLong]
+        } else if (e.isRightClick) {
+          cacheRight[idLongright] ?: cache[idLong]
+        } else {
+          cache[idLong]
+        }
     run?.run()
   }
 }

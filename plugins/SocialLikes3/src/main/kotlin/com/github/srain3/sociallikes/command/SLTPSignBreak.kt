@@ -12,20 +12,20 @@ import org.bukkit.persistence.PersistentDataType
 
 object SLTPSignBreak : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "slsignbreak") return false
     if (sender !is Player) return false
 
     val targetBlock =
-      sender.getTargetBlockExact(3)
-        ?: run {
-          sender.sendMessage("§c視線の先にブロックがありません")
-          return true
-        }
+        sender.getTargetBlockExact(3)
+            ?: run {
+              sender.sendMessage("§c視線の先にブロックがありません")
+              return true
+            }
 
     val state = targetBlock.state
     if (state !is Sign) {
@@ -42,10 +42,8 @@ object SLTPSignBreak : CommandExecutor {
     val id = container.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: 0
     val data = Data.getSLData(id)
     if (data != null) {
-      if (
-        container.get(SLSignSetting.sltpSignUUIDKey, PersistentDataType.STRING) !=
-          sender.uniqueId.toString() && !sender.isOp && data.owner != sender.uniqueId
-      ) {
+      if (container.get(SLSignSetting.sltpSignUUIDKey, PersistentDataType.STRING) !=
+          sender.uniqueId.toString() && !sender.isOp && data.owner != sender.uniqueId) {
         sender.sendMessage("§c他人の看板は回収できません")
         return true
       }

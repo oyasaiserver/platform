@@ -7,20 +7,20 @@ import org.bukkit.Bukkit
 
 data class RankUpData(val user: UUID, var buildCount: Int) {
   private val firstLoginLong: Long? =
-    try {
-      val firstPlayed = Bukkit.getOfflinePlayer(user).firstPlayed
-      if (firstPlayed == 0L) {
+      try {
+        val firstPlayed = Bukkit.getOfflinePlayer(user).firstPlayed
+        if (firstPlayed == 0L) {
+          null
+        } else {
+          firstPlayed / 1000L
+        }
+      } catch (_: Exception) {
         null
-      } else {
-        firstPlayed / 1000L
       }
-    } catch (_: Exception) {
-      null
-    }
 
   /** 初ログインの記録 */
   val firstLogin: LocalDateTime? =
-    firstLoginLong?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
+      firstLoginLong?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
 
   /** プレイヤーの最後のログイン時間を取得する、未プレイの場合null */
   fun lastOnlineTime(): LocalDateTime? {

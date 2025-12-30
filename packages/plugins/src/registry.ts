@@ -1,168 +1,174 @@
-import type { PathLike } from 'node:fs'
-import { format, join } from 'node:path'
+import type { PathLike } from "node:fs";
+import { format, join } from "node:path";
 
 const path = {
-  static: join(import.meta.dirname, '../static'),
-  plugins: join(import.meta.dirname, '../../../plugins')
-} as const
+  static: join(import.meta.dirname, "../static"),
+  plugins: join(import.meta.dirname, "../../../plugins"),
+} as const;
 
 function toGradleBuildPath(name: string) {
   return format({
-    dir: join(path.plugins, name, 'build/libs'),
+    dir: join(path.plugins, name, "build/libs"),
     name,
-    ext: '.jar'
-  })
+    ext: ".jar",
+  });
 }
 
 function toStaticPath(name: string) {
-  return join(path.static, name)
+  return join(path.static, name);
 }
 
 export type PluginDefinition = Readonly<
-  | { type: 'modrinth'; slug: string }
-  | { type: 'spiget'; id: number }
-  | { type: 'github'; owner: string; repo: string; tag: string; name: string }
-  | { type: 'local'; path: PathLike }
-  | { type: 'url'; url: string }
->
+  | { type: "modrinth"; slug: string }
+  | { type: "spiget"; id: number }
+  | { type: "github"; owner: string; repo: string; tag: string; name: string }
+  | { type: "local"; path: PathLike }
+  | { type: "url"; url: string }
+>;
 
 export const registry = {
-  bkcommonlib: { type: 'modrinth', slug: 'bkcommonlib' },
-  coreprotect: { type: 'modrinth', slug: 'coreprotect' },
-  decentholograms: { type: 'modrinth', slug: 'decentholograms' },
-  essentialsx: { type: 'modrinth', slug: 'essentialsx' },
-  essentialsxchat: { type: 'modrinth', slug: 'essentialsx-chat-module' },
-  essentialsxspawn: { type: 'modrinth', slug: 'essentialsx-spawn' },
-  fastasyncworldedit: { type: 'modrinth', slug: 'fastasyncworldedit' },
-  fastasyncvoxelsniper: { type: 'modrinth', slug: 'fastasyncvoxelsniper' },
-  multiversecore: { type: 'modrinth', slug: 'multiverse-core' },
-  multiverseprotals: { type: 'modrinth', slug: 'multiverse-portals' },
-  placeholderapi: { type: 'modrinth', slug: 'placeholderapi' },
-  tab: { type: 'modrinth', slug: 'tab-was-taken' },
-  terra: { type: 'modrinth', slug: 'terra' },
-  veinminer: { type: 'modrinth', slug: 'veinminer' },
-  viaversion: { type: 'modrinth', slug: 'viaversion' },
-  worldguard: { type: 'modrinth', slug: 'worldguard' },
-  luckperms: { type: 'modrinth', slug: 'luckperms' },
-  plugmanx: { type: 'modrinth', slug: 'plugmanx' },
-  discordsrv: { type: 'modrinth', slug: 'discordsrv' },
-  bluemap: { type: 'modrinth', slug: 'bluemap' },
-  skinsrestorer: { type: 'modrinth', slug: 'skinsrestorer' },
+  bkcommonlib: { type: "modrinth", slug: "bkcommonlib" },
+  coreprotect: { type: "modrinth", slug: "coreprotect" },
+  decentholograms: { type: "modrinth", slug: "decentholograms" },
+  essentialsx: { type: "modrinth", slug: "essentialsx" },
+  essentialsxchat: { type: "modrinth", slug: "essentialsx-chat-module" },
+  essentialsxspawn: { type: "modrinth", slug: "essentialsx-spawn" },
+  fastasyncworldedit: { type: "modrinth", slug: "fastasyncworldedit" },
+  fastasyncvoxelsniper: { type: "modrinth", slug: "fastasyncvoxelsniper" },
+  multiversecore: { type: "modrinth", slug: "multiverse-core" },
+  multiverseprotals: { type: "modrinth", slug: "multiverse-portals" },
+  placeholderapi: { type: "modrinth", slug: "placeholderapi" },
+  tab: { type: "modrinth", slug: "tab-was-taken" },
+  terra: { type: "modrinth", slug: "terra" },
+  veinminer: { type: "modrinth", slug: "veinminer" },
+  viaversion: { type: "modrinth", slug: "viaversion" },
+  worldguard: { type: "modrinth", slug: "worldguard" },
+  luckperms: { type: "modrinth", slug: "luckperms" },
+  plugmanx: { type: "modrinth", slug: "plugmanx" },
+  discordsrv: { type: "modrinth", slug: "discordsrv" },
+  bluemap: { type: "modrinth", slug: "bluemap" },
+  skinsrestorer: { type: "modrinth", slug: "skinsrestorer" },
 
-  venturechat: { type: 'spiget', id: 771 },
-  particlehats: { type: 'spiget', id: 1007 },
-  protocollib: { type: 'spiget', id: 1997 },
-  advancedban: { type: 'spiget', id: 8695 },
-  signshop: { type: 'spiget', id: 10997 },
-  mypet: { type: 'spiget', id: 12725 },
-  nuvotifier: { type: 'spiget', id: 13449 },
-  minepacks: { type: 'spiget', id: 19286 },
-  slotmachine: { type: 'spiget', id: 22023 },
-  mycommand: { type: 'spiget', id: 22272 },
-  vault: { type: 'spiget', id: 34315 },
-  simpleelevator: { type: 'spiget', id: 44462 },
-  inventoryshop: { type: 'spiget', id: 47694 },
-  crackshotguns: { type: 'spiget', id: 48301 },
-  joincommands: { type: 'spiget', id: 51758 },
-  tntruneloaded: { type: 'spiget', id: 53359 },
-  gsit: { type: 'spiget', id: 62325 },
-  lwc: { type: 'spiget', id: 69551 },
-  zvoteparty: { type: 'spiget', id: 95603 },
-  skript: { type: 'spiget', id: 114544 },
-  pvparena: { type: 'spiget', id: 16584 },
+  venturechat: { type: "spiget", id: 771 },
+  particlehats: { type: "spiget", id: 1007 },
+  protocollib: { type: "spiget", id: 1997 },
+  advancedban: { type: "spiget", id: 8695 },
+  signshop: { type: "spiget", id: 10997 },
+  mypet: { type: "spiget", id: 12725 },
+  nuvotifier: { type: "spiget", id: 13449 },
+  minepacks: { type: "spiget", id: 19286 },
+  slotmachine: { type: "spiget", id: 22023 },
+  mycommand: { type: "spiget", id: 22272 },
+  vault: { type: "spiget", id: 34315 },
+  simpleelevator: { type: "spiget", id: 44462 },
+  inventoryshop: { type: "spiget", id: 47694 },
+  crackshotguns: { type: "spiget", id: 48301 },
+  joincommands: { type: "spiget", id: 51758 },
+  tntruneloaded: { type: "spiget", id: 53359 },
+  gsit: { type: "spiget", id: 62325 },
+  lwc: { type: "spiget", id: 69551 },
+  zvoteparty: { type: "spiget", id: 95603 },
+  skript: { type: "spiget", id: 114544 },
+  pvparena: { type: "spiget", id: 16584 },
 
-  openinv: { type: 'github', owner: 'JiKoo', repo: 'OpenInv', tag: '5.1.14', name: 'OpenInv.jar' },
+  openinv: {
+    type: "github",
+    owner: "JiKoo",
+    repo: "OpenInv",
+    tag: "5.1.14",
+    name: "OpenInv.jar",
+  },
   lunachat: {
-    type: 'github',
-    owner: 'f1w3',
-    repo: 'LunaChat',
-    tag: 'v3.0.16-fix',
-    name: 'LunaChat.jar'
+    type: "github",
+    owner: "f1w3",
+    repo: "LunaChat",
+    tag: "v3.0.16-fix",
+    name: "LunaChat.jar",
   },
   worldeditsui: {
-    type: 'github',
-    owner: 'kennytv',
-    repo: 'WorldEditSUI',
-    tag: '1.7.4',
-    name: 'WorldEditSUI-1.7.4.jar'
+    type: "github",
+    owner: "kennytv",
+    repo: "WorldEditSUI",
+    tag: "1.7.4",
+    name: "WorldEditSUI-1.7.4.jar",
   },
   worldborder: {
-    type: 'github',
-    owner: 'PryPurity',
-    repo: 'WorldBorder',
-    tag: 'v2.1.5',
-    name: 'WorldBorder.jar'
+    type: "github",
+    owner: "PryPurity",
+    repo: "WorldBorder",
+    tag: "v2.1.5",
+    name: "WorldBorder.jar",
   },
   imageonmap: {
-    type: 'github',
-    owner: 'okocraft',
-    repo: 'ImageOnMap',
-    tag: '5.1.1',
-    name: 'ImageOnMap-5.1.1.jar'
+    type: "github",
+    owner: "okocraft",
+    repo: "ImageOnMap",
+    tag: "5.1.1",
+    name: "ImageOnMap-5.1.1.jar",
   },
 
   arceon: {
-    type: 'local',
-    path: toStaticPath('Arceon.jar')
+    type: "local",
+    path: toStaticPath("Arceon.jar"),
   },
   ezedits: {
-    type: 'local',
-    path: toStaticPath('ezEdits.jar')
+    type: "local",
+    path: toStaticPath("ezEdits.jar"),
   },
   tokenmanager: {
-    type: 'local',
-    path: toStaticPath('TokenManager.jar')
+    type: "local",
+    path: toStaticPath("TokenManager.jar"),
   },
 
   dynamicprofile: {
-    type: 'local',
-    path: toGradleBuildPath('DynamicProfile')
+    type: "local",
+    path: toGradleBuildPath("DynamicProfile"),
   },
   oyasaiadmintools: {
-    type: 'local',
-    path: toGradleBuildPath('OyasaiAdminTools')
+    type: "local",
+    path: toGradleBuildPath("OyasaiAdminTools"),
   },
   oyasaiutilities: {
-    type: 'local',
-    path: toGradleBuildPath('OyasaiUtilities')
+    type: "local",
+    path: toGradleBuildPath("OyasaiUtilities"),
   },
   painttools: {
-    type: 'local',
-    path: toGradleBuildPath('PaintTools')
+    type: "local",
+    path: toGradleBuildPath("PaintTools"),
   },
   sociallikes3: {
-    type: 'local',
-    path: toGradleBuildPath('SocialLikes3')
+    type: "local",
+    path: toGradleBuildPath("SocialLikes3"),
   },
   socialvotes: {
-    type: 'local',
-    path: toGradleBuildPath('SocialVotes')
+    type: "local",
+    path: toGradleBuildPath("SocialVotes"),
   },
   tpswitch: {
-    type: 'local',
-    path: toGradleBuildPath('TPswitch')
+    type: "local",
+    path: toGradleBuildPath("TPswitch"),
   },
   vertex: {
-    type: 'local',
-    path: toGradleBuildPath('Vertex')
+    type: "local",
+    path: toGradleBuildPath("Vertex"),
   },
   oyasaipets: {
-    type: 'local',
-    path: toGradleBuildPath('OyasaiPets')
+    type: "local",
+    path: toGradleBuildPath("OyasaiPets"),
   },
 
   floodgate: {
-    type: 'url',
-    url: 'https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot'
+    type: "url",
+    url: "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot",
   },
   geyser: {
-    type: 'url',
-    url: 'https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot'
+    type: "url",
+    url: "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot",
   },
   chestcommands: {
-    type: 'url',
-    url: 'https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar'
-  }
-} as const satisfies Record<string, PluginDefinition>
+    type: "url",
+    url: "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar",
+  },
+} as const satisfies Record<string, PluginDefinition>;
 
-export type RegistryId = keyof typeof registry
+export type RegistryId = keyof typeof registry;

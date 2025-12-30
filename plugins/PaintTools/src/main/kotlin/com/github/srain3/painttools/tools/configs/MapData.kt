@@ -64,9 +64,9 @@ object MapData {
           pngFile.createNewFile()
         } catch (ex: IOException) {
           ToolBox.pl.logger.log(
-            Level.SEVERE,
-            "Could not save config to /img/${mapDataCash.id}.png",
-            ex,
+              Level.SEVERE,
+              "Could not save config to /img/${mapDataCash.id}.png",
+              ex,
           )
         }
       }
@@ -132,11 +132,11 @@ object MapData {
           }
         }
         var bufferedImage =
-          try {
-            ImageIO.read(pngFile)
-          } catch (_: IIOException) {
-            null
-          }
+            try {
+              ImageIO.read(pngFile)
+            } catch (_: IIOException) {
+              null
+            }
         if (bufferedImage == null) {
           bufferedImage = ImageIO.read(ToolBox.pl.getResource("newPNG.png"))
         }

@@ -47,7 +47,7 @@ class DynamicProfile : JavaPlugin() {
     val allStats = Collections.synchronizedMap(mutableMapOf<UUID, Stats>())
     val failedUser = Collections.synchronizedList(mutableListOf<UUID>())
     val provider: RegisteredServiceProvider<LuckPerms>? =
-      Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
+        Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
     val playTimes = Collections.synchronizedMap(mutableMapOf<Player, BukkitRunnable>())
     var perms: Permission? = null
 
@@ -78,10 +78,9 @@ class DynamicProfile : JavaPlugin() {
   override fun onEnable() {
     totalPlayTimes.left = System.currentTimeMillis()
     totalPlayTimes.right.addAll(
-      allUser.sortedByDescending {
-        Bukkit.getOfflinePlayer(it).getStatistic(Statistic.PLAY_ONE_MINUTE)
-      }
-    )
+        allUser.sortedByDescending {
+          Bukkit.getOfflinePlayer(it).getStatistic(Statistic.PLAY_ONE_MINUTE)
+        })
     saveDefaultConfig()
     NumberBanner.createBanner()
     setupPermissions()
@@ -93,69 +92,69 @@ class DynamicProfile : JavaPlugin() {
       PlaceHolderExpansion(this).register()
     }
     Bukkit.getScheduler()
-      .runTaskAsynchronously(
-        this,
-        Runnable {
-          try {
-            loadTitles()
-            loadWeeklyLB()
+        .runTaskAsynchronously(
+            this,
+            Runnable {
+              try {
+                loadTitles()
+                loadWeeklyLB()
 
-            val userStatsDir = File(plugin.dataFolder, "/UserStatsJSON/")
-            userStatsDir.mkdirs()
-            val userFiles = userStatsDir.listFiles()?.toList().orEmpty()
-            if (userFiles.isNotEmpty()) {
-              logger.info("Loading player data")
-              val backupDir = File(plugin.dataFolder, "auto_backup").apply { mkdirs() }
-              userFiles.forEach { file ->
-                val fileName = file.name
-                val uuid =
-                  fileName.substringBeforeLast('.', "").let {
-                    runCatching { UUID.fromString(it) }.getOrNull()
+                val userStatsDir = File(plugin.dataFolder, "/UserStatsJSON/")
+                userStatsDir.mkdirs()
+                val userFiles = userStatsDir.listFiles()?.toList().orEmpty()
+                if (userFiles.isNotEmpty()) {
+                  logger.info("Loading player data")
+                  val backupDir = File(plugin.dataFolder, "auto_backup").apply { mkdirs() }
+                  userFiles.forEach { file ->
+                    val fileName = file.name
+                    val uuid =
+                        fileName.substringBeforeLast('.', "").let {
+                          runCatching { UUID.fromString(it) }.getOrNull()
+                        }
+                    if (uuid == null) {
+                      logger.warning("Invalid file name (not UUID): $fileName, skipping.")
+                      return@forEach
+                    }
+                    allUser.add(uuid)
+                    try {
+                      val stats: Stats = JsonUtils.fromJsonFile(file, Stats::class.java)
+                      allStats[uuid] = stats
+                    } catch (je: Exception) {
+                      logger.warning("Failed to load stats for $uuid: ${je.message}")
+                      failedUser.add(uuid)
+                      try {
+                        file.copyTo(File(backupDir, file.name), overwrite = true)
+                        logger.info("Backed up $fileName to auto_backup/")
+                      } catch (be: Exception) {
+                        logger.warning("Failed to backup $fileName: ${be.message}")
+                      }
+                    }
                   }
-                if (uuid == null) {
-                  logger.warning("Invalid file name (not UUID): $fileName, skipping.")
-                  return@forEach
+                  logger.info("Player data has been loaded")
+                } else {
+                  logger.info("Player data not found")
                 }
-                allUser.add(uuid)
-                try {
-                  val stats: Stats = JsonUtils.fromJsonFile(file, Stats::class.java)
-                  allStats[uuid] = stats
-                } catch (je: Exception) {
-                  logger.warning("Failed to load stats for $uuid: ${je.message}")
-                  failedUser.add(uuid)
-                  try {
-                    file.copyTo(File(backupDir, file.name), overwrite = true)
-                    logger.info("Backed up $fileName to auto_backup/")
-                  } catch (be: Exception) {
-                    logger.warning("Failed to backup $fileName: ${be.message}")
-                  }
-                }
+              } catch (e: Exception) {
+                Bukkit.getPlayer("Nacukat")?.sendMessage("失敗")
+                e.message?.let { Bukkit.getPlayer("Nacukat")?.sendMessage(it) }
+                logger.warning("Error loading player data: ${e.message}")
+                e.printStackTrace()
               }
-              logger.info("Player data has been loaded")
-            } else {
-              logger.info("Player data not found")
-            }
-          } catch (e: Exception) {
-            Bukkit.getPlayer("Nacukat")?.sendMessage("失敗")
-            e.message?.let { Bukkit.getPlayer("Nacukat")?.sendMessage(it) }
-            logger.warning("Error loading player data: ${e.message}")
-            e.printStackTrace()
-          }
-          for (player in Bukkit.getOnlinePlayers()) {
-            val file =
-              File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${player.uniqueId}.json")
-            JsonUtils.toJsonFile(file, getStats(player.uniqueId), Stats::class.java)
-            val br =
-              object : BukkitRunnable() {
-                override fun run() {
-                  getStats(player.uniqueId).addCount(BehType.PLAY_TIME)
-                }
+              for (player in Bukkit.getOnlinePlayers()) {
+                val file =
+                    File(plugin.dataFolder.absolutePath + "/UserStatsJSON/${player.uniqueId}.json")
+                JsonUtils.toJsonFile(file, getStats(player.uniqueId), Stats::class.java)
+                val br =
+                    object : BukkitRunnable() {
+                      override fun run() {
+                        getStats(player.uniqueId).addCount(BehType.PLAY_TIME)
+                      }
+                    }
+                br.runTaskTimer(plugin, PLAYTIME_DELAY_TICKS, PLAYTIME_INTERVAL_TICKS)
+                playTimes[player] = br
               }
-            br.runTaskTimer(plugin, PLAYTIME_DELAY_TICKS, PLAYTIME_INTERVAL_TICKS)
-            playTimes[player] = br
-          }
-        },
-      )
+            },
+        )
 
     server.getPluginCommand("dprofile")?.setExecutor(DProfileCmd)
     server.getPluginCommand("dpmanager")?.setExecutor(OperatorCommand)
@@ -174,8 +173,8 @@ class DynamicProfile : JavaPlugin() {
     server.pluginManager.registerEvents(GiftItem, this)
     server.pluginManager.registerEvents(SLEvents, this)
     server.pluginManager.registerEvents(
-      com.baakun.dynamicprofile.listener.BookIntroListener(),
-      this,
+        com.baakun.dynamicprofile.listener.BookIntroListener(),
+        this,
     )
 
     val intervalMinutes = config.getInt("RecommendBroadcastIntervalSeconds", 600)

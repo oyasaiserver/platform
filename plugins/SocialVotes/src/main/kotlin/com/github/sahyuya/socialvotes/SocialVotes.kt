@@ -30,10 +30,10 @@ class SocialVotes : JavaPlugin() {
 
     // --- Commands ---
     registerPaperCommand(
-      name = "socialvotes",
-      aliases = listOf("sv"),
-      executor = SvCommand(),
-      tabCompleter = SvTabCompleter(),
+        name = "socialvotes",
+        aliases = listOf("sv"),
+        executor = SvCommand(),
+        tabCompleter = SvTabCompleter(),
     )
 
     registerPaperCommand(name = "svupdate", executor = SvUpdateCommand())
@@ -56,32 +56,32 @@ class SocialVotes : JavaPlugin() {
   }
 
   private fun registerPaperCommand(
-    name: String,
-    aliases: List<String> = emptyList(),
-    executor: CommandExecutor,
-    tabCompleter: TabCompleter? = null,
+      name: String,
+      aliases: List<String> = emptyList(),
+      executor: CommandExecutor,
+      tabCompleter: TabCompleter? = null,
   ) {
 
     val command =
-      object : Command(name) {
+        object : Command(name) {
 
-        override fun execute(
-          sender: CommandSender,
-          label: String,
-          args: Array<out String>,
-        ): Boolean {
-          return executor.onCommand(sender, this, label, args)
-        }
+          override fun execute(
+              sender: CommandSender,
+              label: String,
+              args: Array<out String>,
+          ): Boolean {
+            return executor.onCommand(sender, this, label, args)
+          }
 
-        override fun tabComplete(
-          sender: CommandSender,
-          alias: String,
-          args: Array<out String>,
-        ): MutableList<String> {
-          return tabCompleter?.onTabComplete(sender, this, alias, args)?.toMutableList()
-            ?: mutableListOf()
+          override fun tabComplete(
+              sender: CommandSender,
+              alias: String,
+              args: Array<out String>,
+          ): MutableList<String> {
+            return tabCompleter?.onTabComplete(sender, this, alias, args)?.toMutableList()
+                ?: mutableListOf()
+          }
         }
-      }
 
     command.aliases = aliases
 

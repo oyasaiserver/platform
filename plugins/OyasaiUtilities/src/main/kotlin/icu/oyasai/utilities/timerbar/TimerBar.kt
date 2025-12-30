@@ -53,25 +53,25 @@ object TimerBar {
     Bukkit.getServer().onlinePlayers.forEach { player -> addPlayerToBossBar(player) }
 
     bukkitRunnable =
-      object : BukkitRunnable() {
-        override fun run() {
-          if (bukkitRunnable == null) {
-            bossBar.removeAll()
-            bossBar.isVisible = false
-            cancel()
-            return
-          }
+        object : BukkitRunnable() {
+          override fun run() {
+            if (bukkitRunnable == null) {
+              bossBar.removeAll()
+              bossBar.isVisible = false
+              cancel()
+              return
+            }
 
-          var progress = TimerObj.getNowSec().toDouble() / TimerObj.getMaxSec().toDouble()
-          if (progress !in 0.0..1.0) {
-            progress = 1.0
-          }
+            var progress = TimerObj.getNowSec().toDouble() / TimerObj.getMaxSec().toDouble()
+            if (progress !in 0.0..1.0) {
+              progress = 1.0
+            }
 
-          bossBar.progress = progress
-          bossBar.color = ifColor(progress)
-          bossBar.setTitle(ifStr(progress) + TimerObj.secToStr(TimerObj.getNowSec()))
+            bossBar.progress = progress
+            bossBar.color = ifColor(progress)
+            bossBar.setTitle(ifStr(progress) + TimerObj.secToStr(TimerObj.getNowSec()))
+          }
         }
-      }
     bukkitRunnable?.runTaskTimer(OyasaiUtilities.plugin, 4, 4)
 
     TimerObj.countStart(sec)

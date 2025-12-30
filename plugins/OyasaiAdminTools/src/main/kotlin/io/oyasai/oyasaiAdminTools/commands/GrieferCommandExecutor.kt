@@ -11,10 +11,10 @@ import org.bukkit.command.TabCompleter
 object GrieferCommandExecutor : CommandExecutor, TabCompleter {
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (args.isEmpty()) {
       sender.sendMessage("§cサブコマンドを指定してください。")
@@ -40,16 +40,16 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
   ): List<String> {
     return when (args.size) {
       1 ->
-        Bukkit.getOnlinePlayers()
-          .map { it.name }
-          .filter { it.startsWith(args[0], ignoreCase = true) }
+          Bukkit.getOnlinePlayers()
+              .map { it.name }
+              .filter { it.startsWith(args[0], ignoreCase = true) }
       2 -> listOf("1mo", "2w", "3d", "4h", "5m", "6s")
       3 -> listOf("あらし")
       else -> emptyList()

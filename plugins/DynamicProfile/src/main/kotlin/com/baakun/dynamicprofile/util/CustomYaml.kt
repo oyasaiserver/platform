@@ -18,10 +18,10 @@ import org.bukkit.plugin.java.JavaPlugin
  * @author Srain3
  */
 open class CustomYaml(
-  private val fileName: String,
-  private val firstCreation: Boolean = true,
-  private val fromJar: Boolean = false,
-  private val plugin: JavaPlugin = Tools.plugin,
+    private val fileName: String,
+    private val firstCreation: Boolean = true,
+    private val fromJar: Boolean = false,
+    private val plugin: JavaPlugin = Tools.plugin,
 ) : YamlConfiguration() {
   private val file = File(plugin.dataFolder, fileName)
 

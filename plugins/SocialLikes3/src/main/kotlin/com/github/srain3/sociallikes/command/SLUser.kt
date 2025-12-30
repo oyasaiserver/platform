@@ -10,10 +10,10 @@ import org.bukkit.entity.Player
 object SLUser : CommandExecutor {
   @Suppress("DEPRECATION")
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "sluser") return false
     if (args.isEmpty()) return false

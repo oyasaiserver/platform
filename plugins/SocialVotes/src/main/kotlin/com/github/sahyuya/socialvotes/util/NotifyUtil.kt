@@ -47,11 +47,11 @@ object NotifyUtil {
    * 複数人通知（OP / owner 等）
    * ============================== */
   fun notifyPlayers(
-    targets: Collection<Player>,
-    message: String,
-    sound: Sound = Sound.BLOCK_AMETHYST_BLOCK_BREAK,
-    volume: Float = 1.0f,
-    pitch: Float = 0.5f,
+      targets: Collection<Player>,
+      message: String,
+      sound: Sound = Sound.BLOCK_AMETHYST_BLOCK_BREAK,
+      volume: Float = 1.0f,
+      pitch: Float = 0.5f,
   ) {
     targets.forEach {
       it.sendMessage(message)

@@ -14,10 +14,10 @@ import org.bukkit.entity.Player
 
 object SLNear : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "slnear") return false
     if (sender !is Player) return false
@@ -31,15 +31,15 @@ object SLNear : CommandExecutor {
     val list = Data.getSLNearToSLDataMap(loc)
 
     val size =
-      if (args.isEmpty()) {
-        5
-      } else {
-        var num = (args[0].toIntOrNull() ?: 5)
-        if (num <= 0) {
-          num = 5
+        if (args.isEmpty()) {
+          5
+        } else {
+          var num = (args[0].toIntOrNull() ?: 5)
+          if (num <= 0) {
+            num = 5
+          }
+          num
         }
-        num
-      }
 
     val maxIndex = list.size - 1
     if (maxIndex == -1) {
@@ -52,18 +52,18 @@ object SLNear : CommandExecutor {
       val data = list[i].second
       val distance = ((list[i].first * 100).toInt()) / 100.0
       sender
-        .spigot()
-        .sendMessage(
-          TextComponent(
-              Tools.socialLikesLOGO + "&r${distance}m先: &a${data.title}&7(ID:${data.id})".color()
-            )
-            .apply {
-              this.clickEvent =
-                ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp ${data.id}")
-              this.hoverEvent =
-                HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
-            }
-        )
+          .spigot()
+          .sendMessage(
+              TextComponent(
+                      Tools.socialLikesLOGO +
+                          "&r${distance}m先: &a${data.title}&7(ID:${data.id})".color())
+                  .apply {
+                    this.clickEvent =
+                        ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp ${data.id}")
+                    this.hoverEvent =
+                        HoverEvent(
+                            HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
+                  })
     }
 
     return true

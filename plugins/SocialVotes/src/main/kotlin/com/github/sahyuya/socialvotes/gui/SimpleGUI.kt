@@ -42,7 +42,7 @@ object SimpleGUI {
 
     val dm = SocialVotes.dataManager
     val df =
-      SimpleDateFormat("yyyy/MM/dd HH:mm").apply { timeZone = TimeZone.getTimeZone("Asia/Tokyo") }
+        SimpleDateFormat("yyyy/MM/dd HH:mm").apply { timeZone = TimeZone.getTimeZone("Asia/Tokyo") }
 
     val creatorLore = mutableListOf<String>()
     creatorLore.add("§f制作者:")
@@ -53,14 +53,14 @@ object SimpleGUI {
 
     // 看板情報
     inv.setItem(
-      9,
-      item(
-        Material.OAK_SIGN,
-        "§a看板情報",
-        listOf("§f名前: §e${sign.name}") +
-          creatorLore +
-          listOf("§f作成日: §7${df.format(Date(sign.createdAt))}"),
-      ),
+        9,
+        item(
+            Material.OAK_SIGN,
+            "§a看板情報",
+            listOf("§f名前: §e${sign.name}") +
+                creatorLore +
+                listOf("§f作成日: §7${df.format(Date(sign.createdAt))}"),
+        ),
     )
 
     // グループ情報
@@ -85,32 +85,32 @@ object SimpleGUI {
     val isCreator = sign.creators.contains(p.uniqueId)
     val canCreatorEdit = isCreator || p.isOp
     inv.setItem(
-      11,
-      item(
-        Material.KNOWLEDGE_BOOK,
-        "§e看板名変更",
-        if (canCreatorEdit) listOf("§7クリックで名前を変更") else listOf("§c制作者のみ操作可能"),
-      ),
+        11,
+        item(
+            Material.KNOWLEDGE_BOOK,
+            "§e看板名変更",
+            if (canCreatorEdit) listOf("§7クリックで名前を変更") else listOf("§c制作者のみ操作可能"),
+        ),
     )
 
     // 制作者名変更
     inv.setItem(
-      12,
-      item(
-        Material.WRITABLE_BOOK,
-        "§e制作者表示名変更",
-        if (canCreatorEdit) listOf("§7クリックで制作者欄の表示名を変更") else listOf("§c制作者のみ操作可能"),
-      ),
+        12,
+        item(
+            Material.WRITABLE_BOOK,
+            "§e制作者表示名変更",
+            if (canCreatorEdit) listOf("§7クリックで制作者欄の表示名を変更") else listOf("§c制作者のみ操作可能"),
+        ),
     )
 
     // 制作者追加
     inv.setItem(
-      13,
-      item(
-        Material.NAME_TAG,
-        "§a制作者プレイヤー追加",
-        if (canCreatorEdit) listOf("§7mcid をチャット入力") else listOf("§c制作者のみ操作可能"),
-      ),
+        13,
+        item(
+            Material.NAME_TAG,
+            "§a制作者プレイヤー追加",
+            if (canCreatorEdit) listOf("§7mcid をチャット入力") else listOf("§c制作者のみ操作可能"),
+        ),
     )
 
     // 制作者削除
@@ -123,16 +123,16 @@ object SimpleGUI {
     inv.setItem(16, item(Material.GUNPOWDER, "§cグループ投票リセット", listOf("§7所属グループの自分の票を0に戻す")))
     // 詳細設定
     inv.setItem(
-      17,
-      item(
-        Material.COMPARATOR,
-        "§6詳細設定",
-        when {
-          group == null -> listOf("§cグループに登録されていません")
-          !p.isOp && group.owner != p.uniqueId -> listOf("§c権限がありません")
-          else -> listOf("§eクリックで詳細設定へ")
-        },
-      ),
+        17,
+        item(
+            Material.COMPARATOR,
+            "§6詳細設定",
+            when {
+              group == null -> listOf("§cグループに登録されていません")
+              !p.isOp && group.owner != p.uniqueId -> listOf("§c権限がありません")
+              else -> listOf("§eクリックで詳細設定へ")
+            },
+        ),
     )
 
     // 装飾

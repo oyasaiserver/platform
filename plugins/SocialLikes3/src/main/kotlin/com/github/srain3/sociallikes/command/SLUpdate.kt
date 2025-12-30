@@ -13,10 +13,10 @@ object SLUpdate : CommandExecutor {
   val switch = mutableMapOf<UUID, Boolean>()
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "slupdate") return false
     if (sender !is Player) return false
@@ -26,16 +26,16 @@ object SLUpdate : CommandExecutor {
     switch[sender.uniqueId] = true
 
     object : BukkitRunnable() {
-        override fun run() {
-          if (switch[sender.uniqueId] == true) {
-            if (sender.isOnline) {
-              sender.sendMessage(Tools.socialLikesLOGO + "&eアップデートモードを自動終了しました".color())
+          override fun run() {
+            if (switch[sender.uniqueId] == true) {
+              if (sender.isOnline) {
+                sender.sendMessage(Tools.socialLikesLOGO + "&eアップデートモードを自動終了しました".color())
+              }
+              switch[sender.uniqueId] = false
             }
-            switch[sender.uniqueId] = false
           }
         }
-      }
-      .runTaskLater(Tools.plugin, 20 * 10)
+        .runTaskLater(Tools.plugin, 20 * 10)
 
     return true
   }

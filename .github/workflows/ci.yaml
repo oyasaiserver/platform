@@ -1,79 +1,33 @@
 name: CI
-
 on:
   pull_request:
-
-concurrency:
-  group: pr-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   nocommit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: nobssoftware/nocommit@v3
-
-  check:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: nobssoftware/nocommit@5c3cf9519fe40b80b0954d254085b67b532a5dc3
+  nix-flake-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run lint
-          npm run format
-          test -z "$(git status --porcelain)"
-
-  spotless:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - run: nix run .#nix-flake-check-changed
+  nix-flake-health:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-java
-      - run: |
-          ./gradlew spotlessCheck --parallel
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run build --workspaces --if-present
-
-  build-plugins:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-java
-      - run: |
-          ./gradlew build --parallel
-
-  test-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-node
-      - run: |
-          npm run test --workspaces --if-present
-
-  test-integration:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.1
-      - uses: ./.github/actions/setup-node
-      - uses: ./.github/actions/setup-terraform
-      - run: |
-          npm run test:integration --workspaces --if-present
-
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - run: nix flake show
+      - run: nix flake lock --no-update-lock-file
+      - run: nix flake check --no-build
   actions-timeline:
     needs:
       - nocommit
-      - check
-      - spotless
-      - build
-      - build-plugins
-      - test-unit
-      - test-integration
+      - nix-flake-check
+      - nix-flake-health
     runs-on: ubuntu-latest
     steps:
-      - uses: Kesin11/actions-timeline@v2
+      - uses: Kesin11/actions-timeline@54d513e0b5ff1158f1cf8321108d666a5a6c1fca

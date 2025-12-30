@@ -22,113 +22,113 @@ object NumberBanner {
     bannerList.clear()
 
     val numPatternList =
-      mapOf(
-        Pair(
-          '0',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '1',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER),
-            Pattern(DyeColor.WHITE, PatternType.SQUARE_TOP_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '2',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '3',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '4',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '5',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '6',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '7',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '8',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-        Pair(
-          '9',
-          listOf(
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-            Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-            Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-            Pattern(DyeColor.BLACK, PatternType.BORDER),
-          ),
-        ),
-      )
+        mapOf(
+            Pair(
+                '0',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '1',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER),
+                    Pattern(DyeColor.WHITE, PatternType.SQUARE_TOP_LEFT),
+                    Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '2',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '3',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '4',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
+                    Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '5',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '6',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '7',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '8',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+            Pair(
+                '9',
+                listOf(
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
+                    Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
+                    Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+            ),
+        )
     numPatternList.forEach { (c, list) ->
       val item = ItemStack(Material.BLACK_BANNER)
       val bannerMeta = item.itemMeta as BannerMeta

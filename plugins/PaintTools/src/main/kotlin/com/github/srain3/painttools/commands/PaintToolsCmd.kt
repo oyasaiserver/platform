@@ -31,10 +31,10 @@ import org.bukkit.util.Vector
 /** コマンド「/painttools」を処理する */
 object PaintToolsCmd : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "painttools") return false
     if (!sender.hasPermission("painttools.command.painttools")) return false
@@ -133,8 +133,7 @@ object PaintToolsCmd : CommandExecutor {
               if (it.name == args[1]) {
                 it.openInventory(giveDyeInv() ?: return true)
                 sender.sendMessage(
-                  ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました")
-                )
+                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました"))
               }
             }
           } else {
@@ -147,8 +146,7 @@ object PaintToolsCmd : CommandExecutor {
               if (it.name == args[1]) {
                 it.openInventory(giveDyeInv() ?: return true)
                 sender.sendMessage(
-                  ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました")
-                )
+                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました"))
               }
             }
           }
@@ -199,11 +197,11 @@ object PaintToolsCmd : CommandExecutor {
     mapView.isUnlimitedTracking = false
 
     val mapRenderer =
-      object : MapRenderer() {
-        override fun render(map: MapView, canvas: MapCanvas, player: Player) {}
+        object : MapRenderer() {
+          override fun render(map: MapView, canvas: MapCanvas, player: Player) {}
 
-        override fun isExplorerMap(): Boolean = false
-      }
+          override fun isExplorerMap(): Boolean = false
+        }
     mapView.addRenderer(mapRenderer)
 
     val mapItem = ItemStack(Material.FILLED_MAP)
@@ -212,11 +210,12 @@ object PaintToolsCmd : CommandExecutor {
     mapMeta.mapView = mapView
     mapMeta.setDisplayName("Canvas: $id")
     mapMeta.lore =
-      mutableListOf(ToolBox.colorMessage("&a額縁に飾ってから"), ToolBox.colorMessage("&a各種染料で右クリックすると描けます"))
+        mutableListOf(
+            ToolBox.colorMessage("&a額縁に飾ってから"), ToolBox.colorMessage("&a各種染料で右クリックすると描けます"))
     mapMeta.persistentDataContainer.set(
-      NamespacedKey(ToolBox.pl, "ID"),
-      PersistentDataType.INTEGER,
-      id,
+        NamespacedKey(ToolBox.pl, "ID"),
+        PersistentDataType.INTEGER,
+        id,
     )
     mapItem.itemMeta = mapMeta
 
@@ -250,14 +249,14 @@ object PaintToolsCmd : CommandExecutor {
     val fMeta = feather.itemMeta
     fMeta?.setDisplayName("255,255,255")
     fMeta?.lore =
-      mutableListOf(
-        "canvas用 色が自由なペン(非推奨)",
-        "左クリックで名前決定用AnvilGUIを開く",
-        "[255,255,255]か[#FFFFFF]で指定して下さい",
-        "1,1,1の色だと透過します",
-        "マイクラのマップカラーにない色は描けませんが",
-        "データは正確に残ります",
-      )
+        mutableListOf(
+            "canvas用 色が自由なペン(非推奨)",
+            "左クリックで名前決定用AnvilGUIを開く",
+            "[255,255,255]か[#FFFFFF]で指定して下さい",
+            "1,1,1の色だと透過します",
+            "マイクラのマップカラーにない色は描けませんが",
+            "データは正確に残ります",
+        )
     fMeta?.setCustomModelData(831)
     feather.itemMeta = fMeta
     inv.addItem(feather)
@@ -295,16 +294,16 @@ object PaintToolsCmd : CommandExecutor {
     vec.rotateAroundY(PI / 180 * -sender.eyeLocation.yaw)
 
     val entity =
-      sender.world
-        .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
-        ?.hitEntity
+        sender.world
+            .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
+            ?.hitEntity
     if (entity is ItemFrame) {
       val mapMeta = entity.item.itemMeta as MapMeta
       val id =
-        mapMeta.persistentDataContainer.get(
-          NamespacedKey(ToolBox.pl, "ID"),
-          PersistentDataType.INTEGER,
-        ) ?: return
+          mapMeta.persistentDataContainer.get(
+              NamespacedKey(ToolBox.pl, "ID"),
+              PersistentDataType.INTEGER,
+          ) ?: return
       if (!checkID(id)) return
       val data = MapData.undoCash?.get(num, id) ?: return
       val view = mapMeta.mapView ?: return

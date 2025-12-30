@@ -36,53 +36,51 @@ object DailyEvent : Listener {
     val player = e.player
     if (failedUser.contains(player.uniqueId)) {
       object : BukkitRunnable() {
-          override fun run() {
-            Bukkit.getOnlinePlayers()
-              .filter { it.isOp }
-              .forEach {
-                it.sendMessage(
-                  "§c[DynamicProfile] プレイヤー ${player.name}(${player.uniqueId}) のデータ読み込みに失敗しています。管理者はUserStatsJSON/${player.uniqueId}.jsonを確認してください。"
-                )
-              }
-            player.sendMessage("§cエラーが発生したため、あなたのDynamicProfileの情報が一時的に初期化されています。管理者に連絡してください。")
+            override fun run() {
+              Bukkit.getOnlinePlayers()
+                  .filter { it.isOp }
+                  .forEach {
+                    it.sendMessage(
+                        "§c[DynamicProfile] プレイヤー ${player.name}(${player.uniqueId}) のデータ読み込みに失敗しています。管理者はUserStatsJSON/${player.uniqueId}.jsonを確認してください。")
+                  }
+              player.sendMessage("§cエラーが発生したため、あなたのDynamicProfileの情報が一時的に初期化されています。管理者に連絡してください。")
+            }
           }
-        }
-        .runTaskLater(plugin, 40L)
+          .runTaskLater(plugin, 40L)
     }
     if (!allUser.contains(player.uniqueId)) allUser.add(player.uniqueId)
 
     val userStats = getStats(player.uniqueId)
     val now = LocalDateTime.now()
     val otherDate =
-      try {
-        LocalDateTime.parse(userStats.lastLogin)
-      } catch (_: Exception) {
-        LocalDateTime.MIN
-      }
+        try {
+          LocalDateTime.parse(userStats.lastLogin)
+        } catch (_: Exception) {
+          LocalDateTime.MIN
+        }
     val daysDifference = ChronoUnit.DAYS.between(now, otherDate)
     if (daysDifference != 0L || userStats.join == 0) {
       userStats.lastLogin = now.toString()
       userStats.addCount(BehType.JOIN)
     }
     val br =
-      object : BukkitRunnable() {
-        override fun run() {
-          getStats(player.uniqueId).addCount(BehType.PLAY_TIME)
+        object : BukkitRunnable() {
+          override fun run() {
+            getStats(player.uniqueId).addCount(BehType.PLAY_TIME)
+          }
         }
-      }
     br.runTaskTimer(plugin, 60 * 20, 60 * 20)
     playTimes[player] = br
     val modeConfig = plugin.config.getInt("RecommendBroadcastMode", 0)
     if (modeConfig == 0) {
       plugin.recommendBroadcaster
-        ?.normalBuildingCache
-        ?.addAll(
-          getStats(player.uniqueId)
-            .recommends
-            .values
-            .filter { it != Integer.MIN_VALUE }
-            .filterIndexed { index, i -> index != 0 }
-        )
+          ?.normalBuildingCache
+          ?.addAll(
+              getStats(player.uniqueId)
+                  .recommends
+                  .values
+                  .filter { it != Integer.MIN_VALUE }
+                  .filterIndexed { index, i -> index != 0 })
     } else {
       plugin.recommendBroadcaster?.normalCache?.add(player.uniqueId)
     }

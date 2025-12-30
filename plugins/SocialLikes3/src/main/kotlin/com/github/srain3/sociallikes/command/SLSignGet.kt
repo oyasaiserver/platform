@@ -12,10 +12,10 @@ import org.bukkit.entity.Player
 
 object SLSignGet : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "slsignget") return false
     if (args.isNullOrEmpty()) return false
@@ -23,11 +23,11 @@ object SLSignGet : CommandExecutor {
     val id = args[0].toIntOrNull() ?: return false
 
     val slData =
-      Data.getSLData(id)
-        ?: run {
-          sender.sendMessage(Tools.socialLikesLOGO + "&e ID:${id}は存在しません".color())
-          return true
-        }
+        Data.getSLData(id)
+            ?: run {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e ID:${id}は存在しません".color())
+              return true
+            }
     if (slData.owner == sender.uniqueId || sender.isOp) {
       if (args.size == 2) {
         if (args[1].lowercase() == "hanging") {
@@ -39,8 +39,7 @@ object SLSignGet : CommandExecutor {
         genSignItem(slData, sender, false)
       }
       sender.sendMessage(
-        Tools.socialLikesLOGO + "&r Like看板のアイテムを渡しました! 設置して/slupdateを行ってください".color()
-      )
+          Tools.socialLikesLOGO + "&r Like看板のアイテムを渡しました! 設置して/slupdateを行ってください".color())
     } else {
       sender.sendMessage(Tools.socialLikesLOGO + "&e 他人のLike看板は取得できません".color())
     }
@@ -50,8 +49,8 @@ object SLSignGet : CommandExecutor {
   private fun genSignItem(slData: SLData, player: Player, hanging: Boolean) {
     if (slData.check) {
       Bukkit.dispatchCommand(
-        Bukkit.getConsoleSender(),
-        "minecraft:give ${player.name} ${
+          Bukkit.getConsoleSender(),
+          "minecraft:give ${player.name} ${
           if (hanging) {
             "oak_hanging_sign"
           } else {
@@ -69,8 +68,8 @@ object SLSignGet : CommandExecutor {
       )
     } else {
       Bukkit.dispatchCommand(
-        Bukkit.getConsoleSender(),
-        "minecraft:give ${player.name} ${
+          Bukkit.getConsoleSender(),
+          "minecraft:give ${player.name} ${
           if (hanging) {
             "oak_hanging_sign"
           } else {
@@ -90,5 +89,5 @@ object SLSignGet : CommandExecutor {
   }
 
   private fun escapeForNBT(input: String): String =
-    input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'").replace("§", "\\u00A7")
+      input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'").replace("§", "\\u00A7")
 }

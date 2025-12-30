@@ -44,110 +44,111 @@ object SLDiscord {
       return
     }
     textChID =
-      textIDStr.toLongOrNull()
-        ?: kotlin.run {
-          Tools.plugin.logger.warning("DiscordConfig.ymlのTextCHのIDが不明です！")
-          return
-        }
+        textIDStr.toLongOrNull()
+            ?: kotlin.run {
+              Tools.plugin.logger.warning("DiscordConfig.ymlのTextCHのIDが不明です！")
+              return
+            }
 
     DiscordApiBuilder()
-      .setToken(token)
-      .login()
-      .thenAccept {
-        discordApi = it
-        it.addReactionAddListener { event ->
-          if (event.channel.id != textChID) return@addReactionAddListener
-          if (!event.emoji.equalsEmoji("👍")) {
-            return@addReactionAddListener
-          }
-          val uuid =
-            DiscordSRV.getPlugin().accountLinkManager.linkedAccounts[event.userIdAsString]
-              ?: return@addReactionAddListener
-          val player = Bukkit.getOfflinePlayer(uuid)
-
-          // いいねを行う処理
-          if (!Data.loading) return@addReactionAddListener
-          val messageID = event.messageId
-          val embed = event.channel.getMessageById(messageID)
-          val id = embed.get().embeds.first().description.get().replace("ID:", "").toInt()
-          val data = Data.getSLData(id) ?: return@addReactionAddListener
-
-          // 良いねを行っているか判断
-          if (!data.likes.none { likeUUID -> likeUUID == uuid }) return@addReactionAddListener
-          // いいねを行う
-          // データに記録・保存する
-          data.likes.add(uuid)
-          Data.save(data)
-          Data.changeUserLikesInt(data.owner, 1)
-          AllBuild.updateSLSignData(data)
-          UserBuild.updateSLSignData(data)
-
-          object : BukkitRunnable() {
-              override fun run() {
-                // 制作者がオンラインの場合通知
-                val ownerPlayer = Bukkit.getPlayer(data.owner)
-                if (ownerPlayer?.isOnline == true) {
-                  /*ownerPlayer.spigot().sendMessage(TextComponent(Tools.socialLikesLOGO + "&r「&a${data.title}&7(ID:${id})&r」が ${e.player.name}さんからイイねされました！".color()).apply {
-                      this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
-                      this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
-                  })*/
-                  Tools.advAPI.displayCustomToast(
-                    ownerPlayer,
-                    ItemStack(Material.OAK_SIGN),
-                    Tools.socialLikesLOGOShort +
-                      "&a${data.title}&7ID:${id}&r\n${player.name}&7<&rイイね!".color(),
-                    AdvancementFrameType.TASK,
-                  )
-                  ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
-                  if (uuid != data.owner) {
-                    Bukkit.dispatchCommand(
-                      Bukkit.getConsoleSender(),
-                      "tokenmanager:tm add ${ownerPlayer.name} 2",
-                    )
-                  }
-                } else {
-                  Events.offlineLikesPoint[data.owner] =
-                    (Events.offlineLikesPoint[data.owner] ?: 0) + 2
-                }
-                val block = data.loc.block.state
-                if (block !is Sign) return
-                // 看板ブロックへlike数を反映させる
-                if (Events.checkMarkRegex.containsMatchIn(block.getSide(Side.FRONT).getLine(3))) {
-                  block
-                    .getSide(Side.FRONT)
-                    .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-                  if (player.isOp) {
-                    if (!data.check) {
-                      data.check = true
-                      Data.save(data)
-                    }
-                  }
-                } else {
-                  if (player.isOp) {
-                    block
-                      .getSide(Side.FRONT)
-                      .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-                    if (!data.check) {
-                      data.check = true
-                      Data.save(data)
-                    }
-                  } else {
-                    block
-                      .getSide(Side.FRONT)
-                      .setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
-                  }
-                }
-                block.update()
-              }
+        .setToken(token)
+        .login()
+        .thenAccept {
+          discordApi = it
+          it.addReactionAddListener { event ->
+            if (event.channel.id != textChID) return@addReactionAddListener
+            if (!event.emoji.equalsEmoji("👍")) {
+              return@addReactionAddListener
             }
-            .runTask(Tools.plugin)
+            val uuid =
+                DiscordSRV.getPlugin().accountLinkManager.linkedAccounts[event.userIdAsString]
+                    ?: return@addReactionAddListener
+            val player = Bukkit.getOfflinePlayer(uuid)
+
+            // いいねを行う処理
+            if (!Data.loading) return@addReactionAddListener
+            val messageID = event.messageId
+            val embed = event.channel.getMessageById(messageID)
+            val id = embed.get().embeds.first().description.get().replace("ID:", "").toInt()
+            val data = Data.getSLData(id) ?: return@addReactionAddListener
+
+            // 良いねを行っているか判断
+            if (!data.likes.none { likeUUID -> likeUUID == uuid }) return@addReactionAddListener
+            // いいねを行う
+            // データに記録・保存する
+            data.likes.add(uuid)
+            Data.save(data)
+            Data.changeUserLikesInt(data.owner, 1)
+            AllBuild.updateSLSignData(data)
+            UserBuild.updateSLSignData(data)
+
+            object : BukkitRunnable() {
+                  override fun run() {
+                    // 制作者がオンラインの場合通知
+                    val ownerPlayer = Bukkit.getPlayer(data.owner)
+                    if (ownerPlayer?.isOnline == true) {
+                      /*ownerPlayer.spigot().sendMessage(TextComponent(Tools.socialLikesLOGO + "&r「&a${data.title}&7(ID:${id})&r」が ${e.player.name}さんからイイねされました！".color()).apply {
+                          this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
+                          this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
+                      })*/
+                      Tools.advAPI.displayCustomToast(
+                          ownerPlayer,
+                          ItemStack(Material.OAK_SIGN),
+                          Tools.socialLikesLOGOShort +
+                              "&a${data.title}&7ID:${id}&r\n${player.name}&7<&rイイね!".color(),
+                          AdvancementFrameType.TASK,
+                      )
+                      ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
+                      if (uuid != data.owner) {
+                        Bukkit.dispatchCommand(
+                            Bukkit.getConsoleSender(),
+                            "tokenmanager:tm add ${ownerPlayer.name} 2",
+                        )
+                      }
+                    } else {
+                      Events.offlineLikesPoint[data.owner] =
+                          (Events.offlineLikesPoint[data.owner] ?: 0) + 2
+                    }
+                    val block = data.loc.block.state
+                    if (block !is Sign) return
+                    // 看板ブロックへlike数を反映させる
+                    if (Events.checkMarkRegex.containsMatchIn(
+                        block.getSide(Side.FRONT).getLine(3))) {
+                      block
+                          .getSide(Side.FRONT)
+                          .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
+                      if (player.isOp) {
+                        if (!data.check) {
+                          data.check = true
+                          Data.save(data)
+                        }
+                      }
+                    } else {
+                      if (player.isOp) {
+                        block
+                            .getSide(Side.FRONT)
+                            .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
+                        if (!data.check) {
+                          data.check = true
+                          Data.save(data)
+                        }
+                      } else {
+                        block
+                            .getSide(Side.FRONT)
+                            .setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
+                      }
+                    }
+                    block.update()
+                  }
+                }
+                .runTask(Tools.plugin)
+          }
         }
-      }
-      .exceptionally { _: Throwable? ->
-        // Log a warning when the login to Discord failed (wrong token?)
-        Tools.plugin.logger.warning("Failed to connect to Discord! Disabling plugin!")
-        null
-      }
+        .exceptionally { _: Throwable? ->
+          // Log a warning when the login to Discord failed (wrong token?)
+          Tools.plugin.logger.warning("Failed to connect to Discord! Disabling plugin!")
+          null
+        }
   }
 
   fun disable() {
@@ -162,16 +163,16 @@ object SLDiscord {
       return 0L
     }
     val embed =
-      EmbedBuilder()
-        .setTitle("【SocialLikes】" + slData.title)
-        .setDescription("ID:${slData.id}")
-        .addField(
-          "Author: " +
-            Bukkit.getPlayer(slData.owner)?.name +
-            " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-          "BlueMap: ${blueMapURL(slData.loc)}",
-        )
-        .setColor(Color.PINK)
+        EmbedBuilder()
+            .setTitle("【SocialLikes】" + slData.title)
+            .setDescription("ID:${slData.id}")
+            .addField(
+                "Author: " +
+                    Bukkit.getPlayer(slData.owner)?.name +
+                    " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+                "BlueMap: ${blueMapURL(slData.loc)}",
+            )
+            .setColor(Color.PINK)
     val message = textChannel.sendMessage(embed).join()
     message.addReaction("👍")
     return message.id
@@ -185,41 +186,41 @@ object SLDiscord {
   fun deleteSLToMsg(slData: SLData) {
     if (slData.discordTextID == 0L) return
     Thread {
-        val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-        if (textChannel == null) {
-          Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+          val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
+          if (textChannel == null) {
+            Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+            return@Thread
+          }
+          val message = textChannel.getMessageById(slData.discordTextID).get()
+          message.delete("Server内で看板取り消しが行われた為").join()
           return@Thread
         }
-        val message = textChannel.getMessageById(slData.discordTextID).get()
-        message.delete("Server内で看板取り消しが行われた為").join()
-        return@Thread
-      }
-      .start()
+        .start()
   }
 
   fun changeSLDataToMsg(slData: SLData) {
     if (slData.discordTextID == 0L) return
     Thread {
-        val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-        if (textChannel == null) {
-          Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+          val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
+          if (textChannel == null) {
+            Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+            return@Thread
+          }
+          val embed =
+              EmbedBuilder()
+                  .setTitle("【SocialLikes】" + slData.title)
+                  .setDescription("ID:${slData.id}")
+                  .addField(
+                      "Author: " +
+                          Bukkit.getPlayer(slData.owner)?.name +
+                          " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+                      "BlueMap: ${blueMapURL(slData.loc)}",
+                  )
+                  .setColor(Color.PINK)
+          val message = textChannel.getMessageById(slData.discordTextID)
+          message.join().edit(embed).join()
           return@Thread
         }
-        val embed =
-          EmbedBuilder()
-            .setTitle("【SocialLikes】" + slData.title)
-            .setDescription("ID:${slData.id}")
-            .addField(
-              "Author: " +
-                Bukkit.getPlayer(slData.owner)?.name +
-                " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
-              "BlueMap: ${blueMapURL(slData.loc)}",
-            )
-            .setColor(Color.PINK)
-        val message = textChannel.getMessageById(slData.discordTextID)
-        message.join().edit(embed).join()
-        return@Thread
-      }
-      .start()
+        .start()
   }
 }

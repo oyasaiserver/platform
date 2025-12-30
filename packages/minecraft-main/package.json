@@ -6,6 +6,16 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
+    "build": "tsc",
     "download-plugins": "node scripts/download-plugins.ts"
+  },
+  "dependencies": {
+    "@oyasaiserver/plugins": "file:../plugins",
+    "@oyasaiserver/secrets": "file:../secrets",
+    "@oyasaiserver/cdktf": "file:../cdktf"
+  },
+  "devDependencies": {
+    "@types/node": "25.0.3",
+    "typescript": "5.9.3"
   }
 }

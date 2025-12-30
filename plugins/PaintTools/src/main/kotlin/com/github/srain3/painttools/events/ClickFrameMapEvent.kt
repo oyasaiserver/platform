@@ -29,30 +29,30 @@ object ClickFrameMapEvent : Listener {
     if (frame.item.type != Material.FILLED_MAP) return
     val mapMeta = frame.item.itemMeta as MapMeta
     val id =
-      mapMeta.persistentDataContainer.get(
-        NamespacedKey(ToolBox.pl, "ID"),
-        PersistentDataType.INTEGER,
-      ) ?: return
+        mapMeta.persistentDataContainer.get(
+            NamespacedKey(ToolBox.pl, "ID"),
+            PersistentDataType.INTEGER,
+        ) ?: return
     if (!MapIdList.checkID(id)) return
     event.isCancelled = true
     object : BukkitRunnable() {
-        override fun run() {
-          frame.rotation = Rotation.NONE
+          override fun run() {
+            frame.rotation = Rotation.NONE
+          }
         }
-      }
-      .runTaskLater(ToolBox.pl, 0)
+        .runTaskLater(ToolBox.pl, 0)
 
     val blockVec = faceVec(frame.facing)
     val block = frame.location.add(blockVec).block
 
     val e =
-      PlayerInteractEvent(
-        event.player,
-        Action.RIGHT_CLICK_BLOCK,
-        event.player.inventory.itemInMainHand,
-        block,
-        frame.facing.oppositeFace,
-      )
+        PlayerInteractEvent(
+            event.player,
+            Action.RIGHT_CLICK_BLOCK,
+            event.player.inventory.itemInMainHand,
+            block,
+            frame.facing.oppositeFace,
+        )
     Bukkit.getServer().pluginManager.callEvent(e)
   }
 
@@ -76,10 +76,10 @@ object ClickFrameMapEvent : Listener {
     if (frame.item.type != Material.FILLED_MAP) return
     val mapMeta = frame.item.itemMeta as MapMeta
     val id =
-      mapMeta.persistentDataContainer.get(
-        NamespacedKey(ToolBox.pl, "ID"),
-        PersistentDataType.INTEGER,
-      ) ?: return
+        mapMeta.persistentDataContainer.get(
+            NamespacedKey(ToolBox.pl, "ID"),
+            PersistentDataType.INTEGER,
+        ) ?: return
     if (!MapIdList.checkID(id)) return
 
     val handItem = (event.damager as Player).inventory.itemInMainHand
@@ -101,13 +101,13 @@ object ClickFrameMapEvent : Listener {
     val player = event.damager as Player
 
     val e =
-      PlayerInteractEvent(
-        player,
-        Action.LEFT_CLICK_BLOCK,
-        player.inventory.itemInMainHand,
-        block,
-        frame.facing.oppositeFace,
-      )
+        PlayerInteractEvent(
+            player,
+            Action.LEFT_CLICK_BLOCK,
+            player.inventory.itemInMainHand,
+            block,
+            frame.facing.oppositeFace,
+        )
     Bukkit.getServer().pluginManager.callEvent(e)
   }
 }

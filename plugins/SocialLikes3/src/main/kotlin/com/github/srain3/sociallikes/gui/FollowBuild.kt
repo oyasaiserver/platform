@@ -44,7 +44,7 @@ object FollowBuild : Listener {
     userList.forEach { uuid -> itemListALL0.putAll(UserBuild.getUserBuildItem(uuid)) }
     val iListTimeSort = itemListALL0.asIterable().sortedByDescending { it.key }
     val itemListNewIte =
-      iListTimeSort.filter { it.key > (logoutTimeList[playerUUID] ?: LocalDateTime.now()) }
+        iListTimeSort.filter { it.key > (logoutTimeList[playerUUID] ?: LocalDateTime.now()) }
     val itemListNew = mutableListOf<ItemStack>()
     itemListNewIte.forEach { itemListNew.add(it.value) }
     val itemListALL = itemListALL0.toSortedMap(reverseOrder()).values.toList()
@@ -52,10 +52,10 @@ object FollowBuild : Listener {
     val pane = PaginatedPane(0, 0, 9, 5)
     pane.setOnClick {
       val id =
-        it.currentItem
-          ?.itemMeta
-          ?.persistentDataContainer
-          ?.get(UserBuild.idKey, PersistentDataType.INTEGER) ?: return@setOnClick
+          it.currentItem
+              ?.itemMeta
+              ?.persistentDataContainer
+              ?.get(UserBuild.idKey, PersistentDataType.INTEGER) ?: return@setOnClick
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
@@ -64,105 +64,100 @@ object FollowBuild : Listener {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (filterSwitch) {
-          if (pane.page > 0) {
-            pane.setPage(pane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
-            gui.update()
-          }
-        } else {
-          if (pane.page > 0) {
-            pane.setPage(pane.page - 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
-            gui.update()
-          }
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (filterSwitch) {
+                if (pane.page > 0) {
+                  pane.setPage(pane.page - 1)
+                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
+                  gui.update()
+                }
+              } else {
+                if (pane.page > 0) {
+                  pane.setPage(pane.page - 1)
+                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
+                  gui.update()
+                }
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (filterSwitch) {
-          if (pane.page < pane.pages - 1) {
-            pane.setPage(pane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
-            gui.update()
-          }
-        } else {
-          if (pane.page < pane.pages - 1) {
-            pane.setPage(pane.page + 1)
-            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
-            gui.update()
-          }
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (filterSwitch) {
+                if (pane.page < pane.pages - 1) {
+                  pane.setPage(pane.page + 1)
+                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
+                  gui.update()
+                }
+              } else {
+                if (pane.page < pane.pages - 1) {
+                  pane.setPage(pane.page + 1)
+                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
+                  gui.update()
+                }
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.TOTEM_OF_UNDYING).apply {
-          allFlag()
-          addText("&fフォロー中の人一覧", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-        followHeadListGUI(userList).show(event.whoClicked)
-      },
-      7,
-      0,
+        GuiItem(
+            ItemStack(Material.TOTEM_OF_UNDYING).apply {
+              allFlag()
+              addText("&fフォロー中の人一覧", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+              followHeadListGUI(userList).show(event.whoClicked)
+            },
+        7,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.ENDER_EYE).apply {
-          allFlag()
-          addText("&f新着/全建築の切替スイッチ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent ->
-        filterSwitch = !filterSwitch
-        if (filterSwitch) {
-          if (pane.pages != 0) {
-            pane.page = 0
-          }
-          pane.clear()
-          pane.populateWithItemStacks(itemListNew)
-          gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p1".color()
-        } else {
-          if (pane.pages != 0) {
-            pane.page = 0
-          }
-          pane.clear()
-          pane.populateWithItemStacks(itemListALL)
-          gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p1".color()
-        }
-        gui.update()
-      },
-      6,
-      0,
+        GuiItem(
+            ItemStack(Material.ENDER_EYE).apply {
+              allFlag()
+              addText("&f新着/全建築の切替スイッチ", mutableListOf())
+            }) { _: InventoryClickEvent ->
+              filterSwitch = !filterSwitch
+              if (filterSwitch) {
+                if (pane.pages != 0) {
+                  pane.page = 0
+                }
+                pane.clear()
+                pane.populateWithItemStacks(itemListNew)
+                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p1".color()
+              } else {
+                if (pane.pages != 0) {
+                  pane.page = 0
+                }
+                pane.clear()
+                pane.populateWithItemStacks(itemListALL)
+                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p1".color()
+              }
+              gui.update()
+            },
+        6,
+        0,
     )
     gui.addPane(navigation)
 
@@ -263,9 +258,9 @@ object FollowBuild : Listener {
       val offPlayer = Bukkit.getOfflinePlayer(it)
       meta.setOwningPlayer(offPlayer)
       meta.persistentDataContainer.set(
-        followKey,
-        PersistentDataType.STRING,
-        offPlayer.name ?: "NULL",
+          followKey,
+          PersistentDataType.STRING,
+          offPlayer.name ?: "NULL",
       )
       item.itemMeta = meta
       headItemList.add(item)
@@ -273,8 +268,10 @@ object FollowBuild : Listener {
     pane.populateWithItemStacks(headItemList)
     pane.setOnClick {
       val userName =
-        it.currentItem?.itemMeta?.persistentDataContainer?.get(followKey, PersistentDataType.STRING)
-          ?: return@setOnClick
+          it.currentItem
+              ?.itemMeta
+              ?.persistentDataContainer
+              ?.get(followKey, PersistentDataType.STRING) ?: return@setOnClick
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sluser $userName")
     }
@@ -282,48 +279,45 @@ object FollowBuild : Listener {
 
     val navigation = StaticPane(0, 5, 9, 1)
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.RED_WOOL).apply {
-          allFlag()
-          addText("&f前のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pane.page > 0) {
-          pane.setPage(pane.page - 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-          gui.update()
-        }
-      },
-      0,
-      0,
+        GuiItem(
+            ItemStack(Material.RED_WOOL).apply {
+              allFlag()
+              addText("&f前のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pane.page > 0) {
+                pane.setPage(pane.page - 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
+                gui.update()
+              }
+            },
+        0,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.GREEN_WOOL).apply {
-          allFlag()
-          addText("&f次のページへ", mutableListOf())
-        }
-      ) { _: InventoryClickEvent? ->
-        if (pane.page < pane.pages - 1) {
-          pane.setPage(pane.page + 1)
-          gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-          gui.update()
-        }
-      },
-      8,
-      0,
+        GuiItem(
+            ItemStack(Material.GREEN_WOOL).apply {
+              allFlag()
+              addText("&f次のページへ", mutableListOf())
+            }) { _: InventoryClickEvent? ->
+              if (pane.page < pane.pages - 1) {
+                pane.setPage(pane.page + 1)
+                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
+                gui.update()
+              }
+            },
+        8,
+        0,
     )
     navigation.addItem(
-      GuiItem(
-        ItemStack(Material.BARRIER).apply {
-          allFlag()
-          addText("&c閉じる", mutableListOf())
-        }
-      ) { event: InventoryClickEvent ->
-        event.whoClicked.closeInventory()
-      },
-      4,
-      0,
+        GuiItem(
+            ItemStack(Material.BARRIER).apply {
+              allFlag()
+              addText("&c閉じる", mutableListOf())
+            }) { event: InventoryClickEvent ->
+              event.whoClicked.closeInventory()
+            },
+        4,
+        0,
     )
     gui.addPane(navigation)
 

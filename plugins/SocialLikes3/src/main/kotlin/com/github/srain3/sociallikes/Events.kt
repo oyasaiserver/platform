@@ -82,13 +82,13 @@ object Events : Listener {
     // val id = Data.lastID+1
     // Data.lastID++
     val id =
-      if (Data.emptyIDList.isEmpty()) {
-        Data.lastID += 1
-        Data.lastID
-      } else {
-        Data.emptyIDList.sort()
-        Data.emptyIDList.removeFirst()
-      }
+        if (Data.emptyIDList.isEmpty()) {
+          Data.lastID += 1
+          Data.lastID
+        } else {
+          Data.emptyIDList.sort()
+          Data.emptyIDList.removeFirst()
+        }
 
     // 看板の装飾
     e.setLine(0, Tools.socialLikesLOGO)
@@ -106,18 +106,18 @@ object Events : Listener {
 
     // SLDataを作成&保存
     val data =
-      SLData(
-        id,
-        e.block.location,
-        LocalDateTime.now(),
-        e.player.uniqueId,
-        title,
-        mutableListOf(),
-        false,
-        "No comment",
-        e.block.world.name,
-        0,
-      )
+        SLData(
+            id,
+            e.block.location,
+            LocalDateTime.now(),
+            e.player.uniqueId,
+            title,
+            mutableListOf(),
+            false,
+            "No comment",
+            e.block.world.name,
+            0,
+        )
 
     Data.save(data)
 
@@ -128,24 +128,22 @@ object Events : Listener {
     // 通知
     Bukkit.spigot().broadcast(TextComponent(" "))
     Bukkit.spigot()
-      .broadcast(
-        TextComponent(
-            Tools.socialLikesLOGO + "&f${e.player.name}さん&rが「&a${title}&r」を建てました！".color()
-          )
-          .apply {
-            this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
-            this.hoverEvent =
-              HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-          }
-      )
+        .broadcast(
+            TextComponent(
+                    Tools.socialLikesLOGO + "&f${e.player.name}さん&rが「&a${title}&r」を建てました！".color())
+                .apply {
+                  this.clickEvent =
+                      ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
+                  this.hoverEvent =
+                      HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
+                })
     Bukkit.spigot()
-      .broadcast(
-        TextComponent("&l&n/sltp ${id}&rで見に行きましょう！".color()).apply {
-          this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
-          this.hoverEvent =
-            HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-        }
-      )
+        .broadcast(
+            TextComponent("&l&n/sltp ${id}&rで見に行きましょう！".color()).apply {
+              this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
+              this.hoverEvent =
+                  HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
+            })
     Bukkit.spigot().broadcast(TextComponent(" "))
 
     // 通知音
@@ -154,13 +152,13 @@ object Events : Listener {
     }
 
     Thread {
-        // Discordへ通知
-        val textID = SLDiscord.sendSLEmbedMsg(data)
-        data.discordTextID = textID
-        Data.delID(data, true)
-        Data.save(data)
-      }
-      .start()
+          // Discordへ通知
+          val textID = SLDiscord.sendSLEmbedMsg(data)
+          data.discordTextID = textID
+          Data.delID(data, true)
+          Data.save(data)
+        }
+        .start()
   }
 
   /** このPluginの看板内部データKey */
@@ -201,18 +199,18 @@ object Events : Listener {
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
           val newData =
-            SLData(
-              data.id,
-              block.location,
-              data.time,
-              data.owner,
-              data.title,
-              data.likes,
-              data.check,
-              data.comment,
-              block.world.name,
-              data.discordTextID,
-            )
+              SLData(
+                  data.id,
+                  block.location,
+                  data.time,
+                  data.owner,
+                  data.title,
+                  data.likes,
+                  data.check,
+                  data.comment,
+                  block.world.name,
+                  data.discordTextID,
+              )
           Data.delID(data, true)
           Data.save(newData)
           if (data.loc.world != null) {
@@ -240,7 +238,7 @@ object Events : Listener {
 
       if (e.player.isSneaking) {
         SLSignLikes.createGUI(block, data, (e.player.uniqueId == data.owner), e.player.isOp)
-          .show(e.player)
+            .show(e.player)
         return
       }
 
@@ -273,17 +271,17 @@ object Events : Listener {
               this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
           })*/
           Tools.advAPI.displayCustomToast(
-            ownerPlayer,
-            ItemStack(Material.OAK_SIGN),
-            Tools.socialLikesLOGOShort +
-              "&a${data.title}&7ID:${id}&r\n${e.player.name}&7<&rイイね!".color(),
-            AdvancementFrameType.TASK,
+              ownerPlayer,
+              ItemStack(Material.OAK_SIGN),
+              Tools.socialLikesLOGOShort +
+                  "&a${data.title}&7ID:${id}&r\n${e.player.name}&7<&rイイね!".color(),
+              AdvancementFrameType.TASK,
           )
           ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
           if (e.player.uniqueId != data.owner) {
             Bukkit.dispatchCommand(
-              Bukkit.getConsoleSender(),
-              "tokenmanager:tm add ${ownerPlayer.name} 2",
+                Bukkit.getConsoleSender(),
+                "tokenmanager:tm add ${ownerPlayer.name} 2",
             )
           }
         } else {
@@ -326,14 +324,14 @@ object Events : Listener {
         return
       }
       var id =
-        block
-          .getSide(Side.FRONT)
-          .line(0)
-          .style()
-          .color()
-          ?.asHexString()
-          ?.substring(1)
-          ?.toIntOrNull(16) ?: return
+          block
+              .getSide(Side.FRONT)
+              .line(0)
+              .style()
+              .color()
+              ?.asHexString()
+              ?.substring(1)
+              ?.toIntOrNull(16) ?: return
       id = -id
       val data = Data.getSLData(id) ?: return
 
@@ -342,18 +340,18 @@ object Events : Listener {
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
           val newData =
-            SLData(
-              data.id,
-              block.location,
-              data.time,
-              data.owner,
-              data.title,
-              data.likes,
-              data.check,
-              data.comment,
-              block.world.name,
-              data.discordTextID,
-            )
+              SLData(
+                  data.id,
+                  block.location,
+                  data.time,
+                  data.owner,
+                  data.title,
+                  data.likes,
+                  data.check,
+                  data.comment,
+                  block.world.name,
+                  data.discordTextID,
+              )
           Data.delID(data, true)
           Data.save(newData)
           // 看板の装飾
@@ -361,8 +359,8 @@ object Events : Listener {
           block.setLine(1, "&a".color() + data.title)
           block.setLine(2, "&f${Bukkit.getOfflinePlayer(data.owner).name}".color())
           block.setLine(
-            3,
-            "&7Likes&8: &6${data.likes.count()}${if(data.check){" &e✓"}else{""}}".color(),
+              3,
+              "&7Likes&8: &6${data.likes.count()}${if(data.check){" &e✓"}else{""}}".color(),
           )
 
           block.isWaxed = true
@@ -373,13 +371,11 @@ object Events : Listener {
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
           e.player.sendMessage(
-            Tools.socialLikesLOGO + "&f旧Like看板です。登録データの座標と違います。 運営に報告お願いします".color()
-          )
+              Tools.socialLikesLOGO + "&f旧Like看板です。登録データの座標と違います。 運営に報告お願いします".color())
           Bukkit.getLogger().warning("[SocialLikes3] 旧Like看板の座標違いがクリックされました")
           Bukkit.getLogger()
-            .warning(
-              "[SocialLikes3] world:${block.location.world.name},x${block.location.x},y${block.location.y},z${block.location.z}"
-            )
+              .warning(
+                  "[SocialLikes3] world:${block.location.world.name},x${block.location.x},y${block.location.y},z${block.location.z}")
         }
         return
       }
@@ -388,8 +384,8 @@ object Events : Listener {
       block.setLine(1, "&a".color() + data.title)
       block.setLine(2, "&f${Bukkit.getOfflinePlayer(data.owner).name}".color())
       block.setLine(
-        3,
-        "&7Likes&8: &6${data.likes.count()}${if(data.check){" &e✓"}else{""}}".color(),
+          3,
+          "&7Likes&8: &6${data.likes.count()}${if(data.check){" &e✓"}else{""}}".color(),
       )
 
       block.isWaxed = true
@@ -426,8 +422,8 @@ object Events : Listener {
   fun joinEvent(e: PlayerJoinEvent) {
     val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
     Bukkit.dispatchCommand(
-      Bukkit.getConsoleSender(),
-      "tokenmanager:tm add ${e.player.name} $pointInt",
+        Bukkit.getConsoleSender(),
+        "tokenmanager:tm add ${e.player.name} $pointInt",
     )
     offlineLikesPoint.remove(e.player.uniqueId)
   }
@@ -503,11 +499,11 @@ object Events : Listener {
     val sign = e.blockPlaced.state
     if (sign !is Sign) return
     object : BukkitRunnable() {
-        override fun run() {
-          beSignTask(sign, slData)
+          override fun run() {
+            beSignTask(sign, slData)
+          }
         }
-      }
-      .runTaskLater(plugin, 1)
+        .runTaskLater(plugin, 1)
     // e.isCancelled = true
   }
 
@@ -555,13 +551,13 @@ object Events : Listener {
     val itemMeta = e.itemInHand.itemMeta as? BlockStateMeta ?: return
     val sourceSign = itemMeta.blockState as? Sign ?: return
     val teleportId =
-      sourceSign.persistentDataContainer.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER)
-        ?: return
+        sourceSign.persistentDataContainer.get(
+            SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: return
     val ownerId =
-      sourceSign.persistentDataContainer.get(
-        SLSignSetting.sltpSignUUIDKey,
-        PersistentDataType.STRING,
-      )
+        sourceSign.persistentDataContainer.get(
+            SLSignSetting.sltpSignUUIDKey,
+            PersistentDataType.STRING,
+        )
 
     val frontLines = (0 until 4).map { sourceSign.getSide(Side.FRONT).line(it) }
     val backLines = (0 until 4).map { sourceSign.getSide(Side.BACK).line(it) }
@@ -578,15 +574,15 @@ object Events : Listener {
 
     placedState.isWaxed = waxed
     placedState.persistentDataContainer.set(
-      SLSignSetting.sltpSignKey,
-      PersistentDataType.INTEGER,
-      teleportId,
+        SLSignSetting.sltpSignKey,
+        PersistentDataType.INTEGER,
+        teleportId,
     )
     if (ownerId != null) {
       placedState.persistentDataContainer.set(
-        SLSignSetting.sltpSignUUIDKey,
-        PersistentDataType.STRING,
-        ownerId,
+          SLSignSetting.sltpSignUUIDKey,
+          PersistentDataType.STRING,
+          ownerId,
       )
     }
     placedState.update(true)

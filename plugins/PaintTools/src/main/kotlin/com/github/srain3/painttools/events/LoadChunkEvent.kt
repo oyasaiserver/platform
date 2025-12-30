@@ -22,10 +22,10 @@ object LoadChunkEvent : Listener {
       if (frame.item.type != Material.FILLED_MAP) return@forEach
       val mapMeta = frame.item.itemMeta as MapMeta
       val id =
-        mapMeta.persistentDataContainer.get(
-          NamespacedKey(ToolBox.pl, "ID"),
-          PersistentDataType.INTEGER,
-        ) ?: return@forEach
+          mapMeta.persistentDataContainer.get(
+              NamespacedKey(ToolBox.pl, "ID"),
+              PersistentDataType.INTEGER,
+          ) ?: return@forEach
       if (!MapIdList.checkID(id)) return@forEach
       val mapView = mapMeta.mapView ?: Bukkit.createMap(event.world)
       val mMap = MapData.loadMapData(id)

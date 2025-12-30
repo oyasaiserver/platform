@@ -34,48 +34,48 @@ object Recommended {
     val filteredDataSize = filteredData.size
 
     val maxPage: Int =
-      if (filteredDataSize <= 45) {
-        0
-      } else {
-        if (filteredDataSize % 45 != 0) {
-          (filteredDataSize / 45) + 1
+        if (filteredDataSize <= 45) {
+          0
         } else {
-          (filteredDataSize / 45)
+          if (filteredDataSize % 45 != 0) {
+            (filteredDataSize / 45) + 1
+          } else {
+            (filteredDataSize / 45)
+          }
         }
-      }
 
     val nextPage = ItemStack(Material.ARROW)
     val previousPage = ItemStack(Material.ARROW)
     nextPage
-      .guiRun {
-        if (page != maxPage) {
-          player.playSound(
-            player.eyeLocation,
-            Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page += 1
-          signs(player, page, inv, index, filteredData)
+        .guiRun {
+          if (page != maxPage) {
+            player.playSound(
+                player.eyeLocation,
+                Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page += 1
+            signs(player, page, inv, index, filteredData)
+          }
         }
-      }
-      .allFlag()
+        .allFlag()
     previousPage
-      .guiRun {
-        if (page != 0) {
-          player.playSound(
-            player.eyeLocation,
-            Sound.UI_BUTTON_CLICK,
-            SoundCategory.MASTER,
-            0.75F,
-            1F,
-          )
-          page -= 1
-          signs(player, page, inv, index, filteredData)
+        .guiRun {
+          if (page != 0) {
+            player.playSound(
+                player.eyeLocation,
+                Sound.UI_BUTTON_CLICK,
+                SoundCategory.MASTER,
+                0.75F,
+                1F,
+            )
+            page -= 1
+            signs(player, page, inv, index, filteredData)
+          }
         }
-      }
-      .allFlag()
+        .allFlag()
     inv.setItem(45, previousPage)
     inv.setItem(53, nextPage)
 
@@ -85,11 +85,11 @@ object Recommended {
 
   /** 看板を並べる */
   private fun signs(
-    player: Player,
-    page: Int,
-    inv: Inventory,
-    index: Int,
-    filteredData: MutableList<SLData>,
+      player: Player,
+      page: Int,
+      inv: Inventory,
+      index: Int,
+      filteredData: MutableList<SLData>,
   ) {
     for (i in 0..44) {
       inv.setItem(i, ItemStack(Material.AIR))
@@ -102,8 +102,8 @@ object Recommended {
         val data = filteredData.get(i + (45 * page))
         val item = ItemStack(Material.OAK_SIGN)
         item.addText(
-          "&f>>&a${data.title} &fID:${data.id}",
-          mutableListOf("&3イイね: ${data.likes.size}", "&3作成日: ${data.time.toFormat()}"),
+            "&f>>&a${data.title} &fID:${data.id}",
+            mutableListOf("&3イイね: ${data.likes.size}", "&3作成日: ${data.time.toFormat()}"),
         )
         item.guiRun {
           statsData.recommends[index] = data.id

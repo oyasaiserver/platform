@@ -6,9 +6,15 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
+    "build": "tsc",
     "test:integration": "node --test"
   },
   "dependencies": {
-    "@xmcl/modrinth": "^2.5.0"
+    "@oyasaiserver/cdktf": "file:../cdktf"
+  },
+  "devDependencies": {
+    "@types/node": "25.0.3",
+    "@xmcl/modrinth": "2.5.0",
+    "typescript": "5.9.3"
   }
 }

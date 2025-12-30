@@ -415,3 +415,6 @@ local
 # dotenv environment variable files
 .env.keys
 !secrets/local
+
+# nix
+result

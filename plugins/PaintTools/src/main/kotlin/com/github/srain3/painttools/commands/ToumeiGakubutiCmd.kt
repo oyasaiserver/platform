@@ -12,10 +12,10 @@ import org.bukkit.util.Vector
 /** 透明額縁を簡単に作れるコマンド */
 object ToumeiGakubutiCmd : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "toumeigakubuti") return false
     if (sender !is Player) return false
@@ -32,22 +32,20 @@ object ToumeiGakubutiCmd : CommandExecutor {
               }
             }
             sender.sendMessage(
-              ToolBox.colorMessage(
-                "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁&6${count}個&aを&c透明解除&aしました"
-              )
-            )
+                ToolBox.colorMessage(
+                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁&6${count}個&aを&c透明解除&aしました"))
           }
 
           "count" -> {
             val count =
-              sender
-                .getNearbyEntities(8.0, 8.0, 8.0)
-                .filterIsInstance<ItemFrame>()
-                .filter { !it.isVisible }
-                .size
+                sender
+                    .getNearbyEntities(8.0, 8.0, 8.0)
+                    .filterIsInstance<ItemFrame>()
+                    .filter { !it.isVisible }
+                    .size
             sender.sendMessage(
-              ToolBox.colorMessage("[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁の数は&e${count}個&aです")
-            )
+                ToolBox.colorMessage(
+                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁の数は&e${count}個&aです"))
           }
 
           else -> {
@@ -63,14 +61,13 @@ object ToumeiGakubutiCmd : CommandExecutor {
     vec.rotateAroundY(PI / 180 * -sender.eyeLocation.yaw)
 
     val entity =
-      sender.world
-        .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
-        ?.hitEntity
+        sender.world
+            .rayTraceEntities(sender.eyeLocation, vec, 8.0, 0.025) { it is ItemFrame }
+            ?.hitEntity
     if (entity is ItemFrame) {
       entity.isVisible = !entity.isVisible
       sender.sendMessage(
-        ToolBox.colorMessage("[PaintTools] &a額縁の透明化を&6${!entity.isVisible}&aへ変更しました!")
-      )
+          ToolBox.colorMessage("[PaintTools] &a額縁の透明化を&6${!entity.isVisible}&aへ変更しました!"))
     } else {
       sender.sendMessage(ToolBox.colorMessage("[PaintTools] &c額縁に視線を合わせて下さい!"))
     }

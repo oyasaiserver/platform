@@ -29,14 +29,11 @@ object AnvilEdit : Listener {
           if (!PlayerClickEvent.rgbRegex.matches(stateSnapshot.text)) {
             if (!PlayerClickEvent.htmlColorRegex.matches(stateSnapshot.text)) {
               return@onClick listOf(
-                AnvilGUI.ResponseAction { _, player ->
-                  player.sendMessage(
-                    ToolBox.colorMessage(
-                      "[PaintTools] &cRGB値→ &r255,255,255 &cあるいは &r#ffffff &cのフォーマットのみ受け付けます!"
-                    )
-                  )
-                }
-              )
+                  AnvilGUI.ResponseAction { _, player ->
+                    player.sendMessage(
+                        ToolBox.colorMessage(
+                            "[PaintTools] &cRGB値→ &r255,255,255 &cあるいは &r#ffffff &cのフォーマットのみ受け付けます!"))
+                  })
             }
           }
           val handMeta = stateSnapshot.player.inventory.itemInMainHand.itemMeta
@@ -51,10 +48,10 @@ object AnvilEdit : Listener {
   }
 
   private val paperItem =
-    ItemStack(Material.PAPER).apply {
-      val meta = itemMeta ?: return@apply
-      meta.setDisplayName("1,1,1")
-      meta.setCustomModelData(831)
-      itemMeta = meta
-    }
+      ItemStack(Material.PAPER).apply {
+        val meta = itemMeta ?: return@apply
+        meta.setDisplayName("1,1,1")
+        meta.setCustomModelData(831)
+        itemMeta = meta
+      }
 }

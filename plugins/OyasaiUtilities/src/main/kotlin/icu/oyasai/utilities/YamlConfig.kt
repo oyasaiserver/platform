@@ -7,7 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
 
 open class YamlConfig(private val fileName: String, private val fromJar: Boolean = false) :
-  YamlConfiguration() {
+    YamlConfiguration() {
   private val plugin = OyasaiUtilities.plugin
   private val file = File(plugin.dataFolder, fileName)
 

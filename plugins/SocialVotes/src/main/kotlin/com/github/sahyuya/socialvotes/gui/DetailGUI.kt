@@ -43,34 +43,34 @@ object DetailGUI {
     // 情報
     val signStatus = if (sign.showVotes) "§a公開" else "§c非公開"
     inv.setItem(
-      2,
-      item(
-        Material.OAK_SIGN,
-        "§a看板情報",
-        listOf("§7名前: §f${sign.name}", "§7ID: §f${sign.id}", "§7得票表示: $signStatus"),
-      ),
+        2,
+        item(
+            Material.OAK_SIGN,
+            "§a看板情報",
+            listOf("§7名前: §f${sign.name}", "§7ID: §f${sign.id}", "§7得票表示: $signStatus"),
+        ),
     )
 
     val group = sign.group?.let { SocialVotes.dataManager.groupByName[it] }
     inv.setItem(
-      11,
-      if (group != null) {
-        val groupStatus = if (group.showVotesGroup) "§a公開" else "§c非公開"
-        item(
-          Material.OAK_HANGING_SIGN,
-          "§bグループ情報",
-          buildList {
-            add("§7グループ名: §f${group.name}")
-            add("§7得票表示: $groupStatus")
-            add("§7看板上限: §e${sign.maxVotesPerSign}")
-            add("§7グループ上限: §e${group.maxVotesPerPlayer}")
-            add("§7期間:")
-            addAll(TimeUtil.formatPeriod(group.startTime, group.endTime))
-          },
-        )
-      } else {
-        item(Material.PAPER, "§bグループ情報", listOf("§cグループ未所属"))
-      },
+        11,
+        if (group != null) {
+          val groupStatus = if (group.showVotesGroup) "§a公開" else "§c非公開"
+          item(
+              Material.OAK_HANGING_SIGN,
+              "§bグループ情報",
+              buildList {
+                add("§7グループ名: §f${group.name}")
+                add("§7得票表示: $groupStatus")
+                add("§7看板上限: §e${sign.maxVotesPerSign}")
+                add("§7グループ上限: §e${group.maxVotesPerPlayer}")
+                add("§7期間:")
+                addAll(TimeUtil.formatPeriod(group.startTime, group.endTime))
+              },
+          )
+        } else {
+          item(Material.PAPER, "§bグループ情報", listOf("§cグループ未所属"))
+        },
     )
 
     // 公開切替
@@ -148,20 +148,20 @@ object DetailGUI {
       12 -> startChat(p, signId, ChatInput.Action.SET_GROUP_MAX, "最大投票数を入力してください。（数字以外=変更なし）")
 
       21 ->
-        startChat(
-          p,
-          signId,
-          ChatInput.Action.SET_START_TIME,
-          "開始時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
-        )
+          startChat(
+              p,
+              signId,
+              ChatInput.Action.SET_START_TIME,
+              "開始時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
+          )
 
       22 ->
-        startChat(
-          p,
-          signId,
-          ChatInput.Action.SET_END_TIME,
-          "終了時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
-        )
+          startChat(
+              p,
+              signId,
+              ChatInput.Action.SET_END_TIME,
+              "終了時刻を入力してください。（0でリセット）\n入力例:2025y12M31d23h59min(d,hの入力は必須)",
+          )
 
       7 -> {
         // ① この看板の全投票を合計

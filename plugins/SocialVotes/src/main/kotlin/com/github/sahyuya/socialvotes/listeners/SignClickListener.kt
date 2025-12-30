@@ -44,11 +44,11 @@ class SignClickListener : Listener {
       val groupName = AddModeManager.getGroup(p.uniqueId) ?: return
 
       val sign =
-        dm.signById[signId]
-          ?: run {
-            NotifyUtil.invalid(p, "SV看板データが存在しません。")
-            return
-          }
+          dm.signById[signId]
+              ?: run {
+                NotifyUtil.invalid(p, "SV看板データが存在しません。")
+                return
+              }
 
       if (sign.group != null) {
         NotifyUtil.invalid(p, "この看板は既にグループに所属しています。")
@@ -56,11 +56,11 @@ class SignClickListener : Listener {
       }
 
       val group =
-        dm.groupByName[groupName]
-          ?: run {
-            NotifyUtil.invalid(p, "そのグループは存在しません。")
-            return
-          }
+          dm.groupByName[groupName]
+              ?: run {
+                NotifyUtil.invalid(p, "そのグループは存在しません。")
+                return
+              }
 
       if (group.signIds.size >= 45) {
         NotifyUtil.invalid(p, "45個を超えるため追加できません。")
@@ -83,18 +83,18 @@ class SignClickListener : Listener {
     if (RemoveModeManager.isWatching(p.uniqueId)) {
 
       val sign =
-        dm.signById[signId]
-          ?: run {
-            NotifyUtil.invalid(p, "SV看板データが存在しません。")
-            return
-          }
+          dm.signById[signId]
+              ?: run {
+                NotifyUtil.invalid(p, "SV看板データが存在しません。")
+                return
+              }
 
       val groupName =
-        sign.group
-          ?: run {
-            NotifyUtil.invalid(p, "この看板はグループに所属していません。")
-            return
-          }
+          sign.group
+              ?: run {
+                NotifyUtil.invalid(p, "この看板はグループに所属していません。")
+                return
+              }
 
       val group = dm.groupByName[groupName] ?: return
 
@@ -180,12 +180,12 @@ class SignClickListener : Listener {
 
     // 看板上限処理
     val effectiveSignLimit =
-      when {
-        group != null && group.maxVotesPerPlayer > 0 && sign.maxVotesPerSign > 0 ->
-          minOf(sign.maxVotesPerSign, group.maxVotesPerPlayer)
-        sign.maxVotesPerSign > 0 -> sign.maxVotesPerSign
-        else -> null
-      }
+        when {
+          group != null && group.maxVotesPerPlayer > 0 && sign.maxVotesPerSign > 0 ->
+              minOf(sign.maxVotesPerSign, group.maxVotesPerPlayer)
+          sign.maxVotesPerSign > 0 -> sign.maxVotesPerSign
+          else -> null
+        }
 
     if (effectiveSignLimit != null && usedOnSign >= effectiveSignLimit) {
       NotifyUtil.invalid(p, "この看板への投票上限に到達しています")
@@ -247,9 +247,9 @@ class SignClickListener : Listener {
 
   private fun cancelAllModesIfActive(p: Player, notify: Boolean = true) {
     val wasActive =
-      AddModeManager.isWatching(p.uniqueId) ||
-        RemoveModeManager.isWatching(p.uniqueId) ||
-        UpdateModeManager.isWatching(p.uniqueId)
+        AddModeManager.isWatching(p.uniqueId) ||
+            RemoveModeManager.isWatching(p.uniqueId) ||
+            UpdateModeManager.isWatching(p.uniqueId)
     if (!wasActive) return
     AddModeManager.cancel(p.uniqueId)
     RemoveModeManager.cancel(p.uniqueId)

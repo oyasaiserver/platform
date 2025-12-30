@@ -8,10 +8,10 @@ import org.bukkit.entity.Player
 
 object SLMenu : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "slmenu") return false
     if (sender !is Player) {

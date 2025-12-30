@@ -1,71 +1,41 @@
 # Contributing to platform
 
-platform は、おやさい鯖に関連する プラグイン・インフラ・Web アプリケーションなどを統合的に管理する monorepo
-です。
-このガイドラインは、プロジェクトへスムーズに参加し、貢献を行うための手順とルールをまとめたものです。
+platform は、おやさい鯖に関連するプラグイン・インフラ・Web アプリケーションなどを統合的に管理するモノレポ
+です。このガイドラインは、プロジェクトへスムーズに参加し、貢献を行うための手順とルールをまとめたものです。
 
-## 1. 開発環境の準備
+## 開発環境の準備
 
-### 1.1 エディタ
+### Nix
 
-特に指定はありませんが、IntelliJ IDEA の利用を推奨します。
+1. [nixos.org](https://nixos.org/download/) から Nix
+   をインストールしてください。インストール後にターミナルを再起動することを忘れずに。
+1. このレポジトリ内で `nix flake show` と実行してください。エラーが出なければ成功です。
+1. 今度は `nix develop` と実行してください。これが開発シェル (devshell)、Java など開発に必要なツールが全て入っています。
 
-### 1.2 mise-en-place による環境セットアップ
+### Docker Runtime（任意）
 
-本プロジェクトでは mise-en-place を使用して開発環境を統一しています。
-公式ドキュメント: [https://mise.jdx.dev/getting-started.html](https://mise.jdx.dev/getting-started.html)
-
-依存関係のインストール:
-
-```bash
-mise install
-```
-
-`mise all tools are installed` と表示されれば成功です。
-
-### 1.3 Docker Runtime（任意）
-
-Docker 実行環境があると、本番に近い形のインフラ環境で Platform を実行できます。
-以下のいずれかをインストールしてください：
+Docker 実行環境があると、本番に近い形のインフラ環境で Platform を実行できます。 以下のいずれかをインストールしてください：
 
 - Docker Desktop
 - OrbStack（macOS）
 - Colima（macOS / Linux）
 
-## 2. ローカル開発
+## コード規約
 
-Platform のインフラ構成は CDKTF で管理しています。ローカル起動は以下のコマンドで可能です：
+### フォーマット
 
-```bash
-npm run deploy -w packages/cdktf
+フォーマットされていないコードは受け付けられません。フォーマットを行うには：
+
+```
+$ nix fmt
 ```
 
-※ `dockerd` が稼働している必要があります。
+と実行してください。
 
-## 3. コード規約・ルール
+### PR規約
 
-### 3.1 コーディングスタイル
-
-言語ごとのフォーマットルールは次のとおりです：
-
-#### Kotlin
-
-```bash
-./gradlew spotlessApply
-```
-
-#### TypeScript / Web / その他
-
-```bash
-npm run format
-npm run lint
-```
-
-Format と Lint が通らない PR は受け付けません。
-
-### 3.2 コミットメッセージ規約
-
-PR のタイトルおよびコミットメッセージは Conventional Commits に従ってください。
+PR のタイトルは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)
+に従ってください。
 
 例:
 
@@ -75,32 +45,35 @@ fix(infra): resolve issue with deployment
 chore(deps): update dependencies
 ```
 
-### 3.3 Issue と PR の運用
+## テスト
 
-- Issue の事前作成は不要です。
-- すべての変更は必ず PR として提出してください。
-
-### 3.4 ブランチ作成ルール
-
-メンバーでない場合は Fork が必要です。
-ブランチ名は自由ですが、以下を推奨します：
+CI では、全てのパッケージをビルドし、（もし存在するなら）テストを実行します。ローカルで行うには：
 
 ```
-<name>/<type>/<message>
-または
-<type>/<message>
+$ nix flake check -L
 ```
 
-例:
+と実行してください。
+
+## ローカル開発
+
+> 現在工事中。[`process-compose`](https://github.com/F1bonacc1/process-compose)
+> を使用した環境を構築中です。
+
+### プラグイン開発
+
+devshell に必要なツールは全て入っています。 全てのプラグインをビルドしたい場合は、レポジトリのルートで：
 
 ```
-name/feat/add-notification
-fix/docker-build
+$ gradle build --parallel
 ```
 
-## 4. コードレビューについて
+特定のプラグインをビルドしたい場合は：
 
-Platform では CODEOWNERS に沿ってレビュー担当者が自動アサインされます。
+```
+$ gradle :plugins:<name>:build
+```
 
-- 1 approval でマージ可能です。
-- 修正依頼があれば、PR 内で丁寧に対応してください。
+## コードレビュー
+
+CODEOWNERS に沿ってレビュー担当者が自動アサインされます。1 approval でマージ可能です。

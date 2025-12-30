@@ -4,9 +4,9 @@ import kotlin.collections.forEach
 import org.bukkit.inventory.ItemStack
 
 abstract class GuiPage(
-  val x: Int,
-  val y: Int,
-  private val itemList: MutableMap<Int, MutableList<ItemStack?>> = mutableMapOf(),
+    val x: Int,
+    val y: Int,
+    private val itemList: MutableMap<Int, MutableList<ItemStack?>> = mutableMapOf(),
 ) {
   private var nowPage: Int = 0
 
@@ -78,10 +78,10 @@ abstract class GuiPage(
    * @return 追加したアイテム、失敗した場合null
    */
   fun addItem(
-    item: ItemStack,
-    index: Int? = null,
-    xy: Int? = null,
-    replace: Boolean = false,
+      item: ItemStack,
+      index: Int? = null,
+      xy: Int? = null,
+      replace: Boolean = false,
   ): ItemStack? {
     if (index == null) {
       val result = firstEmpty()

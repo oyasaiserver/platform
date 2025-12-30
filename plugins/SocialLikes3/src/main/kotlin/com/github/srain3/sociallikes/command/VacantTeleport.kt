@@ -11,10 +11,10 @@ import org.bukkit.entity.Player
 
 object VacantTeleport : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "vacanttp") return false
     if (sender !is Player) return false
@@ -31,49 +31,49 @@ object VacantTeleport : CommandExecutor {
     }
     if (checkBiomeString(args[0])) {
       val radius =
-        if (args.size >= 2) {
-          if (args[1].toIntOrNull() != null) {
-            args[1].toInt()
+          if (args.size >= 2) {
+            if (args[1].toIntOrNull() != null) {
+              args[1].toInt()
+            } else {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
+              return false
+            }
           } else {
-            sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-            return false
+            8
           }
-        } else {
-          8
-        }
       val maxCount =
-        if (args.size >= 3) {
-          if (args[2].toIntOrNull() != null) {
-            args[2].toInt()
+          if (args.size >= 3) {
+            if (args[2].toIntOrNull() != null) {
+              args[2].toInt()
+            } else {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
+              return false
+            }
           } else {
-            sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-            return false
+            radius / 3
           }
-        } else {
-          radius / 3
-        }
 
       Data.vacantTPTask(sender, radius, maxCount, args[0])
       return true
     } else {
       val radius =
-        if (args[0].toIntOrNull() != null) {
-          args[0].toInt()
-        } else {
-          sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
-          return false
-        }
-      val maxCount =
-        if (args.size >= 2) {
-          if (args[1].toIntOrNull() != null) {
-            args[1].toInt()
+          if (args[0].toIntOrNull() != null) {
+            args[0].toInt()
           } else {
             sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
             return false
           }
-        } else {
-          radius / 3
-        }
+      val maxCount =
+          if (args.size >= 2) {
+            if (args[1].toIntOrNull() != null) {
+              args[1].toInt()
+            } else {
+              sender.sendMessage(Tools.socialLikesLOGO + "&e引数が間違っています。")
+              return false
+            }
+          } else {
+            radius / 3
+          }
 
       Data.vacantTPTask(sender, radius, maxCount, null)
     }

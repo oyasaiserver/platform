@@ -29,8 +29,8 @@ object PlayerSelectRun {
         viewer.closeInventory()
         val inv = GuiInventory.createInventory(1, "${selected.name} をフレンドに追加しますか？")
         inv.setItem(
-          2,
-          ItemStack(Material.LIME_WOOL).guiRun { userstats.friends.add(selected.uniqueId) },
+            2,
+            ItemStack(Material.LIME_WOOL).guiRun { userstats.friends.add(selected.uniqueId) },
         )
       }
     }

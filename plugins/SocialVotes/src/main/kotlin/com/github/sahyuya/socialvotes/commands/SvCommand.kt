@@ -17,10 +17,10 @@ import org.bukkit.entity.Player
 class SvCommand : CommandExecutor {
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
 
     if (args.isEmpty()) {
@@ -90,15 +90,13 @@ class SvCommand : CommandExecutor {
           g.signIds.forEach { id ->
             val s = dm.signById[id] ?: return@forEach
             val line =
-              Component.text()
-                .append(
-                  Component.text(
-                    "§7ID:§6${s.id}§7「§a${s.name}§7」座標：${s.x} ${s.y} ${s.z} world=${s.world}"
-                  )
-                )
-                .clickEvent(ClickEvent.runCommand("/svtp ${s.id}"))
-                .hoverEvent(HoverEvent.showText(Component.text("§bクリックでこのSV看板へテレポート")))
-                .build()
+                Component.text()
+                    .append(
+                        Component.text(
+                            "§7ID:§6${s.id}§7「§a${s.name}§7」座標：${s.x} ${s.y} ${s.z} world=${s.world}"))
+                    .clickEvent(ClickEvent.runCommand("/svtp ${s.id}"))
+                    .hoverEvent(HoverEvent.showText(Component.text("§bクリックでこのSV看板へテレポート")))
+                    .build()
             sender.sendMessage(line)
           }
         }

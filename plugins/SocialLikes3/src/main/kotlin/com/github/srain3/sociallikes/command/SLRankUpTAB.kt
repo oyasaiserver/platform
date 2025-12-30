@@ -7,10 +7,10 @@ import org.bukkit.entity.Player
 
 object SLRankUpTAB : TabCompleter {
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != "slrankup") return null
     if (!sender.hasPermission("sociallikes3.slrankup")) {
@@ -26,13 +26,13 @@ object SLRankUpTAB : TabCompleter {
         return mutableListOf("default", "chukyu", "jokyu", "builder", "takumi", "blue")
       } else {
         val rawStr =
-          list
-            .dropLast(1)
-            .toString()
-            .replace(" ", "")
-            .replace("\"", "")
-            .replace("[", "")
-            .replace("]", ",")
+            list
+                .dropLast(1)
+                .toString()
+                .replace(" ", "")
+                .replace("\"", "")
+                .replace("[", "")
+                .replace("]", ",")
         val l = mutableListOf("default", "chukyu", "jokyu", "builder", "takumi", "blue")
         val new = mutableListOf<String>()
         l.forEach { str -> new.add(rawStr + str) }

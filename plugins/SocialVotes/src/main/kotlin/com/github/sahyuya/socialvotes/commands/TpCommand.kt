@@ -9,10 +9,10 @@ import org.bukkit.entity.Player
 
 class TpCommand : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("プレイヤーのみ実行可能です。")
@@ -37,14 +37,14 @@ class TpCommand : CommandExecutor {
     }
 
     val world =
-      org.bukkit.Bukkit.getWorld(s.world)
-        ?: run {
-          sender.sendMessage("ワールド ${s.world} が読み込まれていません。")
-          return true
-        }
+        org.bukkit.Bukkit.getWorld(s.world)
+            ?: run {
+              sender.sendMessage("ワールド ${s.world} が読み込まれていません。")
+              return true
+            }
 
     val loc =
-      Location(world, s.x + 0.5, s.y + 0.5, s.z + 0.5, sender.location.yaw, sender.location.pitch)
+        Location(world, s.x + 0.5, s.y + 0.5, s.z + 0.5, sender.location.yaw, sender.location.pitch)
 
     sender.teleport(loc)
     sender.sendMessage("ID:${s.id} の看板へテレポートしました。")

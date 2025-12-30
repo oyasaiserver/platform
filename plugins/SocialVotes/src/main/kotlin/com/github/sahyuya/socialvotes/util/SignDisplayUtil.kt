@@ -18,24 +18,24 @@ object SignDisplayUtil {
     val title = Component.text(SVLOGO)
 
     val creatorLine =
-      when {
-        sv.creatorDisplayName != null ->
-          Component.text(sv.creatorDisplayName!!, NamedTextColor.WHITE)
-        sv.creators.size == 1 -> {
-          val uuid = sv.creators.first()
-          val name = Bukkit.getOfflinePlayer(uuid).name ?: "unknown"
-          Component.text(name, NamedTextColor.WHITE)
+        when {
+          sv.creatorDisplayName != null ->
+              Component.text(sv.creatorDisplayName!!, NamedTextColor.WHITE)
+          sv.creators.size == 1 -> {
+            val uuid = sv.creators.first()
+            val name = Bukkit.getOfflinePlayer(uuid).name ?: "unknown"
+            Component.text(name, NamedTextColor.WHITE)
+          }
+          else -> Component.text("制作者多数", NamedTextColor.WHITE)
         }
-        else -> Component.text("制作者多数", NamedTextColor.WHITE)
-      }
 
     val isVisible = sv.showVotes
 
     val votesLine =
-      if (isVisible)
-        Component.text("Votes: ", NamedTextColor.GRAY)
-          .append(Component.text("${sv.votes}", NamedTextColor.GOLD))
-      else Component.text("Votes: 非公開", NamedTextColor.RED)
+        if (isVisible)
+            Component.text("Votes: ", NamedTextColor.GRAY)
+                .append(Component.text("${sv.votes}", NamedTextColor.GOLD))
+        else Component.text("Votes: 非公開", NamedTextColor.RED)
 
     return listOf(title, Component.text(sv.name, NamedTextColor.GREEN), creatorLine, votesLine)
   }

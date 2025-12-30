@@ -5,6 +5,6 @@ object Secrets {
 
   private fun getenv(name: String): String {
     return System.getenv(name)
-      ?: throw IllegalStateException("Environment variable $name is not set")
+        ?: throw IllegalStateException("Environment variable $name is not set")
   }
 }

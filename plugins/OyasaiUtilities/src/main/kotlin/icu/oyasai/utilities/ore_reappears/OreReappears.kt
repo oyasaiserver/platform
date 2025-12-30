@@ -43,11 +43,11 @@ object OreReappears : Listener {
     reloadConfig()
     OyasaiUtilities.plugin.server.pluginManager.registerEvents(this, OyasaiUtilities.plugin)
     OyasaiUtilities.plugin.server
-      .getPluginCommand("orerepopreload")
-      ?.setExecutor(OreReappearsCommand)
+        .getPluginCommand("orerepopreload")
+        ?.setExecutor(OreReappearsCommand)
     OyasaiUtilities.plugin.server
-      .getPluginCommand("orerepopswitch")
-      ?.setExecutor(OreReappearsCommand)
+        .getPluginCommand("orerepopswitch")
+        ?.setExecutor(OreReappearsCommand)
 
     Task.runTaskTimer(OyasaiUtilities.plugin, 1, 1)
   }
@@ -112,11 +112,11 @@ object OreReappears : Listener {
     }
 
     object : BukkitRunnable() {
-        override fun run() {
-          e.block.world.setBlockData(e.block.location, Material.BEDROCK.createBlockData())
+          override fun run() {
+            e.block.world.setBlockData(e.block.location, Material.BEDROCK.createBlockData())
+          }
         }
-      }
-      .runTaskLater(OyasaiUtilities.plugin, 1)
+        .runTaskLater(OyasaiUtilities.plugin, 1)
   }
 
   /** ブロック設置イベント */

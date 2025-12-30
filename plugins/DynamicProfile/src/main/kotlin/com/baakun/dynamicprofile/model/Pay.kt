@@ -16,17 +16,17 @@ import org.bukkit.inventory.ItemStack
 /** Profileでお金やポイントを送金する時に使う */
 object Pay {
   private val amountMap =
-    mapOf(
-      Pair(1, 1),
-      Pair(2, 10),
-      Pair(3, 100),
-      Pair(4, 1000),
-      Pair(5, 10000),
-      Pair(6, 100000),
-      Pair(7, 1000000),
-      Pair(8, 10000000),
-      Pair(9, 100000000),
-    )
+      mapOf(
+          Pair(1, 1),
+          Pair(2, 10),
+          Pair(3, 100),
+          Pair(4, 1000),
+          Pair(5, 10000),
+          Pair(6, 100000),
+          Pair(7, 1000000),
+          Pair(8, 10000000),
+          Pair(9, 100000000),
+      )
 
   /** プレイヤーからプレイヤーへ/payする為のGUIを返す */
   fun getPayAmountGUI(from: Player, to: String): Inventory {
@@ -35,29 +35,29 @@ object Pay {
     for (y in 0..1) {
       for (x in 1..9) {
         val amountSetItem =
-          if (y == 0) {
-            ItemStack(Material.GREEN_WOOL)
-              .addText("&a+${amountMap[x]}", mutableListOf("&a送る額を増やします"))
-              .allFlag()
-              .guiRun {
-                amount += amountMap[x] ?: 0
-                if (amount > 999999999) {
-                  amount = 999999999
-                }
-                amountChangeToGui(gui, amount, from, to)
-              }
-          } else {
-            ItemStack(Material.RED_WOOL)
-              .addText("&c-${amountMap[x]}", mutableListOf("&c送る額を減らします"))
-              .allFlag()
-              .guiRun {
-                amount -= amountMap[x] ?: 0
-                if (amount < 1) {
-                  amount = 1
-                }
-                amountChangeToGui(gui, amount, from, to)
-              }
-          }
+            if (y == 0) {
+              ItemStack(Material.GREEN_WOOL)
+                  .addText("&a+${amountMap[x]}", mutableListOf("&a送る額を増やします"))
+                  .allFlag()
+                  .guiRun {
+                    amount += amountMap[x] ?: 0
+                    if (amount > 999999999) {
+                      amount = 999999999
+                    }
+                    amountChangeToGui(gui, amount, from, to)
+                  }
+            } else {
+              ItemStack(Material.RED_WOOL)
+                  .addText("&c-${amountMap[x]}", mutableListOf("&c送る額を減らします"))
+                  .allFlag()
+                  .guiRun {
+                    amount -= amountMap[x] ?: 0
+                    if (amount < 1) {
+                      amount = 1
+                    }
+                    amountChangeToGui(gui, amount, from, to)
+                  }
+            }
 
         if (y == 0) {
           gui.setItem(9 - x, amountSetItem)
@@ -99,29 +99,29 @@ object Pay {
     for (y in 0..1) {
       for (x in 1..9) {
         val amountSetItem =
-          if (y == 0) {
-            ItemStack(Material.GREEN_WOOL)
-              .addText("&a+${amountMap[x]}", mutableListOf("&a送る額を増やします"))
-              .allFlag()
-              .guiRun {
-                amount += amountMap[x] ?: 0
-                if (amount > 999999999) {
-                  amount = 999999999
-                }
-                tokenAmountChangeToGui(gui, amount, from, to)
-              }
-          } else {
-            ItemStack(Material.RED_WOOL)
-              .addText("&c-${amountMap[x]}", mutableListOf("&c送る額を減らします"))
-              .allFlag()
-              .guiRun {
-                amount -= amountMap[x] ?: 0
-                if (amount < 1) {
-                  amount = 1
-                }
-                tokenAmountChangeToGui(gui, amount, from, to)
-              }
-          }
+            if (y == 0) {
+              ItemStack(Material.GREEN_WOOL)
+                  .addText("&a+${amountMap[x]}", mutableListOf("&a送る額を増やします"))
+                  .allFlag()
+                  .guiRun {
+                    amount += amountMap[x] ?: 0
+                    if (amount > 999999999) {
+                      amount = 999999999
+                    }
+                    tokenAmountChangeToGui(gui, amount, from, to)
+                  }
+            } else {
+              ItemStack(Material.RED_WOOL)
+                  .addText("&c-${amountMap[x]}", mutableListOf("&c送る額を減らします"))
+                  .allFlag()
+                  .guiRun {
+                    amount -= amountMap[x] ?: 0
+                    if (amount < 1) {
+                      amount = 1
+                    }
+                    tokenAmountChangeToGui(gui, amount, from, to)
+                  }
+            }
 
         if (y == 0) {
           gui.setItem(9 - x, amountSetItem)

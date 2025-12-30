@@ -20,7 +20,7 @@ object TitleUtils {
       titleFile.writeText("{}", StandardCharsets.UTF_8)
     }
     allTitles =
-      JsonUtils.fromJsonFile(titleFile, object : TypeToken<MutableMap<Int, Title>>() {}.type)
+        JsonUtils.fromJsonFile(titleFile, object : TypeToken<MutableMap<Int, Title>>() {}.type)
   }
 
   fun saveTitles() {
@@ -31,8 +31,8 @@ object TitleUtils {
 
   fun createNewTitle(title: String, rarity: Int): String {
     val newId =
-      (0..Int.MAX_VALUE).firstOrNull { it !in allTitles.keys }
-        ?: return "新しいIDが作成できませんでした（一応設定したエラーメッセージ）"
+        (0..Int.MAX_VALUE).firstOrNull { it !in allTitles.keys }
+            ?: return "新しいIDが作成できませんでした（一応設定したエラーメッセージ）"
     allTitles[newId] = Title(newId, title, mutableListOf(), rarity, System.currentTimeMillis())
     return "称号を作成 名前:$title バリュー:$rarity"
   }
@@ -71,10 +71,10 @@ object TitleUtils {
 
   fun getTitles(uuid: UUID): MutableList<Int> {
     return allTitles.values
-      .stream()
-      .filter { it: Title -> it.owners.contains(uuid) }
-      .map { it.id }
-      .collect(Collectors.toList())
+        .stream()
+        .filter { it: Title -> it.owners.contains(uuid) }
+        .map { it.id }
+        .collect(Collectors.toList())
   }
 
   /** 指定した称号の所有者リストをGUIで表示する */

@@ -7,17 +7,17 @@ import org.bukkit.command.CommandSender
 
 object MenuCommand : CommandExecutor {
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "menu") return false
     if (args.isEmpty()) {
       // menuを開く
       Bukkit.dispatchCommand(
-        Bukkit.getConsoleSender(),
-        "chestcommands:chestcommands open menu ${sender.name}",
+          Bukkit.getConsoleSender(),
+          "chestcommands:chestcommands open menu ${sender.name}",
       )
       return true
     }

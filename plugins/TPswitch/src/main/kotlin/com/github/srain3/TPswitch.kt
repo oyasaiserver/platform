@@ -36,24 +36,20 @@ class TPswitch : JavaPlugin() {
         }
         if (config.getBoolean("${server.getPlayerExact(targetP)!!.uniqueId}.switch", true)) {
           // TP open (BlackList Check)
-          if (
-            config.getBoolean(
+          if (config.getBoolean(
               "${server.getPlayerExact(targetP)!!.uniqueId}.BlackList.${senderP.uniqueId}",
               false,
-            )
-          ) { // BlackList Player!!! TP Cancel!!!
+          )) { // BlackList Player!!! TP Cancel!!!
             senderP.sendMessage("§6TPinfo:§e$targetP §6is in closed mode!")
             return true
           } // no BlackList Player
           return false
         } else {
           // TP Close (WhiteList Check)
-          if (
-            config.getBoolean(
+          if (config.getBoolean(
               "${server.getPlayerExact(targetP)!!.uniqueId}.WhiteList.${senderP.uniqueId}",
               false,
-            )
-          ) { // WhiteList Player
+          )) { // WhiteList Player
             return false
           } // no WhiteList Player. TP Cancel!
           senderP.sendMessage("§6TPinfo:§e$targetP §6is in closed mode!")
@@ -66,10 +62,10 @@ class TPswitch : JavaPlugin() {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>,
   ): MutableList<String>? {
     if (sender is Player) {
       if (command.name != "tpset") {
@@ -117,10 +113,10 @@ class TPswitch : JavaPlugin() {
   }
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>,
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>,
   ): Boolean {
     if (sender is Player) {
       val luckperms = LuckPermsProvider.get()
@@ -150,17 +146,19 @@ class TPswitch : JavaPlugin() {
               }
               "mode" -> {
                 val mode =
-                  if (config.getBoolean("${sender.uniqueId}.switch", true)) {
-                    "§9§lOPEN"
-                  } else {
-                    "§c§lCLOSE"
-                  }
+                    if (config.getBoolean("${sender.uniqueId}.switch", true)) {
+                      "§9§lOPEN"
+                    } else {
+                      "§c§lCLOSE"
+                    }
                 sender.sendMessage("§6TPinfo: Your mode is $mode")
                 return true
               }
               "oklist" -> {
                 val whiteNameList =
-                  config.getConfigurationSection("${sender.uniqueId}.WhiteListName")?.getKeys(false)
+                    config
+                        .getConfigurationSection("${sender.uniqueId}.WhiteListName")
+                        ?.getKeys(false)
                 if (whiteNameList == null) {
                   sender.sendMessage("§6TPinfo: Your not WhiteLists")
                   return true
@@ -179,7 +177,9 @@ class TPswitch : JavaPlugin() {
               }
               "nglist" -> {
                 val blackNameList =
-                  config.getConfigurationSection("${sender.uniqueId}.BlackListName")?.getKeys(false)
+                    config
+                        .getConfigurationSection("${sender.uniqueId}.BlackListName")
+                        ?.getKeys(false)
                 if (blackNameList == null) {
                   sender.sendMessage("§6TPinfo: Your not BlackLists")
                   return true
@@ -212,18 +212,17 @@ class TPswitch : JavaPlugin() {
               args[0] == "ok" -> { // to add WhiteList
                 if (name.matches(args[1])) {
                   config.set(
-                    "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    true,
+                      "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      true,
                   )
                   config.set("${sender.uniqueId}.WhiteListName.${args[1]}", true)
                   config.set(
-                    "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    null,
+                      "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      null,
                   )
                   config.set("${sender.uniqueId}.BlackListName.${args[1]}", null)
                   sender.sendMessage(
-                    "§6TPinfo: You WhiteList add §e${args[1]}\n§6We accept TP from §e${args[1]}"
-                  )
+                      "§6TPinfo: You WhiteList add §e${args[1]}\n§6We accept TP from §e${args[1]}")
                   saveConfig()
                   return true
                 }
@@ -233,18 +232,17 @@ class TPswitch : JavaPlugin() {
               args[0] == "ng" -> { // to add BlackList
                 if (name.matches(args[1])) {
                   config.set(
-                    "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    true,
+                      "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      true,
                   )
                   config.set("${sender.uniqueId}.BlackListName.${args[1]}", true)
                   config.set(
-                    "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    null,
+                      "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      null,
                   )
                   config.set("${sender.uniqueId}.WhiteListName.${args[1]}", null)
                   sender.sendMessage(
-                    "§6TPinfo: You BlackList add §c${args[1]}\n§6We do not accept TP from §c${args[1]}"
-                  )
+                      "§6TPinfo: You BlackList add §c${args[1]}\n§6We do not accept TP from §c${args[1]}")
                   saveConfig()
                   return true
                 }
@@ -254,18 +252,17 @@ class TPswitch : JavaPlugin() {
               args[0] == "none" -> { // to remove Black&White Lists
                 if (name.matches(args[1])) {
                   config.set(
-                    "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    null,
+                      "${sender.uniqueId}.BlackList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      null,
                   )
                   config.set("${sender.uniqueId}.BlackListName.${args[1]}", null)
                   config.set(
-                    "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
-                    null,
+                      "${sender.uniqueId}.WhiteList.${server.getOfflinePlayer(args[1]).uniqueId}",
+                      null,
                   )
                   config.set("${sender.uniqueId}.WhiteListName.${args[1]}", null)
                   sender.sendMessage(
-                    "§6TPinfo: You have removed §e${args[1]} §6from the list\n§e${args[1]} §6is affected by your OPEN/CLOSE"
-                  )
+                      "§6TPinfo: You have removed §e${args[1]} §6from the list\n§e${args[1]} §6is affected by your OPEN/CLOSE")
                   saveConfig()
                   return true
                 }

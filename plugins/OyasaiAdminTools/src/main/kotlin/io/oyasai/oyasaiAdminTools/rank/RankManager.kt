@@ -43,38 +43,37 @@ object RankManager {
     val future = CompletableFuture<Rank?>()
     getCurrentRank(player.uniqueId).thenAccept { currentRank ->
       Bukkit.getScheduler()
-        .runTask(
-          plugin,
-          Runnable {
-            if (currentRank != null) {
-              val nextRank = getNextRank(currentRank)
-              if (nextRank != null) {
-                val statsData = getStats(player.uniqueId) // DynamicProfile依存
-                val tick = player.getStatistic(Statistic.PLAY_ONE_MINUTE)
-                val minute = (tick / 20) / 60
-                val hour = minute / 60
-                val joinDays = statsData.join
-                val buildCount = Data.getSLDataAll().count { it.owner == player.uniqueId } // SL依存
-                val elapse =
-                  ChronoUnit.DAYS.between(
-                    DateTimeUtils.unixToJST(player.firstPlayed),
-                    DateTimeUtils.getCurrentJST(),
-                  )
+          .runTask(
+              plugin,
+              Runnable {
+                if (currentRank != null) {
+                  val nextRank = getNextRank(currentRank)
+                  if (nextRank != null) {
+                    val statsData = getStats(player.uniqueId) // DynamicProfile依存
+                    val tick = player.getStatistic(Statistic.PLAY_ONE_MINUTE)
+                    val minute = (tick / 20) / 60
+                    val hour = minute / 60
+                    val joinDays = statsData.join
+                    val buildCount =
+                        Data.getSLDataAll().count { it.owner == player.uniqueId } // SL依存
+                    val elapse =
+                        ChronoUnit.DAYS.between(
+                            DateTimeUtils.unixToJST(player.firstPlayed),
+                            DateTimeUtils.getCurrentJST(),
+                        )
 
-                if (
-                  hour >= nextRank.minPlayTimeHours &&
-                    joinDays >= nextRank.minJoinDays &&
-                    elapse >= nextRank.minElapse &&
-                    buildCount >= nextRank.minBuilds
-                ) {
-                  future.complete(nextRank)
-                  return@Runnable
+                    if (hour >= nextRank.minPlayTimeHours &&
+                        joinDays >= nextRank.minJoinDays &&
+                        elapse >= nextRank.minElapse &&
+                        buildCount >= nextRank.minBuilds) {
+                      future.complete(nextRank)
+                      return@Runnable
+                    }
+                  }
                 }
-              }
-            }
-            future.complete(null)
-          },
-        )
+                future.complete(null)
+              },
+          )
     }
     return future
   }

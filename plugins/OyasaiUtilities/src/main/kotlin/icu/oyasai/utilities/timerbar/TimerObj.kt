@@ -56,28 +56,28 @@ object TimerObj {
 
     val hour = str.split("h")
     val hi =
-      if (hour.size == 1) {
-        // hが含まれない場合
-        0
-      } else {
-        // hが含まれていた場合
-        val h = hour[0].toIntOrNull() ?: 0
-        sec += hToS(h)
-        1
-      }
+        if (hour.size == 1) {
+          // hが含まれない場合
+          0
+        } else {
+          // hが含まれていた場合
+          val h = hour[0].toIntOrNull() ?: 0
+          sec += hToS(h)
+          1
+        }
 
     if (hour[hi].isBlank()) return sec
     val minutes = hour[hi].split("m")
     val mi =
-      if (minutes.size == 1) {
-        // mが含まれない場合
-        0
-      } else {
-        // mが含まれていた場合
-        val m = minutes[0].toIntOrNull() ?: 0
-        sec += mToS(m)
-        1
-      }
+        if (minutes.size == 1) {
+          // mが含まれない場合
+          0
+        } else {
+          // mが含まれていた場合
+          val m = minutes[0].toIntOrNull() ?: 0
+          sec += mToS(m)
+          1
+        }
 
     if (minutes[mi].isBlank()) return sec
     val seconds = minutes[mi].replace("s", "")
@@ -95,35 +95,35 @@ object TimerObj {
 
     var str = ""
     str +=
-      if (h == 0) {
-        ""
-      } else {
-        "${h}h"
-      }
-    str +=
-      if (h == 0) {
-        if (m == 0) {
+        if (h == 0) {
           ""
         } else {
-          "${m}m"
+          "${h}h"
         }
-      } else {
-        " ${m}m"
-      }
     str +=
-      if (h == 0) {
-        if (m == 0) {
-          if (s == 0) {
-            "END!"
+        if (h == 0) {
+          if (m == 0) {
+            ""
           } else {
-            "${s}s"
+            "${m}m"
+          }
+        } else {
+          " ${m}m"
+        }
+    str +=
+        if (h == 0) {
+          if (m == 0) {
+            if (s == 0) {
+              "END!"
+            } else {
+              "${s}s"
+            }
+          } else {
+            " ${s}s"
           }
         } else {
           " ${s}s"
         }
-      } else {
-        " ${s}s"
-      }
 
     return str
   }
