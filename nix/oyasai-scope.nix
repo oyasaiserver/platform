@@ -14,31 +14,33 @@
           oyasaiScope = lib.makeScope pkgs.newScope (
             scopeSelf:
             let
-              package-lock2nixOverlay = final: prev: {
-                mkNpmModule =
-                  args:
-                  let
-                    orig = prev.mkNpmModule args;
-                  in
-                  orig.overrideAttrs (
-                    self:
-                    lib.optionalAttrs (builtins.pathExists (self.src + "/tsconfig.json")) {
-                      nativeBuildInputs =
-                        self.nativeBuildInputs or [ ]
-                        ++ (with pkgs; [
-                          jq
-                          moreutils
-                        ]);
-                      prePatch = orig.prePatch or "" + ''
-                        cat tsconfig.json | jq --arg tsconfig ${../tsconfig.json} '
-                          if has("extends")
-                          then .extends = $tsconfig
-                          else .
-                          end
-                        ' | sponge tsconfig.json
-                      '';
-                    }
-                  );
+              overlays = {
+                package-lock2nix = final: prev: {
+                  mkNpmModule =
+                    args:
+                    let
+                      orig = prev.mkNpmModule args;
+                    in
+                    orig.overrideAttrs (
+                      self:
+                      lib.optionalAttrs (builtins.pathExists (self.src + "/tsconfig.json")) {
+                        nativeBuildInputs =
+                          self.nativeBuildInputs or [ ]
+                          ++ (with pkgs; [
+                            jq
+                            moreutils
+                          ]);
+                        prePatch = orig.prePatch or "" + ''
+                          cat tsconfig.json | jq --arg tsconfig ${../tsconfig.json} '
+                            if has("extends")
+                            then .extends = $tsconfig
+                            else .
+                            end
+                          ' | sponge tsconfig.json
+                        '';
+                      }
+                    );
+                };
               };
             in
             {
@@ -49,7 +51,7 @@
 
               package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
                 inherit (scopeSelf) nodejs;
-                overrideScope = package-lock2nixOverlay;
+                overrideScope = overlays.package-lock2nix;
               };
 
               gradle2nix = inputs.gradle2nix.builders.${system};
