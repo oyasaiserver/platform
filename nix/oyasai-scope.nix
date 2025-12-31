@@ -53,6 +53,26 @@
               };
 
               gradle2nix = inputs.gradle2nix.builders.${system};
+
+              # TODO: Ideally we'd want to split up each into separate derivations
+              # but gradle projects are too complicated :(
+              all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+                pname = "all-plugins";
+                version = "0.0.0";
+                src = ../.;
+                inherit (scopeSelf) gradle;
+                buildJdk = scopeSelf.jdk;
+                lockFile = ../gradle.lock;
+                gradleBuildFlags = [ "build" ];
+                installPhase = ''
+                  runHook preInstall
+
+                  mkdir -p $out
+                  cp plugins/*/build/libs/*.jar $out
+
+                  runHook postInstall
+                '';
+              };
             }
             // lib.packagesFromDirectoryRecursive {
               inherit (scopeSelf) callPackage;
