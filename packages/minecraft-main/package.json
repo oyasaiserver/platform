@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@oyasaiserver/plugins": "file:../plugins",
-    "@oyasaiserver/secrets": "file:../secrets",
-    "@oyasaiserver/cdktf": "file:../cdktf"
+    "@oyasaiserver/secrets": "file:../secrets"
   },
   "devDependencies": {
     "@types/node": "25.0.3",
