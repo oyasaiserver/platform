@@ -31,7 +31,7 @@
     let
       flakeAllSystems = {
         perSystem =
-          { config, system, ... }:
+          { system, ... }:
           {
             _module.args = {
               pkgs = import nixpkgs {
