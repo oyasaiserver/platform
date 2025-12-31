@@ -42,10 +42,10 @@
               };
             in
             {
+              inherit (pkgs) terraform;
               nodejs = pkgs.nodejs_24;
               jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
               gradle = pkgs.gradle_9-unwrapped;
-              terraform = pkgs.terraform;
 
               package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
                 inherit (scopeSelf) nodejs;
@@ -53,28 +53,9 @@
               };
 
               gradle2nix = inputs.gradle2nix.builders.${system};
-
-              # TODO: Split up each into separate derivations
-              __all_plugins = scopeSelf.gradle2nix.buildGradlePackage {
-                pname = "plugins";
-                src = ../.;
-                version = "0.0.0";
-                inherit (scopeSelf) gradle;
-                buildJdk = scopeSelf.jdk;
-                lockFile = ../gradle.lock;
-                gradleBuildFlags = [ "build" ];
-                installPhase = ''
-                  runHook preInstall
-
-                  mkdir -p $out
-                  cp plugins/*/build/libs/*.jar $out
-
-                  runHook postInstall
-                '';
-              };
             }
             // lib.packagesFromDirectoryRecursive {
-              inherit (oyasaiScope) callPackage;
+              inherit (scopeSelf) callPackage;
               directory = ../packages;
             }
           );
@@ -82,7 +63,9 @@
         {
           oyasai.scope = oyasaiScope;
           packages = lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) {
-            inherit (oyasaiScope) cdktf;
+            inherit (oyasaiScope)
+              # exposed as `nix run .#...`
+              ;
           };
           checks = lib.concatMapAttrs (
             k: v: lib.optionalAttrs (lib.meta.availableOn { inherit system; } v) { "build-${k}" = v; }

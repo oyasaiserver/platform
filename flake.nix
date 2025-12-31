@@ -17,6 +17,7 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
+    systems.url = "github:nix-systems/default";
   };
   outputs =
     {
@@ -24,12 +25,13 @@
       flake-parts,
       treefmt-nix,
       devshell,
+      systems,
       ...
     }@inputs:
     let
       flakeAllSystems = {
         perSystem =
-          { system, ... }:
+          { config, system, ... }:
           {
             _module.args = {
               pkgs = import nixpkgs {
@@ -37,16 +39,35 @@
                 config.allowUnfree = true;
               };
             };
+            packages =
+              let
+                oyasaiScope = config.oyasai.scope;
+              in
+              {
+                # TODO: Split up each into separate derivations
+                all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+                  pname = "all-plugins";
+                  version = "0.0.0";
+                  src = ./.;
+                  inherit (oyasaiScope) gradle;
+                  buildJdk = oyasaiScope.jdk;
+                  lockFile = ./gradle.lock;
+                  gradleBuildFlags = [ "build" ];
+                  installPhase = ''
+                    runHook preInstall
+
+                    mkdir -p $out
+                    cp plugins/*/build/libs/*.jar $out
+
+                    runHook postInstall
+                  '';
+                };
+              };
           };
       };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
+      systems = import systems;
       imports = [
         ./nix/devshell.nix
         ./nix/oyasai-scope.nix
