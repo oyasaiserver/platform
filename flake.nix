@@ -48,10 +48,10 @@
                 all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
                   pname = "all-plugins";
                   version = "0.0.0";
-                  src = ../.;
+                  src = ./.;
                   inherit (oyasaiScope) gradle;
                   buildJdk = oyasaiScope.jdk;
-                  lockFile = ../gradle.lock;
+                  lockFile = ./gradle.lock;
                   gradleBuildFlags = [ "build" ];
                   installPhase = ''
                     runHook preInstall
