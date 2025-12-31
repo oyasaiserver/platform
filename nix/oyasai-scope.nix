@@ -52,13 +52,15 @@
                 overrideScope = package-lock2nixOverlay;
               };
 
+              gradle2nix = inputs.gradle2nix.builders.${system};
+
               # TODO: Split up each into separate derivations
-              __all_plugins = inputs.gradle2nix.builders.${system}.buildGradlePackage {
+              __all_plugins = scopeSelf.gradle2nix.buildGradlePackage {
                 pname = "plugins";
                 src = ../.;
                 version = "0.0.0";
                 inherit (scopeSelf) gradle;
-                buildJdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
+                buildJdk = scopeSelf.jdk;
                 lockFile = ../gradle.lock;
                 gradleBuildFlags = [ "build" ];
                 installPhase = ''
