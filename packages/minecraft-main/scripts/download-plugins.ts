@@ -88,5 +88,5 @@ if (import.meta.main) {
     await rm(file);
   }
 
-  await downloadPlugins(dir, plugins[environment]);
+  await downloadPlugins(dir, plugins[environment], "1.21.8");
 }

@@ -1,4 +1,3 @@
-import { DockerStack } from "@oyasaiserver/cdktf/stacks/docker-stack";
 import { ModrinthV2Client } from "@xmcl/modrinth";
 import { ok } from "node:assert/strict";
 import type { PathLike } from "node:fs";
@@ -11,7 +10,10 @@ import {
   type RegistryId,
 } from "./registry.ts";
 
-async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
+async function toDownloadUrl(
+  definition: PluginDefinition,
+  version: string,
+): Promise<URL> {
   switch (definition.type) {
     case "url":
       return new URL(definition.url);
@@ -24,7 +26,7 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
       const client = new ModrinthV2Client();
       const project = await client.getProject(definition.slug);
       const projectVersions = await client.getProjectVersions(project.id, {
-        gameVersions: [DockerStack.minecraftVersion],
+        gameVersions: [version],
         loaders: ["paper", "spigot", "bukkit"],
       });
       const url = projectVersions
@@ -47,8 +49,9 @@ async function toDownloadUrl(definition: PluginDefinition): Promise<URL> {
 
 export async function downloadJar(
   definition: PluginDefinition,
+  version: string,
 ): Promise<Uint8Array> {
-  const url = await toDownloadUrl(definition);
+  const url = await toDownloadUrl(definition, version);
   if (url.protocol === "file:") {
     return readFile(url.pathname); // fetching `file:` protocol is not supported
   }
@@ -66,9 +69,10 @@ export async function downloadJar(
 export async function downloadPlugins(
   dir: PathLike,
   ids: readonly RegistryId[],
+  version: string,
 ): Promise<void> {
   for (const id of ids) {
-    const bytes = await downloadJar(registry[id]);
+    const bytes = await downloadJar(registry[id], version);
     const path = join(dir.toString(), `${id}.jar`);
     await writeFile(path, bytes);
   }
