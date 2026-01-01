@@ -12,6 +12,7 @@ data class SLData(
     val owner: UUID,
     var title: String,
     val likes: MutableList<UUID>,
+    val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf(),
     var check: Boolean,
     var comment: String,
     val worldName: String,

@@ -113,6 +113,7 @@ object Events : Listener {
             e.player.uniqueId,
             title,
             mutableListOf(),
+            mutableMapOf(),
             false,
             "No comment",
             e.block.world.name,
@@ -206,6 +207,7 @@ object Events : Listener {
                   data.owner,
                   data.title,
                   data.likes,
+                  data.likesWithTimestamp,
                   data.check,
                   data.comment,
                   block.world.name,
@@ -247,6 +249,7 @@ object Events : Listener {
         // いいねを行う
         // データに記録・保存する
         data.likes.add(e.player.uniqueId)
+        data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
         Data.save(data)
         Data.changeUserLikesInt(data.owner, 1)
         AllBuild.updateSLSignData(data)
@@ -347,6 +350,7 @@ object Events : Listener {
                   data.owner,
                   data.title,
                   data.likes,
+                  data.likesWithTimestamp,
                   data.check,
                   data.comment,
                   block.world.name,
