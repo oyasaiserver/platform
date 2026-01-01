@@ -1,5 +1,5 @@
-import { downloadPlugins } from "@oyasaiserver/plugins/download";
-import { type RegistryId } from "@oyasaiserver/plugins/registry";
+import { downloadPlugins } from "@oyasaiserver/plugin-registry/download";
+import type { RegistryId } from "@oyasaiserver/plugin-registry";
 import type { Environment } from "@oyasaiserver/secrets/environment";
 import { readEnvironment } from "@oyasaiserver/secrets/environment";
 import { glob, rm } from "node:fs/promises";
