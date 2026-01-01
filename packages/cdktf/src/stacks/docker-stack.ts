@@ -10,6 +10,8 @@ import { envs, ports } from "../object.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export class DockerStack extends OyasaiTerraformStack {
+  // TODO: have a common place with minecraft-main, probably thru
+  // nix + terranix + envvar
   public static readonly minecraftVersion = "1.21.8";
 
   private workdir = join(

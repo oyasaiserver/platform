@@ -6,11 +6,7 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "tsc",
-    "test:integration": "node --test"
-  },
-  "dependencies": {
-    "@oyasaiserver/cdktf": "file:../cdktf"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/node": "25.0.3",
