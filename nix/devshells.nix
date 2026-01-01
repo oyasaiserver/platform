@@ -1,12 +1,12 @@
 { flake-parts-lib, ... }:
 {
   options.perSystem = flake-parts-lib.mkPerSystemOption (
-    { pkgs, config, ... }:
+    { config, ... }:
     let
       oyasaiScope = config.oyasai.scope;
     in
     {
-      devShells.default = pkgs.mkShell {
+      devshells.default = {
         packages = with oyasaiScope; [
           nodejs
           jdk

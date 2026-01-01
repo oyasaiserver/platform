@@ -45,7 +45,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
       imports = [
-        ./nix/devshell.nix
+        ./nix/devshells.nix
         ./nix/oyasai-scope.nix
         ./nix/treefmt.nix
         devshell.flakeModule
