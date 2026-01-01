@@ -58,12 +58,13 @@
                         moreutils
                       ]);
                     prePatch = orig.prePatch or "" + ''
-                      cat tsconfig.json | jq --arg tsconfig ${./tsconfig.json} '
-                        if has("extends")
-                        then .extends = $tsconfig
-                        else .
-                        end
-                      ' | sponge tsconfig.json
+                      
+                                            cat tsconfig.json | jq --arg tsconfig ${./tsconfig.json} '
+                                              if has("extends")
+                                              then .extends = $tsconfig
+                                              else .
+                                              end
+                                            ' | sponge tsconfig.json
                     '';
                   }
                 );
@@ -98,12 +99,13 @@
                 lockFile = ./gradle.lock;
                 gradleBuildFlags = [ "build" ];
                 installPhase = ''
-                  runHook preInstall
-
-                  mkdir -p $out
-                  cp plugins/*/build/libs/*.jar $out
-
-                  runHook postInstall
+                  
+                                    runHook preInstall
+                  
+                                    mkdir -p $out
+                                    cp plugins/*/build/libs/*.jar $out
+                  
+                                    runHook postInstall
                 '';
               };
             }

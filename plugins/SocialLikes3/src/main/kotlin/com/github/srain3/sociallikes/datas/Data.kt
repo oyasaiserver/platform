@@ -258,7 +258,18 @@ object Data {
 
                   // Cacheへ入れる
                   val slData =
-                      SLData(id, loc, time, owner, title, likes, likesWithTimestamp, check, comment, worldStr, textID)
+                      SLData(
+                          id,
+                          loc,
+                          time,
+                          owner,
+                          title,
+                          likes,
+                          likesWithTimestamp,
+                          check,
+                          comment,
+                          worldStr,
+                          textID)
                   val list = dataMap[it.name] ?: mutableListOf()
                   list.add(slData)
                   dataMap[it.name] = list
