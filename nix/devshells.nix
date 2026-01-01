@@ -1,18 +1,20 @@
 { flake-parts-lib, ... }:
 {
   options.perSystem = flake-parts-lib.mkPerSystemOption (
-    { config, ... }:
+    { pkgs, config, ... }:
     let
       oyasaiScope = config.oyasai.scope;
     in
     {
       devshells.default = {
-        packages = with oyasaiScope; [
-          nodejs
-          jdk
-          terraform
-          gradle
-        ];
+        packages =
+          (with oyasaiScope; [
+            nodejs
+            jdk
+            terraform
+            gradle
+          ])
+          ++ (with pkgs; [ infisical ]);
       };
     }
   );
