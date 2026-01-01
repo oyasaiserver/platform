@@ -31,7 +31,7 @@
     let
       flakeAllSystems = {
         perSystem =
-          { config, system, ... }:
+          { system, ... }:
           {
             _module.args = {
               pkgs = import nixpkgs {
@@ -39,30 +39,6 @@
                 config.allowUnfree = true;
               };
             };
-            packages =
-              let
-                oyasaiScope = config.oyasai.scope;
-              in
-              {
-                # TODO: Split up each into separate derivations
-                all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
-                  pname = "all-plugins";
-                  version = "0.0.0";
-                  src = ./.;
-                  inherit (oyasaiScope) gradle;
-                  buildJdk = oyasaiScope.jdk;
-                  lockFile = ./gradle.lock;
-                  gradleBuildFlags = [ "build" ];
-                  installPhase = ''
-                    runHook preInstall
-
-                    mkdir -p $out
-                    cp plugins/*/build/libs/*.jar $out
-
-                    runHook postInstall
-                  '';
-                };
-              };
           };
       };
     in
