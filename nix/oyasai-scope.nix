@@ -31,12 +31,12 @@
                             moreutils
                           ]);
                         prePatch = orig.prePatch or "" + ''
-                          cat tsconfig.json | jq --arg tsconfig ${../tsconfig.json} '
+                          jq --arg tsconfig ${../tsconfig.json} '
                             if has("extends")
                             then .extends = $tsconfig
                             else .
                             end
-                          ' | sponge tsconfig.json
+                          ' tsconfig.json | sponge tsconfig.json
                         '';
                       }
                     );
