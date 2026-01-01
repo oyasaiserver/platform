@@ -45,7 +45,7 @@ jobs:
       - name: Download plugins deps
         run: |
           npm ci
-        working-directory: packages/plugins
+        working-directory: packages/plugin-registry
       - name: Download cdktf deps
         run: |
           npm ci
