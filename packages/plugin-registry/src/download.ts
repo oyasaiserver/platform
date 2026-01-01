@@ -4,11 +4,7 @@ import type { PathLike } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { URL } from "node:url";
-import {
-  type PluginDefinition,
-  registry,
-  type RegistryId,
-} from "./registry.ts";
+import { type PluginDefinition, registry, type RegistryId } from "./index.ts";
 
 async function toDownloadUrl(
   definition: PluginDefinition,

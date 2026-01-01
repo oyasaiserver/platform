@@ -10,7 +10,7 @@
     "download-plugins": "node scripts/download-plugins.ts"
   },
   "dependencies": {
-    "@oyasaiserver/plugins": "file:../plugins",
+    "@oyasaiserver/plugin-registry": "file:../plugin-registry",
     "@oyasaiserver/secrets": "file:../secrets"
   },
   "devDependencies": {
