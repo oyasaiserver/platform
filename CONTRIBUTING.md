@@ -7,8 +7,14 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 ### Nix
 
-1. [nixos.org](https://nixos.org/download/) から Nix
-   をインストールしてください。インストール後にターミナルを再起動することを忘れずに。
+1. [nixos.org](https://nixos.org/download/)
+   からNixをインストールしてください。マルチユーザーを推奨しますが、シングルユーザーでも問題ありません。インストール後にターミナルを再起動することを忘れずに。
+1. いくつかの実験的要素を有効化する必要があります。次のコマンドを実行してください：
+
+```
+$ mkdir -p ~/.config/nix && echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
+```
+
 1. このレポジトリ内で `nix flake show` と実行してください。エラーが出なければ成功です。
 1. 今度は `nix develop` と実行してください。これが開発シェル (devshell)、Java など開発に必要なツールが全て入っています。
 
