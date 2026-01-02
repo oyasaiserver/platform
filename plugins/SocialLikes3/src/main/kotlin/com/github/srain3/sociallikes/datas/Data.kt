@@ -42,6 +42,9 @@ object Data {
     val likesStr = mutableListOf<String>()
     data.likes.forEach { likesStr.add(it.toString()) }
 
+    val likesWithTimestampStr = mutableMapOf<String, Long>()
+    data.likesWithTimestamp.forEach { (uuid, ts) -> likesWithTimestampStr[uuid.toString()] = ts }
+
     // Yamlファイルへ値を入れ、ファイルを保存する
     yml.apply {
       set("id", data.id)
@@ -53,6 +56,7 @@ object Data {
       set("owner", data.owner.toString())
       set("title", data.title)
       set("likes", likesStr)
+      set("likesWithTimestamp", likesWithTimestampStr)
       set("check", data.check)
       set("comment", data.comment)
       set("DiscordTextID", data.discordTextID)
@@ -239,9 +243,33 @@ object Data {
                   val likes: MutableList<UUID> = mutableListOf()
                   likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
 
+                  // likesWithTimestampのロード
+                  val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
+                  val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
+                  if (rawLikesWithTimestamp is Map<*, *>) {
+                    rawLikesWithTimestamp.forEach { (k, v) ->
+                      try {
+                        val uuid = UUID.fromString(k as String)
+                        val ts = (v as? Number)?.toLong() ?: v.toString().toLongOrNull()
+                        if (ts != null) likesWithTimestamp[uuid] = ts
+                      } catch (_: Exception) {}
+                    }
+                  }
+
                   // Cacheへ入れる
                   val slData =
-                      SLData(id, loc, time, owner, title, likes, check, comment, worldStr, textID)
+                      SLData(
+                          id,
+                          loc,
+                          time,
+                          owner,
+                          title,
+                          likes,
+                          likesWithTimestamp,
+                          check,
+                          comment,
+                          worldStr,
+                          textID)
                   val list = dataMap[it.name] ?: mutableListOf()
                   list.add(slData)
                   dataMap[it.name] = list
