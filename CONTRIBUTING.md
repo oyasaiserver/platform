@@ -82,4 +82,5 @@ $ gradle :plugins:<name>:build
 
 ## コードレビュー
 
-CODEOWNERS に沿ってレビュー担当者が自動アサインされます。1 approval でマージ可能です。
+[CODEOWNERS](https://github.com/oyasaiserver/platform/blob/master/CODEOWNERS)
+に沿ってレビュー担当者が自動アサインされます。1 approval でマージ可能です。
