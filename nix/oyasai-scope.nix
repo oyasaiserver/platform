@@ -47,7 +47,7 @@
               # thin derivation of just copying from here. This is because
               # Gradle makes it very hard as local (`project`) depencencies are
               # not part of the lockfile.
-              plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+              plugins = scopeSelf.gradle2nix.buildGradlePackage {
                 pname = "plugins";
                 version = "0.0.0";
                 src =
@@ -89,12 +89,14 @@
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
-              plugins = lib.mapAttrs (
+              plugins = lib.mapAttrs' (
                 name: _:
-                pkgs.runCommand name { } ''
-                  mkdir -p $out
-                  cp ${plugins}/${name}.jar $out
-                ''
+                lib.nameValuePair (lib.toLower name) (
+                  pkgs.runCommand name { } ''
+                    mkdir -p $out
+                    cp ${plugins}/${name}.jar $out
+                  ''
+                )
               ) (builtins.readDir ../plugins);
             }
             // lib.packagesFromDirectoryRecursive {
@@ -109,7 +111,7 @@
           legacyPackages.oyasai-plugins = oyasaiScope.plugins;
           packages = lib.filterAttrs (_: availableOnSystem) {
             # exposed as `nix run .#...`
-            inherit (oyasaiScope) ;
+            inherit (oyasaiScope) plugin-registry;
           };
           checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
             lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)

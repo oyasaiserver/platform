@@ -1,15 +1,54 @@
-import { ModrinthV2Client } from "@xmcl/modrinth";
-import { ok } from "node:assert/strict";
-import type { PathLike } from "node:fs";
-import { readFile, writeFile } from "node:fs/promises";
+#!/usr/bin/env node --enable-source-maps
+import { parseArgs } from "node:util";
 import { join } from "node:path";
 import { URL } from "node:url";
-import { type PluginDefinition, registry, type RegistryId } from "./index.ts";
+import { ModrinthV2Client } from "@xmcl/modrinth";
+import { ok } from "node:assert";
+import { writeFile } from "node:fs/promises";
 
-async function toDownloadUrl(
-  definition: PluginDefinition,
-  version: string,
-): Promise<URL> {
+const args = parseArgs({
+  options: {
+    type: {
+      type: "string",
+    },
+    out: {
+      type: "string",
+    },
+    // modrinth
+    slug: {
+      type: "string",
+    },
+    version: {
+      type: "string",
+    },
+    // spigot
+    id: {
+      type: "string",
+    },
+    // github
+    owner: {
+      type: "string",
+    },
+    repo: {
+      type: "string",
+    },
+    tag: {
+      type: "string",
+    },
+    name: {
+      type: "string",
+    },
+    // url
+    url: {
+      type: "string",
+    },
+  },
+});
+
+const bytes = await downloadJar(args.values);
+await writeFile(args.values.out!, bytes);
+
+async function toDownloadUrl(definition: any): Promise<URL> {
   switch (definition.type) {
     case "url":
       return new URL(definition.url);
@@ -22,7 +61,7 @@ async function toDownloadUrl(
       const client = new ModrinthV2Client();
       const project = await client.getProject(definition.slug);
       const projectVersions = await client.getProjectVersions(project.id, {
-        gameVersions: [version],
+        gameVersions: [definition.version],
         loaders: ["paper", "spigot", "bukkit"],
       });
       const url = projectVersions
@@ -37,20 +76,12 @@ async function toDownloadUrl(
         `https://github.com/${definition.owner}/${definition.repo}/releases/download/${definition.tag}/${definition.name}`,
       );
     }
-    case "local": {
-      return new URL(`file://${definition.path}`);
-    }
   }
+  throw new Error("");
 }
 
-export async function downloadJar(
-  definition: PluginDefinition,
-  version: string,
-): Promise<Uint8Array> {
-  const url = await toDownloadUrl(definition, version);
-  if (url.protocol === "file:") {
-    return readFile(url.pathname); // fetching `file:` protocol is not supported
-  }
+export async function downloadJar(definition: any): Promise<Uint8Array> {
+  const url = await toDownloadUrl(definition);
   const response = await fetch(url);
   const jarHeaders = [
     "application/zip",
@@ -60,16 +91,4 @@ export async function downloadJar(
   ok(jarHeaders.includes(response.headers.get("Content-Type") ?? ""));
   const arrayBuffer = await response.arrayBuffer();
   return new Uint8Array(arrayBuffer);
-}
-
-export async function downloadPlugins(
-  dir: PathLike,
-  ids: readonly RegistryId[],
-  version: string,
-): Promise<void> {
-  for (const id of ids) {
-    const bytes = await downloadJar(registry[id], version);
-    const path = join(dir.toString(), `${id}.jar`);
-    await writeFile(path, bytes);
-  }
 }
