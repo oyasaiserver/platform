@@ -43,6 +43,33 @@
                     );
                 };
               };
+              allPlugins = oyasaiScope.gradle2nix.buildGradlePackage {
+                pname = "all-plugins";
+                version = "0.0.0";
+                src =
+                  with lib.fileset;
+                  toSource {
+                    root = ../.;
+                    fileset = unions [
+                      ../build.gradle.kts
+                      ../gradle
+                      ../plugins
+                      ../settings.gradle.kts
+                    ];
+                  };
+                inherit (scopeSelf) gradle;
+                buildJdk = scopeSelf.jdk;
+                lockFile = ../gradle.lock;
+                gradleBuildFlags = [ "build" ];
+                installPhase = ''
+                  runHook preInstall
+
+                  mkdir -p $out
+                  cp plugins/*/build/libs/*.jar $out
+
+                  runHook postInstall
+                '';
+              };
             in
             {
               inherit (pkgs) terraform;
@@ -62,36 +89,10 @@
               # bacause local (`project`) depencencies are not part of the lockfile.
               plugins = lib.mapAttrs (
                 name: _:
-                (scopeSelf.gradle2nix.buildGradlePackage {
-                  pname = name;
-                  version = "0.0.0";
-                  src =
-                    with lib.fileset;
-                    toSource {
-                      root = ../.;
-                      fileset = unions [
-                        ../build.gradle.kts
-                        ../gradle
-                        ../plugins
-                        ../settings.gradle.kts
-                      ];
-                    };
-                  inherit (scopeSelf) gradle;
-                  buildJdk = scopeSelf.jdk;
-                  lockFile = ../gradle.lock;
-                  gradleBuildFlags = [
-                    ":plugins:${name}:build"
-                    "--no-daemon"
-                  ];
-                  installPhase = ''
-                    runHook preInstall
-
-                    mkdir -p $out
-                    cp plugins/${name}/build/libs/*.jar $out
-
-                    runHook postInstall
-                  '';
-                })
+                pkgs.runCommand name { } ''
+                  mkdir -p $out
+                  cp ${allPlugins}/${name}.jar $out
+                ''
               ) (builtins.readDir ../plugins);
             }
             // lib.packagesFromDirectoryRecursive {
