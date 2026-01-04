@@ -72,7 +72,6 @@
                       fileset = unions [
                         ../build.gradle.kts
                         ../gradle
-                        ../gradle.lock
                         ../plugins
                         ../settings.gradle.kts
                       ];
