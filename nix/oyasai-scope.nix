@@ -79,7 +79,10 @@
                   inherit (scopeSelf) gradle;
                   buildJdk = scopeSelf.jdk;
                   lockFile = ../gradle.lock;
-                  gradleBuildFlags = [ ":plugins:${name}:build" ];
+                  gradleBuildFlags = [
+                    ":plugins:${name}:build"
+                    "--no-daemon"
+                  ];
                   installPhase = ''
                     runHook preInstall
 
