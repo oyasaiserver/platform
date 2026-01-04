@@ -14,6 +14,7 @@
           oyasaiScope = lib.makeScope pkgs.newScope (
             scopeSelf:
             let
+              inherit (scopeSelf) callPackage;
               overlays = {
                 package-lock2nix = final: prev: {
                   mkNpmModule =
@@ -47,51 +48,67 @@
               inherit (pkgs) terraform;
               nodejs = pkgs.nodejs_24;
               jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
+              jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
               gradle = pkgs.gradle_9-unwrapped;
 
-              package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
+              package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
                 inherit (scopeSelf) nodejs;
                 overrideScope = overlays.package-lock2nix;
               };
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
-              # TODO: Ideally we'd want to split up each into separate derivations
-              # but gradle projects are too complicated :(
-              all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
-                pname = "all-plugins";
-                version = "0.0.0";
-                src = ../.;
-                inherit (scopeSelf) gradle;
-                buildJdk = scopeSelf.jdk;
-                lockFile = ../gradle.lock;
-                gradleBuildFlags = [ "build" ];
-                installPhase = ''
-                  runHook preInstall
+              # TODO: granular sourcesets for each derivation. Gradle makes it very hard
+              # bacause local (`project`) depencencies are not part of the lockfile.
+              plugins = lib.mapAttrs (
+                name: _:
+                (scopeSelf.gradle2nix.buildGradlePackage {
+                  pname = name;
+                  version = "0.0.0";
+                  src =
+                    with lib.fileset;
+                    toSource {
+                      root = ../.;
+                      fileset = unions [
+                        ../build.gradle.kts
+                        ../gradle
+                        ../gradle.lock
+                        ../plugins
+                        ../settings.gradle.kts
+                      ];
+                    };
+                  inherit (scopeSelf) gradle;
+                  buildJdk = scopeSelf.jdk;
+                  lockFile = ../gradle.lock;
+                  gradleBuildFlags = [ ":plugins:${name}:build" ];
+                  installPhase = ''
+                    runHook preInstall
 
-                  mkdir -p $out
-                  cp plugins/*/build/libs/*.jar $out
+                    mkdir -p $out
+                    cp plugins/${name}/build/libs/*.jar $out
 
-                  runHook postInstall
-                '';
-              };
+                    runHook postInstall
+                  '';
+                })
+              ) (builtins.readDir ../plugins);
             }
             // lib.packagesFromDirectoryRecursive {
-              inherit (scopeSelf) callPackage;
+              inherit callPackage;
               directory = ../packages;
             }
           );
+          availableOnSystem = lib.meta.availableOn { inherit system; };
         in
         {
           oyasai.scope = oyasaiScope;
-          packages = lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) {
-            inherit (oyasaiScope)
-              # exposed as `nix run .#...`
-              ;
+          legacyPackages.oyasai-plugins = oyasaiScope.plugins;
+          packages = lib.filterAttrs (_: availableOnSystem) {
+            # exposed as `nix run .#...`
+            inherit (oyasaiScope) ;
           };
-          checks = lib.concatMapAttrs (
-            k: v: lib.optionalAttrs (lib.meta.availableOn { inherit system; } v) { "build-${k}" = v; }
-          ) (lib.filterAttrs (_: lib.isDerivation) oyasaiScope);
+          checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
+            lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
+          );
         };
     }
   );
