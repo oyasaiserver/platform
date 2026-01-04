@@ -14,6 +14,7 @@
           oyasaiScope = lib.makeScope pkgs.newScope (
             scopeSelf:
             let
+              inherit (scopeSelf) callPackage;
               overlays = {
                 package-lock2nix = final: prev: {
                   mkNpmModule =
@@ -47,18 +48,21 @@
               inherit (pkgs) terraform;
               nodejs = pkgs.nodejs_24;
               jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
+              jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
               gradle = pkgs.gradle_9-unwrapped;
 
-              package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
+              package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
                 inherit (scopeSelf) nodejs;
                 overrideScope = overlays.package-lock2nix;
               };
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
+              oyasaiPapermc = callPackage ./oyasai-papermc.nix { };
+
               # TODO: Ideally we'd want to split up each into separate derivations
               # but gradle projects are too complicated :(
-              all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+              all-plugins = scopeSelf.gradle2nix.buildGradlePackage {
                 pname = "all-plugins";
                 version = "0.0.0";
                 src = ../.;
@@ -77,7 +81,7 @@
               };
             }
             // lib.packagesFromDirectoryRecursive {
-              inherit (scopeSelf) callPackage;
+              inherit callPackage;
               directory = ../packages;
             }
           );
@@ -85,9 +89,7 @@
         {
           oyasai.scope = oyasaiScope;
           packages = lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) {
-            inherit (oyasaiScope)
-              # exposed as `nix run .#...`
-              ;
+            inherit (oyasaiScope) minecraft-main;
           };
           checks = lib.concatMapAttrs (
             k: v: lib.optionalAttrs (lib.meta.availableOn { inherit system; } v) { "build-${k}" = v; }
