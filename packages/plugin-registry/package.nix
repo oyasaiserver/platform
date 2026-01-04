@@ -1,3 +1,67 @@
-{ package-lock2nix }:
+{
+  package-lock2nix,
+  stdenvNoCC,
+  makeWrapper,
+  lib,
+  plugins,
+  just,
+  writeShellApplication,
+}:
 
-package-lock2nix.mkNpmModule { src = ./.; }
+let
+  data = builtins.fromJSON (builtins.readFile ./data.json);
+
+  directory = {
+    gen = "gen";
+    static = "static";
+  };
+
+  update = writeShellApplication {
+    name = "plugin-registry-update";
+    text = ''
+      rm -rf ${directory.gen}
+    ''
+    + lib.concatMapAttrsStringSep "\n" (
+      version: entries:
+      lib.concatMapAttrsStringSep "\n" (
+        id: definition:
+        let
+          outdir = "${directory.gen}/${version}";
+          out = "${outdir}/${id}.jar";
+        in
+        ''
+          mkdir -p ${outdir}
+        ''
+        + (
+          if definition.type == "local" then
+            "cp ${plugins.${id}}/${definition.name} ${out}"
+          else if definition.type == "static" then
+            "cp ${directory.static}/${definition.name} ${out}"
+          else
+            "${final}/bin/plugin-registry-download-helper ${
+              lib.concatMapAttrsStringSep " " (k: v: " --${k} ${toString v}") definition
+            } --out ${out} --version ${version}"
+        )
+      ) entries
+    ) data;
+  };
+
+  final = package-lock2nix.mkNpmModule {
+    src = ./.;
+
+    passthru = {
+      update = stdenvNoCC.mkDerivation {
+        name = "plugin-registry-update";
+        src = ./.;
+
+        installPhase = ''
+          mkdir -p $out/bin
+          cp ${lib.getExe update} $out/bin/plugin-registry-update
+        '';
+      };
+
+      forVersion = (version: (lib.mapAttrs (k: v: k) data.${version}));
+    };
+  };
+in
+final

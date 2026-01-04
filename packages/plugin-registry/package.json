@@ -1,6 +1,9 @@
 {
   "name": "@oyasaiserver/plugin-registry",
   "type": "module",
+  "bin": {
+    "plugin-registry-download-helper": "scripts/download-helper.ts"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"

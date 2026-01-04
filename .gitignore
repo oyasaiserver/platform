@@ -402,12 +402,9 @@ cdktf.log
 # Wrangler
 .wrangler
 
-# Codegen
-!packages/codegen/lib/*.jar
-!gen/compose/compose.local.yaml
-
 # Local dependencies
 !**/static/*.jar
+!**/gen/**/*.jar
 
 # Local infra
 local
