@@ -61,15 +61,3 @@ export async function downloadJar(
   const arrayBuffer = await response.arrayBuffer();
   return new Uint8Array(arrayBuffer);
 }
-
-export async function downloadPlugins(
-  dir: PathLike,
-  ids: readonly RegistryId[],
-  version: string,
-): Promise<void> {
-  for (const id of ids) {
-    const bytes = await downloadJar(registry[id], version);
-    const path = join(dir.toString(), `${id}.jar`);
-    await writeFile(path, bytes);
-  }
-}

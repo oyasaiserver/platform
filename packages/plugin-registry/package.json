@@ -1,12 +1,16 @@
 {
   "name": "@oyasaiserver/plugin-registry",
   "type": "module",
+  "bin": {
+    "plugin-registry-update": "scripts/update.ts"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "update": "node scripts/update.ts"
   },
   "devDependencies": {
     "@types/node": "25.0.3",
