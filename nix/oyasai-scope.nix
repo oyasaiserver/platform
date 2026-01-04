@@ -14,6 +14,7 @@
           oyasaiScope = lib.makeScope pkgs.newScope (
             scopeSelf:
             let
+              inherit (scopeSelf) callPackage;
               overlays = {
                 package-lock2nix = final: prev: {
                   mkNpmModule =
@@ -42,26 +43,24 @@
                     );
                 };
               };
-            in
-            {
-              inherit (pkgs) terraform;
-              nodejs = pkgs.nodejs_24;
-              jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
-              gradle = pkgs.gradle_9-unwrapped;
-
-              package-lock2nix = pkgs.callPackage inputs.package-lock2nix.lib.package-lock2nix {
-                inherit (scopeSelf) nodejs;
-                overrideScope = overlays.package-lock2nix;
-              };
-
-              gradle2nix = inputs.gradle2nix.builders.${system};
-
-              # TODO: Ideally we'd want to split up each into separate derivations
-              # but gradle projects are too complicated :(
-              all-plugins = oyasaiScope.gradle2nix.buildGradlePackage {
-                pname = "all-plugins";
+              # TODO: Here we build all plugins, and each plugins will have a
+              # thin derivation of just copying from here. This is because
+              # Gradle makes it very hard as local (`project`) depencencies are
+              # not part of the lockfile.
+              plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+                pname = "plugins";
                 version = "0.0.0";
-                src = ../.;
+                src =
+                  with lib.fileset;
+                  toSource {
+                    root = ../.;
+                    fileset = unions [
+                      ../build.gradle.kts
+                      ../gradle
+                      ../plugins
+                      ../settings.gradle.kts
+                    ];
+                  };
                 inherit (scopeSelf) gradle;
                 buildJdk = scopeSelf.jdk;
                 lockFile = ../gradle.lock;
@@ -75,23 +74,46 @@
                   runHook postInstall
                 '';
               };
+            in
+            {
+              inherit (pkgs) terraform;
+              nodejs = pkgs.nodejs_24;
+              jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
+              jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
+              gradle = pkgs.gradle_9-unwrapped;
+
+              package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
+                inherit (scopeSelf) nodejs;
+                overrideScope = overlays.package-lock2nix;
+              };
+
+              gradle2nix = inputs.gradle2nix.builders.${system};
+
+              plugins = lib.mapAttrs (
+                name: _:
+                pkgs.runCommand name { } ''
+                  mkdir -p $out
+                  cp ${plugins}/${name}.jar $out
+                ''
+              ) (builtins.readDir ../plugins);
             }
             // lib.packagesFromDirectoryRecursive {
-              inherit (scopeSelf) callPackage;
+              inherit callPackage;
               directory = ../packages;
             }
           );
+          availableOnSystem = lib.meta.availableOn { inherit system; };
         in
         {
           oyasai.scope = oyasaiScope;
-          packages = lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) {
-            inherit (oyasaiScope)
-              # exposed as `nix run .#...`
-              ;
+          legacyPackages.oyasai-plugins = oyasaiScope.plugins;
+          packages = lib.filterAttrs (_: availableOnSystem) {
+            # exposed as `nix run .#...`
+            inherit (oyasaiScope) ;
           };
-          checks = lib.concatMapAttrs (
-            k: v: lib.optionalAttrs (lib.meta.availableOn { inherit system; } v) { "build-${k}" = v; }
-          ) (lib.filterAttrs (_: lib.isDerivation) oyasaiScope);
+          checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
+            lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
+          );
         };
     }
   );
