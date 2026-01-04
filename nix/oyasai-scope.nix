@@ -43,8 +43,12 @@
                     );
                 };
               };
-              allPlugins = oyasaiScope.gradle2nix.buildGradlePackage {
-                pname = "all-plugins";
+              # TODO: Here we build all plugins, and each plugins will have a
+              # thin derivation of just copying from here. This is because
+              # Gradle makes it very hard as local (`project`) depencencies are
+              # not part of the lockfile.
+              plugins = oyasaiScope.gradle2nix.buildGradlePackage {
+                pname = "plugins";
                 version = "0.0.0";
                 src =
                   with lib.fileset;
@@ -85,13 +89,11 @@
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
-              # TODO: granular sourcesets for each derivation. Gradle makes it very hard
-              # bacause local (`project`) depencencies are not part of the lockfile.
               plugins = lib.mapAttrs (
                 name: _:
                 pkgs.runCommand name { } ''
                   mkdir -p $out
-                  cp ${allPlugins}/${name}.jar $out
+                  cp ${plugins}/${name}.jar $out
                 ''
               ) (builtins.readDir ../plugins);
             }
