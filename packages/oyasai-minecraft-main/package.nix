@@ -3,6 +3,7 @@
   plugin-registry,
   lib,
   oyasaiDockerTools,
+  stdenv,
 }:
 
 let
@@ -22,7 +23,7 @@ let
       vertex
     ];
 
-    passthru = {
+    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {
         inherit name;
         config.Cmd = [ "${lib.getExe final}" ];
