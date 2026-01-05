@@ -7,7 +7,7 @@
 
 let
   final = oyasaiPurpur rec {
-    name = "minecraft-main";
+    name = "oyasai-minecraft-main";
     version = "1.21.8";
 
     # TODO: migrate all plugins once moved to production
