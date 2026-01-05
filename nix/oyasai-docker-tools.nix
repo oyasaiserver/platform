@@ -6,6 +6,6 @@ builtins.mapAttrs (
     let
       image = builder args;
     in
-    image.override { name = "ghcr.io/platform/${image.imageName}"; }
+    image.override { name = "ghcr.io/oyasaiserver/${image.imageName}"; }
   )
 ) dockerTools
