@@ -11,6 +11,7 @@
   name,
   version,
   plugins,
+  passthru ? { },
 }:
 
 let
@@ -31,7 +32,7 @@ let
   '';
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit name;
+  inherit name passthru;
 
   src =
     let
