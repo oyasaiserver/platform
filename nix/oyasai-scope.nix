@@ -91,6 +91,8 @@
 
               oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
+              oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
+
               plugins = lib.mapAttrs' (
                 name: _:
                 lib.nameValuePair (lib.toLower name) (

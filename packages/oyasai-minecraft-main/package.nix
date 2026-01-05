@@ -2,7 +2,7 @@
   oyasaiPurpur,
   plugin-registry,
   lib,
-  dockerTools,
+  oyasaiDockerTools,
 }:
 
 let
@@ -23,8 +23,8 @@ let
     ];
 
     passthru = {
-      docker = dockerTools.buildLayeredImage {
-        name = "ghcr.io/oyasaiserver/${name}";
+      docker = oyasaiDockerTools.buildLayeredImage {
+        inherit name;
         config.Cmd = [ "${lib.getExe final}" ];
       };
     };
