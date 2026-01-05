@@ -89,6 +89,8 @@
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
+              oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
+
               plugins = lib.mapAttrs' (
                 name: _:
                 lib.nameValuePair (lib.toLower name) (
@@ -111,7 +113,7 @@
           legacyPackages.oyasai-plugins = oyasaiScope.plugins;
           packages = lib.filterAttrs (_: availableOnSystem) {
             # exposed as `nix run .#...`
-            inherit (oyasaiScope) plugin-registry;
+            inherit (oyasaiScope) plugin-registry minecraft-main;
           };
           checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
             lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
