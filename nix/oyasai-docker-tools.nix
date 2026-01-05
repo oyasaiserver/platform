@@ -2,10 +2,16 @@
 builtins.mapAttrs (
   _:
   (
-    builder: args:
+    builder:
+    { platforms, ... }@args:
     let
-      image = builder args;
+      args' = builtins.removeAttrs args [ "platforms" ];
+      image = builder args';
     in
-    image.override { name = "ghcr.io/oyasaiserver/${image.imageName}"; }
+    image.override { name = "ghcr.io/oyasaiserver/${image.imageName}"; }.overrideAttrs (old: {
+      meta = (old.meta or { }) // {
+        inherit platforms;
+      };
+    })
   )
 ) dockerTools
