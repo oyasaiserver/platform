@@ -16,6 +16,8 @@ let
     static = "static";
   };
 
+  mkOut = (version: id: "${directory.gen}/${version}/${id}.jar");
+
   update = writeShellApplication {
     name = "plugin-registry-update";
     text = ''
@@ -26,11 +28,10 @@ let
       lib.concatMapAttrsStringSep "\n" (
         id: definition:
         let
-          outdir = "${directory.gen}/${version}";
-          out = "${outdir}/${id}.jar";
+          out = mkOut version id;
         in
         ''
-          mkdir -p ${outdir}
+          mkdir -p ${builtins.dirOf out}
         ''
         + (
           if definition.type == "local" then
@@ -60,7 +61,7 @@ let
         '';
       };
 
-      forVersion = (version: (lib.mapAttrs (k: v: k) data.${version}));
+      forVersion = (version: (lib.mapAttrs (id: _: "${final}/${mkOut version id}") data.${version}));
     };
   };
 in
