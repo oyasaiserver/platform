@@ -48,6 +48,7 @@
         ./nix/devshells.nix
         ./nix/oyasai-scope.nix
         ./nix/treefmt.nix
+        ./nix/docker.nix
         devshell.flakeModule
         treefmt-nix.flakeModule
         flakeAllSystems

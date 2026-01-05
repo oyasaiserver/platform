@@ -2,12 +2,13 @@
   oyasaiPurpur,
   plugin-registry,
   lib,
-  dockerTools,
+  oyasaiDockerTools,
+  stdenv,
 }:
 
 let
   final = oyasaiPurpur rec {
-    name = "minecraft-main";
+    name = "oyasai-minecraft-main";
     version = "1.21.8";
 
     # TODO: migrate all plugins once moved to production
@@ -22,8 +23,8 @@ let
       vertex
     ];
 
-    passthru = {
-      docker = dockerTools.buildLayeredImage {
+    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      docker = oyasaiDockerTools.buildLayeredImage {
         inherit name;
         config.Cmd = [ "${lib.getExe final}" ];
       };

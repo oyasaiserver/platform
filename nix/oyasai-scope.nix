@@ -91,6 +91,8 @@
 
               oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
+              oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
+
               plugins = lib.mapAttrs' (
                 name: _:
                 lib.nameValuePair (lib.toLower name) (
@@ -113,7 +115,7 @@
           legacyPackages.oyasai-plugins = oyasaiScope.plugins;
           packages = lib.filterAttrs (_: availableOnSystem) {
             # exposed as `nix run .#...`
-            inherit (oyasaiScope) plugin-registry minecraft-main;
+            inherit (oyasaiScope) plugin-registry oyasai-minecraft-main oyasai-push-nix-images;
           };
           checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
             lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
