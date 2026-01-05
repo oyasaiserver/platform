@@ -24,7 +24,7 @@ let
 
     passthru = {
       docker = dockerTools.buildLayeredImage {
-        inherit name;
+        name = "ghcr.io/oyasaiserver/${name}";
         config.Cmd = [ "${lib.getExe final}" ];
       };
     };

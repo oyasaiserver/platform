@@ -56,6 +56,7 @@ jobs:
       - nix-flake-check
       - nix-flake-health
       - nix-devshell
+      - push-to-ghcr
     runs-on: ubuntu-latest
     steps:
       - uses: Kesin11/actions-timeline@54d513e0b5ff1158f1cf8321108d666a5a6c1fca
