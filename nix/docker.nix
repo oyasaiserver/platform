@@ -39,26 +39,38 @@
         in
         lib.concatMapAttrs (k: v: { "${k}-docker" = v; }) standalone-docker-images
         // {
-          all-docker-images = aggregate pkgs (
-            builtins.listToAttrs (
-              map (
-                { image, name }:
-                {
-                  inherit name;
-                  value = image;
-                }
-              ) all-docker-image-derivs
+          all-docker-images =
+            aggregate pkgs (
+              builtins.listToAttrs (
+                map (
+                  { image, name }:
+                  {
+                    inherit name;
+                    value = image;
+                  }
+                ) all-docker-image-derivs
+              )
             )
-          );
-          all-docker-derivations = pkgs.writeText "all-docker-derivations" (
-            lib.concatLines (
-              map (
-                { name, image }:
-                with image;
-                "${imageName}:${imageTag} ${builtins.unsafeDiscardStringContext drvPath}"
-              ) all-docker-image-derivs
-            )
-          );
+            // {
+              references = builtins.listToAttrs (
+                map (
+                  { name, image }:
+                  {
+                    inherit name;
+                    value = with image; "${imageName}:${imageTag}";
+                  }
+                ) all-docker-image-derivs
+              );
+              derivations = pkgs.writeText "all-docker-derivations" (
+                lib.concatLines (
+                  map (
+                    { image, ... }:
+                    with image;
+                    "${imageName}:${imageTag} ${builtins.unsafeDiscardStringContext drvPath}"
+                  ) all-docker-image-derivs
+                )
+              );
+            };
         };
     };
 }
