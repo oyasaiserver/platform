@@ -7,8 +7,8 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 ### Nix
 
-1. [nixos.org](https://nixos.org/download/)
-   からNixをインストールしてください。マルチユーザーを推奨しますが、シングルユーザーでも問題ありません。インストール後にターミナルを再起動することを忘れずに。
+1. [nixos.org](https://nixos.org/download/) から Nix
+   をインストールしてください。マルチユーザーを推奨しますが、シングルユーザーでも問題ありません。インストール後にターミナルを再起動することを忘れずに。
 
 1. いくつかの実験的要素を有効化する必要があります。次のコマンドを実行してください：
 
@@ -22,7 +22,7 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 ### Docker Runtime（任意）
 
-Docker 実行環境があると、本番に近い形のインフラ環境で Platform を実行できます。 以下のいずれかをインストールしてください：
+Docker 実行環境があると、本番に近い形のインフラ環境で Platform を実行できます。以下のいずれかをインストールしてください：
 
 - Docker Desktop
 - OrbStack（macOS）
@@ -40,12 +40,12 @@ $ nix fmt
 
 と実行してください。
 
-### PR規約
+### PR 規約
 
 PR のタイトルは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)
 に従ってください。
 
-例:
+例：
 
 ```
 feat: add some feature
@@ -70,7 +70,7 @@ $ nix flake check -L
 
 ### プラグイン開発
 
-devshell に必要なツールは全て入っています。 全てのプラグインをビルドしたい場合は、レポジトリのルートで：
+devshell に必要なツールは全て入っています。全てのプラグインをビルドしたい場合は、レポジトリのルートで：
 
 ```
 $ gradle build --parallel
