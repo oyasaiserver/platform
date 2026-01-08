@@ -89,6 +89,8 @@
 
               gradle2nix = inputs.gradle2nix.builders.${system};
 
+              gradle2nix-cli = inputs.gradle2nix.packages.${system}.default;
+
               oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
               oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
@@ -115,7 +117,12 @@
           legacyPackages.oyasai-plugins = oyasaiScope.plugins;
           packages = lib.filterAttrs (_: availableOnSystem) {
             # exposed as `nix run .#...`
-            inherit (oyasaiScope) plugin-registry oyasai-minecraft-main oyasai-push-nix-images;
+            inherit (oyasaiScope)
+              plugin-registry
+              oyasai-minecraft-main
+              oyasai-push-nix-images
+              gradle2nix-cli
+              ;
           };
           checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
             lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)

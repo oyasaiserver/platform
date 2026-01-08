@@ -13,6 +13,7 @@
             jdk
             terraform
             gradle
+            gradle2nix-cli
           ])
           ++ (with pkgs; [ infisical ]);
       };
