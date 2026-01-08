@@ -12,7 +12,7 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 1. いくつかの実験的要素を有効化する必要があります。次のコマンドを実行してください：
 
-   ```
+   ```console
    $ mkdir -p ~/.config/nix && echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
    ```
 
@@ -34,7 +34,7 @@ Docker 実行環境があると、本番に近い形のインフラ環境で Pla
 
 フォーマットされていないコードは受け付けられません。フォーマットを行うには：
 
-```
+```console
 $ nix fmt
 ```
 
@@ -57,7 +57,7 @@ chore(deps): update dependencies
 
 CI では、全てのパッケージをビルドし、（もし存在するなら）テストを実行します。ローカルで行うには：
 
-```
+```console
 $ nix flake check -L
 ```
 
@@ -72,14 +72,20 @@ $ nix flake check -L
 
 devshell に必要なツールは全て入っています。全てのプラグインをビルドしたい場合は、レポジトリのルートで：
 
-```
+```console
 $ gradle build --parallel
 ```
 
 特定のプラグインをビルドしたい場合は：
 
-```
+```console
 $ gradle :plugins:<name>:build
+```
+
+依存関係を変更した場合は、`gradle.lock`の再生成が必要です:
+
+```console
+$ gradle2nix
 ```
 
 ## コードレビュー
