@@ -6,7 +6,6 @@ gson = {module = "com.google.code.gson:gson", version.ref = "gson"}
 inventoryframework = {module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework"}
 javacord = {module = "org.javacord:javacord", version.ref = "javacord"}
 kotlin-plugin = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
-kotlin-stdlib = {module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"}
 luckperms-api = {module = "net.luckperms:api", version.ref = "luckperms"}
 nuvotifier = {module = "com.github.NuVotifier:NuVotifier", version.ref = "nuvotifier"}
 placeholderapi = {module = "me.clip:placeholderapi", version.ref = "placeholderapi"}
