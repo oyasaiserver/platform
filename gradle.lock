@@ -587,22 +587,6 @@
       "hash": "sha256-rkd5XnIYA+yP8d7tdL4oqBGgJxO9WjqwrGfCtYy2Nas="
     }
   },
-  "io.github.java-diff-utils:java-diff-utils:4.12": {
-    "java-diff-utils-4.12.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.jar",
-      "hash": "sha256-mZCiA5d49rTMlHkBQcKGiGTqzuBiDGxFlFESGpAc1bU="
-    },
-    "java-diff-utils-4.12.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.pom",
-      "hash": "sha256-wm4JftyOxoBdExmBfSPU5JbMEBXMVdxSAhEtj2qRZfw="
-    }
-  },
-  "io.github.java-diff-utils:java-diff-utils-parent:4.12": {
-    "java-diff-utils-parent-4.12.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils-parent/4.12/java-diff-utils-parent-4.12.pom",
-      "hash": "sha256-2BHPnxGMwsrRMMlCetVcF01MCm8aAKwa4cm8vsXESxk="
-    }
-  },
   "io.vavr:vavr:0.10.4": {
     "vavr-0.10.4.jar": {
       "url": "https://repo.maven.apache.org/maven2/io/vavr/vavr/0.10.4/vavr-0.10.4.jar",
@@ -1421,16 +1405,6 @@
       "hash": "sha256-llrrK+3/NpgZvd4b96CzuJuCR91pyIuGN112Fju4w5c="
     }
   },
-  "org.jetbrains.kotlin:abi-tools:2.3.0": {
-    "abi-tools-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools/2.3.0/abi-tools-2.3.0.jar",
-      "hash": "sha256-voVKIwMrLLc8KF5n5O0LBMKvLTb0zwJjVcyllArRgz8="
-    },
-    "abi-tools-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools/2.3.0/abi-tools-2.3.0.pom",
-      "hash": "sha256-CyqAG3Wvmq9yay0QFeEvli4x0LP2uEB4IVgGV7IkzLg="
-    }
-  },
   "org.jetbrains.kotlin:abi-tools-api:2.3.0": {
     "abi-tools-api-2.3.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.3.0/abi-tools-api-2.3.0.jar",
@@ -1607,16 +1581,6 @@
       "hash": "sha256-cYYJKmnzaIQyxcCsuQtKZx/Y7oANhP5YT66P1TO6v4o="
     }
   },
-  "org.jetbrains.kotlin:kotlin-klib-abi-reader:2.3.0": {
-    "kotlin-klib-abi-reader-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-abi-reader/2.3.0/kotlin-klib-abi-reader-2.3.0.jar",
-      "hash": "sha256-QeMUIutesiS5pHX+gOuNBushrTT7fQpAjSyXKnq7jLs="
-    },
-    "kotlin-klib-abi-reader-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-abi-reader/2.3.0/kotlin-klib-abi-reader-2.3.0.pom",
-      "hash": "sha256-QKZ330ajUgsN5tIK2MgfmyP9jIaKb7WfHViYfqnWd5E="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.3.0": {
     "kotlin-klib-commonizer-api-2.3.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.3.0/kotlin-klib-commonizer-api-2.3.0.jar",
@@ -1625,16 +1589,6 @@
     "kotlin-klib-commonizer-api-2.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.3.0/kotlin-klib-commonizer-api-2.3.0.pom",
       "hash": "sha256-zTHw7NqCplEi/8alXehxE5S2GEtRRAK34RkZGqgJGoI="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:2.3.0": {
-    "kotlin-klib-commonizer-embeddable-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/2.3.0/kotlin-klib-commonizer-embeddable-2.3.0.jar",
-      "hash": "sha256-quNqDqrZxwcMmwuaFuUlyZEnb8CEiMx2VqhnHnxThCY="
-    },
-    "kotlin-klib-commonizer-embeddable-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/2.3.0/kotlin-klib-commonizer-embeddable-2.3.0.pom",
-      "hash": "sha256-VeTFZ4fJoEIO65pQivxRP5yAHgmJpPKoR6cMQ/kfbR8="
     }
   },
   "org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0": {

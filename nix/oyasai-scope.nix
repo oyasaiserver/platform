@@ -80,7 +80,7 @@
               nodejs = pkgs.nodejs_24;
               jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
               jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
-              gradle = pkgs.gradle_9-unwrapped;
+              gradle = pkgs.gradle_9.override { java = scopeSelf.jdk; };
 
               package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
                 inherit (scopeSelf) nodejs;
