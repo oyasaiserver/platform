@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
-      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: determinatesystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
       - run: nix flake check -L
 
   nix-flake-health:
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
-      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: determinatesystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
       - run: nix flake show
       - run: nix flake lock --no-update-lock-file
       - run: nix flake check --no-build
@@ -34,8 +34,19 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
-      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: determinatesystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+
+  nix-devshell-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: vampire/setup-wsl@6a8db447be7ed35f2f499c02c6e60ff77ef11278
+      - run: |
+          sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
+      - run: |
+          nix --version
+      - run: |
+          nix develop
 
   push-to-ghcr:
     runs-on: ubuntu-latest
@@ -45,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15
-      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: determinatesystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
       - uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
         with:
           registry: ghcr.io
@@ -62,4 +73,4 @@ jobs:
       - push-to-ghcr
     runs-on: ubuntu-latest
     steps:
-      - uses: Kesin11/actions-timeline@54d513e0b5ff1158f1cf8321108d666a5a6c1fca
+      - uses: kesin11/actions-timeline@54d513e0b5ff1158f1cf8321108d666a5a6c1fca
