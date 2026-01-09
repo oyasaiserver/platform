@@ -45,7 +45,7 @@
               };
               # TODO: Here we build all plugins, and each plugins will have a
               # thin derivation of just copying from here. This is because
-              # Gradle makes it very hard as local (`project`) depencencies are
+              # Gradle makes it very hard as local (`project`) dependencies are
               # not part of the lockfile.
               plugins = scopeSelf.gradle2nix.buildGradlePackage {
                 pname = "plugins";

@@ -45,6 +45,10 @@
           toml-sort = {
             enable = true;
           };
+          typos = {
+            enable = true;
+            excludes = [ "plugins/*" ];
+          };
           yamlfmt = {
             enable = true;
             settings.formatter = {
