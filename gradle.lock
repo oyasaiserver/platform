@@ -443,18 +443,18 @@
       "hash": "sha256-I7PQOeForYndEUaY5t1744P0osV3uId9gsc6ZRXnShc="
     }
   },
-  "com.gradleup.shadow:shadow-gradle-plugin:9.3.0": {
-    "shadow-gradle-plugin-9.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.0/shadow-gradle-plugin-9.3.0.jar",
-      "hash": "sha256-uFUwX/cSRvyntFSvhyAj1eyMHyrZsbu3AAM5B9upEzs="
+  "com.gradleup.shadow:shadow-gradle-plugin:9.3.1": {
+    "shadow-gradle-plugin-9.3.1.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.1/shadow-gradle-plugin-9.3.1.jar",
+      "hash": "sha256-lGB42YbsVs6P+NAWN9kPcJ8zPVg6tSCq3Y5EnTcE2Gc="
     },
-    "shadow-gradle-plugin-9.3.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.0/shadow-gradle-plugin-9.3.0.module",
-      "hash": "sha256-jV28n6obCRQ/XZGZxPa2mDQsiFvGcsXnqLCnFP0Qy3s="
+    "shadow-gradle-plugin-9.3.1.module": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.1/shadow-gradle-plugin-9.3.1.module",
+      "hash": "sha256-IuNwRjPPGSGbTVGUqNKJDPfPTbctRA5g6BIlcS+na2w="
     },
-    "shadow-gradle-plugin-9.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.0/shadow-gradle-plugin-9.3.0.pom",
-      "hash": "sha256-6Vv3tj25yBdlVfoq+DpGhRakOlYUORhM/FOCuakDObQ="
+    "shadow-gradle-plugin-9.3.1.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.3.1/shadow-gradle-plugin-9.3.1.pom",
+      "hash": "sha256-nLrNpEyjh3wt54LMo5iIGUYCimh4H/kOypnamAgO/JE="
     }
   },
   "com.mojang:brigadier:1.3.10": {
@@ -993,10 +993,10 @@
       "hash": "sha256-3HYwz4LLMfTUdiFgVCIa/9UldG7pZUEkD0UvcyNwMCI="
     }
   },
-  "org.apache.logging.log4j:log4j:2.25.2": {
-    "log4j-2.25.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j/2.25.2/log4j-2.25.2.pom",
-      "hash": "sha256-HYBXBY0LBcj3clyhrbpoc5y+rHWJjsoGpIymEVRsA+w="
+  "org.apache.logging.log4j:log4j:2.25.3": {
+    "log4j-2.25.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j/2.25.3/log4j-2.25.3.pom",
+      "hash": "sha256-pbdIJFris5b1vKlHpJbtwI29vfeWmuLMsattS0lznn8="
     }
   },
   "org.apache.logging.log4j:log4j:2.24.1": {
@@ -1011,18 +1011,18 @@
       "hash": "sha256-9Kfh04fB+5s2XUyzbScO+GNLpJrSBVWMThzafUG1I/U="
     }
   },
-  "org.apache.logging.log4j:log4j-api:2.25.2": {
-    "log4j-api-2.25.2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.2/log4j-api-2.25.2.jar",
-      "hash": "sha256-n9Zsn+C+oG+pZmwUeYmkbK+qkrSoh1NpfTlFzEMzjLs="
+  "org.apache.logging.log4j:log4j-api:2.25.3": {
+    "log4j-api-2.25.3.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.3/log4j-api-2.25.3.jar",
+      "hash": "sha256-6IZoKSD6D7nW62OV3LTeCIRD+GRsicXlhG4WjjJ/QG8="
     },
-    "log4j-api-2.25.2.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.2/log4j-api-2.25.2.module",
-      "hash": "sha256-WPeF66u6zDA/Ow5aSF91X9qzKQ9p5JsDT4lj0ngjZV4="
+    "log4j-api-2.25.3.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.3/log4j-api-2.25.3.module",
+      "hash": "sha256-W+T3N0jWz53pXLci63n8rVvCQnk6l4p+cmbyNZGBHAw="
     },
-    "log4j-api-2.25.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.2/log4j-api-2.25.2.pom",
-      "hash": "sha256-CVYJaiUCQIyVioMXTytqV9yy5bB7uRTISHMrRLirvcM="
+    "log4j-api-2.25.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.25.3/log4j-api-2.25.3.pom",
+      "hash": "sha256-MoS+ZXOuuDNGz/a3RvoyXSPq3Z0JyOKG7R11kEoS3W4="
     }
   },
   "org.apache.logging.log4j:log4j-api:2.24.1": {
@@ -1045,10 +1045,10 @@
       "hash": "sha256-K48/bUcd8Xlpkhp/D/2oPgYoqz3vx+W8oq7+0WZ2Ke8="
     }
   },
-  "org.apache.logging.log4j:log4j-bom:2.25.2": {
-    "log4j-bom-2.25.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-bom/2.25.2/log4j-bom-2.25.2.pom",
-      "hash": "sha256-Tym32cLZcP0qZpcXa/fd3EFQifYNaW0ov98xsk6S8Rw="
+  "org.apache.logging.log4j:log4j-bom:2.25.3": {
+    "log4j-bom-2.25.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-bom/2.25.3/log4j-bom-2.25.3.pom",
+      "hash": "sha256-ZleICHEo/mw6+dAlJEhTKvl4cRdmSB20k5a/AyWibK0="
     }
   },
   "org.apache.logging.log4j:log4j-bom:2.24.1": {
@@ -1057,18 +1057,18 @@
       "hash": "sha256-vGPPsrS5bbS9cwyWLoJPtpKMuEkCwUFuR3q1y3KwsNM="
     }
   },
-  "org.apache.logging.log4j:log4j-core:2.25.2": {
-    "log4j-core-2.25.2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.2/log4j-core-2.25.2.jar",
-      "hash": "sha256-5Q23cBQw/5B5gYUO9SekHVGlPdABf1Oghgr8urhXAnc="
+  "org.apache.logging.log4j:log4j-core:2.25.3": {
+    "log4j-core-2.25.3.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.3/log4j-core-2.25.3.jar",
+      "hash": "sha256-Nit/y2W3OqRsxLxTq/TrIW9ESoO10aA3y2/f/wrp8Pk="
     },
-    "log4j-core-2.25.2.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.2/log4j-core-2.25.2.module",
-      "hash": "sha256-JRQSc3eFDwR83jJbc7efriEzKSK+tkmiUzr9CEIlihE="
+    "log4j-core-2.25.3.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.3/log4j-core-2.25.3.module",
+      "hash": "sha256-ChRnoKtPxLJSc7VVHGCL15UguZ/SgRGgM9M4jwJVYwA="
     },
-    "log4j-core-2.25.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.2/log4j-core-2.25.2.pom",
-      "hash": "sha256-L/9GPTmclAgtmCLCG/v0cOEFHbt9S0XyWw54G8Xg9BI="
+    "log4j-core-2.25.3.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.25.3/log4j-core-2.25.3.pom",
+      "hash": "sha256-ysGDRqDJErAmrVF/SE78POgyZ/LPambKhGmRL/GYaw0="
     }
   },
   "org.apache.maven:maven:3.9.6": {
@@ -1647,16 +1647,6 @@
       "hash": "sha256-N51JdplIjLxv11nTN2QrRWLD2lI4g8NMH201PgZZvJc="
     }
   },
-  "org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0-RC2": {
-    "kotlin-metadata-jvm-2.3.0-RC2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.3.0-RC2/kotlin-metadata-jvm-2.3.0-RC2.jar",
-      "hash": "sha256-Wk90LxSQCsjMPsDzRsOD1aSsIcFUz6CDPyem5vZkcbs="
-    },
-    "kotlin-metadata-jvm-2.3.0-RC2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.3.0-RC2/kotlin-metadata-jvm-2.3.0-RC2.pom",
-      "hash": "sha256-o/ngkalB7A8LG/SeCS7QBofsNCqEtiGvyNIO+r9Jt64="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-native-utils:2.3.0": {
     "kotlin-native-utils-2.3.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-native-utils/2.3.0/kotlin-native-utils-2.3.0.jar",
@@ -1947,42 +1937,6 @@
     "mockito-bom-4.11.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-bom/4.11.0/mockito-bom-4.11.0.pom",
       "hash": "sha256-2FMadGyYj39o7V8YjN6pRQBq6pk+xd+eUk4NJ9YUkdo="
-    }
-  },
-  "org.ow2:ow2:1.5.1": {
-    "ow2-1.5.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/ow2/1.5.1/ow2-1.5.1.pom",
-      "hash": "sha256-Mh3bt+5v5PU96mtM1tt0FU1r+kI5HB92OzYbn0hazwU="
-    }
-  },
-  "org.ow2.asm:asm:9.9": {
-    "asm-9.9.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.9/asm-9.9.jar",
-      "hash": "sha256-A9madK0e5ccTNO9nQ39O9P40iMqnyW2GRavHPI4gF9Q="
-    },
-    "asm-9.9.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.9/asm-9.9.pom",
-      "hash": "sha256-z4Ye8edF1XFUr3muFN80DtU0Hl3NAVfO/NLrfxqgXFc="
-    }
-  },
-  "org.ow2.asm:asm-commons:9.9": {
-    "asm-commons-9.9.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.9/asm-commons-9.9.jar",
-      "hash": "sha256-2y9vJhULvnwSZga0oRUYNrzCKh4FpCOzWFaYvs6ZX/g="
-    },
-    "asm-commons-9.9.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.9/asm-commons-9.9.pom",
-      "hash": "sha256-GKXT7xN351RLPKMhDyYTlrmH9gEO9ZHThyra5jEZ7kM="
-    }
-  },
-  "org.ow2.asm:asm-tree:9.9": {
-    "asm-tree-9.9.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.9/asm-tree-9.9.jar",
-      "hash": "sha256-QhePN3XJxj+eXhRGdH0ptOyk2RvW515cQ8+jcqR9OMY="
-    },
-    "asm-tree-9.9.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.9/asm-tree-9.9.pom",
-      "hash": "sha256-0BeI7Y5ujiSsr2y0p73MJzNBYlL6oAIylZ4+Lp3xv0Q="
     }
   },
   "org.purpurmc.purpur:purpur-api:1.21.8-R0.1-SNAPSHOT": {
