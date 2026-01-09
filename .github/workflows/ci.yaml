@@ -38,6 +38,8 @@ jobs:
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
 
   nix-devshell-windows:
+    # Windows runner is expensive and can't use nix cache. Change the value temporarily to run.
+    if: true
     runs-on: windows-latest
     defaults:
       run:

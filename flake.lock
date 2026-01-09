@@ -80,11 +80,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1767020069,
-        "narHash": "sha256-24RKAKWqP+BWz9eBQhvbU6JX8hsOCpvfCooZ2OITONg=",
+        "lastModified": 1767971133,
+        "narHash": "sha256-RAmyvrtD1x7l5vgXmQwqdxEQ2PmoZlFSHMMj1T7OIp0=",
         "owner": "oyasaiserver",
         "repo": "gradle2nix",
-        "rev": "4113d25a94ebc71dcd7a29c83a303467dbe378bf",
+        "rev": "acff41db8ac22481b8da212fc2e82fb293059e47",
         "type": "github"
       },
       "original": {
