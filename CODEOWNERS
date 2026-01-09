@@ -1,3 +1,9 @@
 * @shunueda
+/plugins/DynamicProfile @takucan
+/plugins/OyasaiAdminTools @takucan
+/plugins/OyasaiPets @marzipan99
+/plugins/OyasaiUtilities @takucan
+/plugins/TPswitch @takucan
+/plugins/Vertex @shunueda
 /plugins/
 /gradle/libs.versions.toml
