@@ -7,6 +7,12 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 ### Nix
 
+> [!IMPORTANT]
+>
+> Windows
+> ユーザーは[WSL](https://learn.microsoft.com/ja-jp/windows/wsl/install)をインストールしてください。全ての作業は
+> WSL 内で行います。
+
 1. [nixos.org](https://nixos.org/download/) から Nix
    をインストールしてください。マルチユーザーを推奨しますが、シングルユーザーでも問題ありません。インストール後にターミナルを再起動することを忘れずに。
 
