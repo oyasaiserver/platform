@@ -11,7 +11,7 @@
           (with oyasaiScope; [
             nodejs
             jdk
-            terraform
+            # terraform NOMERGE
             gradle
             gradle2nix-cli
           ])

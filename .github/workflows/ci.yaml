@@ -39,7 +39,6 @@ jobs:
 
   nix-devshell-windows:
     # Windows runner is expensive and can't use nix cache. Change the value temporarily to run.
-    if: true
     runs-on: windows-latest
     defaults:
       run:
