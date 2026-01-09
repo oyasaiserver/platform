@@ -47,6 +47,7 @@ jobs:
         with:
           distribution: Ubuntu-24.04
       - run: sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+      - run: . /etc/profile.d/nix.sh
       - run: nix --extra-experimental-features 'nix-command flakes' develop
 
   push-to-ghcr:
