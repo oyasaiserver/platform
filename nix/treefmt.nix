@@ -6,9 +6,6 @@
       treefmt = {
         programs = {
           # keep-sorted start block=yes
-          actionlint = {
-            enable = true;
-          };
           autocorrect = {
             enable = true;
             excludes = [ "plugins/*" ];
