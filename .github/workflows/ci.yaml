@@ -38,7 +38,7 @@ jobs:
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
 
   nix-devshell-windows:
-    # Windows runner is expensive and can't use nix cache: run only on master.
+    # Windows runner is slow because it can't use nix cache: run only on master.
     if: github.ref == 'refs/heads/master'
     runs-on: windows-latest
     defaults:
