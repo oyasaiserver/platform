@@ -39,14 +39,15 @@ jobs:
 
   nix-devshell-windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: wsl-bash {0}
     steps:
       - uses: vampire/setup-wsl@6a8db447be7ed35f2f499c02c6e60ff77ef11278
-      - run: |
-          sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
-      - run: |
-          nix --version
-      - run: |
-          nix develop
+        with:
+          distribution: Ubuntu-24.04
+      - run: sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+      - run: nix --extra-experimental-features 'nix-command flakes' develop
 
   push-to-ghcr:
     runs-on: ubuntu-latest
