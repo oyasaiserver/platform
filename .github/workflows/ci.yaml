@@ -39,7 +39,7 @@ jobs:
 
   nix-devshell-windows:
     # Windows runner is slow because it can't use nix cache: run only on master.
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master' NOMERGE
     runs-on: windows-latest
     defaults:
       run:
@@ -49,9 +49,13 @@ jobs:
       - uses: vampire/setup-wsl@6a8db447be7ed35f2f499c02c6e60ff77ef11278
         with:
           distribution: Ubuntu-24.04
-      - run: sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+      - run: bash scripts/nix-quick-install.sh
+        env:
+          RELEASE_FILE: ${{ github.action_path }}/RELEASE
+          NIX_VERSION: 2.29.2
+          GITHUB_ACCESS_TOKEN: ${{ github.token }}
+          ENABLE_KVM: true
       - run: |
-          . /etc/profile.d/nix.sh
           nix --extra-experimental-features 'nix-command flakes' develop
 
   push-to-ghcr:
