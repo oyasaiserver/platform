@@ -26,14 +26,6 @@ platform は、おやさい鯖に関連するプラグイン・インフラ・We
 
 1. 今度は `nix develop` と実行してください。これが開発シェル (devshell)、Java など開発に必要なツールが全て入っています。
 
-### Docker Runtime（任意）
-
-Docker 実行環境があると、本番に近い形のインフラ環境で Platform を実行できます。以下のいずれかをインストールしてください：
-
-- Docker Desktop
-- OrbStack（macOS）
-- Colima（macOS / Linux）
-
 ## コード規約
 
 ### フォーマット
@@ -44,20 +36,10 @@ Docker 実行環境があると、本番に近い形のインフラ環境で Pla
 $ nix fmt
 ```
 
-と実行してください。
-
 ### PR 規約
 
 PR のタイトルは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)
 に従ってください。
-
-例：
-
-```
-feat: add some feature
-fix(infra): resolve issue with deployment
-chore(deps): update dependencies
-```
 
 ## テスト
 
@@ -67,12 +49,7 @@ CI では、全てのパッケージをビルドし、（もし存在するな�
 $ nix flake check -L
 ```
 
-と実行してください。
-
 ## ローカル開発
-
-> 現在工事中。[`process-compose`](https://github.com/F1bonacc1/process-compose)
-> を使用した環境を構築中です。
 
 ### プラグイン開発
 
