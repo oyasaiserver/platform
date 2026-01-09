@@ -43,6 +43,7 @@ jobs:
       run:
         shell: wsl-bash {0}
     steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: vampire/setup-wsl@6a8db447be7ed35f2f499c02c6e60ff77ef11278
         with:
           distribution: Ubuntu-24.04
