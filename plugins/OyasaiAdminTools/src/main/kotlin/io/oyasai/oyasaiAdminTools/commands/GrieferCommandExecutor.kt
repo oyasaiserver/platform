@@ -29,7 +29,7 @@ object GrieferCommandExecutor : CommandExecutor, TabCompleter {
         if (Bukkit.dispatchCommand(sender, "tempban ${args.joinToString(" ")}")) {
           SendEmbedMessage.sendBanNotification(args[0], sender.name, args[2], args[1])
           Bukkit.getOnlinePlayers().forEach {
-            it.playSound(it.eyeLocation, Sound.ITEM_MACE_SMASH_GROUND_HEAVY, 1.0f, 2.0f)
+            it.playSound(it.eyeLocation, Sound.ITEM_MACE_SMASH_GROUND_HEAVY, 0.5f, 2.0f)
             it.sendMessage("§4§l[ＢＡＮ] §f§l${args[0]} §fが§c§lBAN§fされました。")
           }
         }
