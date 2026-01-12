@@ -23,9 +23,6 @@ let
     };
   };
   setup = writeShellScriptBin "${name}-setup" ''
-    mkdir -p ${directory}
-    cd ${directory}
-
     echo "eula=true" > eula.txt
 
     mkdir -p plugins
@@ -56,6 +53,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -v $src $out/lib/minecraft/server.jar
 
     makeWrapper ${jre}/bin/java $out/bin/minecraft-server \
+      --run "mkdir -p ${directory}" \
+      --chdir ${directory} \
       --run "${lib.getExe setup}" \
       --add-flags "-jar $out/lib/minecraft/server.jar nogui"
   '';
