@@ -1,4 +1,4 @@
-{ oyasaiPurpur, plugin-registry }:
+{ oyasaiPurpur, oyasai-plugin-registry }:
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-minimal";
@@ -6,7 +6,8 @@ oyasaiPurpur rec {
 
   directory = "local";
 
-  plugins = with (plugin-registry.forVersion version); [
+  # see packages/oyasai-plugins-registry/data.json
+  plugins = with (oyasai-plugin-registry.forVersion version); [
     essentialsx
     fastasyncworldedit
     plugmanx
