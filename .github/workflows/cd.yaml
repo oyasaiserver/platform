@@ -45,7 +45,7 @@ jobs:
       - name: Download plugins deps
         run: |
           npm ci
-        working-directory: packages/plugin-registry
+        working-directory: packages/oyasai-plugin-registry
       - name: Download cdktf deps
         run: |
           npm ci
