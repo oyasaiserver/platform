@@ -57,7 +57,7 @@ $ nix flake check -L
 サーバーを作成できます。[./packages/oyasai-minecraft-minimal.nix](https://github.com/oyasaiserver/platform/blob/master/packages/oyasai-minecraft-minimal.nix)を参考に、構成を作成してください。
 
 作成したら、`git add <path-to-your-config>`でステージし、[./nix/oyasai-scope.nix](https://github.com/oyasaiserver/platform/blob/master/nix/oyasai-scope.nix)の他のエントリが置いてあるところ
-(ヒント：`oyasai-minecraft-marzipan`と検索してみてください) に追記してください。
+(ヒント：`oyasai-minecraft-minimal`と検索してみてください) に追記してください。
 
 作成したサーバーは、
 
