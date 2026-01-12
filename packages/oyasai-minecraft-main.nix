@@ -1,6 +1,6 @@
 {
   oyasaiPurpur,
-  plugin-registry,
+  oyasai-plugin-registry,
   lib,
   oyasaiDockerTools,
   stdenv,
@@ -12,7 +12,7 @@ let
     version = "1.21.8";
 
     # TODO: migrate all plugins once moved to production
-    plugins = with (plugin-registry.forVersion version); [
+    plugins = with (oyasai-plugin-registry.forVersion version); [
       essentialsx
       fastasyncworldedit
       luckperms
@@ -22,6 +22,8 @@ let
       nuvotifier
       vertex
     ];
+
+    # TODO: world container config
 
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {

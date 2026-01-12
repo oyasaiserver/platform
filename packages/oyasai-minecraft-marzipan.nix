@@ -1,4 +1,4 @@
-{ oyasaiPurpur, plugin-registry }:
+{ oyasaiPurpur, oyasai-plugin-registry }:
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-marzipan";
@@ -6,7 +6,7 @@ oyasaiPurpur rec {
 
   directory = "local";
 
-  plugins = with (plugin-registry.forVersion version); [
+  plugins = with (oyasai-plugin-registry.forVersion version); [
     essentialsx
     fastasyncworldedit
     plugmanx
