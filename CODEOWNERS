@@ -1,4 +1,6 @@
 * @shunueda
+/gradle/libs.versions.toml
+
 /plugins/DynamicProfile @takucan
 /plugins/OyasaiAdminTools @takucan
 /plugins/OyasaiPets @marzipan99
@@ -6,4 +8,6 @@
 /plugins/TPswitch @takucan
 /plugins/Vertex @shunueda
 /plugins/
-/gradle/libs.versions.toml
+
+/packages/oyasai-minecraft-minimal.nix @shunueda
+/packages/oyasai-minecraft-marzipan.nix @marzipan99
