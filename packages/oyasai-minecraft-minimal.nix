@@ -1,17 +1,14 @@
 { oyasaiPurpur, plugin-registry }:
 
-let
-  final = oyasaiPurpur rec {
-    name = "oyasai-minecraft-minimal";
-    version = "1.21.8";
+oyasaiPurpur rec {
+  name = "oyasai-minecraft-minimal";
+  version = "1.21.8";
 
-    directory = "local";
+  directory = "local";
 
-    plugins = with (plugin-registry.forVersion version); [
-      essentialsx
-      fastasyncworldedit
-      plugmanx
-    ];
-  };
-in
-final
+  plugins = with (plugin-registry.forVersion version); [
+    essentialsx
+    fastasyncworldedit
+    plugmanx
+  ];
+}
