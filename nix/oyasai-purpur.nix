@@ -11,6 +11,7 @@
   name,
   version,
   plugins,
+  directory ? ".",
   passthru ? { },
 }:
 
@@ -22,6 +23,9 @@ let
     };
   };
   setup = writeShellScriptBin "${name}-setup" ''
+    mkdir -p ${directory}
+    cd ${directory}
+
     echo "eula=true" > eula.txt
 
     mkdir -p plugins

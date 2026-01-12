@@ -122,8 +122,15 @@
           oyasai.scope = oyasaiScope;
           legacyPackages.oyasai-plugins = oyasaiScope.plugins;
           packages = lib.filterAttrs (_: availableOnSystem) {
-            # exposed as `nix run .#...`
-            inherit (oyasaiScope) plugin-registry oyasai-minecraft-main oyasai-push-nix-images;
+            inherit (oyasaiScope)
+              # keep-sorted start
+              oyasai-minecraft-main
+              oyasai-minecraft-marzipan
+              oyasai-minecraft-minimal
+              oyasai-push-nix-images
+              plugin-registry
+              # keep-sorted end
+              ;
           };
           checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
             lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
