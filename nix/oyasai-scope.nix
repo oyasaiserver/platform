@@ -127,8 +127,8 @@
               oyasai-minecraft-main
               oyasai-minecraft-marzipan
               oyasai-minecraft-minimal
+              oyasai-plugin-registry
               oyasai-push-nix-images
-              plugin-registry
               # keep-sorted end
               ;
           };

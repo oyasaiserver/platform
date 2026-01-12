@@ -1,12 +1,8 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    flake-parts.url = "github:hercules-ci/flake-parts";
     devshell.url = "github:numtide/devshell";
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
     gradle2nix = {
       url = "github:oyasaiserver/gradle2nix?ref=v2";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,6 +14,10 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     systems.url = "github:nix-systems/default";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -45,13 +45,15 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
       imports = [
+        # keep-sorted start
         ./nix/devshells.nix
+        ./nix/docker.nix
         ./nix/oyasai-scope.nix
         ./nix/treefmt.nix
-        ./nix/docker.nix
         devshell.flakeModule
-        treefmt-nix.flakeModule
         flakeAllSystems
+        treefmt-nix.flakeModule
+        # keep-sorted end
       ];
     };
 }
