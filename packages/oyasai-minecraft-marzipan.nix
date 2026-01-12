@@ -6,6 +6,7 @@ oyasaiPurpur rec {
 
   directory = "local";
 
+  # see packages/oyasai-plugins-registry/data.json
   plugins = with (oyasai-plugin-registry.forVersion version); [
     essentialsx
     fastasyncworldedit
