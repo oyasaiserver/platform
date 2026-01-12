@@ -405,6 +405,7 @@ cdktf.log
 # Local dependencies
 !**/static/*.jar
 !**/gen/**/*.jar
+!**/libs/*.jar
 
 # Local infra
 local

@@ -1,14 +1,10 @@
-name: OyasaiAnalytics
+name: OyasaiPets
 version: 1.0-SNAPSHOT
-main: me.marzipan.oyasaiAnalytics.BigWolfPlugin
+main: me.marzipan.OyasaiPets.BigWolfPlugin
 api-version: 1.21
+depend: [TokenManager]
+
 commands:
   bigwolf:
     description: 狼を召喚する
     usage: /bigwolf
-    permission: bigwolf.admin
-    permission-message: §cあなたにはこのコマンドを実行する権限がありません。
-permissions:
-  bigwolf.admin:
-    description: 管理者専用権限
-    default: op
