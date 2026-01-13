@@ -4,6 +4,7 @@
   makeWrapper,
   lib,
   plugins,
+  plugins-batch,
   just,
   writeShellApplication,
 }:
@@ -49,6 +50,7 @@ let
 
   final = package-lock2nix.mkNpmModule {
     src = ./.;
+    buildInputs = [ plugins-batch ];
 
     passthru = {
       update = stdenvNoCC.mkDerivation {

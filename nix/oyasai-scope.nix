@@ -47,7 +47,7 @@
               # thin derivation of just copying from here. This is because
               # Gradle makes it very hard as local (`project`) dependencies are
               # not part of the lockfile.
-              plugins = scopeSelf.gradle2nix.buildGradlePackage {
+              plugins-batch = scopeSelf.gradle2nix.buildGradlePackage {
                 pname = "plugins";
                 version = "0.0.0";
                 src =
@@ -101,12 +101,14 @@
 
               oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
 
+              inherit plugins-batch;
+
               plugins = lib.mapAttrs' (
                 name: _:
                 lib.nameValuePair (lib.toLower name) (
                   pkgs.runCommand name { } ''
                     mkdir -p $out
-                    cp ${plugins}/${name}.jar $out
+                    cp ${plugins-batch}/${name}.jar $out
                   ''
                 )
               ) (builtins.readDir ../plugins);
