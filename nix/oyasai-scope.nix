@@ -131,7 +131,6 @@
               oyasai-minecraft-minimal
               oyasai-plugin-registry
               oyasai-push-nix-images
-              plugins-batch
               # keep-sorted end
               ;
           };
