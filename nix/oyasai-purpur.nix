@@ -15,6 +15,7 @@
   directory ? ".",
   port ? 25565,
   passthru ? { },
+  cleanPlugins ? true,
 }:
 
 let
@@ -29,11 +30,16 @@ let
     runtimeInputs = [ coreutils ];
     text = ''
       echo "eula=true" > eula.txt
-
       mkdir -p plugins
-      rm -rf plugins/.paper-remapped
-      rm -f plugins/*.jar
-
+      ${
+        if cleanPlugins then
+          ''
+            rm -rf plugins/.paper-remapped
+            rm -f plugins/*.jar
+          ''
+        else
+          ""
+      }
       ${lib.concatMapStringsSep "\n" (k: "cp --no-preserve=ownership,mode ${k} plugins") plugins}
     '';
   };
