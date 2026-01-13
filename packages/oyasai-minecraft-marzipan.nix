@@ -8,6 +8,8 @@ oyasaiPurpur rec {
 
   port = 8000;
 
+  cleanPlugins = false;
+
   # see packages/oyasai-plugins-registry/data.json
   plugins = with (oyasai-plugin-registry.forVersion version); [
     essentialsx
