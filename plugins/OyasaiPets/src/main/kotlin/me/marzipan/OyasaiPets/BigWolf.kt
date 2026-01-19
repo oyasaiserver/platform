@@ -382,7 +382,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
       // OP用：全部配布 (旧コマンド: リダイレクト)
       "skillbook" -> {
         if (!sender.isOp) {
-          sender.sendMessage(Component.text("OPのみ使用できます。", RED))
+          sender.sendMessage(Component.text("OPのみ使用できます！", RED))
           return true
         }
         sender.sendMessage(Component.text("/bigwolf item skillbook を使ってください", YELLOW))
