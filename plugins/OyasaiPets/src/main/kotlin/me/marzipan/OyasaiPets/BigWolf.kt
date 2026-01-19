@@ -374,7 +374,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
           sender.sendMessage(Component.text("OPのみ使用できます。", RED))
           return true
         }
-        sender.sendMessage(Component.text("/bigwolf item food を使ってください", YELLOW))
+        sender.sendMessage(Component.text("/bigwolf item food を使ってください！", YELLOW))
         sender.inventory.addItem(createPetFoodItem())
         sender.sendMessage(Component.text("魔法のペットフードを入手しました！", YELLOW))
       }
@@ -382,7 +382,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
       // OP用：全部配布 (旧コマンド: リダイレクト)
       "skillbook" -> {
         if (!sender.isOp) {
-          sender.sendMessage(Component.text("OPのみ使用できます。", RED))
+          sender.sendMessage(Component.text("OPのみ使用できます！", RED))
           return true
         }
         sender.sendMessage(Component.text("/bigwolf item skillbook を使ってください", YELLOW))
@@ -469,7 +469,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   // 指定プレイヤーの全ペットを強制収納
   private fun handleForceStoreAll(player: Player, args: Array<out String>) {
     if (!player.isOp) {
-      player.sendMessage(Component.text("OPのみ使用できます。", RED))
+      player.sendMessage(Component.text("OPのみが使用できます。", RED))
       return
     }
     if (args.size < 2) {
