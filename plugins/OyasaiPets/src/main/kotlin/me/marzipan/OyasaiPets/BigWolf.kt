@@ -469,7 +469,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   // 指定プレイヤーの全ペットを強制収納
   private fun handleForceStoreAll(player: Player, args: Array<out String>) {
     if (!player.isOp) {
-      player.sendMessage(Component.text("OPのみ使用できます。", RED))
+      player.sendMessage(Component.text("OPのみが使用できます。", RED))
       return
     }
     if (args.size < 2) {
