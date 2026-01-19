@@ -374,7 +374,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
           sender.sendMessage(Component.text("OPのみ使用できます。", RED))
           return true
         }
-        sender.sendMessage(Component.text("/bigwolf item food を使ってください", YELLOW))
+        sender.sendMessage(Component.text("/bigwolf item food を使ってください！", YELLOW))
         sender.inventory.addItem(createPetFoodItem())
         sender.sendMessage(Component.text("魔法のペットフードを入手しました！", YELLOW))
       }
