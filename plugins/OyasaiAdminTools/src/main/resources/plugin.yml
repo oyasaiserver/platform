@@ -4,6 +4,8 @@ main: io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 api-version: "1.21"
 softdepend:
   - AdvancedBan
+  - TokenManager
+  - WorldBorder
 commands:
   ban:
     aliases: ["oyasaiban", "aban", "tempban"]
@@ -24,6 +26,10 @@ commands:
       - pm
       - pmanager
     permission: oyasai.playermanager
+  kakutyo:
+    description: 個人ワールド拡張用マクロ
+    usage: /kakutyo <プレイヤー名> <ポイント>
+    permission: oyasai.kakutyo
 permissions:
   oyasai.syokaku:
     description: syokakuコマンドの使用権限
@@ -33,4 +39,7 @@ permissions:
     default: op
   oyasai.playermanager:
     description: playermanagerコマンドの使用権限
+    default: op
+  oyasai.kakutyo:
+    description: kakutyoコマンドの使用権限
     default: op
