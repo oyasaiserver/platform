@@ -255,6 +255,16 @@
       "hash": "sha256-+rwP+LRf4vswrntavLL8l/1XXls1WAeM5Z4sfwpqCWY="
     }
   },
+  "com.github.PryPurity:WorldBorder:2.1.4": {
+    "WorldBorder-2.1.4.jar": {
+      "url": "https://repo.purpurmc.org/snapshots/com/github/PryPurity/WorldBorder/2.1.4/WorldBorder-2.1.4.jar",
+      "hash": "sha256-5PC9yW3eXCqbjQn8NU4RoSuE1pyTuvY9HegXuK2yG38="
+    },
+    "WorldBorder-2.1.4.pom": {
+      "url": "https://repo.purpurmc.org/snapshots/com/github/PryPurity/WorldBorder/2.1.4/WorldBorder-2.1.4.pom",
+      "hash": "sha256-ryEHDALxm/FT5KMNeZFrULpl0nENKc3hnrypxYBx9Hc="
+    }
+  },
   "com.github.Realizedd:TokenManager:3.2.4": {
     "TokenManager-3.2.4.jar": {
       "url": "https://repo.purpurmc.org/snapshots/com/github/Realizedd/TokenManager/3.2.4/TokenManager-3.2.4.jar",
