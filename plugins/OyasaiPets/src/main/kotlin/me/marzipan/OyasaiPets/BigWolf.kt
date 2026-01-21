@@ -662,7 +662,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     entity.statTreats = petData.stats.treats
 
     if (petData.variant != null) {
-      VariantHandler.applyVariant(entity, petData.variant!!)
+      VariantHandler.applyVariant(entity, petData.variant)
     }
 
     updateStats(entity, petData.foodLevel, spec)
@@ -2528,7 +2528,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   // --- ペット死亡時の処理 ---
   @EventHandler
   fun onPetDeath(event: EntityDeathEvent) {
-    val entity = event.entity as? LivingEntity ?: return
+    val entity = event.entity
     val petId = entity.petId ?: return
     val ownerId = entity.ownerId ?: return
 
@@ -2554,7 +2554,7 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
   // --- 降車時にペットの位置を記録 ---
   @EventHandler
   fun onPetDismount(event: EntityDismountEvent) {
-    val player = event.entity as? Player ?: return
+    if (event.entity !is Player) return
     val entity = event.dismounted as? LivingEntity ?: return
 
     val petId = entity.petId ?: return

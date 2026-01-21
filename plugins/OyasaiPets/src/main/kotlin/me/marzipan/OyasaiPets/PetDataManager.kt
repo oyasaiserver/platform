@@ -7,7 +7,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -43,7 +42,6 @@ object PetDataManager {
         variant: String?,
         customName: String?
     ): PetData {
-        val playerFolder = getPlayerFolder(ownerUuid)
         val existingPets = loadPlayerPets(ownerUuid)
 
         // 次のペット番号を決定
@@ -90,14 +88,6 @@ object PetDataManager {
         savePetData(ownerUuid, petData)
     }
 
-    /**
-     * ペットの状態を更新
-     */
-    fun updatePetStatus(ownerUuid: UUID, petId: String, status: PetStatus) {
-        val petData = getPetData(ownerUuid, petId) ?: return
-        petData.status = status
-        savePetData(ownerUuid, petData)
-    }
 
     /**
      * ペット死亡時にデータを保存
@@ -168,20 +158,6 @@ object PetDataManager {
         return loadPlayerPets(ownerUuid).values.toList()
     }
 
-    /**
-     * ペットの統計情報を更新
-     */
-    fun updateStats(ownerUuid: UUID, petId: String, entity: LivingEntity) {
-        val petData = getPetData(ownerUuid, petId) ?: return
-        petData.stats = extractStats(entity)
-        petData.skillType = entity.skillType
-        petData.skillUnlockedLevel = entity.skillUnlockedLevel
-        petData.foodLevel = entity.foodLevel
-        petData.customName = entity.customName()?.let {
-            net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(it)
-        }
-        savePetData(ownerUuid, petData)
-    }
 
     /**
      * ペット収納時にステータスを更新
@@ -295,20 +271,12 @@ object PetDataManager {
                 if (pets.containsKey(petId)) {
                     return ownerUuid
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // 無効なフォルダ名は無視
             }
         }
 
         return null
-    }
-
-    /**
-     * petIdからPetDataを取得
-     */
-    fun getPetDataByPetId(petId: String): PetData? {
-        val ownerUuid = findOwnerByPetId(petId) ?: return null
-        return getPetData(ownerUuid, petId)
     }
 }
 

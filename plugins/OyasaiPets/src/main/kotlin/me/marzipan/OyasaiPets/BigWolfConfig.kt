@@ -20,11 +20,9 @@ object BigWolfConfig {
   var reviveCost = 50
 
   // システム設定
-  // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
   const val REMOVEALL_CONFIRM_TIMEOUT_MS = 15_000L
-  const val PERMISSION = "bigwolf.admin"
 
   /** config.ymlから設定を読み込む */
   fun loadFrom(config: FileConfiguration) {
