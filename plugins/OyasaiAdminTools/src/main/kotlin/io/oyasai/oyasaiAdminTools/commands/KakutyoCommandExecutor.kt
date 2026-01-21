@@ -1,7 +1,7 @@
 package io.oyasai.oyasaiAdminTools.commands
 
-import com.wimbli.WorldBorder.Config
 import com.wimbli.WorldBorder.BorderData
+import com.wimbli.WorldBorder.Config
 import me.realized.tokenmanager.api.TokenManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -20,10 +20,6 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能です。")
-      return true
-    }
-    if (!sender.isOp) {
-      sender.sendMessage("§c権限がありません。")
       return true
     }
     if (args.size != 2) {
@@ -70,7 +66,8 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
     val borderData: BorderData? = Config.Border(currentWorldName)
 
     if (borderData == null) {
-      sender.sendMessage("§cこのワールド (${currentWorldName}) にはWorldBorderが設定されていません。先に /wb set を行ってください。")
+      sender.sendMessage(
+          "§cこのワールド (${currentWorldName}) にはWorldBorderが設定されていません。先に /wb set を行ってください。")
       return true
     }
 
@@ -114,7 +111,6 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       borderData.radiusZ = currentRadiusZ.toInt()
       Config.save(true)
     }
-
     return true
   }
 
@@ -124,7 +120,6 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<out String>
   ): List<String> {
-    if (!sender.isOp) return emptyList()
     return when (args.size) {
       1 ->
           Bukkit.getOnlinePlayers()
