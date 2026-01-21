@@ -648,7 +648,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     entity.petId = petData.petId
 
     if (petData.customName != null) {
-      entity.customName(LegacyComponentSerializer.legacyAmpersand().deserialize(petData.customName!!))
+      entity.customName(
+          LegacyComponentSerializer.legacyAmpersand().deserialize(petData.customName!!))
       entity.isCustomNameVisible = true
     }
 
@@ -678,49 +679,67 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val targetY = groundLoc.y + 0.5 // 着地点（地面より少し上）
 
     object : BukkitRunnable() {
-      var currentY = spawnLoc.y
+          var currentY = spawnLoc.y
 
-      override fun run() {
-        if (!entity.isValid) {
-          cancel()
-          return
+          override fun run() {
+            if (!entity.isValid) {
+              cancel()
+              return
+            }
+
+            // パーティクル演出（キラキラと光の柱）
+            val currentLoc = entity.location
+            entity.world.spawnParticle(
+                Particle.TOTEM_OF_UNDYING,
+                currentLoc.clone().add(0.0, 1.0, 0.0),
+                5,
+                0.3,
+                0.5,
+                0.3,
+                0.02)
+            entity.world.spawnParticle(
+                Particle.END_ROD, currentLoc.clone().add(0.0, 2.0, 0.0), 3, 0.2, 0.2, 0.2, 0.01)
+            entity.world.spawnParticle(
+                Particle.FIREWORK, currentLoc.clone().add(0.0, 0.5, 0.0), 2, 0.4, 0.3, 0.4, 0.0)
+
+            // テレポートでゆっくり降下（物理演算を使わない）
+            if (currentY > targetY) {
+              currentY -= 0.3 // 1tickあたり0.3ブロック降下
+              if (currentY < targetY) currentY = targetY
+
+              val newLoc = groundLoc.clone()
+              newLoc.y = currentY
+              newLoc.yaw = entity.location.yaw
+              newLoc.pitch = entity.location.pitch
+              entity.teleport(newLoc)
+              entity.fallDistance = 0f // 落下ダメージ防止
+            } else {
+              // 着地完了
+              val finalLoc = groundLoc.clone()
+              finalLoc.y = targetY
+              finalLoc.yaw = entity.location.yaw
+              finalLoc.pitch = entity.location.pitch
+              entity.teleport(finalLoc)
+
+              // 着地時の派手なエフェクト
+              entity.world.spawnParticle(
+                  Particle.TOTEM_OF_UNDYING,
+                  entity.location.add(0.0, 1.0, 0.0),
+                  50,
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.2)
+              entity.world.spawnParticle(
+                  Particle.EXPLOSION, entity.location.add(0.0, 0.5, 0.0), 3, 0.5, 0.5, 0.5, 0.0)
+              entity.world.playSound(entity.location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1f, 1f)
+              entity.world.playSound(entity.location, Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.2f)
+
+              cancel()
+            }
+          }
         }
-
-        // パーティクル演出（キラキラと光の柱）
-        val currentLoc = entity.location
-        entity.world.spawnParticle(Particle.TOTEM_OF_UNDYING, currentLoc.clone().add(0.0, 1.0, 0.0), 5, 0.3, 0.5, 0.3, 0.02)
-        entity.world.spawnParticle(Particle.END_ROD, currentLoc.clone().add(0.0, 2.0, 0.0), 3, 0.2, 0.2, 0.2, 0.01)
-        entity.world.spawnParticle(Particle.FIREWORK, currentLoc.clone().add(0.0, 0.5, 0.0), 2, 0.4, 0.3, 0.4, 0.0)
-
-        // テレポートでゆっくり降下（物理演算を使わない）
-        if (currentY > targetY) {
-          currentY -= 0.3 // 1tickあたり0.3ブロック降下
-          if (currentY < targetY) currentY = targetY
-
-          val newLoc = groundLoc.clone()
-          newLoc.y = currentY
-          newLoc.yaw = entity.location.yaw
-          newLoc.pitch = entity.location.pitch
-          entity.teleport(newLoc)
-          entity.fallDistance = 0f // 落下ダメージ防止
-        } else {
-          // 着地完了
-          val finalLoc = groundLoc.clone()
-          finalLoc.y = targetY
-          finalLoc.yaw = entity.location.yaw
-          finalLoc.pitch = entity.location.pitch
-          entity.teleport(finalLoc)
-
-          // 着地時の派手なエフェクト
-          entity.world.spawnParticle(Particle.TOTEM_OF_UNDYING, entity.location.add(0.0, 1.0, 0.0), 50, 1.0, 1.0, 1.0, 0.2)
-          entity.world.spawnParticle(Particle.EXPLOSION, entity.location.add(0.0, 0.5, 0.0), 3, 0.5, 0.5, 0.5, 0.0)
-          entity.world.playSound(entity.location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1f, 1f)
-          entity.world.playSound(entity.location, Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.2f)
-
-          cancel()
-        }
-      }
-    }.runTaskTimer(this, 0L, 1L)
+        .runTaskTimer(this, 0L, 1L)
   }
 
   // --- 死亡ペット一覧 ---
@@ -739,7 +758,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
       val variantStr = pet.variant?.let { " ($it)" } ?: ""
       val nameStr = pet.customName?.let { " 「$it」" } ?: ""
       val deathTime = pet.deathData?.deathTime?.take(10) ?: "不明"
-      player.sendMessage(Component.text("#${pet.petNumber} ${pet.type}$variantStr$nameStr - $deathTime 死亡", RED))
+      player.sendMessage(
+          Component.text("#${pet.petNumber} ${pet.type}$variantStr$nameStr - $deathTime 死亡", RED))
     }
 
     player.sendMessage(Component.text("/bigwolf revive <番号> で復活", GRAY))
@@ -747,12 +767,13 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   // --- ペット履歴 ---
   private fun handlePetHistory(player: Player, args: Array<out String>) {
-    val targetUuid = if (args.size >= 2 && player.isOp) {
-      val targetName = args[1]
-      Bukkit.getPlayer(targetName)?.uniqueId ?: Bukkit.getOfflinePlayer(targetName).uniqueId
-    } else {
-      player.uniqueId
-    }
+    val targetUuid =
+        if (args.size >= 2 && player.isOp) {
+          val targetName = args[1]
+          Bukkit.getPlayer(targetName)?.uniqueId ?: Bukkit.getOfflinePlayer(targetName).uniqueId
+        } else {
+          player.uniqueId
+        }
 
     val pets = PetDataManager.getAllPets(targetUuid)
 
@@ -767,17 +788,21 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     for (pet in pets.sortedBy { it.petNumber }) {
       val variantStr = pet.variant?.let { " ($it)" } ?: ""
       val nameStr = pet.customName?.let { " 「$it」" } ?: ""
-      val statusColor = when (pet.status) {
-        PetStatus.ALIVE -> GREEN
-        PetStatus.DEAD -> RED
-        PetStatus.STORED -> YELLOW
-      }
-      val statusStr = when (pet.status) {
-        PetStatus.ALIVE -> "生存"
-        PetStatus.DEAD -> "死亡"
-        PetStatus.STORED -> "収納中"
-      }
-      player.sendMessage(Component.text("#${pet.petNumber} ${pet.type}$variantStr$nameStr ", WHITE).append(Component.text("[$statusStr]", statusColor)))
+      val statusColor =
+          when (pet.status) {
+            PetStatus.ALIVE -> GREEN
+            PetStatus.DEAD -> RED
+            PetStatus.STORED -> YELLOW
+          }
+      val statusStr =
+          when (pet.status) {
+            PetStatus.ALIVE -> "生存"
+            PetStatus.DEAD -> "死亡"
+            PetStatus.STORED -> "収納中"
+          }
+      player.sendMessage(
+          Component.text("#${pet.petNumber} ${pet.type}$variantStr$nameStr ", WHITE)
+              .append(Component.text("[$statusStr]", statusColor)))
     }
   }
 
@@ -810,8 +835,11 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
     val variantStr = pet.variant?.let { " ($it)" } ?: ""
     val nameStr = pet.customName?.let { " 「$it」" } ?: ""
-    player.sendMessage(Component.text("=== ペット #${petNumber} ${pet.type}$variantStr$nameStr ===", GOLD))
-    player.sendMessage(Component.text("最終位置: ${loc.world} (${loc.x.toInt()}, ${loc.y.toInt()}, ${loc.z.toInt()})", YELLOW))
+    player.sendMessage(
+        Component.text("=== ペット #${petNumber} ${pet.type}$variantStr$nameStr ===", GOLD))
+    player.sendMessage(
+        Component.text(
+            "最終位置: ${loc.world} (${loc.x.toInt()}, ${loc.y.toInt()}, ${loc.z.toInt()})", YELLOW))
     player.sendMessage(Component.text("ステータス: ${pet.status}", GRAY))
   }
 
@@ -829,7 +857,9 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     val result: List<String> =
         when (args.size) {
           1 -> {
-            val base = PetRegistry.officialPets.map { it.name.lowercase() } + listOf("storeall", "version", "revive", "dead", "history", "locate")
+            val base =
+                PetRegistry.officialPets.map { it.name.lowercase() } +
+                    listOf("storeall", "version", "revive", "dead", "history", "locate")
             val op =
                 if (sender.isOp)
                     listOf(
@@ -1257,7 +1287,8 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
           // ペット数制限チェック
           if (countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
             player.closeInventory()
-            player.sendMessage(Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
+            player.sendMessage(
+                Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
             player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
             return
           }
@@ -1277,12 +1308,11 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
           // ★ 購入履歴を記録
           if (petId != null) {
             PetDataManager.recordPurchase(
-              ownerUuid = player.uniqueId,
-              petId = petId,
-              type = ctx.type,
-              variant = ctx.variant,
-              customName = null
-            )
+                ownerUuid = player.uniqueId,
+                petId = petId,
+                type = ctx.type,
+                variant = ctx.variant,
+                customName = null)
           }
 
           player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
@@ -1671,11 +1701,12 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     }
 
     // オーナー名を取得してLoreに表示
-    val ownerName = if (ownerId != null) {
-      Bukkit.getOfflinePlayer(UUID.fromString(ownerId)).name ?: "Unknown"
-    } else {
-      "Unknown"
-    }
+    val ownerName =
+        if (ownerId != null) {
+          Bukkit.getOfflinePlayer(UUID.fromString(ownerId)).name ?: "Unknown"
+        } else {
+          "Unknown"
+        }
 
     meta.displayName(Component.text("収納された: ", GOLD).append(currentName))
     meta.lore(
@@ -1760,9 +1791,9 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     // ★ オーナーチェック（譲渡防止）
     val storedOwner = pdc.get(BigWolfKeys.STORED_OWNER, PersistentDataType.STRING)
     if (storedOwner != null && storedOwner != player.uniqueId.toString()) {
-      val ownerName = runCatching {
-        Bukkit.getOfflinePlayer(UUID.fromString(storedOwner)).name
-      }.getOrNull() ?: "Unknown"
+      val ownerName =
+          runCatching { Bukkit.getOfflinePlayer(UUID.fromString(storedOwner)).name }.getOrNull()
+              ?: "Unknown"
       player.sendMessage(Component.text("このペットはあなたのものではありません！(オーナー: $ownerName)", RED))
       return
     }
@@ -2540,12 +2571,13 @@ class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
     // オーナーにメッセージを送信
     val owner = Bukkit.getPlayer(ownerUuid)
     if (owner != null) {
-      val petName = entity.customName()?.let {
-        PlainTextComponentSerializer.plainText().serialize(it)
-      } ?: entity.type.name
+      val petName =
+          entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) }
+              ?: entity.type.name
       owner.sendMessage(Component.text("あなたのペット「$petName」が死亡しました...", RED))
       owner.sendMessage(Component.text("/bigwolf dead で死亡したペットを確認できます。", GRAY))
-      owner.sendMessage(Component.text("/bigwolf revive <番号> で ${BigWolfConfig.reviveCost}pt で復活できます。", GRAY))
+      owner.sendMessage(
+          Component.text("/bigwolf revive <番号> で ${BigWolfConfig.reviveCost}pt で復活できます。", GRAY))
     }
 
     logger.info("Pet died: Owner=$ownerId, PetId=$petId")
