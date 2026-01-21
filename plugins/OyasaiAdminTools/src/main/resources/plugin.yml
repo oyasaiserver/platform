@@ -28,6 +28,7 @@ commands:
     permission: oyasai.playermanager
   kakutyo:
     description: 個人ワールド拡張用マクロ
+    usage: /kakutyo <プレイヤー名> <ポイント>
     permission: oyasai.kakutyo
 permissions:
   oyasai.syokaku:
