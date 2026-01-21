@@ -1,6 +1,7 @@
 package io.oyasai.oyasaiAdminTools
 
 import io.oyasai.oyasaiAdminTools.commands.GrieferCommandExecutor
+import io.oyasai.oyasaiAdminTools.commands.KakutyoCommandExecutor
 import io.oyasai.oyasaiAdminTools.commands.PlayerManagerCommandExecutor
 import io.oyasai.oyasaiAdminTools.commands.SyokakuCommandExecutor
 import io.oyasai.oyasaiAdminTools.commands.SyokakuManagerCommandExecutor
@@ -31,6 +32,8 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("playermanager")?.tabCompleter = PlayerManagerCommandExecutor
     this.getCommand("ban")?.setExecutor(GrieferCommandExecutor)
     this.getCommand("ban")?.tabCompleter = GrieferCommandExecutor
+    this.getCommand("kakutyo")?.setExecutor(KakutyoCommandExecutor)
+    this.getCommand("kakutyo")?.tabCompleter = KakutyoCommandExecutor
   }
 
   override fun onDisable() {
