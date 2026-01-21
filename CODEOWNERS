@@ -1,5 +1,7 @@
 * @shunueda
+
 /gradle/libs.versions.toml
+/gradle.lock
 
 /plugins/DynamicProfile @takucan
 /plugins/OyasaiAdminTools @takucan
