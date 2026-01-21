@@ -16,11 +16,13 @@ object BigWolfConfig {
   var skillBookCostLv2 = 100
   var skillBookCostLv3 = 150
 
+  // 復活設定
+  var reviveCost = 50
+
   // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
   const val REMOVEALL_CONFIRM_TIMEOUT_MS = 15_000L
-  const val PERMISSION = "bigwolf.admin"
 
   /** config.ymlから設定を読み込む */
   fun loadFrom(config: FileConfiguration) {
@@ -30,6 +32,7 @@ object BigWolfConfig {
     skillBookCostLv1 = config.getInt("skillbook.costLv1", skillBookCostLv1)
     skillBookCostLv2 = config.getInt("skillbook.costLv2", skillBookCostLv2)
     skillBookCostLv3 = config.getInt("skillbook.costLv3", skillBookCostLv3)
+    reviveCost = config.getInt("revive.cost", reviveCost)
   }
 
   /** config.ymlにデフォルト値を設定 */
@@ -40,6 +43,7 @@ object BigWolfConfig {
     config.addDefault("skillbook.costLv1", skillBookCostLv1)
     config.addDefault("skillbook.costLv2", skillBookCostLv2)
     config.addDefault("skillbook.costLv3", skillBookCostLv3)
+    config.addDefault("revive.cost", reviveCost)
   }
 
   /** スキルブックレベルに応じたコストを取得 */

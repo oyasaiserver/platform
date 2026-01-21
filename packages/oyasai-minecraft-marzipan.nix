@@ -15,6 +15,5 @@ oyasaiPurpur rec {
     essentialsx
     fastasyncworldedit
     plugmanx
-    oyasaipets
   ];
 }

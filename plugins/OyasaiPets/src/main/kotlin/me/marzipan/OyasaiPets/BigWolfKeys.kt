@@ -28,6 +28,7 @@ object BigWolfKeys {
   lateinit var STORED_VARIANT: NamespacedKey
   lateinit var STORED_NAME: NamespacedKey
   lateinit var STORED_ID: NamespacedKey
+  lateinit var STORED_OWNER: NamespacedKey
   lateinit var STORED_SKILL: NamespacedKey
   lateinit var STORED_HOVER: NamespacedKey
   lateinit var STORED_UNLOCKED: NamespacedKey
@@ -73,6 +74,7 @@ object BigWolfKeys {
     STORED_VARIANT = NamespacedKey(plugin, "stored_variant")
     STORED_NAME = NamespacedKey(plugin, "stored_name")
     STORED_ID = NamespacedKey(plugin, "stored_pet_id")
+    STORED_OWNER = NamespacedKey(plugin, "stored_owner_uuid")
     STORED_SKILL = NamespacedKey(plugin, "stored_skill")
     STORED_HOVER = NamespacedKey(plugin, "stored_hover")
     STORED_UNLOCKED = NamespacedKey(plugin, "stored_unlocked_level")
