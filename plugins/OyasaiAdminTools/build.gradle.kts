@@ -5,6 +5,7 @@ dependencies {
   compileOnly(libs.tokenmanager) { isTransitive = false }
   compileOnly(project(":plugins:SocialLikes3"))
   compileOnly(project(":plugins:DynamicProfile"))
+  compileOnly("com.github.Brettflan:WorldBorder:master-SNAPSHOT")
   implementation(libs.kotlin.stdlib)
   implementation(libs.gson)
   implementation(libs.discord.webhooks)
