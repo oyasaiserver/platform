@@ -220,9 +220,6 @@ object PetDataManager {
     return pets
   }
 
-  private fun getPetData(ownerUuid: UUID, petId: String): PetData? {
-    return loadPlayerPets(ownerUuid)[petId]
-  }
 
   private fun extractStats(entity: LivingEntity): PetStats {
     return PetStats(
@@ -260,6 +257,94 @@ object PetDataManager {
 
     return null
   }
+
+  /** ペットをキャッシュから削除（譲渡時など） */
+  fun removePetFromCache(ownerUuid: UUID, petId: String) {
+    cache[ownerUuid.toString()]?.remove(petId)
+
+    // ファイルも削除
+    val playerFolder = getPlayerFolder(ownerUuid)
+    val pets = loadPlayerPets(ownerUuid)
+    val petData = pets[petId] ?: return
+    val fileName = getPetFileName(petData)
+    val file = File(playerFolder, fileName)
+    if (file.exists()) {
+      file.delete()
+    }
+  }
+
+  /** カスタム名を更新 */
+  fun updateCustomName(ownerUuid: UUID, petId: String, newName: String) {
+    val petData = getPetData(ownerUuid, petId) ?: return
+    petData.customName = newName
+    savePetData(ownerUuid, petData)
+  }
+
+  /** 公開getPetData（他クラスから使用） */
+  fun getPetData(ownerUuid: UUID, petId: String): PetData? {
+    return loadPlayerPets(ownerUuid)[petId]
+  }
+
+  /** 収納されたペットを番号で取得（リカバリー用） */
+  fun getStoredPetForRecover(ownerUuid: UUID, petNumber: Int): PetData? {
+    val pets = loadPlayerPets(ownerUuid)
+    return pets.values.find { it.petNumber == petNumber && it.status == PetStatus.STORED }
+  }
+
+  /** 交配結果を記録 */
+  fun recordBreeding(
+      ownerUuid: UUID,
+      petId: String,
+      type: EntityType,
+      variant: String?,
+      customName: String?,
+      parent1Id: String,
+      parent2Id: String,
+      generation: Int,
+      speedMultiplier: Double,
+      jumpMultiplier: Double
+  ): PetData {
+    val existingPets = loadPlayerPets(ownerUuid)
+    val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
+
+    val petData = PetData(
+        petId = petId,
+        petNumber = nextNumber,
+        type = type.name,
+        variant = variant,
+        customName = customName,
+        purchasedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+        status = PetStatus.ALIVE,
+        lastLocation = null,
+        deathData = null,
+        stats = PetStats(),
+        skillType = 0,
+        skillUnlockedLevel = 0,
+        foodLevel = 0,
+        originalOwner = ownerUuid.toString(),
+        breedInfo = BreedInfo(parent1Id, parent2Id, generation),
+        breedCount = 0,
+        particleUnlocked = "0,1,2,3,4"
+    )
+
+    savePetData(ownerUuid, petData)
+    cache.getOrPut(ownerUuid.toString()) { mutableMapOf() }[petId] = petData
+
+    plugin.logger.info("Pet bred: Player=$ownerUuid, PetNumber=$nextNumber, Type=$type, Gen=$generation")
+    return petData
+  }
+
+  /** ペットの交配回数を増加 */
+  fun incrementBreedCount(ownerUuid: UUID, petId: String) {
+    val petData = getPetData(ownerUuid, petId) ?: return
+    petData.breedCount++
+    savePetData(ownerUuid, petData)
+  }
+
+  /** ペットデータを保存（公開用） */
+  fun savePet(ownerUuid: UUID, petData: PetData) {
+    savePetData(ownerUuid, petData)
+  }
 }
 
 // --- Data classes ---
@@ -283,7 +368,13 @@ data class PetData(
     var stats: PetStats,
     var skillType: Int,
     var skillUnlockedLevel: Int,
-    var foodLevel: Int
+    var foodLevel: Int,
+    // v2: 譲渡・交配関連
+    var originalOwner: String? = null,
+    var transferHistory: MutableList<TransferRecord> = mutableListOf(),
+    var breedInfo: BreedInfo? = null,
+    var breedCount: Int = 0,
+    var particleUnlocked: String = "0,1,2,3,4"
 )
 
 data class LocationData(val world: String, val x: Double, val y: Double, val z: Double)
@@ -297,3 +388,16 @@ data class PetStats(
     var brushes: Int = 0,
     var treats: Int = 0
 )
+
+data class TransferRecord(
+    val fromOwner: String,
+    val toOwner: String,
+    val timestamp: String
+)
+
+data class BreedInfo(
+    val parent1Id: String,
+    val parent2Id: String,
+    val generation: Int
+)
+

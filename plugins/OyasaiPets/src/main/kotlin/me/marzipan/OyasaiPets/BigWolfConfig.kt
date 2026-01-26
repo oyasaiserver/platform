@@ -19,6 +19,27 @@ object BigWolfConfig {
   // 復活設定
   var reviveCost = 50
 
+  // 交配設定
+  var breedMinLevel = 10
+  var breedCost = 200
+  var maxBreedCount = 3
+  var breedRandomMin = 0.9
+  var breedRandomMax = 1.1
+  var breedGenBonusPerGen = 0.02
+  var breedGenBonusMax = 0.2
+  var breedMutationChance = 0.1
+  var breedMutationBoost = 0.15
+  var breedStatCap = 1.5
+  var breedBonusLevelPerGen = 1
+  var breedBonusLevelMax = 5
+
+  // 復旧設定
+  var recoverCost = 100
+
+  // 遊びでのレベルアップ設定
+  var playLevelUpChance = 0.05
+  var playLevelUpMaxLevel = 10
+
   // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
@@ -33,6 +54,11 @@ object BigWolfConfig {
     skillBookCostLv2 = config.getInt("skillbook.costLv2", skillBookCostLv2)
     skillBookCostLv3 = config.getInt("skillbook.costLv3", skillBookCostLv3)
     reviveCost = config.getInt("revive.cost", reviveCost)
+    breedMinLevel = config.getInt("breed.minLevel", breedMinLevel)
+    breedCost = config.getInt("breed.cost", breedCost)
+    maxBreedCount = config.getInt("breed.maxCount", maxBreedCount)
+    playLevelUpChance = config.getDouble("play.levelUpChance", playLevelUpChance)
+    playLevelUpMaxLevel = config.getInt("play.levelUpMaxLevel", playLevelUpMaxLevel)
   }
 
   /** config.ymlにデフォルト値を設定 */
