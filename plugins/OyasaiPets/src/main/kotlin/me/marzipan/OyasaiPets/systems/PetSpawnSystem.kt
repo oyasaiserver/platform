@@ -5,6 +5,7 @@ import me.marzipan.OyasaiPets.domain.PetCategory
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.VariantHandler
+import me.marzipan.OyasaiPets.SpawnUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Bukkit
@@ -53,7 +54,13 @@ class PetSpawnSystem(
         }
 
         val spec = PetRegistry.get(type)
-        val entity = player.world.spawnEntity(player.location.add(0.0, 1.0, 0.0), type) as? LivingEntity
+        val baseLoc = player.location.clone().add(0.0, 1.0, 0.0)
+        val safeLoc = SpawnUtils.findSafeSpawnLocation(baseLoc)
+        if (safeLoc == null) {
+            player.sendMessage(Component.text("この場所では召喚できません（足場と空間が必要です）。", RED))
+            return null
+        }
+        val entity = player.world.spawnEntity(safeLoc, type) as? LivingEntity
 
         if (entity == null || !entity.isValid) {
             player.sendMessage(Component.text("この場所では召喚できません（保護されています）。", RED))
@@ -101,7 +108,7 @@ class PetSpawnSystem(
      */
     fun setupPetEntity(entity: LivingEntity, spec: PetSpec, player: Player) {
         entity.apply {
-            customName(Component.text("${player.name}'s Big ${type.name}"))
+            customName(Component.text("${player.name}の大${type.name}"))
             isCustomNameVisible = true
             setRemoveWhenFarAway(false)
             isInvulnerable = true
@@ -121,4 +128,3 @@ class PetSpawnSystem(
         }
     }
 }
-

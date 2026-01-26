@@ -39,6 +39,7 @@ object BigWolfConfig {
   // 遊びでのレベルアップ設定
   var playLevelUpChance = 0.05
   var playLevelUpMaxLevel = 10
+  var healItemAmount = 10
 
   // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
@@ -59,6 +60,7 @@ object BigWolfConfig {
     maxBreedCount = config.getInt("breed.maxCount", maxBreedCount)
     playLevelUpChance = config.getDouble("play.levelUpChance", playLevelUpChance)
     playLevelUpMaxLevel = config.getInt("play.levelUpMaxLevel", playLevelUpMaxLevel)
+    healItemAmount = config.getInt("items.healAmount", healItemAmount)
   }
 
   /** config.ymlにデフォルト値を設定 */
@@ -70,6 +72,7 @@ object BigWolfConfig {
     config.addDefault("skillbook.costLv2", skillBookCostLv2)
     config.addDefault("skillbook.costLv3", skillBookCostLv3)
     config.addDefault("revive.cost", reviveCost)
+    config.addDefault("items.healAmount", healItemAmount)
   }
 
   /** スキルブックレベルに応じたコストを取得 */

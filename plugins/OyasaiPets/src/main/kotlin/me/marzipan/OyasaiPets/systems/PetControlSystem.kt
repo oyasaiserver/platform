@@ -1,86 +1,219 @@
 package me.marzipan.OyasaiPets.systems
 
-import me.marzipan.OyasaiPets.*
+import me.marzipan.OyasaiPets.BigWolfConfig
 import me.marzipan.OyasaiPets.domain.PetCategory
 import me.marzipan.OyasaiPets.domain.PetRegistry
-import org.bukkit.Location
+import me.marzipan.OyasaiPets.foodLevel
+import me.marzipan.OyasaiPets.isHovering
+import me.marzipan.OyasaiPets.isSilentMode
+import me.marzipan.OyasaiPets.skillType
+import me.marzipan.OyasaiPets.statDistance
+import me.marzipan.OyasaiPets.statJumps
+import me.marzipan.OyasaiPets.statToys
+import me.marzipan.OyasaiPets.statBrushes
+import me.marzipan.OyasaiPets.statTreats
+import me.marzipan.OyasaiPets.speedMultiplier
+import me.marzipan.OyasaiPets.jumpMultiplier
+import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.entity.Sittable
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 import java.util.UUID
 
 /**
- * ペット移動・ジャンプ制御システム
- * プレイヤーの入力に応じたペットの移動、ジャンプ、特殊動作を管理
+ * プレイヤーの入力に合わせてペットの移動・ジャンプを制御する
  */
-class PetControlSystem(private val plugin: JavaPlugin) {
+class PetControlSystem(
+    private val plugin: JavaPlugin,
+    private val particleCallback: (LivingEntity) -> Unit
+) : Listener {
 
-    // アクティブな制御タスク管理
     private val activeControlTasks = mutableMapOf<UUID, BukkitRunnable>()
-
-    // ダッシュ終了時間管理
     private val dashEndTimes = mutableMapOf<UUID, Long>()
 
-    /**
-     * 制御タスクを開始
-     */
-    fun startControlTask(player: Player, entity: LivingEntity) {
-        // 既存のタスクをキャンセル
-        activeControlTasks[entity.uniqueId]?.cancel()
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        cleanup(event.player.uniqueId)
+    }
 
+    fun cleanup(playerId: UUID) {
+        dashEndTimes.remove(playerId)
+    }
+
+    fun startControlTask(player: Player, entity: LivingEntity) {
+        activeControlTasks[entity.uniqueId]?.cancel()
         val spec = PetRegistry.get(entity.type)
 
         val task = object : BukkitRunnable() {
+            var lastPos = entity.location.toVector()
+            var rideDistance = 0.0
+            var ticks = 0
+            var lastJumpPressed = false
+
             override fun run() {
-                if (!entity.isValid || entity.isDead || !player.isOnline) {
+                if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
+                    if (entity.isValid) entity.isSilent = false
+                    if (rideDistance > 0.0 && entity.isValid) {
+                        entity.statDistance = entity.statDistance + rideDistance
+                    }
                     cancel()
                     activeControlTasks.remove(entity.uniqueId)
                     return
                 }
+                if (entity is Sittable) entity.isSitting = false
 
-                if (!entity.passengers.contains(player)) {
-                    cancel()
-                    activeControlTasks.remove(entity.uniqueId)
-                    return
-                }
+                val level = entity.foodLevel
+                val progress = level.toDouble() / BigWolfConfig.maxFoodLevel
+                var speed = spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress
+                speed *= entity.speedMultiplier
 
-                val inputVec = player.location.direction.clone().setY(0).normalize()
+                entity.isSilent = entity.isSilentMode
+                val inWater = entity.isInWater
 
-                // プレイヤーが移動しているかチェック（簡易版）
-                val playerVel = player.velocity
-                val isMoving = playerVel.lengthSquared() > 0.01
-                val isJumping = !entity.isOnGround && playerVel.y > 0
-
-                // 移動速度計算
-                val currentLevel = entity.foodLevel
-                val speedMultiplier = entity.speedMultiplier
-                val baseSpeed = spec.baseSpeed * speedMultiplier
-                val maxSpeed = spec.maxSpeed * speedMultiplier
-                val speedBoost = (currentLevel.toDouble() / BigWolfConfig.maxFoodLevel) * (maxSpeed - baseSpeed)
-                val finalSpeed = baseSpeed + speedBoost
-
-                // ダッシュ中のボーナス速度
-                val dashBonus = if (isDashing(player)) 1.5 else 1.0
-                val speed = finalSpeed * dashBonus
-
-                // 移動ベクトル計算（プレイヤーの向きベース）
-                var moveVec = Vector(0.0, 0.0, 0.0)
-
-                if (isMoving) {
-                    moveVec = inputVec.clone().multiply(speed)
-                }
-
-                // カテゴリ別の特殊処理
                 when (spec.category) {
-                    PetCategory.LAND -> handleLandMovement(entity, moveVec, isJumping, spec.jumpPower)
-                    PetCategory.WATER -> handleWaterMovement(entity, moveVec, isJumping, spec.jumpPower)
-                    PetCategory.FLYING -> handleFlyingMovement(entity, moveVec, isJumping, spec.jumpPower)
+                    PetCategory.LAND -> if (inWater && entity.skillType != 3) speed *= 0.3
+                    PetCategory.WATER -> {
+                        speed *= if (inWater) 1.2 else if (entity.type == EntityType.TURTLE) 0.3 else 0.6
+                    }
+                    PetCategory.FLYING -> if (inWater) speed *= 0.3
                 }
 
-                // 位置統計更新
-                updateDistanceStat(entity)
+                val now = System.currentTimeMillis()
+                val isDashing = now < dashEndTimes.getOrDefault(player.uniqueId, 0L)
+                val input = player.currentInput
+                val dir = player.location.direction.setY(0).normalize()
+                val right = dir.clone().crossProduct(Vector(0, 1, 0))
+                val velocity = Vector(0, 0, 0)
+
+                if (input.isForward) velocity.add(dir)
+                if (input.isBackward) velocity.subtract(dir)
+                if (input.isLeft) velocity.subtract(right)
+                if (input.isRight) velocity.add(right)
+
+                if (spec.category == PetCategory.WATER && inWater) {
+                    if (entity.skillType == 3 && entity.isHovering) {
+                        val loc = entity.location
+                        val isSurface = loc.block.type == Material.WATER ||
+                            loc.clone().subtract(0.0, 0.5, 0.0).block.type == Material.WATER
+                        if (isSurface) {
+                            speed *= 2.5
+                            if (velocity.lengthSquared() > 0) {
+                                velocity.normalize().multiply(speed)
+                                velocity.y = 0.05
+                                entity.world.spawnParticle(
+                                    Particle.SPLASH, entity.location, 5, 0.5, 0.0, 0.5, 0.0
+                                )
+                            }
+                        } else if (input.isForward || input.isBackward) {
+                            velocity.normalize().multiply(speed * 1.5)
+                            velocity.y = 0.2
+                        }
+                    } else if (input.isForward || input.isBackward) {
+                        velocity.y = player.location.direction.y * speed
+                    }
+                }
+
+                if (isDashing) {
+                    particleCallback(entity)
+                } else {
+                    if (velocity.lengthSquared() > 0) {
+                        val isWaterSkillActive =
+                            (spec.category == PetCategory.WATER &&
+                                inWater &&
+                                entity.skillType == 3 &&
+                                entity.isHovering)
+
+                        if (!isWaterSkillActive) {
+                            velocity.normalize().multiply(speed)
+                            if (spec.category != PetCategory.WATER || !inWater) {
+                                velocity.y = entity.velocity.y
+                            }
+                        }
+
+                        if (inWater && input.isJump && spec.category != PetCategory.WATER) {
+                            velocity.y = 0.4
+                            if (!lastJumpPressed) {
+                                entity.statJumps = entity.statJumps + 1
+                            }
+                        }
+                        entity.velocity = velocity
+                        particleCallback(entity)
+                    }
+                }
+
+                val jumpPressedNow = input.isJump
+
+                if (spec.category == PetCategory.FLYING) {
+                    if (input.isJump) {
+                        val vel = entity.velocity
+                        vel.y = 0.4 * entity.jumpMultiplier
+                        entity.velocity = vel
+                        if (!lastJumpPressed) {
+                            entity.statJumps = entity.statJumps + 1
+                        }
+                    } else if (!entity.isOnGround) {
+                        if (entity.skillType == 3 && entity.isHovering) {
+                            val vel = entity.velocity
+                            vel.y = 0.0
+                            entity.velocity = vel
+                            if (entity.ticksLived % 10 == 0) {
+                                entity.world.spawnParticle(
+                                    Particle.END_ROD, entity.location, 1, 0.1, 0.0, 0.1, 0.0
+                                )
+                            }
+                        } else {
+                            val vel = entity.velocity
+                            vel.y = -0.15
+                            entity.velocity = vel
+                        }
+                    }
+                } else {
+                    if (input.isJump && entity.isOnGround && !inWater) {
+                        entity.velocity = entity.velocity.setY(spec.jumpPower * entity.jumpMultiplier)
+                        if (!lastJumpPressed) {
+                            entity.statJumps = entity.statJumps + 1
+                        }
+                    }
+
+                    if (entity.type == EntityType.RABBIT && entity.isOnGround && !inWater) {
+                        if (velocity.length() > 0.1 && entity.ticksLived % 8 == 0) {
+                            try {
+                                entity.playEffect(org.bukkit.EntityEffect.RABBIT_JUMP)
+                            } catch (e: Exception) {
+                                val vel = entity.velocity
+                                vel.y = 0.4
+                                entity.velocity = vel
+                            }
+                        }
+                    }
+                }
+
+                lastJumpPressed = jumpPressedNow
+                entity.setRotation(player.location.yaw, 0f)
+
+                val curr = entity.location.toVector()
+                val delta = curr.distance(lastPos)
+                if (delta.isFinite()) {
+                    if (delta < 100.0) {
+                        rideDistance += delta.coerceAtMost(8.0)
+                    }
+                }
+                lastPos = curr
+
+                ticks++
+                if (ticks % 200 == 0 && rideDistance > 0.0) {
+                    entity.statDistance = entity.statDistance + rideDistance
+                    rideDistance = 0.0
+                }
             }
         }
 
@@ -88,129 +221,12 @@ class PetControlSystem(private val plugin: JavaPlugin) {
         activeControlTasks[entity.uniqueId] = task
     }
 
-    /**
-     * 陸上型の移動処理
-     */
-    private fun handleLandMovement(entity: LivingEntity, moveVec: Vector, jump: Boolean, jumpPower: Double) {
-        if (moveVec.lengthSquared() > 0) {
-            val currentVel = entity.velocity
-            val newVel = moveVec.clone().setY(currentVel.y)
-            entity.velocity = newVel
-        }
-
-        if (jump && entity.isOnGround) {
-            val jumpMultiplier = entity.jumpMultiplier
-            entity.velocity = entity.velocity.setY(jumpPower * jumpMultiplier)
-            entity.statJumps++
-        }
-    }
-
-    /**
-     * 水生型の移動処理
-     */
-    private fun handleWaterMovement(entity: LivingEntity, moveVec: Vector, jump: Boolean, jumpPower: Double) {
-        if (entity.isInWater) {
-            // 水中では高速移動
-            if (moveVec.lengthSquared() > 0) {
-                entity.velocity = moveVec.multiply(1.5)
-            }
-            if (jump) {
-                entity.velocity = entity.velocity.setY(0.3)
-            }
-        } else {
-            // 陸上では遅い
-            if (moveVec.lengthSquared() > 0) {
-                val currentVel = entity.velocity
-                entity.velocity = moveVec.multiply(0.5).setY(currentVel.y)
-            }
-            if (jump && entity.isOnGround) {
-                entity.velocity = entity.velocity.setY(jumpPower * 0.7)
-            }
-
-            // 水面走行モード
-            if (entity.isHovering && isNearWater(entity.location)) {
-                entity.velocity = entity.velocity.setY(0.1)
-            }
-        }
-    }
-
-    /**
-     * 飛行型の移動処理
-     */
-    private fun handleFlyingMovement(entity: LivingEntity, moveVec: Vector, jump: Boolean, jumpPower: Double) {
-        if (entity.isHovering) {
-            // ホバリングモード：自由飛行
-            if (moveVec.lengthSquared() > 0) {
-                entity.velocity = moveVec.setY(0.0)
-            }
-            if (jump) {
-                entity.velocity = entity.velocity.setY(0.4)
-            } else {
-                // ゆっくり降下
-                if (!entity.isOnGround) {
-                    entity.velocity = entity.velocity.setY(-0.1)
-                }
-            }
-        } else {
-            // 通常モード：陸上型と同じ
-            handleLandMovement(entity, moveVec, jump, jumpPower)
-        }
-    }
-
-    /**
-     * 水面が近くにあるかチェック
-     */
-    private fun isNearWater(loc: Location): Boolean {
-        for (dx in -1..1) {
-            for (dz in -1..1) {
-                val block = loc.world?.getBlockAt(loc.blockX + dx, loc.blockY - 1, loc.blockZ + dz)
-                if (block != null && block.isLiquid) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    /**
-     * ダッシュ中かチェック
-     */
     private fun isDashing(player: Player): Boolean {
         val endTime = dashEndTimes[player.uniqueId] ?: return false
         return System.currentTimeMillis() < endTime
     }
 
-    /**
-     * ダッシュ終了時間を設定
-     */
     fun setDashEndTime(player: Player, endTime: Long) {
         dashEndTimes[player.uniqueId] = endTime
     }
-
-    /**
-     * 移動距離統計を更新
-     */
-    private fun updateDistanceStat(entity: LivingEntity) {
-        val vel = entity.velocity
-        val distance = Math.sqrt(vel.x * vel.x + vel.z * vel.z) * 0.05 // tick単位なので調整
-        if (distance > 0.01) {
-            entity.statDistance += distance
-        }
-    }
-
-    /**
-     * 制御タスクを停止
-     */
-    fun stopControlTask(entity: LivingEntity) {
-        activeControlTasks[entity.uniqueId]?.cancel()
-        activeControlTasks.remove(entity.uniqueId)
-    }
-
-    /**
-     * プレイヤーのクリーンアップ
-     */
-    fun cleanupPlayer(playerUuid: UUID) {
-        dashEndTimes.remove(playerUuid)
-    }
 }
-

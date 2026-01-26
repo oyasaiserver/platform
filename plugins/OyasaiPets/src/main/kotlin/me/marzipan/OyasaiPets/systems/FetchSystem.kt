@@ -1,9 +1,11 @@
 package me.marzipan.OyasaiPets.systems
 
-import me.marzipan.OyasaiPets.*
+import io.papermc.paper.entity.LookAnchor
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.ToyType
+import me.marzipan.OyasaiPets.ownerId
+import me.marzipan.OyasaiPets.statToys
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Material
@@ -22,16 +24,33 @@ import java.util.UUID
  * おもちゃフェッチシステム
  * ペットがおもちゃを拾って持ってくる動作を管理
  */
-class FetchSystem(private val plugin: JavaPlugin) {
-
-    // アクティブなフェッチタスク管理
-    private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
+class FetchSystem(
+    private val plugin: JavaPlugin,
+    private val activeFetchTasks: MutableMap<UUID, BukkitTask>
+) {
 
     /**
      * プレイヤーがオーナーかチェック
      */
-    private fun isOwner(entity: LivingEntity, player: Player): Boolean {
-        return entity.ownerId == player.uniqueId.toString()
+    private fun isOwner(entity: LivingEntity, player: Player): Boolean =
+        entity.ownerId == player.uniqueId.toString()
+
+    /**
+     * エンティティを目標地点に向かって移動させる（元のBigWolf.ktのmoveTo関数を復元）
+     */
+    private fun moveTo(entity: LivingEntity, targetLoc: org.bukkit.Location, speed: Double) {
+        val spec = PetRegistry.get(entity.type)
+        val targetVec = targetLoc.toVector().subtract(entity.location.toVector()).normalize().multiply(speed)
+
+        if (spec.category == me.marzipan.OyasaiPets.domain.PetCategory.FLYING ||
+            (spec.category == me.marzipan.OyasaiPets.domain.PetCategory.WATER && entity.isInWater)) {
+            entity.velocity = targetVec
+        } else {
+            targetVec.y = entity.velocity.y
+            entity.velocity = targetVec
+        }
+
+        entity.lookAt(targetLoc, LookAnchor.EYES)
     }
 
     /**
@@ -135,8 +154,7 @@ class FetchSystem(private val plugin: JavaPlugin) {
                         entity.world.playSound(entity.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
                         phase = 1
                     } else {
-                        val dirVec = targetLoc.toVector().subtract(entity.location.toVector()).normalize()
-                        entity.velocity = dirVec.multiply(runSpeed)
+                        moveTo(entity, targetLoc, runSpeed)
                     }
                 } else {
                     // フェーズ1: プレイヤーに向かって戻る
@@ -155,8 +173,7 @@ class FetchSystem(private val plugin: JavaPlugin) {
                         player.sendMessage(Component.text("持ってきた！", GREEN))
                         cleanup(false)
                     } else {
-                        val dirVec = playerLoc.toVector().subtract(entity.location.toVector()).normalize()
-                        entity.velocity = dirVec.multiply(runSpeed)
+                        moveTo(entity, playerLoc, runSpeed)
                     }
                 }
             }
@@ -188,4 +205,3 @@ class FetchSystem(private val plugin: JavaPlugin) {
         }
     }
 }
-

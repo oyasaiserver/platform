@@ -27,75 +27,25 @@ class CommandManager(
             return true
         }
 
-        // 引数なし: 使用方法表示
-        if (args.isEmpty()) {
-            playerCommands.showUsage(sender)
+        return when (command.name.lowercase()) {
+            "bigwolf" -> handlePlayerCommand(sender, args)
+            "bigwolfop" -> handleOpCommand(sender, args)
+            else -> true
+        }
+    }
+
+    private fun handlePlayerCommand(player: Player, args: Array<out String>): Boolean {
+        playerCommands.handleCommand(player, args)
+        return true
+    }
+
+    private fun handleOpCommand(player: Player, args: Array<out String>): Boolean {
+        if (!player.isOp) {
+            player.sendMessage(Component.text("このコマンドはOP専用です。", RED))
             return true
         }
 
-        val subCommand = args[0].lowercase()
-
-        // OP専用コマンド
-        if (sender.isOp) {
-            when (subCommand) {
-                "item" -> {
-                    opCommands.handleItemCommand(sender, args)
-                    return true
-                }
-                "exp" -> {
-                    opCommands.handleExperimentalSummon(sender, args)
-                    return true
-                }
-                "shop" -> {
-                    opCommands.handleShopCommand(sender, args)
-                    return true
-                }
-                "shopremove" -> {
-                    opCommands.handleShopRemove(sender)
-                    return true
-                }
-                "shopremoveall" -> {
-                    opCommands.handleShopRemoveAll(sender)
-                    return true
-                }
-                "reload" -> {
-                    opCommands.handleReload(sender)
-                    return true
-                }
-                "version" -> {
-                    opCommands.handleVersion(sender)
-                    return true
-                }
-            }
-        } else {
-            // 非OPがOP専用コマンドを実行しようとした場合
-            val opOnlyCommands = setOf("item", "exp", "shop", "shopremove", "shopremoveall", "reload")
-            if (subCommand in opOnlyCommands) {
-                sender.sendMessage(Component.text("OPのみ使用できます。", RED))
-                return true
-            }
-        }
-
-        // 一般プレイヤーコマンド
-        when (subCommand) {
-            "list" -> {
-                playerCommands.handleListCommand(sender)
-                return true
-            }
-            "storeall" -> {
-                playerCommands.handleStoreAll(sender)
-                return true
-            }
-            "version" -> {
-                opCommands.handleVersion(sender)
-                return true
-            }
-            else -> {
-                // デフォルト: MOB名として扱う（購入）
-                playerCommands.handleNormalSummon(sender, subCommand, args)
-                return true
-            }
-        }
+        opCommands.handleCommand(player, args)
+        return true
     }
 }
-

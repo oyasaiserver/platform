@@ -156,6 +156,12 @@ fun LivingEntity.isPet(): Boolean = petId != null && ownerId != null
 /** 指定されたプレイヤーがこのペットの飼い主かどうかを判定 */
 fun LivingEntity.isOwnedBy(playerId: String): Boolean = ownerId == playerId
 
+fun String.containsDefaultPetMarker(): Boolean =
+    this.contains("'s Big ") || this.contains("の大")
+
+fun String.startsWithDefaultPetName(playerName: String): Boolean =
+    this.startsWith("${playerName}'s Big ") || this.startsWith("${playerName}の大")
+
 /** PCDのマイグレーション - 古いバージョンのデータを最新に更新 */
 fun LivingEntity.migratePcdIfNeeded() {
   val version = pcdVersion
@@ -188,3 +194,42 @@ fun LivingEntity.migratePcdIfNeeded() {
   }
 }
 
+object SpawnUtils {
+  private const val MAX_CLEARANCE_SEARCH = 6
+
+  fun findSafeSpawnLocation(base: org.bukkit.Location): org.bukkit.Location? {
+    val world = base.world ?: return null
+    val loc = base.clone()
+    if (!ensureAirColumn(world, loc)) {
+      for (i in 1..MAX_CLEARANCE_SEARCH) {
+        loc.y += 1.0
+        if (ensureAirColumn(world, loc)) break
+      }
+      if (!ensureAirColumn(world, loc)) {
+        return null
+      }
+    }
+    var groundY = loc.blockY - 1
+    var steps = 0
+    while (steps < MAX_CLEARANCE_SEARCH) {
+      val ground = world.getBlockAt(loc.blockX, groundY, loc.blockZ)
+      if (ground.type.isSolid && !ground.isLiquid) {
+        loc.y = groundY + 1.01
+        return loc
+      }
+      groundY--
+      steps++
+    }
+    return null
+  }
+
+  private fun ensureAirColumn(world: org.bukkit.World, loc: org.bukkit.Location): Boolean {
+    for (offset in 0..1) {
+      val block = world.getBlockAt(loc.blockX, loc.blockY + offset, loc.blockZ)
+      if (!block.isPassable || block.isLiquid) {
+        return false
+      }
+    }
+    return true
+  }
+}

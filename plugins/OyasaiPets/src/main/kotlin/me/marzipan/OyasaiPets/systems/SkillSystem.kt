@@ -22,6 +22,11 @@ class SkillSystem {
 
     // ダッシュ終了時間管理
     private val dashEndTimes = mutableMapOf<UUID, Long>()
+    private var dashCallback: ((Player, Long) -> Unit)? = null
+
+    fun setDashCallback(callback: (Player, Long) -> Unit) {
+        dashCallback = callback
+    }
 
     /**
      * スキル発動を試みる
@@ -109,7 +114,9 @@ class SkillSystem {
         val direction = player.location.direction.clone().normalize()
         direction.multiply(4.0).setY(0.6)
         entity.velocity = direction
-        dashEndTimes[player.uniqueId] = System.currentTimeMillis() + 800
+        val endTime = System.currentTimeMillis() + 800
+        dashEndTimes[player.uniqueId] = endTime
+        dashCallback?.invoke(player, endTime)
         entity.world.playSound(entity.location, Sound.ENTITY_HORSE_JUMP, 2.0f, 0.5f)
         entity.world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 2.0f)
         entity.world.spawnParticle(Particle.CLOUD, entity.location, 30, 0.5, 0.5, 0.5, 0.2)
@@ -139,4 +146,3 @@ class SkillSystem {
         dashEndTimes.remove(playerId)
     }
 }
-

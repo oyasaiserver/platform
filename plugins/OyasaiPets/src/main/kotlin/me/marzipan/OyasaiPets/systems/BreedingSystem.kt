@@ -3,6 +3,7 @@ package me.marzipan.OyasaiPets.systems
 import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.VariantHandler
+import me.marzipan.OyasaiPets.SpawnUtils
 import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
@@ -52,8 +53,8 @@ class BreedingSystem(
     /**
      * 交配GUI を開く
      */
-    fun openBreedGui(player: Player, pets: List<LivingEntity>): Inventory {
-        val inv = Bukkit.createInventory(null, 54, Component.text("交配するペットを選択", DARK_PURPLE))
+    fun openBreedGui(player: Player, pets: List<LivingEntity>, title: Component): Inventory {
+        val inv = Bukkit.createInventory(null, 54, title)
 
         pets.forEachIndexed { index, entity ->
             if (index >= 45) return@forEachIndexed
@@ -154,10 +155,15 @@ class BreedingSystem(
         newSpeed = newSpeed.coerceAtMost(BigWolfConfig.breedStatCap)
         newJump = newJump.coerceAtMost(BigWolfConfig.breedStatCap)
 
-        // スポーン位置を上空からの降臨に
-        val playerLoc = player.location.clone()
-        val groundLoc = findSafeGround(playerLoc)
-        val spawnLoc = groundLoc.clone().add(0.0, 10.0, 0.0)
+        val safeGround =
+            SpawnUtils.findSafeSpawnLocation(player.location.clone())
+                ?: run {
+                    player.sendMessage(Component.text("この場所ではペットを生成できません。", RED))
+                    @Suppress("DEPRECATION")
+                    TMAPI.addTokens(player.uniqueId, cost)
+                    return
+                }
+        val spawnLoc = safeGround.clone().add(0.0, 10.0, 0.0)
 
         val spec = PetRegistry.get(type)
         val newEntity = player.world.spawnEntity(spawnLoc, type) as? LivingEntity
@@ -197,7 +203,7 @@ class BreedingSystem(
         }
 
         // 降臨演出
-        spawnDescentEffect(newEntity, player, newGeneration)
+        spawnDescentEffect(newEntity, player, newGeneration, safeGround.y + 0.5)
 
         // 親の交配回数更新
         updateParentBreedCount(player, parent1, parent2)
@@ -219,22 +225,13 @@ class BreedingSystem(
         player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.5f)
     }
 
-    private fun findSafeGround(playerLoc: org.bukkit.Location): org.bukkit.Location {
-        val groundLoc = playerLoc.clone()
-        var safeY = playerLoc.y.toInt()
-        for (y in playerLoc.y.toInt() downTo (playerLoc.y.toInt() - 5)) {
-            val block = playerLoc.world?.getBlockAt(playerLoc.blockX, y, playerLoc.blockZ)
-            if (block != null && block.type.isSolid && !block.isLiquid) {
-                safeY = y + 1
-                break
-            }
-        }
-        groundLoc.y = safeY.toDouble()
-        return groundLoc
-    }
-
-    private fun spawnDescentEffect(entity: LivingEntity, player: Player, generation: Int) {
-        var ticks = 0
+    private fun spawnDescentEffect(
+        entity: LivingEntity,
+        player: Player,
+        generation: Int,
+        targetY: Double
+    ) {
+        var currentY = entity.location.y
         object : BukkitRunnable() {
             override fun run() {
                 if (!entity.isValid || entity.isDead) {
@@ -242,24 +239,27 @@ class BreedingSystem(
                     return
                 }
 
-                if (entity.isOnGround || ticks > 40) {
-                    cancel()
-                    entity.world.spawnParticle(
+                val world = entity.world
+                val loc = entity.location
+                world.spawnParticle(Particle.HEART, loc.clone().add(0.0, 1.0, 0.0), 5, 0.3, 0.5, 0.3, 0.02)
+                world.spawnParticle(Particle.TOTEM_OF_UNDYING, loc.clone().add(0.0, 2.0, 0.0), 3, 0.2, 0.2, 0.2, 0.01)
+                world.spawnParticle(Particle.FIREWORK, loc.clone().add(0.0, 0.5, 0.0), 2, 0.4, 0.3, 0.4, 0.0)
+
+                currentY = (currentY - 0.3).coerceAtLeast(targetY)
+                val nextLoc = loc.clone()
+                nextLoc.y = currentY
+                entity.teleport(nextLoc)
+
+                if (currentY <= targetY) {
+                    world.spawnParticle(
                         Particle.EXPLOSION_EMITTER,
                         entity.location.clone().add(0.0, 0.5, 0.0),
                         1
                     )
-                    entity.world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 0.8f, 1.5f)
+                    world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 0.8f, 1.5f)
                     player.sendMessage(Component.text("★ 新しいペットが誕生しました！ (第${generation}世代)", GREEN))
-                    return
+                    cancel()
                 }
-
-                val currentLoc = entity.location
-                entity.world.spawnParticle(Particle.HEART, currentLoc.clone().add(0.0, 1.0, 0.0), 5, 0.3, 0.5, 0.3, 0.02)
-                entity.world.spawnParticle(Particle.TOTEM_OF_UNDYING, currentLoc.clone().add(0.0, 2.0, 0.0), 3, 0.2, 0.2, 0.2, 0.01)
-                entity.world.spawnParticle(Particle.FIREWORK, currentLoc.clone().add(0.0, 0.5, 0.0), 2, 0.4, 0.3, 0.4, 0.0)
-
-                ticks++
             }
         }.runTaskTimer(plugin, 0L, 2L)
     }
@@ -288,4 +288,3 @@ class BreedingSystem(
         }
     }
 }
-

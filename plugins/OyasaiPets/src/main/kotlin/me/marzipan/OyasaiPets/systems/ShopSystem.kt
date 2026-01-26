@@ -5,6 +5,7 @@ import me.marzipan.OyasaiPets.BigWolfKeys
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.ShopContext
 import me.marzipan.OyasaiPets.domain.VariantHandler
+import me.marzipan.OyasaiPets.SpawnUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Bukkit
@@ -31,8 +32,12 @@ class ShopSystem {
         yawDeg: Float?
     ) {
         val loc = admin.location.block.location.add(0.5, 0.0, 0.5)
+        val safeLoc = SpawnUtils.findSafeSpawnLocation(loc) ?: run {
+            admin.sendMessage(Component.text("ここにはショップMOBを設置できません（足場と空間が必要です）。", RED))
+            return
+        }
 
-        val ent = admin.world.spawnEntity(loc, type) as? LivingEntity ?: return
+        val ent = admin.world.spawnEntity(safeLoc, type) as? LivingEntity ?: return
         ent.setAI(false)
         ent.isInvulnerable = true
         ent.isSilent = true
@@ -40,7 +45,7 @@ class ShopSystem {
 
         // 向きを設定（45度単位）
         val yaw = yawDeg ?: admin.location.yaw
-        val newLoc = loc.clone()
+        val newLoc = safeLoc.clone()
         newLoc.yaw = yaw
         ent.teleport(newLoc)
 
@@ -129,4 +134,3 @@ class ShopSystem {
         return ShopContext(type, variant, cost)
     }
 }
-

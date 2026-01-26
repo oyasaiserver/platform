@@ -7,16 +7,13 @@ import io.papermc.paper.registry.RegistryKey
 import java.io.File
 import java.util.Locale
 import java.util.UUID
-import me.marzipan.OyasaiPets.commands.CommandManager
-import me.marzipan.OyasaiPets.commands.OpCommands
-import me.marzipan.OyasaiPets.commands.PlayerCommands
 import me.marzipan.OyasaiPets.domain.*
-import me.marzipan.OyasaiPets.listeners.*
+import me.marzipan.OyasaiPets.items.PetItemFactory
 import me.marzipan.OyasaiPets.services.*
-import me.marzipan.OyasaiPets.SpawnUtils
 import me.marzipan.OyasaiPets.systems.*
 import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -41,10 +38,9 @@ import org.bukkit.inventory.*
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.Vector
 
-class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
+class BigWolfPlugin : JavaPlugin(), Listener, CommandExecutor, TabCompleter {
 
   // システム層
   private val skillSystem = SkillSystem()
@@ -61,15 +57,13 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val itemManagement = ItemManagementSystem()
   private lateinit var interactionService: PetInteractionService
   private lateinit var storageService: PetStorageService
-  private lateinit var commandManager: CommandManager
 
   private val guiTitle = Component.text("ペットステータス", BLACK)
   private val shopGuiTitle = Component.text("購入確認", BLACK)
   private val mainMenuTitle = Component.text("★ BigWolf メインメニュー", DARK_PURPLE)
 
-  private val openedGuis = guiManager.openedPetGuis
-  private val openedShopGuis = guiManager.openedShopGuis
-  private val openedMainMenus = guiManager.openedMainMenus
+  private val openedShopGuis = mutableMapOf<Inventory, ShopContext>()
+  private val openedMainMenus = mutableSetOf<Inventory>()
   // --- shopremoveall 確認待ち管理 ---
   private val pendingRemoveAllConfirm = mutableMapOf<UUID, Long>()
 
@@ -81,9 +75,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val brushCooldowns = mutableMapOf<UUID, Long>() // ブラシ（撫でる）のクールダウン
 
   private val renamingPlayers = mutableMapOf<UUID, LivingEntity>()
+  private val openedGuis = mutableMapOf<Inventory, LivingEntity>()
 
   // タスク管理
-  private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
+  private val activeFetchTasks = mutableMapOf<UUID, BukkitRunnable>()
 
   override fun onEnable() {
     // TokenManager プラグインの存在確認
@@ -107,16 +102,14 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     storageService = PetStorageService(this)
 
     // Systems Init
-    petControlSystem = PetControlSystem(this, interactionService::spawnParticles)
-    server.pluginManager.registerEvents(petControlSystem, this)
-    skillSystem.setDashCallback { player, endTime -> petControlSystem.setDashEndTime(player, endTime) }
+    petControlSystem = PetControlSystem(this)
     petSpawnSystem = PetSpawnSystem(
         this,
         mountCooldowns,
         { player, entity -> petControlSystem.startControlTask(player, entity) },
         { entity, level, spec -> interactionService.updateStats(entity, level, spec) }
     )
-    fetchSystem = FetchSystem(this, activeFetchTasks)
+    fetchSystem = FetchSystem(this)
     breedingSystem = BreedingSystem(
         this,
         ::countActivePets,
@@ -141,127 +134,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       setExecutor(this@BigWolfPlugin)
       setTabCompleter(this@BigWolfPlugin)
     }
-
-    // リスナーの登録
-    val petEventListener = PetEventListener(
-      this,
-      dropCooldowns,
-      activeFetchTasks
-    )
-    server.pluginManager.registerEvents(petEventListener, this)
-
-    val petInteractionListener = PetInteractionListener(
-      this,
-      guiManager,
-      fetchSystem,
-      petControlSystem,
-      mountCooldowns,
-      brushCooldowns,
-      interactionService::checkAndMigrateOwner,
-      interactionService::isOwner,
-      itemManagement::isPetFood,
-      { player: Player, entity: LivingEntity -> interactionService.giveFood(player, entity, economySystem::consumeTokens) },
-      itemManagement::isPetBrush,
-      interactionService::useBrush,
-      itemManagement::isPetTreat,
-      interactionService::giveTreat,
-      itemManagement::isPetHeal,
-      interactionService::healPet,
-      itemManagement::getUnlockItemLevel,
-      { player: Player, entity: LivingEntity, item: ItemStack, level: Int -> interactionService.handleSkillUnlock(player, entity, item, level, economySystem::consumeTokens) },
-      itemManagement::isParticleUnlockItem,
-      interactionService::handleParticleUnlock
-    )
-    server.pluginManager.registerEvents(petInteractionListener, this)
-
-    val playerActionListener = PlayerActionListener(
-      this,
-      fetchSystem,
-      petSpawnSystem,
-      skillSystem,
-      dropCooldowns,
-      mountCooldowns,
-      interactionService::isOwner,
-      { player: Player, item: ItemStack, loc: Location ->
-        storageService.restorePetFromItem(
-          player, item, loc,
-          ::countActivePets,
-          { entity: LivingEntity, spec: PetSpec, p: Player -> storageService.setupPetEntity(entity, spec, p) },
-          { entity: LivingEntity, level: Int, spec: PetSpec -> interactionService.updateStats(entity, level, spec) }
-        )
-      }
-    )
-    server.pluginManager.registerEvents(playerActionListener, this)
-
-    val petInventoryListener = PetInventoryListener(
-      this,
-      logger,
-      guiManager,
-      petSpawnSystem,
-      openedGuis,
-      openedShopGuis,
-      openedMainMenus,
-      pendingBreedSelections,
-      guiTitle,
-      shopGuiTitle,
-      mainMenuTitle,
-      breedGuiTitle,
-      economySystem::consumeTokens,
-      { entity: LivingEntity, level: Int ->
-        val spec = PetRegistry.get(entity.type)
-        interactionService.updateStats(entity, level, spec)
-      },
-      { player: Player, entity: LivingEntity -> interactionService.giveFood(player, entity, economySystem::consumeTokens) },
-      storageService::storePetToItem,
-      storageService::storeAllPets,
-      this::handleDeadPetsList,
-      this::handlePetHistory,
-      this::handleBreedCommand,
-      breedingSystem::executeBreeding
-    )
-    server.pluginManager.registerEvents(petInventoryListener, this)
-
-    // PetLifecycleListener登録
-    val petLifecycleListener = PetLifecycleListener(
-      this,
-      logger,
-      storageService::storeAllPets
-    )
-    server.pluginManager.registerEvents(petLifecycleListener, this)
-
-    // ShopListener登録
-    val shopListener = ShopListener(shopSystem) { player, ctx ->
-      guiManager.openShopGui(player, ctx, economySystem::getPlayerTokens)
-    }
-    server.pluginManager.registerEvents(shopListener, this)
-
-    val playerCommands = PlayerCommands(
-      this::openMainMenu,
-      storageService::storeAllPets,
-      this::handleRevivePet,
-      this::handleDeadPetsList,
-      this::handlePetHistory,
-      this::handleLocatePet,
-      this::handleRecoverEgg,
-      this::handleBreedCommand,
-      this::handleRenameCommand,
-      this::handleTransferCommand,
-      this::handleNormalSummon,
-      this::sendVersionInfo
-    )
-    val opCommands = OpCommands(
-      this,
-      shopSystem,
-      petSpawnSystem::spawnAndMountEntity,
-      itemManagement,
-      this::showOpUsage,
-      this::handleOpShopRemoveAll,
-      this::handleForceStoreTarget,
-      this::handleForceStoreAll,
-      this::handlePetHistory
-    )
-    commandManager = CommandManager(playerCommands, opCommands)
-
+    server.pluginManager.registerEvents(this, this)
     logger.info("BigWolfPlugin enabled with TokenManager integration")
   }
 
@@ -279,27 +152,181 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     if (sender !is Player)
         return true.also { sender.sendMessage(Component.text("プレイヤーのみ可能です。", RED)) }
 
-    return commandManager.onCommand(sender, command, label, args)
+    // コマンド分岐
+    return when (command.name.lowercase()) {
+      "bigwolfop" -> handleOpCommand(sender, args)
+      "bigwolf" -> handlePlayerCommand(sender, args)
+      else -> true
+    }
   }
 
-  private fun showOpUsage(player: Player) {
-    player.sendMessage(Component.text("=== BigWolfOP 管理コマンド ===", GOLD))
-    player.sendMessage(Component.text("/bigwolfop version - バージョン表示", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop reload - 設定リロード", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop item <種類> - アイテム配布", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop exp <mob> [variant] - 実験的召喚", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop shop <mob> [variant] [cost] [yaw] - ショップ設置", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop shopremove - ショップ削除", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop shopremoveall - 全ショップ削除", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop force_store - 強制収納", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop force_storeall <player> - 全強制収納", YELLOW))
-    player.sendMessage(Component.text("/bigwolfop history <player> - 他人の履歴", YELLOW))
+  // ==========================================
+  // ★ OP専用コマンド: /bigwolfop
+  // ==========================================
+  private fun handleOpCommand(sender: Player, args: Array<out String>): Boolean {
+    if (!sender.isOp) {
+      sender.sendMessage(Component.text("このコマンドはOP専用です。", RED))
+      return true
+    }
+
+    if (args.isEmpty()) {
+      sender.sendMessage(Component.text("=== BigWolfOP 管理コマンド ===", GOLD))
+      sender.sendMessage(Component.text("/bigwolfop version - バージョン表示", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop reload - 設定リロード", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop item <種類> - アイテム配布", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop exp <mob> [variant] - 実験的召喚", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop shop <mob> [variant] [cost] [yaw] - ショップ設置", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop shopremove - ショップ削除", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop shopremoveall - 全ショップ削除", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop force_store - 強制収納", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop force_storeall <player> - 全強制収納", YELLOW))
+      sender.sendMessage(Component.text("/bigwolfop history <player> - 他人の履歴", YELLOW))
+      return true
+    }
+
+    val sub = args[0].lowercase()
+    when (sub) {
+      "version" -> {
+        val version = description.version
+        sender.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
+        sender.sendMessage(Component.text("Version: $version", YELLOW))
+      }
+      "reload" -> {
+        reloadConfig()
+        ensureDefaultConfig()
+        PetRegistry.applyConfig(this)
+        BigWolfConfig.loadFrom(config)
+        sender.sendMessage(Component.text("BigWolf: config reloaded!", GREEN))
+      }
+      "item" -> handleOpItemCommand(sender, args)
+      "exp" -> handleExperimentalSummon(sender, args)
+      "shop" -> handleOpShopCommand(sender, args)
+      "shopremove" -> handleOpShopRemove(sender)
+      "shopremoveall" -> handleOpShopRemoveAll(sender)
+      "force_store" -> handleForceStoreTarget(sender)
+      "force_storeall" -> handleForceStoreAll(sender, args)
+      "history" -> handlePetHistory(sender, args)
+      else -> sender.sendMessage(Component.text("不明なサブコマンド: $sub", RED))
+    }
+    return true
   }
 
-  private fun sendVersionInfo(player: Player) {
-    val version = description.version
-    player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
-    player.sendMessage(Component.text("Version: $version", YELLOW))
+  // OP専用: アイテム配布
+  private fun handleOpItemCommand(sender: Player, args: Array<out String>) {
+    if (args.size < 2) {
+      sender.sendMessage(Component.text(
+          "使い方: /bigwolfop item <food|brush|treat|toys|skillbook|particle|all>", RED))
+      return
+    }
+    val key = args[1].lowercase()
+    when (key) {
+      "food" -> {
+        sender.inventory.addItem(PetItemFactory.createPetFoodItem())
+        sender.sendMessage(Component.text("魔法のペットフードを入手しました！", YELLOW))
+      }
+      "brush" -> {
+        sender.inventory.addItem(PetItemFactory.createPetBrushItem())
+        sender.sendMessage(Component.text("ペットブラシを入手しました！", YELLOW))
+      }
+      "treat" -> {
+        sender.inventory.addItem(PetItemFactory.createPetTreatItem())
+        sender.sendMessage(Component.text("ペットのおやつを入手しました！", YELLOW))
+      }
+      "toys" -> {
+        val toys = PetRegistry.getAllToyItems()
+        if (toys.isNotEmpty()) {
+          toys.forEach { sender.inventory.addItem(it) }
+          sender.sendMessage(Component.text("おもちゃセットを入手しました！", YELLOW))
+        } else {
+          sender.sendMessage(Component.text("おもちゃ定義が見つかりません。", GRAY))
+        }
+      }
+      "skillbook" -> {
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(1))
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(2))
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+        sender.sendMessage(Component.text("スキル強化用アイテムを入手しました！", LIGHT_PURPLE))
+      }
+      "skillbook1" -> {
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(1))
+        sender.sendMessage(Component.text("スキルブック(Lv.1)を入手しました！", LIGHT_PURPLE))
+      }
+      "skillbook2" -> {
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(2))
+        sender.sendMessage(Component.text("スキルブック(Lv.2)を入手しました！", LIGHT_PURPLE))
+      }
+      "skillbook3" -> {
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+        sender.sendMessage(Component.text("スキルブック(Lv.3)を入手しました！", LIGHT_PURPLE))
+      }
+      "particle" -> {
+        // アンロック可能なパーティクルアイテムのみ配布（5-10）
+        for (i in 5..10) {
+          sender.inventory.addItem(itemManagement.createParticleUnlockItem(i))
+        }
+        sender.sendMessage(Component.text("パーティクルの結晶セットを入手しました！", LIGHT_PURPLE))
+      }
+      "all" -> {
+        sender.inventory.addItem(PetItemFactory.createPetFoodItem())
+        sender.inventory.addItem(PetItemFactory.createPetBrushItem())
+        sender.inventory.addItem(PetItemFactory.createPetTreatItem())
+        val toys = PetRegistry.getAllToyItems()
+        toys.forEach { sender.inventory.addItem(it) }
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(1))
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(2))
+        sender.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+        for (i in 5..10) {
+          sender.inventory.addItem(itemManagement.createParticleUnlockItem(i))
+        }
+        sender.sendMessage(Component.text("フード・ブラシ・おやつ・おもちゃ・スキルブック・パーティクル を入手しました！", YELLOW))
+      }
+      else -> sender.sendMessage(Component.text("不明なアイテム: $key", RED))
+    }
+  }
+
+  // OP専用: ショップ設置
+  private fun handleOpShopCommand(sender: Player, args: Array<out String>) {
+    if (args.size < 2) {
+      sender.sendMessage(Component.text("使い方: /bigwolfop shop <mob> [variant] [cost] [yawDeg]", RED))
+      return
+    }
+    val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+    if (type == null || !type.isAlive) {
+      sender.sendMessage(Component.text("無効なMOB名です。", RED))
+      return
+    }
+    val variant = args.getOrNull(2)?.lowercase()
+    val cost = args.getOrNull(3)?.toIntOrNull() ?: BigWolfConfig.defaultShopCost
+    val yawArg = args.getOrNull(4)
+    val yawDeg: Float? = if (yawArg.isNullOrBlank()) null else {
+      val raw = yawArg.toFloatOrNull()
+      if (raw == null) {
+        sender.sendMessage(Component.text("yawDeg は数値で指定してください", RED))
+        return
+      }
+      (((raw % 360f) + 360f) % 360f)
+    }
+    shopSystem.spawnShopMob(sender, type, variant, cost, yawDeg)
+    sender.sendMessage(Component.text(
+        "購入用MOBを設置しました: ${type.name}${if (variant != null) " ($variant)" else ""} cost=$cost", GREEN))
+  }
+
+  // OP専用: ショップ削除
+  private fun handleOpShopRemove(sender: Player) {
+    val target = sender.getTargetEntity(6) as? LivingEntity
+    if (target == null) {
+      sender.sendMessage(Component.text("狙っているエンティティが見つかりません。", RED))
+      return
+    }
+    val pdc = target.persistentDataContainer
+    val isShop = (pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1
+    if (!isShop) {
+      sender.sendMessage(Component.text("そのエンティティはショップ用ではありません。", RED))
+      return
+    }
+    target.world.spawnParticle(Particle.POOF, target.location, 10, 0.3, 0.3, 0.3, 0.0)
+    target.remove()
+    sender.sendMessage(Component.text("ショップ用MOBを削除しました。", GREEN))
   }
 
   // OP専用: 全ショップ削除
@@ -479,23 +506,28 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
   }
 
-  private fun handleNormalSummon(player: Player, sub: String, args: Array<out String>) {
-    val (typeName, variantArg) =
-        if (sub == "buy") {
-          val mob = args.getOrNull(1)
-          if (mob == null) {
-            player.sendMessage(Component.text("使い方: /bigwolf buy <mob名> [variant]", RED))
-            return
-          }
-          mob to args.getOrNull(2)
-        } else {
-          player.sendMessage(Component.text("ペット購入は /bigwolf buy $sub を推奨します。", YELLOW))
-          sub to args.getOrNull(1)
-        }
+  private fun handleExperimentalSummon(player: Player, args: Array<out String>) {
+    if (!player.isOp) {
+      player.sendMessage(Component.text("実験的なMOBを召喚する権限(OP)がありません。", RED))
+      return
+    }
+    if (args.size < 2) {
+      player.sendMessage(Component.text("MOB名を指定してください。例: /bigwolf exp zombie", RED))
+      return
+    }
+    val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+    if (type == null || !type.isAlive) {
+      player.sendMessage(Component.text("無効なMOB名です。", RED))
+      return
+    }
+    val variant = if (args.size >= 3) args[2].lowercase() else null
+    petSpawnSystem.spawnAndMountEntity(player, type, variant)
+  }
 
-    val type = runCatching { EntityType.valueOf(typeName.uppercase()) }.getOrNull()
+  private fun handleNormalSummon(player: Player, sub: String, args: Array<out String>) {
+    val type = runCatching { EntityType.valueOf(sub.uppercase()) }.getOrNull()
     if (type == null) {
-      player.sendMessage(Component.text("そのエンティティは見つかりません: $typeName", RED))
+      player.sendMessage(Component.text("そのエンティティは見つかりません: $sub", RED))
       return
     }
 
@@ -510,7 +542,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       return
     }
 
-    val variant = variantArg?.lowercase()
+    val variant = if (args.size >= 2) args[1].lowercase() else null
     val cost = BigWolfConfig.defaultShopCost
 
     // ショップGUIを開いて購入処理
@@ -553,14 +585,24 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     val type = runCatching { EntityType.valueOf(petData.type) }.getOrNull() ?: EntityType.WOLF
     val spec = PetRegistry.get(type)
 
-    val safeGround = SpawnUtils.findSafeSpawnLocation(player.location.clone())
-    if (safeGround == null) {
-      player.sendMessage(Component.text("この場所ではペットを復活できません（足場と空間が必要です）。", RED))
-      return
+    // ★ 安全なスポーン位置を計算（プレイヤーの位置を基準に）
+    val playerLoc = player.location.clone()
+
+    // 安全な着地点を探す（プレイヤーの足元から固体ブロックを探す）
+    val groundLoc = playerLoc.clone()
+    // 下方向に固体ブロックを探す
+    var safeY = playerLoc.y.toInt()
+    for (y in playerLoc.y.toInt() downTo (playerLoc.y.toInt() - 5)) {
+      val block = playerLoc.world?.getBlockAt(playerLoc.blockX, y, playerLoc.blockZ)
+      if (block != null && block.type.isSolid && !block.isLiquid) {
+        safeY = y + 1
+        break
+      }
     }
+    groundLoc.y = safeY.toDouble()
 
     // 上空10ブロックからスタート
-    val spawnLoc = safeGround.clone().add(0.0, 10.0, 0.0)
+    val spawnLoc = groundLoc.clone().add(0.0, 10.0, 0.0)
 
     val entity = player.world.spawnEntity(spawnLoc, type) as? LivingEntity
     if (entity == null) {
@@ -588,9 +630,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     entity.statToys = petData.stats.toys
     entity.statBrushes = petData.stats.brushes
     entity.statTreats = petData.stats.treats
-    entity.particleUnlocked = petData.particleUnlocked
 
-    petData.variant?.let { VariantHandler.applyVariant(entity, it) }
+    if (petData.variant != null) {
+      VariantHandler.applyVariant(entity, petData.variant)
+    }
 
     interactionService.updateStats(entity, petData.foodLevel, spec)
 
@@ -602,7 +645,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     player.sendMessage(Component.text("ペット #${petNumber} を復活させました！ (-${cost}pt)", GREEN))
 
     // 降臨演出タスク（テレポートで段階的に降下）
-    val targetY = safeGround.y + 0.5 // 着地点
+    val targetY = groundLoc.y + 0.5 // 着地点（地面より少し上）
 
     object : BukkitRunnable() {
           var currentY = spawnLoc.y
@@ -633,7 +676,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               currentY -= 0.3 // 1tickあたり0.3ブロック降下
               if (currentY < targetY) currentY = targetY
 
-              val newLoc = safeGround.clone()
+              val newLoc = groundLoc.clone()
               newLoc.y = currentY
               newLoc.yaw = entity.location.yaw
               newLoc.pitch = entity.location.pitch
@@ -641,7 +684,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               entity.fallDistance = 0f // 落下ダメージ防止
             } else {
               // 着地完了
-              val finalLoc = safeGround.clone()
+              val finalLoc = groundLoc.clone()
               finalLoc.y = targetY
               finalLoc.yaw = entity.location.yaw
               finalLoc.pitch = entity.location.pitch
@@ -682,12 +725,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
     for (pet in deadPets.sortedBy { it.petNumber }) {
       val variantStr = pet.variant?.let { " ($it)" } ?: ""
-      val plainName =
-          pet.customName?.let {
-            val component = LegacyComponentSerializer.legacyAmpersand().deserialize(it)
-            PlainTextComponentSerializer.plainText().serialize(component)
-          }
-      val nameStr = plainName?.let { " 「$it」" } ?: ""
+      val nameStr = pet.customName?.let { " 「$it」" } ?: ""
       val deathTime = pet.deathData?.deathTime?.take(10) ?: "不明"
       player.sendMessage(
           Component.text("#${pet.petNumber} ${pet.type}$variantStr$nameStr - $deathTime 死亡", RED))
@@ -899,18 +937,77 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
   // --- 交配コマンド ---
   private fun handleBreedCommand(player: Player) {
-    val breedablePets = breedingSystem.getBreedablePets(player)
+    // プレイヤーの召喚中ペットを取得
+    val playerPets = mutableListOf<LivingEntity>()
+    val targetId = player.uniqueId.toString()
+    for (world in Bukkit.getWorlds()) {
+      for (entity in world.livingEntities) {
+        if (entity.ownerId == targetId) {
+          playerPets.add(entity)
+        }
+      }
+    }
+
+    if (playerPets.size < 2) {
+      player.sendMessage(Component.text("交配には2匹以上のペットが必要です。", RED))
+      return
+    }
+
+    // 交配可能なペットをフィルタ
+    val breedablePets = playerPets.filter {
+      it.foodLevel >= BigWolfConfig.breedMinLevel
+    }
+
     if (breedablePets.size < 2) {
       player.sendMessage(Component.text("交配にはLv.${BigWolfConfig.breedMinLevel}以上のペットが2匹必要です。", RED))
       return
     }
-    pendingBreedSelections[player.uniqueId] = null
-    val inv = breedingSystem.openBreedGui(player, breedablePets, breedGuiTitle)
-    player.openInventory(inv)
+
+    // 交配GUIを開く
+    openBreedGui(player, breedablePets)
   }
 
+  // 交配GUI
   private val breedGuiTitle = Component.text("★ 交配するペットを選択", DARK_PURPLE)
   private val pendingBreedSelections = mutableMapOf<UUID, LivingEntity?>()
+
+  private fun openBreedGui(player: Player, pets: List<LivingEntity>) {
+    val inv = Bukkit.createInventory(null, 27, breedGuiTitle)
+    pendingBreedSelections[player.uniqueId] = null
+
+    pets.take(9).forEachIndexed { index, pet ->
+      val typeStr = pet.type.name
+      val name = pet.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: typeStr
+      val level = pet.foodLevel
+      val eggMat = Material.getMaterial("${pet.type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
+
+      val item = ItemStack(eggMat)
+      item.itemMeta = item.itemMeta.apply {
+        displayName(Component.text("$name (Lv.$level)", AQUA))
+        lore(listOf(
+          Component.text("クリックで選択", GRAY),
+          Component.text("交配回数: ${pet.breedCount}", YELLOW)
+        ))
+        // ペットIDを保存
+        persistentDataContainer.set(BigWolfKeys.PET_ID, PersistentDataType.STRING, pet.petId ?: "")
+      }
+      inv.setItem(index, item)
+    }
+
+    // コスト表示
+    val infoItem = ItemStack(Material.PAPER)
+    infoItem.itemMeta = infoItem.itemMeta.apply {
+      displayName(Component.text("交配について", GOLD))
+      lore(listOf(
+        Component.text("コスト: ${BigWolfConfig.defaultShopCost}pt", YELLOW),
+        Component.text("必要レベル: ${BigWolfConfig.breedMinLevel}以上", YELLOW),
+        Component.text("同じ種類のペット同士のみ", GRAY)
+      ))
+    }
+    inv.setItem(22, infoItem)
+
+    player.openInventory(inv)
+  }
 
   // --- 名前変更コマンド ---
   private fun handleRenameCommand(player: Player, args: Array<out String>) {
@@ -1084,23 +1181,14 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       val targetUuid = targetPlayer.uniqueId
 
       // 1. 元のペットデータを取得
-      var petData = PetDataManager.getPetData(senderUuid, petId)
+      val petData = PetDataManager.getPetData(senderUuid, petId)
       if (petData == null) {
         sender.sendMessage(Component.text("ペットデータが見つかりません。", RED))
         return
       }
 
-      // originalOwner / transfer回数を最新化してから収納
-      if (petEntity.originalOwnerId == null) {
-        petEntity.originalOwnerId = senderUuid.toString()
-      }
-      petEntity.transferCount = petEntity.transferCount + 1
-
       // 2. ペットを収納してスポーンエッグを取得
       val egg = storageService.createStoredPetItem(petEntity)
-
-      // createStoredPetItem -> markAsStored により JSON が更新されるため再読込
-      petData = PetDataManager.getPetData(senderUuid, petId) ?: petData
 
       // 3. エンティティを削除
       petEntity.remove()
@@ -1130,16 +1218,13 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       updatedHistory.add(transferRecord)
 
       // 7. originalOwnerが未設定の場合は現在の送信者をセット
-    val originalOwner = petData.originalOwner ?: senderUuid.toString()
+      val originalOwner = petData.originalOwner ?: senderUuid.toString()
 
       // 8. 新しいペット番号でデータを作成
       val newPetData = petData.copy(
         petNumber = nextNumber,
         originalOwner = originalOwner,
-        transferHistory = updatedHistory,
-        breedInfo = petData.breedInfo?.copy(), // defensive copy
-        stats = petData.stats.copy(),
-        particleUnlocked = petData.particleUnlocked
+        transferHistory = updatedHistory
       )
 
 
@@ -1187,8 +1272,64 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
 
 
+  // --- Anvil GUI 機能（廃止: コマンド方式に変更） ---
+
+  // ★ メインメニューGUI
   private fun openMainMenu(player: Player) {
-    guiManager.openMainMenu(player)
+    val inv = Bukkit.createInventory(null, 27, mainMenuTitle)
+    openedMainMenus.add(inv)
+
+    fun item(mat: Material, name: String, color: NamedTextColor, vararg lore: Component) =
+        ItemStack(mat).apply {
+          itemMeta = itemMeta.apply {
+            displayName(Component.text(name, color))
+            lore(lore.toList())
+          }
+        }
+
+    // スロット10: 全ペット収納
+    inv.setItem(10, item(Material.CHEST, "全ペット収納", GOLD,
+      Component.text("自分のペットを全て収納", GRAY),
+      Component.text("クリックで実行", GREEN)))
+
+    // スロット11: 死亡ペット一覧
+    inv.setItem(11, item(Material.SKELETON_SKULL, "死亡ペット一覧", RED,
+      Component.text("死亡したペットを確認", GRAY),
+      Component.text("クリックで表示", GREEN)))
+
+    // スロット12: ペット履歴
+    inv.setItem(12, item(Material.BOOK, "ペット履歴", YELLOW,
+      Component.text("全ペットの履歴を確認", GRAY),
+      Component.text("クリックで表示", GREEN)))
+
+    // スロット13: 交配
+    inv.setItem(13, item(Material.HEART_OF_THE_SEA, "交配", LIGHT_PURPLE,
+      Component.text("ペット同士を交配", GRAY),
+      Component.text("コスト: ${BigWolfConfig.defaultShopCost}pt", GOLD),
+      Component.text("クリックで選択", GREEN)))
+
+    // スロット14: ペット復活
+    inv.setItem(14, item(Material.TOTEM_OF_UNDYING, "ペット復活", AQUA,
+      Component.text("死亡ペットを復活", GRAY),
+      Component.text("コスト: ${BigWolfConfig.reviveCost}pt/匹", GOLD),
+      Component.text("※番号指定が必要", DARK_GRAY)))
+
+    // スロット15: スポーンエッグ再取得
+    inv.setItem(15, item(Material.EGG, "エッグ再取得", GREEN,
+      Component.text("収納ペットのエッグを再取得", GRAY),
+      Component.text("コスト: ${BigWolfConfig.recoverCost}pt", GOLD),
+      Component.text("※番号指定が必要", DARK_GRAY)))
+
+    // スロット16: 位置確認
+    inv.setItem(16, item(Material.COMPASS, "位置確認", YELLOW,
+      Component.text("ペットの最終位置を確認", GRAY),
+      Component.text("※番号指定が必要", DARK_GRAY)))
+
+    // スロット22: 閉じる
+    inv.setItem(22, item(Material.BARRIER, "閉じる", RED,
+      Component.text("メニューを閉じる", GRAY)))
+
+    player.openInventory(inv)
   }
 
   override fun onTabComplete(
@@ -1197,14 +1338,94 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       label: String,
       args: Array<out String>,
   ): MutableList<String>? {
+    // コマンドによってタブ補完を分ける
     return when (command.name.lowercase()) {
-      "bigwolfop" -> me.marzipan.OyasaiPets.commands.CommandTabCompleter.onTabCompleteOp(sender, args).toMutableList()
-      "bigwolf" -> me.marzipan.OyasaiPets.commands.CommandTabCompleter.onTabCompletePlayer(args).toMutableList()
+      "bigwolfop" -> onTabCompleteOp(sender, args).toMutableList()
+      "bigwolf" -> onTabCompletePlayer(args).toMutableList()
       else -> mutableListOf()
     }
   }
 
+  // /bigwolfop のタブ補完
+  private fun onTabCompleteOp(sender: CommandSender, args: Array<out String>): List<String> {
+    if (!sender.isOp) return mutableListOf()
 
+    val a0 = args.getOrNull(0)?.lowercase() ?: ""
+    val a1 = args.getOrNull(1)?.lowercase() ?: ""
+
+    val result: List<String> = when (args.size) {
+      1 -> listOf("version", "reload", "item", "exp", "shop", "shopremove", "shopremoveall",
+                  "force_store", "force_storeall", "history")
+            .filter { it.startsWith(a0) }
+      2 -> when (a0) {
+        "item" -> listOf("food", "brush", "treat", "toys", "skillbook", "skillbook1", "skillbook2", "skillbook3", "particle", "all")
+            .filter { it.startsWith(a1) }
+        "exp", "shop" -> EntityType.entries.filter { it.isSpawnable && it.isAlive }
+            .map { it.name.lowercase() }.filter { it.startsWith(a1) }
+        "force_storeall", "history" -> Bukkit.getOnlinePlayers().map { it.name }
+            .filter { it.lowercase().startsWith(a1) }
+        else -> emptyList()
+      }
+      3 -> when (a0) {
+        "exp", "shop" -> {
+          val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+          if (type != null) VariantHandler.getVariantNames(type).map { it.lowercase() }.filter { it.startsWith(args[2].lowercase()) }
+          else emptyList()
+        }
+        "history" -> {
+          // ページ番号の候補（1-5程度）
+          (1..5).map { it.toString() }.filter { it.startsWith(args[2]) }
+        }
+        else -> emptyList()
+      }
+      else -> emptyList()
+    }
+    return result.toMutableList()
+  }
+
+  // /bigwolf のタブ補完
+  private fun onTabCompletePlayer(args: Array<out String>): List<String> {
+    val a0 = args.getOrNull(0)?.lowercase() ?: ""
+    val a1 = args.getOrNull(1)?.lowercase() ?: ""
+    val a2 = args.getOrNull(2)?.lowercase() ?: ""
+
+    val result: List<String> = when (args.size) {
+      1 -> {
+        val base = PetRegistry.officialPets.map { it.name.lowercase() } +
+            listOf("menu", "storeall", "revive", "dead", "history", "locate", "recover", "breed", "transfer")
+        base.filter { it.startsWith(a0) }
+      }
+      2 -> when (a0) {
+        "revive", "locate", "recover" -> {
+          // ペット番号の候補（1-10程度）
+          (1..10).map { it.toString() }.filter { it.startsWith(a1) }
+        }
+        "transfer" -> {
+          // ペット番号の候補
+          (1..10).map { it.toString() }.filter { it.startsWith(a1) }
+        }
+        "history" -> {
+          // ページ番号の候補（1-5程度）
+          (1..5).map { it.toString() }.filter { it.startsWith(a1) }
+        }
+        else -> {
+          // バリアント候補
+          val type = runCatching { EntityType.valueOf(a0.uppercase()) }.getOrNull()
+          if (type != null) VariantHandler.getVariantNames(type).map { it.lowercase() }.filter { it.startsWith(a1) }
+          else emptyList()
+        }
+      }
+      3 -> when (a0) {
+        "transfer" -> {
+          // プレイヤー名候補
+          Bukkit.getOnlinePlayers().map { it.name }.filter { it.lowercase().startsWith(a2) }
+        }
+        else -> emptyList()
+      }
+      else -> emptyList()
+    }
+    return result.toMutableList()
+  }
 
   // --- Events ---
 
@@ -1214,18 +1435,502 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
 
 
+  @EventHandler
+  fun onEntityInteract(event: PlayerInteractEntityEvent) {
+    val player = event.player
+    val entity = event.rightClicked as? LivingEntity ?: return
+
+    interactionService.checkAndMigrateOwner(entity, player)
+    val isOwner = interactionService.isOwner(entity, player)
+
+    val plainName =
+        entity.customName()?.let { PlainTextComponentSerializer.plainText().serialize(it) } ?: ""
+    if (entity.ownerId == null && !plainName.contains("'s Big ")) return
+
+    event.isCancelled = true
+
+    if (isOwner && itemManagement.isPetFood(player.inventory.itemInMainHand)) {
+      interactionService.giveFood(player, entity) { p, a -> economySystem.consumeTokens(p, a) }
+      return
+    }
+
+    // --- 新規: ブラシ ---
+    if (isOwner && itemManagement.isPetBrush(player.inventory.itemInMainHand)) {
+      interactionService.useBrush(player, entity)
+      return
+    }
+    // --- 新規: おやつ ---
+    if (isOwner && itemManagement.isPetTreat(player.inventory.itemInMainHand)) {
+      interactionService.giveTreat(player, entity)
+      return
+    }
+
+    // スキル強化アイテム
+    if (isOwner) {
+      val main = player.inventory.itemInMainHand
+      val unlockLevel = itemManagement.getUnlockItemLevel(main)
+      if (unlockLevel > 0) {
+        interactionService.handleSkillUnlock(player, entity, main, unlockLevel) { p, a -> economySystem.consumeTokens(p, a) }
+        event.isCancelled = true
+        return
+      }
+
+      // パーティクルアンロックアイテム
+      if (itemManagement.isParticleUnlockItem(main)) {
+        interactionService.handleParticleUnlock(player, entity, main)
+        event.isCancelled = true
+        return
+      }
+    }
 
 
+    if (isOwner) {
+
+      if (player.isSneaking) {
+        guiManager.openPetInfoGui(player, entity)
+      } else {
+        if (player !in entity.passengers) {
+          fetchSystem.stopFetchTask(entity)
+          if (entity is Sittable) entity.isSitting = false
+          entity.addPassenger(player)
+          mountCooldowns[player.uniqueId] = System.currentTimeMillis()
+          player.sendMessage(Component.text("運転席に乗りました！(左クリックでスキル)", GREEN))
+          petControlSystem.startControlTask(player, entity)
+        }
+      }
+    } else {
+      player.sendMessage(Component.text("このペットには飼い主しか乗れません。", RED))
+      return
+    }
+  }
+
+  @EventHandler
+  fun onPlayerInteract(event: PlayerInteractEvent) {
+    val item = event.item ?: return
+    val player = event.player
+
+    if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
+      val toySpec = PetRegistry.findSpecByToy(item)
+
+      if (toySpec != null && toySpec.toyType == ToyType.THROW_FETCH) {
+        event.isCancelled = true
+        fetchSystem.handleThrowToy(player, item, toySpec)
+        return
+      }
+    }
+
+    if (event.action == Action.RIGHT_CLICK_BLOCK && event.hand == EquipmentSlot.HAND) {
+      val meta = item.itemMeta ?: return
+      if (meta.persistentDataContainer.has(BigWolfKeys.STORED_FLAG, PersistentDataType.BYTE)) {
+        event.isCancelled = true
+        val loc = event.clickedBlock?.location?.add(0.5, 1.0, 0.5) ?: return
+        storageService.restorePetFromItem(player, item, loc, ::countActivePets, { e, s, p -> storageService.setupPetEntity(e, s, p) }, { e, l, s -> interactionService.updateStats(e, l, s) })
+      }
+    }
+  }
 
 
+  @EventHandler
+  fun onPlayerFish(event: PlayerFishEvent) {
+    val player = event.player
+    val item = player.inventory.itemInMainHand
+
+    val toySpec = PetRegistry.findSpecByToy(item) ?: return
+    if (toySpec.toyType != ToyType.FISHING_ROD) return
+
+    if (event.state == PlayerFishEvent.State.FISHING) {
+      fetchSystem.handleFishingToy(player, toySpec)
+    }
+  }
 
 
+  @EventHandler
+  fun onPlayerSkillTrigger(event: PlayerInteractEvent) {
+    if (event.action != Action.LEFT_CLICK_AIR && event.action != Action.LEFT_CLICK_BLOCK) return
+    if (event.hand != EquipmentSlot.HAND) return
 
+    val player = event.player
+    val vehicle = player.vehicle as? LivingEntity ?: return
 
+    if (!interactionService.isOwner(vehicle, player)) return
 
+    val now = System.currentTimeMillis()
+    if (now - dropCooldowns.getOrDefault(player.uniqueId, 0L) < 500) return
+    if (now - mountCooldowns.getOrDefault(player.uniqueId, 0L) < 1000) return
 
+    // SkillSystemに委譲
+    skillSystem.tryActivateSkill(player, vehicle)
+  }
+
+  @EventHandler
+  fun onInventoryClick(event: InventoryClickEvent) {
+    val player = event.whoClicked as? Player ?: return
+    val item = event.currentItem ?: return
+
+    // ★ Anvil GUIは廃止されました（コマンド方式に変更）
+
+    // ★ パーティクル選択GUI
+    if (event.view.title() == Component.text("パーティクル選択", GOLD)) {
+      event.isCancelled = true
+      val entity = openedGuis[event.view.topInventory] ?: return
+
+      when (item.type) {
+        Material.BARRIER, Material.LIGHTNING_ROD, Material.BLAZE_POWDER, Material.SOUL_CAMPFIRE, Material.RED_DYE,
+        Material.NETHER_STAR, Material.NOTE_BLOCK, Material.SNOWBALL, Material.CHERRY_LEAVES,
+        Material.ENDER_PEARL, Material.SLIME_BALL -> {
+          // パーティクルを選択
+          val particleId = when (event.slot) {
+            0 -> 0   // なし
+            1 -> 1   // 電気
+            2 -> 2   // 炎
+            3 -> 3   // 青炎
+            4 -> 4   // ハート
+            9 -> 5   // 星
+            10 -> 6  // 音符
+            11 -> 7  // 雪
+            12 -> 8  // 桜
+            13 -> 9  // エンド
+            14 -> 10 // スライム
+            else -> -1
+          }
+
+          if (particleId >= 0) {
+            // デフォルトパーティクル(0-4)は常に選択可能
+            // アンロック可能パーティクル(5-10)は解放済みかチェック
+            if (particleId <= 4 || entity.isParticleUnlocked(particleId)) {
+              entity.particleType = particleId
+              player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1f)
+              guiManager.openParticleSelectGui(player, entity) // GUI再描画
+            } else {
+              player.sendMessage(Component.text("このパーティクルは未解放です！", RED))
+              player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
+            }
+          }
+        }
+        Material.ARROW -> {
+          // 戻る
+          player.closeInventory()
+          guiManager.openPetInfoGui(player, entity)
+        }
+        Material.GRAY_DYE -> {
+          // 未解放パーティクル
+          player.sendMessage(Component.text("このパーティクルは未解放です！", RED))
+          player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
+        }
+        else -> {}
+      }
+      return
+    }
+
+    // ★ メインメニューGUI
+    if (event.view.title() == mainMenuTitle) {
+      event.isCancelled = true
+      if (!openedMainMenus.contains(event.view.topInventory)) return
+
+      when (item.type) {
+        Material.CHEST -> {
+          // 全ペット収納
+          player.closeInventory()
+          storageService.storeAllPets(player)
+        }
+        Material.SKELETON_SKULL -> {
+          // 死亡ペット一覧
+          player.closeInventory()
+          handleDeadPetsList(player)
+        }
+        Material.BOOK -> {
+          // ペット履歴
+          player.closeInventory()
+          handlePetHistory(player, emptyArray())
+        }
+        Material.HEART_OF_THE_SEA -> {
+          // 交配
+          player.closeInventory()
+          handleBreedCommand(player)
+        }
+        Material.TOTEM_OF_UNDYING -> {
+          // ペット復活（コマンド案内）
+          player.closeInventory()
+          player.sendMessage(Component.text("=== ペット復活 ===", GOLD))
+          player.sendMessage(Component.text("/bigwolf revive <番号> で復活できます", YELLOW))
+          player.sendMessage(Component.text("コスト: ${BigWolfConfig.reviveCost}pt", GRAY))
+        }
+        Material.EGG -> {
+          // エッグ再取得（コマンド案内）
+          player.closeInventory()
+          player.sendMessage(Component.text("=== エッグ再取得 ===", GOLD))
+          player.sendMessage(Component.text("/bigwolf recover <番号> で再取得できます", YELLOW))
+          player.sendMessage(Component.text("コスト: ${BigWolfConfig.recoverCost}pt", GRAY))
+        }
+        Material.COMPASS -> {
+          // 位置確認（コマンド案内）
+          player.closeInventory()
+          player.sendMessage(Component.text("=== ペット位置確認 ===", GOLD))
+          player.sendMessage(Component.text("/bigwolf locate <番号> で確認できます", YELLOW))
+        }
+        Material.BARRIER -> {
+          // 閉じる
+          player.closeInventory()
+        }
+        else -> {}
+      }
+      return
+    }
+
+    // ★ 購入GUI
+    if (event.view.title() == shopGuiTitle) {
+      event.isCancelled = true
+      val ctx = openedShopGuis[event.view.topInventory] ?: return player.closeInventory()
+
+      when (item.type) {
+        Material.EMERALD_BLOCK -> {
+          // ペット数制限チェック
+          if (petSpawnSystem.countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
+            player.closeInventory()
+            player.sendMessage(
+                Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
+            player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
+            return
+          }
+
+          // ポイント残高チェックと消費
+          if (!economySystem.consumeTokens(player, ctx.cost)) {
+            player.closeInventory()
+            player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
+            return
+          }
+
+          player.closeInventory()
+
+          // ★ 直接ペットをスポーン（購入券システム廃止）
+          val petId = petSpawnSystem.spawnAndMountEntity(player, ctx.type, ctx.variant)
+
+          // ★ 購入履歴を記録
+          if (petId != null) {
+            PetDataManager.recordPurchase(
+                ownerUuid = player.uniqueId,
+                petId = petId,
+                type = ctx.type,
+                variant = ctx.variant,
+                customName = null)
+          }
+
+          player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
+          val label =
+              if (ctx.variant != null) "${ctx.type.name} (${ctx.variant})" else ctx.type.name
+          player.sendMessage(Component.text("購入しました: $label (-${ctx.cost}pt)", GREEN))
+        }
+
+        Material.BARRIER -> {
+          player.closeInventory()
+          player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
+          player.sendMessage(Component.text("購入をキャンセルしました。", RED))
+        }
+
+        else -> {}
+      }
+      return
+    }
+
+    // ★ 既存のペット情報GUI
+    if (event.view.title() != guiTitle) return
+    event.isCancelled = true
+
+    val entity =
+        openedGuis[event.view.topInventory]
+            ?: return player.closeInventory().also {
+              player.sendMessage(Component.text("操作対象のペットが見つかりません。", RED))
+            }
+
+    if (!entity.isValid) {
+      player.closeInventory()
+      player.sendMessage(Component.text("ペットが存在しません。", RED))
+      return
+    }
+
+    when (item.type) {
+      Material.NAME_TAG -> {
+        player.closeInventory()
+        // ペット番号を取得
+        val petId = entity.petId
+        val ownerId = entity.ownerId
+        if (petId != null && ownerId != null) {
+          try {
+            val ownerUuid = UUID.fromString(ownerId)
+            val petData = PetDataManager.getPetData(ownerUuid, petId)
+            if (petData != null) {
+              player.sendMessage(Component.text("=== ペット名前変更 ===", GOLD))
+              player.sendMessage(Component.text("下のメッセージをクリックすると、チャット欄に自動入力されます。", YELLOW))
+              player.sendMessage(Component.text("名前を入力してEnterキーで確定してください。", YELLOW))
+              player.sendMessage(Component.empty())
+              player.sendMessage(
+                Component.text("▶ /bigwolf rename ${petData.petNumber} <新しい名前>", GREEN)
+                  .clickEvent(net.kyori.adventure.text.event.ClickEvent.suggestCommand("/bigwolf rename ${petData.petNumber} "))
+                  .hoverEvent(Component.text("クリックでコマンドを入力欄に挿入"))
+              )
+            } else {
+              player.sendMessage(Component.text("ペットデータが見つかりません。", RED))
+              logger.warning("Pet data not found: ownerUuid=$ownerUuid, petId=$petId")
+            }
+          } catch (e: Exception) {
+            player.sendMessage(Component.text("ペット情報の取得に失敗しました。", RED))
+            logger.warning("Failed to get pet data: ${e.message}")
+          }
+        } else {
+          player.sendMessage(Component.text("ペットIDまたはオーナーIDが見つかりません。", RED))
+        }
+      }
+
+      Material.LIME_WOOL,
+      Material.RED_WOOL -> {
+        entity.isSilentMode = !entity.isSilentMode
+        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
+        guiManager.openPetInfoGui(player, entity)
+      }
+
+      Material.IRON_SWORD -> {
+        val unlocked = entity.skillUnlockedLevel
+        if (unlocked == 0) {
+          player.sendMessage(Component.text("スキルが一つも解放されていません。強化アイテムを与えてください。", RED))
+          return
+        }
+        var nextSkill = entity.skillType + 1
+        // 右クリックの場合は逆送り
+        if (event.isRightClick) {
+          nextSkill = entity.skillType - 1
+          if (nextSkill < 1) nextSkill = unlocked
+        } else {
+          if (nextSkill > unlocked) nextSkill = 1 // skills start from 1
+        }
+        // ループ修正: 1..unlocked の範囲にする
+        if (nextSkill < 1) nextSkill = unlocked
+        if (nextSkill > unlocked) nextSkill = 1
+
+        entity.skillType = nextSkill
+        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
+        guiManager.openPetInfoGui(player, entity)
+      }
+
+      Material.BARRIER -> {
+         if (event.slot == 3) {
+             player.sendMessage(Component.text("スキルが未解放です。スキル強化の本を与えてください。", RED))
+         } else if (event.slot == 8) { // 閉じるボタン
+             player.closeInventory()
+         }
+      }
+
+      Material.BLAZE_POWDER -> {
+        // パーティクル選択GUIを開く
+        player.closeInventory()
+        guiManager.openParticleSelectGui(player, entity)
+      }
+
+      Material.CHEST -> {
+        player.closeInventory()
+        storageService.storePetToItem(player, entity)
+      }
+
+      // ★ 譲渡ボタン
+      Material.PLAYER_HEAD -> {
+        player.closeInventory()
+        val petId = entity.petId
+        val ownerId = entity.ownerId
+        if (petId == null || ownerId == null) {
+          player.sendMessage(Component.text("ペットIDまたはオーナーIDが見つかりません。", RED))
+          return
+        }
+
+        try {
+          val ownerUuid = UUID.fromString(ownerId)
+          val petData = PetDataManager.getPetData(ownerUuid, petId)
+          if (petData == null) {
+            player.sendMessage(Component.text("ペットデータが見つかりません。", RED))
+            logger.warning("Pet data not found for transfer: ownerUuid=$ownerUuid, petId=$petId")
+            return
+          }
+
+          player.sendMessage(Component.text("=== ペット譲渡 ===", GOLD))
+          player.sendMessage(Component.text("下のメッセージをクリックすると、チャット欄に自動入力されます。", YELLOW))
+          player.sendMessage(Component.text("譲渡先のプレイヤー名を入力してEnterキーで確定してください。", YELLOW))
+          player.sendMessage(Component.text("※誤操作防止のため、2回実行で確定されます", GRAY))
+          player.sendMessage(Component.empty())
+          player.sendMessage(
+            Component.text("▶ /bigwolf transfer ${petData.petNumber} <プレイヤー名>", GREEN)
+              .clickEvent(net.kyori.adventure.text.event.ClickEvent.suggestCommand("/bigwolf transfer ${petData.petNumber} "))
+              .hoverEvent(Component.text("クリックでコマンドを入力欄に挿入"))
+          )
+        } catch (e: Exception) {
+          player.sendMessage(Component.text("譲渡処理中にエラーが発生しました: ${e.message}", RED))
+          logger.warning("Transfer error: ${e.message}")
+        }
+      }
+
+      // フード (旧: giveFoodをここから呼び出す)
+      Material.COOKED_BEEF -> {
+          interactionService.giveFood(player, entity) { p, a -> economySystem.consumeTokens(p, a) }
+          guiManager.openPetInfoGui(player, entity) // 更新
+      }
+
+      else -> {}
+    }
+  }
 
   // ★ 交配GUI処理
+  @EventHandler
+  fun onBreedGuiClick(event: InventoryClickEvent) {
+    val player = event.whoClicked as? Player ?: return
+    if (event.view.title() != breedGuiTitle) return
+    event.isCancelled = true
+
+    val item = event.currentItem ?: return
+    if (!item.hasItemMeta()) return
+
+    val pdc = item.itemMeta.persistentDataContainer
+    val petId = pdc.get(BigWolfKeys.PET_ID, PersistentDataType.STRING) ?: return
+
+    // ペットエンティティを取得
+    var selectedPet: LivingEntity? = null
+    for (world in Bukkit.getWorlds()) {
+      for (entity in world.livingEntities) {
+        if (entity.petId == petId) {
+          selectedPet = entity
+          break
+        }
+      }
+      if (selectedPet != null) break
+    }
+
+    if (selectedPet == null) {
+      player.sendMessage(Component.text("ペットが見つかりません。", RED))
+      return
+    }
+
+    val firstSelection = pendingBreedSelections[player.uniqueId]
+
+    if (firstSelection == null) {
+      // 1匹目を選択
+      pendingBreedSelections[player.uniqueId] = selectedPet
+      player.sendMessage(Component.text("1匹目を選択しました。2匹目を選択してください。", YELLOW))
+      player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
+    } else {
+      // 2匹目を選択 → 交配実行
+      if (firstSelection.petId == selectedPet.petId) {
+        player.sendMessage(Component.text("同じペットは選択できません。", RED))
+        return
+      }
+
+      // 同じ種類かチェック
+      if (firstSelection.type != selectedPet.type) {
+        player.sendMessage(Component.text("異なる種類のペットは交配できません。", RED))
+        pendingBreedSelections.remove(player.uniqueId)
+        return
+      }
+
+      player.closeInventory()
+      pendingBreedSelections.remove(player.uniqueId)
+      executeBreeding(player, firstSelection, selectedPet)
+    }
+  }
 
   // 交配実行
   private fun executeBreeding(player: Player, parent1: LivingEntity, parent2: LivingEntity) {
@@ -1437,6 +2142,12 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }, 45L)
   }
 
+  @EventHandler
+  fun onInventoryClose(event: InventoryCloseEvent) {
+    openedGuis.remove(event.inventory)
+    openedShopGuis.remove(event.inventory)
+    openedMainMenus.remove(event.inventory)
+  }
 
 
   // --- Logic Methods ---
@@ -1463,13 +2174,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
 
     val spec = PetRegistry.get(type)
-    val safeLoc =
-        SpawnUtils.findSafeSpawnLocation(player.location.clone().add(0.0, 1.0, 0.0))
-            ?: run {
-              player.sendMessage(Component.text("この場所では召喚できません（足場と空間が必要です）。", RED))
-              return null
-            }
-    val entity = player.world.spawnEntity(safeLoc, type) as? LivingEntity
+    val entity = player.world.spawnEntity(player.location.add(0.0, 1.0, 0.0), type) as? LivingEntity
 
     if (entity == null || !entity.isValid) {
       player.sendMessage(Component.text("この場所では召喚できません（保護されています）。", RED))
@@ -1534,5 +2239,59 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
   // --- Shop & Voucher Features ---
 
+
+  // ★ 非推奨: 購入券システムは廃止されました。既存の購入券の互換性のために残しています。
+  @Deprecated("購入券システムは廃止されました。直接スポーン方式に移行してください。")
+  private fun createVoucherEgg(type: EntityType, variant: String?): ItemStack {
+    val eggMat = Material.getMaterial("${type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
+    val item = ItemStack(eggMat)
+
+    item.itemMeta =
+        item.itemMeta.apply {
+          displayName(
+              Component.text(
+                  "【購入券】${type.name}${if (variant != null) " ($variant)" else ""}", LIGHT_PURPLE))
+          lore(listOf(Component.text("右クリックでペットを召喚", GRAY), Component.text("※購入済み", DARK_GRAY)))
+          persistentDataContainer.set(BigWolfKeys.VOUCHER_FLAG, PersistentDataType.BYTE, 1)
+          persistentDataContainer.set(
+              BigWolfKeys.VOUCHER_TYPE, PersistentDataType.STRING, type.name)
+          if (variant != null)
+              persistentDataContainer.set(
+                  BigWolfKeys.VOUCHER_VARIANT, PersistentDataType.STRING, variant)
+          addEnchant(Enchantment.UNBREAKING, 1, true)
+          addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        }
+    return item
+  }
+
+  // ★ 非推奨: 購入券システムは廃止されました。既存の購入券の互換性のために残しています。
+  @EventHandler
+  fun onVoucherUse(event: PlayerInteractEvent) {
+    if (event.hand != EquipmentSlot.HAND) return
+    if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
+
+    val item = event.item ?: return
+    val meta = item.itemMeta ?: return
+    val pdc = meta.persistentDataContainer
+    val isVoucher = (pdc.get(BigWolfKeys.VOUCHER_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1
+    if (!isVoucher) return
+
+    event.isCancelled = true
+
+    val player = event.player
+
+    // ペット数制限チェック - アイテム消費前に確認
+    if (petSpawnSystem.countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
+      player.sendMessage(Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
+      return
+    }
+
+    val typeStr = pdc.get(BigWolfKeys.VOUCHER_TYPE, PersistentDataType.STRING) ?: return
+    val type = runCatching { EntityType.valueOf(typeStr) }.getOrNull() ?: return
+    val variant = pdc.get(BigWolfKeys.VOUCHER_VARIANT, PersistentDataType.STRING)
+
+    petSpawnSystem.spawnAndMountEntity(player, type, variant)
+    item.amount -= 1
+  }
 
 } // End of BigWolfPlugin class

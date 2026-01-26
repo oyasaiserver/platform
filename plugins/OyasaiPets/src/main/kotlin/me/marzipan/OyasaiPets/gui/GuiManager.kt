@@ -304,23 +304,36 @@ class GuiManager {
         val inv = Bukkit.createInventory(null, 27, mainMenuTitle)
         openedMainMenus.add(inv)
 
-        inv.setItem(10, createItem(Material.ENDER_CHEST, "全ペット収納", AQUA,
-            Component.text("すべてのペットをアイテム化", GRAY),
+        inv.setItem(10, createItem(Material.CHEST, "全ペット収納", GOLD,
+            Component.text("自分のペットを全て収納", GRAY),
             Component.text("クリックで実行", GREEN)))
 
-        inv.setItem(12, createItem(Material.HEART_OF_THE_SEA, "ペット復活", LIGHT_PURPLE,
-            Component.text("死亡したペットを復活", GRAY),
-            Component.text("/bigwolf dead で確認", GRAY),
-            Component.text("クリックで死亡ペット一覧", GREEN)))
+        inv.setItem(11, createItem(Material.SKELETON_SKULL, "死亡ペット一覧", RED,
+            Component.text("死亡したペットを確認", GRAY),
+            Component.text("クリックで表示", GREEN)))
 
-        inv.setItem(14, createItem(Material.EGG, "交配", GOLD,
-            Component.text("2匹のペットを交配して", GRAY),
-            Component.text("新しいペットを作る", GRAY),
-            Component.text("クリックで交配開始", GREEN)))
+        inv.setItem(12, createItem(Material.BOOK, "ペット履歴", YELLOW,
+            Component.text("全ペットの履歴を確認", GRAY),
+            Component.text("クリックで表示", GREEN)))
 
-        inv.setItem(16, createItem(Material.COMPASS, "ペットを探す", YELLOW,
-            Component.text("見失ったペットの位置を表示", GRAY),
-            Component.text("クリックで検索", GREEN)))
+        inv.setItem(13, createItem(Material.HEART_OF_THE_SEA, "交配", LIGHT_PURPLE,
+            Component.text("ペット同士を交配", GRAY),
+            Component.text("コスト: ${BigWolfConfig.defaultShopCost}pt", GOLD),
+            Component.text("クリックで選択", GREEN)))
+
+        inv.setItem(14, createItem(Material.TOTEM_OF_UNDYING, "ペット復活", AQUA,
+            Component.text("死亡ペットを復活", GRAY),
+            Component.text("コスト: ${BigWolfConfig.reviveCost}pt/匹", GOLD),
+            Component.text("※番号指定が必要", DARK_GRAY)))
+
+        inv.setItem(15, createItem(Material.EGG, "エッグ再取得", GREEN,
+            Component.text("収納ペットのエッグを再取得", GRAY),
+            Component.text("コスト: ${BigWolfConfig.recoverCost}pt", GOLD),
+            Component.text("※番号指定が必要", DARK_GRAY)))
+
+        inv.setItem(16, createItem(Material.COMPASS, "位置確認", YELLOW,
+            Component.text("ペットの最終位置を確認", GRAY),
+            Component.text("※番号指定が必要", DARK_GRAY)))
 
         inv.setItem(22, createItem(Material.BARRIER, "閉じる", RED,
             Component.text("メニューを閉じる", GRAY)))
@@ -389,4 +402,3 @@ class GuiManager {
      */
     fun getShopContext(inv: Inventory): ShopContext? = openedShopGuis[inv]
 }
-

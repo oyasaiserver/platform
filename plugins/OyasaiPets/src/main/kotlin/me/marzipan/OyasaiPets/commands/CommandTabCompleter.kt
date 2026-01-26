@@ -29,7 +29,7 @@ object CommandTabCompleter {
 
             2 -> when (a0) {
                 "item" -> listOf(
-                    "food", "brush", "treat", "toys", "skillbook", "skillbook1",
+                    "food", "brush", "treat", "heal", "toys", "skillbook", "skillbook1",
                     "skillbook2", "skillbook3", "particle", "all"
                 ).filter { it.startsWith(a1) }
 
@@ -74,12 +74,14 @@ object CommandTabCompleter {
 
         val result: List<String> = when (args.size) {
             1 -> {
-                val base = PetRegistry.officialPets.map { it.name.lowercase() } +
-                    listOf("menu", "storeall", "revive", "dead", "history", "locate", "recover", "breed", "transfer")
+                val base = listOf("buy", "menu", "storeall", "revive", "dead", "history", "locate", "recover", "breed", "transfer", "list", "version")
                 base.filter { it.startsWith(a0) }
             }
 
             2 -> when (a0) {
+                "buy" -> {
+                    PetRegistry.officialPets.map { it.name.lowercase() }.filter { it.startsWith(a1) }
+                }
                 "revive", "locate", "recover" -> {
                     // ペット番号の候補（1-10程度）
                     (1..10).map { it.toString() }.filter { it.startsWith(a1) }
@@ -106,6 +108,13 @@ object CommandTabCompleter {
             }
 
             3 -> when (a0) {
+                "buy" -> {
+                    val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+                    if (type != null) {
+                        VariantHandler.getVariantNames(type).map { it.lowercase() }
+                            .filter { it.startsWith(args[2].lowercase()) }
+                    } else emptyList()
+                }
                 "transfer" -> {
                     // プレイヤー名候補
                     Bukkit.getOnlinePlayers().map { it.name }.filter { it.lowercase().startsWith(a2) }

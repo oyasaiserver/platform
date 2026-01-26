@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -41,6 +42,8 @@ object PetDataManager {
 
     // 次のペット番号を決定
     val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
+    val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
+    val defaultName = "${ownerName}の大${type.name} #$nextNumber"
 
     val petData =
         PetData(
@@ -48,7 +51,7 @@ object PetDataManager {
             petNumber = nextNumber,
             type = type.name,
             variant = variant,
-            customName = customName,
+            customName = customName ?: defaultName,
             purchasedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
             status = PetStatus.ALIVE,
             lastLocation = null,
@@ -75,7 +78,7 @@ object PetDataManager {
         LocationData(
             world = location.world?.name ?: "world", x = location.x, y = location.y, z = location.z)
 
-    savePetData(ownerUuid, petData)
+    savePetData(ownerUuid, petData, syncBack = false)
   }
 
   /** ペット死亡時にデータを保存 */
@@ -108,8 +111,9 @@ object PetDataManager {
     petData.skillType = entity.skillType
     petData.skillUnlockedLevel = entity.skillUnlockedLevel
     petData.foodLevel = entity.foodLevel
+    petData.particleUnlocked = entity.particleUnlocked
 
-    savePetData(ownerUuid, petData)
+    savePetData(ownerUuid, petData, syncBack = false)
 
     plugin.logger.info("Pet died: Owner=$ownerUuid, PetNumber=${petData.petNumber}")
   }
@@ -152,6 +156,7 @@ object PetDataManager {
     petData.skillType = entity.skillType
     petData.skillUnlockedLevel = entity.skillUnlockedLevel
     petData.foodLevel = entity.foodLevel
+    petData.particleUnlocked = entity.particleUnlocked
     petData.customName =
         entity.customName()?.let {
           net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand()
@@ -183,7 +188,7 @@ object PetDataManager {
     return "${number}_${petData.type}${variant}.json"
   }
 
-  private fun savePetData(ownerUuid: UUID, petData: PetData) {
+  private fun savePetData(ownerUuid: UUID, petData: PetData, syncBack: Boolean = true) {
     val playerFolder = getPlayerFolder(ownerUuid)
     val fileName = getPetFileName(petData)
     val file = File(playerFolder, fileName)
@@ -192,6 +197,10 @@ object PetDataManager {
 
     // キャッシュ更新
     cache.getOrPut(ownerUuid.toString()) { mutableMapOf() }[petData.petId] = petData
+
+    if (syncBack) {
+      PetSynchronizer.syncDataToEntity(ownerUuid, petData)
+    }
   }
 
   private fun loadPlayerPets(ownerUuid: UUID): MutableMap<String, PetData> {
@@ -280,6 +289,25 @@ object PetDataManager {
     savePetData(ownerUuid, petData)
   }
 
+  /**
+   * エンティティ側で最新化されたスナップショットから JSON を更新する。
+   */
+  fun updateFromSnapshot(ownerUuid: UUID, snapshot: PetSnapshot) {
+    val petData = getPetData(ownerUuid, snapshot.petId) ?: return
+    petData.customName = snapshot.customName
+    petData.variant = snapshot.variant
+    petData.status = snapshot.status
+    petData.lastLocation = snapshot.lastLocation
+    petData.stats = snapshot.stats
+    petData.skillType = snapshot.skillType
+    petData.skillUnlockedLevel = snapshot.skillUnlockedLevel
+    petData.foodLevel = snapshot.foodLevel
+    petData.originalOwner = snapshot.originalOwnerId ?: petData.originalOwner
+    petData.breedCount = snapshot.breedCount
+    petData.particleUnlocked = snapshot.particleUnlocked
+    savePetData(ownerUuid, petData)
+  }
+
   /** 公開getPetData（他クラスから使用） */
   fun getPetData(ownerUuid: UUID, petId: String): PetData? {
     return loadPlayerPets(ownerUuid)[petId]
@@ -307,12 +335,15 @@ object PetDataManager {
     val existingPets = loadPlayerPets(ownerUuid)
     val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
 
+    val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
+    val defaultName = "${ownerName}の大${type.name} #$nextNumber"
+
     val petData = PetData(
         petId = petId,
         petNumber = nextNumber,
         type = type.name,
         variant = variant,
-        customName = customName,
+        customName = customName ?: defaultName,
         purchasedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
         status = PetStatus.ALIVE,
         lastLocation = null,
@@ -359,7 +390,7 @@ data class PetData(
     val petId: String,
     val petNumber: Int,
     val type: String,
-    val variant: String?,
+    var variant: String?,
     var customName: String?,
     val purchasedAt: String,
     var status: PetStatus,
@@ -401,3 +432,97 @@ data class BreedInfo(
     val generation: Int
 )
 
+data class PetSnapshot(
+    val petId: String,
+    val ownerUuid: UUID,
+    val type: EntityType,
+    val customName: String?,
+    val variant: String?,
+    val status: PetStatus,
+    val lastLocation: LocationData?,
+    val stats: PetStats,
+    val skillType: Int,
+    val skillUnlockedLevel: Int,
+    val foodLevel: Int,
+    val particleUnlocked: String,
+    val breedCount: Int,
+    val originalOwnerId: String?,
+)
+
+object PetSynchronizer {
+  private val logger = Bukkit.getLogger()
+
+  private fun snapshotFromEntity(entity: LivingEntity): PetSnapshot? {
+    val petId = entity.petId ?: return null
+    val ownerUuid =
+        entity.ownerId?.let {
+          runCatching { UUID.fromString(it) }
+              .getOrElse { error ->
+                logger.warning("[OyasaiPets] Invalid owner UUID on entity: ${error.message}")
+                null
+              }
+        } ?: return null
+    val stats =
+        PetStats(
+            distance = entity.statDistance,
+            jumps = entity.statJumps,
+            toys = entity.statToys,
+            brushes = entity.statBrushes,
+            treats = entity.statTreats)
+    val location =
+        LocationData(
+            world = entity.location.world?.name ?: "world",
+            x = entity.location.x,
+            y = entity.location.y,
+            z = entity.location.z)
+    return PetSnapshot(
+        petId = petId,
+        ownerUuid = ownerUuid,
+        type = entity.type,
+        customName =
+            entity.customName()?.let {
+              net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand()
+                  .serialize(it)
+            },
+        variant = me.marzipan.OyasaiPets.domain.VariantHandler.getVariantNameFromEntity(entity),
+        status = PetStatus.ALIVE,
+        lastLocation = location,
+        stats = stats,
+        skillType = entity.skillType,
+        skillUnlockedLevel = entity.skillUnlockedLevel,
+        foodLevel = entity.foodLevel,
+        particleUnlocked = entity.particleUnlocked,
+        breedCount = entity.breedCount,
+        originalOwnerId = entity.originalOwnerId)
+  }
+
+  fun syncEntityToJson(entity: LivingEntity) {
+    val snapshot = snapshotFromEntity(entity) ?: return
+    PetDataManager.updateFromSnapshot(snapshot.ownerUuid, snapshot)
+  }
+
+  fun syncDataToEntity(ownerUuid: UUID, petData: PetData) {
+    val entity =
+        Bukkit.getWorlds()
+            .asSequence()
+            .flatMap { it.livingEntities.asSequence() }
+            .firstOrNull { it.petId == petData.petId && it.ownerId == ownerUuid.toString() }
+            ?: return
+    petData.customName?.let {
+      entity.customName(
+          net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand()
+              .deserialize(it))
+      entity.isCustomNameVisible = true
+    }
+    entity.foodLevel = petData.foodLevel
+    entity.skillType = petData.skillType
+    entity.skillUnlockedLevel = petData.skillUnlockedLevel
+    entity.statDistance = petData.stats.distance
+    entity.statJumps = petData.stats.jumps
+    entity.statToys = petData.stats.toys
+    entity.statBrushes = petData.stats.brushes
+    entity.statTreats = petData.stats.treats
+    entity.particleUnlocked = petData.particleUnlocked
+    petData.variant?.let { me.marzipan.OyasaiPets.domain.VariantHandler.applyVariant(entity, it) }
+  }
+}
