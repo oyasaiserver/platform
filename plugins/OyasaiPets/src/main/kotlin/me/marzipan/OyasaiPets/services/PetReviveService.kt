@@ -2,7 +2,6 @@ package me.marzipan.OyasaiPets.services
 
 import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
-import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.VariantHandler
 import me.marzipan.OyasaiPets.systems.EconomySystem
 import me.marzipan.OyasaiPets.systems.PetSpawnSystem
