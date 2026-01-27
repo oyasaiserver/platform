@@ -203,7 +203,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     server.pluginManager.registerEvents(petInventoryListener, this)
 
     // BreedGuiListener登録
-    val breedGuiListener = BreedGuiListener(petCommandService, breedingSystem, breedingSystem::executeBreeding)
+    val breedGuiListener = BreedGuiListener(petCommandService, breedingSystem::executeBreeding)
     server.pluginManager.registerEvents(breedGuiListener, this)
     petCommandService.breedGuiListener = breedGuiListener // 参照を設定
 

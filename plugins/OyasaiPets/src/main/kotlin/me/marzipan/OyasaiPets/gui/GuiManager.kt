@@ -104,7 +104,7 @@ class GuiManager {
                         recordLore.add(Component.text("初代オーナー: $originalName", GRAY))
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // エラーは無視
             }
         }
@@ -170,7 +170,7 @@ class GuiManager {
                 val ownerUuid = UUID.fromString(ownerId)
                 val petData = PetDataManager.getPetData(ownerUuid, petId)
                 transferCount = petData?.transferHistory?.size ?: 0
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // エラーは無視
             }
         }
@@ -350,15 +350,6 @@ class GuiManager {
     }
 
     /**
-     * GUIをクリーンアップ
-     */
-    fun cleanup(inv: Inventory) {
-        openedPetGuis.remove(inv)
-        openedShopGuis.remove(inv)
-        openedMainMenus.remove(inv)
-    }
-
-    /**
      * パーティクルIDから色を取得
      */
     private fun getParticleColor(pType: Int): NamedTextColor = when (pType) {
@@ -375,37 +366,4 @@ class GuiManager {
         10 -> GREEN
         else -> WHITE
     }
-
-    /**
-     * インベントリがペット情報GUIかどうか
-     */
-    fun isPetInfoGui(inv: Inventory): Boolean = openedPetGuis.containsKey(inv)
-
-    /**
-     * インベントリがショップGUIかどうか
-     */
-    fun isShopGui(inv: Inventory): Boolean = openedShopGuis.containsKey(inv)
-
-    /**
-     * インベントリがメインメニューかどうか
-     */
-    fun isMainMenu(inv: Inventory): Boolean = openedMainMenus.contains(inv)
-
-    /**
-     * インベントリがパーティクル選択GUIかどうか
-     */
-    fun isParticleSelectGui(inv: Inventory): Boolean {
-        return openedPetGuis.containsKey(inv) &&
-            inv.size == 27 // パーティクル選択GUIは27スロット
-    }
-
-    /**
-     * ペット情報GUIからエンティティを取得
-     */
-    fun getEntityFromGui(inv: Inventory): LivingEntity? = openedPetGuis[inv]
-
-    /**
-     * ショップGUIからコンテキストを取得
-     */
-    fun getShopContext(inv: Inventory): ShopContext? = openedShopGuis[inv]
 }

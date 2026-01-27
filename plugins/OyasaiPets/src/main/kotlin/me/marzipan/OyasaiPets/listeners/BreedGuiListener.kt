@@ -1,18 +1,16 @@
 package me.marzipan.OyasaiPets.listeners
 
 import me.marzipan.OyasaiPets.BigWolfConfig
-import me.marzipan.OyasaiPets.i18n.MobTranslator
 import me.marzipan.OyasaiPets.ownerId
 import me.marzipan.OyasaiPets.petId
 import me.marzipan.OyasaiPets.breedCount
 import me.marzipan.OyasaiPets.generation
 import me.marzipan.OyasaiPets.foodLevel
+import me.marzipan.OyasaiPets.i18n.MobTranslator
 import me.marzipan.OyasaiPets.services.PetCommandService
-import me.marzipan.OyasaiPets.systems.BreedingSystem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -29,7 +27,6 @@ import java.util.UUID
  */
 class BreedGuiListener(
     private val petCommandService: PetCommandService,
-    private val breedingSystem: BreedingSystem,
     private val executeBreeding: (Player, LivingEntity, LivingEntity) -> Unit
 ) : Listener {
 
@@ -218,15 +215,11 @@ class BreedGuiListener(
     /**
      * 交配GUIが閉じられた時
      */
+    @Suppress("UNUSED_PARAMETER")
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
-        val player = event.player as? Player ?: return
-        val title = event.view.title()
-        val titlePlain = PlainTextComponentSerializer.plainText().serialize(title)
-
-        if (titlePlain == "★ 交配するペットを選択") {
-            // クリーンアップは不要（次回開く時にリセットされる）
-        }
+        // クリーンアップは不要（次回開く時にリセットされる）
+        // このメソッドはイベントリスナーとして必要
     }
 
     /**

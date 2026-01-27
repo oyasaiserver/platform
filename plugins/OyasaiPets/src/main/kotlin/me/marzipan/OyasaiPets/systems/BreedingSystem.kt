@@ -1,3 +1,4 @@
+@file:Suppress("DEPRECATION")
 package me.marzipan.OyasaiPets.systems
 
 import me.marzipan.OyasaiPets.*
@@ -52,6 +53,7 @@ class BreedingSystem(
     /**
      * 交配GUI を開く（27枠・ペット直接選択式）
      */
+    @Suppress("UNUSED_PARAMETER")
     fun openBreedGui(player: Player, pets: List<LivingEntity>, title: Component): Inventory {
         val inv = Bukkit.createInventory(null, 27, title)
 

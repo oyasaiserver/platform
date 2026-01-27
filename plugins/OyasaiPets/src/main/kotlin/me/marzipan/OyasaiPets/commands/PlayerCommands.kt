@@ -93,7 +93,7 @@ class PlayerCommands(
                 true
             }
             else -> {
-                val typeCheck = runCatching { me.marzipan.OyasaiPets.domain.PetRegistry.isOfficial(org.bukkit.entity.EntityType.valueOf(sub.uppercase())) }.getOrNull() == true
+                val typeCheck = runCatching { PetRegistry.isOfficial(org.bukkit.entity.EntityType.valueOf(sub.uppercase())) }.getOrNull() == true
                 if (typeCheck) {
                     player.sendMessage(Component.text("ペット購入は /bigwolf buy $sub で行ってください。", YELLOW))
                     normalSummonFn(player, sub, args)

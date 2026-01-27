@@ -431,6 +431,7 @@ data class PetSnapshot(
 )
 
 object PetSynchronizer {
+  @Suppress("UnstableApiUsage")
   private val logger = Bukkit.getLogger()
 
   private fun snapshotFromEntity(entity: LivingEntity): PetSnapshot? {

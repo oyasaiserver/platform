@@ -61,12 +61,6 @@ object MobTranslator {
         return translations[type] ?: type.name
     }
 
-    /**
-     * 指定されたEntityTypeが日本語翻訳を持つか確認
-     */
-    fun hasTranslation(type: EntityType): Boolean {
-        return translations.containsKey(type)
-    }
 
     /** バリアント名の日本語翻訳 */
     private val variantTranslations = mapOf(
