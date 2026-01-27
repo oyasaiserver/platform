@@ -1,11 +1,5 @@
 package me.marzipan.OyasaiPets
 
-import io.papermc.paper.entity.LookAnchor
-import io.papermc.paper.event.player.AsyncChatEvent
-import io.papermc.paper.registry.RegistryAccess
-import io.papermc.paper.registry.RegistryKey
-import java.io.File
-import java.util.Locale
 import java.util.UUID
 import me.marzipan.OyasaiPets.commands.CommandManager
 import me.marzipan.OyasaiPets.commands.OpCommands
@@ -13,36 +7,16 @@ import me.marzipan.OyasaiPets.commands.PlayerCommands
 import me.marzipan.OyasaiPets.domain.*
 import me.marzipan.OyasaiPets.listeners.*
 import me.marzipan.OyasaiPets.services.*
-import me.marzipan.OyasaiPets.SpawnUtils
 import me.marzipan.OyasaiPets.systems.*
-import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.*
-import org.bukkit.Keyed
-import org.bukkit.attribute.Attribute
 import org.bukkit.command.*
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
-import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.entity.EntityDismountEvent
-import org.bukkit.event.entity.EntityTeleportEvent
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.event.inventory.InventoryType
-import org.bukkit.event.player.*
 import org.bukkit.inventory.*
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
-import org.bukkit.util.Vector
 
 class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
@@ -78,13 +52,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val pendingRemoveAllConfirm = mutableMapOf<UUID, Long>()
 
   // Cooldowns & Tasks
-  private val skillCooldowns = mutableMapOf<UUID, Long>()
   private val mountCooldowns = mutableMapOf<UUID, Long>()
-  private val dashEndTimes = mutableMapOf<UUID, Long>()
   private val dropCooldowns = mutableMapOf<UUID, Long>()
   private val brushCooldowns = mutableMapOf<UUID, Long>() // ブラシ（撫でる）のクールダウン
 
-  private val renamingPlayers = mutableMapOf<UUID, LivingEntity>()
 
   // タスク管理
   private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
@@ -92,7 +63,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   override fun onEnable() {
     // プラグインバージョン情報をログ出力
     logger.info("========================================")
-    logger.info("OyasaiPets (BigWolf) v${description.version}")
+    logger.info("OyasaiPets (BigWolf) v${pluginMeta.version}")
     logger.info("Build Date: 2026-01-27")
     logger.info("Features: Breeding GUI v3, Variant Randomization, Config Auto-generation")
     logger.info("========================================")
@@ -328,7 +299,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   private fun sendVersionInfo(player: Player) {
-    val version = description.version
+    val version = pluginMeta.version
     player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
     player.sendMessage(Component.text("Version: $version", YELLOW))
   }
@@ -361,70 +332,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   // ==========================================
-  // ★ 一般プレイヤーコマンド: /bigwolf
+  // ★ 設定の初期化
   // ==========================================
-  private fun handlePlayerCommand(sender: Player, args: Array<out String>): Boolean {
-    if (args.isEmpty()) {
-      sender.sendMessage(Component.text("=== BigWolf 使用方法 ===", GOLD))
-      sender.sendMessage(Component.text("/bigwolf buy - ペットショップを開く", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf storeall - 自分の全ペットを収納", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf dead - 死亡したペット一覧", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf revive <番号> - ペットを復活", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf history - ペット履歴", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf locate <番号> - ペットの位置確認", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf recover <番号> - スポーンエッグ再取得", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf breed - 交配", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf rename <番号> <新しい名前> - ペットの名前変更", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf transfer <番号> <プレイヤー名> - ペット譲渡", YELLOW))
-      sender.sendMessage(Component.text("/bigwolf menu - メインメニューを開く", GOLD))
-      return true
-    }
-
-    val sub = args[0].lowercase()
-
-    // デバッグログ - コマンド実行を記録
-    logger.info("=== BigWolf Command Execution ===")
-    logger.info("Player: ${sender.name}")
-    logger.info("Sub-command: '$sub'")
-    logger.info("Args: [${args.joinToString(", ")}]")
-
-    // buy コマンドを最優先で処理
-    if (sub == "buy") {
-      logger.info("Buy command detected! Opening shop GUI...")
-      try {
-        petShopGuiService.openMainShopGui(sender)
-        logger.info("Shop GUI opened successfully")
-      } catch (e: Exception) {
-        logger.severe("Failed to open shop GUI: ${e.message}")
-        e.printStackTrace()
-        sender.sendMessage(Component.text("購入GUIを開けませんでした: ${e.message}", RED))
-      }
-      return true
-    }
-
-    when (sub) {
-      "menu" -> openMainMenu(sender)
-      "storeall" -> storageService.storeAllPets(sender)
-      "revive" -> reviveService.handleRevivePet(sender, args)
-      "dead" -> queryService.handleDeadPetsList(sender)
-      "history" -> queryService.handlePetHistory(sender, args)
-      "locate" -> queryService.handleLocatePet(sender, args)
-      "recover" -> queryService.handleRecoverEgg(sender, args)
-      "breed" -> petCommandService.handleBreedCommand(sender)
-      "rename" -> petCommandService.handleRenameCommand(sender, args)
-      "transfer" -> transferService.handleTransferCommand(sender, args)
-      // 旧OPコマンドは/bigwolfopに移行したことを案内
-      "item", "shop", "shopremove", "shopremoveall", "reload", "force_store", "force_storeall", "exp", "version" -> {
-        if (sender.isOp) {
-          sender.sendMessage(Component.text("管理コマンドは /bigwolfop を使用してください。", YELLOW))
-        } else {
-          sender.sendMessage(Component.text("不明なコマンドです。", RED))
-        }
-      }
-      else -> handleNormalSummon(sender, sub, args)
-    }
-    return true
-  }
 
   private fun ensureDefaultConfig() {
     // 既に設定が存在する場合は尊重しつつ、未定義キーだけデフォルトを注入

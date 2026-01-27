@@ -1,7 +1,6 @@
 package me.marzipan.OyasaiPets.systems
 
 import me.marzipan.OyasaiPets.*
-import me.marzipan.OyasaiPets.domain.PetCategory
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.VariantHandler
@@ -112,12 +111,12 @@ class PetSpawnSystem(
     fun setupPetEntity(entity: LivingEntity, spec: PetSpec, player: Player) {
         entity.apply {
             // バリアント名とMOB名を日本語で取得
-            val variantName = me.marzipan.OyasaiPets.domain.VariantHandler.getVariantNameFromEntity(entity)
+            val variantName = VariantHandler.getVariantNameFromEntity(entity)
             val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variantName)
             val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
 
             // ID番号を取得（petIdの最初の8文字をハッシュ値として使用）
-            val petId = entity.petId ?: java.util.UUID.randomUUID().toString().also { entity.petId = it }
+            val petId = entity.petId ?: UUID.randomUUID().toString().also { entity.petId = it }
             val idNum = petId.hashCode().let { if (it < 0) -it else it } % 10000
 
             // デフォルト名: 「プレイヤー名の<バリアント><MOB名> #<ID>」
