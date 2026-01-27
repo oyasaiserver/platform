@@ -19,16 +19,12 @@ class PetShopGuiListener(
     private val petShopGuiService: PetShopGuiService
 ) : Listener {
 
-    // 開いている購入GUI（メインショップ）を追跡
-    private val openedMainShopGuis = mutableSetOf<UUID>()
-
     // 開いているバリアント選択GUIを追跡 (プレイヤーUUID -> EntityType)
     private val openedVariantGuis = mutableMapOf<UUID, EntityType>()
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
-        val inventory = event.inventory
         val title = event.view.title()
         val titlePlain = PlainTextComponentSerializer.plainText().serialize(title)
 
@@ -113,20 +109,5 @@ class PetShopGuiListener(
 
             return
         }
-    }
-
-    /**
-     * GUIを開いた時の記録
-     */
-    fun registerMainShopGui(player: Player) {
-        openedMainShopGuis.add(player.uniqueId)
-    }
-
-    /**
-     * GUIを閉じた時のクリーンアップ
-     */
-    fun unregisterGuis(player: Player) {
-        openedMainShopGuis.remove(player.uniqueId)
-        openedVariantGuis.remove(player.uniqueId)
     }
 }
