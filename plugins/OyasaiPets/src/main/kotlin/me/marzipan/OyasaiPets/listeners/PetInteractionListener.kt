@@ -116,7 +116,7 @@ class PetInteractionListener(
                     try {
                         val sittable = entity as? org.bukkit.entity.Sittable
                         sittable?.isSitting = false
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         // Ignore if Sittable is not available
                     }
                     entity.addPassenger(player)

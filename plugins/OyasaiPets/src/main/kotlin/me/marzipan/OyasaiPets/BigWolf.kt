@@ -54,7 +54,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   // Cooldowns & Tasks
   private val mountCooldowns = mutableMapOf<UUID, Long>()
   private val dropCooldowns = mutableMapOf<UUID, Long>()
-  private val brushCooldowns = mutableMapOf<UUID, Long>() // ブラシ（撫でる）のクールダウン
 
 
   // タスク管理

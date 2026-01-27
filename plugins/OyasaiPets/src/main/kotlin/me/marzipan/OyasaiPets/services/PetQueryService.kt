@@ -49,7 +49,7 @@ class PetQueryService(
             val nameStr = plainName?.let { " 「$it」" } ?: ""
             val deathTime = pet.deathData?.deathTime?.take(10) ?: "不明"
             val typeName = runCatching {
-                org.bukkit.entity.EntityType.valueOf(pet.type)
+                EntityType.valueOf(pet.type)
             }.getOrNull()?.let {
                 me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(it)
             } ?: pet.type
@@ -132,7 +132,7 @@ class PetQueryService(
                 PetStatus.STORED -> "収納中"
             }
             val typeName = runCatching {
-                org.bukkit.entity.EntityType.valueOf(pet.type)
+                EntityType.valueOf(pet.type)
             }.getOrNull()?.let {
                 me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(it)
             } ?: pet.type
@@ -216,7 +216,7 @@ class PetQueryService(
         val variantStr = pet.variant?.let { " ($it)" } ?: ""
         val nameStr = pet.customName?.let { " 「$it」" } ?: ""
         val typeName = runCatching {
-            org.bukkit.entity.EntityType.valueOf(pet.type)
+            EntityType.valueOf(pet.type)
         }.getOrNull()?.let {
             me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(it)
         } ?: pet.type

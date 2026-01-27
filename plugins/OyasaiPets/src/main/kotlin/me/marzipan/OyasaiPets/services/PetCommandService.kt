@@ -51,25 +51,6 @@ class PetCommandService(
     }
 
     /**
-     * 親を選択
-     */
-    fun selectParent(player: Player, pet: LivingEntity, isParent1: Boolean) {
-        val selection = breedSelections.getOrPut(player.uniqueId) { BreedSelection() }
-
-        if (isParent1) {
-            selection.parent1 = pet
-            player.sendMessage(Component.text("親1に選択しました: ${pet.customName()?.let {
-                net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(it)
-            } ?: pet.type.name}", GREEN))
-        } else {
-            selection.parent2 = pet
-            player.sendMessage(Component.text("親2に選択しました: ${pet.customName()?.let {
-                net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(it)
-            } ?: pet.type.name}", GREEN))
-        }
-    }
-
-    /**
      * 選択された親を取得
      */
     fun getSelectedParents(player: Player): Pair<LivingEntity?, LivingEntity?> {

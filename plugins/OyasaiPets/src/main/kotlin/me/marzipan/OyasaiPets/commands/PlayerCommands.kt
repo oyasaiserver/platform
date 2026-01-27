@@ -82,18 +82,16 @@ class PlayerCommands(
                     if (type == null || !PetRegistry.isOfficial(type)) {
                         player.sendMessage(Component.text("無効なMOB名です: $mobName", RED))
                         player.sendMessage(Component.text("/bigwolf list で購入可能なペット一覧を確認できます", YELLOW))
-                        true
                     } else {
                         val variant = args.getOrNull(2)?.lowercase()
                         // 直接購入確認画面を開く
                         openPurchaseConfirmationFn(player, type, variant)
-                        true
                     }
                 }
                 true
             }
             else -> {
-                val typeCheck = runCatching { PetRegistry.isOfficial(org.bukkit.entity.EntityType.valueOf(sub.uppercase())) }.getOrNull() == true
+                val typeCheck = runCatching { PetRegistry.isOfficial(EntityType.valueOf(sub.uppercase())) }.getOrNull() == true
                 if (typeCheck) {
                     player.sendMessage(Component.text("ペット購入は /bigwolf buy $sub で行ってください。", YELLOW))
                     normalSummonFn(player, sub, args)
