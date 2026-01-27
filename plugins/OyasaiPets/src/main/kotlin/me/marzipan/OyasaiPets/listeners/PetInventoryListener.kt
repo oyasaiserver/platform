@@ -2,13 +2,11 @@ package me.marzipan.OyasaiPets.listeners
 
 import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.ShopContext
-import me.marzipan.OyasaiPets.domain.VariantHandler
 import me.marzipan.OyasaiPets.gui.GuiManager
 import me.marzipan.OyasaiPets.systems.PetSpawnSystem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.*
-import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -18,7 +16,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.scheduler.BukkitRunnable
 import java.util.UUID
 import java.util.logging.Logger
 
@@ -29,7 +26,6 @@ import java.util.logging.Logger
  * - onInventoryClose: Cleanup when inventories are closed
  */
 class PetInventoryListener(
-    private val plugin: BigWolfPlugin,
     private val logger: Logger,
     private val guiManager: GuiManager,
     private val petSpawnSystem: PetSpawnSystem,
@@ -37,7 +33,6 @@ class PetInventoryListener(
     private val openedGuis: MutableMap<Inventory, LivingEntity>,
     private val openedShopGuis: MutableMap<Inventory, ShopContext>,
     private val openedMainMenus: MutableSet<Inventory>,
-    private val breedSelections: MutableMap<UUID, me.marzipan.OyasaiPets.services.PetCommandService.BreedSelection>,
     // GUI titles
     private val guiTitle: Component,
     private val shopGuiTitle: Component,
@@ -45,14 +40,12 @@ class PetInventoryListener(
     private val breedGuiTitle: Component,
     // Helper method references
     private val consumeTokensFn: (Player, Int) -> Boolean,
-    private val updateStatsFn: (LivingEntity, Int) -> Unit,
     private val giveFoodFn: (Player, LivingEntity) -> Unit,
     private val storePetToItemFn: (Player, LivingEntity) -> Unit,
     private val storeAllPetsFn: (Player) -> Unit,
     private val handleDeadPetsListFn: (Player) -> Unit,
     private val handlePetHistoryFn: (Player, Array<out String>) -> Unit,
-    private val handleBreedCommandFn: (Player) -> Unit,
-    private val executeBreedingFn: (Player, LivingEntity, LivingEntity) -> Unit
+    private val handleBreedCommandFn: (Player) -> Unit
 ) : Listener {
 
     @EventHandler

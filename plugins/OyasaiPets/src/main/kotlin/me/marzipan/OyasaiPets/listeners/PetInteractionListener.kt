@@ -1,7 +1,6 @@
 package me.marzipan.OyasaiPets.listeners
 
 import me.marzipan.OyasaiPets.*
-import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.gui.GuiManager
 import me.marzipan.OyasaiPets.systems.FetchSystem
 import me.marzipan.OyasaiPets.systems.PetControlSystem
@@ -9,15 +8,12 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.*
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEntityEvent
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 import java.util.UUID
 
 /**
@@ -31,13 +27,10 @@ import java.util.UUID
  * - Mounting pets
  */
 class PetInteractionListener(
-    private val plugin: BigWolfPlugin,
     private val guiManager: GuiManager,
     private val fetchSystem: FetchSystem,
     private val petControlSystem: PetControlSystem,
     private val mountCooldowns: MutableMap<UUID, Long>,
-    private val brushCooldowns: MutableMap<UUID, Long>,
-    private val petCommandService: me.marzipan.OyasaiPets.services.PetCommandService,
     // Helper method references - these need to be exposed from BigWolfPlugin
     private val checkAndMigrateOwnerFn: (LivingEntity, Player) -> Unit,
     private val isOwnerFn: (LivingEntity, Player) -> Boolean,

@@ -141,13 +141,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     server.pluginManager.registerEvents(petEventListener, this)
 
     val petInteractionListener = PetInteractionListener(
-      this,
       guiManager,
       fetchSystem,
       petControlSystem,
       mountCooldowns,
-      brushCooldowns,
-      petCommandService,
       interactionService::checkAndMigrateOwner,
       interactionService::isOwner,
       itemManagement::isPetFood,
@@ -185,30 +182,23 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     server.pluginManager.registerEvents(playerActionListener, this)
 
     val petInventoryListener = PetInventoryListener(
-      this,
       logger,
       guiManager,
       petSpawnSystem,
       openedGuis,
       openedShopGuis,
       openedMainMenus,
-      petCommandService.breedSelections,
       guiTitle,
       shopGuiTitle,
       mainMenuTitle,
       petCommandService.breedGuiTitle,
       economySystem::consumeTokens,
-      { entity: LivingEntity, level: Int ->
-        val spec = PetRegistry.get(entity.type)
-        interactionService.updateStats(entity, level, spec)
-      },
       { player: Player, entity: LivingEntity -> interactionService.giveFood(player, entity, economySystem::consumeTokens) },
       storageService::storePetToItem,
       storageService::storeAllPets,
       queryService::handleDeadPetsList,
       queryService::handlePetHistory,
-      petCommandService::handleBreedCommand,
-      breedingSystem::executeBreeding
+      petCommandService::handleBreedCommand
     )
     server.pluginManager.registerEvents(petInventoryListener, this)
 
