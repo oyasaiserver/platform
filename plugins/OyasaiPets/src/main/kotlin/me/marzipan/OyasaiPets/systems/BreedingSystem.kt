@@ -257,9 +257,7 @@ class BreedingSystem(
             customName = null,
             parent1Id = parent1.petId ?: "",
             parent2Id = parent2.petId ?: "",
-            generation = newGeneration,
-            speedMultiplier = newSpeed,
-            jumpMultiplier = newJump
+            generation = newGeneration
         )
 
         player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.5f)

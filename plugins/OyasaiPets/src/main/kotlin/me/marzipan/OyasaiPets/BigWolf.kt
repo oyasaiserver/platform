@@ -52,7 +52,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private lateinit var petSpawnSystem: PetSpawnSystem
   private lateinit var fetchSystem: FetchSystem
   private lateinit var breedingSystem: BreedingSystem
-  private val transferSystem = TransferSystem()
   private val shopSystem = ShopSystem()
   private lateinit var petControlSystem: PetControlSystem
 

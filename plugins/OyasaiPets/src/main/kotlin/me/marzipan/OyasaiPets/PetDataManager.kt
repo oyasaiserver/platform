@@ -247,33 +247,6 @@ object PetDataManager {
         treats = entity.statTreats)
   }
 
-  /** petIdからオーナーUUIDを検索 */
-  fun findOwnerByPetId(petId: String): UUID? {
-    // まずキャッシュを検索
-    for ((ownerUuidStr, pets) in cache) {
-      if (pets.containsKey(petId)) {
-        return UUID.fromString(ownerUuidStr)
-      }
-    }
-
-    // キャッシュになければファイルを検索
-    dataFolder
-        .listFiles()
-        ?.filter { it.isDirectory }
-        ?.forEach { playerFolder ->
-          try {
-            val ownerUuid = UUID.fromString(playerFolder.name)
-            val pets = loadPlayerPets(ownerUuid)
-            if (pets.containsKey(petId)) {
-              return ownerUuid
-            }
-          } catch (_: Exception) {
-            // 無効なフォルダ名は無視
-          }
-        }
-
-    return null
-  }
 
   /** ペットをキャッシュから削除（譲渡時など） */
   fun removePetFromCache(ownerUuid: UUID, petId: String) {
@@ -336,9 +309,7 @@ object PetDataManager {
       customName: String?,
       parent1Id: String,
       parent2Id: String,
-      generation: Int,
-      speedMultiplier: Double,
-      jumpMultiplier: Double
+      generation: Int
   ): PetData {
     val existingPets = loadPlayerPets(ownerUuid)
     val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
@@ -381,12 +352,6 @@ object PetDataManager {
     return petData
   }
 
-  /** ペットの交配回数を増加 */
-  fun incrementBreedCount(ownerUuid: UUID, petId: String) {
-    val petData = getPetData(ownerUuid, petId) ?: return
-    petData.breedCount++
-    savePetData(ownerUuid, petData)
-  }
 
   /** ペットデータを保存（公開用） */
   fun savePet(ownerUuid: UUID, petData: PetData) {
