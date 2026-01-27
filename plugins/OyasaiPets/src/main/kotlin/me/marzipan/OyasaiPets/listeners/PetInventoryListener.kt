@@ -37,7 +37,7 @@ class PetInventoryListener(
     private val openedGuis: MutableMap<Inventory, LivingEntity>,
     private val openedShopGuis: MutableMap<Inventory, ShopContext>,
     private val openedMainMenus: MutableSet<Inventory>,
-    private val pendingBreedSelections: MutableMap<UUID, LivingEntity?>,
+    private val breedSelections: MutableMap<UUID, me.marzipan.OyasaiPets.services.PetCommandService.BreedSelection>,
     // GUI titles
     private val guiTitle: Component,
     private val shopGuiTitle: Component,
@@ -393,31 +393,10 @@ class PetInventoryListener(
             return
         }
 
-        val firstSelection = pendingBreedSelections[player.uniqueId]
-
-        if (firstSelection == null) {
-            // 1匹目を選択
-            pendingBreedSelections[player.uniqueId] = selectedPet
-            player.sendMessage(Component.text("1匹目を選択しました。2匹目を選択してください。", YELLOW))
-            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
-        } else {
-            // 2匹目を選択 → 交配実行
-            if (firstSelection.petId == selectedPet.petId) {
-                player.sendMessage(Component.text("同じペットは選択できません。", RED))
-                return
-            }
-
-            // 同じ種類かチェック
-            if (firstSelection.type != selectedPet.type) {
-                player.sendMessage(Component.text("異なる種類のペットは交配できません。", RED))
-                pendingBreedSelections.remove(player.uniqueId)
-                return
-            }
-
-            player.closeInventory()
-            pendingBreedSelections.remove(player.uniqueId)
-            executeBreedingFn(player, firstSelection, selectedPet)
-        }
+        // 新しい交配システムでは、このGUIは使用されない
+        // BreedGuiListenerで処理される
+        player.closeInventory()
+        player.sendMessage(Component.text("交配システムが更新されました。/bigwolf breed を使用してください。", YELLOW))
     }
 
     @EventHandler

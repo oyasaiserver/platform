@@ -51,52 +51,65 @@ class BreedingSystem(
     }
 
     /**
-     * 交配GUI を開く
+     * 交配GUI を開く（9枠のシンプル選択式）
      */
     fun openBreedGui(player: Player, pets: List<LivingEntity>, title: Component): Inventory {
-        val inv = Bukkit.createInventory(null, 54, title)
+        val inv = Bukkit.createInventory(null, 9, title)
 
-        pets.forEachIndexed { index, entity ->
-            if (index >= 45) return@forEachIndexed
-
-            val eggMat = Material.getMaterial("${entity.type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
-            val nameComp = entity.customName() ?: Component.text(entity.type.name)
-            val gen = entity.generation
-            val breedCount = entity.breedCount
-
-            val item = org.bukkit.inventory.ItemStack(eggMat).apply {
-                itemMeta = itemMeta.apply {
-                    displayName(Component.text("${entity.type.name} ", YELLOW).append(nameComp))
-                    lore(
-                        listOf(
-                            Component.text("レベル: ${entity.foodLevel}", GREEN),
-                            Component.text("世代: 第${gen}世代", AQUA),
-                            Component.text("交配回数: ${breedCount}/${BigWolfConfig.maxBreedCount}", GRAY),
-                            Component.text("必要レベル: ${BigWolfConfig.breedMinLevel}以上", YELLOW),
-                            Component.text("クリックで選択", GREEN)
-                        )
-                    )
-                }
+        // 親1の表示（スロット1）
+        val parent1Item = org.bukkit.inventory.ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("親1: 選択してください", AQUA))
+                lore(listOf(
+                    Component.text("", GRAY),
+                    Component.text("フィールドのペットをクリック", YELLOW)
+                ))
             }
-            inv.setItem(index, item)
         }
+        inv.setItem(1, parent1Item)
 
-        // 説明
+        // 親2の表示（スロット3）
+        val parent2Item = org.bukkit.inventory.ItemStack(Material.PINK_STAINED_GLASS_PANE).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("親2: 選択してください", LIGHT_PURPLE))
+                lore(listOf(
+                    Component.text("", GRAY),
+                    Component.text("フィールドのペットをクリック", YELLOW)
+                ))
+            }
+        }
+        inv.setItem(3, parent2Item)
+
+        // 決定ボタン（スロット7）
+        val confirmItem = org.bukkit.inventory.ItemStack(Material.GREEN_WOOL).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("交配を実行", GREEN))
+                lore(listOf(
+                    Component.text("親を2匹選択してください", GRAY),
+                    Component.text("コスト: ${BigWolfConfig.breedCost}pt", RED)
+                ))
+            }
+        }
+        inv.setItem(7, confirmItem)
+
+        // 説明（スロット4）
         val infoItem = org.bukkit.inventory.ItemStack(Material.BOOK).apply {
             itemMeta = itemMeta.apply {
-                displayName(Component.text("交配について", GOLD))
-                lore(
-                    listOf(
-                        Component.text("2匹のペットを選択して交配できます", GRAY),
-                        Component.text("必要条件:", YELLOW),
-                        Component.text("- レベル${BigWolfConfig.breedMinLevel}以上", GRAY),
-                        Component.text("- 交配回数${BigWolfConfig.maxBreedCount}回未満", GRAY),
-                        Component.text("コスト: ${BigWolfConfig.breedCost}pt", RED)
-                    )
-                )
+                displayName(Component.text("交配の手順", GOLD))
+                lore(listOf(
+                    Component.text("1. フィールドのペットを右クリック", GRAY),
+                    Component.text("   してGUIで「親1に選択」", GRAY),
+                    Component.text("2. 別のペットを右クリック", GRAY),
+                    Component.text("   してGUIで「親2に選択」", GRAY),
+                    Component.text("3. 緑の決定ボタンを押す", GRAY),
+                    Component.text("", GRAY),
+                    Component.text("必要条件:", YELLOW),
+                    Component.text("- レベル${BigWolfConfig.breedMinLevel}以上", GRAY),
+                    Component.text("- 交配回数${BigWolfConfig.maxBreedCount}回未満", GRAY)
+                ))
             }
         }
-        inv.setItem(49, infoItem)
+        inv.setItem(4, infoItem)
 
         return inv
     }

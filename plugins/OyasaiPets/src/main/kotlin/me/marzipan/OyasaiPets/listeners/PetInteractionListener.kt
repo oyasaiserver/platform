@@ -37,6 +37,7 @@ class PetInteractionListener(
     private val petControlSystem: PetControlSystem,
     private val mountCooldowns: MutableMap<UUID, Long>,
     private val brushCooldowns: MutableMap<UUID, Long>,
+    private val petCommandService: me.marzipan.OyasaiPets.services.PetCommandService,
     // Helper method references - these need to be exposed from BigWolfPlugin
     private val checkAndMigrateOwnerFn: (LivingEntity, Player) -> Unit,
     private val isOwnerFn: (LivingEntity, Player) -> Boolean,
@@ -68,6 +69,16 @@ class PetInteractionListener(
         if (entity.ownerId == null && !plainName.containsDefaultPetMarker()) return
 
         event.isCancelled = true
+
+        // シフト右クリックで交配親選択GUIを開く
+        if (player.isSneaking && isOwner) {
+            val selection = petCommandService.breedSelections[player.uniqueId]
+            if (selection != null) {
+                // 交配モード中
+                openParentSelectionGui(player, entity)
+                return
+            }
+        }
 
         if (isOwner && isPetFoodFn(player.inventory.itemInMainHand)) {
             giveFoodFn(player, entity)
@@ -134,5 +145,46 @@ class PetInteractionListener(
             player.sendMessage(Component.text("このペットには飼い主しか乗れません。", RED))
             return
         }
+    }
+
+    /**
+     * 交配親選択用のシンプルなGUIを開く
+     */
+    private fun openParentSelectionGui(player: Player, entity: LivingEntity) {
+        val inv = Bukkit.createInventory(null, 9, Component.text("このペットを親に選択", GOLD))
+
+        // 親1に選択ボタン
+        val parent1Button = ItemStack(Material.LIGHT_BLUE_WOOL).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("親1に選択", AQUA))
+                lore(listOf(
+                    Component.text("", GRAY),
+                    Component.text("クリックで親1に設定", YELLOW)
+                ))
+            }
+        }
+        inv.setItem(3, parent1Button)
+
+        // 親2に選択ボタン
+        val parent2Button = ItemStack(Material.PINK_WOOL).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("親2に選択", LIGHT_PURPLE))
+                lore(listOf(
+                    Component.text("", GRAY),
+                    Component.text("クリックで親2に設定", YELLOW)
+                ))
+            }
+        }
+        inv.setItem(5, parent2Button)
+
+        // エンティティを一時保存
+        parentSelectionTargets[player.uniqueId] = entity
+
+        player.openInventory(inv)
+    }
+
+    companion object {
+        // 親選択GUI用の一時ストレージ
+        val parentSelectionTargets = mutableMapOf<UUID, LivingEntity>()
     }
 }
