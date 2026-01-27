@@ -91,6 +91,13 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
 
   override fun onEnable() {
+    // プラグインバージョン情報をログ出力
+    logger.info("========================================")
+    logger.info("OyasaiPets (BigWolf) v${description.version}")
+    logger.info("Build Date: 2026-01-27")
+    logger.info("Features: Breeding GUI v3, Variant Randomization, Config Auto-generation")
+    logger.info("========================================")
+
     // TokenManager プラグインの存在確認
     val tmPlugin = server.pluginManager.getPlugin("TokenManager")
     if (tmPlugin == null || !tmPlugin.isEnabled) {
@@ -238,6 +245,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     // BreedGuiListener登録
     val breedGuiListener = BreedGuiListener(petCommandService, breedingSystem, breedingSystem::executeBreeding)
     server.pluginManager.registerEvents(breedGuiListener, this)
+    petCommandService.breedGuiListener = breedGuiListener // 参照を設定
 
     // PetShopGuiListener登録
     val petShopGuiListener = PetShopGuiListener(petShopGuiService)
@@ -372,9 +380,29 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
 
     val sub = args[0].lowercase()
+
+    // デバッグログ - コマンド実行を記録
+    logger.info("=== BigWolf Command Execution ===")
+    logger.info("Player: ${sender.name}")
+    logger.info("Sub-command: '$sub'")
+    logger.info("Args: [${args.joinToString(", ")}]")
+
+    // buy コマンドを最優先で処理
+    if (sub == "buy") {
+      logger.info("Buy command detected! Opening shop GUI...")
+      try {
+        petShopGuiService.openMainShopGui(sender)
+        logger.info("Shop GUI opened successfully")
+      } catch (e: Exception) {
+        logger.severe("Failed to open shop GUI: ${e.message}")
+        e.printStackTrace()
+        sender.sendMessage(Component.text("購入GUIを開けませんでした: ${e.message}", RED))
+      }
+      return true
+    }
+
     when (sub) {
       "menu" -> openMainMenu(sender)
-      "buy" -> petShopGuiService.openMainShopGui(sender)
       "storeall" -> storageService.storeAllPets(sender)
       "revive" -> reviveService.handleRevivePet(sender, args)
       "dead" -> queryService.handleDeadPetsList(sender)
@@ -502,6 +530,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   private fun handleNormalSummon(player: Player, sub: String, args: Array<out String>) {
+    logger.warning("=== handleNormalSummon called ===")
+    logger.warning("This should NOT happen for 'buy' command!")
+    logger.warning("Sub: '$sub', Args: [${args.joinToString(", ")}]")
+
     // subがMOB名、args[1]がvariant
     val typeName = sub
     val variantArg = args.getOrNull(1)

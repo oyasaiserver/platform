@@ -40,8 +40,7 @@ class BreedingSystem(
         for (world in Bukkit.getWorlds()) {
             for (entity in world.livingEntities) {
                 if (entity.ownerId == playerUuidStr &&
-                    entity.foodLevel >= BigWolfConfig.breedMinLevel &&
-                    entity.breedCount < BigWolfConfig.maxBreedCount
+                    entity.foodLevel >= BigWolfConfig.breedMinLevel
                 ) {
                     pets.add(entity)
                 }
@@ -51,36 +50,78 @@ class BreedingSystem(
     }
 
     /**
-     * 交配GUI を開く（9枠のシンプル選択式）
+     * 交配GUI を開く（27枠・ペット直接選択式）
      */
     fun openBreedGui(player: Player, pets: List<LivingEntity>, title: Component): Inventory {
-        val inv = Bukkit.createInventory(null, 9, title)
+        val inv = Bukkit.createInventory(null, 27, title)
 
-        // 親1の表示（スロット1）
+        // 交配可能なペットを上部2行に表示（最大18匹）
+        pets.take(18).forEachIndexed { index, entity ->
+            val eggMat = Material.getMaterial("${entity.type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
+            val nameComp = entity.customName() ?: Component.text(me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(entity.type))
+            val gen = entity.generation
+            val breedCount = entity.breedCount
+
+            val item = org.bukkit.inventory.ItemStack(eggMat).apply {
+                itemMeta = itemMeta.apply {
+                    displayName(Component.text("${me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(entity.type)} ", YELLOW).append(nameComp))
+                    lore(
+                        listOf(
+                            Component.text("レベル: ${entity.foodLevel}", GREEN),
+                            Component.text("世代: 第${gen}世代", AQUA),
+                            Component.text("交配回数: ${breedCount}回", GRAY),
+                            Component.text("", GRAY),
+                            Component.text("クリックで親に選択", GREEN)
+                        )
+                    )
+                }
+            }
+            inv.setItem(index, item)
+        }
+
+        // 3行目: 選択状態と操作ボタン
+        // スロット18: 親1選択状態
         val parent1Item = org.bukkit.inventory.ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE).apply {
             itemMeta = itemMeta.apply {
-                displayName(Component.text("親1: 選択してください", AQUA))
+                displayName(Component.text("親1: 未選択", AQUA))
                 lore(listOf(
-                    Component.text("", GRAY),
-                    Component.text("フィールドのペットをクリック", YELLOW)
+                    Component.text("上のペットをクリックして選択", GRAY)
                 ))
             }
         }
-        inv.setItem(1, parent1Item)
+        inv.setItem(18, parent1Item)
 
-        // 親2の表示（スロット3）
+        // スロット20: 親2選択状態
         val parent2Item = org.bukkit.inventory.ItemStack(Material.PINK_STAINED_GLASS_PANE).apply {
             itemMeta = itemMeta.apply {
-                displayName(Component.text("親2: 選択してください", LIGHT_PURPLE))
+                displayName(Component.text("親2: 未選択", LIGHT_PURPLE))
                 lore(listOf(
-                    Component.text("", GRAY),
-                    Component.text("フィールドのペットをクリック", YELLOW)
+                    Component.text("上のペットをクリックして選択", GRAY)
                 ))
             }
         }
-        inv.setItem(3, parent2Item)
+        inv.setItem(20, parent2Item)
 
-        // 決定ボタン（スロット7）
+        // スロット22: 説明
+        val infoItem = org.bukkit.inventory.ItemStack(Material.BOOK).apply {
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("交配の手順", GOLD))
+                lore(
+                    listOf(
+                        Component.text("1. 上段のペットから親1を選択", GRAY),
+                        Component.text("2. 上段のペットから親2を選択", GRAY),
+                        Component.text("3. 緑ボタンで交配実行", GRAY),
+                        Component.text("", GRAY),
+                        Component.text("必要条件:", YELLOW),
+                        Component.text("- レベル${BigWolfConfig.breedMinLevel}以上", GRAY),
+                        Component.text("コスト: ${BigWolfConfig.breedCost}pt", RED)
+                    )
+                )
+            }
+        }
+        inv.setItem(22, infoItem)
+
+        // スロット26: 決定ボタン
         val confirmItem = org.bukkit.inventory.ItemStack(Material.GREEN_WOOL).apply {
             itemMeta = itemMeta.apply {
                 displayName(Component.text("交配を実行", GREEN))
@@ -90,26 +131,7 @@ class BreedingSystem(
                 ))
             }
         }
-        inv.setItem(7, confirmItem)
-
-        // 説明（スロット4）
-        val infoItem = org.bukkit.inventory.ItemStack(Material.BOOK).apply {
-            itemMeta = itemMeta.apply {
-                displayName(Component.text("交配の手順", GOLD))
-                lore(listOf(
-                    Component.text("1. フィールドのペットを右クリック", GRAY),
-                    Component.text("   してGUIで「親1に選択」", GRAY),
-                    Component.text("2. 別のペットを右クリック", GRAY),
-                    Component.text("   してGUIで「親2に選択」", GRAY),
-                    Component.text("3. 緑の決定ボタンを押す", GRAY),
-                    Component.text("", GRAY),
-                    Component.text("必要条件:", YELLOW),
-                    Component.text("- レベル${BigWolfConfig.breedMinLevel}以上", GRAY),
-                    Component.text("- 交配回数${BigWolfConfig.maxBreedCount}回未満", GRAY)
-                ))
-            }
-        }
-        inv.setItem(4, infoItem)
+        inv.setItem(26, confirmItem)
 
         return inv
     }
@@ -134,8 +156,9 @@ class BreedingSystem(
         // 新しいペットを生成
         val newPetId = UUID.randomUUID().toString()
         val type = parent1.type
-        val variant = VariantHandler.getVariantNameFromEntity(parent1)
-            ?: VariantHandler.getVariantNameFromEntity(parent2)
+
+        // バリアントをランダムに選択
+        val variant = selectRandomVariant(parent1, parent2)
 
         // 世代計算
         val gen1 = parent1.generation
@@ -299,5 +322,70 @@ class BreedingSystem(
                 PetDataManager.savePet(player.uniqueId, petData2)
             }
         }
+    }
+
+    /**
+     * 交配時にバリアントをランダムに選択
+     *
+     * ロジック:
+     * 1. 親1と親2のバリアントを取得
+     * 2. そのMOBタイプで利用可能な全バリアントを取得
+     * 3. 親のバリアントを優先的に（70%）、その他のバリアントも候補に（30%）
+     */
+    private fun selectRandomVariant(parent1: LivingEntity, parent2: LivingEntity): String? {
+        val type = parent1.type
+
+        // 利用可能なバリアント一覧を取得
+        val availableVariants = VariantHandler.getVariantNames(type)
+
+        // バリアントが存在しない場合はnull
+        if (availableVariants.isEmpty()) {
+            return null
+        }
+
+        // 親のバリアントを取得
+        val parent1Variant = VariantHandler.getVariantNameFromEntity(parent1)
+        val parent2Variant = VariantHandler.getVariantNameFromEntity(parent2)
+
+        // ランダム選択の候補リストを構築
+        val candidates = mutableListOf<String>()
+
+        // 親のバリアントを優先的に追加
+        // 重みはconfig.ymlの breed.variantWeights.parent で設定可能（デフォルト: 7）
+        parent1Variant?.let { v ->
+            candidates.addAll(List(BigWolfConfig.breedParentVariantWeight) { v })
+        }
+        parent2Variant?.let { v ->
+            candidates.addAll(List(BigWolfConfig.breedParentVariantWeight) { v })
+        }
+
+        // その他の全バリアントも候補に追加（親のバリアントは除外）
+        // 重みはconfig.ymlの breed.variantWeights.other で設定可能（デフォルト: 3）
+        val parentVariants = setOfNotNull(parent1Variant, parent2Variant)
+        availableVariants.forEach { variant ->
+            if (variant !in parentVariants) {
+                candidates.addAll(List(BigWolfConfig.breedOtherVariantWeight) { variant })
+            }
+        }
+
+        // ランダムに選択
+        val selectedVariant = if (candidates.isNotEmpty()) {
+            candidates.random()
+        } else {
+            // 候補がない場合は利用可能なバリアントからランダム
+            availableVariants.randomOrNull()
+        }
+
+        // デバッグログ
+        plugin.logger.info("=== Breeding Variant Selection ===")
+        plugin.logger.info("Type: ${type.name}")
+        plugin.logger.info("Parent1 Variant: $parent1Variant")
+        plugin.logger.info("Parent2 Variant: $parent2Variant")
+        plugin.logger.info("Available Variants: ${availableVariants.joinToString()}")
+        plugin.logger.info("Candidates count: ${candidates.size}")
+        plugin.logger.info("Selected Variant: $selectedVariant")
+        plugin.logger.info("Candidate distribution: ${candidates.groupingBy { it }.eachCount()}")
+
+        return selectedVariant
     }
 }

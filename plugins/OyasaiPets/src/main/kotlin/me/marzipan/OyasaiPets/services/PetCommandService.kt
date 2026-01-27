@@ -27,13 +27,16 @@ class PetCommandService(
     data class BreedSelection(var parent1: LivingEntity? = null, var parent2: LivingEntity? = null)
     val breedSelections = mutableMapOf<UUID, BreedSelection>()
 
+    // BreedGuiListenerへの参照（後で設定）
+    var breedGuiListener: me.marzipan.OyasaiPets.listeners.BreedGuiListener? = null
+
     /**
      * 交配コマンドを処理
      */
     fun handleBreedCommand(player: Player) {
         val breedablePets = breedingSystem.getBreedablePets(player)
         if (breedablePets.size < 2) {
-            player.sendMessage(Component.text("交配にはLv.${BigWolfConfig.breedMinLevel}以上のペットが2匹必要です。", RED))
+            player.sendMessage(Component.text("交配にはLv.${BigWolfConfig.breedMinLevel}以上のペットが2匹必要です", RED))
             return
         }
 
@@ -42,6 +45,9 @@ class PetCommandService(
 
         val inv = breedingSystem.openBreedGui(player, breedablePets, breedGuiTitle)
         player.openInventory(inv)
+
+        // BreedGuiListenerにpetsを通知
+        breedGuiListener?.registerBreedGuiOpened(player, breedablePets)
     }
 
     /**
