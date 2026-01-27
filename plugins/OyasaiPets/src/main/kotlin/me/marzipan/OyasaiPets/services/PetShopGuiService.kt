@@ -98,10 +98,12 @@ class PetShopGuiService(
         variants.forEachIndexed { index: Int, variant: String ->
             if (index >= 45) return@forEachIndexed
 
+            val variantJap = MobTranslator.translateVariant(variant)
             val item = ItemStack(eggMat).apply {
                 itemMeta = itemMeta?.apply {
-                    displayName(Component.text("$japName ($variant)", YELLOW))
+                    displayName(Component.text("$japName ($variantJap)", YELLOW))
                     lore(listOf(
+                        Component.text("バリアント: $variant", GRAY),
                         Component.text("価格: ${BigWolfConfig.defaultShopCost}pt", GOLD),
                         Component.text("", GRAY),
                         Component.text("クリックで購入", GREEN)
@@ -134,5 +136,12 @@ class PetShopGuiService(
         inv.setItem(invSize - 1, backItem)
 
         player.openInventory(inv)
+    }
+
+    /**
+     * 直接購入確認画面を開く（コマンドから直接呼び出し用）
+     */
+    fun openPurchaseConfirmation(player: Player, type: EntityType, variant: String?) {
+        openShopGui(player, ShopContext(type, variant, BigWolfConfig.defaultShopCost), getPlayerTokens)
     }
 }

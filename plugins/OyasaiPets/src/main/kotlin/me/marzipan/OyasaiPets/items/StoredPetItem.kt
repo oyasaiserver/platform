@@ -89,18 +89,28 @@ class StoredPetItem(private val plugin: JavaPlugin) {
             "Unknown"
         }
 
+        // バリアント名を日本語で取得
+        val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variantName)
+        val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(entity.type)
+        val typeDisplayName = if (variantName != null) "$mobJap ($variantJap)" else mobJap
+
+        val loreLi = mutableListOf<Component>()
+        loreLi.add(Component.text("右クリックで解放", GRAY))
+        loreLi.add(Component.text("種類: $typeDisplayName", YELLOW))
+        if (variantName != null) {
+            loreLi.add(Component.text("バリアント: $variantName", DARK_GRAY))
+        }
+        loreLi.add(Component.text("オーナー: $ownerName", AQUA))
+        loreLi.add(Component.text("ID: ${pid.take(8)}...", DARK_GRAY))
+        loreLi.add(Component.text("記録:", DARK_AQUA))
+        loreLi.add(Component.text("  距離: ${"%.1f".format(entity.statDistance)} m", GRAY))
+        loreLi.add(Component.text("  ジャンプ: ${entity.statJumps} 回", GRAY))
+        loreLi.add(Component.text("  おもちゃ: ${entity.statToys} 回", GRAY))
+        loreLi.add(Component.text("  なでた: ${entity.statBrushes} 回", GRAY))
+        loreLi.add(Component.text("  おやつ: ${entity.statTreats} 回", GRAY))
+
         meta.displayName(Component.text("収納された: ", GOLD).append(currentName))
-        meta.lore(listOf(
-            Component.text("右クリックで解放", GRAY),
-            Component.text("オーナー: $ownerName", AQUA),
-            Component.text("ID: ${pid.take(8)}...", DARK_GRAY),
-            Component.text("記録:", DARK_AQUA),
-            Component.text("  距離: ${"%.1f".format(entity.statDistance)} m", GRAY),
-            Component.text("  ジャンプ: ${entity.statJumps} 回", GRAY),
-            Component.text("  おもちゃ: ${entity.statToys} 回", GRAY),
-            Component.text("  なでた: ${entity.statBrushes} 回", GRAY),
-            Component.text("  おやつ: ${entity.statTreats} 回", GRAY),
-        ))
+        meta.lore(loreLi)
         meta.addEnchant(Enchantment.UNBREAKING, 1, true)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         item.itemMeta = meta

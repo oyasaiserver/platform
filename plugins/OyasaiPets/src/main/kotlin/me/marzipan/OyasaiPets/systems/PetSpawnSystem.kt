@@ -67,15 +67,18 @@ class PetSpawnSystem(
             return null
         }
 
-        setupPetEntity(entity, spec, player)
+        // petIdを先に設定（setupPetEntityでデフォルト名生成に必要）
+        val petId = UUID.randomUUID().toString()
+        entity.petId = petId
+        entity.ownerId = player.uniqueId.toString()
 
+        // バリアントを先に適用（setupPetEntityでバリアント名取得に必要）
         if (variantName != null) {
             VariantHandler.applyVariant(entity, variantName)
         }
 
-        val petId = UUID.randomUUID().toString()
-        entity.ownerId = player.uniqueId.toString()
-        entity.petId = petId
+        setupPetEntity(entity, spec, player)
+
         entity.foodLevel = 0
         entity.isSilentMode = false
         entity.particleType = 0
@@ -108,7 +111,23 @@ class PetSpawnSystem(
      */
     fun setupPetEntity(entity: LivingEntity, spec: PetSpec, player: Player) {
         entity.apply {
-            customName(Component.text("${player.name}の大${type.name}"))
+            // バリアント名とMOB名を日本語で取得
+            val variantName = me.marzipan.OyasaiPets.domain.VariantHandler.getVariantNameFromEntity(entity)
+            val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variantName)
+            val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+
+            // ID番号を取得（petIdの最初の8文字をハッシュ値として使用）
+            val petId = entity.petId ?: java.util.UUID.randomUUID().toString().also { entity.petId = it }
+            val idNum = petId.hashCode().let { if (it < 0) -it else it } % 10000
+
+            // デフォルト名: 「プレイヤー名の<バリアント><MOB名> #<ID>」
+            val defaultName = if (variantName != null) {
+                "${player.name}の$variantJap$mobJap #$idNum"
+            } else {
+                "${player.name}の$mobJap #$idNum"
+            }
+
+            customName(Component.text(defaultName))
             isCustomNameVisible = true
             setRemoveWhenFarAway(false)
             isInvulnerable = true

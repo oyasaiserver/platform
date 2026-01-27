@@ -267,6 +267,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
 
     val playerCommands = PlayerCommands(
       this::openMainMenu,
+      petShopGuiService::openMainShopGui,
+      petShopGuiService::openPurchaseConfirmation,
       storageService::storeAllPets,
       reviveService::handleRevivePet,
       queryService::handleDeadPetsList,

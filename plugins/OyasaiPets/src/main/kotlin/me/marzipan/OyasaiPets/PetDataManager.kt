@@ -43,7 +43,15 @@ object PetDataManager {
     // 次のペット番号を決定
     val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
     val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
-    val defaultName = "${ownerName}の大${type.name} #$nextNumber"
+
+    // デフォルト名を日本語化（バリアント対応）
+    val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+    val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variant)
+    val defaultName = if (variant != null) {
+        "${ownerName}の$variantJap$mobJap #$nextNumber"
+    } else {
+        "${ownerName}の$mobJap #$nextNumber"
+    }
 
     val petData =
         PetData(
@@ -336,7 +344,15 @@ object PetDataManager {
     val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
 
     val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
-    val defaultName = "${ownerName}の大${type.name} #$nextNumber"
+
+    // デフォルト名を日本語化（バリアント対応）
+    val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+    val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variant)
+    val defaultName = if (variant != null) {
+        "${ownerName}の$variantJap$mobJap #$nextNumber"
+    } else {
+        "${ownerName}の$mobJap #$nextNumber"
+    }
 
     val petData = PetData(
         petId = petId,

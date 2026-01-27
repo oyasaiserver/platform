@@ -60,7 +60,9 @@ class GuiManager {
         // スロット0: 基本情報
         val nameComp = entity.customName() ?: Component.text(entity.type.name, AQUA)
         val vName = VariantHandler.getVariantNameFromEntity(entity)
-        val typeName = if (vName != null) "${entity.type.name} ($vName)" else entity.type.name
+        val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(vName)
+        val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(entity.type)
+        val typeName = if (vName != null) "$mobJap ($variantJap)" else mobJap
         val hp = "${entity.health.toInt()} / ${entity.getAttribute(Attribute.MAX_HEALTH)?.value?.toInt()}"
         val ownerName = Bukkit.getOfflinePlayer(UUID.fromString(entity.ownerId ?: player.uniqueId.toString())).name ?: "Unknown"
 
@@ -268,7 +270,12 @@ class GuiManager {
         openedShopGuis[inv] = ctx
 
         val spec = PetRegistry.get(ctx.type)
-        val typeLabel = if (ctx.variant != null) "${ctx.type.name} (${ctx.variant})" else ctx.type.name
+
+        // バリアント名とMOB名を日本語化
+        val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(ctx.type)
+        val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(ctx.variant)
+        val typeLabel = if (ctx.variant != null) "$mobJap ($variantJap)" else mobJap
+
         val currentTokens = getPlayerTokens(player)
         val canAfford = currentTokens >= ctx.cost
 

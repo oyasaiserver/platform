@@ -212,11 +212,19 @@ class BreedingSystem(
             return
         }
 
-        // エンティティ設定
-        setupPetEntity(newEntity, spec, player)
+        // petIdとバリアントを先に設定（setupPetEntityでデフォルト名生成に必要）
         newEntity.petId = newPetId
         newEntity.ownerId = player.uniqueId.toString()
         newEntity.originalOwnerId = player.uniqueId.toString()
+
+        // バリアント適用（setupPetEntityでバリアント名取得に必要）
+        if (variant != null) {
+            VariantHandler.applyVariant(newEntity, variant)
+        }
+
+        // エンティティ設定
+        setupPetEntity(newEntity, spec, player)
+
         newEntity.generation = newGeneration
         newEntity.parent1Id = parent1.petId
         newEntity.parent2Id = parent2.petId
@@ -233,10 +241,6 @@ class BreedingSystem(
             updateStats(newEntity, bonusLevel, spec)
         }
 
-        // バリアント適用
-        if (variant != null) {
-            VariantHandler.applyVariant(newEntity, variant)
-        }
 
         // 降臨演出
         spawnDescentEffect(newEntity, player, newGeneration, safeGround.y + 0.5)

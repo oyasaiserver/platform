@@ -86,23 +86,30 @@ class PetShopGuiListener(
                     // スポーンエッグがクリックされた
                     if (!clickedItem.type.name.endsWith("_SPAWN_EGG")) return
 
-                    val itemName = clickedItem.itemMeta?.displayName() ?: return
-                    val itemNamePlain = PlainTextComponentSerializer.plainText().serialize(itemName)
+                    val itemMeta = clickedItem.itemMeta ?: return
+                    val itemLore = itemMeta.lore() ?: return
 
-                    // バリアント名を抽出（例: "オオカミ (brown)" -> "brown"）
-                    val variant = if (itemNamePlain.contains("(") && itemNamePlain.contains(")")) {
-                        val start = itemNamePlain.indexOf("(") + 1
-                        val end = itemNamePlain.indexOf(")")
-                        val variantName = itemNamePlain.substring(start, end)
-                        if (variantName == "デフォルト") null else variantName
-                    } else {
-                        null
+                    // LOREから「バリアント: xxx」行を探してバリアント名を取得
+                    var variant: String? = null
+                    for (loreLine in itemLore) {
+                        val lorePlain = PlainTextComponentSerializer.plainText().serialize(loreLine)
+                        if (lorePlain.startsWith("バリアント: ")) {
+                            variant = lorePlain.removePrefix("バリアント: ")
+                            break
+                        }
+                    }
+
+                    // タイトルから「デフォルト」かどうか判定
+                    val itemName = itemMeta.displayName() ?: return
+                    val itemNamePlain = PlainTextComponentSerializer.plainText().serialize(itemName)
+                    if (itemNamePlain.contains("デフォルト")) {
+                        variant = null
                     }
 
                     player.closeInventory()
 
-                    // 購入確認画面を開く（既存のGuiManagerを使用）
-                    petShopGuiService.openVariantSelectionGui(player, type)
+                    // 購入確認画面を開く
+                    petShopGuiService.openPurchaseConfirmation(player, type, variant)
                 }
             }
 

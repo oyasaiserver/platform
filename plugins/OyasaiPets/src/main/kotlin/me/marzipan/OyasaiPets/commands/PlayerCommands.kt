@@ -11,6 +11,8 @@ import org.bukkit.entity.Player
  */
 class PlayerCommands(
     private val openMainMenuFn: (Player) -> Unit,
+    private val openShopGuiFn: (Player) -> Unit,
+    private val openPurchaseConfirmationFn: (Player, EntityType, String?) -> Unit,
     private val storeAllPetsFn: (Player) -> Unit,
     private val reviveFn: (Player, Array<out String>) -> Unit,
     private val deadListFn: (Player) -> Unit,
@@ -69,7 +71,26 @@ class PlayerCommands(
                 versionFn(player); true
             }
             "buy" -> {
-                normalSummonFn(player, sub, args); true
+                // 引数なし: 購入GUIを開く
+                if (args.size == 1) {
+                    openShopGuiFn(player)
+                } else {
+                    // 引数あり: /bigwolf buy <MOB> [variant]
+                    val mobName = args[1].lowercase()
+                    val type = runCatching { EntityType.valueOf(mobName.uppercase()) }.getOrNull()
+
+                    if (type == null || !PetRegistry.isOfficial(type)) {
+                        player.sendMessage(Component.text("無効なMOB名です: $mobName", RED))
+                        player.sendMessage(Component.text("/bigwolf list で購入可能なペット一覧を確認できます", YELLOW))
+                        true
+                    } else {
+                        val variant = args.getOrNull(2)?.lowercase()
+                        // 直接購入確認画面を開く
+                        openPurchaseConfirmationFn(player, type, variant)
+                        true
+                    }
+                }
+                true
             }
             else -> {
                 val typeCheck = runCatching { me.marzipan.OyasaiPets.domain.PetRegistry.isOfficial(org.bukkit.entity.EntityType.valueOf(sub.uppercase())) }.getOrNull() == true
@@ -89,10 +110,13 @@ class PlayerCommands(
      */
     fun showUsage(player: Player) {
         player.sendMessage(Component.text("=== BigWolf 使用方法 ===", GOLD))
-        player.sendMessage(Component.text("/bigwolf buy <mob名> [variant] - ペットを購入して召喚", YELLOW))
+        player.sendMessage(Component.text("/bigwolf buy - ペットショップを開く", YELLOW))
         player.sendMessage(Component.text("/bigwolf list - 購入可能なペット一覧", YELLOW))
         player.sendMessage(Component.text("/bigwolf storeall - 自分の全ペットを収納", YELLOW))
-        player.sendMessage(Component.text("例: /bigwolf buy wolf, /bigwolf buy cat tabby", GRAY))
+        player.sendMessage(Component.text("/bigwolf dead - 死亡したペット一覧", YELLOW))
+        player.sendMessage(Component.text("/bigwolf revive <番号> - ペットを復活", YELLOW))
+        player.sendMessage(Component.text("/bigwolf breed - 交配", YELLOW))
+        player.sendMessage(Component.text("/bigwolf menu - メインメニューを開く", GOLD))
     }
 
     /**

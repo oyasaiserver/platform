@@ -229,16 +229,26 @@ class PetStorageService(private val plugin: JavaPlugin) {
             return
         }
 
+        // petIdとownerIdを先に設定（setupPetEntityでデフォルト名生成に必要）
+        entity.petId = storedId ?: UUID.randomUUID().toString()
+        entity.ownerId = player.uniqueId.toString()
+
+        // バリアントを先に適用（setupPetEntityでバリアント名取得に必要）
+        val variantStr = pdc.get(BigWolfKeys.STORED_VARIANT, PersistentDataType.STRING)
+        if (variantStr != null) {
+            me.marzipan.OyasaiPets.domain.VariantHandler.applyVariant(entity, variantStr)
+        }
+
         setupPetEntity(entity, spec, player)
 
+        // カスタム名が保存されている場合のみ上書き（ユーザーが名前変更していた場合）
         val nameStr = pdc.get(BigWolfKeys.STORED_NAME, PersistentDataType.STRING)
-        if (nameStr != null) {
+        if (nameStr != null && !nameStr.contains("の大")) {
+            // 旧デフォルト名「プレイヤー名の大WOLF」でない場合のみ復元
             entity.customName(LegacyComponentSerializer.legacyAmpersand().deserialize(nameStr))
             entity.isCustomNameVisible = true
         }
 
-        entity.ownerId = player.uniqueId.toString()
-        entity.petId = storedId ?: UUID.randomUUID().toString()
 
         val food = pdc.get(BigWolfKeys.FOOD, PersistentDataType.INTEGER) ?: 0
         entity.foodLevel = food
@@ -278,10 +288,6 @@ class PetStorageService(private val plugin: JavaPlugin) {
 
         updateStats(entity, food, spec)
 
-        val vStr = pdc.get(BigWolfKeys.STORED_VARIANT, PersistentDataType.STRING)
-        if (vStr != null) {
-            VariantHandler.applyVariant(entity, vStr)
-        }
 
         // PetDataManagerに解放状態を記録
         PetDataManager.markAsAlive(player.uniqueId, entity.petId!!)
@@ -303,17 +309,24 @@ class PetStorageService(private val plugin: JavaPlugin) {
         val meta = item.itemMeta
         val pdc = meta.persistentDataContainer
 
-        val variantStr = petData.variant?.let { " ($it)" } ?: ""
+        val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(petData.variant)
+        val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+        val typeDisplayName = if (petData.variant != null) "$mobJap ($variantJap)" else mobJap
         val nameStr = petData.customName ?: "名前なし"
 
-        meta.displayName(Component.text("【収納】${type.name}$variantStr - $nameStr", AQUA))
+        meta.displayName(Component.text("【収納】$typeDisplayName - $nameStr", AQUA))
 
         val ownerName = runCatching { Bukkit.getOfflinePlayer(UUID.fromString(ownerUuid)).name }.getOrNull() ?: "Unknown"
-        meta.lore(listOf(
-            Component.text("右クリックでペットを解放", GRAY),
-            Component.text("Lv: ${petData.foodLevel}", YELLOW),
-            Component.text("オーナー: $ownerName", DARK_GRAY)
-        ))
+        val loreLi = mutableListOf<Component>()
+        loreLi.add(Component.text("右クリックでペットを解放", GRAY))
+        loreLi.add(Component.text("種類: $typeDisplayName", YELLOW))
+        if (petData.variant != null) {
+            loreLi.add(Component.text("バリアント: ${petData.variant}", DARK_GRAY))
+        }
+        loreLi.add(Component.text("Lv: ${petData.foodLevel}", YELLOW))
+        loreLi.add(Component.text("オーナー: $ownerName", DARK_GRAY))
+
+        meta.lore(loreLi)
 
         // PDCにデータを保存（全データを正しく保存）
         pdc.set(BigWolfKeys.STORED_FLAG, PersistentDataType.BYTE, 1)
@@ -364,7 +377,23 @@ class PetStorageService(private val plugin: JavaPlugin) {
      */
     fun setupPetEntity(entity: LivingEntity, spec: PetSpec, player: Player) {
         entity.apply {
-            customName(Component.text("${player.name}の大${type.name}"))
+            // バリアント名とMOB名を日本語で取得
+            val variantName = me.marzipan.OyasaiPets.domain.VariantHandler.getVariantNameFromEntity(entity)
+            val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variantName)
+            val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+
+            // ID番号を取得（petIdの最初の8文字をハッシュ値として使用）
+            val petId = entity.petId ?: java.util.UUID.randomUUID().toString().also { entity.petId = it }
+            val idNum = petId.hashCode().let { if (it < 0) -it else it } % 10000
+
+            // デフォルト名: 「プレイヤー名の<バリアント><MOB名> #<ID>」
+            val defaultName = if (variantName != null) {
+                "${player.name}の$variantJap$mobJap #$idNum"
+            } else {
+                "${player.name}の$mobJap #$idNum"
+            }
+
+            customName(Component.text(defaultName))
             isCustomNameVisible = true
             setRemoveWhenFarAway(false)
             isInvulnerable = true
@@ -430,15 +459,18 @@ class PetStorageService(private val plugin: JavaPlugin) {
             return null
         }
 
-        setupPetEntity(entity, spec, player)
+        // petIdを先に設定（setupPetEntityでデフォルト名生成に必要）
+        val petId = UUID.randomUUID().toString()
+        entity.petId = petId
+        entity.ownerId = player.uniqueId.toString()
 
+        // バリアントを先に適用（setupPetEntityでバリアント名取得に必要）
         if (variantName != null) {
             VariantHandler.applyVariant(entity, variantName)
         }
 
-        val petId = UUID.randomUUID().toString()
-        entity.ownerId = player.uniqueId.toString()
-        entity.petId = petId
+        setupPetEntity(entity, spec, player)
+
         entity.foodLevel = 0
         entity.isSilentMode = false
         entity.particleType = 0
