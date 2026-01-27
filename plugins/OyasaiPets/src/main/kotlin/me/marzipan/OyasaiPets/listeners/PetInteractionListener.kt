@@ -7,7 +7,6 @@ import me.marzipan.OyasaiPets.systems.PetControlSystem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
