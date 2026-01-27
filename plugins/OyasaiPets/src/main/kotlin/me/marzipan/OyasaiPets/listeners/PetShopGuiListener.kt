@@ -3,7 +3,6 @@ package me.marzipan.OyasaiPets.listeners
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.VariantHandler
 import me.marzipan.OyasaiPets.services.PetShopGuiService
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
@@ -11,7 +10,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.inventory.Inventory
 import java.util.UUID
 
 /**
