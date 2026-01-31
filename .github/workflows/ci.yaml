@@ -39,7 +39,7 @@ jobs:
 
   nix-devshell-windows:
     # Windows runner is slow because it can't use nix cache: run only on master.
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master' NOMERGE
     runs-on: windows-latest
     defaults:
       run:
@@ -52,7 +52,9 @@ jobs:
       - run: sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
       - run: |
           . /etc/profile.d/nix.sh
-          nix --extra-experimental-features 'nix-command flakes' develop
+          mkdir -p ~/.config/nix && echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
+          nix develop
+          nix fmt
 
   push-to-ghcr:
     runs-on: ubuntu-latest
