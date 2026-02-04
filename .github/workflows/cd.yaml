@@ -72,4 +72,4 @@ jobs:
       - cdktf
     runs-on: ubuntu-latest
     steps:
-      - uses: kesin11/actions-timeline@v2
+      - uses: kesin11/actions-timeline@v3
