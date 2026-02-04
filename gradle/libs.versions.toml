@@ -20,7 +20,7 @@ worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "world
 [versions]
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
-discordsrv = "1.30.3"
+discordsrv = "1.30.4"
 gson = "2.13.2"
 inventoryframework = "0.11.6"
 javacord = "3.8.0"
