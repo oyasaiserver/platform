@@ -35,6 +35,7 @@ class FetchSystem(
     private fun isOwner(entity: LivingEntity, player: Player): Boolean =
         entity.ownerId == player.uniqueId.toString()
 
+
     /**
      * エンティティを目標地点に向かって移動させる（元のBigWolf.ktのmoveTo関数を復元）
      */
@@ -111,7 +112,7 @@ class FetchSystem(
                 val velocity = vec.clone().setY(0).normalize().multiply(strength).setY(0.6)
 
                 pet.velocity = velocity
-                pet.lookAt(targetLoc, io.papermc.paper.entity.LookAnchor.EYES)
+                pet.lookAt(targetLoc, LookAnchor.EYES)
 
                 player.sendMessage(Component.text("とびかかれ！", LIGHT_PURPLE))
                 pet.world.playSound(pet.location, Sound.ENTITY_CAT_HISS, 1f, 1f)

@@ -106,9 +106,8 @@ class PetInteractionListener(
                 event.isCancelled = true
                 return
             }
-        }
 
-        if (isOwner) {
+            // 騎乗またはGUI表示
             if (player.isSneaking) {
                 guiManager.openPetInfoGui(player, entity)
             } else {
@@ -129,7 +128,6 @@ class PetInteractionListener(
             }
         } else {
             player.sendMessage(Component.text("このペットには飼い主しか乗れません。", RED))
-            return
         }
     }
 }
