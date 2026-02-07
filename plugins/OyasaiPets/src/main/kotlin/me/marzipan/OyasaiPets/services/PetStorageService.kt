@@ -23,7 +23,7 @@ import java.util.UUID
  * ペットの収納と復元を管理するサービス
  * ペットをアイテムに変換して保存、復元する機能を提供
  */
-class PetStorageService(private val plugin: JavaPlugin) {
+class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
 
     private val KEY_STORED_STAT_BRUSHES = NamespacedKey(plugin, "stored_stat_brushes")
     private val KEY_STORED_STAT_TREATS = NamespacedKey(plugin, "stored_stat_treats")

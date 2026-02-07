@@ -240,7 +240,8 @@ object SpawnUtils {
     val world = base.world ?: return null
     val loc = base.clone()
     if (!ensureAirColumn(world, loc)) {
-      for (_i in 1..MAX_CLEARANCE_SEARCH) {
+      @Suppress("unused")
+      for (step in 1..MAX_CLEARANCE_SEARCH) {
         loc.y += 1.0
         if (ensureAirColumn(world, loc)) break
       }
