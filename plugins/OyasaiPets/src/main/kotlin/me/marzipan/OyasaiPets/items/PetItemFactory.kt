@@ -3,7 +3,6 @@ package me.marzipan.OyasaiPets.items
 import me.marzipan.OyasaiPets.BigWolfConfig
 import me.marzipan.OyasaiPets.BigWolfKeys
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
@@ -111,6 +110,36 @@ object PetItemFactory {
             PlainTextComponentSerializer.plainText()
                 .serialize(item.itemMeta?.displayName() ?: Component.empty())
                 .contains("おやつ")
+
+    // ==========================================
+    // ヒールポーション
+    // ==========================================
+
+    /**
+     * ヒールポーションアイテムを生成
+     */
+    fun createPetHealItem(): ItemStack =
+        ItemStack(Material.GOLDEN_APPLE).apply {
+            val healAmount = BigWolfConfig.healItemAmount
+            itemMeta = itemMeta.apply {
+                displayName(Component.text("ヒールポーション", AQUA))
+                lore(listOf(
+                    Component.text("ペットに右クリックで使用", GRAY),
+                    Component.text("体力を${healAmount}回復させます", YELLOW)
+                ))
+                addEnchant(Enchantment.UNBREAKING, 1, true)
+                addItemFlags(ItemFlag.HIDE_ENCHANTS)
+            }
+        }
+
+    /**
+     * アイテムがヒールポーションかどうか判定
+     */
+    fun isPetHeal(item: ItemStack): Boolean =
+        item.type == Material.GOLDEN_APPLE &&
+            PlainTextComponentSerializer.plainText()
+                .serialize(item.itemMeta?.displayName() ?: Component.empty())
+                .contains("ヒールポーション")
 
     // ==========================================
     // スキルブック

@@ -49,6 +49,9 @@ class PetInteractionListener(
 
     @EventHandler
     fun onEntityInteract(event: PlayerInteractEntityEvent) {
+        // OFF_HANDのイベントはスキップ
+        if (event.hand != org.bukkit.inventory.EquipmentSlot.HAND) return
+
         val player = event.player
         val entity = event.rightClicked as? LivingEntity ?: return
 

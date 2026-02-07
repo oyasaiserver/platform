@@ -80,6 +80,9 @@ class PetStorageService(private val plugin: JavaPlugin) {
         pdc.set(BigWolfKeys.STORED_SPEED_MULTIPLIER, PersistentDataType.DOUBLE, entity.speedMultiplier)
         pdc.set(BigWolfKeys.STORED_JUMP_MULTIPLIER, PersistentDataType.DOUBLE, entity.jumpMultiplier)
 
+        // v3: 性質を保存
+        pdc.set(BigWolfKeys.STORED_TEMPERAMENT, PersistentDataType.STRING, entity.temperament)
+
         val variantName = VariantHandler.getVariantNameFromEntity(entity)
         if (variantName != null) {
             pdc.set(BigWolfKeys.STORED_VARIANT, PersistentDataType.STRING, variantName)
@@ -93,11 +96,15 @@ class PetStorageService(private val plugin: JavaPlugin) {
                 "Unknown"
             }
 
+        // 性質の表示名を取得
+        val temperamentDisplay = me.marzipan.OyasaiPets.domain.TemperamentHelper.getDisplayName(entity.temperament)
+
         meta.displayName(Component.text("収納された: ", GOLD).append(currentName))
         meta.lore(
             listOf(
                 Component.text("右クリックで解放", GRAY),
                 Component.text("オーナー: $ownerName", AQUA),
+                Component.text("性質: $temperamentDisplay", if (entity.isAtypical()) LIGHT_PURPLE else GRAY),
                 Component.text("ID: ${pid.take(8)}...", DARK_GRAY),
                 Component.text("記録:", DARK_AQUA),
                 Component.text("  距離: ${"%.1f".format(entity.statDistance)} m", GRAY),
@@ -216,13 +223,10 @@ class PetStorageService(private val plugin: JavaPlugin) {
         val type = runCatching { org.bukkit.entity.EntityType.valueOf(typeStr) }.getOrNull() ?: org.bukkit.entity.EntityType.WOLF
         val spec = PetRegistry.get(type)
 
-        val safeLoc = SpawnUtils.findSafeSpawnLocation(loc)
-        if (safeLoc == null) {
-            player.sendMessage(Component.text("この場所ではペットを解放できません（周囲に空間と足場が必要です）。", RED))
-            return
-        }
+        // 通常のスポーンエッグと同じ挙動: クリック位置にそのままスポーン
+        val spawnLoc = SpawnUtils.findSafeSpawnLocation(loc)
 
-        val entity = player.world.spawnEntity(safeLoc, type) as? LivingEntity
+        val entity = player.world.spawnEntity(spawnLoc, type) as? LivingEntity
 
         if (entity == null || !entity.isValid) {
             player.sendMessage(Component.text("この場所ではペットを解放できません（保護されています）。", RED))
@@ -262,6 +266,9 @@ class PetStorageService(private val plugin: JavaPlugin) {
         pdc.get(BigWolfKeys.STORED_SPEED_MULTIPLIER, PersistentDataType.DOUBLE)?.let { entity.speedMultiplier = it }
         pdc.get(BigWolfKeys.STORED_JUMP_MULTIPLIER, PersistentDataType.DOUBLE)?.let { entity.jumpMultiplier = it }
 
+        // v3: 性質を復元
+        entity.temperament = pdc.get(BigWolfKeys.STORED_TEMPERAMENT, PersistentDataType.STRING) ?: "typical"
+
         // 遊んだ記録を復元
         entity.statDistance =
             pdc.get(BigWolfKeys.STORED_STAT_DISTANCE, PersistentDataType.DOUBLE) ?: 0.0
@@ -293,11 +300,11 @@ class PetStorageService(private val plugin: JavaPlugin) {
         PetDataManager.markAsAlive(player.uniqueId, entity.petId!!)
 
         // 解放位置を記録（見失い対策）
-        PetDataManager.updateLastLocation(player.uniqueId, entity.petId!!, safeLoc)
+        PetDataManager.updateLastLocation(player.uniqueId, entity.petId!!, spawnLoc)
 
         item.amount -= 1
         player.sendMessage(Component.text("ペットを解放しました！", GREEN))
-        player.playSound(safeLoc, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
+        player.playSound(spawnLoc, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
     }
 
     /**
@@ -397,11 +404,25 @@ class PetStorageService(private val plugin: JavaPlugin) {
             isCustomNameVisible = true
             setRemoveWhenFarAway(false)
             isInvulnerable = true
-            setAI(true)
+            setAI(BigWolfConfig.spawnAiEnabled)
 
+            // スケールを適用（速度はスケールに関係なくデフォルト値）
             getAttribute(Attribute.SCALE)?.baseValue = spec.scaleRange.start
-            getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.0
-            getAttribute(Attribute.FLYING_SPEED)?.baseValue = 0.0
+
+            // 自由移動時の速度設定
+            // 水棲・飛行MOBはデフォルト速度のまま（水中/空中で自然に動くため）
+            // 陸上MOBのみ速度倍率を適用（大きすぎると速すぎるため）
+            val speedMultiplier = when (spec.category) {
+                me.marzipan.OyasaiPets.domain.PetCategory.WATER -> 1.0
+                me.marzipan.OyasaiPets.domain.PetCategory.FLYING -> 1.0
+                else -> BigWolfConfig.freeRoamSpeedMultiplier
+            }
+            getAttribute(Attribute.MOVEMENT_SPEED)?.let {
+                it.baseValue = it.defaultValue * speedMultiplier
+            }
+            getAttribute(Attribute.FLYING_SPEED)?.let {
+                it.baseValue = it.defaultValue  // 飛行速度は常にデフォルト
+            }
             getAttribute(Attribute.STEP_HEIGHT)?.baseValue = 1.1
 
             if (this is org.bukkit.entity.Tameable) {
@@ -419,12 +440,6 @@ class PetStorageService(private val plugin: JavaPlugin) {
             if (this is org.bukkit.entity.Chicken) {
                 getAttribute(Attribute.MAX_HEALTH)?.baseValue = 20.0  // デフォルト4 → 20
                 health = 20.0
-            }
-
-            // Turtleの陸上移動速度を低く設定（モーション高速化を防ぐ）
-            if (this is org.bukkit.entity.Turtle) {
-                // Turtleは水中では速く、陸上ではゆっくり移動
-                getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.1
             }
         }
     }

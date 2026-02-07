@@ -32,7 +32,7 @@ class ShopSystem {
         yawDeg: Float?
     ) {
         val loc = admin.location.block.location.add(0.5, 0.0, 0.5)
-        val safeLoc = SpawnUtils.findSafeSpawnLocation(loc) ?: run {
+        val safeLoc = SpawnUtils.findSafeGroundLocation(loc) ?: run {
             admin.sendMessage(Component.text("ここにはショップMOBを設置できません（足場と空間が必要です）。", RED))
             return
         }

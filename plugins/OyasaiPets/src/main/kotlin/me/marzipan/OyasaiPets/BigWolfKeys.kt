@@ -68,8 +68,12 @@ object BigWolfKeys {
   lateinit var STORED_SPEED_MULTIPLIER: NamespacedKey
   lateinit var STORED_JUMP_MULTIPLIER: NamespacedKey
 
+  // v3: 性質（定型/非定型）関連
+  lateinit var TEMPERAMENT: NamespacedKey
+  lateinit var STORED_TEMPERAMENT: NamespacedKey
+
   // PCDバージョン定数
-  const val CURRENT_PCD_VERSION = 2
+  const val CURRENT_PCD_VERSION = 3
 
   /** すべてのキーを初期化 */
   fun initialize(plugin: Plugin) {
@@ -135,5 +139,9 @@ object BigWolfKeys {
     STORED_PARTICLE_UNLOCKED = NamespacedKey(plugin, "stored_particle_unlocked")
     STORED_SPEED_MULTIPLIER = NamespacedKey(plugin, "stored_speed_multiplier")
     STORED_JUMP_MULTIPLIER = NamespacedKey(plugin, "stored_jump_multiplier")
+
+    // v3: 性質（定型/非定型）関連
+    TEMPERAMENT = NamespacedKey(plugin, "temperament")
+    STORED_TEMPERAMENT = NamespacedKey(plugin, "stored_temperament")
   }
 }

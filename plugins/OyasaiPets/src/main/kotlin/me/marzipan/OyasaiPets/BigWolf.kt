@@ -5,6 +5,7 @@ import me.marzipan.OyasaiPets.commands.CommandManager
 import me.marzipan.OyasaiPets.commands.OpCommands
 import me.marzipan.OyasaiPets.commands.PlayerCommands
 import me.marzipan.OyasaiPets.domain.*
+import me.marzipan.OyasaiPets.items.PetItemFactory
 import me.marzipan.OyasaiPets.listeners.*
 import me.marzipan.OyasaiPets.services.*
 import me.marzipan.OyasaiPets.systems.*
@@ -28,10 +29,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private lateinit var breedingSystem: BreedingSystem
   private val shopSystem = ShopSystem()
   private lateinit var petControlSystem: PetControlSystem
+  private lateinit var childAISystem: ChildAISystem
 
   // 新しいサービス層
   private lateinit var economySystem: EconomySystem
-  private val itemManagement = ItemManagementSystem()
   private lateinit var interactionService: PetInteractionService
   private lateinit var storageService: PetStorageService
   private lateinit var queryService: PetQueryService
@@ -96,9 +97,16 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
         this,
         mountCooldowns,
         { player, entity -> petControlSystem.startControlTask(player, entity) },
-        { entity, level, spec -> interactionService.updateStats(entity, level, spec) }
+        { entity, level, spec -> interactionService.updateStats(entity, level, spec) },
+        { entity, spec, player -> storageService.setupPetEntity(entity, spec, player) }
     )
-    reviveService = PetReviveService(this, economySystem, petSpawnSystem, interactionService)
+    reviveService = PetReviveService(
+        this,
+        economySystem,
+        petSpawnSystem::countActivePets,
+        { entity, spec, player -> storageService.setupPetEntity(entity, spec, player) },
+        interactionService
+    )
     transferService = TransferService(this, storageService, logger)
     fetchSystem = FetchSystem(this, activeFetchTasks)
     breedingSystem = BreedingSystem(
@@ -114,6 +122,9 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
         economySystem::getPlayerTokens
     )
 
+    // 子供AIシステムの初期化と開始
+    childAISystem = ChildAISystem(this)
+    childAISystem.startGlobalAITask()
 
     // Ensure config and apply config
     ensureDefaultConfig()
@@ -146,17 +157,17 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       mountCooldowns,
       interactionService::checkAndMigrateOwner,
       interactionService::isOwner,
-      itemManagement::isPetFood,
+      PetItemFactory::isPetFood,
       { player: Player, entity: LivingEntity -> interactionService.giveFood(player, entity, economySystem::consumeTokens) },
-      itemManagement::isPetBrush,
+      PetItemFactory::isPetBrush,
       interactionService::useBrush,
-      itemManagement::isPetTreat,
+      PetItemFactory::isPetTreat,
       interactionService::giveTreat,
-      itemManagement::isPetHeal,
+      PetItemFactory::isPetHeal,
       interactionService::healPet,
-      itemManagement::getUnlockItemLevel,
+      PetItemFactory::getUnlockItemLevel,
       { player: Player, entity: LivingEntity, item: ItemStack, level: Int -> interactionService.handleSkillUnlock(player, entity, item, level, economySystem::consumeTokens) },
-      itemManagement::isParticleUnlockItem,
+      PetItemFactory::isParticleUnlockItem,
       interactionService::handleParticleUnlock
     )
     server.pluginManager.registerEvents(petInteractionListener, this)
@@ -244,7 +255,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       this,
       shopSystem,
       petSpawnSystem::spawnAndMountEntity,
-      itemManagement,
       this::showOpUsage,
       this::handleOpShopRemoveAll,
       this::handleForceStoreTarget,
@@ -257,6 +267,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   }
 
   override fun onDisable() {
+    // 子供AIシステムのクリーンアップ
+    if (::childAISystem.isInitialized) {
+      childAISystem.cleanup()
+    }
     logger.info("BigWolfPlugin disabled")
   }
 
@@ -285,6 +299,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     player.sendMessage(Component.text("/bigwolfop force_store - 強制収納", YELLOW))
     player.sendMessage(Component.text("/bigwolfop force_storeall <player> - 全強制収納", YELLOW))
     player.sendMessage(Component.text("/bigwolfop history <player> - 他人の履歴", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop spawn_ai <on|off|status> - スポーン時AI切替", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop reset_speed [all] - ペット速度をデフォルトに戻す", YELLOW))
   }
 
   private fun sendVersionInfo(player: Player) {
@@ -482,26 +498,4 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
       else -> mutableListOf()
     }
   }
-
-
-
-  // --- Events ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} // End of BigWolfPlugin class
+}

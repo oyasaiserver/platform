@@ -4,6 +4,7 @@ package me.marzipan.OyasaiPets.systems
 import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.VariantHandler
+import me.marzipan.OyasaiPets.domain.TemperamentHelper
 import me.marzipan.OyasaiPets.SpawnUtils
 import me.realized.tm.api.TMAPI
 import net.kyori.adventure.text.Component
@@ -63,6 +64,7 @@ class BreedingSystem(
             val nameComp = entity.customName() ?: Component.text(me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(entity.type))
             val gen = entity.generation
             val breedCount = entity.breedCount
+            val temperamentDisplay = TemperamentHelper.getDisplayName(entity.temperament)
 
             val item = org.bukkit.inventory.ItemStack(eggMat).apply {
                 itemMeta = itemMeta.apply {
@@ -71,6 +73,7 @@ class BreedingSystem(
                         listOf(
                             Component.text("レベル: ${entity.foodLevel}", GREEN),
                             Component.text("世代: 第${gen}世代", AQUA),
+                            Component.text("性質: $temperamentDisplay", if (entity.isAtypical()) LIGHT_PURPLE else GRAY),
                             Component.text("交配回数: ${breedCount}回", GRAY),
                             Component.text("", GRAY),
                             Component.text("クリックで親に選択", GREEN)
@@ -194,7 +197,7 @@ class BreedingSystem(
         newJump = newJump.coerceAtMost(BigWolfConfig.breedStatCap)
 
         val safeGround =
-            SpawnUtils.findSafeSpawnLocation(player.location.clone())
+            SpawnUtils.findSafeGroundLocation(player.location.clone())
                 ?: run {
                     player.sendMessage(Component.text("この場所ではペットを生成できません。", RED))
                     @Suppress("DEPRECATION")
@@ -234,6 +237,12 @@ class BreedingSystem(
         newEntity.speedMultiplier = newSpeed
         newEntity.jumpMultiplier = newJump
         newEntity.particleUnlocked = "0,1,2,3,4"
+
+        // v3: 性質を決定（親の性質に基づく確率）
+        newEntity.temperament = TemperamentHelper.determineForBreeding(
+            parent1.temperament,
+            parent2.temperament
+        )
 
         // 世代ボーナスで初期レベル
         val bonusLevel = ((newGeneration - 1) * BigWolfConfig.breedBonusLevelPerGen)
@@ -297,7 +306,16 @@ class BreedingSystem(
                         1
                     )
                     world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 0.8f, 1.5f)
-                    player.sendMessage(Component.text("★ 新しいペットが誕生しました！ (第${generation}世代)", GREEN))
+
+                    // 性質に応じたメッセージ
+                    val temperamentDisplay = TemperamentHelper.getDisplayName(entity.temperament)
+                    if (entity.isAtypical()) {
+                        player.sendMessage(Component.text("★★ 新しいペットが誕生しました！ (第${generation}世代) [$temperamentDisplay]", LIGHT_PURPLE))
+                        // 非定型の特別エフェクト
+                        world.spawnParticle(Particle.HEART, entity.location.add(0.0, 1.5, 0.0), 15, 0.5, 0.5, 0.5, 0.1)
+                    } else {
+                        player.sendMessage(Component.text("★ 新しいペットが誕生しました！ (第${generation}世代)", GREEN))
+                    }
                     cancel()
                 }
             }
@@ -380,15 +398,6 @@ class BreedingSystem(
             availableVariants.randomOrNull()
         }
 
-        // デバッグログ
-        plugin.logger.info("=== Breeding Variant Selection ===")
-        plugin.logger.info("Type: ${type.name}")
-        plugin.logger.info("Parent1 Variant: $parent1Variant")
-        plugin.logger.info("Parent2 Variant: $parent2Variant")
-        plugin.logger.info("Available Variants: ${availableVariants.joinToString()}")
-        plugin.logger.info("Candidates count: ${candidates.size}")
-        plugin.logger.info("Selected Variant: $selectedVariant")
-        plugin.logger.info("Candidate distribution: ${candidates.groupingBy { it }.eachCount()}")
 
         return selectedVariant
     }

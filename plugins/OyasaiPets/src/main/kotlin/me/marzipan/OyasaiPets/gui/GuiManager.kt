@@ -65,10 +65,13 @@ class GuiManager {
         val typeName = if (vName != null) "$mobJap ($variantJap)" else mobJap
         val hp = "${entity.health.toInt()} / ${entity.getAttribute(Attribute.MAX_HEALTH)?.value?.toInt()}"
         val ownerName = Bukkit.getOfflinePlayer(UUID.fromString(entity.ownerId ?: player.uniqueId.toString())).name ?: "Unknown"
+        val temperamentDisplay = me.marzipan.OyasaiPets.domain.TemperamentHelper.getDisplayName(entity.temperament)
+        val temperamentColor = if (entity.isAtypical()) LIGHT_PURPLE else GRAY
 
         inv.setItem(0, createItem(Material.NAME_TAG, "基本情報", AQUA,
             Component.text("名前: ", GRAY).append(nameComp),
             Component.text("種類: $typeName", GRAY),
+            Component.text("性質: $temperamentDisplay", temperamentColor),
             Component.text("オーナー: $ownerName", GRAY),
             Component.text("体力: $hp", RED),
             Component.text("クリックで名前変更", GREEN)))

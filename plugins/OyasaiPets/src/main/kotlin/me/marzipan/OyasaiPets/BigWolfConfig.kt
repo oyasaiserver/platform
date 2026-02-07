@@ -50,6 +50,20 @@ object BigWolfConfig {
   var playLevelUpMaxLevel = 10
   var healItemAmount = 10
 
+  // ペットスポーン時AI設定
+  var spawnAiEnabled = true
+
+  // ペット自由移動時の速度倍率（1.0 = デフォルト、0.5 = 半分の速度）
+  var freeRoamSpeedMultiplier = 0.5
+
+  // 性質（定型/非定型）設定
+  var atypicalBaseChance = 0.07          // 基本確率 7%
+  var atypicalOneParentChance = 0.15     // 片親非定型 15%
+  var atypicalBothParentChance = 0.35    // 両親非定型 35%
+  var atypicalLevelUpBonus = 1.5         // レベルアップ確率倍率
+  var atypicalAffectionBonus = 1.3       // 親密度上昇倍率
+  var childAiEnabled = true              // 子供AI有効化
+
   // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
@@ -84,6 +98,12 @@ object BigWolfConfig {
     playLevelUpChance = config.getDouble("play.levelUpChance", playLevelUpChance)
     playLevelUpMaxLevel = config.getInt("play.levelUpMaxLevel", playLevelUpMaxLevel)
 
+    // ペットスポーン時AI設定
+    spawnAiEnabled = config.getBoolean("pets.spawnAiEnabled", spawnAiEnabled)
+
+    // ペット自由移動時の速度倍率
+    freeRoamSpeedMultiplier = config.getDouble("pets.freeRoamSpeedMultiplier", freeRoamSpeedMultiplier)
+
     // 交配設定
     breedMinLevel = config.getInt("breed.minLevel", breedMinLevel)
     breedCost = config.getInt("breed.cost", breedCost)
@@ -101,6 +121,14 @@ object BigWolfConfig {
     // バリアント遺伝確率設定
     breedParentVariantWeight = config.getInt("breed.variantWeights.parent", breedParentVariantWeight)
     breedOtherVariantWeight = config.getInt("breed.variantWeights.other", breedOtherVariantWeight)
+
+    // 性質設定
+    atypicalBaseChance = config.getDouble("traits.atypicalBaseChance", atypicalBaseChance)
+    atypicalOneParentChance = config.getDouble("traits.atypicalOneParentChance", atypicalOneParentChance)
+    atypicalBothParentChance = config.getDouble("traits.atypicalBothParentChance", atypicalBothParentChance)
+    atypicalLevelUpBonus = config.getDouble("traits.atypicalLevelUpBonus", atypicalLevelUpBonus)
+    atypicalAffectionBonus = config.getDouble("traits.atypicalAffectionBonus", atypicalAffectionBonus)
+    childAiEnabled = config.getBoolean("traits.childAiEnabled", childAiEnabled)
   }
 
   /** config.ymlにデフォルト値を設定 */
@@ -132,6 +160,12 @@ object BigWolfConfig {
     config.addDefault("play.levelUpChance", playLevelUpChance)
     config.addDefault("play.levelUpMaxLevel", playLevelUpMaxLevel)
 
+    // ペットスポーン時AI設定
+    config.addDefault("pets.spawnAiEnabled", spawnAiEnabled)
+
+    // ペット自由移動時の速度倍率
+    config.addDefault("pets.freeRoamSpeedMultiplier", freeRoamSpeedMultiplier)
+
     // 交配設定
     config.addDefault("breed.minLevel", breedMinLevel)
     config.addDefault("breed.cost", breedCost)
@@ -161,6 +195,14 @@ object BigWolfConfig {
     //   parent=0,  other=10 : 完全ランダム
     config.addDefault("breed.variantWeights.parent", breedParentVariantWeight)
     config.addDefault("breed.variantWeights.other", breedOtherVariantWeight)
+
+    // 性質設定
+    config.addDefault("traits.atypicalBaseChance", atypicalBaseChance)
+    config.addDefault("traits.atypicalOneParentChance", atypicalOneParentChance)
+    config.addDefault("traits.atypicalBothParentChance", atypicalBothParentChance)
+    config.addDefault("traits.atypicalLevelUpBonus", atypicalLevelUpBonus)
+    config.addDefault("traits.atypicalAffectionBonus", atypicalAffectionBonus)
+    config.addDefault("traits.childAiEnabled", childAiEnabled)
   }
 
   /** スキルブックレベルに応じたコストを取得 */

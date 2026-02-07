@@ -77,9 +77,10 @@ object PetRegistry {
             baseSpeed = 0.5,
             maxSpeed = 1.0,
             scaleRange = 1.2..2.2,
-            toyMaterial = Material.SNOWBALL,
-            toyName = "ビーチボール",
-            toyType = ToyType.THROW_FETCH
+            toyMaterial = Material.PUFFERFISH,
+            toyName = "フグ風船",
+            toyType = ToyType.BALLOON_JUMP,
+            toyGravity = false
         ),
         EntityType.AXOLOTL to PetSpec(
             category = PetCategory.WATER,

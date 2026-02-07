@@ -7,16 +7,12 @@ import me.marzipan.OyasaiPets.items.PetItemFactory
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
@@ -25,19 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin
  */
 class PetInteractionService(private val plugin: JavaPlugin) {
 
-    private val particleTypes = listOf(
-        0 to ("なし" to Material.BARRIER),
-        1 to ("電気" to Material.LIGHTNING_ROD),
-        2 to ("炎" to Material.BLAZE_POWDER),
-        3 to ("青炎" to Material.SOUL_CAMPFIRE),
-        4 to ("ハート" to Material.RED_DYE),
-        5 to ("星" to Material.NETHER_STAR),
-        6 to ("音符" to Material.NOTE_BLOCK),
-        7 to ("雪" to Material.SNOWBALL),
-        8 to ("桜" to Material.CHERRY_LEAVES),
-        9 to ("エンド" to Material.ENDER_PEARL),
-        10 to ("スライム" to Material.SLIME_BALL)
-    )
 
     private val brushCooldowns = mutableMapOf<java.util.UUID, Long>()
 
@@ -103,7 +86,7 @@ class PetInteractionService(private val plugin: JavaPlugin) {
         entity.unlockParticle(particleId)
         item.amount -= 1
 
-        val particleName = particleTypes.find { it.first == particleId }?.second?.first ?: "不明"
+        val particleName = PetItemFactory.getParticleName(particleId)
         entity.world.playSound(entity.location, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1f, 1.5f)
         entity.world.spawnParticle(Particle.END_ROD, entity.location.add(0.0, 1.0, 0.0), 20, 0.5, 0.5, 0.5, 0.1)
         player.sendMessage(Component.text("パーティクル「$particleName」をアンロックしました！", LIGHT_PURPLE))
@@ -259,7 +242,11 @@ class PetInteractionService(private val plugin: JavaPlugin) {
     fun tryPlayLevelUp(player: Player, entity: LivingEntity) {
         val currentLevel = entity.foodLevel
         val maxPlayLevel = BigWolfConfig.playLevelUpMaxLevel
-        val chance = BigWolfConfig.playLevelUpChance
+
+        // 基本確率 + 非定型ボーナス
+        val baseChance = BigWolfConfig.playLevelUpChance
+        val multiplier = me.marzipan.OyasaiPets.domain.TemperamentHelper.getLevelUpMultiplier(entity.temperament)
+        val chance = baseChance * multiplier
 
         // すでに遊びでの上限に達している場合はスキップ
         if (currentLevel >= maxPlayLevel) return
@@ -270,13 +257,20 @@ class PetInteractionService(private val plugin: JavaPlugin) {
             val spec = PetRegistry.get(entity.type)
             updateStats(entity, entity.foodLevel, spec)
 
-            player.sendMessage(Component.text("★ ペットのレベルが上がった！ (Lv.${entity.foodLevel})", GREEN))
+            // 非定型の場合は特別なメッセージ
+            val msg = if (entity.isAtypical()) {
+                "★★ ペットのレベルが上がった！ (Lv.${entity.foodLevel}) [非定型ボーナス]"
+            } else {
+                "★ ペットのレベルが上がった！ (Lv.${entity.foodLevel})"
+            }
+            player.sendMessage(Component.text(msg, GREEN))
             player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.5f)
             entity.world.spawnParticle(Particle.TOTEM_OF_UNDYING, entity.location.add(0.0, 1.0, 0.0), 20, 0.5, 0.5, 0.5, 0.1)
             sync(entity)
         }
     }
-}
+
     private fun sync(entity: LivingEntity) {
         PetSynchronizer.syncEntityToJson(entity)
     }
+}

@@ -24,7 +24,7 @@ object CommandTabCompleter {
         val result: List<String> = when (args.size) {
             1 -> listOf(
                 "version", "reload", "item", "exp", "shop", "shopremove", "shopremoveall",
-                "force_store", "force_storeall", "history"
+                "force_store", "force_storeall", "history", "spawn_ai", "reset_speed"
             ).filter { it.startsWith(a0) }
 
             2 -> when (a0) {
@@ -38,6 +38,9 @@ object CommandTabCompleter {
 
                 "force_storeall", "history" -> Bukkit.getOnlinePlayers().map { it.name }
                     .filter { it.lowercase().startsWith(a1) }
+
+                "spawn_ai" -> listOf("on", "off", "status").filter { it.startsWith(a1) }
+                "reset_speed" -> listOf("all").filter { it.startsWith(a1) }
 
                 else -> emptyList()
             }

@@ -4,11 +4,11 @@ import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.VariantHandler
+import me.marzipan.OyasaiPets.domain.TemperamentHelper
 import me.marzipan.OyasaiPets.SpawnUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Bukkit
-import org.bukkit.attribute.Attribute
 import org.bukkit.entity.*
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.UUID
@@ -21,7 +21,8 @@ class PetSpawnSystem(
     private val plugin: JavaPlugin,
     private val mountCooldowns: MutableMap<UUID, Long>,
     private val startControlTask: (Player, LivingEntity) -> Unit,
-    private val updateStats: (LivingEntity, Int, PetSpec) -> Unit
+    private val updateStats: (LivingEntity, Int, PetSpec) -> Unit,
+    private val setupPetEntity: (LivingEntity, PetSpec, Player) -> Unit
 ) {
 
     /**
@@ -54,11 +55,8 @@ class PetSpawnSystem(
 
         val spec = PetRegistry.get(type)
         val baseLoc = player.location.clone().add(0.0, 1.0, 0.0)
+        // 通常のスポーンエッグと同じ挙動: プレイヤー位置にそのままスポーン
         val safeLoc = SpawnUtils.findSafeSpawnLocation(baseLoc)
-        if (safeLoc == null) {
-            player.sendMessage(Component.text("この場所では召喚できません（足場と空間が必要です）。", RED))
-            return null
-        }
         val entity = player.world.spawnEntity(safeLoc, type) as? LivingEntity
 
         if (entity == null || !entity.isValid) {
@@ -85,6 +83,9 @@ class PetSpawnSystem(
         entity.skillType = 0
         entity.isHovering = false
 
+        // v3: 性質を決定
+        entity.temperament = TemperamentHelper.determineForPurchase()
+
         // 遊んだ記録：新規召喚はゼロ初期化
         entity.statDistance = 0.0
         entity.statJumps = 0
@@ -101,48 +102,14 @@ class PetSpawnSystem(
             }
         }, 2L)
 
-        player.sendMessage(Component.text("巨大な ${type.name} を召喚しました！", AQUA))
-        return petId
-    }
-
-    /**
-     * ペットエンティティの基本設定
-     */
-    fun setupPetEntity(entity: LivingEntity, spec: PetSpec, player: Player) {
-        entity.apply {
-            // バリアント名とMOB名を日本語で取得
-            val variantName = VariantHandler.getVariantNameFromEntity(entity)
-            val variantJap = me.marzipan.OyasaiPets.i18n.MobTranslator.translateVariant(variantName)
-            val mobJap = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
-
-            // ID番号を取得（petIdの最初の8文字をハッシュ値として使用）
-            val petId = entity.petId ?: UUID.randomUUID().toString().also { entity.petId = it }
-            val idNum = petId.hashCode().let { if (it < 0) -it else it } % 10000
-
-            // デフォルト名: 「プレイヤー名の<バリアント><MOB名> #<ID>」
-            val defaultName = if (variantName != null) {
-                "${player.name}の$variantJap$mobJap #$idNum"
-            } else {
-                "${player.name}の$mobJap #$idNum"
-            }
-
-            customName(Component.text(defaultName))
-            isCustomNameVisible = true
-            setRemoveWhenFarAway(false)
-            isInvulnerable = true
-            setAI(true)
-
-            getAttribute(Attribute.SCALE)?.baseValue = spec.scaleRange.start
-            getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.0
-            getAttribute(Attribute.FLYING_SPEED)?.baseValue = 0.0
-            getAttribute(Attribute.STEP_HEIGHT)?.baseValue = 1.1
-
-            if (this is Tameable) {
-                isTamed = true
-                owner = player
-            }
-            if (this is Sittable) isSitting = false
-            if (this is Ageable) setAdult()
+        // 性質に応じたメッセージ
+        val mobName = me.marzipan.OyasaiPets.i18n.MobTranslator.toJapanese(type)
+        if (entity.isAtypical()) {
+            val temperamentDisplay = TemperamentHelper.getDisplayName(entity.temperament)
+            player.sendMessage(Component.text("★★ $mobName を召喚しました！ [$temperamentDisplay]", LIGHT_PURPLE))
+        } else {
+            player.sendMessage(Component.text("$mobName を召喚しました！", AQUA))
         }
+        return petId
     }
 }

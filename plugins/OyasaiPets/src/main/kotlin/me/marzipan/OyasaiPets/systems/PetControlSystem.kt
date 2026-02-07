@@ -9,14 +9,11 @@ import me.marzipan.OyasaiPets.isSilentMode
 import me.marzipan.OyasaiPets.skillType
 import me.marzipan.OyasaiPets.statDistance
 import me.marzipan.OyasaiPets.statJumps
-import me.marzipan.OyasaiPets.statToys
-import me.marzipan.OyasaiPets.statBrushes
-import me.marzipan.OyasaiPets.statTreats
 import me.marzipan.OyasaiPets.speedMultiplier
 import me.marzipan.OyasaiPets.jumpMultiplier
 import org.bukkit.Material
 import org.bukkit.Particle
-import org.bukkit.Sound
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -53,6 +50,10 @@ class PetControlSystem(
         activeControlTasks[entity.uniqueId]?.cancel()
         val spec = PetRegistry.get(entity.type)
 
+        // 騎乗開始時にAIの移動速度を0にする（勝手に動かないように）
+        val originalSpeed = entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
+        entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.0
+
         val task = object : BukkitRunnable() {
             var lastPos = entity.location.toVector()
             var rideDistance = 0.0
@@ -61,7 +62,11 @@ class PetControlSystem(
 
             override fun run() {
                 if (!entity.isValid || !player.isOnline || player !in entity.passengers) {
-                    if (entity.isValid) entity.isSilent = false
+                    if (entity.isValid) {
+                        entity.isSilent = false
+                        // 降車時にAIの移動速度を元に戻す
+                        entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = originalSpeed
+                    }
                     if (rideDistance > 0.0 && entity.isValid) {
                         entity.statDistance = entity.statDistance + rideDistance
                     }
@@ -188,7 +193,7 @@ class PetControlSystem(
                         if (velocity.length() > 0.1 && entity.ticksLived % 8 == 0) {
                             try {
                                 entity.playEffect(org.bukkit.EntityEffect.RABBIT_JUMP)
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 val vel = entity.velocity
                                 vel.y = 0.4
                                 entity.velocity = vel
@@ -221,10 +226,6 @@ class PetControlSystem(
         activeControlTasks[entity.uniqueId] = task
     }
 
-    private fun isDashing(player: Player): Boolean {
-        val endTime = dashEndTimes[player.uniqueId] ?: return false
-        return System.currentTimeMillis() < endTime
-    }
 
     fun setDashEndTime(player: Player, endTime: Long) {
         dashEndTimes[player.uniqueId] = endTime

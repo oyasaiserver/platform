@@ -150,6 +150,14 @@ var LivingEntity.jumpMultiplier: Double
   get() = persistentDataContainer.get(BigWolfKeys.JUMP_MULTIPLIER, PersistentDataType.DOUBLE) ?: 1.0
   set(value) = persistentDataContainer.set(BigWolfKeys.JUMP_MULTIPLIER, PersistentDataType.DOUBLE, value)
 
+// 性質（v3）: "typical" = 定型, "atypical" = 非定型
+var LivingEntity.temperament: String
+  get() = persistentDataContainer.get(BigWolfKeys.TEMPERAMENT, PersistentDataType.STRING) ?: "typical"
+  set(value) = persistentDataContainer.set(BigWolfKeys.TEMPERAMENT, PersistentDataType.STRING, value)
+
+/** このペットが非定型かどうかを判定 */
+fun LivingEntity.isAtypical(): Boolean = temperament == "atypical"
+
 /** このエンティティがBigWolfのペットかどうかを判定 */
 fun LivingEntity.isPet(): Boolean = petId != null && ownerId != null
 
@@ -197,7 +205,36 @@ fun LivingEntity.migratePcdIfNeeded() {
 object SpawnUtils {
   private const val MAX_CLEARANCE_SEARCH = 6
 
-  fun findSafeSpawnLocation(base: org.bukkit.Location): org.bukkit.Location? {
+  /**
+   * 通常のスポーンエッグと同じ挙動でスポーン位置を決定
+   * - 基本的にクリックした位置をそのまま使用
+   * - 固体ブロック内の場合のみ調整
+   */
+  fun findSafeSpawnLocation(base: org.bukkit.Location): org.bukkit.Location {
+    val world = base.world ?: return base
+    val loc = base.clone()
+
+    // クリック位置のブロックが固体の場合のみ上に移動
+    val block = world.getBlockAt(loc.blockX, loc.blockY, loc.blockZ)
+    if (block.type.isSolid && !block.isPassable) {
+      // 上に空間を探す
+      for (i in 1..MAX_CLEARANCE_SEARCH) {
+        val checkBlock = world.getBlockAt(loc.blockX, loc.blockY + i, loc.blockZ)
+        if (checkBlock.isPassable || checkBlock.isLiquid) {
+          loc.y = (loc.blockY + i).toDouble() + 0.01
+          return loc
+        }
+      }
+    }
+
+    // そのままの位置を返す（水中、空中、地上すべてOK）
+    return loc
+  }
+
+  /**
+   * 旧式の安全な地上スポーン位置を検索（後方互換性のため残す）
+   */
+  fun findSafeGroundLocation(base: org.bukkit.Location): org.bukkit.Location? {
     val world = base.world ?: return null
     val loc = base.clone()
     if (!ensureAirColumn(world, loc)) {

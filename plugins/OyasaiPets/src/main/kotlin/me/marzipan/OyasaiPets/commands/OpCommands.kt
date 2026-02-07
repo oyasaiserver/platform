@@ -3,11 +3,12 @@ package me.marzipan.OyasaiPets.commands
 import me.marzipan.OyasaiPets.BigWolfConfig
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.systems.ShopSystem
-import me.marzipan.OyasaiPets.systems.ItemManagementSystem
 import me.marzipan.OyasaiPets.items.PetItemFactory
+import me.marzipan.OyasaiPets.isPet
+import org.bukkit.Bukkit
+import org.bukkit.attribute.Attribute
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
-import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -19,7 +20,6 @@ class OpCommands(
     private val plugin: JavaPlugin,
     private val shopSystem: ShopSystem,
     private val spawnAndMountEntity: (Player, EntityType, String?) -> String?,
-    private val itemManagement: ItemManagementSystem,
     private val showUsageFn: (Player) -> Unit,
     private val shopRemoveAllFn: (Player) -> Unit,
     private val forceStoreFn: (Player) -> Unit,
@@ -64,6 +64,12 @@ class OpCommands(
             "history" -> {
                 historyFn(player, args); true
             }
+            "spawn_ai" -> {
+                handleSpawnAi(player, args); true
+            }
+            "reset_speed" -> {
+                handleResetSpeed(player, args); true
+            }
             else -> {
                 player.sendMessage(Component.text("不明なサブコマンド: $sub", RED))
                 true
@@ -100,7 +106,7 @@ class OpCommands(
                 player.sendMessage(Component.text("ペットのおやつを入手しました！", GREEN))
             }
             "heal" -> {
-                player.inventory.addItem(itemManagement.createPetHealItem())
+                player.inventory.addItem(PetItemFactory.createPetHealItem())
                 player.sendMessage(Component.text("ヒールポーションを入手しました！", GREEN))
             }
             "toys" -> {
@@ -113,26 +119,26 @@ class OpCommands(
                 }
             }
             "skillbook" -> {
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(1))
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(2))
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(1))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(2))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(3))
                 player.sendMessage(Component.text("スキル強化用アイテムを入手しました！", LIGHT_PURPLE))
             }
             "skillbook1" -> {
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(1))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(1))
                 player.sendMessage(Component.text("スキルブック(Lv.1)を入手しました！", LIGHT_PURPLE))
             }
             "skillbook2" -> {
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(2))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(2))
                 player.sendMessage(Component.text("スキルブック(Lv.2)を入手しました！", LIGHT_PURPLE))
             }
             "skillbook3" -> {
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(3))
                 player.sendMessage(Component.text("スキルブック(Lv.3)を入手しました！", LIGHT_PURPLE))
             }
             "particle" -> {
                 for (i in 5..10) {
-                    player.inventory.addItem(itemManagement.createParticleUnlockItem(i))
+                    player.inventory.addItem(PetItemFactory.createParticleUnlockItem(i))
                 }
                 player.sendMessage(Component.text("パーティクルの結晶セットを入手しました！", LIGHT_PURPLE))
             }
@@ -140,13 +146,13 @@ class OpCommands(
                 player.inventory.addItem(PetItemFactory.createPetFoodItem())
                 player.inventory.addItem(PetItemFactory.createPetBrushItem())
                 player.inventory.addItem(PetItemFactory.createPetTreatItem())
-                player.inventory.addItem(itemManagement.createPetHealItem())
+                player.inventory.addItem(PetItemFactory.createPetHealItem())
                 PetRegistry.getAllToyItems().forEach { player.inventory.addItem(it) }
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(1))
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(2))
-                player.inventory.addItem(itemManagement.createSkillUnlockItem(3))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(1))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(2))
+                player.inventory.addItem(PetItemFactory.createSkillUnlockItem(3))
                 for (i in 5..10) {
-                    player.inventory.addItem(itemManagement.createParticleUnlockItem(i))
+                    player.inventory.addItem(PetItemFactory.createParticleUnlockItem(i))
                 }
                 player.sendMessage(Component.text("全アイテムを入手しました！", GREEN))
             }
@@ -223,5 +229,52 @@ class OpCommands(
         val version = plugin.description.version
         player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
         player.sendMessage(Component.text("Version: $version", YELLOW))
+    }
+
+    private fun handleSpawnAi(player: Player, args: Array<out String>) {
+        val arg = args.getOrNull(1)?.lowercase()
+        when (arg) {
+            null, "status" -> {
+                val state = if (BigWolfConfig.spawnAiEnabled) "ON" else "OFF"
+                player.sendMessage(Component.text("ペットスポーン時AI: $state", YELLOW))
+            }
+            "on" -> {
+                BigWolfConfig.spawnAiEnabled = true
+                plugin.config.set("pets.spawnAiEnabled", true)
+                plugin.saveConfig()
+                player.sendMessage(Component.text("ペットスポーン時AIをONにしました。", GREEN))
+            }
+            "off" -> {
+                BigWolfConfig.spawnAiEnabled = false
+                plugin.config.set("pets.spawnAiEnabled", false)
+                plugin.saveConfig()
+                player.sendMessage(Component.text("ペットスポーン時AIをOFFにしました。", YELLOW))
+            }
+            else -> {
+                player.sendMessage(Component.text("使い方: /bigwolfop spawn_ai <on|off|status>", RED))
+            }
+        }
+    }
+
+    private fun handleResetSpeed(player: Player, args: Array<out String>) {
+        val arg = args.getOrNull(1)?.lowercase()
+        if (arg != null && arg != "all") {
+            player.sendMessage(Component.text("使い方: /bigwolfop reset_speed [all]", RED))
+            return
+        }
+
+        var count = 0
+        for (world in Bukkit.getWorlds()) {
+            for (entity in world.livingEntities) {
+                if (!entity.isPet()) continue
+                val move = entity.getAttribute(Attribute.MOVEMENT_SPEED)
+                move?.baseValue = move?.defaultValue ?: move?.baseValue ?: 0.0
+                val fly = entity.getAttribute(Attribute.FLYING_SPEED)
+                fly?.baseValue = fly?.defaultValue ?: fly?.baseValue ?: 0.0
+                count++
+            }
+        }
+
+        player.sendMessage(Component.text("ペットの移動速度をデフォルトに戻しました: $count 体", GREEN))
     }
 }

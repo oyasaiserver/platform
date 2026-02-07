@@ -2,9 +2,9 @@ package me.marzipan.OyasaiPets.services
 
 import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
+import me.marzipan.OyasaiPets.domain.PetSpec
 import me.marzipan.OyasaiPets.domain.VariantHandler
 import me.marzipan.OyasaiPets.systems.EconomySystem
-import me.marzipan.OyasaiPets.systems.PetSpawnSystem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -24,7 +24,8 @@ import org.bukkit.scheduler.BukkitRunnable
 class PetReviveService(
     private val plugin: JavaPlugin,
     private val economySystem: EconomySystem,
-    private val petSpawnSystem: PetSpawnSystem,
+    private val countActivePets: (Player) -> Int,
+    private val setupPetEntity: (LivingEntity, PetSpec, Player) -> Unit,
     private val interactionService: PetInteractionService
 ) {
 
@@ -51,7 +52,7 @@ class PetReviveService(
         }
 
         // ペット数制限チェック
-        if (petSpawnSystem.countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
+        if (countActivePets(player) >= BigWolfConfig.MAX_PET_COUNT) {
             player.sendMessage(Component.text("ペットは同時に${BigWolfConfig.MAX_PET_COUNT}匹までしか召喚できません！", RED))
             return
         }
@@ -66,7 +67,7 @@ class PetReviveService(
         val type = runCatching { EntityType.valueOf(petData.type) }.getOrNull() ?: EntityType.WOLF
         val spec = PetRegistry.get(type)
 
-        val safeGround = SpawnUtils.findSafeSpawnLocation(player.location.clone())
+        val safeGround = SpawnUtils.findSafeGroundLocation(player.location.clone())
         if (safeGround == null) {
             player.sendMessage(Component.text("この場所ではペットを復活できません（足場と空間が必要です）。", RED))
             return
@@ -81,7 +82,7 @@ class PetReviveService(
             return
         }
 
-        petSpawnSystem.setupPetEntity(entity, spec, player)
+        setupPetEntity(entity, spec, player)
 
         // データ復元
         entity.ownerId = player.uniqueId.toString()

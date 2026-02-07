@@ -53,6 +53,12 @@ class PlayerActionListener(
                 fetchSystem.handleThrowToy(player, item, toySpec)
                 return
             }
+
+            if (toySpec != null && toySpec.toyType == ToyType.BALLOON_JUMP) {
+                event.isCancelled = true
+                fetchSystem.handleBalloonJump(player, item, toySpec)
+                return
+            }
         }
 
         if ((event.action == Action.RIGHT_CLICK_BLOCK || event.action == Action.RIGHT_CLICK_AIR) &&
