@@ -2,14 +2,12 @@ package me.marzipan.OyasaiPets.systems
 
 import me.marzipan.OyasaiPets.BigWolfConfig
 import me.marzipan.OyasaiPets.BigWolfKeys
-import me.marzipan.OyasaiPets.domain.PetRegistry
+import me.marzipan.OyasaiPets.SpawnUtils
 import me.marzipan.OyasaiPets.domain.ShopContext
 import me.marzipan.OyasaiPets.domain.VariantHandler
-import me.marzipan.OyasaiPets.SpawnUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -64,7 +62,6 @@ class ShopSystem {
         }
 
         // カスタム名
-        val spec = PetRegistry.get(type)
         val label = if (variant != null) "${type.name} ($variant)" else type.name
         ent.customName(Component.text("★ $label - ${cost}pt", GOLD))
         ent.isCustomNameVisible = true
@@ -96,6 +93,7 @@ class ShopSystem {
     /**
      * ワールド内のすべてのショップMOBを削除
      */
+    @Suppress("unused")
     fun removeAllShopMobs(admin: Player): Int {
         var count = 0
         for (world in Bukkit.getWorlds()) {

@@ -162,6 +162,7 @@ fun LivingEntity.isAtypical(): Boolean = temperament == "atypical"
 fun LivingEntity.isPet(): Boolean = petId != null && ownerId != null
 
 /** 指定されたプレイヤーがこのペットの飼い主かどうかを判定 */
+@Suppress("unused")
 fun LivingEntity.isOwnedBy(playerId: String): Boolean = ownerId == playerId
 
 fun String.containsDefaultPetMarker(): Boolean =
@@ -171,6 +172,7 @@ fun String.startsWithDefaultPetName(playerName: String): Boolean =
     this.startsWith("${playerName}'s Big ") || this.startsWith("${playerName}の大")
 
 /** PCDのマイグレーション - 古いバージョンのデータを最新に更新 */
+@Suppress("unused")
 fun LivingEntity.migratePcdIfNeeded() {
   val version = pcdVersion
   if (version < BigWolfKeys.CURRENT_PCD_VERSION) {
@@ -238,7 +240,7 @@ object SpawnUtils {
     val world = base.world ?: return null
     val loc = base.clone()
     if (!ensureAirColumn(world, loc)) {
-      for (i in 1..MAX_CLEARANCE_SEARCH) {
+      for (_i in 1..MAX_CLEARANCE_SEARCH) {
         loc.y += 1.0
         if (ensureAirColumn(world, loc)) break
       }

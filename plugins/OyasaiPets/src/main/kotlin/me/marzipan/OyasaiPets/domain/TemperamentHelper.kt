@@ -70,6 +70,7 @@ object TemperamentHelper {
     /**
      * 性質に応じた親密度上昇倍率を取得
      */
+    @Suppress("unused")
     fun getAffectionMultiplier(temperament: String): Double {
         return if (temperament == ATYPICAL) {
             BigWolfConfig.atypicalAffectionBonus

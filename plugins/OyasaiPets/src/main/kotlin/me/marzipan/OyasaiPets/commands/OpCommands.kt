@@ -225,6 +225,7 @@ class OpCommands(
     /**
      * バージョン表示コマンド
      */
+    @Suppress("DEPRECATION")
     fun handleVersion(player: Player) {
         val version = plugin.description.version
         player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
@@ -267,10 +268,12 @@ class OpCommands(
         for (world in Bukkit.getWorlds()) {
             for (entity in world.livingEntities) {
                 if (!entity.isPet()) continue
-                val move = entity.getAttribute(Attribute.MOVEMENT_SPEED)
-                move?.baseValue = move?.defaultValue ?: move?.baseValue ?: 0.0
-                val fly = entity.getAttribute(Attribute.FLYING_SPEED)
-                fly?.baseValue = fly?.defaultValue ?: fly?.baseValue ?: 0.0
+                entity.getAttribute(Attribute.MOVEMENT_SPEED)?.let { move ->
+                    move.baseValue = move.defaultValue
+                }
+                entity.getAttribute(Attribute.FLYING_SPEED)?.let { fly ->
+                    fly.baseValue = fly.defaultValue
+                }
                 count++
             }
         }

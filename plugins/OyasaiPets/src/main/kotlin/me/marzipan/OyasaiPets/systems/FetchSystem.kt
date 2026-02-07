@@ -133,7 +133,6 @@ class FetchSystem(
             var phase = 0
             var ticks = 0
             val timeoutTicks = 200  // 10秒（200tick）でタイムアウト
-            val runSpeed = 0.35
 
             override fun run() {
                 if (!entity.isValid || entity.isDead || !player.isOnline) {

@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin
  * ペットとプレイヤーの相互作用を管理するサービス
  * スキル、パーティクル、餌やり、ブラシ、おやつなど
  */
-class PetInteractionService(private val plugin: JavaPlugin) {
+class PetInteractionService(@Suppress("unused") private val plugin: JavaPlugin) {
 
 
     private val brushCooldowns = mutableMapOf<java.util.UUID, Long>()

@@ -4,10 +4,7 @@ import me.marzipan.OyasaiPets.*
 import me.marzipan.OyasaiPets.domain.PetRegistry
 import me.marzipan.OyasaiPets.domain.ToyType
 import me.marzipan.OyasaiPets.systems.FetchSystem
-import me.marzipan.OyasaiPets.systems.PetSpawnSystem
 import me.marzipan.OyasaiPets.systems.SkillSystem
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor.*
 import org.bukkit.Location
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.LivingEntity
@@ -29,9 +26,9 @@ import java.util.UUID
  * - onPlayerSkillTrigger: Left-click to activate pet skills
  */
 class PlayerActionListener(
-    private val plugin: BigWolfPlugin,
+    @Suppress("unused") private val plugin: BigWolfPlugin,
     private val fetchSystem: FetchSystem,
-    private val petSpawnSystem: PetSpawnSystem,
+    @Suppress("unused") private val petSpawnSystem: me.marzipan.OyasaiPets.systems.PetSpawnSystem,
     private val skillSystem: SkillSystem,
     private val dropCooldowns: MutableMap<UUID, Long>,
     private val mountCooldowns: MutableMap<UUID, Long>,
@@ -68,7 +65,7 @@ class PlayerActionListener(
                 event.isCancelled = true
                 val clicked = event.clickedBlock
                 val spawnLoc =
-                    if (clicked != null && event.blockFace != null) {
+                    if (clicked != null) {
                         when (event.blockFace) {
                             BlockFace.UP -> clicked.location.add(0.5, 1.0, 0.5)
                             BlockFace.DOWN -> clicked.location.add(0.5, -1.0, 0.5)
