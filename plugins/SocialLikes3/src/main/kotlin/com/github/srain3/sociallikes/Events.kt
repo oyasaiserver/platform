@@ -590,5 +590,8 @@ object Events : Listener {
       )
     }
     placedState.update(true)
+    
+    e.player.sendMessage(Tools.socialLikesLOGO + "&eSLTP看板を設置しました！".color())
+    e.player.sendMessage(Tools.socialLikesLOGO + "&e看板を見ながら /slsignbreak で破壊＆再取得できます。".color())
   }
 }
