@@ -61,6 +61,7 @@ const development: RegistryId[] = local.concat(
   "ezedits",
   "tokenmanager",
   "dynamicprofile",
+  "entitypose",
   "oyasaiadmintools",
   "oyasaiutilities",
   "painttools",

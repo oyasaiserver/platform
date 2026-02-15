@@ -124,6 +124,10 @@ export const registry = {
     type: "local",
     path: toGradleBuildPath("DynamicProfile"),
   },
+  entitypose: {
+    type: "local",
+    path: toGradleBuildPath("EntityPose"),
+  },
   oyasaiadmintools: {
     type: "local",
     path: toGradleBuildPath("OyasaiAdminTools"),
