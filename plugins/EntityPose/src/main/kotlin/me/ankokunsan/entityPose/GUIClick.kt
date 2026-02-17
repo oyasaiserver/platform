@@ -55,13 +55,11 @@ class GUIClick : Listener {
         }
       }
       2 -> {
-        if (target is ArmorStand)
-          target.setBasePlate(!target.hasBasePlate())
-        }
+        if (target is ArmorStand) target.setBasePlate(!target.hasBasePlate())
+      }
 
       3 -> {
-        if (target is ArmorStand)
-          target.isInvisible = !target.isInvisible
+        if (target is ArmorStand) target.isInvisible = !target.isInvisible
       }
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
