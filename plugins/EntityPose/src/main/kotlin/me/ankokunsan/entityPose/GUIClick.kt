@@ -46,6 +46,7 @@ class GUIClick : Listener {
           target.addScoreboardTag("custom_invincible")
         }
       }
+
       1 -> {
         if (target is Tameable) {
           target.isTamed = !target.isTamed
@@ -56,7 +57,10 @@ class GUIClick : Listener {
       2 -> {
         if (target is ArmorStand) target.setBasePlate(!target.hasBasePlate())
       }
-      else -> return
+
+      3 -> {
+        if (target is ArmorStand) target.isInvisible = !target.isInvisible
+      }
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
     // 再描画の際も、今見つけたtargetを渡す

@@ -40,8 +40,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
     } else {
       val loc = target.location
       val yaw = (loc.yaw % 360 + 360) % 360
-      val gravity = if (target.hasGravity()) "§aあり" else "§cなし"
-      val invincible = if (target.scoreboardTags.contains("custom_invincible")) "§aあり" else "§cなし"
+      val invincible = if (target.scoreboardTags.contains("custom_invincible")) "§aON" else "§cOFF"
 
       if (target is ArmorStand) {
         val head = target.headPose
@@ -50,7 +49,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
         val rightArm = target.rightArmPose
         val leftLeg = target.leftLegPose
         val rightLeg = target.rightLegPose
-        val basePlate = if (target.hasBasePlate()) "§aあり" else "§cなし"
+        val gravity = if (target.hasGravity()) "§aON" else "§cOFF"
+        val invisible = if (target.isInvisible) "§aON" else "§cOFF"
 
         sender.sendMessage("§6---[EntityPose]§bArmorStandの情報§6---")
         sender.sendMessage("頭: §e${formatDeg1(head)}")
@@ -63,8 +63,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
         sender.sendMessage(
             "座標: §eX:${formatLoc(loc.x)} Y:${formatLoc(loc.y)} Z:${formatLoc(loc.z)}")
         sender.sendMessage("ダメージ無効: $invincible")
-        sender.sendMessage("底のプレート: $basePlate")
         sender.sendMessage("重力: $gravity")
+        sender.sendMessage("透明: $invisible")
       } else {
         val pitch = loc.pitch
         sender.sendMessage("§6---[EntityPose]§b${target.type.name} の情報§6---")
@@ -73,7 +73,6 @@ class Entityinfo : CommandExecutor, TabCompleter {
         sender.sendMessage(
             "座標: §eX:${formatLoc(loc.x)} Y:${formatLoc(loc.y)} Z:${formatLoc(loc.z)}")
         sender.sendMessage("ダメージ無効: $invincible")
-        sender.sendMessage("重力: $gravity")
       }
       return true
     }
@@ -85,7 +84,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
     val damageItem =
         ItemStack(Material.DIAMOND_SWORD).apply {
           val meta = itemMeta ?: return@apply
-          val status = if (target.scoreboardTags.contains("custom_invincible")) "§aあり" else "§cなし"
+          val status = if (target.scoreboardTags.contains("custom_invincible")) "§aON" else "§cOFF"
           meta.setDisplayName("§fダメージ無効: $status")
           itemMeta = meta
         }
@@ -93,7 +92,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
       val tameItem =
           ItemStack(Material.BONE).apply {
             val meta = itemMeta ?: return@apply
-            val status = if (target.isTamed) "§a懐いている" else "§c野生"
+            val status = if (target.isTamed) "§aON" else "§cOFF"
             meta.setDisplayName("§f懐き状態: $status")
             itemMeta = meta
           }
@@ -102,7 +101,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
       val baseItem =
           ItemStack(Material.SMOOTH_STONE_SLAB).apply {
             val meta = itemMeta ?: return@apply
-            val status = if (target.hasBasePlate()) "§aある" else "§cない"
+            val status = if (target.hasBasePlate()) "§aON" else "§cOFF"
             meta.setDisplayName("§f底のプレート表示: $status")
             itemMeta = meta
           }
@@ -113,8 +112,16 @@ class Entityinfo : CommandExecutor, TabCompleter {
             meta.setDisplayName("§f重力: $status")
             itemMeta = meta
           }
+      val invisibleItem =
+          ItemStack(Material.POTION).apply {
+            val meta = itemMeta ?: return@apply
+            val status = if (target.isInvisible) "§aON" else "§cOFF"
+            meta.setDisplayName("§f透明: $status")
+            itemMeta = meta
+          }
       invs.setItem(1, gravityItem)
       invs.setItem(2, baseItem)
+      invs.setItem(3, invisibleItem)
     }
     invs.setItem(0, damageItem)
 

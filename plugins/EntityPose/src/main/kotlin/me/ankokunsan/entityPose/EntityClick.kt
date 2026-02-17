@@ -726,11 +726,11 @@ class EntityClick : Listener {
           actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
         }
         EntiPart.Y -> {
-          entity.teleport(entity.location.add(0.0, 0.0, move1))
+          entity.teleport(entity.location.add(0.0, move1, 0.0))
           actionBar(player, "§aY座標変更中: §f${formatLoc(entity.location.y)}")
         }
         EntiPart.Z -> {
-          entity.teleport(entity.location.add(move1, 0.0, 0.0))
+          entity.teleport(entity.location.add(0.0, 0.0, move1))
           actionBar(player, "§aZ座標変更中: §f${formatLoc(entity.location.z)}")
         }
         EntiPart.HAN -> {
@@ -770,7 +770,7 @@ class EntityClick : Listener {
 
   @EventHandler
   fun onStepClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3座標の動く量選択") return
+    if (event.view.title != "§3座標の動かす量選択") return
     event.isCancelled = true
 
     val player = event.whoClicked as? Player ?: return
