@@ -118,7 +118,7 @@ object ChooseGUi {
   }
 
   fun openZahyoGUI(player: Player) {
-    val inv = Bukkit.createInventory(null, 9, "§3座標の動く量選択")
+    val inv = Bukkit.createInventory(null, 9, "§3座標の動かす量選択")
     val zahyos =
         listOf(
             "§b0.1マスずつ" to 0.1, // Double型にする

@@ -21,7 +21,7 @@ enum class StandPart(val display: String) {
   RIGHT_LEG_Y("右足_Y軸側"),
   RIGHT_LEG_Z("右足_Z軸側"),
   ALL("全体"),
-  ZAHYO("座標変更"),
+  ZAHYO("座標の動かす量を変更"),
   X("X座標"),
   Y("Y座標"),
   Z("Z座標");
