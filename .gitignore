@@ -416,3 +416,9 @@ local
 
 # nix
 result
+result-*
+
+# Gradle is provided via devshell
+gradlew
+gradlew.bat
+gradle/wrapper
