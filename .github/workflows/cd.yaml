@@ -66,10 +66,3 @@ jobs:
           npm run synth
           npm run deploy
         working-directory: packages/cdktf
-  actions-timeline:
-    needs:
-      - envs
-      - cdktf
-    runs-on: ubuntu-latest
-    steps:
-      - uses: kesin11/actions-timeline@v2
