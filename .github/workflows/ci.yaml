@@ -69,14 +69,3 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
       - run: nix run .#oyasai-push-nix-images
-
-  actions-timeline:
-    needs:
-      - nocommit
-      - nix-flake-check
-      - nix-flake-health
-      - nix-devshell
-      - push-to-ghcr
-    runs-on: ubuntu-latest
-    steps:
-      - uses: kesin11/actions-timeline@541d5f48d6d50ad3302eaaff763214bf407ba3c0
