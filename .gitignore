@@ -416,3 +416,7 @@ local
 
 # nix
 result
+
+# OyasaiPets backup files
+plugins/OyasaiPets/backup/
+
