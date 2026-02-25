@@ -44,24 +44,6 @@ jobs:
         with:
           name: oyasaiserver
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      # FIXME: super ugly, non-nix deployment. Fix my nixifying cdktf (or switching to terranix)
-      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
-      - name: Build plugins
-        run: |
-          gradle build --parallel
-      - name: Download plugins deps
-        run: |
-          npm ci
-        working-directory: packages/oyasai-plugin-registry
-      - name: Download cdktf deps
-        run: |
-          npm ci
-        working-directory: packages/cdktf
-      - name: Download plugins
-        run: |
-          npm ci
-          npm run download-plugins
-        working-directory: packages/minecraft-main
       - uses: infisical/secrets-action@v1.0.15
         with:
           project-slug: "platform"
@@ -70,6 +52,6 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
-          npm run synth
-          npm run deploy
+          # NOMERGE
+          nix run .#oyasai-cdktf -- synth
         working-directory: packages/cdktf

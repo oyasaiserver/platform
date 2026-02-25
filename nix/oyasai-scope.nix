@@ -43,7 +43,14 @@ lib.makeScope pkgs.newScope (
   in
   {
     inherit inputs;
-    inherit (pkgs) terraform;
+
+    terraform = pkgs.terraform.withPlugins (
+      _: with (pkgs.terraform-providers-bin.providers); [
+        cloudflare.cloudflare
+        kreuzwerker.docker
+        integrations.github
+      ]
+    );
     nodejs = pkgs.nodejs_24;
     jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
     jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;

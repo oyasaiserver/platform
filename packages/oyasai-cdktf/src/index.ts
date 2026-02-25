@@ -1,3 +1,4 @@
+#!/usr/bin/env node --enable-source-maps
 import { App } from "cdktf";
 import { createTerraformSensitiveSecrets } from "./secrets.ts";
 import { CloudflareStack } from "./stacks/cloudflare-stack.ts";
