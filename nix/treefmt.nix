@@ -1,6 +1,6 @@
-{ flake-parts-lib, ... }:
+{ ... }:
 {
-  options.perSystem = flake-parts-lib.mkPerSystemOption (
+  perSystem =
     { ... }:
     {
       treefmt.programs = {
@@ -51,6 +51,5 @@
         };
         # keep-sorted end
       };
-    }
-  );
+    };
 }
