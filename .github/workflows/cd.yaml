@@ -36,7 +36,11 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd
-      - uses: determinatesystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39
+      - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1
+        with:
+          name: oyasaiserver
+          signingKey: "${{ secrets.CACHIX_SIGNING_KEY }}"
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       # FIXME: super ugly, non-nix deployment. Fix my nixifying cdktf (or switching to terranix)
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
