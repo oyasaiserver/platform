@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   nocommit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: nobssoftware/nocommit@5c3cf9519fe40b80b0954d254085b67b532a5dc3
