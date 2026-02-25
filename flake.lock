@@ -211,6 +211,26 @@
         "type": "github"
       }
     },
+    "nixpkgs-terraform-providers-bin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775265695,
+        "narHash": "sha256-NF0IA0sCz/Zxp/x6SnZtrAgTeFgHeGphO64lhOXl3cU=",
+        "owner": "nix-community",
+        "repo": "nixpkgs-terraform-providers-bin",
+        "rev": "f2ee40d5c2e9764cd69c575158bc2273d54d55c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs-terraform-providers-bin",
+        "type": "github"
+      }
+    },
     "package-lock2nix": {
       "inputs": {
         "flake-parts": [
@@ -249,6 +269,7 @@
         "gradle2nix": "gradle2nix",
         "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-terraform-providers-bin": "nixpkgs-terraform-providers-bin",
         "package-lock2nix": "package-lock2nix",
         "systems": "systems_2",
         "tools": "tools",

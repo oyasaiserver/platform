@@ -1,11 +1,10 @@
 import { Container } from "@cdktf/provider-docker/lib/container/index.js";
-import { Image } from "@cdktf/provider-docker/lib/image/index.js";
 import { Network } from "@cdktf/provider-docker/lib/network/index.js";
 import { DockerProvider } from "@cdktf/provider-docker/lib/provider/index.js";
 import type { Secrets } from "@oyasaiserver/secrets";
 import { Construct } from "constructs";
 import { join } from "node:path";
-import { directory, hashPaths } from "../fs.ts";
+import { directory } from "../fs.ts";
 import { envs, ports } from "../object.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
@@ -35,28 +34,11 @@ export class DockerStack extends OyasaiTerraformStack {
           },
     );
 
-    const minecraftMainPath = join(directory.root, "packages/minecraft-main");
+    const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
-      mariadb: new Image(this, this.envAwareId("mariadb-image"), {
-        name: "mariadb:10.4.28",
-      }),
-      minecraftMain: new Image(this, this.envAwareId("minecraft-main-image"), {
-        name: `minecraft-main-image:${hashPaths(
-          ["plugins", "Dockerfile", "entrypoint.sh"].map((it) =>
-            join(minecraftMainPath, it),
-          ),
-        )}`,
-        buildAttribute: {
-          context: minecraftMainPath,
-        },
-      }),
-      minecraftBackup: new Image(
-        this,
-        this.envAwareId("minecraft-backup-image"),
-        {
-          name: "itzg/mc-backup:latest",
-        },
-      ),
+      mariadb: imageIds.mariadb,
+      minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftBackup: imageIds["mc-backup"],
     } as const;
 
     const network = new Network(this, this.envAwareId("network"), {

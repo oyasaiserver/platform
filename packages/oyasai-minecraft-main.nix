@@ -11,16 +11,69 @@ let
     name = "oyasai-minecraft-main";
     version = "1.21.8";
 
-    # TODO: migrate all plugins once moved to production
     plugins = with (oyasai-plugin-registry.forVersion version); [
+      advancedban
+      arceon
+      bkcommonlib
+      bluemap
+      chestcommands
+      coreprotect
+      crackshotguns
+      decentholograms
+      discordsrv
+      dynamicprofile
       essentialsx
+      essentialsxchat
+      essentialsxspawn
+      ezedits
+      fastasyncvoxelsniper
       fastasyncworldedit
+      floodgate
+      geyser
+      gsit
+      imageonmap
+      inventoryshop
+      joincommands
       luckperms
+      lunachat
+      lwc
+      minepacks
+      multiversecore
+      multiverseprotals
+      mycommand
+      mypet
+      nuvotifier
+      openinv
+      oyasaiadmintools
+      oyasaipets
+      oyasaiutilities
+      painttools
+      particlehats
+      placeholderapi
       plugmanx
       protocollib
+      pvparena
+      signshop
+      simpleelevator
+      skinsrestorer
+      skript
+      slotmachine
+      sociallikes3
+      socialvotes
+      tab
+      terra
+      tntruneloaded
+      tokenmanager
+      tpswitch
       vault
-      nuvotifier
+      veinminer
+      venturechat
       vertex
+      viaversion
+      worldborder
+      worldeditsui
+      worldguard
+      zvoteparty
     ];
 
     # TODO: world container config
@@ -28,7 +81,7 @@ let
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {
         inherit name;
-        config.Cmd = [ "${lib.getExe final}" ];
+        config.Cmd = [ (lib.getExe final) ];
       };
     };
   };
