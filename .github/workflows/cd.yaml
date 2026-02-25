@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+      # NOMERGE
+      # - build/nixify-cdktf
   workflow_dispatch:
     inputs:
       environment:
@@ -14,6 +16,10 @@ on:
           - production
           - development
 jobs:
+  push-to-ghcr:
+    uses: ./.github/workflows/push-to-ghcr.yaml
+    secrets: inherit
+
   envs:
     runs-on: ubuntu-latest
     outputs:
@@ -29,6 +35,7 @@ jobs:
   cdktf:
     needs:
       - envs
+      - push-to-ghcr
     runs-on: ubuntu-latest
     environment: ${{ needs.envs.outputs.environment }}
     env:
@@ -46,36 +53,13 @@ jobs:
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
+          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
           sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
       - name: Setup Nix S3 cache
         uses: ./packages/nix-s3-cache-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
           signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
-      # FIXME: super ugly, non-nix deployment. Fix my nixifying cdktf (or switching to terranix)
-      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
-      - name: Build plugins
-        run: |
-          gradle build --parallel
-      - name: Download plugins deps
-        run: |
-          npm ci
-        working-directory: packages/oyasai-plugin-registry
-      - name: Build cdktf providers
-        run: |
-          npm ci
-          npm run build
-        working-directory: packages/oyasai-cdktf-providers
-      - name: Download cdktf deps
-        run: |
-          npm ci
-        working-directory: packages/cdktf
-      - name: Download plugins
-        run: |
-          npm ci
-          npm run download-plugins
-        working-directory: packages/minecraft-main
       - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
         with:
           project-slug: "platform"
@@ -84,6 +68,5 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
-          npm run synth
-          npm run deploy
+          nix run .#oyasai-cdktf -- deploy '*' --auto-approve
         working-directory: packages/cdktf

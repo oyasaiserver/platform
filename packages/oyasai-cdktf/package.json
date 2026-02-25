@@ -1,21 +1,18 @@
 {
-  "name": "@oyasaiserver/cdktf",
+  "name": "oyasai-cdktf",
   "type": "module",
   "exports": {
     "./*": "./src/*.ts"
   },
+  "bin": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "synth": "cdktf synth",
-    "deploy": "cdktf deploy '*' --auto-approve",
-    "deploy:cloudflare": "cdktf deploy 'cloudflare' --auto-approve",
     "test:integration": "node --test"
   },
   "dependencies": {
     "@oyasaiserver/secrets": "file:../secrets",
     "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",
     "cdktf": "0.21.0",
-    "cdktf-cli": "0.21.0",
     "constructs": "10.5.1"
   },
   "peerDependencies": {

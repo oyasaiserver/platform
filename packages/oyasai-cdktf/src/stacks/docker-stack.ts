@@ -5,15 +5,11 @@ import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import type { Secrets } from "@oyasaiserver/secrets";
 import { Construct } from "constructs";
 import { join } from "node:path";
-import { directory, hashPaths } from "../fs.ts";
+import { directory } from "../fs.ts";
 import { envs, ports } from "../object.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export class DockerStack extends OyasaiTerraformStack {
-  // TODO: have a common place with minecraft-main, probably thru
-  // nix + terranix + envvar
-  public static readonly minecraftVersion = "1.21.8";
-
   private workdir = join(
     this.environment === "local" ? directory.root : "/opt/platform",
     this.environment,
@@ -35,28 +31,11 @@ export class DockerStack extends OyasaiTerraformStack {
           },
     );
 
-    const minecraftMainPath = join(directory.root, "packages/minecraft-main");
+    const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
-      mariadb: new Image(this, this.envAwareId("mariadb-image"), {
-        name: "mariadb:10.4.28",
-      }),
-      minecraftMain: new Image(this, this.envAwareId("minecraft-main-image"), {
-        name: `minecraft-main-image:${hashPaths(
-          ["plugins", "Dockerfile", "entrypoint.sh"].map((it) =>
-            join(minecraftMainPath, it),
-          ),
-        )}`,
-        buildAttribute: {
-          context: minecraftMainPath,
-        },
-      }),
-      minecraftBackup: new Image(
-        this,
-        this.envAwareId("minecraft-backup-image"),
-        {
-          name: "itzg/mc-backup:latest",
-        },
-      ),
+      mariadb: imageIds.mariadb,
+      minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftBackup: imageIds["mc-backup"],
     } as const;
 
     const network = new Network(this, this.envAwareId("network"), {
@@ -67,7 +46,7 @@ export class DockerStack extends OyasaiTerraformStack {
       this,
       this.envAwareId("mariadb-container"),
       {
-        image: images.mariadb.imageId,
+        image: images.mariadb,
         name: "mariadb",
         restart: "unless-stopped",
         env: envs({
@@ -91,7 +70,7 @@ export class DockerStack extends OyasaiTerraformStack {
       this,
       this.envAwareId("minecraft-main-container"),
       {
-        image: images.minecraftMain.imageId,
+        image: images.minecraftMain,
         name: "minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
@@ -105,19 +84,11 @@ export class DockerStack extends OyasaiTerraformStack {
           udp: [19132],
         }),
         env: envs({
-          EULA: true,
-          TYPE: "PURPUR",
-          VERSION: DockerStack.minecraftVersion,
-          USE_MEOWICE_FLAGS: this.environment !== "local",
-          ENABLE_ROLLING_LOGS: true,
-          LOG_TIMESTAMP: true,
-          MOTD: `§l§r                 §b§lOyasai§f§lServer§7 [v${DockerStack.minecraftVersion}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！`,
           MEMORY: this.envAwareConfig({
             production: "28G",
             development: "12G",
             local: "5G",
           }),
-          ICON: "https://avatars.githubusercontent.com/oyasaiserver",
           RCON_PASSWORD: this.secrets.RCON_PASSWORD,
         }),
         healthcheck: {
@@ -149,7 +120,7 @@ export class DockerStack extends OyasaiTerraformStack {
       new Container(this, this.envAwareId("minecraft-backup-container"), {
         name: "minecraft-main-backup",
         dependsOn: [minecraftMainContainer],
-        image: images.minecraftBackup.imageId,
+        image: images.minecraftBackup,
         networksAdvanced: [network],
         restart: "unless-stopped",
         env: envs({
@@ -192,10 +163,6 @@ export class DockerStack extends OyasaiTerraformStack {
           DB_DEBUG: true,
         }),
       });
-    }
-
-    if (this.environment === "development") {
-      // TODO restore mc data from backup
     }
   }
 }
