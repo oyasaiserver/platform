@@ -1,3 +1,14 @@
-{ package-lock2nix, cdktf-cli }:
+{
+  package-lock2nix,
+  cdktf-cli,
+  nodejs,
+  infisical,
+}:
 
-package-lock2nix.mkNpmModule { src = ./.; }
+package-lock2nix.mkNpmModule {
+  src = ./.;
+  buildInputs = [
+    cdktf-cli
+    nodejs
+  ];
+}

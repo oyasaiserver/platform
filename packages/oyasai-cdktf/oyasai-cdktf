@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-exec cdktf "$@"
+exec infisical run -- cdktf "$@"
