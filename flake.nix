@@ -50,10 +50,10 @@
       systems = import systems;
       imports = [
         # keep-sorted start
-        ./nix/devshells.nix
-        ./nix/docker.nix
-        ./nix/oyasai-scope.nix
-        ./nix/treefmt.nix
+        ./nix/flake-parts/devshells.nix
+        ./nix/flake-parts/docker-images.nix
+        ./nix/flake-parts/oyasai-scope.nix
+        ./nix/flake-parts/treefmt.nix
         devshell.flakeModule
         flakeAllSystems
         treefmt-nix.flakeModule
