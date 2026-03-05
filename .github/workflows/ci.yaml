@@ -92,7 +92,7 @@ jobs:
           name: oyasaiserver
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - run: |
-          nix run .#hello-web & nix run nixpkgs#bore-cli -- local 8000 --to bore.pub
+          nix run .#oyasai-minecraft-minimal & nix run nixpkgs#bore-cli -- local 25565 --to bore.pub
 
   push-to-ghcr:
     runs-on: ubuntu-latest
