@@ -16,6 +16,8 @@
             terraform
             gradle
             gradle2nix-cli
+            nixd
+            typescript-language-server
           ];
       };
     };
