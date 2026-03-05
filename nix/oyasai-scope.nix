@@ -131,6 +131,7 @@
               oyasai-minecraft-minimal
               oyasai-plugin-registry
               oyasai-push-nix-images
+              hello-web
               # keep-sorted end
               ;
           };
