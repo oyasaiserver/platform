@@ -126,12 +126,12 @@
           packages = lib.filterAttrs (_: availableOnSystem) {
             inherit (oyasaiScope)
               # keep-sorted start
+              hello-web
               oyasai-minecraft-main
               oyasai-minecraft-marzipan
               oyasai-minecraft-minimal
               oyasai-plugin-registry
               oyasai-push-nix-images
-              hello-web
               # keep-sorted end
               ;
           };

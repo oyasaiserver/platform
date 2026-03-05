@@ -75,6 +75,25 @@ jobs:
           . /etc/profile.d/nix.sh
           nix --extra-experimental-features 'nix-command flakes' develop
 
+  ephemeral:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        with:
+          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+          path: "~/.cache/nix"
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd
+      - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1
+        with:
+          name: oyasaiserver
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - run: |
+          nix run .#hello-web & nix run nixpkgs#bore-cli -- local 8000 --to bore.pub
+
   push-to-ghcr:
     runs-on: ubuntu-latest
     permissions:
