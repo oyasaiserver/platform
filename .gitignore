@@ -422,3 +422,7 @@ result-*
 gradlew
 gradlew.bat
 gradle/wrapper
+
+# direnv
+.envrc
+.direnv
