@@ -15,6 +15,10 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
+    environment:
+      name: "pr-${{ github.event.pull_request.number }}"
+    # Keeping it low for now. But it's free so we can absolutely set it higher.
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
