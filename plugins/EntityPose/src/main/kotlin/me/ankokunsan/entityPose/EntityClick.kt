@@ -780,7 +780,7 @@ class EntityClick : Listener {
         item.itemMeta?.persistentDataContainer?.get(ZAHYO_KEY, PersistentDataType.DOUBLE) ?: return
     currentZah[targetEntity.uniqueId] = value1
 
-    player.sendMessage("§6[EntityPose] §aこのエンティティの移動刻みを ${value1}マス に設定しました。")
+    player.sendMessage("§6[EntityPose] §aこのエンティティの一回あたりに動かす座標を ${value1}マス に設定しました。")
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
 
     player.closeInventory()
