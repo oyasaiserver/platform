@@ -92,22 +92,24 @@ class Entityinfo : CommandExecutor, TabCompleter {
           meta.setDisplayName("§fダメージ無効: $status")
           itemMeta = meta
         }
-    val scaleItem1 = ItemStack(Material.POTION).apply { // LEGACYを消す
-      val meta = itemMeta as? PotionMeta?: return@apply
-      meta.color = Color.YELLOW
-      val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-      val showScale= String.format("%.1f",scale)
-      meta.setDisplayName("§fサイズ設定: $showScale")
-      itemMeta = meta
-    }
-    val scaleItem2 = ItemStack(Material.POTION).apply {
-      val meta = itemMeta as? PotionMeta?: return@apply
-      meta.color = Color.YELLOW
-      val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-      val showScale = String.format("%.1f",scale)
-      meta.setDisplayName("§fサイズ設定: $showScale")
-      itemMeta = meta
-    }
+    val scaleItem1 =
+        ItemStack(Material.POTION).apply { // LEGACYを消す
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+          val showScale = String.format("%.1f", scale)
+          meta.setDisplayName("§fサイズ設定: $showScale")
+          itemMeta = meta
+        }
+    val scaleItem2 =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+          val showScale = String.format("%.1f", scale)
+          meta.setDisplayName("§fサイズ設定: $showScale")
+          itemMeta = meta
+        }
     if (target is Tameable) {
       val tameItem =
           ItemStack(Material.BONE).apply {
@@ -144,8 +146,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
       invs.setItem(3, invisibleItem)
     }
     invs.setItem(0, damageItem)
-    invs.setItem(7,scaleItem1)
-    invs.setItem(8,scaleItem2)
+    invs.setItem(7, scaleItem1)
+    invs.setItem(8, scaleItem2)
 
     val filler = getFiller()
     for (i in 0 until invs.size) {

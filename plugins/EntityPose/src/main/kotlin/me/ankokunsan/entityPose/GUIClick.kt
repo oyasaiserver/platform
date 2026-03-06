@@ -1,5 +1,6 @@
 package me.ankokunsan.entityPose
 
+import kotlin.math.round
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
@@ -22,7 +23,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.persistence.PersistentDataType
-import kotlin.math.round
 
 class GUIClick : Listener {
   @EventHandler
@@ -68,7 +68,7 @@ class GUIClick : Listener {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
-        val newScale =(currentScale + 0.1).coerceAtMost(3.0)
+        val newScale = (currentScale + 0.1).coerceAtMost(3.0)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
@@ -76,7 +76,7 @@ class GUIClick : Listener {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
-        val newScale =(currentScale - 0.1).coerceAtLeast(0.5)
+        val newScale = (currentScale - 0.1).coerceAtLeast(0.5)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
