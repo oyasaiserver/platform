@@ -65,7 +65,11 @@
                 inherit (scopeSelf) gradle;
                 buildJdk = scopeSelf.jdk;
                 lockFile = ../gradle.lock;
-                gradleBuildFlags = [ "build" "-x" "detekt" ];
+                gradleBuildFlags = [
+                  "build"
+                  "-x"
+                  "detekt"
+                ];
                 installPhase = ''
                   runHook preInstall
 

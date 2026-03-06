@@ -30,6 +30,9 @@ subprojects {
     return@subprojects
   }
 
+  // CVE-2025-48924: commons-lang3 < 3.17.0 の脆弱性を解消するため推移的依存を強制アップグレード
+  configurations.all { resolutionStrategy.force("org.apache.commons:commons-lang3:3.17.0") }
+
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
   apply(plugin = "java-library")
@@ -41,9 +44,7 @@ subprojects {
     verbose.set(true)
     outputToConsole.set(true)
     ignoreFailures.set(true)
-    filter {
-      exclude("**/build/**")
-    }
+    filter { exclude("**/build/**") }
   }
 
   extensions.configure<DetektExtension>("detekt") {

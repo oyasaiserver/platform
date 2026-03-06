@@ -39,20 +39,6 @@
       "hash": "sha256-OTLSKNn2/N6iwZgC5ca6OZLwInC3qY82OoOki5Hi5Kc="
     }
   },
-  "com.beust:jcommander:1.82": {
-    "jcommander-1.82.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.jar",
-      "hash": "sha256-3urBV8jeaCKHjYXQx7yEZ6GcyEhNN3iPeATwOd3igLE="
-    },
-    "jcommander-1.82.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.module",
-      "hash": "sha256-k2oti84PhNoYUA9OEZSIuTEG26qDuEYv6Za80OHDixY="
-    },
-    "jcommander-1.82.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.pom",
-      "hash": "sha256-JGNEFwtRO4Acz4EiNNThMkoPbtKoHpCqYYkTtmucwXM="
-    }
-  },
   "com.codahale:common-pom:0.0.11": {
     "common-pom-0.0.11.pom": {
       "url": "https://repo.maven.apache.org/maven2/com/codahale/common-pom/0.0.11/common-pom-0.0.11.pom",
@@ -875,20 +861,6 @@
       "hash": "sha256-fk6LD0t8pgdSCyDS8eWN9Pk0ymNsseuoKJz/LylWv9g="
     }
   },
-  "io.github.davidburstrom.contester:contester-breakpoint:0.2.0": {
-    "contester-breakpoint-0.2.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/davidburstrom/contester/contester-breakpoint/0.2.0/contester-breakpoint-0.2.0.jar",
-      "hash": "sha256-Zyy+u11Fpys13YH9YSfhh0Ubtvt/ujUxW73y9Xz86DU="
-    },
-    "contester-breakpoint-0.2.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/davidburstrom/contester/contester-breakpoint/0.2.0/contester-breakpoint-0.2.0.module",
-      "hash": "sha256-JZPF2femBAbmrqzmBWP82SNxdTb90ngGQUKX6T1gn+U="
-    },
-    "contester-breakpoint-0.2.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/davidburstrom/contester/contester-breakpoint/0.2.0/contester-breakpoint-0.2.0.pom",
-      "hash": "sha256-vi0ixQGThmVimejxY0LGjFJkW3R/+4YZKQjRexb+wK4="
-    }
-  },
   "io.github.detekt.sarif4k:sarif4k:0.5.0": {
     "sarif4k-0.5.0.module": {
       "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k/0.5.0/sarif4k-0.5.0.module",
@@ -897,16 +869,6 @@
     "sarif4k-0.5.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k/0.5.0/sarif4k-0.5.0.pom",
       "hash": "sha256-MMgukyguwUte58jfdJRXGs0VlRapPpRoLgfDdDDteVk="
-    }
-  },
-  "io.github.detekt.sarif4k:sarif4k:0.4.0": {
-    "sarif4k-0.4.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k/0.4.0/sarif4k-0.4.0.module",
-      "hash": "sha256-8mGDXpCvxsaILCgosT0z7INdFq/9Bixma21UAJ9tfyw="
-    },
-    "sarif4k-0.4.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k/0.4.0/sarif4k-0.4.0.pom",
-      "hash": "sha256-ALzGVNsidrkid6/AU63z87xkCDkwKV/vYDZzcR2BuL0="
     }
   },
   "io.github.detekt.sarif4k:sarif4k-jvm:0.5.0": {
@@ -925,36 +887,6 @@
     "sarif4k-jvm-0.5.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k-jvm/0.5.0/sarif4k-jvm-0.5.0.pom",
       "hash": "sha256-uFnbSlHJkag3uMMPQsjkK96Xh2sVTH2LW4MFk+3F4RQ="
-    }
-  },
-  "io.github.detekt.sarif4k:sarif4k-jvm:0.4.0": {
-    "sarif4k-jvm-0.4.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k-jvm/0.4.0/sarif4k-jvm-0.4.0.jar",
-      "hash": "sha256-6tBBk4Mjs0M2E4z0Phh12K/5C15+lBHb7ePSAaMn8ac="
-    },
-    "sarif4k-jvm-0.4.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k-jvm/0.4.0/sarif4k-jvm-0.4.0.module",
-      "hash": "sha256-yYgjlnTytxSa8L/EYM1TWGrIsszHJTAISyBb4yoeMSc="
-    },
-    "sarif4k-jvm-0.4.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/detekt/sarif4k/sarif4k-jvm/0.4.0/sarif4k-jvm-0.4.0.pom",
-      "hash": "sha256-VFmBizTfoN9zmkAkbjScbNneV8PXONm5s+Q8z2HFVxY="
-    }
-  },
-  "io.github.java-diff-utils:java-diff-utils:4.12": {
-    "java-diff-utils-4.12.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.jar",
-      "hash": "sha256-mZCiA5d49rTMlHkBQcKGiGTqzuBiDGxFlFESGpAc1bU="
-    },
-    "java-diff-utils-4.12.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.pom",
-      "hash": "sha256-wm4JftyOxoBdExmBfSPU5JbMEBXMVdxSAhEtj2qRZfw="
-    }
-  },
-  "io.github.java-diff-utils:java-diff-utils-parent:4.12": {
-    "java-diff-utils-parent-4.12.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils-parent/4.12/java-diff-utils-parent-4.12.pom",
-      "hash": "sha256-2BHPnxGMwsrRMMlCetVcF01MCm8aAKwa4cm8vsXESxk="
     }
   },
   "io.github.oshai:kotlin-logging:5.1.0": {
@@ -985,48 +917,6 @@
       "hash": "sha256-xwR0qu+5LPNc7jqALap5LiBSOMg4AiyAUZ1VO2RP/74="
     }
   },
-  "io.gitlab.arturbosch.detekt:detekt-api:1.23.6": {
-    "detekt-api-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-api/1.23.6/detekt-api-1.23.6.jar",
-      "hash": "sha256-bob+0q4/cXDnVFNImx089QKCXWfEqXuBG0DP+eRN66M="
-    },
-    "detekt-api-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-api/1.23.6/detekt-api-1.23.6.module",
-      "hash": "sha256-RNfYv+ocijB0wJHpaS2G6I8XTvAzRSPn135mPFOj+pg="
-    },
-    "detekt-api-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-api/1.23.6/detekt-api-1.23.6.pom",
-      "hash": "sha256-FHKNRd2J9alDbv+JsCu/CMpr7QbjftY/D6aBoMz+CR4="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-cli:1.23.6": {
-    "detekt-cli-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-cli/1.23.6/detekt-cli-1.23.6.jar",
-      "hash": "sha256-oVrbDUi5oSMn5eTVukNT7vcshTFBvqgpUC2vaLg9emA="
-    },
-    "detekt-cli-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-cli/1.23.6/detekt-cli-1.23.6.module",
-      "hash": "sha256-VaBcOK4U2kWIRl/mC+/exL19+PUMGOkeSHqmkoNhtnw="
-    },
-    "detekt-cli-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-cli/1.23.6/detekt-cli-1.23.6.pom",
-      "hash": "sha256-8AcLjOY31nqVli3MBElwO+xEyu5kH2a1lyA/61KCSUg="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-core:1.23.6": {
-    "detekt-core-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-core/1.23.6/detekt-core-1.23.6.jar",
-      "hash": "sha256-kK7Me+R3b3Shj9gNdpqdLEDY+qhVWjyT9QaoO5hktXo="
-    },
-    "detekt-core-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-core/1.23.6/detekt-core-1.23.6.module",
-      "hash": "sha256-lJMZAHGjrAN8+K2R1V1Ch+kLXGuPLn5EflkTP+qqGDM="
-    },
-    "detekt-core-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-core/1.23.6/detekt-core-1.23.6.pom",
-      "hash": "sha256-qYnZYt1Cqa10bd7dvkeZnNqZIICaaWIbpmodl/jJ/zU="
-    }
-  },
   "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.6": {
     "detekt-gradle-plugin-1.23.6.jar": {
       "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/1.23.6/detekt-gradle-plugin-1.23.6.jar",
@@ -1039,286 +929,6 @@
     "detekt-gradle-plugin-1.23.6.pom": {
       "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/1.23.6/detekt-gradle-plugin-1.23.6.pom",
       "hash": "sha256-whvG+kALJZL1p4I0kFAgSyrNLPANVPLpc/UZi8Zz6+0="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-metrics:1.23.6": {
-    "detekt-metrics-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-metrics/1.23.6/detekt-metrics-1.23.6.jar",
-      "hash": "sha256-EtioJ4uNlyMWFpdhXneWL0ZwR+NShuf0iXAODqvFp2Q="
-    },
-    "detekt-metrics-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-metrics/1.23.6/detekt-metrics-1.23.6.module",
-      "hash": "sha256-bJGFnr4f83r4evbv4X0Tk9tbebD7JDiWCi7FlRP19yc="
-    },
-    "detekt-metrics-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-metrics/1.23.6/detekt-metrics-1.23.6.pom",
-      "hash": "sha256-/KwrZOe3n6cIwVDVZ3EUu2/u0udKCkn/wIejmnf4g9k="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-parser:1.23.6": {
-    "detekt-parser-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-parser/1.23.6/detekt-parser-1.23.6.jar",
-      "hash": "sha256-12bXoFbgjsIrLXWLJL5Kx1jiErnN9OGFFT02u1P23zg="
-    },
-    "detekt-parser-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-parser/1.23.6/detekt-parser-1.23.6.module",
-      "hash": "sha256-uil+OmLAXfH1HMPOEdFfF3CDqsjjaus9k4CAd/02u6Q="
-    },
-    "detekt-parser-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-parser/1.23.6/detekt-parser-1.23.6.pom",
-      "hash": "sha256-D2HEG8l3uZXFNcbUNjF6k/pb6jC7o+XPucm5G3b9Vec="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-psi-utils:1.23.6": {
-    "detekt-psi-utils-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-psi-utils/1.23.6/detekt-psi-utils-1.23.6.jar",
-      "hash": "sha256-jpjAAm2DMAgjuZZE9XDBlb5BV9WNgTdRtjs6JIOk9BQ="
-    },
-    "detekt-psi-utils-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-psi-utils/1.23.6/detekt-psi-utils-1.23.6.module",
-      "hash": "sha256-o8sTmj4OyhffXefAr+CXHtc9GYLjblknmTQ6BMqVI/A="
-    },
-    "detekt-psi-utils-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-psi-utils/1.23.6/detekt-psi-utils-1.23.6.pom",
-      "hash": "sha256-hBVA/KpgUDYzSkPrN41XyO4r/tnL0GmEUfCYu+bkBVw="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-report-html:1.23.6": {
-    "detekt-report-html-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-html/1.23.6/detekt-report-html-1.23.6.jar",
-      "hash": "sha256-Us8I3B1qpMMUASS+OrvgaUf1Xjf+wrOKU8BsR6CsnBo="
-    },
-    "detekt-report-html-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-html/1.23.6/detekt-report-html-1.23.6.module",
-      "hash": "sha256-vbXgqa1iGxE9SBt1vQvK3ZaxuXDghIkrOdOV7vYL1Qk="
-    },
-    "detekt-report-html-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-html/1.23.6/detekt-report-html-1.23.6.pom",
-      "hash": "sha256-9IQ0xQDu+FmSbwQFbbGUKNz6PzGTShWTG93TiqCPnPg="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-report-md:1.23.6": {
-    "detekt-report-md-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-md/1.23.6/detekt-report-md-1.23.6.jar",
-      "hash": "sha256-e18EfG0QMqrQsnzRFNFKqifMW+YO1wcFbKxu9NzEDnQ="
-    },
-    "detekt-report-md-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-md/1.23.6/detekt-report-md-1.23.6.module",
-      "hash": "sha256-gPUzBnifxuwZy4mwVRn8AnsBuLFaAiBDcW2b+XSaSQE="
-    },
-    "detekt-report-md-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-md/1.23.6/detekt-report-md-1.23.6.pom",
-      "hash": "sha256-FhrJ9xlKrsM4pKJ8wulypU/smwDEsB7yes8z3RVFUpw="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-report-sarif:1.23.6": {
-    "detekt-report-sarif-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-sarif/1.23.6/detekt-report-sarif-1.23.6.jar",
-      "hash": "sha256-357uIh7EYbHflOvkJhK7YCfKhBD0XXbu+azVBEmAQvA="
-    },
-    "detekt-report-sarif-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-sarif/1.23.6/detekt-report-sarif-1.23.6.module",
-      "hash": "sha256-5+lmjyBPnqpvhBFKNIGBJTBcxDeyrIW6H+kBBcWuvl0="
-    },
-    "detekt-report-sarif-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-sarif/1.23.6/detekt-report-sarif-1.23.6.pom",
-      "hash": "sha256-9WR3j2FkwioGYufEq2kX60neU8j8QtSPq488tmbPw9M="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-report-txt:1.23.6": {
-    "detekt-report-txt-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-txt/1.23.6/detekt-report-txt-1.23.6.jar",
-      "hash": "sha256-B3n3G8PjE35gR7BzDl613NzOXJvu2DpuRhQJIqutZUY="
-    },
-    "detekt-report-txt-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-txt/1.23.6/detekt-report-txt-1.23.6.module",
-      "hash": "sha256-FyBm4x0WZVeIBOg1T9PwoA2D1pFBzDSbklsrAyzU1J8="
-    },
-    "detekt-report-txt-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-txt/1.23.6/detekt-report-txt-1.23.6.pom",
-      "hash": "sha256-ia04zpc/kwSwkXAPcSmIaK7MyS6llCUSaQe3WXZ1XGY="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-report-xml:1.23.6": {
-    "detekt-report-xml-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-xml/1.23.6/detekt-report-xml-1.23.6.jar",
-      "hash": "sha256-AT92N6fciqeHgO2fA0WYebEJG53Y8xtiGD1yi26EoFQ="
-    },
-    "detekt-report-xml-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-xml/1.23.6/detekt-report-xml-1.23.6.module",
-      "hash": "sha256-lLinRdSs1AHYLpvqN2ICU3+S4F8eieO7K8ZZ4WXXUh0="
-    },
-    "detekt-report-xml-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-report-xml/1.23.6/detekt-report-xml-1.23.6.pom",
-      "hash": "sha256-RAl5c+1vJLq3EUe1tJZ0Ik5GzndnCM9pvH3yl2cXEyw="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules:1.23.6": {
-    "detekt-rules-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules/1.23.6/detekt-rules-1.23.6.jar",
-      "hash": "sha256-w3EmvImzl+ezvpmeWBf4KZXsE437tCJ4fFsZgCG/Kc0="
-    },
-    "detekt-rules-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules/1.23.6/detekt-rules-1.23.6.module",
-      "hash": "sha256-uLBVS+vllgqsVkajiZEX4ln0Lghb1nNPDFDHQG2y24I="
-    },
-    "detekt-rules-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules/1.23.6/detekt-rules-1.23.6.pom",
-      "hash": "sha256-Sxt/otgi4CTYWzsygGKHygw6xb4Bi6dwz7MmDMLK9W0="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-complexity:1.23.6": {
-    "detekt-rules-complexity-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-complexity/1.23.6/detekt-rules-complexity-1.23.6.jar",
-      "hash": "sha256-b9q7jeARxdzpTN9EKs0ua2DbXJqmdzZCj+4OtUo8IhI="
-    },
-    "detekt-rules-complexity-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-complexity/1.23.6/detekt-rules-complexity-1.23.6.module",
-      "hash": "sha256-1GrDIczmpK6DebDPOUe0looZkadzxOwJJs6JQqIajtY="
-    },
-    "detekt-rules-complexity-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-complexity/1.23.6/detekt-rules-complexity-1.23.6.pom",
-      "hash": "sha256-dI9sMQ9Sc4sX0UOGtE2qbQGcWUs492zn++Qu74JPhCI="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-coroutines:1.23.6": {
-    "detekt-rules-coroutines-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-coroutines/1.23.6/detekt-rules-coroutines-1.23.6.jar",
-      "hash": "sha256-477O5DBSE8sl5WqW5nnyfdqGHMl0NArRuLCUS4JD00E="
-    },
-    "detekt-rules-coroutines-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-coroutines/1.23.6/detekt-rules-coroutines-1.23.6.module",
-      "hash": "sha256-w9UtKsTotnPChOBFZ9z6g0FF/Ngn28ZdTyQV8+gBrcI="
-    },
-    "detekt-rules-coroutines-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-coroutines/1.23.6/detekt-rules-coroutines-1.23.6.pom",
-      "hash": "sha256-rORb0SGUPyaWsq1vps+tQdNBYAbzTHAsY6vZl6DfZ7U="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-documentation:1.23.6": {
-    "detekt-rules-documentation-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-documentation/1.23.6/detekt-rules-documentation-1.23.6.jar",
-      "hash": "sha256-AngXHWcrjAK01v2dsPoM99Rv9e5c1DhnRDxgHquAb5U="
-    },
-    "detekt-rules-documentation-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-documentation/1.23.6/detekt-rules-documentation-1.23.6.module",
-      "hash": "sha256-cAqAtKvq7IORxYR1sWpliLILPTDBB6BIdozKLCXFylw="
-    },
-    "detekt-rules-documentation-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-documentation/1.23.6/detekt-rules-documentation-1.23.6.pom",
-      "hash": "sha256-xXdUBqOz8UN5YyLepjDkZotZIY8YtVyQusloAVPnZXs="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-empty:1.23.6": {
-    "detekt-rules-empty-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-empty/1.23.6/detekt-rules-empty-1.23.6.jar",
-      "hash": "sha256-+Vhbu4CiGRx3JbxsI0ThX7U0WpohDa5+9ymr3BdOmK8="
-    },
-    "detekt-rules-empty-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-empty/1.23.6/detekt-rules-empty-1.23.6.module",
-      "hash": "sha256-+/sQH9oeb6nk1c7PM3/+3/0vCFvFwBUFfI3BbCS7ODo="
-    },
-    "detekt-rules-empty-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-empty/1.23.6/detekt-rules-empty-1.23.6.pom",
-      "hash": "sha256-+GJRNsbbx/9v+Vy7HfUrkQGDtYWnZplhGzmz9d/F9gc="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-errorprone:1.23.6": {
-    "detekt-rules-errorprone-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-errorprone/1.23.6/detekt-rules-errorprone-1.23.6.jar",
-      "hash": "sha256-8v3jZ6Q3pvFLof9kMcfhTX9uNCnn7XTTjAuTbKr0UrU="
-    },
-    "detekt-rules-errorprone-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-errorprone/1.23.6/detekt-rules-errorprone-1.23.6.module",
-      "hash": "sha256-ASXR7x1DSUdzv+kcnihvyORQIq0K73B5daQu/+Lwedw="
-    },
-    "detekt-rules-errorprone-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-errorprone/1.23.6/detekt-rules-errorprone-1.23.6.pom",
-      "hash": "sha256-WizkLpgpyUp2KNDvOfyFPpmpy6BZR1pwy19hGxR19EQ="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-exceptions:1.23.6": {
-    "detekt-rules-exceptions-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-exceptions/1.23.6/detekt-rules-exceptions-1.23.6.jar",
-      "hash": "sha256-agnolIRLOLYQsLvH64fsOZN63/4dlhcWWRKj7xW2chM="
-    },
-    "detekt-rules-exceptions-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-exceptions/1.23.6/detekt-rules-exceptions-1.23.6.module",
-      "hash": "sha256-z/gLSgAGH7M/Rpb65BSAgasgFCeZiw/5RndQ2IOVQ1I="
-    },
-    "detekt-rules-exceptions-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-exceptions/1.23.6/detekt-rules-exceptions-1.23.6.pom",
-      "hash": "sha256-I9IwTNiFQxu9yJFy3+CZaShgGaUnFjqQPFWrG9Z3Wxc="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-naming:1.23.6": {
-    "detekt-rules-naming-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-naming/1.23.6/detekt-rules-naming-1.23.6.jar",
-      "hash": "sha256-kIZVKdoRT+pzVNWvy8tK3dVPa5s4RpvsgGIbTqo4pqY="
-    },
-    "detekt-rules-naming-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-naming/1.23.6/detekt-rules-naming-1.23.6.module",
-      "hash": "sha256-uQrvvrNTtRYPA/6skqv9ModABYfG9ptFuH+AZpKaMnA="
-    },
-    "detekt-rules-naming-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-naming/1.23.6/detekt-rules-naming-1.23.6.pom",
-      "hash": "sha256-qgK2uRqGyUTPUfU1DIjyGwTKlZ7HiBpqJoXjqxTB564="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-performance:1.23.6": {
-    "detekt-rules-performance-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-performance/1.23.6/detekt-rules-performance-1.23.6.jar",
-      "hash": "sha256-9BGzLylFKmh47Z/gtASpKyKqnZHoYTOtZmFiK3xQdEo="
-    },
-    "detekt-rules-performance-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-performance/1.23.6/detekt-rules-performance-1.23.6.module",
-      "hash": "sha256-TeLwkXjXPmIOvS5F7JCETzyd4zcPAMk7VZrhM8uD2Es="
-    },
-    "detekt-rules-performance-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-performance/1.23.6/detekt-rules-performance-1.23.6.pom",
-      "hash": "sha256-RwMa2xUobZEyJ2JY0Q/wsFR1j+67iMZsXykdzqE1mjQ="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-rules-style:1.23.6": {
-    "detekt-rules-style-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-style/1.23.6/detekt-rules-style-1.23.6.jar",
-      "hash": "sha256-ePlA70hEdE2giAa7+FyayL0EO0PgHDM64XN4KnBPE3I="
-    },
-    "detekt-rules-style-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-style/1.23.6/detekt-rules-style-1.23.6.module",
-      "hash": "sha256-uq1SbjBVLfWyy6rpdCtiFEcbTriZApsmS4VVTKEVjxk="
-    },
-    "detekt-rules-style-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-rules-style/1.23.6/detekt-rules-style-1.23.6.pom",
-      "hash": "sha256-3JaQ8OQb7WbXssa5tcXu085s+MHteofODpLc+QPsFRw="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-tooling:1.23.6": {
-    "detekt-tooling-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-tooling/1.23.6/detekt-tooling-1.23.6.jar",
-      "hash": "sha256-J8WopH+ccOHGOzNTvLvabcmV26QW5PDMMB9mJ+V07fs="
-    },
-    "detekt-tooling-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-tooling/1.23.6/detekt-tooling-1.23.6.module",
-      "hash": "sha256-iooYtd92t20oM6YGhn100mvc4wDpTrf520hhmAkzQGc="
-    },
-    "detekt-tooling-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-tooling/1.23.6/detekt-tooling-1.23.6.pom",
-      "hash": "sha256-+w3HVM0Fwv/50VFl9N5Op3c2MXF+UTchIcNi9hausok="
-    }
-  },
-  "io.gitlab.arturbosch.detekt:detekt-utils:1.23.6": {
-    "detekt-utils-1.23.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-utils/1.23.6/detekt-utils-1.23.6.jar",
-      "hash": "sha256-+5a9fV1+neG6/EH/FVzzydB04oUGvHe/Cedmdcao27I="
-    },
-    "detekt-utils-1.23.6.module": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-utils/1.23.6/detekt-utils-1.23.6.module",
-      "hash": "sha256-C3tUgO1i6jXYL/hwoAoe2wxFHhQgtE4dPXdzbes4BVI="
-    },
-    "detekt-utils-1.23.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/io/gitlab/arturbosch/detekt/detekt-utils/1.23.6/detekt-utils-1.23.6.pom",
-      "hash": "sha256-FUi/W3+gf6WiyJyGUvL+Dw2p3a68v9mC3ncndtH3q4c="
     }
   },
   "io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin:1.23.6": {
@@ -1631,12 +1241,6 @@
       "hash": "sha256-LpO7q+NBOviaDDv7nmv3Hbyej5+xTMux14vQJ13xxSU="
     }
   },
-  "org.apache:apache:23": {
-    "apache-23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/apache/23/apache-23.pom",
-      "hash": "sha256-vBBiTgYj82V3+sVjnKKTbTJA7RUvttjVM6tNJwVDSRw="
-    }
-  },
   "org.apache.ant:ant:1.10.15": {
     "ant-1.10.15.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/apache/ant/ant/1.10.15/ant-1.10.15.jar",
@@ -1663,14 +1267,14 @@
       "hash": "sha256-SYhPGHPFEHzCN/QoXER3R5uwgEvwc3OUgBsI114rvrA="
     }
   },
-  "org.apache.commons:commons-lang3:3.12.0": {
-    "commons-lang3-3.12.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
-      "hash": "sha256-2RnZBEhsA3+NGTQS2gyS4iqfokIwudZ6V4VcXDHH6U4="
+  "org.apache.commons:commons-lang3:3.17.0": {
+    "commons-lang3-3.17.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0.jar",
+      "hash": "sha256-bucx31yOWil2ocoCO2uzIOqNNTn75kyKHVy3ZRJ8M7Q="
     },
-    "commons-lang3-3.12.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.pom",
-      "hash": "sha256-gtMfHcxFg+/9dE6XkWWxbaZL+GvKYj/F0bA+2U9FyFo="
+    "commons-lang3-3.17.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.17.0/commons-lang3-3.17.0.pom",
+      "hash": "sha256-NRxuSUDpObHzMN9H9g8Tujg9uB7gCBga9UHzoqbSpWw="
     }
   },
   "org.apache.commons:commons-parent:91": {
@@ -1679,10 +1283,10 @@
       "hash": "sha256-0vi2/UgAtqrxIPWjgibV+dX8bbg3r5ni+bMwZ4aLmHI="
     }
   },
-  "org.apache.commons:commons-parent:52": {
-    "commons-parent-52.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/52/commons-parent-52.pom",
-      "hash": "sha256-ddvo806Y5MP/QtquSi+etMvNO18QR9VEYKzpBtu0UC4="
+  "org.apache.commons:commons-parent:73": {
+    "commons-parent-73.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/73/commons-parent-73.pom",
+      "hash": "sha256-TtRFYLB/hEhHnf0eg6Qiuk6D5gs25RsocaxQKm1cG+o="
     }
   },
   "org.apache.groovy:groovy-bom:4.0.27": {
@@ -2171,16 +1775,6 @@
       "hash": "sha256-h3IcuqZaPJfYsbqdIHhA8WTJ/jh1n8nqEP/iZWX40+k="
     }
   },
-  "org.jetbrains.kotlin:abi-tools:2.3.0": {
-    "abi-tools-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools/2.3.0/abi-tools-2.3.0.jar",
-      "hash": "sha256-voVKIwMrLLc8KF5n5O0LBMKvLTb0zwJjVcyllArRgz8="
-    },
-    "abi-tools-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools/2.3.0/abi-tools-2.3.0.pom",
-      "hash": "sha256-CyqAG3Wvmq9yay0QFeEvli4x0LP2uEB4IVgGV7IkzLg="
-    }
-  },
   "org.jetbrains.kotlin:abi-tools-api:2.3.0": {
     "abi-tools-api-2.3.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.3.0/abi-tools-api-2.3.0.jar",
@@ -2255,16 +1849,6 @@
       "hash": "sha256-zOmxEfIRZgxcRTk+dI30aVC2HAEUfgdzttxxnui7d6g="
     }
   },
-  "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.23": {
-    "kotlin-compiler-embeddable-1.9.23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.9.23/kotlin-compiler-embeddable-1.9.23.jar",
-      "hash": "sha256-zJQGSXS/nr9ZlF4xIXzy0WoM66rySH6wdI/By9F4eUM="
-    },
-    "kotlin-compiler-embeddable-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.9.23/kotlin-compiler-embeddable-1.9.23.pom",
-      "hash": "sha256-WLI81NgtWqkWpcnMmbMhjuxVaWBoova3C+3fbDaR/RU="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.10": {
     "kotlin-compiler-embeddable-1.9.10.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.9.10/kotlin-compiler-embeddable-1.9.10.jar",
@@ -2303,16 +1887,6 @@
     "kotlin-daemon-embeddable-2.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/2.3.0/kotlin-daemon-embeddable-2.3.0.pom",
       "hash": "sha256-TI3aucQLMNAbhc/qHxd31zUlybcWQ+YlDGV2/H0fwRI="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-daemon-embeddable:1.9.23": {
-    "kotlin-daemon-embeddable-1.9.23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/1.9.23/kotlin-daemon-embeddable-1.9.23.jar",
-      "hash": "sha256-bztmG5gmetJOL4+3rV0Gvn0u1hpdBcJn9OTKp433g9k="
-    },
-    "kotlin-daemon-embeddable-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/1.9.23/kotlin-daemon-embeddable-1.9.23.pom",
-      "hash": "sha256-WFRgOL5Go4NmOFPRMd12xPsnQ4MLqXt0sno1zxAtPQI="
     }
   },
   "org.jetbrains.kotlin:kotlin-daemon-embeddable:1.9.10": {
@@ -2397,16 +1971,6 @@
       "hash": "sha256-cYYJKmnzaIQyxcCsuQtKZx/Y7oANhP5YT66P1TO6v4o="
     }
   },
-  "org.jetbrains.kotlin:kotlin-klib-abi-reader:2.3.0": {
-    "kotlin-klib-abi-reader-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-abi-reader/2.3.0/kotlin-klib-abi-reader-2.3.0.jar",
-      "hash": "sha256-QeMUIutesiS5pHX+gOuNBushrTT7fQpAjSyXKnq7jLs="
-    },
-    "kotlin-klib-abi-reader-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-abi-reader/2.3.0/kotlin-klib-abi-reader-2.3.0.pom",
-      "hash": "sha256-QKZ330ajUgsN5tIK2MgfmyP9jIaKb7WfHViYfqnWd5E="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.3.0": {
     "kotlin-klib-commonizer-api-2.3.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.3.0/kotlin-klib-commonizer-api-2.3.0.jar",
@@ -2415,16 +1979,6 @@
     "kotlin-klib-commonizer-api-2.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.3.0/kotlin-klib-commonizer-api-2.3.0.pom",
       "hash": "sha256-zTHw7NqCplEi/8alXehxE5S2GEtRRAK34RkZGqgJGoI="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:2.3.0": {
-    "kotlin-klib-commonizer-embeddable-2.3.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/2.3.0/kotlin-klib-commonizer-embeddable-2.3.0.jar",
-      "hash": "sha256-quNqDqrZxwcMmwuaFuUlyZEnb8CEiMx2VqhnHnxThCY="
-    },
-    "kotlin-klib-commonizer-embeddable-2.3.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/2.3.0/kotlin-klib-commonizer-embeddable-2.3.0.pom",
-      "hash": "sha256-VeTFZ4fJoEIO65pQivxRP5yAHgmJpPKoR6cMQ/kfbR8="
     }
   },
   "org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0": {
@@ -2447,16 +2001,6 @@
       "hash": "sha256-Rp6PYB/b34kP+ozXSOEQcCqkUxu7KbZOXnUD8O/lDZA="
     }
   },
-  "org.jetbrains.kotlin:kotlin-reflect:1.9.23": {
-    "kotlin-reflect-1.9.23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.9.23/kotlin-reflect-1.9.23.jar",
-      "hash": "sha256-dHwpJ6Yjtuu3NLRl1qJoYukg3dGCjvQ3Foh8CEmjEx8="
-    },
-    "kotlin-reflect-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.9.23/kotlin-reflect-1.9.23.pom",
-      "hash": "sha256-WXD72CdKWAyk6I/nhkeMR8i5ufo3TFsK3ekyhFYiX2o="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-reflect:1.6.10": {
     "kotlin-reflect-1.6.10.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.6.10/kotlin-reflect-1.6.10.jar",
@@ -2475,16 +2019,6 @@
     "kotlin-script-runtime-2.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/2.3.0/kotlin-script-runtime-2.3.0.pom",
       "hash": "sha256-20CN5tumaQeVvFOkoPhbM8en1qzLZ94ZAmQPr1QfL1s="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-script-runtime:1.9.23": {
-    "kotlin-script-runtime-1.9.23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/1.9.23/kotlin-script-runtime-1.9.23.jar",
-      "hash": "sha256-dRN+QUoaW0tNCQ+BLQ416zC08MkjpT1pWFRWuyT8Hfg="
-    },
-    "kotlin-script-runtime-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/1.9.23/kotlin-script-runtime-1.9.23.pom",
-      "hash": "sha256-LWx0sGpUDpicq9BTChbnZYGQUl8vTVpDq5sa/nQU/F8="
     }
   },
   "org.jetbrains.kotlin:kotlin-script-runtime:1.9.10": {
@@ -2565,20 +2099,6 @@
       "hash": "sha256-jDyCEAfBNBFVhzm589U4LrgVUds4lc/7iVYeVsD03BY="
     }
   },
-  "org.jetbrains.kotlin:kotlin-stdlib:1.9.23": {
-    "kotlin-stdlib-1.9.23.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.23/kotlin-stdlib-1.9.23.jar",
-      "hash": "sha256-iRDMI4gH2G71UMsfCxDdXtQLNaTsGlJSX3YK7ehOrTc="
-    },
-    "kotlin-stdlib-1.9.23.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.23/kotlin-stdlib-1.9.23.module",
-      "hash": "sha256-UZUZOzfc2touHAqw1RLEIrKtdq81V4Q6G5w0gPTnHQ4="
-    },
-    "kotlin-stdlib-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.23/kotlin-stdlib-1.9.23.pom",
-      "hash": "sha256-wm0n8mcQrUDiPu2f/gpkuFkejBPSI8ypDFk+5j87KKs="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-stdlib:1.9.10": {
     "kotlin-stdlib-1.9.10.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.10/kotlin-stdlib-1.9.10.jar",
@@ -2597,16 +2117,6 @@
     "kotlin-stdlib-common-2.3.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.3.0/kotlin-stdlib-common-2.3.0.pom",
       "hash": "sha256-J+2DQuBLgcqy0aP512D06/lQmG9n7Eme1y1cw4d+6NA="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.23": {
-    "kotlin-stdlib-common-1.9.23.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.23/kotlin-stdlib-common-1.9.23.module",
-      "hash": "sha256-hjnwBfqZd67wjDL8jnonedoi7iYkZNcnMpiq/Ug3Fc0="
-    },
-    "kotlin-stdlib-common-1.9.23.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.23/kotlin-stdlib-common-1.9.23.pom",
-      "hash": "sha256-OuBxRYdw47aGCafTGet5emeJ9fBAyqQUQJgJmGhb5PY="
     }
   },
   "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10": {
@@ -2629,16 +2139,6 @@
       "hash": "sha256-x/pnx5YTILidhaPKWaLhjCxlhQhFWV3K5LRq9pRe3NU="
     }
   },
-  "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21": {
-    "kotlin-stdlib-jdk7-1.8.21.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.21/kotlin-stdlib-jdk7-1.8.21.jar",
-      "hash": "sha256-M9FI2w4R3r0NkGd9KCQrztkH+cd3MAAP1ZeGcIkDnYY="
-    },
-    "kotlin-stdlib-jdk7-1.8.21.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.21/kotlin-stdlib-jdk7-1.8.21.pom",
-      "hash": "sha256-m7EH1dXjkwvFl38AekPNILfSTZGxweUo6m7g8kjxTTY="
-    }
-  },
   "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0": {
     "kotlin-stdlib-jdk7-1.8.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.0/kotlin-stdlib-jdk7-1.8.0.jar",
@@ -2657,16 +2157,6 @@
     "kotlin-stdlib-jdk8-1.9.10.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.10/kotlin-stdlib-jdk8-1.9.10.pom",
       "hash": "sha256-X0uU3TBlp3ZMN/oV3irW2B9A1Z+Msz8X0YHGOE+3py4="
-    }
-  },
-  "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21": {
-    "kotlin-stdlib-jdk8-1.8.21.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.21/kotlin-stdlib-jdk8-1.8.21.jar",
-      "hash": "sha256-PbdSowB08G7mxXmEqm8n2kT00rvH9UQmUfaYjxyyt9c="
-    },
-    "kotlin-stdlib-jdk8-1.8.21.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.21/kotlin-stdlib-jdk8-1.8.21.pom",
-      "hash": "sha256-ODnXKNfDCaXDaLAnC0S08ceHj/XKXTKpogT6o0kUWdg="
     }
   },
   "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0": {
@@ -2737,20 +2227,6 @@
     "kotlinx-coroutines-core-jvm-1.8.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.pom",
       "hash": "sha256-pWM6vVNGfOuRYi2B8umCCAh3FF4LduG3V4hxVDSIXQs="
-    }
-  },
-  "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1": {
-    "kotlinx-html-jvm-0.8.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-html-jvm/0.8.1/kotlinx-html-jvm-0.8.1.jar",
-      "hash": "sha256-mL2hx4pQKKE0zrJbY/XBMMiTSXMNNf1H73SQtr8LY7M="
-    },
-    "kotlinx-html-jvm-0.8.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-html-jvm/0.8.1/kotlinx-html-jvm-0.8.1.module",
-      "hash": "sha256-LmFHvYMmyke+lXIwrS7LOu6OGUoK/bc6Z3YRbu16Sl8="
-    },
-    "kotlinx-html-jvm-0.8.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-html-jvm/0.8.1/kotlinx-html-jvm-0.8.1.pom",
-      "hash": "sha256-pKgxcBDDGabHdxdr72MZsyzJbha0hDlOJqLL+Fcf/QQ="
     }
   },
   "org.jetbrains.kotlinx:kotlinx-serialization-core:1.4.1": {
@@ -2899,6 +2375,16 @@
       "hash": "sha256-GdS3R7IEgFMltjNFUylvmGViJ3pKwcteWTpeTE9eQRU="
     }
   },
+  "org.junit:junit-bom:5.11.0": {
+    "junit-bom-5.11.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.11.0/junit-bom-5.11.0.module",
+      "hash": "sha256-9+2+Z/IgQnCMQQq8VHQI5cR29An1ViNqEXkiEnSi7S0="
+    },
+    "junit-bom-5.11.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.11.0/junit-bom-5.11.0.pom",
+      "hash": "sha256-5nRZ1IgkJKxjdPQNscj0ouiJRrNAugcsgL6TKivkZE0="
+    }
+  },
   "org.junit:junit-bom:5.10.3": {
     "junit-bom-5.10.3.module": {
       "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.10.3/junit-bom-5.10.3.module",
@@ -2907,16 +2393,6 @@
     "junit-bom-5.10.3.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.10.3/junit-bom-5.10.3.pom",
       "hash": "sha256-EJN9RMQlmEy4c5Il00cS4aMUVkHKk6w/fvGG+iX2urw="
-    }
-  },
-  "org.junit:junit-bom:5.7.1": {
-    "junit-bom-5.7.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.7.1/junit-bom-5.7.1.module",
-      "hash": "sha256-mFTjiU1kskhSB+AEa8oHs9QtFp54L0+oyc4imnj67gQ="
-    },
-    "junit-bom-5.7.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/5.7.1/junit-bom-5.7.1.pom",
-      "hash": "sha256-C5sUo9YhBvr+jGinF7h7h60YaFiZRRt1PAT6QbaFd4Q="
     }
   },
   "org.mockito:mockito-bom:4.11.0": {
@@ -2991,16 +2467,6 @@
     "slf4j-parent-1.7.32.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.7.32/slf4j-parent-1.7.32.pom",
       "hash": "sha256-WrNJ0PTHvAjtDvH02ThssZQKL01vFSFQ4W277MC4PHA="
-    }
-  },
-  "org.snakeyaml:snakeyaml-engine:2.6": {
-    "snakeyaml-engine-2.6.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/snakeyaml/snakeyaml-engine/2.6/snakeyaml-engine-2.6.jar",
-      "hash": "sha256-JlIZmvQMmqLxeCQA0t+79OUiYgjE4F3dQFnD1tnNFQU="
-    },
-    "snakeyaml-engine-2.6.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/snakeyaml/snakeyaml-engine/2.6/snakeyaml-engine-2.6.pom",
-      "hash": "sha256-Ep0ib1N1FVWXHyT1DIeJ9kVps4Kj00CU5F/s/G9sF/8="
     }
   },
   "org.sonatype.oss:oss-parent:9": {
