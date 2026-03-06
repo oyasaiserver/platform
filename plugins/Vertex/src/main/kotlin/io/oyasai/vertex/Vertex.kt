@@ -4,6 +4,7 @@ import io.oyasai.vertex.services.Service
 import io.oyasai.vertex.services.schematics.SchematicsService
 import org.bukkit.plugin.java.JavaPlugin
 
+// NOMERGE
 class Vertex : JavaPlugin() {
   override fun onLoad() {
     services.forEach { it.onLoad() }
