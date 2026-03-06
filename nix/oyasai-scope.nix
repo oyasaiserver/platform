@@ -56,6 +56,7 @@
                     root = ../.;
                     fileset = unions [
                       ../build.gradle.kts
+                      ../config
                       ../gradle
                       ../plugins
                       ../settings.gradle.kts
@@ -64,7 +65,7 @@
                 inherit (scopeSelf) gradle;
                 buildJdk = scopeSelf.jdk;
                 lockFile = ../gradle.lock;
-                gradleBuildFlags = [ "build" ];
+                gradleBuildFlags = [ "build" "-x" "detekt" ];
                 installPhase = ''
                   runHook preInstall
 

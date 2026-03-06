@@ -1,0 +1,42 @@
+config:
+  validation: true
+
+style:
+  MagicNumber:
+    active: false
+  WildcardImport:
+    active: false
+  MayBeConst:
+    active: false
+  MaxLineLength:
+    active: false
+  UnusedImports:
+    active: true
+
+complexity:
+  LongMethod:
+    active: false
+  LongParameterList:
+    active: false
+  LargeClass:
+    active: false
+  TooManyFunctions:
+    active: false
+
+performance:
+  SpreadOperator:
+    active: false
+
+potential-bugs:
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: true
+
+naming:
+  TopLevelPropertyNaming:
+    active: false
+  FunctionNaming:
+    active: false
+
+comments:
+  UndocumentedPublicFunction:
+    active: false
