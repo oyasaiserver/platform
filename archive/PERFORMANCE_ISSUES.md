@@ -1,7 +1,7 @@
 # OyasaiPets パフォーマンス問題レポート
 
-> **作成経緯**: 本番サーバー（Paper 1.21.8）で「1秒ごとにプチフリーズ」が報告されたため、 Spark
-> プロファイラ（フリーズ時・正常時の2本）を解析した結果をまとめたもの。 Step 7〜9 のリファクタリング時に以下の問題を修正すること。
+> **作成経緯**: 本番サーバー（Paper 1.21.8）で「1 秒ごとにプチフリーズ」が報告されたため、Spark プロファイラ（フリーズ時・正常時の
+> 2 本）を解析した結果をまとめたもの。Step 7〜9 のリファクタリング時に以下の問題を修正すること。
 
 ---
 
@@ -17,7 +17,7 @@ L7807,7823,7845 | chunk save 圧力 |
 
 ---
 
-## 問題1 🔴: PDC をホットパスで毎 tick 読む
+## 問題 1 🔴: PDC をホットパスで毎 tick 読む
 
 ### 現状コード（`startControlTask` 内、毎 tick 実行）
 
@@ -54,7 +54,7 @@ var cachedJumpMul     = entity.jumpMultiplier
 
 ---
 
-## 問題2 🔴: `isSilent` を値変化なく毎 tick 書き込む
+## 問題 2 🔴: `isSilent` を値変化なく毎 tick 書き込む
 
 ### 現状コード（L7738）
 
@@ -63,8 +63,8 @@ var cachedJumpMul     = entity.jumpMultiplier
 entity.isSilent = entity.isSilentMode
 ```
 
-Bukkit の `entity.isSilent =` はエンティティの NMS フィールドに書き込む。 値が変わっていなくても毎 tick
-書くと、Paper の dirty フラグが立ち続ける可能性がある。
+Bukkit の `entity.isSilent =` はエンティティの NMS フィールドに書き込む。値が変わっていなくても毎 tick 書くと、Paper
+の dirty フラグが立ち続ける可能性がある。
 
 ### 修正方針
 
@@ -78,7 +78,7 @@ if (entity.isSilent != shouldBeSilent) {
 
 ---
 
-## 問題3 🟡: `startGlobalAITask` が全ペットに PDC read を毎秒発行
+## 問題 3 🟡: `startGlobalAITask` が全ペットに PDC read を毎秒発行
 
 ### 現状コード（`ChildAISystem.kt`、毎 20 tick = 1 秒）
 
@@ -92,7 +92,7 @@ for (entity in activePets) {
 }
 ```
 
-**タイミングの一致**: このタスクは毎 20 tick（＝毎 1 秒）実行。 ユーザーが報告した「1 秒ごとのプチフリーズ」の周期と完全に一致する。
+**タイミングの一致**: このタスクは毎 20 tick（＝毎 1 秒）実行。ユーザーが報告した「1 秒ごとのプチフリーズ」の周期と完全に一致する。
 Spark の 4ms サンプラーには映らない軽微な処理でも、毎秒の規則的な実行であれば プレイヤーに体感できるスタッターとして現れる。
 
 ### 修正方針
@@ -104,7 +104,7 @@ object ActivePetRegistry {
     private val byEntityId = ConcurrentHashMap<UUID, LivingEntity>()
     private val byPetId    = ConcurrentHashMap<String, UUID>()
 
-    // ★ 追加: PDC を毎秒読まないためのインメモリキャッシュ
+    // ★ 追加：PDC を毎秒読まないためのインメモリキャッシュ
     private val cachedIsAtypical = ConcurrentHashMap<UUID, Boolean>()
     private val cachedOwnerId    = ConcurrentHashMap<UUID, String>()
 
@@ -148,7 +148,7 @@ for (entity in activePets) {
 
 ---
 
-## 問題4 🟢: `statJumps` PDC write が entity を dirty にする
+## 問題 4 🟢: `statJumps` PDC write が entity を dirty にする
 
 ### 現状コード
 
@@ -157,7 +157,7 @@ for (entity in activePets) {
 entity.statJumps = entity.statJumps + 1
 ```
 
-PDC への書き込みはエンティティが属するチャンクを dirty（保存待ち）にする。 多人数が同時に乗車・ジャンプすると dirty チャンクが積み重なり、
+PDC への書き込みはエンティティが属するチャンクを dirty（保存待ち）にする。多人数が同時に乗車・ジャンプすると dirty チャンクが積み重なり、
 autosave（6000 tick ごと）で I/O バーストが発生する。
 
 ### 修正方針
@@ -188,9 +188,9 @@ if (ticks % 200 == 0) {
 
 ---
 
-## 補足: なぜ Spark プロファイラに映らなかったか
+## 補足：なぜ Spark プロファイラに映らなかったか
 
-Spark のサンプリング間隔は 4ms。OyasaiPets のタスクが 1〜2ms で完了する場合、 プロファイラへの出現確率は 2〜4%
+Spark のサンプリング間隔は 4ms。OyasaiPets のタスクが 1〜2ms で完了する場合、プロファイラへの出現確率は 2〜4%
 程度となり、ノイズに埋もれて見えなくなる。
 
 しかし `startGlobalAITask` は**毎 1 秒という規則正しい周期**で実行されるため、
@@ -198,16 +198,16 @@ Spark のサンプリング間隔は 4ms。OyasaiPets のタスクが 1〜2ms �
 
 ---
 
-## 参考: Spark で確認されたサーバー全体の課題（OyasaiPets 外）
+## 参考：Spark で確認されたサーバー全体の課題（OyasaiPets 外）
 
 OyasaiPets 以外にも、サーバー全体として以下の問題が Spark 解析で確認された。
 リファクタリングの前後でパフォーマンステストを行う際の参考にすること。
 
 ### G1 GC の設定ミス（最大の原因、JVM レベルの問題）
 
-- `-Xmx28G` に対して `G1NewSizePercent=28` → Young Gen 最小 **7.8GB**（推奨の約3倍）
-- G1 Young GC 平均停止時間: **191ms**（目標 200ms に肉薄）
-- MSPT last5m 最大値: **1097ms**（ほぼ GC 停止と一致）
+- `-Xmx28G` に対して `G1NewSizePercent=28` → Young Gen 最小 **7.8GB**（推奨の約 3 倍）
+- G1 Young GC 平均停止時間：**191ms**（目標 200ms に肉薄）
+- MSPT last5m 最大値：**1097ms**（ほぼ GC 停止と一致）
 - **対応**: `-XX:G1NewSizePercent=6 -XX:G1MaxNewSizePercent=20` に変更（サーバー管理者向け）
 
 ### MyPet / BKCommonLib によるスポーンイベント割り込み
