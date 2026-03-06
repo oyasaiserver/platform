@@ -8,9 +8,11 @@ import me.ankokunsan.entityPose.commands.Entityinfo
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.Sound
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Rabbit
 import org.bukkit.entity.Tameable
@@ -20,6 +22,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.persistence.PersistentDataType
+import kotlin.math.round
 
 class GUIClick : Listener {
   @EventHandler
@@ -60,6 +63,22 @@ class GUIClick : Listener {
 
       3 -> {
         if (target is ArmorStand) target.isInvisible = !target.isInvisible
+      }
+      7 -> {
+        val livingEntity = target as? LivingEntity ?: return
+        val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
+        val currentScale = attribute.baseValue
+        val newScale =(currentScale + 0.1).coerceAtMost(3.0)
+        val roundedScale = round(newScale * 10) / 10.0
+        attribute.baseValue = roundedScale
+      }
+      8 -> {
+        val livingEntity = target as? LivingEntity ?: return
+        val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
+        val currentScale = attribute.baseValue
+        val newScale =(currentScale - 0.1).coerceAtLeast(0.5)
+        val roundedScale = round(newScale * 10) / 10.0
+        attribute.baseValue = roundedScale
       }
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)

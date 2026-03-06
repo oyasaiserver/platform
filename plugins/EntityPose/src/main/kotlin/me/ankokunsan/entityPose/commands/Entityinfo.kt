@@ -2,16 +2,20 @@ package me.ankokunsan.entityPose.commands
 
 import me.ankokunsan.entityPose.EntityPose
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.attribute.Attribute
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Tameable
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.EulerAngle
 
@@ -88,6 +92,22 @@ class Entityinfo : CommandExecutor, TabCompleter {
           meta.setDisplayName("§fダメージ無効: $status")
           itemMeta = meta
         }
+    val scaleItem1 = ItemStack(Material.POTION).apply { // LEGACYを消す
+      val meta = itemMeta as? PotionMeta?: return@apply
+      meta.color = Color.YELLOW
+      val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+      val showScale= String.format("%.1f",scale)
+      meta.setDisplayName("§fサイズ設定: $showScale")
+      itemMeta = meta
+    }
+    val scaleItem2 = ItemStack(Material.POTION).apply {
+      val meta = itemMeta as? PotionMeta?: return@apply
+      meta.color = Color.YELLOW
+      val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+      val showScale = String.format("%.1f",scale)
+      meta.setDisplayName("§fサイズ設定: $showScale")
+      itemMeta = meta
+    }
     if (target is Tameable) {
       val tameItem =
           ItemStack(Material.BONE).apply {
@@ -124,6 +144,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
       invs.setItem(3, invisibleItem)
     }
     invs.setItem(0, damageItem)
+    invs.setItem(7,scaleItem1)
+    invs.setItem(8,scaleItem2)
 
     val filler = getFiller()
     for (i in 0 until invs.size) {
