@@ -1,0 +1,14 @@
+name: OyasaiPets
+version: ${version}
+main: me.marzipan.OyasaiPets.BigWolfPlugin
+api-version: 1.21
+depend: [TokenManager]
+
+commands:
+  bigwolf:
+    description: ペットシステムのメインコマンド
+    usage: /bigwolf
+  bigwolfop:
+    description: ペットシステムの管理者コマンド（OP専用）
+    usage: /bigwolfop
+    permission: op
