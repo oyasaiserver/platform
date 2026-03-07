@@ -8400,7 +8400,7 @@ class SkillSystem {
         target.damage(2.0, entity)
       }
     }
-    player.sendActionBar(Component.text(">>> 咆哮スキル発動！! <<<", GOLD))
+    player.sendActionBar(Component.text(">>> 咆哮スキル発動！ <<<", GOLD))
   }
 
   /** 突進スキルを発動 */
