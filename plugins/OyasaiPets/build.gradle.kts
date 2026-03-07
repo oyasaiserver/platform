@@ -1,3 +1,5 @@
+version = "2.4.0"
+
 dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(project(":plugins:SocialLikes3"))
