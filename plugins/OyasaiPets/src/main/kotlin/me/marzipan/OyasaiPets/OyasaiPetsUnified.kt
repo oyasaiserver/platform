@@ -285,6 +285,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             logger,
             { player ->
               storageService.storeAllPets(player)
+              skillSystem.cleanup(player.uniqueId)
               interactionService.cleanupPlayer(player.uniqueId)
               mountCooldowns.remove(player.uniqueId)
               dropCooldowns.remove(player.uniqueId)
@@ -1855,9 +1856,6 @@ var LivingEntity.temperament: String
 
 /** このペットが非定型かどうかを判定 */
 fun LivingEntity.isAtypical(): Boolean = temperament == "atypical"
-
-/** このエンティティがBigWolfのペットかどうかを判定 */
-fun LivingEntity.isPet(): Boolean = petId != null && ownerId != null
 
 /** 指定されたプレイヤーがこのペットの飼い主かどうかを判定 */
 @Suppress("unused") fun LivingEntity.isOwnedBy(playerId: String): Boolean = ownerId == playerId
@@ -8318,8 +8316,6 @@ class SkillSystem {
   // スキルクールダウン管理
   private val skillCooldowns = mutableMapOf<UUID, Long>()
 
-  // ダッシュ終了時間管理
-  private val dashEndTimes = mutableMapOf<UUID, Long>()
   private var dashCallback: ((Player, Long) -> Unit)? = null
 
   fun setDashCallback(callback: (Player, Long) -> Unit) {
@@ -8409,7 +8405,6 @@ class SkillSystem {
     direction.multiply(4.0).setY(0.6)
     entity.velocity = direction
     val endTime = System.currentTimeMillis() + 800
-    dashEndTimes[player.uniqueId] = endTime
     dashCallback?.invoke(player, endTime)
     entity.world.playSound(entity.location, Sound.ENTITY_HORSE_JUMP, 2.0f, 0.5f)
     entity.world.playSound(entity.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 2.0f)
@@ -8417,20 +8412,8 @@ class SkillSystem {
     player.sendActionBar(Component.text(">>> 突進！ <<<", AQUA))
   }
 
-  /** ダッシュ中かどうかを判定 */
-  fun isDashing(playerId: UUID): Boolean {
-    val endTime = dashEndTimes[playerId] ?: return false
-    return System.currentTimeMillis() < endTime
-  }
-
-  /** ダッシュ終了時間を取得 */
-  fun getDashEndTime(playerId: UUID): Long {
-    return dashEndTimes[playerId] ?: 0L
-  }
-
   /** プレイヤー切断時のクリーンアップ */
   fun cleanup(playerId: UUID) {
     skillCooldowns.remove(playerId)
-    dashEndTimes.remove(playerId)
   }
 }
