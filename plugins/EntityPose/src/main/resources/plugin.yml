@@ -1,7 +1,7 @@
 name: EntityPose
-version: "1.0-SNAPSHOT"
+version: '1.0-SNAPSHOT'
 main: me.ankokunsan.entityPose.EntityPose
-api-version: "1.21"
+api-version: '1.21'
 
 commands:
   entitystick:
@@ -12,6 +12,16 @@ commands:
   entityinfo:
     description: エンティティの諸元を表示
     usage: /entityinfo
+    permission: entitypose_arrange
+
+  kakudo:
+    description: 角度変更
+    usage: /kakudo
+    permission: entitypose_arrange
+
+  zahyo:
+    description: 座標の動かす量変更
+    usage: /zahyo
     permission: entitypose_arrange
 
 permissions:
