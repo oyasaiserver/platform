@@ -3,11 +3,9 @@ package me.ankokunsan.entityPose
 import kotlin.math.roundToInt
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.GUI_KEY
-import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
-import me.ankokunsan.entityPose.EntityPose.Companion.ZAHYO_KEY
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -19,6 +17,7 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.ExperienceOrb
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
@@ -30,7 +29,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
@@ -42,20 +43,21 @@ class EntityClick : Listener {
 
   companion object {
     val inputWait = mutableMapOf<java.util.UUID, Entity>()
-  }
-
-  private val currentStep = mutableMapOf<java.util.UUID, Double>()
-  private val currentZah = mutableMapOf<java.util.UUID, Double>()
-
-  private fun isEntiStick(item: ItemStack?): Boolean {
-    if (item == null || item.type.isAir) return false
-    if (!item.hasItemMeta()) return false
-    val meta = item.itemMeta ?: return false
-    return meta.persistentDataContainer.has(EntityPose.ENTITY_STICK_KEY, PersistentDataType.BYTE)
+    val currentStep = mutableMapOf<java.util.UUID, Double>()
+    val currentZah = mutableMapOf<java.util.UUID, Double>()
   }
 
   private fun actionBar(player: Player, text: String) {
     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(text))
+  }
+
+  @EventHandler
+  fun onHeldstick(event: PlayerItemHeldEvent) {
+    val player = event.player
+    val item = player.inventory.getItem(event.newSlot)
+    if (isEntiStick(item) && player.hasPermission("entitypose_arrange")) {
+      AirBlock.startglowing(player)
+    }
   }
 
   @EventHandler
@@ -66,8 +68,13 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val target = event.entity
+    if (target.scoreboardTags.contains("entity_locked")) {
+      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています。")
+      return
+    }
     AirBlock.airblockplace(player)
     event.isCancelled = true
+    inputWait[player.uniqueId] = target
 
     if (target is ArmorStand) {
       val current = selectedPart[target.uniqueId] ?: StandPart.Z
@@ -76,11 +83,44 @@ class EntityClick : Listener {
       selectedPart[target.uniqueId] = next
       actionBar(player, "現在の選択部位→ ${next.display}")
     } else if (target is LivingEntity) {
+      if (target.hasAI()) {
+        player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+        return
+      }
       val current = selectPart[target.uniqueId] ?: EntiPart.HAN
       val next1 = if (player.isSneaking) current.prev() else current.next()
 
       selectPart[target.uniqueId] = next1
       actionBar(player, "現在の選択→ ${next1.display}")
+    }
+  }
+
+  @EventHandler
+  fun onSwapEvent(event: PlayerSwapHandItemsEvent) {
+    val player = event.player
+    val hand = event.offHandItem
+    if (!isEntiStick(hand)) return
+    if (!player.hasPermission("entitypose_arrange")) return
+    event.isCancelled = true
+    val result =
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
+          it != player && it !is ExperienceOrb
+        }
+    val target = result?.hitEntity
+    if (target == null) {
+      player.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
+      return
+    }
+    if (target is LivingEntity && target.hasAI()) {
+      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+      return
+    }
+    if (player.isSneaking) {
+      ChooseGUi.openZahyoGUI(player)
+      player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
+    } else {
+      ChooseGUi.openKakudoGUI(player)
+      player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
     }
   }
 
@@ -151,7 +191,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ライトブラウン")
+                        setDisplayName("${ChatColor.GREEN}栗色")
                         persistentDataContainer.set(
                             WOLF_KEY, PersistentDataType.STRING, "LIGHT_BROWN")
                         if (isMini)
@@ -163,7 +203,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}グレー")
+                        setDisplayName("${ChatColor.GREEN}灰色")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "GRAY")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -174,7 +214,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}しま柄")
+                        setDisplayName("${ChatColor.GREEN}しま模様")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "STRIPED")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -196,7 +236,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブラウン")
+                        setDisplayName("${ChatColor.GREEN}赤茶色")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "BROWN")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -207,7 +247,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}白")
+                        setDisplayName("${ChatColor.GREEN}雪")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "WHITE")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -218,7 +258,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブラック")
+                        setDisplayName("${ChatColor.GREEN}黒色")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "BLACK")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -229,7 +269,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ウッド柄")
+                        setDisplayName("${ChatColor.GREEN}森(ウッド柄)")
                         persistentDataContainer.set(WOLF_KEY, PersistentDataType.STRING, "WOOD")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -309,7 +349,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}オレンジ")
+                        setDisplayName("${ChatColor.GREEN}赤色(絶対オレンジです)")
                         persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "ORANGE")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -331,7 +371,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ライトグレー")
+                        setDisplayName("${ChatColor.GREEN}ブリティッシュ_ショートヘア")
                         persistentDataContainer.set(
                             CAT_KEY, PersistentDataType.STRING, "LIGHT_GRAY")
                         if (isMini)
@@ -366,7 +406,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ホワイト")
+                        setDisplayName("${ChatColor.GREEN}白色")
                         persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "WHITE")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -377,7 +417,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}グレー")
+                        setDisplayName("${ChatColor.GREEN}ジェリー")
                         persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "GRAY")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -388,7 +428,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブラック")
+                        setDisplayName("${ChatColor.GREEN}黒色")
                         persistentDataContainer.set(CAT_KEY, PersistentDataType.STRING, "BLACK")
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
@@ -422,7 +462,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブラウン")
+                        setDisplayName("${ChatColor.GREEN}茶色")
                         persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "BROWN")
                       }
                 }
@@ -431,7 +471,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}白")
+                        setDisplayName("${ChatColor.GREEN}白色")
                         persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "WHITE")
                       }
                 }
@@ -440,7 +480,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ブラック")
+                        setDisplayName("${ChatColor.GREEN}黒色")
                         persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "BLACK")
                       }
                 }
@@ -457,7 +497,7 @@ class EntityClick : Listener {
             CustomHead.get("c977a3266bf3b9eaf17e5a02ea5fbb46801159863dd288b93e6c12c9cb").apply {
               itemMeta =
                   itemMeta!!.apply {
-                    setDisplayName("${ChatColor.GREEN}ゴールド")
+                    setDisplayName("${ChatColor.GREEN}金色")
                     persistentDataContainer.set(RABBIT_KEY, PersistentDataType.STRING, "GOLD")
                   }
             }
@@ -466,7 +506,7 @@ class EntityClick : Listener {
                 .apply {
                   itemMeta =
                       itemMeta!!.apply {
-                        setDisplayName("${ChatColor.GREEN}ライトブラウン")
+                        setDisplayName("${ChatColor.GREEN}ソルト＆ペッパー")
                         persistentDataContainer.set(
                             RABBIT_KEY, PersistentDataType.STRING, "LIGHT_BROWN")
                       }
@@ -525,6 +565,10 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.rightClicked
+    if (entity.scoreboardTags.contains("entity_locked")) {
+      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています。")
+      return
+    }
     event.isCancelled = true
     entity.isPersistent = true
     inputWait[player.uniqueId] = entity
@@ -537,10 +581,6 @@ class EntityClick : Listener {
       val part = selectedPart[entity.uniqueId] ?: return
       val rad = Math.toRadians(delta.toDouble())
       when (part) {
-        StandPart.KAKUDO -> {
-          ChooseGUi.openKakudoGUI(player)
-          return
-        }
         StandPart.HEAD_X -> {
           entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
           val deg = Math.toDegrees(entity.headPose.x)
@@ -655,10 +695,6 @@ class EntityClick : Listener {
           entity.teleport(loc)
           actionBar(player, "§a全体: ${formatDeg(loc.yaw.toDouble())}")
         }
-        StandPart.ZAHYO -> {
-          ChooseGUi.openZahyoGUI(player)
-          return
-        }
         StandPart.X -> {
           entity.teleport(entity.location.add(move1, 0.0, 0.0))
           actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
@@ -681,10 +717,6 @@ class EntityClick : Listener {
       val loc = entity.location.clone()
 
       when (part1) {
-        EntiPart.KAKUDO -> {
-          ChooseGUi.openKakudoGUI(player)
-          return
-        }
         EntiPart.HEAD -> {
           loc.pitch = (loc.pitch + deltaF).coerceIn(-90f, 90f)
           entity.teleport(loc)
@@ -714,7 +746,7 @@ class EntityClick : Listener {
               actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
             }
 
-            else -> actionBar(player, "§cこのモブは座れません、残念;;")
+            else -> actionBar(player, "§6[EntityPose] §cこのモブは座れません、残念;;")
           }
         }
         EntiPart.ZAHYO -> {
@@ -748,42 +780,6 @@ class EntityClick : Listener {
         }
       }
     }
-  }
-
-  @EventHandler
-  fun onKakudoClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3角度選択") return
-    event.isCancelled = true
-
-    val player = event.whoClicked as? Player ?: return
-    val item = event.currentItem ?: return
-    val targetEntity = inputWait[player.uniqueId] ?: return
-
-    val value =
-        item.itemMeta?.persistentDataContainer?.get(KAKUDO_KEY, PersistentDataType.DOUBLE) ?: return
-
-    currentStep[targetEntity.uniqueId] = value
-    player.sendMessage("§6[EntityPose] §aこのエンティティの角度の刻みを ${value}度 に設定しました。")
-    player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
-    player.closeInventory()
-  }
-
-  @EventHandler
-  fun onStepClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3座標の動かす量選択") return
-    event.isCancelled = true
-
-    val player = event.whoClicked as? Player ?: return
-    val item = event.currentItem ?: return
-    val targetEntity = inputWait[player.uniqueId] ?: return
-    val value1 =
-        item.itemMeta?.persistentDataContainer?.get(ZAHYO_KEY, PersistentDataType.DOUBLE) ?: return
-    currentZah[targetEntity.uniqueId] = value1
-
-    player.sendMessage("§6[EntityPose] §aこのエンティティの一回あたりに動かす座標を ${value1}マス に設定しました。")
-    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
-
-    player.closeInventory()
   }
 
   @EventHandler
