@@ -14,6 +14,16 @@ commands:
     usage: /entityinfo
     permission: entitypose_arrange
 
+  kakudo:
+    description: 角度変更
+    usage: /kakudo
+    permission: entitypose_arrange
+
+  zahyo:
+    description: 座標の動かす量変更
+    usage: /zahyo
+    permission: entitypose_arrange
+
 permissions:
   entitypose_arrange:
     description: このプラグイン全体の権限

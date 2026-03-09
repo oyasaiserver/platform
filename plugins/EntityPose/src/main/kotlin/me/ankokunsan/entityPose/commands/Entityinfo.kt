@@ -37,7 +37,10 @@ class Entityinfo : CommandExecutor, TabCompleter {
         }
     val target =
         result?.hitEntity ?: return true.also { sender.sendMessage("§6[EntityPose] §cエンティティがいません") }
-
+    if (target is LivingEntity && target.hasAI()) {
+      sender.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+      return true
+    }
     if (args.isNotEmpty() && args[0].equals("set", ignoreCase = true)) {
       openSettingGUI(sender, target)
       return true
@@ -54,6 +57,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
         val leftLeg = target.leftLegPose
         val rightLeg = target.rightLegPose
         val gravity = if (target.hasGravity()) "§aON" else "§cOFF"
+        val basePlate = if (target.hasBasePlate()) "§aON" else "§cOFF"
         val invisible = if (target.isInvisible) "§aON" else "§cOFF"
 
         sender.sendMessage("§6---[EntityPose]§bArmorStandの情報§6---")
@@ -68,6 +72,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
             "座標: §eX:${formatLoc(loc.x)} Y:${formatLoc(loc.y)} Z:${formatLoc(loc.z)}")
         sender.sendMessage("ダメージ無効: $invincible")
         sender.sendMessage("重力: $gravity")
+        sender.sendMessage("底のプレート: $basePlate")
         sender.sendMessage("透明: $invisible")
       } else {
         val pitch = loc.pitch
@@ -97,8 +102,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          val showScale = String.format("%.1f", scale)
-          meta.setDisplayName("§fサイズ設定: $showScale")
+          meta.setDisplayName("§fサイズ設定: $scale")
           itemMeta = meta
         }
     val scaleItem2 =
@@ -106,8 +110,14 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          val showScale = String.format("%.1f", scale)
-          meta.setDisplayName("§fサイズ設定: $showScale")
+          meta.setDisplayName("§fサイズ設定: $scale")
+          itemMeta = meta
+        }
+    val lockitem =
+        ItemStack(Material.TRIAL_KEY).apply {
+          val meta = itemMeta ?: return@apply
+          val lockarrange = if (target.scoreboardTags.contains("entity_locked")) "§aON" else "§cOFF"
+          meta.setDisplayName("§fアレンジのロック: $lockarrange")
           itemMeta = meta
         }
     if (target is Tameable) {
@@ -146,8 +156,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
       invs.setItem(3, invisibleItem)
     }
     invs.setItem(0, damageItem)
-    invs.setItem(7, scaleItem1)
-    invs.setItem(8, scaleItem2)
+    invs.setItem(6, scaleItem1)
+    invs.setItem(7, scaleItem2)
+    invs.setItem(8, lockitem)
 
     val filler = getFiller()
     for (i in 0 until invs.size) {

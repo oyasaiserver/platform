@@ -2,10 +2,13 @@ package me.ankokunsan.entityPose
 
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 object AirBlock {
+  private val glowingTarget = mutableMapOf<java.util.UUID, Entity>()
+
   fun airblockplace(player: Player) {
     val block = player.location.subtract(0.0, 1.0, 0.0).block
 
@@ -45,5 +48,34 @@ object AirBlock {
           }
         }
         .runTaskTimer(EntityPose.INSTANCE, 0L, 20L) // 0Lにすることで、設置直後から判定を開始
+  }
+
+  fun startglowing(player: Player) {
+    object : BukkitRunnable() {
+          override fun run() {
+            val hand = player.inventory.itemInMainHand
+
+            if (!isEntiStick(hand) || !player.isOnline) {
+              glowingTarget[player.uniqueId]?.isGlowing = false
+              this.cancel()
+              return
+            }
+            val result =
+                player.world.rayTraceEntities(
+                    player.eyeLocation, player.location.direction, 7.0, 0.5) {
+                      it != player
+                    }
+            val target = result?.hitEntity ?: return
+
+            val lastTarget = glowingTarget[player.uniqueId]
+            if (target != lastTarget) {
+              lastTarget?.isGlowing = false
+
+              target.isGlowing = true
+              glowingTarget[player.uniqueId] = target
+            }
+          }
+        }
+        .runTaskTimer(EntityPose.INSTANCE, 0L, 2L) // 0Lにすることで、設置直後から判定を開始
   }
 }

@@ -1,10 +1,16 @@
 package me.ankokunsan.entityPose
 
+import kotlin.collections.set
 import kotlin.math.round
+import me.ankokunsan.entityPose.EntityClick.Companion.currentStep
+import me.ankokunsan.entityPose.EntityClick.Companion.currentZah
+import me.ankokunsan.entityPose.EntityClick.Companion.inputWait
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.ZAHYO_KEY
 import me.ankokunsan.entityPose.commands.Entityinfo
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
@@ -32,7 +38,6 @@ class GUIClick : Listener {
 
     val player = event.whoClicked as? Player ?: return
 
-    // 【重要】Mapを使わず、クリックした瞬間の視線からターゲットを再取得
     val result =
         player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
           it != player
@@ -41,15 +46,13 @@ class GUIClick : Listener {
 
     val slot = event.rawSlot
     when (slot) {
-      0 -> { // ダメージ無効スイッチ
-        // タグを使って状態を管理する (isInvulnerableはfalseのままにする)
+      0 -> {
         if (target.scoreboardTags.contains("custom_invincible")) {
           target.removeScoreboardTag("custom_invincible")
         } else {
           target.addScoreboardTag("custom_invincible")
         }
       }
-
       1 -> {
         if (target is Tameable) {
           target.isTamed = !target.isTamed
@@ -60,11 +63,10 @@ class GUIClick : Listener {
       2 -> {
         if (target is ArmorStand) target.setBasePlate(!target.hasBasePlate())
       }
-
       3 -> {
         if (target is ArmorStand) target.isInvisible = !target.isInvisible
       }
-      7 -> {
+      6 -> {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
@@ -72,13 +74,20 @@ class GUIClick : Listener {
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
-      8 -> {
+      7 -> {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
         val newScale = (currentScale - 0.1).coerceAtLeast(0.5)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
+      }
+      8 -> {
+        if (target.scoreboardTags.contains("entity_locked")) {
+          target.removeScoreboardTag("entity_locked")
+        } else {
+          target.addScoreboardTag("entity_locked")
+        }
       }
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
@@ -203,5 +212,41 @@ class GUIClick : Listener {
       // ウサギの種類を設定
       rabbit.rabbitType = rabtype
     }
+  }
+
+  @EventHandler
+  fun onKakudoClick(event: InventoryClickEvent) {
+    if (event.view.title != "§3角度選択") return
+    event.isCancelled = true
+
+    val player = event.whoClicked as? Player ?: return
+    val item = event.currentItem ?: return
+    val targetEntity = inputWait[player.uniqueId] ?: return
+
+    val value =
+        item.itemMeta?.persistentDataContainer?.get(KAKUDO_KEY, PersistentDataType.DOUBLE) ?: return
+
+    currentStep[targetEntity.uniqueId] = value
+    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの角度の刻みを ${value}度 に設定しました。")
+    player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
+    player.closeInventory()
+  }
+
+  @EventHandler
+  fun onStepClick(event: InventoryClickEvent) {
+    if (event.view.title != "§3座標の動く量選択") return
+    event.isCancelled = true
+
+    val player = event.whoClicked as? Player ?: return
+    val item = event.currentItem ?: return
+    val targetEntity = inputWait[player.uniqueId] ?: return
+    val value1 =
+        item.itemMeta?.persistentDataContainer?.get(ZAHYO_KEY, PersistentDataType.DOUBLE) ?: return
+    currentZah[targetEntity.uniqueId] = value1
+
+    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く量を ${value1}マス に設定しました。")
+    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
+
+    player.closeInventory()
   }
 }
