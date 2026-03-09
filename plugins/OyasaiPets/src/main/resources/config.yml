@@ -9,6 +9,7 @@ economy:
 # ペット設定
 pets:
   maxFoodLevel: 50
+  freeRoamFlyingSpeedMultiplier: 0.5
 
 # ショップ設定
 shop:

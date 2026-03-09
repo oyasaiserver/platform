@@ -9,6 +9,8 @@ economy:
 # ペット全般設定
 pets:
   maxFoodLevel: 50 # ペットの最大レベル
+  # maxHealth: 各MOBの最大HP。0以下でデフォルト値を使用
+  freeRoamFlyingSpeedMultiplier: 0.5 # 飛行MOB（ALLAY・PARROT・BEE）のフリーローム速度倍率
 
   # ペット種別ごとの詳細設定
   wolf:
@@ -17,96 +19,112 @@ pets:
     jumpPower: 0.6
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: -1
   cat:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.9
     scaleMin: 2.2
     scaleMax: 3.4
+    maxHealth: -1
   chicken:
     baseSpeed: 0.4
     maxSpeed: 0.9
     jumpPower: 0.5
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: 20
   dolphin:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.5
     scaleMin: 1.2
     scaleMax: 2.2
+    maxHealth: -1
   parrot:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.5
     scaleMin: 1.5
     scaleMax: 3.5
+    maxHealth: -1
   fox:
     baseSpeed: 0.7
     maxSpeed: 1.3
     jumpPower: 0.7
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: -1
   frog:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 1.2
     scaleMin: 2.0
     scaleMax: 3.0
+    maxHealth: -1
   allay:
     baseSpeed: 0.6
     maxSpeed: 1.2
     jumpPower: 0.5
     scaleMin: 1.0
     scaleMax: 2.0
+    maxHealth: -1
   axolotl:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.5
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: -1
   bee:
     baseSpeed: 0.6
     maxSpeed: 1.1
     jumpPower: 0.5
     scaleMin: 1.0
     scaleMax: 2.0
+    maxHealth: -1
   rabbit:
     baseSpeed: 0.6
     maxSpeed: 1.2
     jumpPower: 0.8
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: 20
   panda:
     baseSpeed: 0.4
     maxSpeed: 0.8
     jumpPower: 0.5
     scaleMin: 2.0
     scaleMax: 3.0
+    maxHealth: -1
   polar_bear:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.6
     scaleMin: 2.5
     scaleMax: 3.5
+    maxHealth: -1
   pufferfish:
     baseSpeed: 0.4
     maxSpeed: 0.8
     jumpPower: 0.5
     scaleMin: 1.0
     scaleMax: 2.0
+    maxHealth: -1
   turtle:
     baseSpeed: 0.3
     maxSpeed: 0.7
     jumpPower: 0.5
     scaleMin: 1.5
     scaleMax: 2.5
+    maxHealth: -1
   armadillo:
     baseSpeed: 0.5
     maxSpeed: 1.0
     jumpPower: 0.5
     scaleMin: 1.2
     scaleMax: 2.2
+    maxHealth: -1
 
 # ショップ設定
 shop:
@@ -196,4 +214,3 @@ play:
 #   cost: 50
 # recover:
 #   cost: 50
-

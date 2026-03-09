@@ -90,12 +90,13 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val openedShopGuis = guiManager.openedShopGuis
   private val openedMainMenus = guiManager.openedMainMenus
   // --- shopremoveall 確認待ち管理 ---
+  private val pendingRemoveAllConfirm = mutableMapOf<UUID, Long>()
   // --- abandon 確認待ち管理 ---
-  private val pendingAbandonConfirm = ConcurrentHashMap<UUID, Pair<Int, Long>>()
+  private val pendingAbandonConfirm = mutableMapOf<UUID, Pair<Int, Long>>()
 
   // Cooldowns & Tasks
-  private val mountCooldowns = ConcurrentHashMap<UUID, Long>()
-  private val dropCooldowns = ConcurrentHashMap<UUID, Long>()
+  private val mountCooldowns = mutableMapOf<UUID, Long>()
+  private val dropCooldowns = mutableMapOf<UUID, Long>()
 
   // タスク管理
   private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
@@ -174,21 +175,12 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     // 子供AIシステムの開始（初期化はSystems Init前に実施済み）
     childAISystem.startGlobalAITask()
 
-    // ペットのオーナー追従テレポート + 空中パロットのエフェクト起動（5秒ごと）
+    // ペットのオーナー追従テレポートタスク（騎乗中でないペットが遠く離れた場合に自動テレポート）
     object : BukkitRunnable() {
           override fun run() {
             for (entity in ActivePetRegistry.getAll()) {
               if (!entity.isValid) continue
-              val isRidden = entity.passengers.isNotEmpty()
-
-              // 空中パロットのエフェクト起動（騎乗中でない & エフェクト未起動の場合）
-              if (entity is Parrot && !isRidden &&
-                  !entity.isOnGround && !entity.isInWater &&
-                  !ParrotFloatEffectRegistry.isRunning(entity.uniqueId)) {
-                ParrotFloatEffectRegistry.start(this@BigWolfPlugin, entity, 400)
-              }
-
-              if (isRidden) continue // 騎乗中はテレポートスキップ
+              if (entity.passengers.isNotEmpty()) continue // 騎乗中はスキップ
               val ownerId = ActivePetRegistry.getOwnerId(entity.uniqueId) ?: continue
               val ownerUuid = runCatching { UUID.fromString(ownerId) }.getOrNull() ?: continue
               val owner = Bukkit.getPlayer(ownerUuid) ?: continue
@@ -198,11 +190,8 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               val target =
                   SpawnUtils.findSafeSpawnLocation(
                       owner.location.clone().add(
-                          (Random.nextDouble() * 4 - 2), 0.0, (Random.nextDouble() * 4 - 2)))
+                          (Math.random() * 4 - 2), 0.0, (Math.random() * 4 - 2)))
               entity.teleport(target)
-              if (entity is Parrot && !entity.isOnGround) {
-                ParrotFloatEffectRegistry.start(this@BigWolfPlugin, entity, 400)
-              }
             }
           }
         }
@@ -321,9 +310,9 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               storageService.storeAllPets(player)
               skillSystem.cleanup(player.uniqueId)
               interactionService.cleanupPlayer(player.uniqueId)
-              PetDataManager.clearPlayerCache(player.uniqueId)
               mountCooldowns.remove(player.uniqueId)
               dropCooldowns.remove(player.uniqueId)
+              pendingRemoveAllConfirm.remove(player.uniqueId)
               pendingAbandonConfirm.remove(player.uniqueId)
               PetDebugger.disable(player.uniqueId)
             })
@@ -356,7 +345,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     val opCommands =
         OpCommands(
             this,
+            shopSystem,
+            petSpawnSystem::spawnAndMountEntity,
             this::showOpUsage,
+            this::handleOpShopRemoveAll,
             this::handleForceStoreTarget,
             this::handleForceStoreAll,
             queryService::handlePetHistory)
@@ -398,19 +390,53 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     player.sendMessage(Component.text("/bigwolfop version - バージョン表示", YELLOW))
     player.sendMessage(Component.text("/bigwolfop reload - 設定リロード", YELLOW))
     player.sendMessage(Component.text("/bigwolfop item <種類> - アイテム配布", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop exp <mob> [variant] - 実験的召喚", YELLOW))
+    player.sendMessage(
+        Component.text("/bigwolfop shop <mob> [variant] [cost] [yaw] - ショップ設置", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop shopremove - ショップ削除", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop shopremoveall - 全ショップ削除", YELLOW))
     player.sendMessage(Component.text("/bigwolfop force_store - 強制収納", YELLOW))
     player.sendMessage(Component.text("/bigwolfop force_storeall <player> - 全強制収納", YELLOW))
     player.sendMessage(Component.text("/bigwolfop history <player> - 他人の履歴", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop spawn_ai <on|off|status> - スポーン時AI切替", YELLOW))
+    player.sendMessage(Component.text("/bigwolfop reset_speed [all] - ペット速度をデフォルトに戻す", YELLOW))
     player.sendMessage(
         Component.text("/bigwolfop debug_egg <mob> [key=value ...] - デバッグ用スポーンエッグ生成", YELLOW))
     player.sendMessage(
-        Component.text("/bigwolfop config [list|get <key>|set <key> <value>|mob <mob> ...] - コンフィグ編集", YELLOW))
+        Component.text("/bigwolfop perf_debug <on|off|status> - tick処理デバッグ表示", YELLOW))
   }
 
   private fun sendVersionInfo(player: Player) {
     val version = pluginMeta.version
     player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
     player.sendMessage(Component.text("Version: $version", YELLOW))
+  }
+
+  // OP専用: 全ショップ削除
+  private fun handleOpShopRemoveAll(sender: Player) {
+    val now = System.currentTimeMillis()
+    val last = pendingRemoveAllConfirm[sender.uniqueId]
+    if (last != null && now - last <= BigWolfConfig.REMOVEALL_CONFIRM_TIMEOUT_MS) {
+      pendingRemoveAllConfirm.remove(sender.uniqueId)
+      var removed = 0
+      for (world in Bukkit.getWorlds()) {
+        val it = world.livingEntities.iterator()
+        while (it.hasNext()) {
+          val e = it.next()
+          val pdc = e.persistentDataContainer
+          val isShop = (pdc.get(BigWolfKeys.SHOP_FLAG, PersistentDataType.BYTE) ?: 0).toInt() == 1
+          if (isShop) {
+            e.remove()
+            removed++
+          }
+        }
+      }
+      sender.sendMessage(Component.text("ショップ用MOBを $removed 体削除しました。", GREEN))
+      return
+    }
+    pendingRemoveAllConfirm[sender.uniqueId] = now
+    sender.sendMessage(Component.text("【確認】本当に全ワールドのショップMOBを削除しますか？", RED))
+    sender.sendMessage(Component.text("15秒以内にもう一度 /bigwolfop shopremoveall を実行してください。", YELLOW))
   }
 
   // ==========================================
@@ -881,147 +907,6 @@ object BigWolfConfig {
         3 -> skillBookCostLv3
         else -> 0
       }
-
-  /** 全コンフィグキーと現在値のリストを返す */
-  fun asEntryList(): List<Pair<String, Any>> =
-      listOf(
-          "foodPointCost" to foodPointCost,
-          "maxFoodLevel" to maxFoodLevel,
-          "defaultShopCost" to defaultShopCost,
-          "skillBookCostLv1" to skillBookCostLv1,
-          "skillBookCostLv2" to skillBookCostLv2,
-          "skillBookCostLv3" to skillBookCostLv3,
-          "reviveCost" to reviveCost,
-          "recoverCost" to recoverCost,
-          "healItemAmount" to healItemAmount,
-          "breedMinLevel" to breedMinLevel,
-          "breedCost" to breedCost,
-          "maxBreedCount" to maxBreedCount,
-          "breedRandomMin" to breedRandomMin,
-          "breedRandomMax" to breedRandomMax,
-          "breedGenBonusPerGen" to breedGenBonusPerGen,
-          "breedGenBonusMax" to breedGenBonusMax,
-          "breedMutationChance" to breedMutationChance,
-          "breedMutationBoost" to breedMutationBoost,
-          "breedStatCap" to breedStatCap,
-          "breedBonusLevelPerGen" to breedBonusLevelPerGen,
-          "breedBonusLevelMax" to breedBonusLevelMax,
-          "breedParentVariantWeight" to breedParentVariantWeight,
-          "breedOtherVariantWeight" to breedOtherVariantWeight,
-          "playLevelUpChance" to playLevelUpChance,
-          "playLevelUpMaxLevel" to playLevelUpMaxLevel,
-          "spawnAiEnabled" to spawnAiEnabled,
-          "freeRoamSpeedMultiplier" to freeRoamSpeedMultiplier,
-          "freeRoamFlyingSpeedMultiplier" to freeRoamFlyingSpeedMultiplier,
-          "atypicalBaseChance" to atypicalBaseChance,
-          "atypicalOneParentChance" to atypicalOneParentChance,
-          "atypicalBothParentChance" to atypicalBothParentChance,
-          "atypicalLevelUpBonus" to atypicalLevelUpBonus,
-          "atypicalAffectionBonus" to atypicalAffectionBonus,
-          "childAiEnabled" to childAiEnabled,
-      )
-
-  /** キー名から現在値を取得 */
-  fun getField(key: String): Any? = asEntryList().find { it.first == key }?.second
-
-  /** キー名と文字列値でコンフィグを変更（成功時true） */
-  fun setField(key: String, raw: String): Boolean =
-      when (key) {
-        "foodPointCost" -> raw.toIntOrNull()?.also { foodPointCost = it } != null
-        "maxFoodLevel" -> raw.toIntOrNull()?.also { maxFoodLevel = it } != null
-        "defaultShopCost" -> raw.toIntOrNull()?.also { defaultShopCost = it } != null
-        "skillBookCostLv1" -> raw.toIntOrNull()?.also { skillBookCostLv1 = it } != null
-        "skillBookCostLv2" -> raw.toIntOrNull()?.also { skillBookCostLv2 = it } != null
-        "skillBookCostLv3" -> raw.toIntOrNull()?.also { skillBookCostLv3 = it } != null
-        "reviveCost" -> raw.toIntOrNull()?.also { reviveCost = it } != null
-        "recoverCost" -> raw.toIntOrNull()?.also { recoverCost = it } != null
-        "healItemAmount" -> raw.toIntOrNull()?.also { healItemAmount = it } != null
-        "breedMinLevel" -> raw.toIntOrNull()?.also { breedMinLevel = it } != null
-        "breedCost" -> raw.toIntOrNull()?.also { breedCost = it } != null
-        "maxBreedCount" -> raw.toIntOrNull()?.also { maxBreedCount = it } != null
-        "breedRandomMin" -> raw.toDoubleOrNull()?.also { breedRandomMin = it } != null
-        "breedRandomMax" -> raw.toDoubleOrNull()?.also { breedRandomMax = it } != null
-        "breedGenBonusPerGen" -> raw.toDoubleOrNull()?.also { breedGenBonusPerGen = it } != null
-        "breedGenBonusMax" -> raw.toDoubleOrNull()?.also { breedGenBonusMax = it } != null
-        "breedMutationChance" -> raw.toDoubleOrNull()?.also { breedMutationChance = it } != null
-        "breedMutationBoost" -> raw.toDoubleOrNull()?.also { breedMutationBoost = it } != null
-        "breedStatCap" -> raw.toDoubleOrNull()?.also { breedStatCap = it } != null
-        "breedBonusLevelPerGen" -> raw.toIntOrNull()?.also { breedBonusLevelPerGen = it } != null
-        "breedBonusLevelMax" -> raw.toIntOrNull()?.also { breedBonusLevelMax = it } != null
-        "breedParentVariantWeight" -> raw.toIntOrNull()?.also { breedParentVariantWeight = it } != null
-        "breedOtherVariantWeight" -> raw.toIntOrNull()?.also { breedOtherVariantWeight = it } != null
-        "playLevelUpChance" -> raw.toDoubleOrNull()?.also { playLevelUpChance = it } != null
-        "playLevelUpMaxLevel" -> raw.toIntOrNull()?.also { playLevelUpMaxLevel = it } != null
-        "spawnAiEnabled" ->
-            when (raw.lowercase()) {
-              "true" -> true.also { spawnAiEnabled = it }
-              "false" -> false.also { spawnAiEnabled = it }
-              else -> null
-            } != null
-        "freeRoamSpeedMultiplier" ->
-            raw.toDoubleOrNull()?.also { freeRoamSpeedMultiplier = it } != null
-        "freeRoamFlyingSpeedMultiplier" ->
-            raw.toDoubleOrNull()?.also { freeRoamFlyingSpeedMultiplier = it } != null
-        "atypicalBaseChance" -> raw.toDoubleOrNull()?.also { atypicalBaseChance = it } != null
-        "atypicalOneParentChance" ->
-            raw.toDoubleOrNull()?.also { atypicalOneParentChance = it } != null
-        "atypicalBothParentChance" ->
-            raw.toDoubleOrNull()?.also { atypicalBothParentChance = it } != null
-        "atypicalLevelUpBonus" -> raw.toDoubleOrNull()?.also { atypicalLevelUpBonus = it } != null
-        "atypicalAffectionBonus" ->
-            raw.toDoubleOrNull()?.also { atypicalAffectionBonus = it } != null
-        "childAiEnabled" ->
-            when (raw.lowercase()) {
-              "true" -> true.also { childAiEnabled = it }
-              "false" -> false.also { childAiEnabled = it }
-              else -> null
-            } != null
-        else -> false
-      }
-
-  /** 変更したキーをconfig.ymlに永続化 */
-  fun saveField(key: String, plugin: JavaPlugin) {
-    val path =
-        when (key) {
-          "foodPointCost" -> "economy.foodPointCost"
-          "maxFoodLevel" -> "pets.maxFoodLevel"
-          "defaultShopCost" -> "shop.defaultCost"
-          "skillBookCostLv1" -> "skillbook.costLv1"
-          "skillBookCostLv2" -> "skillbook.costLv2"
-          "skillBookCostLv3" -> "skillbook.costLv3"
-          "reviveCost" -> "revive.cost"
-          "recoverCost" -> "recover.cost"
-          "healItemAmount" -> "items.healAmount"
-          "breedMinLevel" -> "breed.minLevel"
-          "breedCost" -> "breed.cost"
-          "maxBreedCount" -> "breed.maxCount"
-          "breedRandomMin" -> "breed.randomMin"
-          "breedRandomMax" -> "breed.randomMax"
-          "breedGenBonusPerGen" -> "breed.genBonusPerGen"
-          "breedGenBonusMax" -> "breed.genBonusMax"
-          "breedMutationChance" -> "breed.mutationChance"
-          "breedMutationBoost" -> "breed.mutationBoost"
-          "breedStatCap" -> "breed.statCap"
-          "breedBonusLevelPerGen" -> "breed.bonusLevelPerGen"
-          "breedBonusLevelMax" -> "breed.bonusLevelMax"
-          "breedParentVariantWeight" -> "breed.variantWeights.parent"
-          "breedOtherVariantWeight" -> "breed.variantWeights.other"
-          "playLevelUpChance" -> "play.levelUpChance"
-          "playLevelUpMaxLevel" -> "play.levelUpMaxLevel"
-          "spawnAiEnabled" -> "pets.spawnAiEnabled"
-          "freeRoamSpeedMultiplier" -> "pets.freeRoamSpeedMultiplier"
-          "freeRoamFlyingSpeedMultiplier" -> "pets.freeRoamFlyingSpeedMultiplier"
-          "atypicalBaseChance" -> "traits.atypicalBaseChance"
-          "atypicalOneParentChance" -> "traits.atypicalOneParentChance"
-          "atypicalBothParentChance" -> "traits.atypicalBothParentChance"
-          "atypicalLevelUpBonus" -> "traits.atypicalLevelUpBonus"
-          "atypicalAffectionBonus" -> "traits.atypicalAffectionBonus"
-          "childAiEnabled" -> "traits.childAiEnabled"
-          else -> return
-        }
-    plugin.config.set(path, getField(key))
-    plugin.saveConfig()
-  }
 }
 
 // ===== File: BigWolfKeys.kt =====
@@ -1196,12 +1081,8 @@ object PetDataManager {
   ): PetData {
     val existingPets = loadPlayerPets(ownerUuid)
 
-    // 次のペット番号を決定（譲渡受け取りペットの番号を除外して連番を維持）
-    val ownerUuidStr = ownerUuid.toString()
-    val nextNumber =
-        (existingPets.values
-            .filter { it.originalOwner == null || it.originalOwner == ownerUuidStr }
-            .maxOfOrNull { it.petNumber } ?: 0) + 1
+    // 次のペット番号を決定
+    val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
     val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
     val defaultName = buildDefaultPetName(ownerName, type, variant, nextNumber)
 
@@ -1409,11 +1290,6 @@ object PetDataManager {
   }
 
   /** ペットをキャッシュから削除（譲渡時など） */
-  /** プレイヤーのキャッシュを全削除（ログアウト時に呼ぶ） */
-  fun clearPlayerCache(ownerUuid: UUID) {
-    cache.remove(ownerUuid.toString())
-  }
-
   fun removePetFromCache(ownerUuid: UUID, petId: String) {
     cache[ownerUuid.toString()]?.remove(petId)
 
@@ -1475,12 +1351,7 @@ object PetDataManager {
       generation: Int
   ): PetData {
     val existingPets = loadPlayerPets(ownerUuid)
-    // 譲渡受け取りペットの番号を除外して連番を維持
-    val ownerUuidStr = ownerUuid.toString()
-    val nextNumber =
-        (existingPets.values
-            .filter { it.originalOwner == null || it.originalOwner == ownerUuidStr }
-            .maxOfOrNull { it.petNumber } ?: 0) + 1
+    val nextNumber = (existingPets.values.maxOfOrNull { it.petNumber } ?: 0) + 1
     val ownerName = Bukkit.getOfflinePlayer(ownerUuid).name ?: "Unknown"
     val defaultName = buildDefaultPetName(ownerName, type, variant, nextNumber)
 
@@ -1673,38 +1544,6 @@ object ActivePetRegistry {
     cachedIsAtypical.clear()
     cachedOwnerId.clear()
   }
-}
-
-// ===== File: ParrotFloatEffectRegistry.kt =====
-/** オウムペットの空中浮遊エフェクトを一元管理する */
-object ParrotFloatEffectRegistry {
-  private val tasks = ConcurrentHashMap<UUID, BukkitTask>()
-
-  fun start(plugin: JavaPlugin, entity: Parrot, timeoutTicks: Int) {
-    tasks.remove(entity.uniqueId)?.cancel()
-    var tick = 0
-    val task = object : BukkitRunnable() {
-      override fun run() {
-        if (!entity.isValid || entity.isDead || entity.isOnGround ||
-            entity.isInWater || entity.passengers.isNotEmpty() || tick++ > timeoutTicks) {
-          tasks.remove(entity.uniqueId); cancel(); return
-        }
-        // 足元を中心に円軌道でパーティクルを放出
-        val loc = entity.location.clone()
-        val angle = 2 * Math.PI * (tick % 30) / 30.0
-        val x = Math.cos(angle) * 0.5
-        val z = Math.sin(angle) * 0.5
-        entity.world.spawnParticle(Particle.ENCHANT, loc.clone().add(x, 0.0, z), 2, 0.0, 0.1, 0.0, 0.05)
-        if (tick % 10 == 0) {
-          entity.world.spawnParticle(Particle.END_ROD, loc, 1, 0.2, 0.1, 0.2, 0.01)
-        }
-      }
-    }
-    tasks[entity.uniqueId] = task.runTaskTimer(plugin, 1L, 1L)
-  }
-
-  fun stop(entityUuid: UUID) { tasks.remove(entityUuid)?.cancel() }
-  fun isRunning(entityUuid: UUID) = tasks.containsKey(entityUuid)
 }
 
 // ===== File: debug/PetDebugger.kt =====
@@ -2243,46 +2082,6 @@ object CommandTabCompleter {
       }
     }
 
-    val configGlobalKeys =
-        listOf(
-            "foodPointCost",
-            "maxFoodLevel",
-            "defaultShopCost",
-            "skillBookCostLv1",
-            "skillBookCostLv2",
-            "skillBookCostLv3",
-            "reviveCost",
-            "recoverCost",
-            "healItemAmount",
-            "breedMinLevel",
-            "breedCost",
-            "maxBreedCount",
-            "breedRandomMin",
-            "breedRandomMax",
-            "breedGenBonusPerGen",
-            "breedGenBonusMax",
-            "breedMutationChance",
-            "breedMutationBoost",
-            "breedStatCap",
-            "breedBonusLevelPerGen",
-            "breedBonusLevelMax",
-            "breedParentVariantWeight",
-            "breedOtherVariantWeight",
-            "playLevelUpChance",
-            "playLevelUpMaxLevel",
-            "spawnAiEnabled",
-            "freeRoamSpeedMultiplier",
-            "freeRoamFlyingSpeedMultiplier",
-            "atypicalBaseChance",
-            "atypicalOneParentChance",
-            "atypicalBothParentChance",
-            "atypicalLevelUpBonus",
-            "atypicalAffectionBonus",
-            "childAiEnabled")
-    val configMobKeys = listOf("baseSpeed", "maxSpeed", "jumpPower", "scaleMin", "scaleMax")
-    val configMobNames =
-        PetRegistry.allConfigurableTypes().map { it.name.lowercase() }.sorted()
-
     val result: List<String> =
         when (args.size) {
           1 ->
@@ -2290,11 +2089,17 @@ object CommandTabCompleter {
                       "version",
                       "reload",
                       "item",
+                      "exp",
+                      "shop",
+                      "shopremove",
+                      "shopremoveall",
                       "force_store",
                       "force_storeall",
                       "history",
+                      "spawn_ai",
+                      "reset_speed",
                       "debug_egg",
-                      "config")
+                      "perf_debug")
                   .filter { it.startsWith(a0) }
 
           2 ->
@@ -2314,25 +2119,43 @@ object CommandTabCompleter {
                             "all")
                         .filter { it.startsWith(a1) }
 
+                "exp",
+                "shop" ->
+                    EntityType.entries
+                        .filter { it.isSpawnable && it.isAlive }
+                        .map { it.name.lowercase() }
+                        .filter { it.startsWith(a1) }
+
                 "force_storeall",
                 "history" ->
                     Bukkit.getOnlinePlayers()
                         .map { it.name }
                         .filter { it.lowercase().startsWith(a1) }
 
+                "spawn_ai" -> listOf("on", "off", "status").filter { it.startsWith(a1) }
+                "reset_speed" -> listOf("all").filter { it.startsWith(a1) }
                 "debug_egg" ->
                     EntityType.entries
                         .filter { it.isSpawnable && it.isAlive }
                         .map { it.name.lowercase() }
                         .filter { it.startsWith(a1) }
-                "config" ->
-                    listOf("list", "get", "set", "mob").filter { it.startsWith(a1) }
+                "perf_debug" -> listOf("on", "off", "status").filter { it.startsWith(a1) }
 
                 else -> emptyList()
               }
 
           3 ->
               when (a0) {
+                "exp",
+                "shop" -> {
+                  val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+                  if (type != null) {
+                    VariantHandler.getVariantNames(type)
+                        .map { it.lowercase() }
+                        .filter { it.startsWith(args[2].lowercase()) }
+                  } else emptyList()
+                }
+
                 "history" -> {
                   // ページ番号の候補（1-5程度）
                   (1..5).map { it.toString() }.filter { it.startsWith(args[2]) }
@@ -2340,38 +2163,6 @@ object CommandTabCompleter {
 
                 "debug_egg" -> debugEggKv(args[2].lowercase())
 
-                "config" -> {
-                  val cur = args[2].lowercase()
-                  when (a1) {
-                    "get", "set" -> configGlobalKeys.filter { it.lowercase().startsWith(cur) }
-                    "mob" -> configMobNames.filter { it.startsWith(cur) }
-                    else -> emptyList()
-                  }
-                }
-
-                else -> emptyList()
-              }
-
-          4 ->
-              when {
-                a0 == "config" && a1 == "mob" -> {
-                  val cur = args[3].lowercase()
-                  listOf("list", "get", "set").filter { it.startsWith(cur) }
-                }
-                a0 == "debug_egg" -> debugEggKv(args.last().lowercase())
-                else -> emptyList()
-              }
-
-          5 ->
-              when {
-                a0 == "config" && a1 == "mob" -> {
-                  val mobSub = args[3].lowercase()
-                  val cur = args[4].lowercase()
-                  if (mobSub == "get" || mobSub == "set")
-                      configMobKeys.filter { it.lowercase().startsWith(cur) }
-                  else emptyList()
-                }
-                a0 == "debug_egg" -> debugEggKv(args.last().lowercase())
                 else -> emptyList()
               }
 
@@ -2469,7 +2260,10 @@ object CommandTabCompleter {
 /** OP専用コマンド処理 */
 class OpCommands(
     private val plugin: JavaPlugin,
+    private val shopSystem: ShopSystem,
+    private val spawnAndMountEntity: (Player, EntityType, String?) -> String?,
     private val showUsageFn: (Player) -> Unit,
+    private val shopRemoveAllFn: (Player) -> Unit,
     private val forceStoreFn: (Player) -> Unit,
     private val forceStoreAllFn: (Player, Array<out String>) -> Unit,
     private val historyFn: (Player, Array<out String>) -> Unit
@@ -2484,6 +2278,22 @@ class OpCommands(
     return when (val sub = args[0].lowercase()) {
       "item" -> {
         handleItemCommand(player, args)
+        true
+      }
+      "exp" -> {
+        handleExperimentalSummon(player, args)
+        true
+      }
+      "shop" -> {
+        handleShopCommand(player, args)
+        true
+      }
+      "shopremove" -> {
+        handleShopRemove(player)
+        true
+      }
+      "shopremoveall" -> {
+        shopRemoveAllFn(player)
         true
       }
       "reload" -> {
@@ -2506,12 +2316,20 @@ class OpCommands(
         historyFn(player, args)
         true
       }
+      "spawn_ai" -> {
+        handleSpawnAi(player, args)
+        true
+      }
+      "reset_speed" -> {
+        handleResetSpeed(player, args)
+        true
+      }
       "debug_egg" -> {
         handleDebugEgg(player, args)
         true
       }
-      "config" -> {
-        handleConfigCommand(player, args)
+      "perf_debug" -> {
+        handlePerfDebug(player, args)
         true
       }
       else -> {
@@ -2603,6 +2421,47 @@ class OpCommands(
   }
 
   /** 実験的召喚コマンド */
+  fun handleExperimentalSummon(player: Player, args: Array<out String>) {
+    if (args.size < 2) {
+      player.sendMessage(Component.text("MOB名を指定してください。例: /bigwolf exp zombie", RED))
+      return
+    }
+
+    val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+    if (type == null || !type.isAlive) {
+      player.sendMessage(Component.text("無効なMOB名です。", RED))
+      return
+    }
+
+    val variant = if (args.size >= 3) args[2].lowercase() else null
+    spawnAndMountEntity(player, type, variant)
+  }
+
+  /** ショップMOB設置コマンド */
+  fun handleShopCommand(player: Player, args: Array<out String>) {
+    if (args.size < 2) {
+      player.sendMessage(Component.text("使い方: /bigwolf shop <mob> [variant] [cost] [yawDeg]", RED))
+      return
+    }
+
+    val type = runCatching { EntityType.valueOf(args[1].uppercase()) }.getOrNull()
+    if (type == null || !type.isAlive) {
+      player.sendMessage(Component.text("無効なMOB名です。", RED))
+      return
+    }
+
+    val variant = args.getOrNull(2)?.lowercase()
+    val cost = args.getOrNull(3)?.toIntOrNull() ?: BigWolfConfig.defaultShopCost
+    val yawDeg = args.getOrNull(4)?.toFloatOrNull()
+
+    shopSystem.spawnShopMob(player, type, variant, cost, yawDeg)
+  }
+
+  /** ショップMOB削除コマンド */
+  fun handleShopRemove(player: Player) {
+    shopSystem.removeNearestShopMob(player)
+  }
+
   /** 設定リロードコマンド */
   fun handleReload(player: Player) {
     plugin.reloadConfig()
@@ -2617,6 +2476,51 @@ class OpCommands(
     val version = plugin.description.version
     player.sendMessage(Component.text("=== OyasaiPets (BigWolf) ===", GOLD))
     player.sendMessage(Component.text("Version: $version", YELLOW))
+  }
+
+  private fun handleSpawnAi(player: Player, args: Array<out String>) {
+    val arg = args.getOrNull(1)?.lowercase()
+    when (arg) {
+      null,
+      "status" -> {
+        val state = if (BigWolfConfig.spawnAiEnabled) "ON" else "OFF"
+        player.sendMessage(Component.text("ペットスポーン時AI: $state", YELLOW))
+      }
+      "on" -> {
+        BigWolfConfig.spawnAiEnabled = true
+        plugin.config.set("pets.spawnAiEnabled", true)
+        plugin.saveConfig()
+        player.sendMessage(Component.text("ペットスポーン時AIをONにしました。", GREEN))
+      }
+      "off" -> {
+        BigWolfConfig.spawnAiEnabled = false
+        plugin.config.set("pets.spawnAiEnabled", false)
+        plugin.saveConfig()
+        player.sendMessage(Component.text("ペットスポーン時AIをOFFにしました。", YELLOW))
+      }
+      else -> {
+        player.sendMessage(Component.text("使い方: /bigwolfop spawn_ai <on|off|status>", RED))
+      }
+    }
+  }
+
+  private fun handleResetSpeed(player: Player, args: Array<out String>) {
+    val arg = args.getOrNull(1)?.lowercase()
+    if (arg != null && arg != "all") {
+      player.sendMessage(Component.text("使い方: /bigwolfop reset_speed [all]", RED))
+      return
+    }
+
+    var count = 0
+    for (entity in ActivePetRegistry.getAll()) {
+      entity.getAttribute(Attribute.MOVEMENT_SPEED)?.let { move ->
+        move.baseValue = move.defaultValue
+      }
+      entity.getAttribute(Attribute.FLYING_SPEED)?.let { fly -> fly.baseValue = fly.defaultValue }
+      count++
+    }
+
+    player.sendMessage(Component.text("ペットの移動速度をデフォルトに戻しました: $count 体", GREEN))
   }
 
   private fun handleDebugEgg(player: Player, args: Array<out String>) {
@@ -2719,133 +2623,38 @@ class OpCommands(
     player.sendMessage(Component.text("デバッグ用スポーンエッグを付与しました: $debugName", GREEN))
   }
 
-  private fun handleConfigCommand(player: Player, args: Array<out String>) {
-    when (val sub = args.getOrNull(1)?.lowercase()) {
-      null, "list" -> {
-        player.sendMessage(Component.text("=== BigWolf Config ===", GOLD))
-        BigWolfConfig.asEntryList().forEach { (key, value) ->
-          player.sendMessage(Component.text("  $key = $value", YELLOW))
-        }
+  private fun handlePerfDebug(player: Player, args: Array<out String>) {
+    val sub = args.getOrNull(1)?.lowercase()
+    when (sub) {
+      "on" -> {
+        PetDebugger.enable(player.uniqueId)
         player.sendMessage(
-            Component.text("使い方: /bigwolfop config get <key> | set <key> <value>", GRAY))
+            Component.text(
+                "[PetDebug] パフォーマンスデバッグを有効にしました。",
+                net.kyori.adventure.text.format.NamedTextColor.GREEN))
+        player.sendMessage(
+            Component.text(
+                "[PetDebug] ペットに乗るとアクションバーにtick情報が表示されます。",
+                net.kyori.adventure.text.format.NamedTextColor.GRAY))
       }
-      "get" -> {
-        val key = args.getOrNull(2)
-            ?: run {
-              player.sendMessage(Component.text("使い方: /bigwolfop config get <key>", RED))
-              return
-            }
-        val value = BigWolfConfig.getField(key)
-            ?: run {
-              player.sendMessage(Component.text("不明なキー: $key", RED))
-              return
-            }
-        player.sendMessage(Component.text("$key = $value", YELLOW))
+      "off" -> {
+        PetDebugger.disable(player.uniqueId)
+        player.sendMessage(
+            Component.text(
+                "[PetDebug] パフォーマンスデバッグを無効にしました。",
+                net.kyori.adventure.text.format.NamedTextColor.YELLOW))
       }
-      "set" -> {
-        val key = args.getOrNull(2)
-            ?: run {
-              player.sendMessage(
-                  Component.text("使い方: /bigwolfop config set <key> <value>", RED))
-              return
-            }
-        val raw = args.getOrNull(3)
-            ?: run {
-              player.sendMessage(
-                  Component.text("使い方: /bigwolfop config set <key> <value>", RED))
-              return
-            }
-        if (!BigWolfConfig.setField(key, raw)) {
-          player.sendMessage(Component.text("不明なキーまたは無効な値: $key = $raw", RED))
-          return
-        }
-        BigWolfConfig.saveField(key, plugin)
-        val newValue = BigWolfConfig.getField(key)
-        player.sendMessage(Component.text("$key を $newValue に設定しました。", GREEN))
+      "status" -> {
+        val enabled = PetDebugger.isEnabled(player.uniqueId)
+        val state = if (enabled) "有効" else "無効"
+        val color =
+            if (enabled) net.kyori.adventure.text.format.NamedTextColor.GREEN
+            else net.kyori.adventure.text.format.NamedTextColor.GRAY
+        player.sendMessage(Component.text("[PetDebug] 現在の状態: $state", color))
       }
-      "mob" -> {
-        val mobName = args.getOrNull(2)
-        if (mobName == null) {
-          player.sendMessage(Component.text("利用可能なモブ:", GOLD))
-          PetRegistry.allConfigurableTypes().sortedBy { it.name }.forEach {
-            player.sendMessage(Component.text("  ${it.name.lowercase()}", YELLOW))
-          }
-          player.sendMessage(
-              Component.text(
-                  "使い方: /bigwolfop config mob <mob> [list | get <key> | set <key> <value>]",
-                  GRAY))
-          return
-        }
-        val type =
-            runCatching { EntityType.valueOf(mobName.uppercase(Locale.ROOT)) }.getOrNull()
-                ?: run {
-                  player.sendMessage(Component.text("不明なモブ: $mobName", RED))
-                  return
-                }
-        when (val mobSub = args.getOrNull(3)?.lowercase()) {
-          null, "list" -> {
-            player.sendMessage(Component.text("=== ${type.name.lowercase()} ===", GOLD))
-            PetRegistry.getMobEntryList(type).forEach { (k, v) ->
-              player.sendMessage(Component.text("  $k = $v", YELLOW))
-            }
-            player.sendMessage(
-                Component.text("キー: baseSpeed / maxSpeed / jumpPower / scaleMin / scaleMax", GRAY))
-          }
-          "get" -> {
-            val key =
-                args.getOrNull(4)
-                    ?: run {
-                      player.sendMessage(
-                          Component.text(
-                              "使い方: /bigwolfop config mob <mob> get <key>", RED))
-                      return
-                    }
-            val value =
-                PetRegistry.getMobField(type, key)
-                    ?: run {
-                      player.sendMessage(Component.text("不明なキー: $key", RED))
-                      return
-                    }
-            player.sendMessage(Component.text("${type.name.lowercase()}.$key = $value", YELLOW))
-          }
-          "set" -> {
-            val key =
-                args.getOrNull(4)
-                    ?: run {
-                      player.sendMessage(
-                          Component.text(
-                              "使い方: /bigwolfop config mob <mob> set <key> <value>", RED))
-                      return
-                    }
-            val raw =
-                args.getOrNull(5)
-                    ?: run {
-                      player.sendMessage(
-                          Component.text(
-                              "使い方: /bigwolfop config mob <mob> set <key> <value>", RED))
-                      return
-                    }
-            if (!PetRegistry.setMobField(type, key, raw, plugin)) {
-              player.sendMessage(
-                  Component.text("不明なキーまたは無効な値: $key = $raw", RED))
-              return
-            }
-            val newValue = PetRegistry.getMobField(type, key)
-            player.sendMessage(
-                Component.text("${type.name.lowercase()}.$key を $newValue に設定しました。", GREEN))
-          }
-          else ->
-              player.sendMessage(
-                  Component.text(
-                      "使い方: /bigwolfop config mob <mob> [list | get <key> | set <key> <value>]",
-                      RED))
-        }
+      else -> {
+        player.sendMessage(Component.text("使い方: /bigwolfop perf_debug <on|off|status>", RED))
       }
-      else ->
-          player.sendMessage(
-              Component.text(
-                  "使い方: /bigwolfop config [list | get <key> | set <key> <value> | mob <mob> ...]",
-                  RED))
     }
   }
 }
@@ -3102,19 +2911,16 @@ object PetRegistry {
                   entityType = EntityType.PARROT,
                   baseSpeed = 0.5,
                   maxSpeed = 1.0,
-                  jumpPower = 1.0,
                   scaleRange = 1.0..2.0,
                   toyMaterial = Material.WHEAT_SEEDS,
                   toyName = "種のおもちゃ",
-                  toyType = ToyType.THROW_FETCH,
-                  toyGravity = false),
+                  toyType = ToyType.THROW_FETCH),
           EntityType.CHICKEN to
               PetSpec(
                   category = PetCategory.FLYING,
                   entityType = EntityType.CHICKEN,
                   baseSpeed = 0.4,
                   maxSpeed = 0.9,
-                  jumpPower = 0.8,
                   toyMaterial = Material.MELON_SEEDS,
                   toyName = "スイカの種",
                   toyType = ToyType.THROW_FETCH),
@@ -3124,7 +2930,6 @@ object PetRegistry {
                   entityType = EntityType.BEE,
                   baseSpeed = 0.6,
                   maxSpeed = 1.1,
-                  jumpPower = 1.0,
                   scaleRange = 1.0..2.0,
                   toyMaterial = Material.HONEY_BOTTLE,
                   toyName = "ハチミツ",
@@ -3135,7 +2940,6 @@ object PetRegistry {
                   entityType = EntityType.ALLAY,
                   baseSpeed = 0.6,
                   maxSpeed = 1.2,
-                  jumpPower = 1.1,
                   scaleRange = 1.0..2.0,
                   toyMaterial = Material.AMETHYST_SHARD,
                   toyName = "キラキラ",
@@ -3253,59 +3057,6 @@ object PetRegistry {
   /** 全公式ペットのおもちゃアイテムリストを取得 */
   fun getAllToyItems(): List<ItemStack> {
     return officialPets.mapNotNull { type -> specs[type]?.createToyItem() }
-  }
-
-  /** モブスペックのキーと現在値の一覧を返す */
-  fun getMobEntryList(type: EntityType): List<Pair<String, Any>> {
-    val spec = get(type)
-    return listOf(
-        "baseSpeed" to spec.baseSpeed,
-        "maxSpeed" to spec.maxSpeed,
-        "jumpPower" to spec.jumpPower,
-        "scaleMin" to spec.scaleRange.start,
-        "scaleMax" to spec.scaleRange.endInclusive,
-    )
-  }
-
-  /** モブスペックの特定フィールドの現在値を取得 */
-  fun getMobField(type: EntityType, key: String): Any? {
-    val spec = get(type)
-    return when (key) {
-      "baseSpeed" -> spec.baseSpeed
-      "maxSpeed" -> spec.maxSpeed
-      "jumpPower" -> spec.jumpPower
-      "scaleMin" -> spec.scaleRange.start
-      "scaleMax" -> spec.scaleRange.endInclusive
-      else -> null
-    }
-  }
-
-  /** モブスペックのフィールドを変更してメモリとconfig.ymlに反映（成功時true） */
-  fun setMobField(type: EntityType, key: String, raw: String, plugin: JavaPlugin): Boolean {
-    val spec = get(type)
-    val updated =
-        when (key) {
-          "baseSpeed" -> raw.toDoubleOrNull()?.let { spec.copy(baseSpeed = it) }
-          "maxSpeed" -> raw.toDoubleOrNull()?.let { spec.copy(maxSpeed = it) }
-          "jumpPower" -> raw.toDoubleOrNull()?.let { spec.copy(jumpPower = it) }
-          "scaleMin" ->
-              raw.toDoubleOrNull()?.let {
-                spec.copy(scaleRange = it..spec.scaleRange.endInclusive)
-              }
-          "scaleMax" ->
-              raw.toDoubleOrNull()?.let { spec.copy(scaleRange = spec.scaleRange.start..it) }
-          else -> null
-        } ?: return false
-
-    overrides[type] = updated
-    val base = "pets.${type.name.lowercase()}"
-    plugin.config.set("$base.baseSpeed", updated.baseSpeed)
-    plugin.config.set("$base.maxSpeed", updated.maxSpeed)
-    plugin.config.set("$base.jumpPower", updated.jumpPower)
-    plugin.config.set("$base.scaleMin", updated.scaleRange.start)
-    plugin.config.set("$base.scaleMax", updated.scaleRange.endInclusive)
-    plugin.saveConfig()
-    return true
   }
 }
 
@@ -4570,10 +4321,11 @@ class BreedGuiListener(
   }
 
   /** 交配GUIが閉じられた時 */
+  @Suppress("UNUSED_PARAMETER")
   @EventHandler
   fun onInventoryClose(event: InventoryCloseEvent) {
-    val player = event.player as? Player ?: return
-    guiPets.remove(player.uniqueId)
+    // クリーンアップは不要（次回開く時にリセットされる）
+    // このメソッドはイベントリスナーとして必要
   }
 
   /** 交配GUIが開かれた時（外部から呼ばれる） */
@@ -5191,56 +4943,6 @@ class PetLifecycleListener(
     if (entity.ownerId == null) return
     // 降車中の降下タスクが残っていればキャンセル
     activeFlyDescentTasks.remove(entity.uniqueId)?.cancel()
-
-    if (entity is Parrot) {
-      // 肩乗り防止: 降車直後に座り状態へ
-      entity.isSitting = true
-      // 空中降車: テレポートで強制降下 + エフェクト
-      if (!entity.isOnGround) {
-        // 地面Y座標を走査（最大128ブロック下）
-        val startLoc = entity.location
-        var targetY = startLoc.y
-        for (dy in 1..128) {
-          val check = startLoc.clone().subtract(0.0, dy.toDouble(), 0.0)
-          if (check.block.type.isSolid) { targetY = check.block.y.toDouble() + 1.0; break }
-        }
-        val finalTargetY = targetY
-        var currentY = startLoc.y
-        var ticks = 0
-        val task = object : BukkitRunnable() {
-          override fun run() {
-            if (!entity.isValid || entity.isDead || ticks++ > 1000) {
-              activeFlyDescentTasks.remove(entity.uniqueId)
-              cancel()
-              return
-            }
-            // Nブロック/tick でテレポート降下
-            currentY = (currentY - 0.3).coerceAtLeast(finalTargetY)
-            val nextLoc = entity.location.clone()
-            nextLoc.y = currentY
-            entity.teleport(nextLoc)
-            // 着地完了 — isOnGroundはテレポート後に不正確なためY座標のみで判定
-            if (currentY <= finalTargetY) {
-              activeFlyDescentTasks.remove(entity.uniqueId)
-              cancel()
-            }
-          }
-        }
-        activeFlyDescentTasks[entity.uniqueId] = task.runTaskTimer(plugin, 1L, 1L)
-        // 降下中も魔法浮遊エフェクトを起動（タイムアウト1000秒）
-        ParrotFloatEffectRegistry.start(plugin, entity, 20000)
-      }
-    }
-  }
-
-  /** オウムへの乗車時: AI復帰 + 座り解除 */
-  @EventHandler
-  fun onPetMount(event: org.bukkit.event.entity.EntityMountEvent) {
-    if (event.entity !is Player) return
-    val entity = event.mount as? Parrot ?: return
-    if (entity.ownerId == null) return
-    entity.isSitting = false
-    ParrotFloatEffectRegistry.stop(entity.uniqueId)
   }
 }
 
@@ -5338,11 +5040,6 @@ class PetShopGuiListener(private val petShopGuiService: PetShopGuiService) : Lis
 
       return
     }
-  }
-
-  @EventHandler
-  fun onPlayerQuit(event: PlayerQuitEvent) {
-    openedVariantGuis.remove(event.player.uniqueId)
   }
 }
 
@@ -6833,8 +6530,6 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
         owner = player
       }
       if (this is org.bukkit.entity.Sittable) isSitting = false
-      // オウムは座り状態を維持して肩乗りを防止
-      if (this is Parrot) isSitting = true
       if (this is org.bukkit.entity.Ageable) setAdult()
       if (this is org.bukkit.entity.Armadillo &&
           state != org.bukkit.entity.Armadillo.State.IDLE) {
@@ -6866,7 +6561,7 @@ class TransferService(
     private val storageService: PetStorageService,
     private val logger: Logger
 ) {
-  private val pendingTransfers = ConcurrentHashMap<UUID, TransferRequest>()
+  private val pendingTransfers = mutableMapOf<UUID, TransferRequest>()
 
   data class TransferRequest(val petId: String, val targetPlayer: UUID, val expireTime: Long)
 
@@ -7454,8 +7149,11 @@ class BreedingSystem(
 /** 非定型ペットの子供AI システム 非定型ペットに子供っぽい活発な挙動を追加 */
 class ChildAISystem(private val plugin: JavaPlugin) {
 
+  // アクティブなAIタスク
+  private val activeTasks = mutableMapOf<UUID, BukkitTask>()
+
   // クールダウン管理（各ペットごと）
-  private val lastActionTime = ConcurrentHashMap<UUID, Long>()
+  private val lastActionTime = mutableMapOf<UUID, Long>()
 
   // アクション間隔（ミリ秒）
   private val minActionInterval = 5000L // 5秒
@@ -7635,6 +7333,8 @@ class ChildAISystem(private val plugin: JavaPlugin) {
 
   /** クリーンアップ */
   fun cleanup() {
+    activeTasks.values.forEach { it.cancel() }
+    activeTasks.clear()
     lastActionTime.clear()
   }
 }
@@ -7738,12 +7438,6 @@ class FetchSystem(
     val pet = findNearbyOwnedPet(player, toySpec.entityType)
 
     if (pet != null) {
-      // ウーパールーパーは水中限定
-      if (toySpec.entityType == EntityType.AXOLOTL && !pet.isInWater) {
-        player.sendMessage(Component.text("ウーパールーパーは水中でしか遊べません！", RED))
-        return
-      }
-
       // おもちゃで遊んだ回数（投げたタイミングでカウント）
       pet.statToys = pet.statToys + 1
 
@@ -8201,8 +7895,6 @@ class PetControlSystem(
           var cachedIsHovering = entity.isHovering
           var cachedJumpMul = entity.jumpMultiplier
           var localJumps = 0
-          var hoverTick = -1    // -1: ホバー外、0+: 固定サイクル進行中
-          var internalYVel = 0.0 // サーバー重力干渉を排除した内部管理Y速度
 
           override fun run() {
             val debugEnabled = PetDebugger.isEnabled(player.uniqueId)
@@ -8308,63 +8000,29 @@ class PetControlSystem(
               // Y:  entity.velocity.y（重力適用済み）を基に加工（自然な重力加速）
 
               val prevXZ = flyingVelocities.getOrDefault(entity.uniqueId, Vector(0.0, 0.0, 0.0))
+              // Minecraftが毎tick適用した重力込みのY速度を読む
+              val currentY = entity.velocity.y
 
-              // --- Y速度（内部管理: サーバー重力干渉を排除） ---
-              // entity.velocity.y はサーバーが鶏等に重力を加算した後の値のため読まない
-              // ホバー固定サイクル定数
-              val hoverPeriod = 60   // 1サイクル tick数（3秒）
-              val hoverHeight = 0.2  // 最大高さ（ブロック）
-              // spec.jumpPower で上昇加速量・上限を MOB ごとに制御
-              val jumpAccel = 0.06 * spec.jumpPower * cachedJumpMul
-              val jumpCap   = 0.4  * spec.jumpPower * cachedJumpMul
-              // (1) XZ入力があればホバーサイクルを即キャンセル
-              if (hoverTick >= 0 &&
-                  (input.isForward || input.isBackward || input.isLeft || input.isRight)) {
-                hoverTick = -1
-              }
+              // --- Y速度 ---
               val yVel =
                   when {
                     input.isJump -> {
                       if (!lastJumpPressed) localJumps++
-                      hoverTick = -1  // ホバー中断
                       // 毎tick上昇推力を加算し、上限でキャップ
-                      minOf(internalYVel + jumpAccel, jumpCap)
+                      minOf(currentY + 0.06 * cachedJumpMul, 0.4 * cachedJumpMul)
                     }
                     cachedSkillType == 3 && cachedIsHovering -> {
-                      hoverTick = -1  // ホバー中断
                       // ホバースキル: Y速度を減衰して空中静止
                       if (entity.ticksLived % 10 == 0) {
                         entity.world.spawnParticle(
                             Particle.END_ROD, entity.location, 1, 0.1, 0.0, 0.1, 0.0)
                       }
-                      internalYVel * 0.75
+                      currentY * 0.75
                     }
-                    hoverTick >= 0 -> {
-                      // (2) テレポート後などで地面から離れていたらホバーキャンセル
-                      val nearGround = entity.isOnGround ||
-                          entity.location.clone().subtract(0.0, 0.6, 0.0).block.type.isSolid
-                      if (!nearGround) {
-                        hoverTick = -1
-                        maxOf(internalYVel - 0.04, -0.5)
-                      } else {
-                        // 固定サイクルホバー: 正弦波 h(t)=H*sin(π*t/T) の速度成分
-                        // v(t) = H*π/T * cos(π*t/T)
-                        val phase = Math.PI * hoverTick.toDouble() / hoverPeriod
-                        val vel = hoverHeight * Math.PI / hoverPeriod * Math.cos(phase)
-                        hoverTick++
-                        if (hoverTick >= hoverPeriod) hoverTick = -1  // サイクル終了、次の接地で再開
-                        vel
-                      }
-                    }
-                    entity.isOnGround -> {
-                      // 接地: サイクル開始（cos(0)=1 なので初速 H*π/T）
-                      hoverTick = 0
-                      hoverHeight * Math.PI / hoverPeriod
-                    }
-                    // 自前重力シミュレート（全飛行MOB統一: サーバー重力に依存しない）
-                    else -> maxOf(internalYVel - 0.04, -0.5)
+                    // 飛行MOBはサーバーが重力を適用しないため自前でシミュレート
+                    // 毎tick -0.04 ずつ加速し -0.5 で終端速度キャップ
+                    else -> maxOf(currentY - 0.04, -0.5)
                   }
-              internalYVel = yVel
 
               // --- XZ速度 ---
               if (isDashing) {
@@ -8396,8 +8054,12 @@ class PetControlSystem(
 
                 flyingVelocities[entity.uniqueId] = newXZ.clone()
 
-                entity.velocity = Vector(newXZ.x, yVel, newXZ.z)
-                if (targetXZ.lengthSquared() > 0) particleCallback(entity, cachedParticleType)
+                // 接地中かつ無入力かつ非ジャンプ: velocity代入をスキップしてアニメーション安定化
+                val isIdle = newXZ.lengthSquared() < 0.0005 && entity.isOnGround && !input.isJump
+                if (!isIdle) {
+                  entity.velocity = Vector(newXZ.x, yVel, newXZ.z)
+                  if (targetXZ.lengthSquared() > 0) particleCallback(entity, cachedParticleType)
+                }
               }
             } else {
               // ===== LAND / WATER カテゴリ =====
