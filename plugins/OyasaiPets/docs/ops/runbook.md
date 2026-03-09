@@ -1,18 +1,15 @@
 # OyasaiPets 障害対応 Runbook
 
-| 項目 | 内容 |
-|---|---|
-| 対象読者 | サーバー運営メンバー（OP権限保持者） |
-| 対象バージョン | OyasaiPets v2.4.0 |
-| 最終更新日 | 2026-03-07 |
+| 項目 | 内容 | |---|---| | 対象読者 | サーバー運営メンバー（OP権限保持者） | | 対象バージョン | OyasaiPets
+v2.4.0 | | 最終更新日 | 2026-03-07 |
 
 ---
 
 ## 障害対応の基本方針
 
 1. まずログ（`logs/latest.log`）を確認する
-2. プレイヤーデータ（JSONファイル）を誤って削除・上書きしない
-3. 不明な場合はサーバー停止より `/bigwolfop force_store` や `/bigwolf storeall` で被害を最小化する
+1. プレイヤーデータ（JSONファイル）を誤って削除・上書きしない
+1. 不明な場合はサーバー停止より `/bigwolfop force_store` や `/bigwolf storeall` で被害を最小化する
 
 ---
 
@@ -25,12 +22,13 @@
 **手順:**
 
 1. `logs/latest.log` を開き `[OyasaiPets]` または `BigWolf` で検索する
-2. `TokenManager not found!` が出ている場合:
+1. `TokenManager not found!` が出ている場合:
    - TokenManager プラグインが `plugins/` に存在するか確認する
-   - TokenManager が先に有効化されているか確認する（`depend` 宣言があるため自動的に順序制御されるが、TokenManager 自体が壊れている場合は別途対処）
-3. `ClassNotFoundException` 等が出ている場合:
+   - TokenManager が先に有効化されているか確認する（`depend` 宣言があるため自動的に順序制御されるが、TokenManager
+     自体が壊れている場合は別途対処）
+1. `ClassNotFoundException` 等が出ている場合:
    - JAR ファイルが破損している可能性がある → 再ビルドまたは再配布
-4. `api-version` エラーが出ている場合:
+1. `api-version` エラーが出ている場合:
    - サーバーが PaperMC 1.21 以上であることを確認する
 
 **確認方法:** `/bigwolfop version` が応答すれば正常
@@ -51,12 +49,12 @@
    ```
    /bigwolfop history <プレイヤー名>
    ```
-2. 「足場と空間が必要です」メッセージが出ている場合:
+1. 「足場と空間が必要です」メッセージが出ている場合:
    - 召喚場所が水中・空中・壁の中ではないか確認する
-3. ペットが見えない（データはあるが実体がない）場合:
+1. ペットが見えない（データはあるが実体がない）場合:
    - `/bigwolfop history <プレイヤー名>` で状態を確認する
    - 必要に応じて `/bigwolfop force_storeall <プレイヤー名>` で全収納して再召喚させる
-4. 強制収納が必要な場合:
+1. 強制収納が必要な場合:
    ```
    /bigwolfop force_storeall <プレイヤー名>
    ```
@@ -64,7 +62,8 @@
 
 **確認方法:** プレイヤーが `/bigwolf history` でペットのステータスを確認できる
 
-**失敗時対応:** `players/<UUID>/` のJSONファイルを確認し、ステータスが `ALIVE` のまま止まっている場合は `STORED` に手動修正する（サーバー停止中に実施）
+**失敗時対応:** `players/<UUID>/` のJSONファイルを確認し、ステータスが `ALIVE` のまま止まっている場合は `STORED`
+に手動修正する（サーバー停止中に実施）
 
 ---
 
@@ -77,12 +76,12 @@
 **手順:**
 
 1. プレイヤーの UUID を確認する（ログやMinecraft公式サイト等で調べる）
-2. `plugins/OyasaiPets/players/<UUID>/` ディレクトリを確認する
-3. JSONファイルが存在する場合:
+1. `plugins/OyasaiPets/players/<UUID>/` ディレクトリを確認する
+1. JSONファイルが存在する場合:
    - `status` フィールドを確認する（`ALIVE` / `DEAD` / `STORED`）
    - `STORED` なら `/bigwolf recover <番号>` をプレイヤーに案内する
    - `DEAD` なら `/bigwolf revive <番号>` をプレイヤーに案内する
-4. JSONファイルが存在しない場合:
+1. JSONファイルが存在しない場合:
    - バックアップから復旧する（[バックアップ/復旧手順](backup-restore.md) 参照）
 
 **確認方法:** プレイヤーが `/bigwolf history` でペットを確認できる
@@ -100,12 +99,12 @@
 **手順:**
 
 1. 問題のある場所に移動する
-2. 全削除コマンドを実行する（15秒以内に2回実行で確定）
+1. 全削除コマンドを実行する（15秒以内に2回実行で確定）
    ```
    /bigwolfop shopremoveall
    /bigwolfop shopremoveall
    ```
-3. 必要なショップMOBを再設置する
+1. 必要なショップMOBを再設置する
    ```
    /bigwolfop shop <mob名> [variant] [cost]
    ```
@@ -145,12 +144,12 @@
 **手順:**
 
 1. `config.yml` の YAML 構文が正しいか確認する（インデントに注意）
-2. リロードを実行する
+1. リロードを実行する
    ```
    /bigwolfop reload
    ```
-3. ログに `[OyasaiPets]` のエラーが出ていないか確認する
-4. 必要であればデバッグ表示を有効化する
+1. ログに `[OyasaiPets]` のエラーが出ていないか確認する
+1. 必要であればデバッグ表示を有効化する
    ```
    /bigwolfop perf_debug on
    /bigwolfop perf_debug status
