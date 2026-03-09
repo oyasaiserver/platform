@@ -36,6 +36,7 @@ subprojects {
 
     tasks.withType<ShadowJar>().configureEach {
       archiveBaseName = project.name
+      archiveVersion = ""
       archiveClassifier = ""
       duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
