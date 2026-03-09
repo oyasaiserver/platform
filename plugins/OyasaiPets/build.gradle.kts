@@ -1,5 +1,3 @@
-version = "2.5.0"
-
 dependencies {
   compileOnly(libs.purpur.api)
   // compileOnly(project(":plugins:SocialLikes3")) // 未使用のため除外
