@@ -9,7 +9,7 @@ economy:
 # ペット全般設定
 pets:
   maxFoodLevel: 50 # ペットの最大レベル
-  # maxHealth: 各MOBの最大HP。0以下でデフォルト値を使用
+  # maxHealth: 各MOBの最大HP、C0以下でデフォルト値を使用
   freeRoamFlyingSpeedMultiplier: 0.5 # 飛行MOB（ALLAY・PARROT・BEE）のフリーローム速度倍率
 
   # ペット種別ごとの詳細設定
