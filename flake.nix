@@ -22,10 +22,18 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    codegen = {
+      url = "github:anteriorcore/codegen";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.systems.follows = "systems";
+    };
   };
   outputs =
     {
       nixpkgs,
+      codegen,
       flake-parts,
       treefmt-nix,
       devshell,
@@ -54,6 +62,8 @@
         ./nix/docker.nix
         ./nix/oyasai-scope.nix
         ./nix/treefmt.nix
+        ./nix/codegen.nix
+        codegen.flakeModules.default
         devshell.flakeModule
         flakeAllSystems
         treefmt-nix.flakeModule
