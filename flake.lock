@@ -210,6 +210,7 @@
         "nixpkgs": "nixpkgs",
         "package-lock2nix": "package-lock2nix",
         "systems": "systems_2",
+        "tools": "tools",
         "treefmt-nix": "treefmt-nix"
       }
     },
@@ -240,6 +241,35 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tools": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1773271620,
+        "narHash": "sha256-GGlVQR5v/To17BADvcJoHSwVyo5I8tfqd/cAjz004DA=",
+        "owner": "anteriorcore",
+        "repo": "tools",
+        "rev": "17f44f23b5a41f2584c6778fe594034256ddcb4c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anteriorcore",
+        "repo": "tools",
         "type": "github"
       }
     },

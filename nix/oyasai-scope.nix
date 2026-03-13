@@ -134,9 +134,6 @@
               # keep-sorted end
               ;
           };
-          checks = lib.concatMapAttrs (k: v: lib.optionalAttrs (availableOnSystem v) { "build-${k}" = v; }) (
-            lib.filterAttrs (_: lib.isDerivation) (oyasaiScope // oyasaiScope.plugins)
-          );
         };
     }
   );
