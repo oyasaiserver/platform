@@ -13,7 +13,6 @@
           {
             "gradle".source = "${gradle-wrapper}/gradle/";
             "gradlew".source = "${gradle-wrapper}/gradlew";
-            "gradlew.bat".source = "${gradle-wrapper}/gradlew.bat";
           };
       };
     };

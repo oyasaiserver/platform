@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/gradle
 
-    cp gradlew gradlew.bat $out
+    cp gradlew $out
     cp -r gradle $out
     cp ${../gradle/libs.versions.toml} $out/gradle/libs.versions.toml
   '';
