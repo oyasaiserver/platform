@@ -337,6 +337,7 @@ gradle-app.setting
 ### Kotlin template
 # Compiled class file
 *.class
+.kotlin
 
 # Log file
 *.log
@@ -418,14 +419,12 @@ local
 result
 result-*
 
-# Gradle is provided via devshell
-gradlew
-gradlew.bat
-gradle/wrapper
-
 # direnv
 .envrc
 .direnv
 
 # Claude Code
 .claude
+
+# Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
