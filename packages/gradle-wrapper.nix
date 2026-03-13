@@ -15,6 +15,5 @@ stdenv.mkDerivation {
 
     cp gradlew $out
     cp -r gradle $out
-    cp ${../gradle/libs.versions.toml} $out/gradle/libs.versions.toml
   '';
 }

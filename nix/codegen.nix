@@ -11,7 +11,7 @@
             inherit (config.oyasai.scope) gradle-wrapper;
           in
           {
-            "gradle".source = "${gradle-wrapper}/gradle/";
+            "gradle/wrapper".source = "${gradle-wrapper}/gradle/wrapper/";
             "gradlew".source = "${gradle-wrapper}/gradlew";
           };
       };
