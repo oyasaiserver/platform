@@ -24,7 +24,7 @@ jobs:
         with:
           name: oyasaiserver
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - run: nix flake check -L
+      - run: nix run .#nix-flake-check-changed
 
   nix-flake-health:
     runs-on: ubuntu-latest
