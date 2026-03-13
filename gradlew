@@ -1,4 +1,4 @@
-#!/nix/store/i2yfb9hqscbws8nqw7hkdq811x5fyc1n-bash-5.3p3/bin/sh
+#!/bin/sh
 
 #
 # Copyright © 2015 the original authors.
