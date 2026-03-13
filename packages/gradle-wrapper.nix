@@ -11,9 +11,6 @@ stdenv.mkDerivation {
     gradle wrapper
   '';
   installPhase = ''
-    mkdir -p $out/gradle
-
-    cp gradlew $out
-    cp -r gradle $out
+    cp -r . $out
   '';
 }
