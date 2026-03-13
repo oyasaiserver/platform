@@ -26,6 +26,13 @@
       inputs.systems.follows = "systems";
     };
     systems.url = "github:nix-systems/default";
+    tools = {
+      url = "github:anteriorcore/tools";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.systems.follows = "systems";
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,6 +53,7 @@
         ./nix/treefmt.nix
         inputs.codegen.flakeModules.default
         inputs.devshell.flakeModule
+        inputs.tools.flakeModules.checkBuildAll
         inputs.treefmt-nix.flakeModule
         # keep-sorted end
       ];
