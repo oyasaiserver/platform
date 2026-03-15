@@ -7,31 +7,44 @@
   lib,
   gradle,
   jdk,
+  runCommand,
 }:
-gradle2nix.buildGradlePackage {
-  pname = "plugins";
-  version = "0.0.0";
-  src =
-    with lib.fileset;
-    toSource {
-      root = ../.;
-      fileset = unions [
-        ../build.gradle.kts
-        ../gradle
-        ../plugins
-        ../settings.gradle.kts
-      ];
-    };
-  inherit gradle;
-  buildJdk = jdk;
-  lockFile = ../gradle.lock;
-  gradleBuildFlags = [ "build" ];
-  installPhase = ''
-    runHook preInstall
+let
+  final = gradle2nix.buildGradlePackage {
+    pname = "plugins";
+    version = "0.0.0";
+    src =
+      with lib.fileset;
+      toSource {
+        root = ../.;
+        fileset = unions [
+          ../build.gradle.kts
+          ../gradle
+          ../plugins
+          ../settings.gradle.kts
+        ];
+      };
+    inherit gradle;
+    buildJdk = jdk;
+    lockFile = ../gradle.lock;
+    gradleBuildFlags = [ "build" ];
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out
-    cp plugins/*/build/libs/*.jar $out
+      mkdir -p $out
+      cp plugins/*/build/libs/*.jar $out
 
-    runHook postInstall
-  '';
-}
+      runHook postInstall
+    '';
+
+    passthru = lib.mapAttrs' (
+      name: _:
+      lib.nameValuePair (lib.toLower name) (
+        runCommand name { } ''
+          cp ${final}/${name}.jar $out
+        ''
+      )
+    ) (builtins.readDir ./.);
+  };
+in
+final

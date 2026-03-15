@@ -39,8 +39,6 @@ lib.makeScope pkgs.newScope (
           );
       };
     };
-
-    oyasai-plugins = callPackage ../plugins/package.nix { };
   in
   {
     inherit (pkgs) terraform;
@@ -64,21 +62,11 @@ lib.makeScope pkgs.newScope (
       '';
     });
 
+    oyasai-plugins = callPackage ../plugins/package.nix { };
+
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
-
-    inherit oyasai-plugins;
-
-    plugins = lib.mapAttrs' (
-      name: _:
-      lib.nameValuePair (lib.toLower name) (
-        pkgs.runCommand name { } ''
-          mkdir -p $out
-          cp ${oyasai-plugins}/${name}.jar $out
-        ''
-      )
-    ) (builtins.readDir ../plugins);
   }
   // lib.packagesFromDirectoryRecursive {
     inherit callPackage;

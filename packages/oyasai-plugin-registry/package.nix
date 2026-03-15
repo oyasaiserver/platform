@@ -2,7 +2,6 @@
   package-lock2nix,
   stdenvNoCC,
   lib,
-  plugins,
   oyasai-plugins,
   writeShellApplication,
 }:
@@ -34,7 +33,7 @@ let
         ''
         + (
           if definition.type == "local" then
-            "cp ${plugins.${id}}/${definition.name} ${out}"
+            "cp ${oyasai-plugins.${id}}/${definition.name} ${out}"
           else if definition.type == "static" then
             "cp ${directory.static}/${definition.name} ${out}"
           else
