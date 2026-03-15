@@ -5,7 +5,7 @@
     {
       config.codegen = {
         enable = true;
-        root = ../.;
+        root = ../../.;
         files =
           let
             inherit (config.oyasai.scope) gradle-wrapper;

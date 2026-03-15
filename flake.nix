@@ -45,12 +45,12 @@
       systems = import inputs.systems;
       imports = [
         # keep-sorted start
-        ./nix/codegen.nix
-        ./nix/devshells.nix
-        ./nix/docker.nix
-        ./nix/misc.nix
-        ./nix/oyasai-scope.nix
-        ./nix/treefmt.nix
+        ./nix/flake-parts/codegen.nix
+        ./nix/flake-parts/devshells.nix
+        ./nix/flake-parts/docker.nix
+        ./nix/flake-parts/misc.nix
+        ./nix/flake-parts/oyasai-scope.nix
+        ./nix/flake-parts/treefmt.nix
         inputs.codegen.flakeModules.default
         inputs.devshell.flakeModule
         inputs.tools.flakeModules.checkBuildAll
