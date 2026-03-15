@@ -1,6 +1,7 @@
 package me.ankokunsan.entityPose
 
-import me.ankokunsan.entityPose.EntityPose.Companion.ENTITY_STICK_KEY
+
+import me.ankokunsan.entityPose.EntityPose.Companion.COPY_STICK_KEY
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -9,30 +10,25 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
-object Bou {
-
-    fun create(): ItemStack {
-        val item = ItemStack(Material.STICK)
+object CopyWand {
+    fun create1(): ItemStack {
+        val item = ItemStack(Material.ECHO_SHARD)
         val meta: ItemMeta = item.itemMeta!!
 
         // 名前
-        meta.setDisplayName("${ChatColor.GREEN}エンティティ棒")
+        meta.setDisplayName("${ChatColor.GREEN}Entity Copy Wand")
 
         // Lore
         meta.lore = listOf(
-            "${ChatColor.GRAY}ブロックを左クリック→置くエンティティを選択するGUI",
-            "${ChatColor.GRAY}エンティティを左クリック→部位選択(しゃがみで戻る)",
-            "${ChatColor.GRAY}エンティティを右クリック→回転(しゃがみで逆回転)"
+            "${ChatColor.GRAY}エンティティを左クリック→pos1",
+            "${ChatColor.GRAY}エンティティを右クリック→pos2"
         )
 
         meta.addEnchant(Enchantment.DENSITY, 1, true)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
 
-        // 壊れない設定（必要なら true）
-        meta.isUnbreakable = false
-
         meta.persistentDataContainer.set(
-            ENTITY_STICK_KEY,
+            COPY_STICK_KEY,
             PersistentDataType.BYTE,
             1.toByte()
         )

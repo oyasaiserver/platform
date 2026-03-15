@@ -3,8 +3,14 @@
 package me.ankokunsan.entityPose
 
 import me.ankokunsan.entityPose.commands.Boucommand
+import me.ankokunsan.entityPose.commands.EntityCopy
+import me.ankokunsan.entityPose.commands.EntityHojo
+import me.ankokunsan.entityPose.commands.EntityPaste
+import me.ankokunsan.entityPose.commands.EntityScale
+import me.ankokunsan.entityPose.commands.EntityWand
 import me.ankokunsan.entityPose.commands.Entityinfo
 import me.ankokunsan.entityPose.commands.KakudoCommand
+import me.ankokunsan.entityPose.commands.SetumeiCommand
 import me.ankokunsan.entityPose.commands.ZahyoCommand
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
@@ -14,56 +20,72 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.NameTagVisibility
 
 fun isEntiStick(item: ItemStack?): Boolean {
-  if (item == null || item.type.isAir) return false
-  if (!item.hasItemMeta()) return false
-  val meta = item.itemMeta ?: return false
-  return meta.persistentDataContainer.has(EntityPose.ENTITY_STICK_KEY, PersistentDataType.BYTE)
+    if (item == null || item.type.isAir) return false
+    if (!item.hasItemMeta()) return false
+    val meta = item.itemMeta ?: return false
+    return meta.persistentDataContainer.has(
+        EntityPose.ENTITY_STICK_KEY,
+        PersistentDataType.BYTE
+    )
 }
 
 class EntityPose : JavaPlugin() {
 
-  companion object {
-    lateinit var ENTITY_STICK_KEY: NamespacedKey
-    lateinit var GUI_KEY: NamespacedKey
-    lateinit var WOLF_KEY: NamespacedKey
-    lateinit var SIZE_KEY: NamespacedKey
-    lateinit var CAT_KEY: NamespacedKey
-    lateinit var RABBIT_KEY: NamespacedKey
-    lateinit var KAKUDO_KEY: NamespacedKey
-    lateinit var ZAHYO_KEY: NamespacedKey
-    lateinit var INSTANCE: EntityPose
-      private set
-  }
+    companion object {
+        lateinit var ENTITY_STICK_KEY: NamespacedKey
+        lateinit var COPY_STICK_KEY: NamespacedKey
+        lateinit var GUI_KEY: NamespacedKey
+        lateinit var WOLF_KEY: NamespacedKey
+        lateinit var SIZE_KEY: NamespacedKey
+        lateinit var CAT_KEY: NamespacedKey
+        lateinit var RABBIT_KEY: NamespacedKey
+        lateinit var PARROT_KEY: NamespacedKey
+        lateinit var KAKUDO_KEY: NamespacedKey
+        lateinit var ZAHYO_KEY: NamespacedKey
+        lateinit var INSTANCE: EntityPose
+            private set
 
-  @Suppress("DEPRECATION")
-  override fun onEnable() {
-    INSTANCE = this
-    ENTITY_STICK_KEY = NamespacedKey(this, "entity_stick")
-    GUI_KEY = NamespacedKey(this, "gui_action")
-    WOLF_KEY = NamespacedKey(this, "wolf_spawn")
-    SIZE_KEY = NamespacedKey(this, "size_spawn")
-    CAT_KEY = NamespacedKey(this, "cat_spawn")
-    RABBIT_KEY = NamespacedKey(this, "rabbit_spawn")
-    KAKUDO_KEY = NamespacedKey(this, "angle_set")
-    ZAHYO_KEY = NamespacedKey(this, "zahyo_set")
+    }
 
-    Bou.create()
-    getCommand("entitystick")?.setExecutor(Boucommand())
-    getCommand("entityinfo")?.setExecutor(Entityinfo())
-    getCommand("kakudo")?.setExecutor(KakudoCommand())
-    getCommand("zahyo")?.setExecutor(ZahyoCommand())
+    @Suppress("DEPRECATION")
+    override fun onEnable() {
+        INSTANCE = this
+        ENTITY_STICK_KEY = NamespacedKey(this, "entity_stick")
+        COPY_STICK_KEY = NamespacedKey(this,"copy_brush")
+        GUI_KEY = NamespacedKey(this, "gui_action")
+        WOLF_KEY = NamespacedKey(this, "wolf_spawn")
+        SIZE_KEY = NamespacedKey(this, "size_spawn")
+        CAT_KEY = NamespacedKey(this, "cat_spawn")
+        RABBIT_KEY = NamespacedKey(this, "rabbit_spawn")
+        PARROT_KEY = NamespacedKey(this,"parrot_spawn")
+        KAKUDO_KEY = NamespacedKey(this, "angle_set")
+        ZAHYO_KEY = NamespacedKey(this, "zahyo_set")
 
-    val board = Bukkit.getScoreboardManager()!!.mainScoreboard
+        Bou.create()
+        CopyWand.create1()
+        getCommand("estick")?.setExecutor(Boucommand())
+        getCommand("einfo")?.setExecutor(Entityinfo())
+        getCommand("ekakudo")?.setExecutor(KakudoCommand())
+        getCommand("ezahyo")?.setExecutor(ZahyoCommand())
+        getCommand("escale")?.setExecutor(EntityScale())
+        getCommand("ehojo")?.setExecutor(EntityHojo())
+        getCommand("ewand")?.setExecutor(EntityWand())
+        getCommand("ecopy")?.setExecutor(EntityCopy())
+        getCommand("epaste")?.setExecutor(EntityPaste())
+        getCommand("entitypose")?.setExecutor(SetumeiCommand())
 
-    val team =
-        board.getTeam("animal_things_hide_name") ?: board.registerNewTeam("animal_things_hide_name")
+        val board = Bukkit.getScoreboardManager()!!.mainScoreboard
 
-    team.nameTagVisibility = NameTagVisibility.NEVER
-    server.pluginManager.registerEvents(EntityClick(), this)
-    server.pluginManager.registerEvents(GUIClick(), this)
-  }
+        val team = board.getTeam("animal_things_hide_name")
+            ?: board.registerNewTeam("animal_things_hide_name")
 
-  override fun onDisable() {
-    logger.info("EntityPose disabled")
-  }
+        team.nameTagVisibility = NameTagVisibility.NEVER
+        server.pluginManager.registerEvents(EntityClick(), this)
+        server.pluginManager.registerEvents(GUIClick(), this)
+        server.pluginManager.registerEvents(EntityCopyClick(),this)
+    }
+
+    override fun onDisable() {
+        logger.info("EntityPose disabled")
+    }
 }

@@ -1,18 +1,16 @@
 package me.ankokunsan.entityPose.commands
 
-import me.ankokunsan.entityPose.ChooseGUi
-import me.ankokunsan.entityPose.EntityClick
 import me.ankokunsan.entityPose.isEntiStick
-import org.bukkit.Sound
+import org.bukkit.attribute.Attribute
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.ExperienceOrb
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import kotlin.collections.set
+import kotlin.math.round
 
-class ZahyoCommand: CommandExecutor {
+class EntityScale : CommandExecutor {
     override fun onCommand(
         sender: CommandSender,
         command: Command,
@@ -24,7 +22,7 @@ class ZahyoCommand: CommandExecutor {
         }
         val hand = sender.inventory.itemInMainHand
         if (!isEntiStick(hand)) {
-            sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください。")
+            sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください")
             return true
         }
         if (!sender.hasPermission("entitypose_arrange")) {
@@ -37,22 +35,30 @@ class ZahyoCommand: CommandExecutor {
             sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
             return true
         }
-        if (target is LivingEntity && target.hasAI()) {
-            player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+        if (target is Player) {
+            sender.sendMessage("§6[EntityPose] §cプレイヤーをいじろうとしないでね")
+            return true
+        }
+        val livingEntity = target as? LivingEntity ?: return true
+            if(livingEntity.hasAI()) {
+            player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
             return true
         }
         if (args.isEmpty()) {
-            ChooseGUi.openZahyoGUI(player)
-            player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
+            player.sendMessage("§6[EntityPose] §c数字を入力してください")
             return true
         }
-        val value1 = args[0].toDoubleOrNull()
-        if (value1 != null) {
-            val limitedValue1 = value1.coerceIn(0.01, 2.0)
-            EntityClick.currentZah[target.uniqueId] = limitedValue1
-            sender.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを ${limitedValue1}マス に設定しました。")
+        val scale= args[0].toDoubleOrNull()
+        if (scale != null) {
+            val limitedScale = scale.coerceIn(0.1, 3.0)
+            val attribute = livingEntity.getAttribute(Attribute.SCALE)
+            if (attribute != null) {
+            val roundedScale = round(limitedScale * 10) / 10.0
+            attribute.baseValue = roundedScale
+                player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのサイズを $roundedScale に設定しました")
+            }
         }else {
-            sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/zahyoとだけ打ってGUIを開いてください。")
+            sender.sendMessage("§6[EntityPose] §c数字を入力してください")
         }
         return true
     }
