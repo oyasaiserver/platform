@@ -14,15 +14,14 @@ data class EntityCopyData(
     val hanten: Boolean = false,
     val customName: String?,
     val scoreBoard: Set<String> = emptySet(),
-    val hasGravity: Boolean = true,              // 重力
+    val hasGravity: Boolean = true, // 重力
     val hasBasePlate: Boolean = true,
     val isSmall: Boolean = true,
-    val isInvisible: Boolean = false,          // 透明
-    val scale: Double = 1.0,                     // サイズ
+    val isInvisible: Boolean = false, // 透明
+    val scale: Double = 1.0, // サイズ
     val isTamed: Boolean = false,
     val isMini: Boolean = false,
     val isSitting: Boolean = false,
-
     val headPose: EulerAngle? = null,
     val bodyPose: EulerAngle? = null,
     val leftArmPose: EulerAngle? = null,
@@ -31,7 +30,5 @@ data class EntityCopyData(
     val rightLegPose: EulerAngle? = null,
     val hasArms: Boolean = true,
     val equipment: Map<EquipmentSlot, ItemStack?> = emptyMap(),
-
     val variant: String? = null
-
 )

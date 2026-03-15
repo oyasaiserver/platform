@@ -1,5 +1,6 @@
 package me.ankokunsan.entityPose
 
+import java.util.UUID
 import org.bukkit.Particle
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
@@ -9,50 +10,50 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.EulerAngle
-import java.util.UUID
 
 object FollowEntity {
 
-    // プレイヤーが現在操作中のエンティティとタスクをペアで管理
-    private val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
+  // プレイヤーが現在操作中のエンティティとタスクをペアで管理
+  private val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Entity> start(player: Player, type: EntityType, setup: (T) -> Unit) {
-        if (activePreviews.containsKey(player.uniqueId)) {
-            player.sendMessage("§6[EntityPose] §cもうエンティティ出してるよ～！！！")
-            return
-        }
-        val distance = 2.5
-        val entity = player.world.spawnEntity(player.location, type) as T
-        // 共通設定
-        entity.setGravity(false)
-        entity.isPersistent = false // サーバー再起動時に残らないように
-        // LivingEntity（狼、猫、防具立て等）固有の設定
-        if (entity is LivingEntity) {
-            entity.setAI(false)
-            entity.isCollidable = false
-            entity.isInvulnerable = true
-        }
+  @Suppress("UNCHECKED_CAST")
+  fun <T : Entity> start(player: Player, type: EntityType, setup: (T) -> Unit) {
+    if (activePreviews.containsKey(player.uniqueId)) {
+      player.sendMessage("§6[EntityPose] §cもうエンティティ出してるよ～！！！")
+      return
+    }
+    val distance = 2.5
+    val entity = player.world.spawnEntity(player.location, type) as T
+    // 共通設定
+    entity.setGravity(false)
+    entity.isPersistent = false // サーバー再起動時に残らないように
+    // LivingEntity（狼、猫、防具立て等）固有の設定
+    if (entity is LivingEntity) {
+      entity.setAI(false)
+      entity.isCollidable = false
+      entity.isInvulnerable = true
+    }
 
-        if (entity is ArmorStand) {
-            entity.setBasePlate(false)
-            val zero = EulerAngle(0.0, 0.0, 0.0)
-            entity.headPose = zero
-            entity.bodyPose = zero
-            entity.leftArmPose = zero
-            entity.rightArmPose = zero
-            entity.leftLegPose = zero
-            entity.rightLegPose = zero
-        }
+    if (entity is ArmorStand) {
+      entity.setBasePlate(false)
+      val zero = EulerAngle(0.0, 0.0, 0.0)
+      entity.headPose = zero
+      entity.bodyPose = zero
+      entity.leftArmPose = zero
+      entity.rightArmPose = zero
+      entity.leftLegPose = zero
+      entity.rightLegPose = zero
+    }
 
-        setup(entity)
+    setup(entity)
 
-        val task = object : BukkitRunnable() {
-            override fun run() {
+    val task =
+        object : BukkitRunnable() {
+              override fun run() {
                 if (!player.isOnline || entity.isDead) {
-                    cancel()
-                    activePreviews.remove(player.uniqueId)
-                    return
+                  cancel()
+                  activePreviews.remove(player.uniqueId)
+                  return
                 }
                 // 視線方向から位置を計算
                 val eyeLoc = player.eyeLocation
@@ -69,37 +70,41 @@ object FollowEntity {
                 w.spawnParticle(Particle.FLAME, bx, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
                 w.spawnParticle(Particle.FLAME, bx + 1, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
 
-                val directionToPlayer = eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
-                val lookAtPlayerLoc = target.clone().setDirection(directionToPlayer) // ベクトルをLocationの向きに変換
+                val directionToPlayer =
+                    eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
+                val lookAtPlayerLoc =
+                    target.clone().setDirection(directionToPlayer) // ベクトルをLocationの向きに変換
                 target.yaw = lookAtPlayerLoc.yaw
                 target.pitch = 0f
 
                 entity.teleport(target)
+              }
             }
-        }.runTaskTimer(EntityPose.INSTANCE, 0L, 1L)
+            .runTaskTimer(EntityPose.INSTANCE, 0L, 1L)
 
-        activePreviews[player.uniqueId] = Pair(entity, task)
+    activePreviews[player.uniqueId] = Pair(entity, task)
+  }
+
+  fun stop(player: Player): Entity? {
+    val data = activePreviews.remove(player.uniqueId) ?: return null
+
+    val entity = data.first
+    val task = data.second
+    // 1. 追従タスク（タイマー）を即座に停止
+    task.cancel()
+    // 2. エンティティが生きている場合、最終的な状態を確定させる
+    if (!entity.isDead) {
+      entity.setGravity(false) // 重力を無効化（空中浮遊を維持する場合）
+      entity.isPersistent = true // 設置後はサーバー再起動で消えないようにする（任意）
+
+      if (entity is LivingEntity) {
+        entity.setAI(false) // AIを完全に停止
+        entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
+        entity.isInvulnerable = false
+        entity.isSilent = true
+      }
     }
-    fun stop(player: Player): Entity? {
-        val data = activePreviews.remove(player.uniqueId) ?: return null
 
-        val entity = data.first
-        val task = data.second
-        // 1. 追従タスク（タイマー）を即座に停止
-        task.cancel()
-        // 2. エンティティが生きている場合、最終的な状態を確定させる
-        if (!entity.isDead) {
-            entity.setGravity(false) // 重力を無効化（空中浮遊を維持する場合）
-            entity.isPersistent = true // 設置後はサーバー再起動で消えないようにする（任意）
-
-            if (entity is LivingEntity) {
-                entity.setAI(false)         // AIを完全に停止
-                entity.isCollidable = true  // 設置後は当たり判定を戻す（必要に応じて）
-                entity.isInvulnerable = false
-                entity.isSilent = true
-            }
-        }
-
-        return entity
-    }
+    return entity
+  }
 }
