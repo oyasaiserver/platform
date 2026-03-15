@@ -16,17 +16,7 @@
         in
         {
           oyasai.scope = oyasaiScope;
-          packages = lib.filterAttrs (_: availableOnSystem) {
-            inherit (oyasaiScope)
-              # keep-sorted start
-              oyasai-minecraft-main
-              oyasai-minecraft-marzipan
-              oyasai-minecraft-minimal
-              oyasai-plugin-registry
-              oyasai-push-nix-images
-              # keep-sorted end
-              ;
-          };
+          packages = lib.filterAttrs (_: v: (availableOnSystem v) && (lib.isDerivation v)) oyasaiScope;
         };
     }
   );
