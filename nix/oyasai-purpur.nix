@@ -1,11 +1,9 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
   jre,
   writeShellApplication,
   coreutils,
+  purpurServers,
 }:
 
 {
@@ -13,65 +11,33 @@
   version,
   plugins,
   directory ? ".",
+  # TODO: port handling
   port ? 25565,
   passthru ? { },
-  cleanPlugins ? true,
 }:
 
 let
-  versions = {
-    "1.21.8" = {
-      build = 2497;
-      hash = "sha256-3XsifyVVYBw5zsCR32eCdfCoH6ftaM6VTsSSS7RXXEY=";
-    };
-  };
-  setup = writeShellApplication {
-    name = "${name}-setup";
-    runtimeInputs = [ coreutils ];
-    text = ''
-      echo "eula=true" > eula.txt
-      mkdir -p plugins
-      ${
-        if cleanPlugins then
-          ''
-            rm -rf plugins/.paper-remapped
-            rm -f plugins/*.jar
-          ''
-        else
-          ""
-      }
-      ${lib.concatMapStringsSep "\n" (k: "cp --no-preserve=ownership,mode ${k} plugins") plugins}
-    '';
-  };
+  package = purpurServers."purpur-${lib.replaceString "." "_" version}".override { inherit jre; };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+writeShellApplication {
   inherit name passthru;
 
-  src =
-    let
-      inherit (versions.${version}) build hash;
-    in
-    fetchurl {
-      url = "https://api.purpurmc.org/v2/purpur/${version}/${toString build}/download";
-      inherit hash;
-    };
+  runtimeInputs = [ coreutils ];
+  text = ''
+    mkdir -p ${directory}
+    cd ${directory}
 
-  nativeBuildInputs = [ makeWrapper ];
+    echo "eula=true" > eula.txt
 
-  preferLocalBuild = true;
+    mkdir -p cache
+    cp ${package.vanillaJar} cache/mojang_${version}.jar
 
-  installPhase = ''
-    mkdir -p $out/bin $out/lib/minecraft
-    cp -v $src $out/lib/minecraft/server.jar
+    mkdir -p plugins
+    rm -rf plugins/.paper-remapped
+    rm -f plugins/*.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/minecraft-server \
-      --run "mkdir -p ${directory}" \
-      --chdir ${directory} \
-      --run "${lib.getExe setup}" \
-      --add-flags "-jar $out/lib/minecraft/server.jar --nogui --port ${toString port}"
+    ${lib.concatMapStringsSep "\n" (k: "cp --no-preserve=ownership,mode ${k} plugins") plugins}
+
+    exec ${lib.getExe package} "$@"
   '';
-
-  dontUnpack = true;
-
-  meta.mainProgram = "minecraft-server";
-})
+}

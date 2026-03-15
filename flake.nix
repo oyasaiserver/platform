@@ -17,6 +17,11 @@
       url = "github:oyasaiserver/gradle2nix?ref=v2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-minecraft = {
+      url = "github:infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+    };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     package-lock2nix = {
       url = "github:anteriorcore/package-lock2nix";

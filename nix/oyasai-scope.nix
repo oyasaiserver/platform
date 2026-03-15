@@ -3,6 +3,7 @@
   pkgs,
   lib,
   stdenv,
+  ...
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -41,6 +42,7 @@ lib.makeScope pkgs.newScope (
     };
   in
   {
+    inherit inputs;
     inherit (pkgs) terraform;
     nodejs = pkgs.nodejs_24;
     jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
