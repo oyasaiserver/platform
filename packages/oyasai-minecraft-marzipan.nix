@@ -1,10 +1,14 @@
 { oyasaiPurpur, oyasai-plugin-registry }:
 
 oyasaiPurpur rec {
-  name = "oyasai-minecraft-minimal";
+  name = "oyasai-minecraft-marzipan";
   version = "1.21.8";
 
   directory = "local";
+
+  port = 8000;
+
+  cleanPlugins = false;
 
   # see packages/oyasai-plugins-registry/data.json
   plugins = with (oyasai-plugin-registry.forVersion version); [

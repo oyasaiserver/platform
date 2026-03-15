@@ -11,16 +11,16 @@
   version,
   plugins,
   directory ? ".",
-  # TODO port
   port ? 25565,
   passthru ? { },
+  cleanPlugins ? true,
 }:
 
 let
   package = purpurServers."purpur-${lib.replaceString "." "_" version}".override { inherit jre; };
 in
 writeShellApplication {
-  inherit name passthru;
+  inherit name;
 
   runtimeInputs = [ coreutils ];
   text = ''
@@ -40,4 +40,6 @@ writeShellApplication {
 
     exec ${lib.getExe package} "$@"
   '';
+
+  inherit passthru;
 }

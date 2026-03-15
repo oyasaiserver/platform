@@ -243,6 +243,10 @@
       "type": "local",
       "name": "TPSwitch.jar"
     },
+    "vertex": {
+      "type": "local",
+      "name": "Vertex.jar"
+    },
     "oyasaipets": {
       "type": "local",
       "name": "OyasaiPets.jar"

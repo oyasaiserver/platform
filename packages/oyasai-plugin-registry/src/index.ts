@@ -152,6 +152,10 @@ export const registry = {
     type: "local",
     path: toGradleBuildPath("TPswitch"),
   },
+  vertex: {
+    type: "local",
+    path: toGradleBuildPath("Vertex"),
+  },
   oyasaipets: {
     type: "local",
     path: toGradleBuildPath("OyasaiPets"),
