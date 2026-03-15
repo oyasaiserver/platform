@@ -16,7 +16,7 @@
         in
         {
           oyasai.scope = oyasaiScope;
-          packages = lib.filterAttrs (_: v: (availableOnSystem v) && (lib.isDerivation v)) oyasaiScope;
+          packages = lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) oyasaiScope;
         };
     }
   );

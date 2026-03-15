@@ -12,5 +12,7 @@ testers.runNixOSTest (
     testScript = ''
       machine.succeed("hello")
     '';
+
+    meta.platforms = lib.platforms.linux;
   }
 )
