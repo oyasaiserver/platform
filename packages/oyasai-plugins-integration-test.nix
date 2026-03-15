@@ -18,7 +18,7 @@ testers.runNixOSTest (
           ../nix/nixos/oyasai-scope.nix
           { _module.args = { inherit inputs; }; }
         ];
-        virtualisation.oci-containers.backend = "docker";
+        virtualisation.memorySize = 4000;
         systemd.services.${name} = {
           serviceConfig = {
             Type = "oneshot";
