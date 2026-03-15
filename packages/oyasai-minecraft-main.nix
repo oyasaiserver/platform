@@ -20,7 +20,6 @@ let
       protocollib
       vault
       nuvotifier
-      vertex
     ];
 
     # TODO: world container config

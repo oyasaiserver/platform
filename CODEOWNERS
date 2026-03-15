@@ -8,8 +8,6 @@
 /plugins/OyasaiPets @marzipan99
 /plugins/OyasaiUtilities @takucan
 /plugins/TPswitch @takucan
-/plugins/Vertex @shunueda
 /plugins/
 
 /packages/oyasai-minecraft-minimal.nix @shunueda
-/packages/oyasai-minecraft-marzipan.nix @marzipan99

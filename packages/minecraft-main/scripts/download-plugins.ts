@@ -12,7 +12,6 @@ const local: RegistryId[] = [
   "protocollib",
   "vault",
   "nuvotifier",
-  "vertex",
 ];
 
 const development: RegistryId[] = local.concat(
@@ -68,7 +67,6 @@ const development: RegistryId[] = local.concat(
   "sociallikes3",
   "socialvotes",
   "tpswitch",
-  "vertex",
   "pvparena",
   "oyasaipets",
 );
