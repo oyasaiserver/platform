@@ -3,8 +3,14 @@
 package me.ankokunsan.entityPose
 
 import me.ankokunsan.entityPose.commands.Boucommand
+import me.ankokunsan.entityPose.commands.EntityCopy
+import me.ankokunsan.entityPose.commands.EntityHojo
+import me.ankokunsan.entityPose.commands.EntityPaste
+import me.ankokunsan.entityPose.commands.EntityScale
+import me.ankokunsan.entityPose.commands.EntityWand
 import me.ankokunsan.entityPose.commands.Entityinfo
 import me.ankokunsan.entityPose.commands.KakudoCommand
+import me.ankokunsan.entityPose.commands.SetumeiCommand
 import me.ankokunsan.entityPose.commands.ZahyoCommand
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
@@ -24,11 +30,13 @@ class EntityPose : JavaPlugin() {
 
   companion object {
     lateinit var ENTITY_STICK_KEY: NamespacedKey
+    lateinit var COPY_STICK_KEY: NamespacedKey
     lateinit var GUI_KEY: NamespacedKey
     lateinit var WOLF_KEY: NamespacedKey
     lateinit var SIZE_KEY: NamespacedKey
     lateinit var CAT_KEY: NamespacedKey
     lateinit var RABBIT_KEY: NamespacedKey
+    lateinit var PARROT_KEY: NamespacedKey
     lateinit var KAKUDO_KEY: NamespacedKey
     lateinit var ZAHYO_KEY: NamespacedKey
     lateinit var INSTANCE: EntityPose
@@ -39,19 +47,28 @@ class EntityPose : JavaPlugin() {
   override fun onEnable() {
     INSTANCE = this
     ENTITY_STICK_KEY = NamespacedKey(this, "entity_stick")
+    COPY_STICK_KEY = NamespacedKey(this, "copy_brush")
     GUI_KEY = NamespacedKey(this, "gui_action")
     WOLF_KEY = NamespacedKey(this, "wolf_spawn")
     SIZE_KEY = NamespacedKey(this, "size_spawn")
     CAT_KEY = NamespacedKey(this, "cat_spawn")
     RABBIT_KEY = NamespacedKey(this, "rabbit_spawn")
+    PARROT_KEY = NamespacedKey(this, "parrot_spawn")
     KAKUDO_KEY = NamespacedKey(this, "angle_set")
     ZAHYO_KEY = NamespacedKey(this, "zahyo_set")
 
     Bou.create()
-    getCommand("entitystick")?.setExecutor(Boucommand())
-    getCommand("entityinfo")?.setExecutor(Entityinfo())
-    getCommand("kakudo")?.setExecutor(KakudoCommand())
-    getCommand("zahyo")?.setExecutor(ZahyoCommand())
+    CopyWand.create1()
+    getCommand("estick")?.setExecutor(Boucommand())
+    getCommand("einfo")?.setExecutor(Entityinfo())
+    getCommand("ekakudo")?.setExecutor(KakudoCommand())
+    getCommand("ezahyo")?.setExecutor(ZahyoCommand())
+    getCommand("escale")?.setExecutor(EntityScale())
+    getCommand("ehojo")?.setExecutor(EntityHojo())
+    getCommand("ewand")?.setExecutor(EntityWand())
+    getCommand("ecopy")?.setExecutor(EntityCopy())
+    getCommand("epaste")?.setExecutor(EntityPaste())
+    getCommand("entitypose")?.setExecutor(SetumeiCommand())
 
     val board = Bukkit.getScoreboardManager()!!.mainScoreboard
 
@@ -61,6 +78,7 @@ class EntityPose : JavaPlugin() {
     team.nameTagVisibility = NameTagVisibility.NEVER
     server.pluginManager.registerEvents(EntityClick(), this)
     server.pluginManager.registerEvents(GUIClick(), this)
+    server.pluginManager.registerEvents(EntityCopyClick(), this)
   }
 
   override fun onDisable() {

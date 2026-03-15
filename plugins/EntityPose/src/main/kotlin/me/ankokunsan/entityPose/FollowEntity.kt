@@ -16,14 +16,12 @@ object FollowEntity {
   // プレイヤーが現在操作中のエンティティとタスクをペアで管理
   private val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
 
-  /**
-   * エンティティをスポーンさせ、追従を開始する
-   *
-   * @param type スポーンさせるエンティティの種類
-   * @param setup エンティティ固有の設定（バリアントなど）を行うラムダ
-   */
   @Suppress("UNCHECKED_CAST")
   fun <T : Entity> start(player: Player, type: EntityType, setup: (T) -> Unit) {
+    if (activePreviews.containsKey(player.uniqueId)) {
+      player.sendMessage("§6[EntityPose] §cもうエンティティ出してるよ～！！！")
+      return
+    }
     val distance = 2.5
     val entity = player.world.spawnEntity(player.location, type) as T
     // 共通設定
@@ -47,10 +45,8 @@ object FollowEntity {
       entity.rightLegPose = zero
     }
 
-    // 外部から渡された個別設定を実行（バリアントなど）
     setup(entity)
 
-    // 追従タスク
     val task =
         object : BukkitRunnable() {
               override fun run() {

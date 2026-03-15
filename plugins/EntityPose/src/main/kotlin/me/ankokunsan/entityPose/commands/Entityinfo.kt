@@ -36,15 +36,20 @@ class Entityinfo : CommandExecutor, TabCompleter {
           it != sender
         }
     val target =
-        result?.hitEntity ?: return true.also { sender.sendMessage("§6[EntityPose] §cエンティティがいません") }
+        result?.hitEntity
+            ?: return true.also { sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがいません") }
+    if (target is Player) {
+      sender.sendMessage("§6[EntityPose] §cプレイヤーの情報を見たり、いじろうとしないでね")
+      return true
+    }
     if (target is LivingEntity && target.hasAI()) {
-      sender.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+      sender.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
       return true
     }
     if (args.isNotEmpty() && args[0].equals("set", ignoreCase = true)) {
       openSettingGUI(sender, target)
       return true
-    } else {
+    } else if (args.isEmpty()) {
       val loc = target.location
       val yaw = (loc.yaw % 360 + 360) % 360
       val invincible = if (target.scoreboardTags.contains("custom_invincible")) "§aON" else "§cOFF"
@@ -85,6 +90,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
       }
       return true
     }
+    return true
   }
 
   fun openSettingGUI(player: Player, target: Entity) {

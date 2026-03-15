@@ -7,6 +7,7 @@ import me.ankokunsan.entityPose.EntityClick.Companion.currentZah
 import me.ankokunsan.entityPose.EntityClick.Companion.inputWait
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
@@ -20,6 +21,7 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
 import org.bukkit.entity.Rabbit
 import org.bukkit.entity.Tameable
@@ -78,7 +80,7 @@ class GUIClick : Listener {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
-        val newScale = (currentScale - 0.1).coerceAtLeast(0.5)
+        val newScale = (currentScale - 0.1).coerceAtLeast(0.1)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
@@ -181,6 +183,7 @@ class GUIClick : Listener {
         cat.setBaby()
         cat.ageLock = true // 大人にならないように固定
       }
+      player.closeInventory()
     }
   }
 
@@ -212,11 +215,38 @@ class GUIClick : Listener {
       // ウサギの種類を設定
       rabbit.rabbitType = rabtype
     }
+    player.closeInventory()
+  }
+
+  @EventHandler
+  fun onparrotClick(event: InventoryClickEvent) {
+    val player = event.whoClicked as? Player ?: return
+    if (event.view.title != "§3オウム選択") return
+
+    event.isCancelled = true
+
+    val item = event.currentItem ?: return
+    if (!item.hasItemMeta()) return
+
+    val meta = item.itemMeta!!
+    val action = meta.persistentDataContainer.get(PARROT_KEY, PersistentDataType.STRING) ?: return
+
+    val parrotVariantMap =
+        mapOf(
+            "RED" to Parrot.Variant.RED,
+            "BLUE" to Parrot.Variant.BLUE,
+            "GREEN" to Parrot.Variant.GREEN,
+            "CYAN" to Parrot.Variant.CYAN,
+            "GRAY" to Parrot.Variant.GRAY)
+
+    val parrotType = parrotVariantMap[action] ?: return
+    FollowEntity.start<Parrot>(player, EntityType.PARROT) { parrot -> parrot.variant = parrotType }
+    player.closeInventory()
   }
 
   @EventHandler
   fun onKakudoClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3角度選択") return
+    if (event.view.title != "§3角度の刻みを選択") return
     event.isCancelled = true
 
     val player = event.whoClicked as? Player ?: return
@@ -227,14 +257,14 @@ class GUIClick : Listener {
         item.itemMeta?.persistentDataContainer?.get(KAKUDO_KEY, PersistentDataType.DOUBLE) ?: return
 
     currentStep[targetEntity.uniqueId] = value
-    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの角度の刻みを ${value}度 に設定しました。")
+    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの角度の刻みを ${value}度 に設定しました")
     player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
     player.closeInventory()
   }
 
   @EventHandler
   fun onStepClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3座標の動く量選択") return
+    if (event.view.title != "§3一回あたりに動く座標の大きさを選択") return
     event.isCancelled = true
 
     val player = event.whoClicked as? Player ?: return
@@ -244,7 +274,7 @@ class GUIClick : Listener {
         item.itemMeta?.persistentDataContainer?.get(ZAHYO_KEY, PersistentDataType.DOUBLE) ?: return
     currentZah[targetEntity.uniqueId] = value1
 
-    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く量を ${value1}マス に設定しました。")
+    player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを ${value1}マス に設定しました")
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
 
     player.closeInventory()

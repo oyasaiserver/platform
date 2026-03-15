@@ -4,27 +4,57 @@ main: me.ankokunsan.entityPose.EntityPose
 api-version: "1.21"
 
 commands:
-  entitystick:
-    description: エンティティ棒をもらう
-    usage: /entitystick
+  estick:
+    description: エンティティ棒を手に入れる
+    usage: /estick
     permission: entitypose_arrange
 
-  entityinfo:
-    description: エンティティの諸元を表示
-    usage: /entityinfo
+  einfo:
+    description: エンティティの情報を表示、変更
+    usage: /einfo
     permission: entitypose_arrange
 
-  kakudo:
-    description: 角度変更
-    usage: /kakudo
+  ekakudo:
+    description: エンティティの角度の刻みを変更
+    usage: /ekakudo
     permission: entitypose_arrange
 
-  zahyo:
-    description: 座標の動かす量変更
-    usage: /zahyo
+  ezahyo:
+    description: エンティティの一回あたりに動く座標の大きさを変更
+    usage: /ezahyo
+    permission: entitypose_arrange
+
+  escale:
+    description: エンティティの大きさ変更
+    usage: /escale
+    permission: entitypose_arrange
+
+  ehojo:
+    description: エンティティを空中で操作するときに自動で出るガラスのオンオフ
+    usage: /ehojo
+    permission: entitypose_arrange
+
+  ewand:
+    description: Entity Copy Wandを手に入れる
+    usage: /ewand
+    permission: entitypose_arrange
+
+  ecopy:
+    description: エンティティをコピー
+    usage: /ecopy
+    permission: entitypose_arrange
+
+  epaste:
+    description: エンティティをペースト
+    usage: /epaste
+    permission: entitypose_arrange
+
+  entitypose:
+    description: EntityPoseのコマンドとか操作一覧
+    usage: /entitypose
     permission: entitypose_arrange
 
 permissions:
   entitypose_arrange:
-    description: このプラグイン全体の権限
+    description: EntityPoseの権限
     default: op

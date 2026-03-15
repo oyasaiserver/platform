@@ -17,7 +17,7 @@ object ChooseGUi {
     val inv =
         Bukkit.createInventory(
             player, // holder（nullでもOK）
-            9, // サイズ（9の倍数）
+            18, // サイズ（9の倍数）
             "§3エンティティスポーン")
     val sarmorStandItem = ItemStack(Material.ARMOR_STAND)
     sarmorStandItem.itemMeta =
@@ -75,6 +75,12 @@ object ChooseGUi {
           setDisplayName("${ChatColor.GREEN}ウサギ")
           persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "RABBIT")
         }
+    val parItem = ItemStack(Material.PARROT_SPAWN_EGG)
+    parItem.itemMeta =
+        rabItem.itemMeta!!.apply {
+          setDisplayName("${ChatColor.GREEN}オウム")
+          persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "PARROT")
+        }
     inv.setItem(0, sarmorStandItem)
     inv.setItem(1, armorStandItem)
     inv.setItem(2, sminiStandItem)
@@ -84,12 +90,14 @@ object ChooseGUi {
     inv.setItem(6, caItem)
     inv.setItem(7, minicaItem)
     inv.setItem(8, rabItem)
-
+    inv.setItem(9, parItem)
+    val filler = getFiller1()
+    (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
     player.openInventory(inv)
   }
 
   fun openKakudoGUI(player: Player) {
-    val inv = Bukkit.createInventory(null, 9, "§3角度選択")
+    val inv = Bukkit.createInventory(null, 9, "§3角度の刻みを選択")
     val kakudos =
         listOf(
             "§b1度ずつ" to 1.0,
@@ -118,7 +126,7 @@ object ChooseGUi {
   }
 
   fun openZahyoGUI(player: Player) {
-    val inv = Bukkit.createInventory(null, 9, "§3座標の動く量選択")
+    val inv = Bukkit.createInventory(null, 9, "§3一回あたりに動く座標の大きさを選択")
     val zahyos =
         listOf(
             "§b0.1マスずつ" to 0.1, // Double型にする
@@ -138,8 +146,6 @@ object ChooseGUi {
           }
       inv.setItem(index, item)
     }
-
-    // 隙間を埋める処理はループの外に出すと効率的です
     val filler = getFiller1()
     (0 until inv.size).forEach { i -> if (inv.getItem(i) == null) inv.setItem(i, filler) }
 

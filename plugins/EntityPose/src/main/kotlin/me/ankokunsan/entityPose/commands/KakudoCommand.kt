@@ -25,7 +25,7 @@ class KakudoCommand : CommandExecutor {
             }
     val hand = sender.inventory.itemInMainHand
     if (!isEntiStick(hand)) {
-      sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください。")
+      sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください")
       return true
     }
     if (!sender.hasPermission("entitypose_arrange")) {
@@ -42,7 +42,7 @@ class KakudoCommand : CommandExecutor {
       return true
     }
     if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
       return true
     }
     if (args.isEmpty()) {
@@ -54,9 +54,9 @@ class KakudoCommand : CommandExecutor {
     if (value != null) {
       val limitedValue = value.coerceIn(0.5, 90.0)
       EntityClick.currentStep[target.uniqueId] = limitedValue
-      sender.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの角度の刻みを ${limitedValue}度 に設定しました。")
+      sender.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの角度の刻みを ${limitedValue}度 に設定しました")
     } else {
-      sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/kakudoとだけ打ってGUIを開いてください。")
+      sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/kakudoとだけ打ってGUIを開いてください")
     }
     return true
   }
