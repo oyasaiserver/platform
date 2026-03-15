@@ -12,8 +12,8 @@ buildscript {
 allprojects {
   repositories {
     mavenCentral()
-    maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.frengor.com/repository/public/")
+    maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.scarsz.me/content/groups/public/")
   }
 }
