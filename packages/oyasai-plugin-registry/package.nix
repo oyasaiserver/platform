@@ -1,11 +1,9 @@
 {
   package-lock2nix,
   stdenvNoCC,
-  makeWrapper,
   lib,
   plugins,
-  plugins-batch,
-  just,
+  oyasai-plugins,
   writeShellApplication,
 }:
 
@@ -50,7 +48,7 @@ let
 
   final = package-lock2nix.mkNpmModule {
     src = ./.;
-    buildInputs = [ plugins-batch ];
+    buildInputs = [ oyasai-plugins ];
 
     passthru = {
       update = stdenvNoCC.mkDerivation {

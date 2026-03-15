@@ -39,37 +39,8 @@ lib.makeScope pkgs.newScope (
           );
       };
     };
-    # TODO: Here we build all plugins, and each plugins will have a
-    # thin derivation of just copying from here. This is because
-    # Gradle makes it very hard as local (`project`) dependencies are
-    # not part of the lockfile.
-    plugins-batch = scopeSelf.gradle2nix.buildGradlePackage {
-      pname = "plugins";
-      version = "0.0.0";
-      src =
-        with lib.fileset;
-        toSource {
-          root = ../.;
-          fileset = unions [
-            ../build.gradle.kts
-            ../gradle
-            ../plugins
-            ../settings.gradle.kts
-          ];
-        };
-      inherit (scopeSelf) gradle;
-      buildJdk = scopeSelf.jdk;
-      lockFile = ../gradle.lock;
-      gradleBuildFlags = [ "build" ];
-      installPhase = ''
-        runHook preInstall
 
-        mkdir -p $out
-        cp plugins/*/build/libs/*.jar $out
-
-        runHook postInstall
-      '';
-    };
+    oyasai-plugins = callPackage ../plugins/package.nix { };
   in
   {
     inherit (pkgs) terraform;
@@ -97,14 +68,14 @@ lib.makeScope pkgs.newScope (
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
 
-    inherit plugins-batch;
+    inherit oyasai-plugins;
 
     plugins = lib.mapAttrs' (
       name: _:
       lib.nameValuePair (lib.toLower name) (
         pkgs.runCommand name { } ''
           mkdir -p $out
-          cp ${plugins-batch}/${name}.jar $out
+          cp ${oyasai-plugins}/${name}.jar $out
         ''
       )
     ) (builtins.readDir ../plugins);
