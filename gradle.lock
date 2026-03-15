@@ -188,11 +188,11 @@
   "com.github.MilkBowl:VaultAPI:1.7.1": {
     "VaultAPI-1.7.1.jar": {
       "url": "https://repo.purpurmc.org/snapshots/com/github/MilkBowl/VaultAPI/1.7.1/VaultAPI-1.7.1.jar",
-      "hash": "sha256-N6VlbLAVrrbtxxFUI7TULlt9Iq7An47JIVMF8+dHT8M="
+      "hash": "sha256-RsuwROYBOw8U6ZsIwq/Cc/VVS32lMg42YU3bnXGc68w="
     },
     "VaultAPI-1.7.1.pom": {
       "url": "https://repo.purpurmc.org/snapshots/com/github/MilkBowl/VaultAPI/1.7.1/VaultAPI-1.7.1.pom",
-      "hash": "sha256-3Uvyoi1hkVtZyl35Ne3cBcqpF7298Or1tqfE5geNaR0="
+      "hash": "sha256-KH29TYszwFDiP14h/eCSybGqY/iPO6uqFkpgrCgL8sw="
     }
   },
   "com.github.NuVotifier:NuVotifier:2.7.2": {
