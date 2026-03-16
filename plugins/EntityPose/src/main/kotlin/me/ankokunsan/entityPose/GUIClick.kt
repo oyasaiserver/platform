@@ -68,6 +68,12 @@ class GUIClick : Listener {
       3 -> {
         if (target is ArmorStand) target.isInvisible = !target.isInvisible
       }
+      4 ->
+          if (target.scoreboardTags.contains("item_lock")) {
+            target.removeScoreboardTag("item_lock")
+          } else {
+            target.addScoreboardTag("item_lock")
+          }
       6 -> {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return

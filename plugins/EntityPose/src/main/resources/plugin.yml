@@ -4,49 +4,49 @@ main: me.ankokunsan.entityPose.EntityPose
 api-version: "1.21"
 
 commands:
-  estick:
+  epstick:
     description: エンティティ棒を手に入れる
-    usage: /estick
+    usage: /epstick
     permission: entitypose_arrange
 
-  einfo:
+  epinfo:
     description: エンティティの情報を表示、変更
-    usage: /einfo
+    usage: /epinfo
     permission: entitypose_arrange
 
-  ekakudo:
+  epkakudo:
     description: エンティティの角度の刻みを変更
-    usage: /ekakudo
+    usage: /epkakudo
     permission: entitypose_arrange
 
-  ezahyo:
+  epzahyo:
     description: エンティティの一回あたりに動く座標の大きさを変更
-    usage: /ezahyo
+    usage: /epzahyo
     permission: entitypose_arrange
 
-  escale:
+  epscale:
     description: エンティティの大きさ変更
-    usage: /escale
+    usage: /epscale
     permission: entitypose_arrange
 
-  ehojo:
+  ephojo:
     description: エンティティを空中で操作するときに自動で出るガラスのオンオフ
-    usage: /ehojo
+    usage: /ephojo
     permission: entitypose_arrange
 
-  ewand:
+  epwand:
     description: Entity Copy Wandを手に入れる
-    usage: /ewand
+    usage: /epwand
     permission: entitypose_arrange
 
-  ecopy:
+  epcopy:
     description: エンティティをコピー
-    usage: /ecopy
+    usage: /epcopy
     permission: entitypose_arrange
 
-  epaste:
+  eppaste:
     description: エンティティをペースト
-    usage: /epaste
+    usage: /eppaste
     permission: entitypose_arrange
 
   entitypose:

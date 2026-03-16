@@ -43,7 +43,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
       return true
     }
     if (target is LivingEntity && target.hasAI()) {
-      sender.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      sender.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return true
     }
     if (args.isNotEmpty() && args[0].equals("set", ignoreCase = true)) {
@@ -157,9 +157,17 @@ class Entityinfo : CommandExecutor, TabCompleter {
             meta.setDisplayName("§f透明: $status")
             itemMeta = meta
           }
+      val itemlockItem =
+          ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
+            val meta = itemMeta ?: return@apply
+            val status = if (target.scoreboardTags.contains("item_lock")) "§aON" else "§cOFF"
+            meta.setDisplayName("§fアイテムのロック: $status")
+            itemMeta = meta
+          }
       invs.setItem(1, gravityItem)
       invs.setItem(2, baseItem)
       invs.setItem(3, invisibleItem)
+      invs.setItem(4, itemlockItem)
     }
     invs.setItem(0, damageItem)
     invs.setItem(6, scaleItem1)
