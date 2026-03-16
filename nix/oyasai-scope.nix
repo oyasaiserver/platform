@@ -64,8 +64,6 @@ lib.makeScope pkgs.newScope (
       '';
     });
 
-    oyasai-plugins = callPackage ../plugins/package.nix { };
-
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
