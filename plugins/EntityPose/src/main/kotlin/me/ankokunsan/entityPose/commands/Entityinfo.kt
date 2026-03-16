@@ -157,16 +157,17 @@ class Entityinfo : CommandExecutor, TabCompleter {
             meta.setDisplayName("§f透明: $status")
             itemMeta = meta
           }
-      val itemlockItem = ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
-        val meta = itemMeta ?: return@apply
-        val status = if(target.scoreboardTags.contains("item_lock")) "§aON" else "§cOFF"
-        meta.setDisplayName("§fアイテムのロック: $status")
-        itemMeta = meta
-      }
+      val itemlockItem =
+          ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
+            val meta = itemMeta ?: return@apply
+            val status = if (target.scoreboardTags.contains("item_lock")) "§aON" else "§cOFF"
+            meta.setDisplayName("§fアイテムのロック: $status")
+            itemMeta = meta
+          }
       invs.setItem(1, gravityItem)
       invs.setItem(2, baseItem)
       invs.setItem(3, invisibleItem)
-      invs.setItem(4,itemlockItem)
+      invs.setItem(4, itemlockItem)
     }
     invs.setItem(0, damageItem)
     invs.setItem(6, scaleItem1)
