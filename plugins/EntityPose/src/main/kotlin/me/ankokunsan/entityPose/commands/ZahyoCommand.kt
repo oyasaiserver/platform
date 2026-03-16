@@ -43,7 +43,7 @@ class ZahyoCommand : CommandExecutor {
       return true
     }
     if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です。")
       return true
     }
     if (args.isEmpty()) {
