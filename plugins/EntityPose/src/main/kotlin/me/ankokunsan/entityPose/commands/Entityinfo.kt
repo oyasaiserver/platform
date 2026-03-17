@@ -152,7 +152,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
           }
       val invisibleItem =
           ItemStack(Material.POTION).apply {
-            val meta = itemMeta ?: return@apply
+            val meta = itemMeta as? PotionMeta ?: return@apply
+            meta.color = Color.fromRGB(127, 131, 146)
             val status = if (target.isInvisible) "§aON" else "§cOFF"
             meta.setDisplayName("§f透明: $status")
             itemMeta = meta
