@@ -5,7 +5,7 @@ enum class EntiPart(val display: String) {
   ALL("体全体"),
   HEAD("頭"),
   SITTING("座る"),
-  ZAHYO("一回あたりに動く座標の大きさ変更"),
+  ZAHYO("一回あたりに動く座標の大きさを変更"),
   X("X座標"),
   Y("Y座標"),
   Z("Z座標"),
