@@ -26,7 +26,7 @@ class ZahyoCommand : CommandExecutor {
             }
     val hand = sender.inventory.itemInMainHand
     if (!isEntiStick(hand)) {
-      sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください。")
+      sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください")
       return true
     }
     if (!sender.hasPermission("entitypose_arrange")) {
@@ -43,7 +43,7 @@ class ZahyoCommand : CommandExecutor {
       return true
     }
     if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です。")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return true
     }
     if (args.isEmpty()) {
@@ -56,9 +56,9 @@ class ZahyoCommand : CommandExecutor {
       val limitedValue1 = value1.coerceIn(0.01, 2.0)
       EntityClick.currentZah[target.uniqueId] = limitedValue1
       sender.sendMessage(
-          "§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを ${limitedValue1}マス に設定しました。")
+          "§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを ${limitedValue1}マス に設定しました")
     } else {
-      sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/zahyoとだけ打ってGUIを開いてください。")
+      sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/zahyoとだけ打ってGUIを開いてください")
     }
     return true
   }

@@ -1,7 +1,6 @@
 package me.ankokunsan.entityPose.commands
 
 import kotlin.math.round
-import me.ankokunsan.entityPose.isEntiStick
 import org.bukkit.attribute.Attribute
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -22,11 +21,6 @@ class EntityScale : CommandExecutor {
             ?: run {
               return true
             }
-    val hand = sender.inventory.itemInMainHand
-    if (!isEntiStick(hand)) {
-      sender.sendMessage("§6[EntityPose] §cエンティティ棒を手に持って実行してください")
-      return true
-    }
     if (!sender.hasPermission("entitypose_arrange")) {
       sender.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
       return true
@@ -60,7 +54,7 @@ class EntityScale : CommandExecutor {
       if (attribute != null) {
         val roundedScale = round(limitedScale * 10) / 10.0
         attribute.baseValue = roundedScale
-        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのサイズを $roundedScale に設定しました")
+        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのスケールを $roundedScale に設定しました")
       }
     } else {
       sender.sendMessage("§6[EntityPose] §c数字を入力してください")

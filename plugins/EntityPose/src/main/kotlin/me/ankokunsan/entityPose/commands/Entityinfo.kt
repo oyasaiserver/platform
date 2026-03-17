@@ -108,7 +108,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定: $scale")
+          meta.setDisplayName("§fスケール設定: $scale")
           itemMeta = meta
         }
     val scaleItem2 =
@@ -116,7 +116,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定: $scale")
+          meta.setDisplayName("§fスケール設定: $scale")
           itemMeta = meta
         }
     val lockitem =
