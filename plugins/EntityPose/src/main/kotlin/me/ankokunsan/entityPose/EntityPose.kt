@@ -2,6 +2,7 @@
 
 package me.ankokunsan.entityPose
 
+import java.util.UUID
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.highlightTasks
 import me.ankokunsan.entityPose.commands.Boucommand
 import me.ankokunsan.entityPose.commands.EntityCopy
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.NameTagVisibility
-import java.util.UUID
 
 fun isEntiStick(item: ItemStack?): Boolean {
   if (item == null || item.type.isAir) return false
@@ -28,6 +28,7 @@ fun isEntiStick(item: ItemStack?): Boolean {
   val meta = item.itemMeta ?: return false
   return meta.persistentDataContainer.has(EntityPose.ENTITY_STICK_KEY, PersistentDataType.BYTE)
 }
+
 fun stopHighlight(uuid: UUID) {
   highlightTasks[uuid]?.cancel()
   highlightTasks.remove(uuid)
@@ -66,9 +67,9 @@ class EntityPose : JavaPlugin() {
     PARROT_KEY = NamespacedKey(this, "parrot_spawn")
     KAKUDO_KEY = NamespacedKey(this, "angle_set")
     ZAHYO_KEY = NamespacedKey(this, "zahyo_set")
-    INVINCIBLE = NamespacedKey(this,"custom_invincible")
-    ITEMLOCK = NamespacedKey(this,"item_lock")
-    ARRANGELOCK = NamespacedKey(this,"arrange_lock")
+    INVINCIBLE = NamespacedKey(this, "custom_invincible")
+    ITEMLOCK = NamespacedKey(this, "item_lock")
+    ARRANGELOCK = NamespacedKey(this, "arrange_lock")
 
     Bou.create()
     CopyWand.create1()

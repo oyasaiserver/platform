@@ -13,17 +13,17 @@ import org.bukkit.entity.Player
 class EntityWand : CommandExecutor, TabCompleter {
 
   override fun onCommand(
-    sender: CommandSender,
-    command: Command,
-    label: String,
-    args: Array<out String>
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>
   ): Boolean {
     // プレイヤーでない場合はメッセージを送って終了
     val player =
-      sender as? Player
-        ?: run {
-          return true
-        }
+        sender as? Player
+            ?: run {
+              return true
+            }
     if (!sender.hasPermission("entitypose_arrange")) {
       sender.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
       return true
@@ -48,10 +48,10 @@ class EntityWand : CommandExecutor, TabCompleter {
   }
 
   override fun onTabComplete(
-    sender: CommandSender,
-    command: Command,
-    alias: String,
-    args: Array<out String>
+      sender: CommandSender,
+      command: Command,
+      alias: String,
+      args: Array<out String>
   ): List<String> {
     if (args.size == 1) {
       return listOf("-c").filter { it.startsWith(args[0], ignoreCase = true) }
