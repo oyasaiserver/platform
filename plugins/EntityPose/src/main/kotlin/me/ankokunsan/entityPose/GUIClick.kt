@@ -1,10 +1,12 @@
 package me.ankokunsan.entityPose
 
+import kotlin.collections.filter
 import kotlin.collections.set
 import kotlin.math.round
 import me.ankokunsan.entityPose.EntityClick.Companion.currentStep
 import me.ankokunsan.entityPose.EntityClick.Companion.currentZah
 import me.ankokunsan.entityPose.EntityClick.Companion.inputWait
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.KAKUDO_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
@@ -49,10 +51,11 @@ class GUIClick : Listener {
     val slot = event.rawSlot
     when (slot) {
       0 -> {
-        if (target.scoreboardTags.contains("custom_invincible")) {
-          target.removeScoreboardTag("custom_invincible")
+        val container = target.persistentDataContainer
+        if (target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)) {
+          container.remove(EntityPose.INVINCIBLE)
         } else {
-          target.addScoreboardTag("custom_invincible")
+          container.set(EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
         }
       }
       1 -> {
@@ -68,12 +71,14 @@ class GUIClick : Listener {
       3 -> {
         if (target is ArmorStand) target.isInvisible = !target.isInvisible
       }
-      4 ->
-          if (target.scoreboardTags.contains("item_lock")) {
-            target.removeScoreboardTag("item_lock")
-          } else {
-            target.addScoreboardTag("item_lock")
-          }
+      4 -> {
+        val container = target.persistentDataContainer
+        if (target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
+          container.remove(EntityPose.ITEMLOCK)
+        } else {
+          container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+        }
+      }
       6 -> {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
@@ -86,15 +91,16 @@ class GUIClick : Listener {
         val livingEntity = target as? LivingEntity ?: return
         val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
-        val newScale = (currentScale - 0.1).coerceAtLeast(0.1)
+        val newScale = (currentScale - 0.1).coerceAtLeast(0.3)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
       8 -> {
-        if (target.scoreboardTags.contains("entity_locked")) {
-          target.removeScoreboardTag("entity_locked")
+        val container = target.persistentDataContainer
+        if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+          container.remove(EntityPose.ARRANGELOCK)
         } else {
-          target.addScoreboardTag("entity_locked")
+          container.set(EntityPose.ARRANGELOCK, PersistentDataType.BYTE, 1.toByte())
         }
       }
     }
@@ -104,10 +110,76 @@ class GUIClick : Listener {
   }
 
   @EventHandler
+  fun onALLSettingClick(event: InventoryClickEvent) {
+    if (event.view.title != "§3範囲選択済みエンティティの設定変更") return
+    event.isCancelled = true
+
+    val player = event.whoClicked as? Player ?: return
+
+    val result =
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
+          it != player
+        }
+    val target = result?.hitEntity ?: return
+    val selected = activeselection[player.uniqueId]
+    if (selected != null && selected.contains(target)) {
+      val targets = selected.filter { it.isValid }
+
+      val slot = event.rawSlot
+      when (slot) {
+        0 -> {
+          val allInvincible =
+              targets.all {
+                it.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+              }
+          targets.forEach {
+            if (allInvincible) it.persistentDataContainer.remove(EntityPose.INVINCIBLE)
+            else
+                it.persistentDataContainer.set(
+                    EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
+          }
+        }
+        6 -> {
+          targets.forEach { entity ->
+            (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
+              val newScale = (attribute.baseValue + 0.1).coerceAtMost(3.0)
+              val roundedScale = round(newScale * 10) / 10.0
+              attribute.baseValue = roundedScale
+            }
+          }
+        }
+        7 -> {
+          targets.forEach { entity ->
+            (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
+              val newScale = (attribute.baseValue - 0.1).coerceAtLeast(0.3)
+              val roundedScale = round(newScale * 10) / 10.0
+              attribute.baseValue = roundedScale
+            }
+          }
+        }
+        8 -> {
+          val allarrange =
+              targets.all {
+                it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+          targets.forEach {
+            if (allarrange) it.persistentDataContainer.remove(EntityPose.ARRANGELOCK)
+            else
+                it.persistentDataContainer.set(
+                    EntityPose.ARRANGELOCK, PersistentDataType.BYTE, 1.toByte())
+          }
+        }
+      }
+      player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
+      Entityinfo().openAllSettingGUI(player, targets)
+    }
+  }
+
+  @EventHandler
   fun onDamage(event: EntityDamageEvent) {
-    // 叩かれたエンティティが「あの名札（タグ）」を持っていたら…
-    if (event.entity.scoreboardTags.contains("custom_invincible")) {
-      // ダメージ事件そのものを「なかったこと」にする！
+    // 叩かれたエンティティがtagを持っていたら
+    if (event.entity.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)) {
+      // ダメージそのものを「なかったこと」にする
       event.isCancelled = true
     }
   }

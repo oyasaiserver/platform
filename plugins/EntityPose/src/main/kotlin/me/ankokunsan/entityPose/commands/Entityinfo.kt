@@ -1,5 +1,7 @@
 package me.ankokunsan.entityPose.commands
 
+import kotlin.collections.filter
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityPose
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -20,15 +22,20 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.EulerAngle
 
 class Entityinfo : CommandExecutor, TabCompleter {
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
       label: String,
       args: Array<out String>
   ): Boolean {
-    if (sender !is Player) return true
-    if (!sender.hasPermission("entitypose_arrange")) {
-      sender.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
+    val player =
+        sender as? Player
+            ?: run {
+              return true
+            }
+    if (!player.hasPermission("entitypose_arrange")) {
+      player.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
       return true
     }
     val result =
@@ -47,12 +54,21 @@ class Entityinfo : CommandExecutor, TabCompleter {
       return true
     }
     if (args.isNotEmpty() && args[0].equals("set", ignoreCase = true)) {
-      openSettingGUI(sender, target)
-      return true
+      val selected = activeselection[player.uniqueId]
+      if (selected != null && selected.contains(target)) {
+        val targets = selected.filter { it.isValid }
+        openAllSettingGUI(player, targets)
+      } else {
+        openSettingGUI(player, target)
+        return true
+      }
     } else if (args.isEmpty()) {
       val loc = target.location
       val yaw = (loc.yaw % 360 + 360) % 360
-      val invincible = if (target.scoreboardTags.contains("custom_invincible")) "§aON" else "§cOFF"
+      val invincible =
+          if (target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE))
+              "§aON"
+          else "§cOFF"
 
       if (target is ArmorStand) {
         val head = target.headPose
@@ -99,7 +115,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
     val damageItem =
         ItemStack(Material.DIAMOND_SWORD).apply {
           val meta = itemMeta ?: return@apply
-          val status = if (target.scoreboardTags.contains("custom_invincible")) "§aON" else "§cOFF"
+          val hasKey =
+              target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+          val status = if (hasKey) "§aON" else "§cOFF"
           meta.setDisplayName("§fダメージ無効: $status")
           itemMeta = meta
         }
@@ -108,7 +126,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fスケール設定: $scale")
+          meta.setDisplayName("§fサイズ設定(大きくするほう): $scale")
           itemMeta = meta
         }
     val scaleItem2 =
@@ -116,13 +134,15 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fスケール設定: $scale")
+          meta.setDisplayName("§fサイズ設定(小さくするほう): $scale")
           itemMeta = meta
         }
     val lockitem =
         ItemStack(Material.TRIAL_KEY).apply {
           val meta = itemMeta ?: return@apply
-          val lockarrange = if (target.scoreboardTags.contains("entity_locked")) "§aON" else "§cOFF"
+          val hasKey =
+              target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+          val lockarrange = if (hasKey) "§aON" else "§cOFF"
           meta.setDisplayName("§fアレンジのロック: $lockarrange")
           itemMeta = meta
         }
@@ -161,7 +181,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
       val itemlockItem =
           ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
             val meta = itemMeta ?: return@apply
-            val status = if (target.scoreboardTags.contains("item_lock")) "§aON" else "§cOFF"
+            val hasKey =
+                target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+            val status = if (hasKey) "§aON" else "§cOFF"
             meta.setDisplayName("§fアイテムのロック: $status")
             itemMeta = meta
           }
@@ -175,6 +197,56 @@ class Entityinfo : CommandExecutor, TabCompleter {
     invs.setItem(7, scaleItem2)
     invs.setItem(8, lockitem)
 
+    val filler = getFiller()
+    for (i in 0 until invs.size) {
+      if (invs.getItem(i) == null) invs.setItem(i, filler)
+    }
+    player.openInventory(invs)
+  }
+
+  fun openAllSettingGUI(player: Player, targets: List<Entity>) {
+    val invs = Bukkit.createInventory(null, 9, "§3範囲選択済みエンティティの設定変更")
+
+    val damageItem =
+        ItemStack(Material.DIAMOND_SWORD).apply {
+          val meta = itemMeta ?: return@apply
+          val count =
+              targets.count {
+                it.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+              }
+          meta.setDisplayName("§fダメージ無効 ${count}/${targets.size}体ON")
+          itemMeta = meta
+        }
+    val scaleItem1 =
+        ItemStack(Material.POTION).apply { // LEGACYを消す
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          meta.setDisplayName("§fサイズ設定(大きくするほう)")
+          meta.lore = listOf("どうやって表示すればいいか思いつかなかった")
+          itemMeta = meta
+        }
+    val scaleItem2 =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          meta.setDisplayName("§fサイズ設定(小さくするほう)")
+          meta.lore = listOf("どうやって表示すればいいか思いつかなかった")
+          itemMeta = meta
+        }
+    val lockitem =
+        ItemStack(Material.TRIAL_KEY).apply {
+          val meta = itemMeta ?: return@apply
+          val count =
+              targets.count {
+                it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+          meta.setDisplayName("§fアレンジのロック ${count}/${targets.size}体ON")
+          itemMeta = meta
+        }
+    invs.setItem(0, damageItem)
+    invs.setItem(6, scaleItem1)
+    invs.setItem(7, scaleItem2)
+    invs.setItem(8, lockitem)
     val filler = getFiller()
     for (i in 0 until invs.size) {
       if (invs.getItem(i) == null) invs.setItem(i, filler)

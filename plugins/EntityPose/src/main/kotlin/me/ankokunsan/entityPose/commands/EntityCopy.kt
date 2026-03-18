@@ -1,15 +1,15 @@
 package me.ankokunsan.entityPose.commands
 
-import java.util.UUID
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.clipboard
-import me.ankokunsan.entityPose.EntityCopyClick.Companion.highlightTasks
-import me.ankokunsan.entityPose.EntityCopyClick.Companion.selection
 import me.ankokunsan.entityPose.EntityCopyData
+import me.ankokunsan.entityPose.EntityPose
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Ageable
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Cat
 import org.bukkit.entity.LivingEntity
@@ -21,14 +21,9 @@ import org.bukkit.entity.Tameable
 import org.bukkit.entity.Wolf
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import org.bukkit.util.BoundingBox
+import org.bukkit.persistence.PersistentDataType
 
 class EntityCopy : CommandExecutor {
-
-  private fun stopHighlight(uuid: UUID) {
-    highlightTasks[uuid]?.cancel()
-    highlightTasks.remove(uuid)
-  }
 
   @Suppress("DEPRECATION")
   override fun onCommand(
@@ -42,28 +37,25 @@ class EntityCopy : CommandExecutor {
             ?: run {
               return true
             }
-    if (!sender.hasPermission("entitypose_arrange")) {
-      sender.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
+    if (!player.hasPermission("entitypose_arrange")) {
+      player.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
       return true
     }
     val uuid = player.uniqueId
-    val (p1, p2) = selection[uuid] ?: (null to null)
+    val targets = activeselection[uuid]?.filter { it.isValid }
 
-    if (p1 == null || p2 == null) {
-      player.sendMessage("§c範囲が選択されていません。Entity Copy Wandで2地点を指定してください")
+    if (targets == null) {
+      player.sendMessage("§6[EntityPose] §c範囲選択されているエンティティがいません")
       return true
     }
-    val origin = player.location
-    val originVec = origin.toVector()
-    val box = BoundingBox.of(p1, p2).expand(0.2)
-    val world = player.world
-    val targets =
-        world.getNearbyEntities(box).filter { entity ->
-          entity != player && (entity as? LivingEntity)?.hasAI() == false
-        }
+
+    val originVec = player.location.toVector()
     val snapshot =
         targets.map { entity ->
-          val relativePos = entity.location.toVector().subtract(originVec)
+          val loc = entity.location
+          val relativePos = loc.toVector().subtract(originVec)
+
+          val container = entity.persistentDataContainer
 
           val variantStr =
               when (entity) {
@@ -101,7 +93,9 @@ class EntityCopy : CommandExecutor {
               pitch = entity.location.pitch,
               customName = if (entity.customName == "Dinnerbone") null else entity.customName,
               hanten = entity.customName == "Dinnerbone",
-              scoreBoard = entity.scoreboardTags.toSet(),
+              isInvincible = container.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE),
+              isArrangeLocked = container.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE),
+              isItemLocked = container.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE),
               hasGravity = entity.hasGravity(),
               hasBasePlate = armorStands?.hasBasePlate() ?: true,
               isInvisible = armorStands?.isInvisible == true,
@@ -110,8 +104,7 @@ class EntityCopy : CommandExecutor {
               isTamed = (entity as? Tameable)?.isTamed ?: false,
               isMini =
                   when (entity) {
-                    is Wolf -> !entity.isAdult
-                    is Cat -> !entity.isAdult
+                    is Ageable -> !entity.isAdult
                     else -> false
                   },
               isSitting = sitting,
@@ -127,8 +120,6 @@ class EntityCopy : CommandExecutor {
         }
     clipboard[uuid] = snapshot
     player.sendMessage("§6[EntityPose] §a${snapshot.size}体のエンティティをコピーしました")
-    stopHighlight(uuid)
-    selection.remove(uuid)
     return true
   }
 }

@@ -1,6 +1,8 @@
 package me.ankokunsan.entityPose.commands
 
+import kotlin.collections.filter
 import kotlin.math.round
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import org.bukkit.attribute.Attribute
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -31,7 +33,7 @@ class EntityScale : CommandExecutor {
         }
     val target = result?.hitEntity
     if (target == null) {
-      sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
+      sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがいません")
       return true
     }
     if (target is Player) {
@@ -48,16 +50,27 @@ class EntityScale : CommandExecutor {
       return true
     }
     val scale = args[0].toDoubleOrNull()
-    if (scale != null) {
-      val limitedScale = scale.coerceIn(0.1, 3.0)
+    if (scale == null) {
+      player.sendMessage("§6[EntityPose] §c数字を入力してください")
+      return true
+    }
+    val limitedScale = scale.coerceIn(0.3, 3.0)
+    val roundedScale = round(limitedScale * 10) / 10.0
+    val selected = activeselection[player.uniqueId]
+    if (selected != null && selected.contains(target)) {
+      val targets = selected.filter { it.isValid }
+      targets.forEach { entity ->
+        (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->
+          attribute.baseValue = roundedScale
+        }
+      }
+      player.sendMessage("§6[EntityPose] §a範囲選択されているエンティティのサイズを $roundedScale に設定しました")
+    } else {
       val attribute = livingEntity.getAttribute(Attribute.SCALE)
       if (attribute != null) {
-        val roundedScale = round(limitedScale * 10) / 10.0
         attribute.baseValue = roundedScale
-        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのスケールを $roundedScale に設定しました")
+        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのサイズを $roundedScale に設定しました")
       }
-    } else {
-      sender.sendMessage("§6[EntityPose] §c数字を入力してください")
     }
     return true
   }

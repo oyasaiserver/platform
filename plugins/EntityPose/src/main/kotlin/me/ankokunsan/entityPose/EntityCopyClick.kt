@@ -2,12 +2,14 @@ package me.ankokunsan.entityPose
 
 import java.util.UUID
 import org.bukkit.Particle
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
@@ -19,6 +21,7 @@ import org.bukkit.util.Vector
 class EntityCopyClick : Listener {
   companion object {
     val selection = mutableMapOf<UUID, Pair<Vector?, Vector?>>()
+    val activeselection = HashMap<UUID, List<Entity>>()
     val clipboard = mutableMapOf<UUID, List<EntityCopyData>>()
     val highlightTasks = mutableMapOf<UUID, BukkitTask>()
   }
@@ -38,11 +41,11 @@ class EntityCopyClick : Listener {
     if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.entity
     if (entity is Player) {
-      player.sendMessage("§6[EntityPose] §cプレイヤーをコピーしようとしないでね")
+      player.sendMessage("§6[EntityPose] §cプレイヤーをいじろうとしないでね")
       return
     }
     if (entity is LivingEntity && entity.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return
     }
     event.isCancelled = true
@@ -65,8 +68,12 @@ class EntityCopyClick : Listener {
     if (!isCopyWand(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.rightClicked
+    if (entity is Player) {
+      player.sendMessage("§6[EntityPose] §cプレイヤーをいじろうとしないでね")
+      return
+    }
     if (entity is LivingEntity && entity.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return
     }
     event.isCancelled = true
@@ -81,14 +88,14 @@ class EntityCopyClick : Listener {
     val pos1 = current.first
     if (pos1 != null) {
       player.sendMessage("§6[EntityPose] §bpos2を設定しました")
-      player.sendMessage("§6[EntityPose] §b/ecopyでコピーできます")
-      val box = BoundingBox.of(pos1, newPos2).expand(0.5)
+      val box = BoundingBox.of(pos1, newPos2).expand(0.2)
       val world = player.world
       highlightTasks[uuid]?.cancel()
       val targets =
           world.getNearbyEntities(box).filter { entity ->
             entity != player && (entity as? LivingEntity)?.hasAI() == false
           }
+      activeselection[uuid] = targets
       player.sendMessage("§6[EntityPose] §f範囲内に ${targets.size} 体見つかりました")
       val task =
           object : BukkitRunnable() {
@@ -111,6 +118,24 @@ class EntityCopyClick : Listener {
       highlightTasks[uuid] = task
     } else {
       player.sendMessage("§6[EntityPose] §bpos2を設定しました")
+    }
+  }
+
+  @EventHandler
+  fun onSwapEvent(event: PlayerSwapHandItemsEvent) {
+    val player = event.player
+    val hand = event.offHandItem
+    if (!isCopyWand(hand)) return
+    if (!player.hasPermission("entitypose_arrange")) return
+    if (!activeselection.isEmpty()) {
+      event.isCancelled = true
+      val uuid = player.uniqueId
+      stopHighlight(uuid)
+      activeselection.remove(uuid)
+      selection.remove(uuid)
+      player.sendMessage("§6[EntityPose] §e範囲選択をリセットしました")
+    } else {
+      player.sendMessage("§6[EntityPose] §c範囲選択されているエンティティがいません")
     }
   }
 }
