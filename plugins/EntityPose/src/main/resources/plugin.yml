@@ -49,6 +49,11 @@ commands:
     usage: /eppaste
     permission: entitypose_arrange
 
+  epcut:
+    description: エンティティを削除
+    usage: /epcut
+    permission: entitypose_arrange
+
   entitypose:
     description: EntityPoseのコマンドとか操作一覧
     usage: /entitypose

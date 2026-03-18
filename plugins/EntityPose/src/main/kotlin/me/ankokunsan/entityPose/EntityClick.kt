@@ -1,5 +1,6 @@
 package me.ankokunsan.entityPose
 
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import java.util.UUID
 import kotlin.math.roundToInt
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import kotlin.collections.filter
 
 class EntityClick : Listener {
 
@@ -66,7 +68,8 @@ class EntityClick : Listener {
   @EventHandler
   fun onManipulate(event: PlayerArmorStandManipulateEvent) {
     val hand = event.player.inventory.itemInMainHand
-    if (isEntiStick(hand)) {
+    val armor = event.rightClicked
+    if (isEntiStick(hand) || armor.persistentDataContainer.has(EntityPose.ITEMLOCK , PersistentDataType.BYTE)) {
       event.isCancelled = true
     }
   }
@@ -79,7 +82,7 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val target = event.entity
-    if (target.scoreboardTags.contains("entity_locked")) {
+    if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK , PersistentDataType.BYTE)) {
       actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
       return
     }
@@ -93,9 +96,10 @@ class EntityClick : Listener {
 
       selectedPart[target.uniqueId] = next
       actionBar(player, "現在の選択部位→ ${next.display}")
+
     } else if (target is LivingEntity) {
       if (target.hasAI()) {
-        player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+        player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
         return
       }
       val current = selectPart[target.uniqueId] ?: EntiPart.HAN
@@ -119,11 +123,11 @@ class EntityClick : Listener {
         }
     val target = result?.hitEntity
     if (target == null) {
-      player.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
+      player.sendMessage("§6[EntityPose] §c視線の先にエンティティがいません")
       return
     }
     if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return
     }
     if (player.isSneaking) {
@@ -638,7 +642,7 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.rightClicked
-    if (entity.scoreboardTags.contains("entity_locked")) {
+    if (entity.persistentDataContainer.has(EntityPose.ARRANGELOCK , PersistentDataType.BYTE)) {
       actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
       return
     }
@@ -653,6 +657,13 @@ class EntityClick : Listener {
     if (entity is ArmorStand) {
       val part = selectedPart[entity.uniqueId] ?: return
       val rad = Math.toRadians(delta.toDouble())
+      val selected = activeselection[player.uniqueId]
+      val ismoveMode = part == StandPart.X || part == StandPart.Y || part == StandPart.Z
+      val targets = if(ismoveMode && selected != null && selected.contains(entity)) {
+        selected.filter { it.isValid }
+      } else {
+        listOf(entity)
+      }
       when (part) {
         StandPart.HEAD_X -> {
           entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
@@ -769,16 +780,16 @@ class EntityClick : Listener {
           actionBar(player, "§a全体: ${formatDeg(loc.yaw.toDouble())}")
         }
         StandPart.X -> {
-          entity.teleport(entity.location.add(move1, 0.0, 0.0))
-          actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
+          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+          actionBar(player, "§aX座標変更中 (${targets.size}体): ${formatLoc(entity.location.x)}")
         }
         StandPart.Y -> {
-          entity.teleport(entity.location.add(0.0, move1, 0.0))
-          actionBar(player, "§aY座標変更中: §f${formatLoc(entity.location.y)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0,move1, 0.0)) }
+          actionBar(player, "§aY座標変更中 (${targets.size}体): ${formatLoc(entity.location.y)}")
         }
         StandPart.Z -> {
-          entity.teleport(entity.location.add(0.0, 0.0, move1))
-          actionBar(player, "§aZ座標変更中: §f${formatLoc(entity.location.z)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0,0.0,move1)) }
+          actionBar(player, "§aZ座標変更中 (${targets.size}体): ${formatLoc(entity.location.z)}")
         }
       }
       return
@@ -786,6 +797,13 @@ class EntityClick : Listener {
 
     if (entity is LivingEntity) {
       val part1 = selectPart[entity.uniqueId] ?: return
+      val selected1 = activeselection[player.uniqueId]
+      val ismoveMode1 = part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z
+      val targets = if(ismoveMode1 && selected1 != null && selected1.contains(entity)) {
+        selected1.filter { it.isValid }
+      } else {
+        listOf(entity)
+      }
       val deltaF = (if (player.isSneaking) -step else step).toFloat()
       val loc = entity.location.clone()
 
@@ -830,17 +848,17 @@ class EntityClick : Listener {
           ChooseGUi.openZahyoGUI(player)
           return
         }
-        EntiPart.X -> {
-          entity.teleport(entity.location.add(move1, 0.0, 0.0))
-          actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
+        EntiPart.X ->{
+          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+          actionBar(player, "§aX座標変更中 (${targets.size}体): ${formatLoc(entity.location.x)}")
         }
         EntiPart.Y -> {
-          entity.teleport(entity.location.add(0.0, move1, 0.0))
-          actionBar(player, "§aY座標変更中: §f${formatLoc(entity.location.y)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0,move1, 0.0)) }
+          actionBar(player, "§aY座標変更中 (${targets.size}体): ${formatLoc(entity.location.y)}")
         }
         EntiPart.Z -> {
-          entity.teleport(entity.location.add(0.0, 0.0, move1))
-          actionBar(player, "§aZ座標変更中: §f${formatLoc(entity.location.z)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0,0.0,move1)) }
+          actionBar(player, "§aZ座標変更中 (${targets.size}体): ${formatLoc(entity.location.z)}")
         }
         EntiPart.HAN -> {
           val board = Bukkit.getScoreboardManager()!!.mainScoreboard

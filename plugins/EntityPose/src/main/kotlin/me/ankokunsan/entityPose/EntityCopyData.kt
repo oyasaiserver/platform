@@ -13,7 +13,9 @@ data class EntityCopyData(
     val pitch: Float,
     val hanten: Boolean = false,
     val customName: String?,
-    val scoreBoard: Set<String> = emptySet(),
+    val isInvincible: Boolean = false,
+    val isArrangeLocked: Boolean = false,
+    val isItemLocked: Boolean = false,
     val hasGravity: Boolean = true, // 重力
     val hasBasePlate: Boolean = true,
     val isSmall: Boolean = true,

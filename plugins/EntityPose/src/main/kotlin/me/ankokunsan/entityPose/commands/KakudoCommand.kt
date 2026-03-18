@@ -38,7 +38,7 @@ class KakudoCommand : CommandExecutor {
         }
     val target = result?.hitEntity
     if (target == null) {
-      sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
+      sender.sendMessage("§6[EntityPose] §c視線の先にエンティティがいません")
       return true
     }
     if (target is LivingEntity && target.hasAI()) {

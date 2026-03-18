@@ -1,6 +1,7 @@
 package me.ankokunsan.entityPose.commands
 
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.clipboard
+import me.ankokunsan.entityPose.EntityPose
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
@@ -18,6 +19,7 @@ import org.bukkit.entity.Rabbit
 import org.bukkit.entity.Sittable
 import org.bukkit.entity.Tameable
 import org.bukkit.entity.Wolf
+import org.bukkit.persistence.PersistentDataType
 
 class EntityPaste : CommandExecutor {
 
@@ -81,7 +83,8 @@ class EntityPaste : CommandExecutor {
 
       world.spawnEntity(spawnLoc, data.type).apply {
         setGravity(data.hasGravity)
-        data.scoreBoard.forEach { tag -> addScoreboardTag(tag) }
+        val container = this.persistentDataContainer
+
         if (this is LivingEntity) {
           setAI(false)
           isSilent = true
@@ -93,6 +96,16 @@ class EntityPaste : CommandExecutor {
             val team = board.getTeam("animal_things_hide_name")
             team?.addEntry(this.uniqueId.toString())
           }
+          if (data.isInvincible) {
+            container.set(EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
+          }
+          if (data.isArrangeLocked) {
+            container.set(EntityPose.ARRANGELOCK, PersistentDataType.BYTE, 1.toByte())
+          }
+          if (data.isItemLocked) {
+            container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+          }
+
           data.equipment.forEach { (slot, item) -> this.equipment?.setItem(slot, item) }
           applyVariant(this, data.variant)
           if (this is Ageable) {
