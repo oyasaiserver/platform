@@ -72,8 +72,8 @@ class EntityPaste : CommandExecutor {
       player.sendMessage("§6[EntityPose] §cクリップボードが空です。先にコピーしてください")
       return true
     }
-    player.sendMessage("§6[EntityPose] §a${snapshot1.size} 体のエンティティを貼り付けます")
-    val loc = player.location
+    player.sendMessage("§6[EntityPose] §a${snapshot1.size}体のエンティティを貼り付けます")
+    val loc = player.location.block.location
     val world = player.world
     snapshot1.forEach { data ->
       val spawnLoc = loc.clone().add(data.offset)

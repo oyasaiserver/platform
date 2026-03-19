@@ -36,7 +36,7 @@ class EntityCut : CommandExecutor {
     activeselection.remove(uuid)
     selection.remove(uuid)
     stopHighlight(uuid)
-    player.sendMessage("§6[EntityPose] §f範囲内の ${targets.size} 体を削除しました")
+    player.sendMessage("§6[EntityPose] §f範囲内の${targets.size}体を削除しました")
     return true
   }
 }

@@ -139,6 +139,37 @@ class GUIClick : Listener {
                     EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
           }
         }
+        1 -> {
+          val armor = targets.filterIsInstance<ArmorStand>()
+          val allgravity = armor.all { it.hasGravity() }
+          val nextState = !allgravity
+          armor.forEach { it.setGravity(nextState) }
+        }
+        2 -> {
+          val armor = targets.filterIsInstance<ArmorStand>()
+          val allbaseplate = armor.all { it.hasBasePlate() }
+          val nextState = !allbaseplate
+          armor.forEach { it.setBasePlate(nextState) }
+        }
+
+        3 -> {
+          val armor = targets.filterIsInstance<ArmorStand>()
+          val allInvisible = armor.all { it.isInvisible }
+          val nextState = !allInvisible
+          armor.forEach { it.isInvisible = nextState }
+        }
+        4 -> {
+          val allInvincible =
+              targets.all {
+                it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+              }
+          targets.forEach {
+            if (allInvincible) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
+            else
+                it.persistentDataContainer.set(
+                    EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+          }
+        }
         6 -> {
           targets.forEach { entity ->
             (entity as? LivingEntity)?.getAttribute(Attribute.SCALE)?.let { attribute ->

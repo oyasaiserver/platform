@@ -60,7 +60,8 @@ class EntityClick : Listener {
   fun onHeldstick(event: PlayerItemHeldEvent) {
     val player = event.player
     val item = player.inventory.getItem(event.newSlot)
-    if (isEntiStick(item) && player.hasPermission("entitypose_arrange")) {
+    val isTargetItem = isEntiStick(item) || isCopyWand(item)
+    if (isTargetItem && player.hasPermission("entitypose_arrange")) {
       AirBlock.startglowing(player)
     }
   }

@@ -45,7 +45,6 @@ object AirBlock {
 
             if (distance >= 1.1 || !player.isOnline) {
               removeBlock()
-              player.sendMessage("§6[EntityPose] §c足場から離れたため消去しました")
               centerLoc.world?.playSound(centerLoc, Sound.BLOCK_GLASS_BREAK, 2.0f, 1.0f)
               this.cancel()
               return
@@ -68,9 +67,17 @@ object AirBlock {
     object : BukkitRunnable() {
           override fun run() {
             val hand = player.inventory.itemInMainHand
+            val uuid = player.uniqueId
 
-            if (!isEntiStick(hand) || !player.isOnline) {
-              glowingTarget[player.uniqueId]?.isGlowing = false
+            if (!player.isValid) {
+              glowingTarget[uuid]?.isGlowing = false
+              glowingTarget.remove(uuid)
+              this.cancel()
+              return
+            }
+            if (!isEntiStick(hand) && !isCopyWand(hand)) {
+              glowingTarget[uuid]?.isGlowing = false
+              glowingTarget.remove(uuid)
               this.cancel()
               return
             }
@@ -81,12 +88,12 @@ object AirBlock {
                     }
             val target = result?.hitEntity ?: return
 
-            val lastTarget = glowingTarget[player.uniqueId]
+            val lastTarget = glowingTarget[uuid]
             if (target != lastTarget) {
               lastTarget?.isGlowing = false
 
               target.isGlowing = true
-              glowingTarget[player.uniqueId] = target
+              glowingTarget[uuid] = target
             }
           }
         }
