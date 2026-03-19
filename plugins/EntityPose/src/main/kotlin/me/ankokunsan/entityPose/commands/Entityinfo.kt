@@ -243,6 +243,39 @@ class Entityinfo : CommandExecutor, TabCompleter {
           meta.setDisplayName("§fアレンジのロック ${count}/${targets.size}体ON")
           itemMeta = meta
         }
+
+    if (targets.all{it is ArmorStand}) {
+      val baseItem = ItemStack(Material.SMOOTH_STONE_SLAB).apply {
+        val meta = itemMeta ?: return@apply
+        val count = targets.filterIsInstance<ArmorStand>().count { it.hasBasePlate()}
+        meta.setDisplayName("§f底のプレート表示: ${count}/${targets.size}体ON")
+        itemMeta = meta
+      }
+      val gravityItem = ItemStack(Material.ANVIL).apply {
+        val meta = itemMeta ?: return@apply
+        val count = targets.count { it.hasGravity()}
+        meta.setDisplayName("§f重力: ${count}/${targets.size}体ON")
+        itemMeta = meta
+      }
+      val invisibleItem = ItemStack(Material.POTION).apply {
+        val meta = itemMeta as? PotionMeta ?: return@apply
+        meta.color = Color.fromRGB(127, 131, 146)
+        val count = targets.filterIsInstance<ArmorStand>().count { it.isInvisible }
+        meta.setDisplayName("§f透明: ${count}/${targets.size}体ON")
+        itemMeta = meta
+      }
+      val itemlockItem = ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
+        val meta = itemMeta ?: return@apply
+        val count = targets.count{ it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE) }
+        meta.setDisplayName("§fアイテムのロック: ${count}/${targets.size}体ON")
+        itemMeta = meta
+      }
+      invs.setItem(1, gravityItem)
+      invs.setItem(2, baseItem)
+      invs.setItem(3, invisibleItem)
+      invs.setItem(4,itemlockItem)
+    }
+
     invs.setItem(0, damageItem)
     invs.setItem(6, scaleItem1)
     invs.setItem(7, scaleItem2)

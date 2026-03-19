@@ -28,7 +28,15 @@ fun isEntiStick(item: ItemStack?): Boolean {
   val meta = item.itemMeta ?: return false
   return meta.persistentDataContainer.has(EntityPose.ENTITY_STICK_KEY, PersistentDataType.BYTE)
 }
-
+fun isCopyWand(item: ItemStack?): Boolean {
+  if (item == null || item.type.isAir) return false
+  if (!item.hasItemMeta()) return false
+  val meta = item.itemMeta ?: return false
+  return meta.persistentDataContainer.has(
+    EntityPose.COPY_STICK_KEY,
+    PersistentDataType.BYTE
+  )
+}
 fun stopHighlight(uuid: UUID) {
   highlightTasks[uuid]?.cancel()
   highlightTasks.remove(uuid)

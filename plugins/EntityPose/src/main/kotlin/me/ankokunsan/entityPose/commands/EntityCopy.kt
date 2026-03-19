@@ -49,7 +49,7 @@ class EntityCopy : CommandExecutor {
       return true
     }
 
-    val originVec = player.location.toVector()
+    val originVec = player.location.block.location.toVector()
     val snapshot =
         targets.map { entity ->
           val loc = entity.location
