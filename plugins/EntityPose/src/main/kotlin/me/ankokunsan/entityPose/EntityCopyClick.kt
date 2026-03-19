@@ -54,27 +54,30 @@ class EntityCopyClick : Listener {
       val box = BoundingBox.of(newpos1, pos2).expand(0.2)
       val world = player.world
       highlightTasks[uuid]?.cancel()
-      val targets = world.getNearbyEntities(box).filter { entity ->
-        entity != player &&
-          (entity as? LivingEntity)?.hasAI() == false
-      }
+      val targets =
+          world.getNearbyEntities(box).filter { entity ->
+            entity != player && (entity as? LivingEntity)?.hasAI() == false
+          }
       activeselection[uuid] = targets
       player.sendMessage("§6[EntityPose] §f範囲内に${targets.size}体見つかりました")
-      val task = object : BukkitRunnable() {
-        override fun run() {
-          if (!player.isOnline) {
-            this.cancel()
-            highlightTasks.remove(uuid)
-            return
-          }
-          targets.forEach { entity ->
-            if (entity.isValid) {
-              val headlocation = entity.location.add(0.0, entity.height + 0.2, 0.0)
-              player.spawnParticle(Particle.HAPPY_VILLAGER, headlocation, 10, 0.1, 0.1, 0.1, 0.05)
-            }
-          }
-        }
-      }.runTaskTimer(EntityPose.INSTANCE, 0L, 10L) // 10L = 0.5秒間隔
+      val task =
+          object : BukkitRunnable() {
+                override fun run() {
+                  if (!player.isOnline) {
+                    this.cancel()
+                    highlightTasks.remove(uuid)
+                    return
+                  }
+                  targets.forEach { entity ->
+                    if (entity.isValid) {
+                      val headlocation = entity.location.add(0.0, entity.height + 0.2, 0.0)
+                      player.spawnParticle(
+                          Particle.HAPPY_VILLAGER, headlocation, 10, 0.1, 0.1, 0.1, 0.05)
+                    }
+                  }
+                }
+              }
+              .runTaskTimer(EntityPose.INSTANCE, 0L, 10L) // 10L = 0.5秒間隔
       highlightTasks[uuid] = task
     } else {
       player.sendMessage("§6[EntityPose] §bpos1を設定しました")

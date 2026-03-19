@@ -156,19 +156,18 @@ class GUIClick : Listener {
           val armor = targets.filterIsInstance<ArmorStand>()
           val allInvisible = armor.all { it.isInvisible }
           val nextState = !allInvisible
-          armor.forEach { it.isInvisible = nextState}
+          armor.forEach { it.isInvisible = nextState }
         }
         4 -> {
-          val allInvincible = targets.all {
-            it.persistentDataContainer.has(
-              EntityPose.ITEMLOCK,
-              PersistentDataType.BYTE
-            )
-          }
+          val allInvincible =
+              targets.all {
+                it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+              }
           targets.forEach {
             if (allInvincible) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
-            else it.persistentDataContainer.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
-
+            else
+                it.persistentDataContainer.set(
+                    EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
           }
         }
         6 -> {
