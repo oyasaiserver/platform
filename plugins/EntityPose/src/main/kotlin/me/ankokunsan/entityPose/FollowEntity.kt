@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.EulerAngle
@@ -102,6 +103,8 @@ object FollowEntity {
         entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
         entity.isInvulnerable = false
         entity.isSilent = true
+        entity.persistentDataContainer.set(
+            EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
       }
     }
 
