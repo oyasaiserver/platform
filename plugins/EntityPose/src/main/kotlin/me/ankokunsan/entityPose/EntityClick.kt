@@ -642,11 +642,14 @@ class EntityClick : Listener {
       val part = selectedPart[entity.type] ?: return
       val rad = Math.toRadians(delta.toDouble())
       val selected = activeselection[player.uniqueId]
-      val ismoveMode = part == StandPart.X || part == StandPart.Y || part == StandPart.Z || part == StandPart.ALL
+      val ismoveMode =
+          part == StandPart.X || part == StandPart.Y || part == StandPart.Z || part == StandPart.ALL
       val targets =
           if (ismoveMode && selected != null && selected.contains(entity)) {
-            selected.filter { it.isValid && !it.persistentDataContainer.has(EntityPose.ARRANGELOCK,
-              PersistentDataType.BYTE) }
+            selected.filter {
+              it.isValid &&
+                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            }
           } else {
             listOf(entity)
           }
@@ -765,14 +768,13 @@ class EntityClick : Listener {
             loc.yaw += delta
             target.teleport(loc)
           }
-          val status = targets.take(10).joinToString("/") {
-            formatDeg(it.location.yaw.toDouble())
-          }
-          val suffix = if (targets.size > 10) {
-            "§7...ほか${targets.size - 10}体"
-          } else {
-            ""
-          }
+          val status = targets.take(10).joinToString("/") { formatDeg(it.location.yaw.toDouble()) }
+          val suffix =
+              if (targets.size > 10) {
+                "§7...ほか${targets.size - 10}体"
+              } else {
+                ""
+              }
           actionBar(player, "§a全体: (${targets.size}体): §e$status$suffix")
         }
         StandPart.X -> {
@@ -794,11 +796,14 @@ class EntityClick : Listener {
     if (entity is LivingEntity) {
       val part1 = selectPart[entity.type] ?: return
       val selected1 = activeselection[player.uniqueId]
-      val ismoveMode1 = part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
+      val ismoveMode1 =
+          part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
       val targets =
           if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
-            selected1.filter { it.isValid && !it.persistentDataContainer.has(EntityPose.ARRANGELOCK,
-              PersistentDataType.BYTE) }
+            selected1.filter {
+              it.isValid &&
+                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            }
           } else {
             listOf(entity)
           }
@@ -820,20 +825,19 @@ class EntityClick : Listener {
             loc.yaw += deltaF
             target.teleport(loc)
           }
-          val status = targets.take(10).joinToString("/") {
-            formatDeg(it.location.yaw.toDouble())
-          }
-          val suffix = if (targets.size > 10) {
-            "§7...ほか${targets.size - 10}体"
-          } else {
-            ""
-          }
+          val status = targets.take(10).joinToString("/") { formatDeg(it.location.yaw.toDouble()) }
+          val suffix =
+              if (targets.size > 10) {
+                "§7...ほか${targets.size - 10}体"
+              } else {
+                ""
+              }
           actionBar(player, "§a全体: (${targets.size}体): §e$status$suffix")
         }
 
         EntiPart.SITTING -> {
           when (entity) {
-              is Sittable ->{
+            is Sittable -> {
               entity.isSitting = !entity.isSitting
               actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
             }

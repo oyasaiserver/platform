@@ -34,8 +34,7 @@ class ZahyoCommand : CommandExecutor {
     if (value1 != null) {
       val limitedValue1 = value1.coerceIn(0.01, 2.0)
       EntityClick.currentZah[player.uniqueId] = limitedValue1
-      sender.sendMessage(
-          "§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを${limitedValue1}マスに設定しました")
+      sender.sendMessage("§6[EntityPose] §a視線の先にあるエンティティの一回あたりに動く座標の大きさを${limitedValue1}マスに設定しました")
     } else {
       sender.sendMessage("§6[EntityPose] §c有効な数字を入力するか、/epzahyoとだけ打ってGUIを開いてください")
     }
