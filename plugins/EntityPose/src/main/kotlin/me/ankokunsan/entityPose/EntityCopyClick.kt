@@ -152,9 +152,9 @@ class EntityCopyClick : Listener {
     val hand = event.offHandItem
     if (!isCopyWand(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return
-    if (!activeselection.isEmpty()) {
-      event.isCancelled = true
-      val uuid = player.uniqueId
+    event.isCancelled = true
+    val uuid = player.uniqueId
+    if (activeselection.containsKey(uuid)) {
       stopHighlight(uuid)
       activeselection.remove(uuid)
       selection.remove(uuid)
