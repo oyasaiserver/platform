@@ -1,7 +1,7 @@
 package me.ankokunsan.entityPose
 
 enum class EntiPart(val display: String) {
-  ALL("体全体"),
+  ALL("全体"),
   HEAD("頭"),
   SITTING("座る"),
   X("X座標"),

@@ -69,6 +69,10 @@ class Entityinfo : CommandExecutor, TabCompleter {
           if (target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE))
               "§aON"
           else "§cOFF"
+      val arrangelock = if(target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE))
+        "§aON"
+      else "§cOFF"
+      val scale =  (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
 
       if (target is ArmorStand) {
         val head = target.headPose
@@ -80,6 +84,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
         val gravity = if (target.hasGravity()) "§aON" else "§cOFF"
         val basePlate = if (target.hasBasePlate()) "§aON" else "§cOFF"
         val invisible = if (target.isInvisible) "§aON" else "§cOFF"
+        val itemlock = if(target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE))
+          "§aON"
+        else "§cOFF"
 
         sender.sendMessage("§6---[EntityPose]§bArmorStandの情報§6---")
         sender.sendMessage("頭: §e${formatDeg1(head)}")
@@ -95,6 +102,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
         sender.sendMessage("重力: $gravity")
         sender.sendMessage("底のプレート: $basePlate")
         sender.sendMessage("透明: $invisible")
+        sender.sendMessage("スケール: $scale")
+        sender.sendMessage("アイテムのロック: $itemlock")
+        sender.sendMessage("アレンジのロック: $arrangelock")
       } else {
         val pitch = loc.pitch
         sender.sendMessage("§6---[EntityPose]§b${target.type.name} の情報§6---")
@@ -103,6 +113,8 @@ class Entityinfo : CommandExecutor, TabCompleter {
         sender.sendMessage(
             "座標: §eX:${formatLoc(loc.x)} Y:${formatLoc(loc.y)} Z:${formatLoc(loc.z)}")
         sender.sendMessage("ダメージ無効: $invincible")
+        sender.sendMessage("スケール: $scale")
+        sender.sendMessage("アレンジのロック: $arrangelock")
       }
       return true
     }
@@ -222,7 +234,17 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           meta.setDisplayName("§fサイズ設定(大きくするほう)")
-          meta.lore = listOf("どうやって表示すればいいか思いつかなかった")
+          val lorelist = mutableListOf<String>()
+          lorelist.add("§7----- 現在のサイズ一覧 -----")
+          targets.take(10).forEach { target ->
+            val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+            val typeName = target.type.name
+            lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
+          }
+          if (targets.size > 10) {
+            lorelist.add("§8...ほか ${targets.size - 10}体")
+          }
+          meta.lore = lorelist
           itemMeta = meta
         }
     val scaleItem2 =
@@ -230,7 +252,17 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           meta.setDisplayName("§fサイズ設定(小さくするほう)")
-          meta.lore = listOf("どうやって表示すればいいか思いつかなかった")
+          val lorelist = mutableListOf<String>()
+          lorelist.add("§7----- 現在のサイズ一覧 -----")
+          targets.take(10).forEach { target ->
+            val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+            val typeName = target.type.name
+            lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
+          }
+          if (targets.size > 10) {
+            lorelist.add("§8...ほか ${targets.size - 10}体")
+          }
+          meta.lore = lorelist
           itemMeta = meta
         }
     val lockitem =
