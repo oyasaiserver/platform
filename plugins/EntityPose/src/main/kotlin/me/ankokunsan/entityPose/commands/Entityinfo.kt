@@ -69,10 +69,11 @@ class Entityinfo : CommandExecutor, TabCompleter {
           if (target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE))
               "§aON"
           else "§cOFF"
-      val arrangelock = if(target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE))
-        "§aON"
-      else "§cOFF"
-      val scale =  (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+      val arrangelock =
+          if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE))
+              "§aON"
+          else "§cOFF"
+      val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
 
       if (target is ArmorStand) {
         val head = target.headPose
@@ -84,9 +85,10 @@ class Entityinfo : CommandExecutor, TabCompleter {
         val gravity = if (target.hasGravity()) "§aON" else "§cOFF"
         val basePlate = if (target.hasBasePlate()) "§aON" else "§cOFF"
         val invisible = if (target.isInvisible) "§aON" else "§cOFF"
-        val itemlock = if(target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE))
-          "§aON"
-        else "§cOFF"
+        val itemlock =
+            if (target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE))
+                "§aON"
+            else "§cOFF"
 
         sender.sendMessage("§6---[EntityPose]§bArmorStandの情報§6---")
         sender.sendMessage("頭: §e${formatDeg1(head)}")
