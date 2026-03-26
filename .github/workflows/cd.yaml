@@ -52,5 +52,6 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
+          # NOMERGE
           nix run .#oyasai-cdktf -- synth
         working-directory: packages/cdktf
