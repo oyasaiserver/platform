@@ -28,7 +28,7 @@ class EntityScale : CommandExecutor {
       return true
     }
     val result =
-        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) {
           it != player && it !is ExperienceOrb
         }
     val target = result?.hitEntity

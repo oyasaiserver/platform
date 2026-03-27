@@ -3,6 +3,7 @@ package me.ankokunsan.entityPose
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
@@ -65,38 +66,40 @@ object AirBlock {
 
   fun startglowing(player: Player) {
     object : BukkitRunnable() {
-          override fun run() {
-            val hand = player.inventory.itemInMainHand
-            val uuid = player.uniqueId
+      override fun run() {
+        val hand = player.inventory.itemInMainHand
+        val uuid = player.uniqueId
 
-            if (!player.isValid) {
-              glowingTarget[uuid]?.isGlowing = false
-              glowingTarget.remove(uuid)
-              this.cancel()
-              return
-            }
-            if (!isEntiStick(hand) && !isCopyWand(hand)) {
-              glowingTarget[uuid]?.isGlowing = false
-              glowingTarget.remove(uuid)
-              this.cancel()
-              return
-            }
-            val result =
-                player.world.rayTraceEntities(
-                    player.eyeLocation, player.location.direction, 7.0, 0.6) {
-                      it != player
-                    }
-            val target = result?.hitEntity ?: return
-
-            val lastTarget = glowingTarget[uuid]
-            if (target != lastTarget) {
-              lastTarget?.isGlowing = false
-
-              target.isGlowing = true
-              glowingTarget[uuid] = target
-            }
-          }
+        if (!player.isValid) {
+          glowingTarget[uuid]?.isGlowing = false
+          glowingTarget.remove(uuid)
+          this.cancel()
+          return
         }
-        .runTaskTimer(EntityPose.INSTANCE, 0L, 2L) // 0Lにすることで、設置直後から判定を開始
+        if (!isEntiStick(hand) && !isCopyWand(hand)) {
+          glowingTarget[uuid]?.isGlowing = false
+          glowingTarget.remove(uuid)
+          this.cancel()
+          return
+        }
+        val result = player.world.rayTraceEntities(
+          player.eyeLocation,
+          player.location.direction,
+          5.0,
+          0.1
+        ) { it is LivingEntity && it !is Player }
+        val newtarget = result?.hitEntity
+        val lastTarget = glowingTarget[uuid]
+        if (newtarget != lastTarget) {
+          lastTarget?.isGlowing = false
+          newtarget?.isGlowing = true
+          if (newtarget != null) {
+            glowingTarget[uuid] = newtarget
+          } else
+            glowingTarget.remove(uuid)
+        }
+      }
+    }
+      .runTaskTimer(EntityPose.INSTANCE, 0L, 2L)
   }
 }
