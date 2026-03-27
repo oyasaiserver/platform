@@ -66,40 +66,38 @@ object AirBlock {
 
   fun startglowing(player: Player) {
     object : BukkitRunnable() {
-      override fun run() {
-        val hand = player.inventory.itemInMainHand
-        val uuid = player.uniqueId
+          override fun run() {
+            val hand = player.inventory.itemInMainHand
+            val uuid = player.uniqueId
 
-        if (!player.isValid) {
-          glowingTarget[uuid]?.isGlowing = false
-          glowingTarget.remove(uuid)
-          this.cancel()
-          return
+            if (!player.isValid) {
+              glowingTarget[uuid]?.isGlowing = false
+              glowingTarget.remove(uuid)
+              this.cancel()
+              return
+            }
+            if (!isEntiStick(hand) && !isCopyWand(hand)) {
+              glowingTarget[uuid]?.isGlowing = false
+              glowingTarget.remove(uuid)
+              this.cancel()
+              return
+            }
+            val result =
+                player.world.rayTraceEntities(
+                    player.eyeLocation, player.location.direction, 5.0, 0.1) {
+                      it is LivingEntity && it !is Player
+                    }
+            val newtarget = result?.hitEntity
+            val lastTarget = glowingTarget[uuid]
+            if (newtarget != lastTarget) {
+              lastTarget?.isGlowing = false
+              newtarget?.isGlowing = true
+              if (newtarget != null) {
+                glowingTarget[uuid] = newtarget
+              } else glowingTarget.remove(uuid)
+            }
+          }
         }
-        if (!isEntiStick(hand) && !isCopyWand(hand)) {
-          glowingTarget[uuid]?.isGlowing = false
-          glowingTarget.remove(uuid)
-          this.cancel()
-          return
-        }
-        val result = player.world.rayTraceEntities(
-          player.eyeLocation,
-          player.location.direction,
-          5.0,
-          0.1
-        ) { it is LivingEntity && it !is Player }
-        val newtarget = result?.hitEntity
-        val lastTarget = glowingTarget[uuid]
-        if (newtarget != lastTarget) {
-          lastTarget?.isGlowing = false
-          newtarget?.isGlowing = true
-          if (newtarget != null) {
-            glowingTarget[uuid] = newtarget
-          } else
-            glowingTarget.remove(uuid)
-        }
-      }
-    }
-      .runTaskTimer(EntityPose.INSTANCE, 0L, 2L)
+        .runTaskTimer(EntityPose.INSTANCE, 0L, 2L)
   }
 }

@@ -653,11 +653,12 @@ class EntityClick : Listener {
           } else {
             listOf(entity)
           }
-      val suffix = if (targets.size > 1) {
-        "§6(${targets.size}体を同時に操作中)"
-      } else {
-        ""
-      }
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
       when (part) {
         StandPart.HEAD_X -> {
           entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
@@ -778,7 +779,7 @@ class EntityClick : Listener {
         }
         StandPart.X -> {
           targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-         actionBar(player,"§aX座標: ${formatLoc(entity.location.x)}$suffix")
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         StandPart.Y -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
@@ -807,11 +808,12 @@ class EntityClick : Listener {
             listOf(entity)
           }
       val deltaF = (if (player.isSneaking) -step else step).toFloat()
-      val suffix = if (targets.size > 1) {
-        "§6(${targets.size}体を同時に操作中)"
-      } else {
-        ""
-      }
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
 
       when (part1) {
         EntiPart.HEAD -> {
@@ -844,11 +846,11 @@ class EntityClick : Listener {
         }
         EntiPart.X -> {
           targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-          actionBar(player,"§aX座標: ${formatLoc(entity.location.x)}$suffix")
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         EntiPart.Y -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
-          actionBar(player,"§aY座標: ${formatLoc(entity.location.y)}$suffix")
+          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
         }
         EntiPart.Z -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
