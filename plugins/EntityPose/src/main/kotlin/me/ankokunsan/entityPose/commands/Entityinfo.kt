@@ -140,7 +140,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定(大きくするほう): $scale")
+          meta.setDisplayName("§fスケール設定(大きくするほう): $scale")
           itemMeta = meta
         }
     val scaleItem2 =
@@ -148,7 +148,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定(小さくするほう): $scale")
+          meta.setDisplayName("§fスケール設定(小さくするほう): $scale")
           itemMeta = meta
         }
     val lockitem =
@@ -235,9 +235,9 @@ class Entityinfo : CommandExecutor, TabCompleter {
         ItemStack(Material.POTION).apply { // LEGACYを消す
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
-          meta.setDisplayName("§fサイズ設定(大きくするほう)")
+          meta.setDisplayName("§fスケール設定(大きくするほう)")
           val lorelist = mutableListOf<String>()
-          lorelist.add("§7----- 現在のサイズ一覧 -----")
+          lorelist.add("§7----- 現在のスケール一覧 -----")
           targets.take(6).forEach { target ->
             val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
             val typeName = target.type.name
