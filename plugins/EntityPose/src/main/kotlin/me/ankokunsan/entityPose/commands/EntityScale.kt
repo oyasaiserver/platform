@@ -64,12 +64,12 @@ class EntityScale : CommandExecutor {
           attribute.baseValue = roundedScale
         }
       }
-      player.sendMessage("§6[EntityPose] §a範囲選択されているエンティティのサイズを $roundedScale に設定しました")
+      player.sendMessage("§6[EntityPose] §a範囲選択されているエンティティのスケールを $roundedScale に設定しました")
     } else {
       val attribute = livingEntity.getAttribute(Attribute.SCALE)
       if (attribute != null) {
         attribute.baseValue = roundedScale
-        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのサイズを $roundedScale に設定しました")
+        player.sendMessage("§6[EntityPose] §a視線の先にあるエンティティのスケールを $roundedScale に設定しました")
       }
     }
     return true

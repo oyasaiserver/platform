@@ -40,8 +40,8 @@ import org.bukkit.persistence.PersistentDataType
 
 class EntityClick : Listener {
 
-  private val selectedPart = mutableMapOf<EntityType, StandPart>()
-  private val selectPart = mutableMapOf<EntityType, EntiPart>()
+  private val selectedPart = mutableMapOf<Pair<UUID,EntityType>,StandPart>()
+  private val selectPart = mutableMapOf<Pair<UUID,EntityType>, EntiPart>()
 
   companion object {
     val currentStep = mutableMapOf<UUID, Double>()
@@ -87,23 +87,23 @@ class EntityClick : Listener {
     AirBlock.airblockplace(player)
     event.isCancelled = true
 
-    val type = target.type
+    val key = player.uniqueId to target.type
 
     if (target is ArmorStand) {
-      val current = selectedPart[type] ?: StandPart.Z
+      val current = selectedPart[key] ?: StandPart.Z
       val next = if (player.isSneaking) current.prev() else current.next()
 
-      selectedPart[type] = next
+      selectedPart[key] = next
       actionBar(player, "現在の選択部位→ ${next.display}")
     } else if (target is LivingEntity) {
       if (target.hasAI()) {
         player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
         return
       }
-      val current = selectPart[type] ?: EntiPart.HAN
+      val current = selectPart[key] ?: EntiPart.HAN
       val next1 = if (player.isSneaking) current.prev() else current.next()
 
-      selectPart[type] = next1
+      selectPart[key] = next1
       actionBar(player, "現在の選択→ ${next1.display}")
     }
   }
@@ -633,13 +633,14 @@ class EntityClick : Listener {
     }
     event.isCancelled = true
     entity.isPersistent = true
+    val key = player.uniqueId to entity.type
     val step = currentStep[player.uniqueId] ?: 1.0
     val delta = (if (player.isSneaking) -step else step).toFloat()
     val step2 = currentZah[player.uniqueId] ?: 1.0
     val move1 = if (player.isSneaking) -step2 else step2
 
     if (entity is ArmorStand) {
-      val part = selectedPart[entity.type] ?: return
+      val part = selectedPart[key] ?: return
       val rad = Math.toRadians(delta.toDouble())
       val selected = activeselection[player.uniqueId]
       val ismoveMode =
@@ -794,7 +795,7 @@ class EntityClick : Listener {
     }
 
     if (entity is LivingEntity) {
-      val part1 = selectPart[entity.type] ?: return
+      val part1 = selectPart[key] ?: return
       val selected1 = activeselection[player.uniqueId]
       val ismoveMode1 =
           part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
@@ -884,6 +885,8 @@ class EntityClick : Listener {
       selection.remove(uuid)
       activeselection.remove(uuid)
     }
+    selectedPart.keys.removeIf { it.first == uuid }
+    selectPart.keys.removeIf { it.first == uuid }
   }
 
   private fun formatDeg(value: Double): String {
