@@ -3,6 +3,7 @@ package me.ankokunsan.entityPose
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
@@ -83,20 +84,20 @@ object AirBlock {
             }
             val result =
                 player.world.rayTraceEntities(
-                    player.eyeLocation, player.location.direction, 7.0, 0.6) {
-                      it != player
+                    player.eyeLocation, player.location.direction, 5.0, 0.1) {
+                      it is LivingEntity && it !is Player
                     }
-            val target = result?.hitEntity ?: return
-
+            val newtarget = result?.hitEntity
             val lastTarget = glowingTarget[uuid]
-            if (target != lastTarget) {
+            if (newtarget != lastTarget) {
               lastTarget?.isGlowing = false
-
-              target.isGlowing = true
-              glowingTarget[uuid] = target
+              newtarget?.isGlowing = true
+              if (newtarget != null) {
+                glowingTarget[uuid] = newtarget
+              } else glowingTarget.remove(uuid)
             }
           }
         }
-        .runTaskTimer(EntityPose.INSTANCE, 0L, 2L) // 0Lにすることで、設置直後から判定を開始
+        .runTaskTimer(EntityPose.INSTANCE, 0L, 2L)
   }
 }

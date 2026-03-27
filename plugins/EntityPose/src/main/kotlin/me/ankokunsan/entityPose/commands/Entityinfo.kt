@@ -39,7 +39,7 @@ class Entityinfo : CommandExecutor, TabCompleter {
       return true
     }
     val result =
-        sender.world.rayTraceEntities(sender.eyeLocation, sender.location.direction, 3.0, 0.5) {
+        sender.world.rayTraceEntities(sender.eyeLocation, sender.location.direction, 3.0, 0.1) {
           it != sender
         }
     val target =
@@ -238,13 +238,13 @@ class Entityinfo : CommandExecutor, TabCompleter {
           meta.setDisplayName("§fサイズ設定(大きくするほう)")
           val lorelist = mutableListOf<String>()
           lorelist.add("§7----- 現在のサイズ一覧 -----")
-          targets.take(10).forEach { target ->
+          targets.take(6).forEach { target ->
             val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
             val typeName = target.type.name
             lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
           }
-          if (targets.size > 10) {
-            lorelist.add("§8...ほか ${targets.size - 10}体")
+          if (targets.size > 6) {
+            lorelist.add("§8...ほか ${targets.size - 6}体")
           }
           meta.lore = lorelist
           itemMeta = meta
@@ -256,13 +256,13 @@ class Entityinfo : CommandExecutor, TabCompleter {
           meta.setDisplayName("§fサイズ設定(小さくするほう)")
           val lorelist = mutableListOf<String>()
           lorelist.add("§7----- 現在のサイズ一覧 -----")
-          targets.take(10).forEach { target ->
+          targets.take(6).forEach { target ->
             val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
             val typeName = target.type.name
             lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
           }
-          if (targets.size > 10) {
-            lorelist.add("§8...ほか ${targets.size - 10}体")
+          if (targets.size > 6) {
+            lorelist.add("§8...ほか ${targets.size - 6}体")
           }
           meta.lore = lorelist
           itemMeta = meta

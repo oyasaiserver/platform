@@ -653,6 +653,12 @@ class EntityClick : Listener {
           } else {
             listOf(entity)
           }
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
       when (part) {
         StandPart.HEAD_X -> {
           entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
@@ -768,26 +774,20 @@ class EntityClick : Listener {
             loc.yaw += delta
             target.teleport(loc)
           }
-          val status = targets.take(10).joinToString("/") { formatDeg(it.location.yaw.toDouble()) }
-          val suffix =
-              if (targets.size > 10) {
-                "§7...ほか${targets.size - 10}体"
-              } else {
-                ""
-              }
-          actionBar(player, "§a全体: (${targets.size}体): §e$status$suffix")
+          val deg = entity.location.yaw.toDouble()
+          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
         }
         StandPart.X -> {
           targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-          actionBar(player, "§aX座標: (${targets.size}体): ${formatLoc(entity.location.x)}")
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         StandPart.Y -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
-          actionBar(player, "§aY座標: (${targets.size}体): ${formatLoc(entity.location.y)}")
+          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
         }
         StandPart.Z -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
-          actionBar(player, "§aZ座標: (${targets.size}体): ${formatLoc(entity.location.z)}")
+          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
         }
       }
       return
@@ -808,6 +808,12 @@ class EntityClick : Listener {
             listOf(entity)
           }
       val deltaF = (if (player.isSneaking) -step else step).toFloat()
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
 
       when (part1) {
         EntiPart.HEAD -> {
@@ -825,14 +831,8 @@ class EntityClick : Listener {
             loc.yaw += deltaF
             target.teleport(loc)
           }
-          val status = targets.take(10).joinToString("/") { formatDeg(it.location.yaw.toDouble()) }
-          val suffix =
-              if (targets.size > 10) {
-                "§7...ほか${targets.size - 10}体"
-              } else {
-                ""
-              }
-          actionBar(player, "§a全体: (${targets.size}体): §e$status$suffix")
+          val deg = entity.location.yaw.toDouble()
+          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
         }
 
         EntiPart.SITTING -> {
@@ -846,15 +846,15 @@ class EntityClick : Listener {
         }
         EntiPart.X -> {
           targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-          actionBar(player, "§aX座標変更中 (${targets.size}体): ${formatLoc(entity.location.x)}")
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         EntiPart.Y -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
-          actionBar(player, "§aY座標変更中 (${targets.size}体): ${formatLoc(entity.location.y)}")
+          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
         }
         EntiPart.Z -> {
           targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
-          actionBar(player, "§aZ座標変更中 (${targets.size}体): ${formatLoc(entity.location.z)}")
+          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
         }
         EntiPart.HAN -> {
           val board = Bukkit.getScoreboardManager()!!.mainScoreboard
