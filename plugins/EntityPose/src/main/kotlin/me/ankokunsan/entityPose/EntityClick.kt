@@ -40,8 +40,8 @@ import org.bukkit.persistence.PersistentDataType
 
 class EntityClick : Listener {
 
-  private val selectedPart = mutableMapOf<Pair<UUID,EntityType>,StandPart>()
-  private val selectPart = mutableMapOf<Pair<UUID,EntityType>, EntiPart>()
+  private val selectedPart = mutableMapOf<Pair<UUID, EntityType>, StandPart>()
+  private val selectPart = mutableMapOf<Pair<UUID, EntityType>, EntiPart>()
 
   companion object {
     val currentStep = mutableMapOf<UUID, Double>()
