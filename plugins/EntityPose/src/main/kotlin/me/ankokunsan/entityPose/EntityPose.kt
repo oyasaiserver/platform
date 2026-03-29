@@ -4,17 +4,6 @@ package me.ankokunsan.entityPose
 
 import java.util.UUID
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.highlightTasks
-import me.ankokunsan.entityPose.commands.Boucommand
-import me.ankokunsan.entityPose.commands.EntityCopy
-import me.ankokunsan.entityPose.commands.EntityCut
-import me.ankokunsan.entityPose.commands.EntityHojo
-import me.ankokunsan.entityPose.commands.EntityPaste
-import me.ankokunsan.entityPose.commands.EntityScale
-import me.ankokunsan.entityPose.commands.EntityWand
-import me.ankokunsan.entityPose.commands.Entityinfo
-import me.ankokunsan.entityPose.commands.KakudoCommand
-import me.ankokunsan.entityPose.commands.SetumeiCommand
-import me.ankokunsan.entityPose.commands.ZahyoCommand
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -80,17 +69,7 @@ class EntityPose : JavaPlugin() {
 
     Bou.create()
     CopyWand.create1()
-    getCommand("epstick")?.setExecutor(Boucommand())
-    getCommand("epinfo")?.setExecutor(Entityinfo())
-    getCommand("epkakudo")?.setExecutor(KakudoCommand())
-    getCommand("epzahyo")?.setExecutor(ZahyoCommand())
-    getCommand("epscale")?.setExecutor(EntityScale())
-    getCommand("ephojo")?.setExecutor(EntityHojo())
-    getCommand("epwand")?.setExecutor(EntityWand())
-    getCommand("epcopy")?.setExecutor(EntityCopy())
-    getCommand("eppaste")?.setExecutor(EntityPaste())
-    getCommand("epcut")?.setExecutor(EntityCut())
-    getCommand("entitypose")?.setExecutor(SetumeiCommand())
+      getCommand("ep")?.setExecutor(EntityCommands())
 
     val board = Bukkit.getScoreboardManager()!!.mainScoreboard
 

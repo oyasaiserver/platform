@@ -57,15 +57,7 @@ class EntityPaste : CommandExecutor {
       label: String,
       args: Array<out String>
   ): Boolean {
-    val player =
-        sender as? Player
-            ?: run {
-              return true
-            }
-    if (!sender.hasPermission("entitypose_arrange")) {
-      sender.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
-      return true
-    }
+    val player = sender as Player
     val uuid = player.uniqueId
     val snapshot1 = clipboard[uuid]
     if (snapshot1 == null) {

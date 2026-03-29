@@ -13,7 +13,6 @@ import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.ZAHYO_KEY
-import me.ankokunsan.entityPose.commands.Entityinfo
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.Sound
@@ -105,7 +104,7 @@ class GUIClick : Listener {
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
     // 再描画の際も、今見つけたtargetを渡す
-    Entityinfo().openSettingGUI(player, target)
+      ChooseGUi.openSettingGUI(player, target)
   }
 
   @EventHandler
@@ -201,7 +200,7 @@ class GUIClick : Listener {
         }
       }
       player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
-      Entityinfo().openAllSettingGUI(player, targets)
+      ChooseGUi.openAllSettingGUI(player, targets)
     }
   }
 

@@ -11,6 +11,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.EulerAngle
+import kotlin.math.roundToInt
 
 object FollowEntity {
 
@@ -61,6 +62,17 @@ object FollowEntity {
                 val dir = eyeLoc.direction.normalize()
                 val target = eyeLoc.clone().add(dir.multiply(distance))
 
+                target.x = target.blockX + 0.5
+                target.y = target.blockY.toDouble()
+                target.z = target.blockZ + 0.5
+
+                val directionToPlayer = eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
+                val lookAtPlayerLoc = target.clone().setDirection(directionToPlayer)
+                val snappedYaw = ((lookAtPlayerLoc.yaw / 45.0).roundToInt() * 45.0).toFloat()
+                // ベクトルをLocationの向きに変換
+                target.yaw = snappedYaw
+                target.pitch = 0f
+
                 val bx = target.blockX.toDouble()
                 val by = target.blockY.toDouble()
                 val bz = target.blockZ.toDouble()
@@ -70,13 +82,6 @@ object FollowEntity {
                 w.spawnParticle(Particle.FLAME, bx + 1, by, bz, 1, 0.0, 0.0, 0.0, 0.0)
                 w.spawnParticle(Particle.FLAME, bx, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
                 w.spawnParticle(Particle.FLAME, bx + 1, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
-
-                val directionToPlayer =
-                    eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
-                val lookAtPlayerLoc =
-                    target.clone().setDirection(directionToPlayer) // ベクトルをLocationの向きに変換
-                target.yaw = lookAtPlayerLoc.yaw
-                target.pitch = 0f
 
                 entity.teleport(target)
               }

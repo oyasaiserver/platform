@@ -2,7 +2,6 @@ package me.ankokunsan.entityPose
 
 import java.util.UUID
 import kotlin.collections.filter
-import kotlin.math.roundToInt
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.selection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
@@ -15,7 +14,6 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.ArmorStand
@@ -29,6 +27,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -124,14 +123,43 @@ class EntityClick : Listener {
     }
   }
 
-  @EventHandler
-  fun onLeftClickBlock(event: PlayerInteractEvent) {
-    val player = event.player
-    val hand = player.inventory.itemInMainHand
-    if (!isEntiStick(hand)) return
-    if (!player.hasPermission("entitypose_arrange")) return //
-    if (event.action != Action.LEFT_CLICK_BLOCK) return
-    if (event.clickedBlock == null) return
+    @EventHandler
+    fun onDropEvent(event : PlayerDropItemEvent) {
+        val player = event.player
+        val item = event.itemDrop.itemStack
+        if(!isEntiStick(item)) return
+        if(!player.hasPermission("entitypose_arrange")) return
+        if(!player.isSneaking) return
+        event.isCancelled = true
+        val result =
+            player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) { it != player }
+        val target = result?.hitEntity ?: return
+        if (target is Player) {
+            player.sendMessage("§6[EntityPose] §cプレイヤーの情報を見たり、いじろうとしないでね")
+            return
+        }
+        if (target is LivingEntity && target.hasAI()) {
+            player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+            return
+        }
+        val selected = activeselection[player.uniqueId]
+        if (selected != null && selected.contains(target)) {
+            val targets = selected.filter { it.isValid }
+            ChooseGUi.openAllSettingGUI(player, targets)
+        } else {
+            ChooseGUi.openSettingGUI(player, target)
+            return
+        }
+    }
+
+    @EventHandler
+    fun onLeftClickBlock(event: PlayerInteractEvent) {
+        val player = event.player
+        val hand = player.inventory.itemInMainHand
+        if (!isEntiStick(hand)) return
+        if (!player.hasPermission("entitypose_arrange")) return //
+        if (event.action != Action.LEFT_CLICK_BLOCK) return
+        if (event.clickedBlock == null) return
 
     event.isCancelled = true
     player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
@@ -597,22 +625,6 @@ class EntityClick : Listener {
     // 叩いた対象が、今追従させているものと一致する場合のみ実行
     if (currentPreview != entity) return
     event.isCancelled = true
-
-    val loc = entity.location
-    val directionToPlayer = player.eyeLocation.toVector().subtract(loc.toVector())
-    val lookAtYaw = loc.clone().setDirection(directionToPlayer).yaw
-    val snappedYaw = ((lookAtYaw / 45.0).roundToInt() * 45.0).toFloat()
-
-    val gridLoc =
-        Location(
-            loc.world,
-            loc.blockX + 0.5, // X軸の真ん中
-            loc.blockY.toDouble(), // 高さはそのまま（空中可）
-            loc.blockZ + 0.5, // Z軸の真ん中
-            snappedYaw,
-            0f // 垂直に向かせる
-            )
-    entity.teleport(gridLoc)
     entity.setGravity(false)
 
     player.sendMessage("§6[EntityPose] §aエンティティを固定しました！")
