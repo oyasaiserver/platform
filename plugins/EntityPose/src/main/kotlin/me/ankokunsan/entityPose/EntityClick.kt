@@ -129,7 +129,7 @@ class EntityClick : Listener {
     val item = event.itemDrop.itemStack
     if (!isEntiStick(item)) return
     if (!player.hasPermission("entitypose_arrange")) return
-    if (!player.isSneaking) return
+    if (player.isSneaking) return
     event.isCancelled = true
     val result =
         player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) {
@@ -141,7 +141,7 @@ class EntityClick : Listener {
       return
     }
     if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
       return
     }
     val selected = activeselection[player.uniqueId]
