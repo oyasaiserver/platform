@@ -16,6 +16,7 @@ tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tok
 ultimateadvancementapi = {module = "com.frengor:ultimateadvancementapi-shadeable", version.ref = "ultimateadvancementapi"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
+fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
 
 [versions]
 anvilgui = "1.10.11-SNAPSHOT"
@@ -34,3 +35,4 @@ tokenmanager = "3.2.4"
 ultimateadvancementapi = "2.7.2"
 vault = "1.7.1"
 worldborder = "2.1.4"
+fawe = "2.11.2"

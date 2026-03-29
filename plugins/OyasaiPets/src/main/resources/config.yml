@@ -1,68 +1,222 @@
-# ========================================
-# OyasaiPets プラグイン設定ファイル
-# ========================================
+# ==========================================
+# OyasaiPets 設定ファイル
+# ==========================================
+
+
+# ==========================================
+# 1. コスト設定
+# ==========================================
 
 # 経済設定
 economy:
-  foodPointCost: 100
-
-# ペット設定
-pets:
-  maxFoodLevel: 50
-  freeRoamFlyingSpeedMultiplier: 0.5
+  foodPointCost: 10           # ペット餌やりポイントのコスト
 
 # ショップ設定
 shop:
-  defaultCost: 100
+  defaultCost: 100            # スポーンエッグのデフォルト購入価格
 
 # スキルブック設定
 skillbook:
-  costLv1: 50
-  costLv2: 100
-  costLv3: 150
+  costLv1: 50                 # スキルブック Lv.1 コスト
+  costLv2: 100                # スキルブック Lv.2 コスト
+  costLv3: 150                # スキルブック Lv.3 コスト
 
-# 復活設定
+# ペット復活設定
 revive:
-  cost: 50
+  cost: 50                    # 死亡したペットを復活させるコスト
+
+# スポーンエッグ再取得設定
+recover:
+  cost: 50                    # 紛失したスポーンエッグを再取得するコスト
 
 # 回復アイテム設定
 items:
-  healAmount: 10
+  healAmount: 10              # 回復アイテムの回復量
 
-# 遊び機能設定
+# アイテムショップ価格設定
+itemshop:
+  petFoodCost: 20             # ペットフードの価格
+  petBrushCost: 15            # ペットブラシの価格
+  petTreatCost: 15            # ペットのおやつの価格
+  healPotionCost: 30          # ヒールポーションの価格
+  particleCost: 200           # パーティクル結晶の価格（1個）
+  toyCost: 50                 # おもちゃの価格（1個）
+
+
+# ==========================================
+# 2. ペット全般設定
+# ==========================================
+
+pets:
+  maxFoodLevel: 50                      # ペットの最大食事レベル
+  spawnAiEnabled: true                  # ペットスポーン時に AI を有効にするか
+  freeRoamSpeedMultiplier: 0.5          # フリーローム時の速度倍率（陸上・水中MOB）
+  freeRoamFlyingSpeedMultiplier: 0.5    # フリーローム時の速度倍率（飛行MOB）
+
+  # ------------------------------------------
+  # ペット種別ごとの詳細設定
+  # maxHealth: -1.0 = MOBのデフォルト値を使用
+  # ------------------------------------------
+
+  # 陸上ペット
+  wolf:
+    maxHealth: -1.0
+    baseSpeed: 0.6
+    maxSpeed: 1.2
+    jumpPower: 0.6
+    scaleMin: 1.5
+    scaleMax: 2.5
+  cat:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.8
+    scaleMin: 2.0
+    scaleMax: 3.0
+  fox:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.7
+    scaleMin: 1.5
+    scaleMax: 2.5
+  rabbit:
+    maxHealth: 20.0
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 1.0
+    scaleMin: 2.5
+    scaleMax: 3.25
+  panda:
+    maxHealth: -1.0
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 0.4
+    scaleMin: 1.25
+    scaleMax: 1.5
+  polar_bear:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.4
+    scaleMin: 1.25
+    scaleMax: 1.5
+  armadillo:
+    maxHealth: -1.0
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.25
+
+  # 水中ペット
+  dolphin:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.2
+  axolotl:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.0
+  frog:
+    maxHealth: -1.0
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 1.2
+    scaleMin: 2.0
+    scaleMax: 2.8
+  turtle:
+    maxHealth: -1.0
+    baseSpeed: 0.3
+    maxSpeed: 0.7
+    jumpPower: 0.5
+    scaleMin: 1.25
+    scaleMax: 1.75
+
+  # 飛行ペット
+  parrot:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 2.0
+    scaleMax: 3.0
+  chicken:
+    maxHealth: 20.0
+    baseSpeed: 0.4
+    maxSpeed: 0.9
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.5
+  bee:
+    maxHealth: 16.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.25
+    scaleMax: 1.75
+  allay:
+    maxHealth: -1.0
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.0
+
+
+# ==========================================
+# 3. 遊び設定
+# ==========================================
+
 play:
-  levelUpChance: 0.05
-  levelUpMaxLevel: 10
+  levelUpChance: 0.05         # おもちゃ・ブラシでレベルアップする確率（5%）
+  levelUpMaxLevel: 10         # 遊びでレベルアップできる最大レベル
 
-# 交配設定
+
+# ==========================================
+# 4. 交配設定
+# ==========================================
+
 breed:
-  minLevel: 10
-  cost: 200
-  maxCount: 3
+  minLevel: 10                # 交配可能になる最低レベル
+  cost: 100                   # 交配コスト
+  maxCount: 3                 # 1ペアから生まれる最大子供数
 
-  # バリアント遺伝確率設定
-  # =====================================================
-  # 交配時に子供のバリアントを決定する重み設定
-  #
-  # 計算方法:
-  #   親1のバリアント: parent x 1個
-  #   親2のバリアント: parent x 1個
-  #   その他のバリアント: other x (全バリアント数 - 親のバリアント数)個
-  #
-  # 例: オオカミ（9種類）で parent=7, other=3 の場合
-  #   親1: 7個
-  #   親2: 7個
-  #   その他7種: 各3個
-  #   合計: 7 + 7 + (7x3) = 35個
-  #   確率: 親1=20%, 親2=20%, その他各=8.6%
-  #
-  # 設定例:
-  #   parent=10, other=0  : 親のバリアントのみ（100%遺伝）
-  #   parent=7,  other=3  : デフォルト（親40%, その他60%）
-  #   parent=5,  other=5  : 均等（親約22%, その他約78%）
-  #   parent=3,  other=7  : その他優先（親約15%, その他約85%）
-  #   parent=0,  other=10 : 完全ランダム（親のバリアントも均等扱い）
-  # =====================================================
+  # --- 能力値遺伝パラメータ ---
+  randomMin: 0.9              # ランダム係数の最小値（90%）
+  randomMax: 1.1              # ランダム係数の最大値（110%）
+  mutationChance: 0.10        # 突然変異が発生する確率（10%）
+  mutationBoost: 0.15         # 突然変異時の能力ブースト量（+15%）
+  genBonusPerGen: 0.02        # 1世代ごとに追加されるボーナス（+2%）
+  genBonusMax: 0.2            # 世代ボーナスの上限（+20%）
+  statCap: 1.5                # 速度・ジャンプ力の最大倍率（150%）
+  bonusLevelPerGen: 1         # 1世代ごとに獲得する初期レベル
+  bonusLevelMax: 5            # 初期レベルボーナスの上限（最大 +5Lv）
+
+  # --- バリアント遺伝確率 ---
+  # 親バリアントの重み(parent) と その他の重み(other) で子のバリアントを決定する
+  # 例: parent=7, other=3 の場合（オオカミ9種）
+  #   親1: 7個, 親2: 7個, その他7種: 各3個 → 合計35個
+  #   確率: 親1=20%, 親2=20%, その他各≈8.6%
   variantWeights:
-    parent: 7
-    other: 3
+    parent: 7                 # 親バリアントの重み
+    other: 3                  # その他バリアントの重み
+
+
+# ==========================================
+# 5. 特殊形質（非定型）設定
+# ==========================================
+
+traits:
+  atypicalBaseChance: 0.07          # 基本発生確率（7%）
+  atypicalOneParentChance: 0.15     # 片親が非定型の場合の発生確率（15%）
+  atypicalBothParentChance: 0.35    # 両親が非定型の場合の発生確率（35%）
+  atypicalLevelUpBonus: 1.5         # 非定型ペットのレベルアップ確率倍率
+  atypicalAffectionBonus: 1.3       # 非定型ペットの親密度上昇倍率
+  childAiEnabled: true              # 子供ペットの AI を有効にするか

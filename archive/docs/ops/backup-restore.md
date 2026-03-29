@@ -1,7 +1,10 @@
 # OyasaiPets バックアップ/復旧手順
 
-| 項目 | 内容 | |---|---| | 対象読者 | サーバー運営メンバー（OP権限保持者） | | 対象バージョン | OyasaiPets
-v2.4.0 | | 最終更新日 | 2026-03-07 |
+| 項目 | 内容 |
+|---|---|
+| 対象読者 | サーバー運営メンバー（OP権限保持者） |
+| 対象バージョン | OyasaiPets v2.5.0 |
+| 最終更新日 | 2026-03-29 |
 
 ---
 
@@ -54,7 +57,7 @@ v2.4.0 | | 最終更新日 | 2026-03-07 |
 1. バックアップから対象プレイヤーディレクトリをコピーする
    ```bash
    # UUID例: f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b
-   cp -r /backup/oyasaipets-players-20260305/f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b \
+   cp -r /backup/oyasaipets-players-20260329/f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b \
          plugins/OyasaiPets/players/
    ```
 1. サーバーを起動する
@@ -106,7 +109,7 @@ cp /backup/oyasaipets-config-<日付>.yml plugins/OyasaiPets/config.yml
   "type": "WOLF",
   "variant": "black",
   "customName": "Steveの黒オオカミ #1",
-  "purchasedAt": "2026-03-07T12:34:56",
+  "purchasedAt": "2026-03-29T12:34:56",
   "status": "STORED",
   "foodLevel": 5,
   "lastLocation": {
