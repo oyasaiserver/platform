@@ -32,15 +32,7 @@ class EntityCopy : CommandExecutor {
       label: String,
       args: Array<out String>
   ): Boolean {
-    val player =
-        sender as? Player
-            ?: run {
-              return true
-            }
-    if (!player.hasPermission("entitypose_arrange")) {
-      player.sendMessage("§cあなたにはこのコマンドを使う権限がありません！")
-      return true
-    }
+    val player = sender as Player
     val uuid = player.uniqueId
     val targets = activeselection[uuid]?.filter { it.isValid }
 

@@ -4,59 +4,9 @@ main: me.ankokunsan.entityPose.EntityPose
 api-version: "1.21"
 
 commands:
-  epstick:
-    description: エンティティ棒を手に入れる
-    usage: /epstick
-    permission: entitypose_arrange
-
-  epinfo:
-    description: エンティティの情報を表示、変更
-    usage: /epinfo
-    permission: entitypose_arrange
-
-  epkakudo:
-    description: エンティティの角度の刻みを変更
-    usage: /epkakudo
-    permission: entitypose_arrange
-
-  epzahyo:
-    description: エンティティの一回あたりに動く座標の大きさを変更
-    usage: /epzahyo
-    permission: entitypose_arrange
-
-  epscale:
-    description: エンティティの大きさ変更
-    usage: /epscale
-    permission: entitypose_arrange
-
-  ephojo:
-    description: エンティティを空中で操作するときに自動で出るガラスのオンオフ
-    usage: /ephojo
-    permission: entitypose_arrange
-
-  epwand:
-    description: Entity Copy Wandを手に入れる
-    usage: /epwand
-    permission: entitypose_arrange
-
-  epcopy:
-    description: エンティティをコピー
-    usage: /epcopy
-    permission: entitypose_arrange
-
-  eppaste:
-    description: エンティティをペースト
-    usage: /eppaste
-    permission: entitypose_arrange
-
-  epcut:
-    description: エンティティを削除
-    usage: /epcut
-    permission: entitypose_arrange
-
-  entitypose:
-    description: EntityPoseのコマンドとか操作一覧
-    usage: /entitypose
+  ep:
+    description: EntityPoseの全コマンド集合
+    usage: /ep
     permission: entitypose_arrange
 
 permissions:
