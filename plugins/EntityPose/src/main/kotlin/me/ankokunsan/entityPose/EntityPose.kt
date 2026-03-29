@@ -69,7 +69,7 @@ class EntityPose : JavaPlugin() {
 
     Bou.create()
     CopyWand.create1()
-      getCommand("ep")?.setExecutor(EntityCommands())
+    getCommand("ep")?.setExecutor(EntityCommands())
 
     val board = Bukkit.getScoreboardManager()!!.mainScoreboard
 

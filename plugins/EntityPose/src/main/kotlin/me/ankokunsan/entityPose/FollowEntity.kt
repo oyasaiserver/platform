@@ -1,6 +1,7 @@
 package me.ankokunsan.entityPose
 
 import java.util.UUID
+import kotlin.math.roundToInt
 import org.bukkit.Particle
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
@@ -11,7 +12,6 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.EulerAngle
-import kotlin.math.roundToInt
 
 object FollowEntity {
 
@@ -66,7 +66,8 @@ object FollowEntity {
                 target.y = target.blockY.toDouble()
                 target.z = target.blockZ + 0.5
 
-                val directionToPlayer = eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
+                val directionToPlayer =
+                    eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
                 val lookAtPlayerLoc = target.clone().setDirection(directionToPlayer)
                 val snappedYaw = ((lookAtPlayerLoc.yaw / 45.0).roundToInt() * 45.0).toFloat()
                 // ベクトルをLocationの向きに変換

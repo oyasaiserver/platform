@@ -123,43 +123,45 @@ class EntityClick : Listener {
     }
   }
 
-    @EventHandler
-    fun onDropEvent(event : PlayerDropItemEvent) {
-        val player = event.player
-        val item = event.itemDrop.itemStack
-        if(!isEntiStick(item)) return
-        if(!player.hasPermission("entitypose_arrange")) return
-        if(!player.isSneaking) return
-        event.isCancelled = true
-        val result =
-            player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) { it != player }
-        val target = result?.hitEntity ?: return
-        if (target is Player) {
-            player.sendMessage("§6[EntityPose] §cプレイヤーの情報を見たり、いじろうとしないでね")
-            return
+  @EventHandler
+  fun onDropEvent(event: PlayerDropItemEvent) {
+    val player = event.player
+    val item = event.itemDrop.itemStack
+    if (!isEntiStick(item)) return
+    if (!player.hasPermission("entitypose_arrange")) return
+    if (!player.isSneaking) return
+    event.isCancelled = true
+    val result =
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) {
+          it != player
         }
-        if (target is LivingEntity && target.hasAI()) {
-            player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
-            return
-        }
-        val selected = activeselection[player.uniqueId]
-        if (selected != null && selected.contains(target)) {
-            val targets = selected.filter { it.isValid }
-            ChooseGUi.openAllSettingGUI(player, targets)
-        } else {
-            ChooseGUi.openSettingGUI(player, target)
-            return
-        }
+    val target = result?.hitEntity ?: return
+    if (target is Player) {
+      player.sendMessage("§6[EntityPose] §cプレイヤーの情報を見たり、いじろうとしないでね")
+      return
     }
+    if (target is LivingEntity && target.hasAI()) {
+      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です")
+      return
+    }
+    val selected = activeselection[player.uniqueId]
+    if (selected != null && selected.contains(target)) {
+      val targets = selected.filter { it.isValid }
+      ChooseGUi.openAllSettingGUI(player, targets)
+    } else {
+      ChooseGUi.openSettingGUI(player, target)
+      return
+    }
+  }
 
-    @EventHandler
-    fun onLeftClickBlock(event: PlayerInteractEvent) {
-        val player = event.player
-        val hand = player.inventory.itemInMainHand
-        if (!isEntiStick(hand)) return
-        if (!player.hasPermission("entitypose_arrange")) return //
-        if (event.action != Action.LEFT_CLICK_BLOCK) return
-        if (event.clickedBlock == null) return
+  @EventHandler
+  fun onLeftClickBlock(event: PlayerInteractEvent) {
+    val player = event.player
+    val hand = player.inventory.itemInMainHand
+    if (!isEntiStick(hand)) return
+    if (!player.hasPermission("entitypose_arrange")) return //
+    if (event.action != Action.LEFT_CLICK_BLOCK) return
+    if (event.clickedBlock == null) return
 
     event.isCancelled = true
     player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)

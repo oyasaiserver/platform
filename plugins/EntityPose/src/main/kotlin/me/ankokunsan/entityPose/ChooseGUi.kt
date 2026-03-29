@@ -160,187 +160,218 @@ object ChooseGUi {
     player.playSound(player, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
   }
 
-    fun openSettingGUI(player: Player, target: Entity) {
-        val invs = Bukkit.createInventory(null, 9, "§3エンティティの設定変更")
-        val living = target as? LivingEntity
+  fun openSettingGUI(player: Player, target: Entity) {
+    val invs = Bukkit.createInventory(null, 9, "§3エンティティの設定変更")
+    val living = target as? LivingEntity
 
-        val damageItem = ItemStack(Material.DIAMOND_SWORD).apply {
+    val damageItem =
+        ItemStack(Material.DIAMOND_SWORD).apply {
+          val meta = itemMeta ?: return@apply
+          val hasKey =
+              target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+          val status = if (hasKey) "§aON" else "§cOFF"
+          meta.setDisplayName("§fダメージ無効: $status")
+          itemMeta = meta
+        }
+    val scaleItem1 =
+        ItemStack(Material.POTION).apply { // LEGACYを消す
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+          meta.setDisplayName("§fサイズ設定(大きくするほう): $scale")
+          itemMeta = meta
+        }
+    val scaleItem2 =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+          meta.setDisplayName("§fサイズ設定(小さくするほう): $scale")
+          itemMeta = meta
+        }
+    val invisibleItem =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.fromRGB(127, 131, 146)
+          val status = living?.let { if (it.isInvisible) "§aON" else "§cOFF" }
+          meta.setDisplayName("§f透明: $status")
+          itemMeta = meta
+        }
+    val lockitem =
+        ItemStack(Material.TRIAL_KEY).apply {
+          val meta = itemMeta ?: return@apply
+          val hasKey =
+              target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+          val lockarrange = if (hasKey) "§aON" else "§cOFF"
+          meta.setDisplayName("§fアレンジのロック: $lockarrange")
+          itemMeta = meta
+        }
+    if (target is Tameable) {
+      val tameItem =
+          ItemStack(Material.BONE).apply {
             val meta = itemMeta ?: return@apply
-            val hasKey= target.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+            val status = if (target.isTamed) "§aON" else "§cOFF"
+            meta.setDisplayName("§f懐き状態: $status")
+            itemMeta = meta
+          }
+      invs.setItem(1, tameItem)
+    } else if (target is ArmorStand) {
+      val baseItem =
+          ItemStack(Material.SMOOTH_STONE_SLAB).apply {
+            val meta = itemMeta ?: return@apply
+            val status = if (target.hasBasePlate()) "§aON" else "§cOFF"
+            meta.setDisplayName("§f底のプレート表示: $status")
+            itemMeta = meta
+          }
+      val gravityItem =
+          ItemStack(Material.ANVIL).apply {
+            val meta = itemMeta ?: return@apply
+            val status = if (target.hasGravity()) "§aON" else "§cOFF"
+            meta.setDisplayName("§f重力: $status")
+            itemMeta = meta
+          }
+      val itemlockItem =
+          ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
+            val meta = itemMeta ?: return@apply
+            val hasKey =
+                target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
             val status = if (hasKey) "§aON" else "§cOFF"
-            meta.setDisplayName("§fダメージ無効: $status")
+            meta.setDisplayName("§fアイテムのロック: $status")
             itemMeta = meta
-        }
-        val scaleItem1 = ItemStack(Material.POTION).apply { // LEGACYを消す
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.YELLOW
-            val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-            meta.setDisplayName("§fサイズ設定(大きくするほう): $scale")
-            itemMeta = meta
-        }
-        val scaleItem2 = ItemStack(Material.POTION).apply {
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.YELLOW
-            val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-            meta.setDisplayName("§fサイズ設定(小さくするほう): $scale")
-            itemMeta = meta
-        }
-        val invisibleItem = ItemStack(Material.POTION).apply {
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.fromRGB(127, 131, 146)
-            val status = living?.let { if (it.isInvisible) "§aON" else "§cOFF" }
-            meta.setDisplayName("§f透明: $status")
-            itemMeta = meta
-        }
-        val lockitem = ItemStack(Material.TRIAL_KEY).apply {
-            val meta = itemMeta ?: return@apply
-            val hasKey= target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
-            val lockarrange = if (hasKey) "§aON" else "§cOFF"
-            meta.setDisplayName("§fアレンジのロック: $lockarrange")
-            itemMeta = meta
-        }
-        if (target is Tameable) {
-            val tameItem = ItemStack(Material.BONE).apply {
-                val meta = itemMeta ?: return@apply
-                val status = if (target.isTamed) "§aON" else "§cOFF"
-                meta.setDisplayName("§f懐き状態: $status")
-                itemMeta = meta
-            }
-            invs.setItem(1, tameItem)
-
-        } else if (target is ArmorStand) {
-            val baseItem = ItemStack(Material.SMOOTH_STONE_SLAB).apply {
-                val meta = itemMeta ?: return@apply
-                val status = if (target.hasBasePlate()) "§aON" else "§cOFF"
-                meta.setDisplayName("§f底のプレート表示: $status")
-                itemMeta = meta
-            }
-            val gravityItem = ItemStack(Material.ANVIL).apply {
-                val meta = itemMeta ?: return@apply
-                val status = if (target.hasGravity()) "§aON" else "§cOFF"
-                meta.setDisplayName("§f重力: $status")
-                itemMeta = meta
-            }
-            val itemlockItem = ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
-                val meta = itemMeta ?: return@apply
-                val hasKey= target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
-                val status = if (hasKey) "§aON" else "§cOFF"
-                meta.setDisplayName("§fアイテムのロック: $status")
-                itemMeta = meta
-            }
-            invs.setItem(1, gravityItem)
-            invs.setItem(2, baseItem)
-            invs.setItem(3,itemlockItem)
-        }
-        invs.setItem(0, damageItem)
-        invs.setItem(5, invisibleItem)
-        invs.setItem(6,scaleItem1)
-        invs.setItem(7,scaleItem2)
-        invs.setItem(8,lockitem)
-
-        val filler = getFiller1()
-        for (i in 0 until invs.size) {
-            if (invs.getItem(i) == null) invs.setItem(i, filler)
-        }
-        player.openInventory(invs)
+          }
+      invs.setItem(1, gravityItem)
+      invs.setItem(2, baseItem)
+      invs.setItem(3, itemlockItem)
     }
-    fun openAllSettingGUI(player: Player,targets: List<Entity>) {
-        val invs = Bukkit.createInventory(null, 9, "§3範囲選択済みエンティティの設定変更")
+    invs.setItem(0, damageItem)
+    invs.setItem(5, invisibleItem)
+    invs.setItem(6, scaleItem1)
+    invs.setItem(7, scaleItem2)
+    invs.setItem(8, lockitem)
 
-        val damageItem = ItemStack(Material.DIAMOND_SWORD).apply {
-            val meta = itemMeta ?: return@apply
-            val count = targets.count { it.persistentDataContainer.has(EntityPose.INVINCIBLE , PersistentDataType.BYTE) }
-            meta.setDisplayName("§fダメージ無効 ${count}/${targets.size}体ON")
-            itemMeta = meta
+    val filler = getFiller1()
+    for (i in 0 until invs.size) {
+      if (invs.getItem(i) == null) invs.setItem(i, filler)
+    }
+    player.openInventory(invs)
+  }
+
+  fun openAllSettingGUI(player: Player, targets: List<Entity>) {
+    val invs = Bukkit.createInventory(null, 9, "§3範囲選択済みエンティティの設定変更")
+
+    val damageItem =
+        ItemStack(Material.DIAMOND_SWORD).apply {
+          val meta = itemMeta ?: return@apply
+          val count =
+              targets.count {
+                it.persistentDataContainer.has(EntityPose.INVINCIBLE, PersistentDataType.BYTE)
+              }
+          meta.setDisplayName("§fダメージ無効 ${count}/${targets.size}体ON")
+          itemMeta = meta
         }
-        val scaleItem1 = ItemStack(Material.POTION).apply { // LEGACYを消す
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.YELLOW
-            meta.setDisplayName("§fスケール設定(大きくするほう)")
-            val lorelist = mutableListOf<String>()
-            lorelist.add("§7----- 現在のスケール一覧 -----")
-            targets.take(10).forEach { target ->
-                val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-                val typeName = target.type.name
-                lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
-            }
-            if (targets.size > 10) {
-                lorelist.add("§8...ほか ${targets.size - 10}体")
-            }
-            meta.lore = lorelist
-            itemMeta = meta
+    val scaleItem1 =
+        ItemStack(Material.POTION).apply { // LEGACYを消す
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          meta.setDisplayName("§fスケール設定(大きくするほう)")
+          val lorelist = mutableListOf<String>()
+          lorelist.add("§7----- 現在のスケール一覧 -----")
+          targets.take(10).forEach { target ->
+            val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+            val typeName = target.type.name
+            lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
+          }
+          if (targets.size > 10) {
+            lorelist.add("§8...ほか ${targets.size - 10}体")
+          }
+          meta.lore = lorelist
+          itemMeta = meta
         }
-        val scaleItem2 = ItemStack(Material.POTION).apply {
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.YELLOW
-            meta.setDisplayName("§fスケール設定(小さくするほう)")
-            val lorelist = mutableListOf<String>()
-            lorelist.add("§7----- 現在のスケール一覧 -----")
-            targets.take(10).forEach { target ->
-                val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-                val typeName = target.type.name
-                lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
-            }
-            if (targets.size > 10) {
-                lorelist.add("§8...ほか ${targets.size - 10}体")
-            }
-            meta.lore = lorelist
-            itemMeta = meta
+    val scaleItem2 =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.YELLOW
+          meta.setDisplayName("§fスケール設定(小さくするほう)")
+          val lorelist = mutableListOf<String>()
+          lorelist.add("§7----- 現在のスケール一覧 -----")
+          targets.take(10).forEach { target ->
+            val scale = (target as? LivingEntity)?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
+            val typeName = target.type.name
+            lorelist.add("§8-$typeName: §b${String.format("%.1f", scale)}")
+          }
+          if (targets.size > 10) {
+            lorelist.add("§8...ほか ${targets.size - 10}体")
+          }
+          meta.lore = lorelist
+          itemMeta = meta
         }
-        val invisibleItem = ItemStack(Material.POTION).apply {
-            val meta = itemMeta as? PotionMeta ?: return@apply
-            meta.color = Color.fromRGB(127, 131, 146)
-            val count = targets.filterIsInstance<LivingEntity>().count { it.isInvisible }
-            meta.setDisplayName("§f透明: ${count}/${targets.size}体ON")
-            itemMeta = meta
+    val invisibleItem =
+        ItemStack(Material.POTION).apply {
+          val meta = itemMeta as? PotionMeta ?: return@apply
+          meta.color = Color.fromRGB(127, 131, 146)
+          val count = targets.filterIsInstance<LivingEntity>().count { it.isInvisible }
+          meta.setDisplayName("§f透明: ${count}/${targets.size}体ON")
+          itemMeta = meta
         }
-        val lockitem = ItemStack(Material.TRIAL_KEY).apply {
-            val meta = itemMeta ?: return@apply
-            val count = targets.count { it.persistentDataContainer.has(EntityPose.ARRANGELOCK , PersistentDataType.BYTE)}
-            meta.setDisplayName("§fアレンジのロック ${count}/${targets.size}体ON")
-            itemMeta = meta
+    val lockitem =
+        ItemStack(Material.TRIAL_KEY).apply {
+          val meta = itemMeta ?: return@apply
+          val count =
+              targets.count {
+                it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+          meta.setDisplayName("§fアレンジのロック ${count}/${targets.size}体ON")
+          itemMeta = meta
         }
 
-        if (targets.all{it is ArmorStand}) {
-            val baseItem = ItemStack(Material.SMOOTH_STONE_SLAB).apply {
-                val meta = itemMeta ?: return@apply
-                val count = targets.filterIsInstance<ArmorStand>().count { it.hasBasePlate()}
-                meta.setDisplayName("§f底のプレート表示: ${count}/${targets.size}体ON")
-                itemMeta = meta
-            }
-            val gravityItem = ItemStack(Material.ANVIL).apply {
-                val meta = itemMeta ?: return@apply
-                val count = targets.count { it.hasGravity()}
-                meta.setDisplayName("§f重力: ${count}/${targets.size}体ON")
-                itemMeta = meta
-            }
-            val itemlockItem = ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
-                val meta = itemMeta ?: return@apply
-                val count = targets.count{ it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE) }
-                meta.setDisplayName("§fアイテムのロック: ${count}/${targets.size}体ON")
-                itemMeta = meta
-            }
-            invs.setItem(1, gravityItem)
-            invs.setItem(2, baseItem)
-            invs.setItem(3,itemlockItem)
-        }
-        invs.setItem(0,damageItem)
-        invs.setItem(5,invisibleItem)
-        invs.setItem(6,scaleItem1)
-        invs.setItem(7,scaleItem2)
-        invs.setItem(8,lockitem)
-        val filler = getFiller1()
-        for (i in 0 until invs.size) {
-            if (invs.getItem(i) == null) invs.setItem(i, filler)
-        }
-        player.openInventory(invs)
+    if (targets.all { it is ArmorStand }) {
+      val baseItem =
+          ItemStack(Material.SMOOTH_STONE_SLAB).apply {
+            val meta = itemMeta ?: return@apply
+            val count = targets.filterIsInstance<ArmorStand>().count { it.hasBasePlate() }
+            meta.setDisplayName("§f底のプレート表示: ${count}/${targets.size}体ON")
+            itemMeta = meta
+          }
+      val gravityItem =
+          ItemStack(Material.ANVIL).apply {
+            val meta = itemMeta ?: return@apply
+            val count = targets.count { it.hasGravity() }
+            meta.setDisplayName("§f重力: ${count}/${targets.size}体ON")
+            itemMeta = meta
+          }
+      val itemlockItem =
+          ItemStack(Material.OMINOUS_TRIAL_KEY).apply {
+            val meta = itemMeta ?: return@apply
+            val count =
+                targets.count {
+                  it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+                }
+            meta.setDisplayName("§fアイテムのロック: ${count}/${targets.size}体ON")
+            itemMeta = meta
+          }
+      invs.setItem(1, gravityItem)
+      invs.setItem(2, baseItem)
+      invs.setItem(3, itemlockItem)
     }
-    private fun getFiller1(): ItemStack {
-        return ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE).apply {
-            itemMeta = itemMeta?.apply {
-                setDisplayName(" ")
-                persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "FILLER")
-            }
-        }
+    invs.setItem(0, damageItem)
+    invs.setItem(5, invisibleItem)
+    invs.setItem(6, scaleItem1)
+    invs.setItem(7, scaleItem2)
+    invs.setItem(8, lockitem)
+    val filler = getFiller1()
+    for (i in 0 until invs.size) {
+      if (invs.getItem(i) == null) invs.setItem(i, filler)
     }
+    player.openInventory(invs)
+  }
+
+  private fun getFiller1(): ItemStack {
+    return ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE).apply {
+      itemMeta =
+          itemMeta?.apply {
+            setDisplayName(" ")
+            persistentDataContainer.set(GUI_KEY, PersistentDataType.STRING, "FILLER")
+          }
+    }
+  }
 }

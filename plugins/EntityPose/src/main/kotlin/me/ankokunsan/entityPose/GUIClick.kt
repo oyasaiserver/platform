@@ -104,7 +104,7 @@ class GUIClick : Listener {
     }
     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.5f)
     // 再描画の際も、今見つけたtargetを渡す
-      ChooseGUi.openSettingGUI(player, target)
+    ChooseGUi.openSettingGUI(player, target)
   }
 
   @EventHandler
