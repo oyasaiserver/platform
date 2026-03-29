@@ -365,8 +365,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
               "paste",
               "cut",
               "clear",
-              "hojo"
-          )
+              "hojo")
       completions.addAll(list.filter { it.startsWith(args[0], ignoreCase = true) })
       return completions
     }
