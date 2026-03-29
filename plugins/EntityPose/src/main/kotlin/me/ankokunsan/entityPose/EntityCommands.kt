@@ -355,29 +355,17 @@ class EntityCommands : CommandExecutor, TabCompleter {
       val list =
           listOf(
               "stick",
-              "st",
               "wand",
-              "wa",
               "info",
-              "in",
               "infoset",
-              "ins",
               "scale",
-              "sc",
               "kakudo",
-              "ka",
               "zahyo",
-              "za",
               "copy",
-              "co",
               "paste",
-              "pa",
               "cut",
-              "cu",
               "clear",
-              "cl",
-              "hojo",
-              "ho")
+              "hojo")
       completions.addAll(list.filter { it.startsWith(args[0], ignoreCase = true) })
       return completions
     }
