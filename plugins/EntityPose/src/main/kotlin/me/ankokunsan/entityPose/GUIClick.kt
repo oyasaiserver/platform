@@ -160,9 +160,10 @@ class GUIClick : Listener {
         5 -> {
           val allInvisible = targets.all { (it as? LivingEntity)?.isInvisible == true }
           val nextState = !allInvisible
-          targets.forEach { entity -> if (entity is LivingEntity) {
-            entity.isInvisible = nextState
-          }
+          targets.forEach { entity ->
+            if (entity is LivingEntity) {
+              entity.isInvisible = nextState
+            }
           }
         }
         6 -> {
