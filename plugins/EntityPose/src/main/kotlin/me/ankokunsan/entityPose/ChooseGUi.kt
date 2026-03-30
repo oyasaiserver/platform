@@ -178,7 +178,7 @@ object ChooseGUi {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定(大きくするほう): $scale")
+          meta.setDisplayName("§fスケール設定(大きくするほう): $scale")
           itemMeta = meta
         }
     val scaleItem2 =
@@ -186,7 +186,7 @@ object ChooseGUi {
           val meta = itemMeta as? PotionMeta ?: return@apply
           meta.color = Color.YELLOW
           val scale = living?.getAttribute(Attribute.SCALE)?.baseValue ?: 1.0
-          meta.setDisplayName("§fサイズ設定(小さくするほう): $scale")
+          meta.setDisplayName("§fスケール設定(小さくするほう): $scale")
           itemMeta = meta
         }
     val invisibleItem =
