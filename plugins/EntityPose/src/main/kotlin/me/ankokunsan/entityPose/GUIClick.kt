@@ -45,6 +45,7 @@ class GUIClick : Listener {
           it != player
         }
     val target = result?.hitEntity ?: return // いなければ終了
+    val livingEntity = target as? LivingEntity
 
     val slot = event.rawSlot
     when (slot) {
@@ -67,9 +68,6 @@ class GUIClick : Listener {
         if (target is ArmorStand) target.setBasePlate(!target.hasBasePlate())
       }
       3 -> {
-        if (target is ArmorStand) target.isInvisible = !target.isInvisible
-      }
-      4 -> {
         val container = target.persistentDataContainer
         if (target.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
           container.remove(EntityPose.ITEMLOCK)
@@ -77,17 +75,16 @@ class GUIClick : Listener {
           container.set(EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
         }
       }
+      5 -> livingEntity?.isInvisible = !livingEntity.isInvisible
       6 -> {
-        val livingEntity = target as? LivingEntity ?: return
-        val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
+        val attribute = livingEntity?.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
         val newScale = (currentScale + 0.1).coerceAtMost(3.0)
         val roundedScale = round(newScale * 10) / 10.0
         attribute.baseValue = roundedScale
       }
       7 -> {
-        val livingEntity = target as? LivingEntity ?: return
-        val attribute = livingEntity.getAttribute(Attribute.SCALE) ?: return
+        val attribute = livingEntity?.getAttribute(Attribute.SCALE) ?: return
         val currentScale = attribute.baseValue
         val newScale = (currentScale - 0.1).coerceAtLeast(0.3)
         val roundedScale = round(newScale * 10) / 10.0
@@ -124,6 +121,7 @@ class GUIClick : Listener {
       val targets = selected.filter { it.isValid }
 
       val slot = event.rawSlot
+      val armor = targets.filterIsInstance<ArmorStand>()
       when (slot) {
         0 -> {
           val allInvincible =
@@ -138,34 +136,33 @@ class GUIClick : Listener {
           }
         }
         1 -> {
-          val armor = targets.filterIsInstance<ArmorStand>()
           val allgravity = armor.all { it.hasGravity() }
           val nextState = !allgravity
           armor.forEach { it.setGravity(nextState) }
         }
         2 -> {
-          val armor = targets.filterIsInstance<ArmorStand>()
           val allbaseplate = armor.all { it.hasBasePlate() }
           val nextState = !allbaseplate
           armor.forEach { it.setBasePlate(nextState) }
         }
-
         3 -> {
-          val armor = targets.filterIsInstance<ArmorStand>()
-          val allInvisible = armor.all { it.isInvisible }
-          val nextState = !allInvisible
-          armor.forEach { it.isInvisible = nextState }
-        }
-        4 -> {
-          val allInvincible =
+          val allItemlock =
               targets.all {
                 it.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
               }
           targets.forEach {
-            if (allInvincible) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
+            if (allItemlock) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
             else
                 it.persistentDataContainer.set(
                     EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+          }
+        }
+        5 -> {
+          val allInvisible = targets.all { (it as? LivingEntity)?.isInvisible == true }
+          val nextState = !allInvisible
+          targets.forEach { entity -> if (entity is LivingEntity) {
+            entity.isInvisible = nextState
+          }
           }
         }
         6 -> {
