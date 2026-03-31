@@ -83,6 +83,10 @@ class EntityClick : Listener {
       actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
       return
     }
+    if (target is Player) {
+      actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
+      return
+    }
     AirBlock.airblockplace(player)
     event.isCancelled = true
 
@@ -645,6 +649,10 @@ class EntityClick : Listener {
       actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
       return
     }
+    if (entity is Player) {
+      actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
+      return
+    }
     event.isCancelled = true
     entity.isPersistent = true
     val key = player.uniqueId to entity.type
@@ -856,7 +864,7 @@ class EntityClick : Listener {
               entity.isSitting = !entity.isSitting
               actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
             }
-            else -> actionBar(player, "§6[EntityPose] §cこのモブは座れません。残念;;")
+            else -> actionBar(player, "§6[EntityPose] §cこのエンティティは座れません。残念;;")
           }
         }
         EntiPart.X -> {
