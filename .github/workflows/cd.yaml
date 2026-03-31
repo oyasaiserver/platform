@@ -40,7 +40,7 @@ jobs:
           path: "~/.cache/nix"
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@51f3067b56fe8ae331890c77d4e454f6d60615ff
-      - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1
+      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
           name: oyasaiserver
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
