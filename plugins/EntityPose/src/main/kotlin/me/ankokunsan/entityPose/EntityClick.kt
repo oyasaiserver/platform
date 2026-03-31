@@ -83,7 +83,7 @@ class EntityClick : Listener {
       actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
       return
     }
-    if(target is Player) {
+    if (target is Player) {
       actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
       return
     }
