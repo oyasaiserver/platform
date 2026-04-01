@@ -98,7 +98,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val dropCooldowns = ConcurrentHashMap<UUID, Long>()
 
   // タスク管理
-  private val activeFetchTasks = mutableMapOf<UUID, BukkitTask>()
+  private val activeFetchTasks = ConcurrentHashMap<UUID, BukkitTask>()
 
   override fun onEnable() {
     // プラグインバージョン情報をログ出力
@@ -340,6 +340,10 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             this,
             logger,
             { player ->
+              // フェッチタスクをキャンセル（storeAllPets でエンティティが消える前に行う）
+              for (entity in ActivePetRegistry.getByOwner(player.uniqueId.toString())) {
+                fetchSystem.stopFetchTask(entity)
+              }
               storageService.storeAllPets(player)
               skillSystem.cleanup(player.uniqueId)
               interactionService.cleanupPlayer(player.uniqueId)
@@ -1264,7 +1268,7 @@ object PetDataManager {
     savePetData(ownerUuid, petData)
 
     // キャッシュ更新
-    cache.getOrPut(ownerUuid.toString()) { mutableMapOf() }[petId] = petData
+    cache.getOrPut(ownerUuid.toString()) { ConcurrentHashMap() }[petId] = petData
 
     plugin.logger.info("Pet purchased: Player=${ownerUuid}, PetNumber=$nextNumber, Type=$type")
     return petData
@@ -1366,7 +1370,10 @@ object PetDataManager {
 
   private fun getPetFileName(petData: PetData): String {
     val number = petData.petNumber.toString().padStart(3, '0')
-    val variant = petData.variant?.let { "_$it" } ?: ""
+    val variant = petData.variant?.let { v ->
+      val safe = v.replace(Regex("[^a-zA-Z0-9_-]"), "")
+      if (safe.isNotEmpty()) "_$safe" else ""
+    } ?: ""
     return "${number}_${petData.type}${variant}.json"
   }
 
@@ -1374,13 +1381,17 @@ object PetDataManager {
     val playerFolder = getPlayerFolder(ownerUuid)
     val fileName = getPetFileName(petData)
     val file = File(playerFolder, fileName)
-
-    // キャッシュ更新（メインスレッド）
-    cache.getOrPut(ownerUuid.toString()) { mutableMapOf() }[petData.petId] = petData
-
-    // ファイル書き込みは非同期でメインスレッドをブロックしない
     val json = gson.toJson(petData)
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable { file.writeText(json) })
+
+    // キャッシュ更新
+    cache.getOrPut(ownerUuid.toString()) { ConcurrentHashMap() }[petData.petId] = petData
+
+    // ファイル書き込み（同期: クラッシュ時のデータ消失を防ぐ）
+    try {
+      file.writeText(json)
+    } catch (e: Exception) {
+      plugin.logger.warning("Failed to save pet data for $ownerUuid / ${petData.petId}: ${e.message}")
+    }
 
     if (syncBack) {
       PetSynchronizer.syncDataToEntity(ownerUuid, petData)
@@ -1394,7 +1405,7 @@ object PetDataManager {
     }
 
     val playerFolder = getPlayerFolder(ownerUuid)
-    val pets = mutableMapOf<String, PetData>()
+    val pets = ConcurrentHashMap<String, PetData>()
 
     playerFolder
         .listFiles()
