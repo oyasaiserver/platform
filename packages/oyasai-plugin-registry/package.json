@@ -2,16 +2,20 @@
   "name": "@oyasaiserver/plugin-registry",
   "type": "module",
   "bin": {
-    "plugin-registry-download-helper": "scripts/download-helper.ts"
+    "plugin-registry-download-helper": "scripts/download-helper.ts",
+    "plugin-registry-update": "update.ts"
   },
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "update": "plugin-registry-update"
   },
   "devDependencies": {
+    "@iarna/toml": "2.2.5",
+    "@types/iarna__toml": "2.0.5",
     "@xmcl/modrinth": "2.5.0"
   },
   "peerDependencies": {

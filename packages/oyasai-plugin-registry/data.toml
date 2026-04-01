@@ -1,0 +1,274 @@
+# Plugin registry for Minecraft server
+# This file defines plugins and how to fetch them
+
+[versions."1.21.8"]
+
+# For spiget use https://spiget.org/documentation/
+[versions."1.21.8".plugins.lwc]
+type = "spiget"
+id = 69551
+
+[versions."1.21.8".plugins.venturechat]
+type = "spiget"
+id = 771
+
+[versions."1.21.8".plugins.particlehats]
+type = "spiget"
+id = 1007
+
+[versions."1.21.8".plugins.protocollib]
+type = "spiget"
+id = 1997
+
+[versions."1.21.8".plugins.advancedban]
+type = "spiget"
+id = 8695
+
+[versions."1.21.8".plugins.signshop]
+type = "spiget"
+id = 10997
+
+[versions."1.21.8".plugins.mypet]
+type = "spiget"
+id = 12725
+
+[versions."1.21.8".plugins.nuvotifier]
+type = "spiget"
+id = 13449
+
+[versions."1.21.8".plugins.minepacks]
+type = "spiget"
+id = 19286
+
+[versions."1.21.8".plugins.slotmachine]
+type = "spiget"
+id = 22023
+
+[versions."1.21.8".plugins.mycommand]
+type = "spiget"
+id = 22272
+
+[versions."1.21.8".plugins.vault]
+type = "spiget"
+id = 34315
+
+[versions."1.21.8".plugins.simpleelevator]
+type = "spiget"
+id = 44462
+
+[versions."1.21.8".plugins.inventoryshop]
+type = "spiget"
+id = 47694
+
+[versions."1.21.8".plugins.crackshotguns]
+type = "spiget"
+id = 48301
+
+[versions."1.21.8".plugins.joincommands]
+type = "spiget"
+id = 51758
+
+[versions."1.21.8".plugins.tntruneloaded]
+type = "spiget"
+id = 53359
+
+[versions."1.21.8".plugins.gsit]
+type = "spiget"
+id = 62325
+
+[versions."1.21.8".plugins.zvoteparty]
+type = "spiget"
+id = 95603
+
+[versions."1.21.8".plugins.skript]
+type = "spiget"
+id = 114544
+
+[versions."1.21.8".plugins.pvparena]
+type = "spiget"
+id = 16584
+
+# GitHub releases
+[versions."1.21.8".plugins.openinv]
+type = "github"
+owner = "JiKoo"
+repo = "OpenInv"
+tag = "5.1.14"
+name = "OpenInv.jar"
+
+[versions."1.21.8".plugins.lunachat]
+type = "github"
+owner = "f1w3"
+repo = "LunaChat"
+tag = "v3.0.16-fix"
+name = "LunaChat.jar"
+
+[versions."1.21.8".plugins.worldeditsui]
+type = "github"
+owner = "kennytv"
+repo = "WorldEditSUI"
+tag = "1.7.4"
+name = "WorldEditSUI-1.7.4.jar"
+
+[versions."1.21.8".plugins.worldborder]
+type = "github"
+owner = "PryPurity"
+repo = "WorldBorder"
+tag = "v2.1.5"
+name = "WorldBorder.jar"
+
+[versions."1.21.8".plugins.imageonmap]
+type = "github"
+owner = "okocraft"
+repo = "ImageOnMap"
+tag = "5.1.1"
+name = "ImageOnMap-5.1.1.jar"
+
+# Leave static alone - these are bundled in the static directory
+[versions."1.21.8".plugins.arceon]
+type = "static"
+name = "Arceon.jar"
+
+[versions."1.21.8".plugins.ezedits]
+type = "static"
+name = "ezEdits.jar"
+
+[versions."1.21.8".plugins.tokenmanager]
+type = "static"
+name = "TokenManager.jar"
+
+# Leave local alone - these are built from source
+[versions."1.21.8".plugins.dynamicprofile]
+type = "local"
+name = "DynamicProfile.jar"
+
+[versions."1.21.8".plugins.oyasaiadmintools]
+type = "local"
+name = "OyasaiAdminTools.jar"
+
+[versions."1.21.8".plugins.oyasaiutilities]
+type = "local"
+name = "OyasaiUtilities.jar"
+
+[versions."1.21.8".plugins.painttools]
+type = "local"
+name = "PaintTools.jar"
+
+[versions."1.21.8".plugins.sociallikes3]
+type = "local"
+name = "SocialLikes3.jar"
+
+[versions."1.21.8".plugins.socialvotes]
+type = "local"
+name = "SocialVotes.jar"
+
+[versions."1.21.8".plugins.tpswitch]
+type = "local"
+name = "TPSwitch.jar"
+
+[versions."1.21.8".plugins.vertex]
+type = "local"
+name = "Vertex.jar"
+
+[versions."1.21.8".plugins.oyasaipets]
+type = "local"
+name = "OyasaiPets.jar"
+
+# For geysermc projects, use https://geysermc.org/wiki/api/downloads/
+[versions."1.21.8".plugins.floodgate]
+type = "geysermc"
+project = "floodgate"
+
+[versions."1.21.8".plugins.geyser]
+type = "geysermc"
+project = "geyser"
+
+# Direct URL downloads
+[versions."1.21.8".plugins.chestcommands]
+type = "url"
+url = "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar"
+
+# For modrinth use https://docs.modrinth.com/api/
+[versions."1.21.8".plugins.bkcommonlib]
+type = "modrinth"
+slug = "bkcommonlib"
+
+[versions."1.21.8".plugins.coreprotect]
+type = "modrinth"
+slug = "coreprotect"
+
+[versions."1.21.8".plugins.decentholograms]
+type = "modrinth"
+slug = "decentholograms"
+
+[versions."1.21.8".plugins.essentialsx]
+type = "modrinth"
+slug = "essentialsx"
+
+[versions."1.21.8".plugins.essentialsxchat]
+type = "modrinth"
+slug = "essentialsx-chat-module"
+
+[versions."1.21.8".plugins.essentialsxspawn]
+type = "modrinth"
+slug = "essentialsx-spawn"
+
+[versions."1.21.8".plugins.fastasyncworldedit]
+type = "modrinth"
+slug = "fastasyncworldedit"
+
+[versions."1.21.8".plugins.fastasyncvoxelsniper]
+type = "modrinth"
+slug = "fastasyncvoxelsniper"
+
+[versions."1.21.8".plugins.multiversecore]
+type = "modrinth"
+slug = "multiverse-core"
+
+[versions."1.21.8".plugins.multiverseportals]
+type = "modrinth"
+slug = "multiverse-portals"
+
+[versions."1.21.8".plugins.placeholderapi]
+type = "modrinth"
+slug = "placeholderapi"
+
+[versions."1.21.8".plugins.tab]
+type = "modrinth"
+slug = "tab-was-taken"
+
+[versions."1.21.8".plugins.terra]
+type = "modrinth"
+slug = "terra"
+
+[versions."1.21.8".plugins.veinminer]
+type = "modrinth"
+slug = "veinminer"
+
+[versions."1.21.8".plugins.viaversion]
+type = "modrinth"
+slug = "viaversion"
+
+[versions."1.21.8".plugins.worldguard]
+type = "modrinth"
+slug = "worldguard"
+
+[versions."1.21.8".plugins.luckperms]
+type = "modrinth"
+slug = "luckperms"
+
+[versions."1.21.8".plugins.plugmanx]
+type = "modrinth"
+slug = "plugmanx"
+
+[versions."1.21.8".plugins.discordsrv]
+type = "modrinth"
+slug = "discordsrv"
+
+[versions."1.21.8".plugins.bluemap]
+type = "modrinth"
+slug = "bluemap"
+
+[versions."1.21.8".plugins.skinsrestorer]
+type = "modrinth"
+slug = "skinsrestorer"
