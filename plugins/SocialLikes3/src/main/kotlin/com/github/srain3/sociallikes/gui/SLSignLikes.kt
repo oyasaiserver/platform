@@ -29,7 +29,7 @@ import org.bukkit.inventory.meta.SkullMeta
 object SLSignLikes {
   fun createGUI(sign: Sign, slData: SLData, owner: Boolean, isOP: Boolean): ChestGui {
     val gui =
-        ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&a${slData.title}&0」p1".color())
+        ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&2${slData.title}&0」p1".color())
     gui.setOnTopClick {
       it.isCancelled = true
       if (it.currentItem != null) {
@@ -62,7 +62,7 @@ object SLSignLikes {
                 pagePane.setPage(pagePane.page - 1)
                 gui.title =
                     Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&a${slData.title}&0」p${pagePane.page+1}".color()
+                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
                 gui.update()
               }
             },
@@ -79,7 +79,7 @@ object SLSignLikes {
                 pagePane.setPage(pagePane.page + 1)
                 gui.title =
                     Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&a${slData.title}&0」p${pagePane.page+1}".color()
+                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
                 gui.update()
               }
             },
@@ -163,7 +163,7 @@ object SLSignLikes {
               it.whoClicked.closeInventory()
               UserBuild.createGUI(offlineOwnerPlayer, (it.whoClicked as Player)).show(it.whoClicked)
             },
-        3,
+        5,
         0,
     )
     navigation.addItem(

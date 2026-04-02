@@ -1,12 +1,14 @@
 package me.ankokunsan.entityPose
 
 import java.util.UUID
+import kotlin.math.roundToInt
 import org.bukkit.Particle
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.util.EulerAngle
@@ -16,14 +18,12 @@ object FollowEntity {
   // プレイヤーが現在操作中のエンティティとタスクをペアで管理
   private val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
 
-  /**
-   * エンティティをスポーンさせ、追従を開始する
-   *
-   * @param type スポーンさせるエンティティの種類
-   * @param setup エンティティ固有の設定（バリアントなど）を行うラムダ
-   */
   @Suppress("UNCHECKED_CAST")
   fun <T : Entity> start(player: Player, type: EntityType, setup: (T) -> Unit) {
+    if (activePreviews.containsKey(player.uniqueId)) {
+      player.sendMessage("§6[EntityPose] §cもうエンティティ出してるよ～！！！")
+      return
+    }
     val distance = 2.5
     val entity = player.world.spawnEntity(player.location, type) as T
     // 共通設定
@@ -47,10 +47,8 @@ object FollowEntity {
       entity.rightLegPose = zero
     }
 
-    // 外部から渡された個別設定を実行（バリアントなど）
     setup(entity)
 
-    // 追従タスク
     val task =
         object : BukkitRunnable() {
               override fun run() {
@@ -64,6 +62,18 @@ object FollowEntity {
                 val dir = eyeLoc.direction.normalize()
                 val target = eyeLoc.clone().add(dir.multiply(distance))
 
+                target.x = target.blockX + 0.5
+                target.y = target.blockY.toDouble()
+                target.z = target.blockZ + 0.5
+
+                val directionToPlayer =
+                    eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
+                val lookAtPlayerLoc = target.clone().setDirection(directionToPlayer)
+                val snappedYaw = ((lookAtPlayerLoc.yaw / 45.0).roundToInt() * 45.0).toFloat()
+                // ベクトルをLocationの向きに変換
+                target.yaw = snappedYaw
+                target.pitch = 0f
+
                 val bx = target.blockX.toDouble()
                 val by = target.blockY.toDouble()
                 val bz = target.blockZ.toDouble()
@@ -73,13 +83,6 @@ object FollowEntity {
                 w.spawnParticle(Particle.FLAME, bx + 1, by, bz, 1, 0.0, 0.0, 0.0, 0.0)
                 w.spawnParticle(Particle.FLAME, bx, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
                 w.spawnParticle(Particle.FLAME, bx + 1, by, bz + 1, 1, 0.0, 0.0, 0.0, 0.0)
-
-                val directionToPlayer =
-                    eyeLoc.toVector().subtract(target.toVector()) // プレイヤーへの方向ベクトル
-                val lookAtPlayerLoc =
-                    target.clone().setDirection(directionToPlayer) // ベクトルをLocationの向きに変換
-                target.yaw = lookAtPlayerLoc.yaw
-                target.pitch = 0f
 
                 entity.teleport(target)
               }
@@ -106,6 +109,8 @@ object FollowEntity {
         entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
         entity.isInvulnerable = false
         entity.isSilent = true
+        entity.persistentDataContainer.set(
+            EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
       }
     }
 

@@ -7,7 +7,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 
-object CustomHead { // objectにすると便利
+object CustomHead {
   @Suppress("DEPRECATION")
   fun get(textureId: String): ItemStack {
     val head = ItemStack(Material.PLAYER_HEAD)

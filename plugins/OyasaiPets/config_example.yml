@@ -1,0 +1,216 @@
+# ==========================================
+# BigWolf プラグイン設定ファイル
+# ==========================================
+
+# 経済設定
+economy:
+  foodPointCost: 10 # ペットのレベルアップに必要なポイント
+
+# ペット全般設定
+pets:
+  maxFoodLevel: 50 # ペットの最大レベル
+  # maxHealth: 各MOBの最大HP。0以下でデフォルト値を使用
+  freeRoamFlyingSpeedMultiplier: 0.5 # 飛行MOB（ALLAY・PARROT・BEE）のフリーローム速度倍率
+
+  # ペット種別ごとの詳細設定
+  wolf:
+    baseSpeed: 0.6
+    maxSpeed: 1.2
+    jumpPower: 0.6
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: -1
+  cat:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.9
+    scaleMin: 2.2
+    scaleMax: 3.4
+    maxHealth: -1
+  chicken:
+    baseSpeed: 0.4
+    maxSpeed: 0.9
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: 20
+  dolphin:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.2
+    scaleMax: 2.2
+    maxHealth: -1
+  parrot:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 3.5
+    maxHealth: -1
+  fox:
+    baseSpeed: 0.7
+    maxSpeed: 1.3
+    jumpPower: 0.7
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: -1
+  frog:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 1.2
+    scaleMin: 2.0
+    scaleMax: 3.0
+    maxHealth: -1
+  allay:
+    baseSpeed: 0.6
+    maxSpeed: 1.2
+    jumpPower: 0.5
+    scaleMin: 1.0
+    scaleMax: 2.0
+    maxHealth: -1
+  axolotl:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: -1
+  bee:
+    baseSpeed: 0.6
+    maxSpeed: 1.1
+    jumpPower: 0.5
+    scaleMin: 1.0
+    scaleMax: 2.0
+    maxHealth: -1
+  rabbit:
+    baseSpeed: 0.6
+    maxSpeed: 1.2
+    jumpPower: 0.8
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: 20
+  panda:
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 0.5
+    scaleMin: 2.0
+    scaleMax: 3.0
+    maxHealth: -1
+  polar_bear:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.6
+    scaleMin: 2.5
+    scaleMax: 3.5
+    maxHealth: -1
+  pufferfish:
+    baseSpeed: 0.4
+    maxSpeed: 0.8
+    jumpPower: 0.5
+    scaleMin: 1.0
+    scaleMax: 2.0
+    maxHealth: -1
+  turtle:
+    baseSpeed: 0.3
+    maxSpeed: 0.7
+    jumpPower: 0.5
+    scaleMin: 1.5
+    scaleMax: 2.5
+    maxHealth: -1
+  armadillo:
+    baseSpeed: 0.5
+    maxSpeed: 1.0
+    jumpPower: 0.5
+    scaleMin: 1.2
+    scaleMax: 2.2
+    maxHealth: -1
+
+# ショップ設定
+shop:
+  defaultCost: 100 # デフォルト購入価格
+
+# スキルブック設定
+skillbook:
+  costLv1: 100 # スキルブックLv.1コスト
+  costLv2: 150 # スキルブックLv.2コスト
+  costLv3: 200 # スキルブックLv.3コスト
+
+# ペット復活設定
+revive:
+  cost: 20 # 死亡したペットを復活させるコスト
+
+# スポーンエッグ再取得設定
+recover:
+  cost: 20 # 紛失したスポーンエッグを再取得するコスト
+
+# 交配システム設定
+breed:
+  minLevel: 10 # 交配可能になる最低レベル
+
+  # === 能力値遺伝の詳細パラメータ ===
+
+  # ランダム要素の範囲
+  randomMin: 0.95 # ランダム係数の最小値（95%）
+  randomMax: 1.1 # ランダム係数の最大値（110%）
+  # → 親の平均能力に対して 95%〜110% のランダム性
+
+  # 突然変異
+  mutationChance: 0.05 # 突然変異が発生する確率（5% = 0.05）
+  mutationBoost: 1.1 # 突然変異時の能力ブースト倍率（1.1倍 = 110%）
+
+  # 世代ボーナス
+  genBonusPerGen: 0.01 # 1世代ごとに追加されるボーナス（1% = 0.01）
+  genBonusMax: 0.2 # 世代ボーナスの上限（20% = 0.2）
+  # 例: 第1世代 = +1%, 第2世代 = +2%, ... 第20世代以上 = +20%
+
+  # 能力値の上限
+  statCap: 1.5 # 速度とジャンプ力の最大倍率（1.5 = 150%）
+
+  # 初期レベルボーナス
+  bonusLevelPerGen: 1 # 1世代ごとに獲得する初期レベル（1世代 = +1Lv）
+  bonusLevelMax: 10 # 初期レベルボーナスの上限（最大10レベル）
+  # 例: 第2世代 = Lv.1スタート, 第11世代以上 = Lv.10スタート
+
+# 遊びでレベルアップ設定
+play:
+  levelUpChance: 0.05 # おもちゃ・ブラシでレベルアップする確率（5%）
+  levelUpMaxLevel: 10 # 遊びでレベルアップできる最大レベル
+
+# ==========================================
+# 設定カスタマイズ例
+# ==========================================
+
+# 【例1】より強力なペットを作りやすくする
+# breed:
+#   randomMin: 0.98
+#   randomMax: 1.15
+#   mutationChance: 0.10
+#   mutationBoost: 1.2
+#   genBonusPerGen: 0.02
+#   genBonusMax: 0.30
+#   statCap: 2.0
+#   bonusLevelPerGen: 2
+#   bonusLevelMax: 20
+
+# 【例2】ハードモード（育成難易度を上げる）
+# breed:
+#   randomMin: 0.90
+#   randomMax: 1.10
+#   mutationChance: 0.02
+#   mutationBoost: 1.05
+#   genBonusPerGen: 0.005
+#   genBonusMax: 0.10
+#   statCap: 1.3
+#   bonusLevelPerGen: 0
+#   bonusLevelMax: 0
+
+# 【例3】価格を調整
+# shop:
+#   defaultCost: 200
+# economy:
+#   foodPointCost: 5
+# revive:
+#   cost: 50
+# recover:
+#   cost: 50

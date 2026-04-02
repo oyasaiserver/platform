@@ -337,6 +337,7 @@ gradle-app.setting
 ### Kotlin template
 # Compiled class file
 *.class
+.kotlin
 
 # Log file
 *.log
@@ -417,11 +418,6 @@ local
 # nix
 result
 result-*
-
-# Gradle is provided via devshell
-gradlew
-gradlew.bat
-gradle/wrapper
 
 # direnv
 .envrc

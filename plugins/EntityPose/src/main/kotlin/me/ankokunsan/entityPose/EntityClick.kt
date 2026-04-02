@@ -1,8 +1,12 @@
 package me.ankokunsan.entityPose
 
-import kotlin.math.roundToInt
+import java.util.UUID
+import kotlin.collections.filter
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
+import me.ankokunsan.entityPose.EntityCopyClick.Companion.selection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.GUI_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
@@ -10,23 +14,20 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.ArmorStand
-import org.bukkit.entity.Cat
-import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.ExperienceOrb
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Parrot
 import org.bukkit.entity.Player
-import org.bukkit.entity.Wolf
+import org.bukkit.entity.Sittable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -38,13 +39,12 @@ import org.bukkit.persistence.PersistentDataType
 
 class EntityClick : Listener {
 
-  private val selectedPart = mutableMapOf<java.util.UUID, StandPart>()
-  private val selectPart = mutableMapOf<java.util.UUID, EntiPart>()
+  private val selectedPart = mutableMapOf<Pair<UUID, EntityType>, StandPart>()
+  private val selectPart = mutableMapOf<Pair<UUID, EntityType>, EntiPart>()
 
   companion object {
-    val inputWait = mutableMapOf<java.util.UUID, Entity>()
-    val currentStep = mutableMapOf<java.util.UUID, Double>()
-    val currentZah = mutableMapOf<java.util.UUID, Double>()
+    val currentStep = mutableMapOf<UUID, Double>()
+    val currentZah = mutableMapOf<UUID, Double>()
   }
 
   private fun actionBar(player: Player, text: String) {
@@ -55,8 +55,19 @@ class EntityClick : Listener {
   fun onHeldstick(event: PlayerItemHeldEvent) {
     val player = event.player
     val item = player.inventory.getItem(event.newSlot)
-    if (isEntiStick(item) && player.hasPermission("entitypose_arrange")) {
+    val isTargetItem = isEntiStick(item) || isCopyWand(item)
+    if (isTargetItem && player.hasPermission("entitypose_arrange")) {
       AirBlock.startglowing(player)
+    }
+  }
+
+  @EventHandler
+  fun onManipulate(event: PlayerArmorStandManipulateEvent) {
+    val hand = event.player.inventory.itemInMainHand
+    val armor = event.rightClicked
+    if (isEntiStick(hand) ||
+        armor.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
+      event.isCancelled = true
     }
   }
 
@@ -68,29 +79,34 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val target = event.entity
-    if (target.scoreboardTags.contains("entity_locked")) {
-      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています。")
+    if (target.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
+      return
+    }
+    if (target is Player) {
+      actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
       return
     }
     AirBlock.airblockplace(player)
     event.isCancelled = true
-    inputWait[player.uniqueId] = target
+
+    val key = player.uniqueId to target.type
 
     if (target is ArmorStand) {
-      val current = selectedPart[target.uniqueId] ?: StandPart.Z
+      val current = selectedPart[key] ?: StandPart.Z
       val next = if (player.isSneaking) current.prev() else current.next()
 
-      selectedPart[target.uniqueId] = next
+      selectedPart[key] = next
       actionBar(player, "現在の選択部位→ ${next.display}")
     } else if (target is LivingEntity) {
       if (target.hasAI()) {
-        player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
+        player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
         return
       }
-      val current = selectPart[target.uniqueId] ?: EntiPart.HAN
+      val current = selectPart[key] ?: EntiPart.HAN
       val next1 = if (player.isSneaking) current.prev() else current.next()
 
-      selectPart[target.uniqueId] = next1
+      selectPart[key] = next1
       actionBar(player, "現在の選択→ ${next1.display}")
     }
   }
@@ -102,25 +118,43 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return
     event.isCancelled = true
-    val result =
-        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.5) {
-          it != player && it !is ExperienceOrb
-        }
-    val target = result?.hitEntity
-    if (target == null) {
-      player.sendMessage("§6[EntityPose] §c視線の先にエンティティがありません")
-      return
-    }
-    if (target is LivingEntity && target.hasAI()) {
-      player.sendMessage("§6[EntityPose] §cこのモブはAIが有効です。")
-      return
-    }
     if (player.isSneaking) {
       ChooseGUi.openZahyoGUI(player)
       player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
     } else {
       ChooseGUi.openKakudoGUI(player)
       player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1.0f, 2.0f)
+    }
+  }
+
+  @EventHandler
+  fun onDropEvent(event: PlayerDropItemEvent) {
+    val player = event.player
+    val item = event.itemDrop.itemStack
+    if (!isEntiStick(item)) return
+    if (!player.hasPermission("entitypose_arrange")) return
+    if (player.isSneaking) return
+    event.isCancelled = true
+    val result =
+        player.world.rayTraceEntities(player.eyeLocation, player.location.direction, 3.0, 0.1) {
+          it != player
+        }
+    val target = result?.hitEntity ?: return
+    if (target is Player) {
+      player.sendMessage("§6[EntityPose] §cプレイヤーの情報を見たり、いじろうとしないでね")
+      return
+    }
+    if (target is LivingEntity && target.hasAI()) {
+      player.sendMessage("§6[EntityPose] §cこのエンティティはAIが有効です")
+      return
+    }
+    val selected = activeselection[player.uniqueId]
+    if (selected != null && selected.contains(target)) {
+      val targets = selected.filter { it.isValid }
+      ChooseGUi.openAllSettingGUI(player, targets)
+    } else {
+      ChooseGUi.openSettingGUI(player, target)
+      return
     }
   }
 
@@ -522,6 +556,68 @@ class EntityClick : Listener {
 
         player.openInventory(inv3)
       }
+      "PARROT" -> {
+        event.isCancelled
+        val inv4 =
+            Bukkit.createInventory(
+                player, // holder（nullでもOK）
+                9,
+                "§3オウム選択")
+        val redItem =
+            CustomHead.get("5d1a168bc72cb314f7c86feef9d9bc7612365244ce67f0a104fce04203430c1d")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}赤色")
+                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "RED")
+                      }
+                }
+        val blueItem =
+            CustomHead.get("20e03b10c15ee5601423867dfb8bcbcbc919ca96c0eea63073ec8e795eabd05f")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}青色")
+                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "BLUE")
+                      }
+                }
+        val greenItem =
+            CustomHead.get("5fc9a3b9d5879c2150984dbfe588cc2e61fb1de1e60fd2a469f69dd4b6f6a993")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}緑色")
+                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "GREEN")
+                      }
+                }
+        val liblItem =
+            CustomHead.get("bc6471f23547b2dbdf60347ea128f8eb2baa6a79b0401724f23bd4e2564a2b61")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}シアン")
+                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "CYAN")
+                      }
+                }
+        val grayItem =
+            CustomHead.get("a3c34722ac64496c9b84d0c54019daae6185d6094990133ad6810eea3d24067a")
+                .apply {
+                  itemMeta =
+                      itemMeta!!.apply {
+                        setDisplayName("${ChatColor.GREEN}灰色")
+                        persistentDataContainer.set(PARROT_KEY, PersistentDataType.STRING, "GRAY")
+                      }
+                }
+
+        inv4.setItem(0, redItem)
+        inv4.setItem(1, blueItem)
+        inv4.setItem(2, greenItem)
+        inv4.setItem(3, liblItem)
+        inv4.setItem(4, grayItem)
+        val filler = getFiller()
+        (0 until inv4.size).forEach { i -> if (inv4.getItem(i) == null) inv4.setItem(i, filler) }
+        player.openInventory(inv4)
+      }
     }
   }
 
@@ -535,22 +631,6 @@ class EntityClick : Listener {
     // 叩いた対象が、今追従させているものと一致する場合のみ実行
     if (currentPreview != entity) return
     event.isCancelled = true
-
-    val loc = entity.location
-    val directionToPlayer = player.eyeLocation.toVector().subtract(loc.toVector())
-    val lookAtYaw = loc.clone().setDirection(directionToPlayer).yaw
-    val snappedYaw = ((lookAtYaw / 45.0).roundToInt() * 45.0).toFloat()
-
-    val gridLoc =
-        Location(
-            loc.world,
-            loc.blockX + 0.5, // X軸の真ん中
-            loc.blockY.toDouble(), // 高さはそのまま（空中可）
-            loc.blockZ + 0.5, // Z軸の真ん中
-            snappedYaw,
-            0f // 垂直に向かせる
-            )
-    entity.teleport(gridLoc)
     entity.setGravity(false)
 
     player.sendMessage("§6[EntityPose] §aエンティティを固定しました！")
@@ -565,21 +645,43 @@ class EntityClick : Listener {
     if (!isEntiStick(hand)) return
     if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.rightClicked
-    if (entity.scoreboardTags.contains("entity_locked")) {
-      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています。")
+    if (entity.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
+      return
+    }
+    if (entity is Player) {
+      actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
       return
     }
     event.isCancelled = true
     entity.isPersistent = true
-    inputWait[player.uniqueId] = entity
-    val step = currentStep[entity.uniqueId] ?: 1.0
+    val key = player.uniqueId to entity.type
+    val step = currentStep[player.uniqueId] ?: 1.0
     val delta = (if (player.isSneaking) -step else step).toFloat()
-    val step2 = currentZah[entity.uniqueId] ?: 1.0
+    val step2 = currentZah[player.uniqueId] ?: 1.0
     val move1 = if (player.isSneaking) -step2 else step2
 
     if (entity is ArmorStand) {
-      val part = selectedPart[entity.uniqueId] ?: return
+      val part = selectedPart[key] ?: return
       val rad = Math.toRadians(delta.toDouble())
+      val selected = activeselection[player.uniqueId]
+      val ismoveMode =
+          part == StandPart.X || part == StandPart.Y || part == StandPart.Z || part == StandPart.ALL
+      val targets =
+          if (ismoveMode && selected != null && selected.contains(entity)) {
+            selected.filter {
+              it.isValid &&
+                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            }
+          } else {
+            listOf(entity)
+          }
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
       when (part) {
         StandPart.HEAD_X -> {
           entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
@@ -690,34 +792,55 @@ class EntityClick : Listener {
         }
 
         StandPart.ALL -> {
-          val loc = entity.location
-          loc.yaw = (loc.yaw + delta)
-          entity.teleport(loc)
-          actionBar(player, "§a全体: ${formatDeg(loc.yaw.toDouble())}")
+          targets.forEach { target ->
+            val loc = target.location.clone()
+            loc.yaw += delta
+            target.teleport(loc)
+          }
+          val deg = entity.location.yaw.toDouble()
+          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
         }
         StandPart.X -> {
-          entity.teleport(entity.location.add(move1, 0.0, 0.0))
-          actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
+          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         StandPart.Y -> {
-          entity.teleport(entity.location.add(0.0, move1, 0.0))
-          actionBar(player, "§aY座標変更中: §f${formatLoc(entity.location.y)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
+          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
         }
         StandPart.Z -> {
-          entity.teleport(entity.location.add(0.0, 0.0, move1))
-          actionBar(player, "§aZ座標変更中: §f${formatLoc(entity.location.z)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
+          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
         }
       }
       return
     }
 
     if (entity is LivingEntity) {
-      val part1 = selectPart[entity.uniqueId] ?: return
+      val part1 = selectPart[key] ?: return
+      val selected1 = activeselection[player.uniqueId]
+      val ismoveMode1 =
+          part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
+      val targets =
+          if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
+            selected1.filter {
+              it.isValid &&
+                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            }
+          } else {
+            listOf(entity)
+          }
       val deltaF = (if (player.isSneaking) -step else step).toFloat()
-      val loc = entity.location.clone()
+      val suffix =
+          if (targets.size > 1) {
+            "§6(${targets.size}体を同時に操作中)"
+          } else {
+            ""
+          }
 
       when (part1) {
         EntiPart.HEAD -> {
+          val loc = entity.location.clone()
           loc.pitch = (loc.pitch + deltaF).coerceIn(-90f, 90f)
           entity.teleport(loc)
 
@@ -726,44 +849,35 @@ class EntityClick : Listener {
         }
 
         EntiPart.ALL -> {
-          val newYaw = loc.yaw + deltaF
-          entity.setRotation(newYaw, loc.pitch)
-          actionBar(player, "§a全体: ${formatDeg(newYaw.toDouble())}°")
+          targets.forEach { target ->
+            val loc = target.location.clone()
+            loc.yaw += deltaF
+            target.teleport(loc)
+          }
+          val deg = entity.location.yaw.toDouble()
+          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
         }
 
         EntiPart.SITTING -> {
           when (entity) {
-            is Wolf -> {
+            is Sittable -> {
               entity.isSitting = !entity.isSitting
               actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
             }
-            is Cat -> {
-              entity.isSitting = !entity.isSitting
-              actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
-            }
-            is Parrot -> {
-              entity.isSitting = !entity.isSitting
-              actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
-            }
-
-            else -> actionBar(player, "§6[EntityPose] §cこのモブは座れません、残念;;")
+            else -> actionBar(player, "§6[EntityPose] §cこのエンティティは座れません。残念;;")
           }
         }
-        EntiPart.ZAHYO -> {
-          ChooseGUi.openZahyoGUI(player)
-          return
-        }
         EntiPart.X -> {
-          entity.teleport(entity.location.add(move1, 0.0, 0.0))
-          actionBar(player, "§aX座標変更中: §f${formatLoc(entity.location.x)}")
+          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
         }
         EntiPart.Y -> {
-          entity.teleport(entity.location.add(0.0, move1, 0.0))
-          actionBar(player, "§aY座標変更中: §f${formatLoc(entity.location.y)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
+          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
         }
         EntiPart.Z -> {
-          entity.teleport(entity.location.add(0.0, 0.0, move1))
-          actionBar(player, "§aZ座標変更中: §f${formatLoc(entity.location.z)}")
+          targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
+          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
         }
         EntiPart.HAN -> {
           val board = Bukkit.getScoreboardManager()!!.mainScoreboard
@@ -784,7 +898,17 @@ class EntityClick : Listener {
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
-    currentStep.remove(event.player.uniqueId)
+    val uuid = event.player.uniqueId
+    currentStep.remove(uuid)
+    currentZah.remove(uuid)
+
+    if (selection.containsKey(uuid)) {
+      stopHighlight(uuid)
+      selection.remove(uuid)
+      activeselection.remove(uuid)
+    }
+    selectedPart.keys.removeIf { it.first == uuid }
+    selectPart.keys.removeIf { it.first == uuid }
   }
 
   private fun formatDeg(value: Double): String {
