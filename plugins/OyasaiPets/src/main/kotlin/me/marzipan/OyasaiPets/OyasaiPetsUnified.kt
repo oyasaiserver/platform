@@ -947,7 +947,9 @@ object BigWolfConfig {
         else -> 0
       }
 
-  @Deprecated("Use getSkillBookShopCost or getSkillBookUseCost instead", replaceWith = ReplaceWith("getSkillBookUseCost(level)"))
+  @Deprecated(
+      "Use getSkillBookShopCost or getSkillBookUseCost instead",
+      replaceWith = ReplaceWith("getSkillBookUseCost(level)"))
   fun getSkillBookCost(level: Int): Int = getSkillBookUseCost(level)
 
   /** 全コンフィグキーと現在値のリストを返す */
@@ -1456,10 +1458,11 @@ object PetDataManager {
 
   private fun getPetFileName(petData: PetData): String {
     val number = petData.petNumber.toString().padStart(3, '0')
-    val variant = petData.variant?.let { v ->
-      val safe = v.replace(Regex("[^a-zA-Z0-9_-]"), "")
-      if (safe.isNotEmpty()) "_$safe" else ""
-    } ?: ""
+    val variant =
+        petData.variant?.let { v ->
+          val safe = v.replace(Regex("[^a-zA-Z0-9_-]"), "")
+          if (safe.isNotEmpty()) "_$safe" else ""
+        } ?: ""
     return "${number}_${petData.type}${variant}.json"
   }
 
@@ -1476,7 +1479,8 @@ object PetDataManager {
     try {
       file.writeText(json)
     } catch (e: Exception) {
-      plugin.logger.warning("Failed to save pet data for $ownerUuid / ${petData.petId}: ${e.message}")
+      plugin.logger.warning(
+          "Failed to save pet data for $ownerUuid / ${petData.petId}: ${e.message}")
     }
 
     if (syncBack) {
@@ -3634,7 +3638,8 @@ object VariantHandler {
 
       EntityType.AXOLOTL -> Axolotl.Variant.entries.map { it.name }
       EntityType.PARROT -> Parrot.Variant.entries.map { it.name }
-      EntityType.RABBIT -> Rabbit.Type.entries.filter { it != Rabbit.Type.THE_KILLER_BUNNY }.map { it.name }
+      EntityType.RABBIT ->
+          Rabbit.Type.entries.filter { it != Rabbit.Type.THE_KILLER_BUNNY }.map { it.name }
       EntityType.LLAMA,
       EntityType.TRADER_LLAMA -> Llama.Color.entries.map { it.name }
       EntityType.HORSE -> Horse.Color.entries.map { it.name }
@@ -4095,12 +4100,7 @@ class GuiManager {
 
     // 下段左 (スロット10): ショップに戻る
     inv.setItem(
-        10,
-        createItem(
-            Material.ARROW,
-            "← ショップへ戻る",
-            WHITE,
-            Component.text("ペット一覧に戻る", GRAY)))
+        10, createItem(Material.ARROW, "← ショップへ戻る", WHITE, Component.text("ペット一覧に戻る", GRAY)))
 
     // 下段右 (スロット16): キャンセル
     inv.setItem(16, createItem(Material.BARRIER, "閉じる", RED, Component.text("GUIを閉じる", GRAY)))
@@ -4198,12 +4198,11 @@ class GuiManager {
             PetListFilter.STORED -> allPets.count { it.status == PetStatus.STORED }
             PetListFilter.DEAD -> allPets.count { it.status == PetStatus.DEAD }
           }
-      val lore =
-          buildList {
-            add(Component.text("${count}匹", f.statusColor))
-            if (isActive) add(Component.text("▶ 現在表示中", GREEN))
-            else add(Component.text("クリックで切り替え", GRAY))
-          }
+      val lore = buildList {
+        add(Component.text("${count}匹", f.statusColor))
+        if (isActive) add(Component.text("▶ 現在表示中", GREEN))
+        else add(Component.text("クリックで切り替え", GRAY))
+      }
       inv.setItem(
           idx,
           createItem(
@@ -4218,12 +4217,7 @@ class GuiManager {
 
     // メインメニューへ戻るボタン（右上端）
     inv.setItem(
-        8,
-        createItem(
-            Material.BARRIER,
-            "← メインメニューへ",
-            WHITE,
-            Component.text("メインメニューに戻る", GRAY)))
+        8, createItem(Material.BARRIER, "← メインメニューへ", WHITE, Component.text("メインメニューに戻る", GRAY)))
 
     // ペット一覧 (スロット 9-44)
     val startIdx = (currentPage - 1) * petsPerPage
@@ -4232,9 +4226,9 @@ class GuiManager {
       val slot = i + 9
       val eggMat = Material.getMaterial("${pet.type}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
       val typeName =
-          runCatching { EntityType.valueOf(pet.type) }.getOrNull()?.let {
-            MobTranslator.toJapanese(it)
-          } ?: pet.type
+          runCatching { EntityType.valueOf(pet.type) }
+              .getOrNull()
+              ?.let { MobTranslator.toJapanese(it) } ?: pet.type
       val variantStr = pet.variant?.let { " (${MobTranslator.translateVariant(it)})" } ?: ""
       val plainName = pet.customName?.let { PLAIN_TEXT.serialize(LEGACY_AMP.deserialize(it)) }
       val statusStr =
@@ -4245,8 +4239,7 @@ class GuiManager {
           }
       val lore =
           mutableListOf(
-              Component.text("状態: ", GRAY)
-                  .append(Component.text(statusStr, pet.status.guiColor())),
+              Component.text("状態: ", GRAY).append(Component.text(statusStr, pet.status.guiColor())),
               Component.text("レベル: ${pet.foodLevel} / ${BigWolfConfig.maxFoodLevel}", GRAY))
       if (plainName != null) lore.add(0, Component.text("名前: 「$plainName」", WHITE))
       lore.add(Component.text("クリックで詳細を表示", DARK_AQUA))
@@ -4314,9 +4307,9 @@ class GuiManager {
     for (i in 0 until 54) inv.setItem(i, glassPane)
 
     val typeName =
-        runCatching { EntityType.valueOf(pet.type) }.getOrNull()?.let {
-          MobTranslator.toJapanese(it)
-        } ?: pet.type
+        runCatching { EntityType.valueOf(pet.type) }
+            .getOrNull()
+            ?.let { MobTranslator.toJapanese(it) } ?: pet.type
     val variantStr = pet.variant?.let { " (${MobTranslator.translateVariant(it)})" } ?: ""
     val plainName = pet.customName?.let { PLAIN_TEXT.serialize(LEGACY_AMP.deserialize(it)) }
     val statusColor = pet.status.guiColor()
@@ -4385,8 +4378,7 @@ class GuiManager {
               RED,
               Component.text("死亡日時: ${deathData.deathTime.take(16)}", GRAY),
               Component.text("場所: ${loc.world}", GRAY),
-              Component.text(
-                  "  X:${loc.x.toInt()} Y:${loc.y.toInt()} Z:${loc.z.toInt()}", GRAY)))
+              Component.text("  X:${loc.x.toInt()} Y:${loc.y.toInt()} Z:${loc.z.toInt()}", GRAY)))
     } else if (lastLoc != null) {
       inv.setItem(
           16,
@@ -4431,8 +4423,7 @@ class GuiManager {
         val toName =
             runCatching { Bukkit.getOfflinePlayer(UUID.fromString(record.toOwner)).name }
                 .getOrNull() ?: record.toOwner.take(8)
-        transferLore.add(
-            Component.text("${record.timestamp.take(10)}: $fromName → $toName", GRAY))
+        transferLore.add(Component.text("${record.timestamp.take(10)}: $fromName → $toName", GRAY))
       }
       inv.setItem(22, createItem(Material.PLAYER_HEAD, "譲渡履歴", GOLD, *transferLore.toTypedArray()))
     }
@@ -4440,12 +4431,7 @@ class GuiManager {
     // アクションボタン (最終行 スロット45-53)
     // スロット45: 戻る
     inv.setItem(
-        45,
-        createItem(
-            Material.ARROW,
-            "← 一覧に戻る",
-            GREEN,
-            Component.text("ペット一覧に戻ります", GRAY)))
+        45, createItem(Material.ARROW, "← 一覧に戻る", GREEN, Component.text("ペット一覧に戻ります", GRAY)))
 
     // スロット47: 主要アクション（状態別）
     when (pet.status) {
@@ -4518,9 +4504,9 @@ class GuiManager {
     for (i in 0 until 27) inv.setItem(i, glassPane)
 
     val typeName =
-        runCatching { EntityType.valueOf(pet.type) }.getOrNull()?.let {
-          MobTranslator.toJapanese(it)
-        } ?: pet.type
+        runCatching { EntityType.valueOf(pet.type) }
+            .getOrNull()
+            ?.let { MobTranslator.toJapanese(it) } ?: pet.type
     val variantStr = pet.variant?.let { " (${MobTranslator.translateVariant(it)})" } ?: ""
     val plainName = pet.customName?.let { PLAIN_TEXT.serialize(LEGACY_AMP.deserialize(it)) }
     val nameDisplay = plainName?.let { "「$it」" } ?: "$typeName$variantStr"
@@ -4715,8 +4701,7 @@ class PetDetailGuiListener(
           player.sendMessage(
               Component.text("▶ /bigwolf rename ${ctx.pet.petNumber} <新しい名前>", GREEN)
                   .hoverEvent(Component.text("クリックでコマンドを入力欄に挿入"))
-                  .clickEvent(
-                      ClickEvent.suggestCommand("/bigwolf rename ${ctx.pet.petNumber} ")))
+                  .clickEvent(ClickEvent.suggestCommand("/bigwolf rename ${ctx.pet.petNumber} ")))
         }
       }
       51 -> {
@@ -5777,11 +5762,12 @@ class PetInventoryListener(
           return
         }
         val currentSkill = entity.skillType
-        val nextSkill = if (event.isRightClick) {
-          if (currentSkill > 1) currentSkill - 1 else unlocked
-        } else {
-          if (currentSkill < unlocked) currentSkill + 1 else 1
-        }
+        val nextSkill =
+            if (event.isRightClick) {
+              if (currentSkill > 1) currentSkill - 1 else unlocked
+            } else {
+              if (currentSkill < unlocked) currentSkill + 1 else 1
+            }
 
         entity.skillType = nextSkill
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1f, 1f)
@@ -5940,7 +5926,8 @@ class PetLifecycleListener(
     val vehiclePetId = vehicle?.petId
     val vehicleOwnerId = vehicle?.ownerId
     if (vehicle != null && vehiclePetId != null && vehicleOwnerId != null) {
-      runCatching { UUID.fromString(vehicleOwnerId) }.getOrNull()
+      runCatching { UUID.fromString(vehicleOwnerId) }
+          .getOrNull()
           ?.let { PetDataManager.updateLastLocation(it, vehiclePetId, vehicle.location) }
     }
 
@@ -6216,7 +6203,8 @@ class PetShopGuiListener(
       val clickedItem = event.currentItem ?: return
 
       when (clickedItem.type) {
-        Material.AIR, Material.EMERALD -> return
+        Material.AIR,
+        Material.EMERALD -> return
         Material.ARROW -> {
           // 戻るボタン
           player.closeInventory()
@@ -7062,16 +7050,17 @@ class PetQueryService(
         }
 
     // ヘッダー
-    player.sendMessage(
-        Component.text("=== ペット詳細 #${pet.petNumber} $typeName$variantStr ===", GOLD))
+    player.sendMessage(Component.text("=== ペット詳細 #${pet.petNumber} $typeName$variantStr ===", GOLD))
 
     // 基本情報
     if (plainName != null) {
       player.sendMessage(Component.text("名前: 「$plainName」", WHITE))
     }
-    player.sendMessage(Component.text("状態: ", GRAY).append(Component.text("[$statusStr]", statusColor)))
+    player.sendMessage(
+        Component.text("状態: ", GRAY).append(Component.text("[$statusStr]", statusColor)))
     player.sendMessage(Component.text("種族: $typeName$variantStr", WHITE))
-    player.sendMessage(Component.text("レベル: ${pet.foodLevel} / ${BigWolfConfig.maxFoodLevel}", GREEN))
+    player.sendMessage(
+        Component.text("レベル: ${pet.foodLevel} / ${BigWolfConfig.maxFoodLevel}", GREEN))
     player.sendMessage(
         Component.text("スキル: Lv.${pet.skillType} (解放済み: Lv.${pet.skillUnlockedLevel})", AQUA))
     player.sendMessage(Component.text("購入日: ${pet.purchasedAt.take(10)}", GRAY))
@@ -7127,8 +7116,7 @@ class PetQueryService(
       val loc = deathData.location
       player.sendMessage(
           Component.text(
-              "  場所: ${loc.world} (${loc.x.toInt()}, ${loc.y.toInt()}, ${loc.z.toInt()})",
-              GRAY))
+              "  場所: ${loc.world} (${loc.x.toInt()}, ${loc.y.toInt()}, ${loc.z.toInt()})", GRAY))
     }
 
     // 最終位置（生存・収納中のみ）
@@ -7147,14 +7135,13 @@ class PetQueryService(
       PetStatus.DEAD ->
           player.sendMessage(
               Component.text("[▶ 復活する (${BigWolfConfig.reviveCost}pt)]", GREEN)
-                  .hoverEvent(
-                      Component.text("/bigwolf revive ${pet.petNumber} を実行します"))
+                  .hoverEvent(Component.text("/bigwolf revive ${pet.petNumber} を実行します"))
                   .clickEvent(ClickEvent.runCommand("/bigwolf revive ${pet.petNumber}")))
-      PetStatus.ALIVE, PetStatus.STORED ->
+      PetStatus.ALIVE,
+      PetStatus.STORED ->
           player.sendMessage(
               Component.text("[▶ 放棄する]", RED)
-                  .hoverEvent(
-                      Component.text("/bigwolf abandon ${pet.petNumber} を入力欄に挿入します"))
+                  .hoverEvent(Component.text("/bigwolf abandon ${pet.petNumber} を入力欄に挿入します"))
                   .clickEvent(ClickEvent.suggestCommand("/bigwolf abandon ${pet.petNumber}")))
     }
   }
@@ -7576,9 +7563,7 @@ class PetShopGuiService(
               itemMeta?.apply {
                 displayName(Component.text("パーティクル結晶", LIGHT_PURPLE))
                 lore(
-                    listOf(
-                        Component.text("特殊エフェクトをアンロック", GRAY),
-                        Component.text("クリックで開く", GREEN)))
+                    listOf(Component.text("特殊エフェクトをアンロック", GRAY), Component.text("クリックで開く", GREEN)))
               }
         })
 
@@ -7589,10 +7574,7 @@ class PetShopGuiService(
           itemMeta =
               itemMeta?.apply {
                 displayName(Component.text("おもちゃ", YELLOW))
-                lore(
-                    listOf(
-                        Component.text("各種ペット用おもちゃ", GRAY),
-                        Component.text("クリックで開く", GREEN)))
+                lore(listOf(Component.text("各種ペット用おもちゃ", GRAY), Component.text("クリックで開く", GREEN)))
               }
         })
 
@@ -7636,8 +7618,7 @@ class PetShopGuiService(
           meta.lore(
               currentLore +
                   listOf(
-                      Component.text("価格: ${ci.cost}pt", GOLD),
-                      Component.text("クリックで購入", GREEN)))
+                      Component.text("価格: ${ci.cost}pt", GOLD), Component.text("クリックで購入", GREEN)))
           ci.item.itemMeta = meta
           inv.setItem(ci.slot, ci.item)
         }
@@ -7645,10 +7626,7 @@ class PetShopGuiService(
     inv.setItem(
         9,
         ItemStack(Material.ARROW).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("← アイテムショップへ戻る", WHITE))
-              }
+          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
         })
     inv.setItem(
         13,
@@ -7672,19 +7650,17 @@ class PetShopGuiService(
       val meta = item.itemMeta ?: return@forEach
       val currentLore = meta.lore() ?: mutableListOf()
       meta.lore(
-          currentLore + listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN)))
+          currentLore +
+              listOf(Component.text("価格: ${cost}pt", GOLD), Component.text("クリックで購入", GREEN)))
       item.itemMeta = meta
-      val slot = (level - 1) * 2 + 2  // 2, 4, 6
+      val slot = (level - 1) * 2 + 2 // 2, 4, 6
       inv.setItem(slot, item)
     }
 
     inv.setItem(
         9,
         ItemStack(Material.ARROW).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("← アイテムショップへ戻る", WHITE))
-              }
+          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
         })
     inv.setItem(
         13,
@@ -7717,10 +7693,7 @@ class PetShopGuiService(
     inv.setItem(
         9,
         ItemStack(Material.ARROW).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("← アイテムショップへ戻る", WHITE))
-              }
+          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
         })
     inv.setItem(
         13,
@@ -7759,10 +7732,7 @@ class PetShopGuiService(
     inv.setItem(
         controlRowStart,
         ItemStack(Material.ARROW).apply {
-          itemMeta =
-              itemMeta?.apply {
-                displayName(Component.text("← アイテムショップへ戻る", WHITE))
-              }
+          itemMeta = itemMeta?.apply { displayName(Component.text("← アイテムショップへ戻る", WHITE)) }
         })
     inv.setItem(
         controlRowStart + 4,
@@ -7870,7 +7840,8 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     item.itemMeta = meta
 
     // PetDataManagerに収納状態を記録
-    ownerId?.let { runCatching { UUID.fromString(it) }.getOrNull() }
+    ownerId
+        ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
         ?.let { PetDataManager.markAsStored(it, pid, entity) }
 
     return item
@@ -8676,38 +8647,30 @@ class BreedingSystem(
       if (newEntity.isAtypical()) {
         player.sendMessage(
             Component.text(
-                "★★ 新しいペットが誕生しました！ (第${newGeneration}世代) [$temperamentDisplay]",
-                LIGHT_PURPLE))
+                "★★ 新しいペットが誕生しました！ (第${newGeneration}世代) [$temperamentDisplay]", LIGHT_PURPLE))
       } else {
-        player.sendMessage(
-            Component.text("★ 新しいペットが誕生しました！ (第${newGeneration}世代)", GREEN))
+        player.sendMessage(Component.text("★ 新しいペットが誕生しました！ (第${newGeneration}世代)", GREEN))
       }
-      player.sendMessage(
-          Component.text("  ${petData.customName ?: ""}", GRAY))
+      player.sendMessage(Component.text("  ${petData.customName ?: ""}", GRAY))
       player.sendMessage(
           Component.text("  速度: ", GRAY)
-              .append(
-                  Component.text(String.format("%.3f", newSpeed), if (isCapped) RED else GREEN))
+              .append(Component.text(String.format("%.3f", newSpeed), if (isCapped) RED else GREEN))
               .append(Component.text("  ジャンプ: ", GRAY))
-              .append(
-                  Component.text(String.format("%.3f", newJump), if (isCapped) RED else GREEN)))
+              .append(Component.text(String.format("%.3f", newJump), if (isCapped) RED else GREEN)))
       val bonuses = buildList {
         add(
             Component.text(
-                "ランダム${(randomFactor * 100).toInt()}%",
-                if (randomFactor >= 1.0) GREEN else YELLOW))
-        if (genBonus > 0)
-            add(Component.text("世代補正+${String.format("%.2f", genBonus)}", AQUA))
+                "ランダム${(randomFactor * 100).toInt()}%", if (randomFactor >= 1.0) GREEN else YELLOW))
+        if (genBonus > 0) add(Component.text("世代補正+${String.format("%.2f", genBonus)}", AQUA))
         if (hasMutation) add(Component.text("突然変異★", LIGHT_PURPLE))
         if (bonusLevel > 0) add(Component.text("初期Lv+$bonusLevel", GREEN))
         if (isCapped) add(Component.text("上限到達", RED))
       }
       if (bonuses.isNotEmpty()) {
         val line =
-            bonuses.drop(1).fold(
-                Component.text("  ボーナス: ", GRAY).append(bonuses[0])) { acc, c ->
-                  acc.append(Component.text(" / ", DARK_GRAY)).append(c)
-                }
+            bonuses.drop(1).fold(Component.text("  ボーナス: ", GRAY).append(bonuses[0])) { acc, c ->
+              acc.append(Component.text(" / ", DARK_GRAY)).append(c)
+            }
         player.sendMessage(line)
       }
     }
@@ -8817,8 +8780,12 @@ class BreedingSystem(
     // 各バリアントの重みを集計（同じ親バリアントが両親に一致する場合は2倍）
     // 重みはconfig.ymlの breed.variantWeights で設定可能
     val weights = LinkedHashMap<String, Int>()
-    parent1Variant?.let { weights[it] = (weights[it] ?: 0) + BigWolfConfig.breedParentVariantWeight }
-    parent2Variant?.let { weights[it] = (weights[it] ?: 0) + BigWolfConfig.breedParentVariantWeight }
+    parent1Variant?.let {
+      weights[it] = (weights[it] ?: 0) + BigWolfConfig.breedParentVariantWeight
+    }
+    parent2Variant?.let {
+      weights[it] = (weights[it] ?: 0) + BigWolfConfig.breedParentVariantWeight
+    }
     for (variant in availableVariants) {
       if (variant !in parentVariants) {
         weights[variant] = BigWolfConfig.breedOtherVariantWeight
@@ -9340,10 +9307,8 @@ class FetchSystem(
     activeFetchTasks[entity.uniqueId]?.cancel()
 
     // 元の移動速度を保存し、一時的にAI移動を有効化
-    val originalSpeed =
-        entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
-    entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue =
-        0.3 // イルカのデフォルト速度
+    val originalSpeed = entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
+    entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = 0.3 // イルカのデフォルト速度
 
     val task =
         object : BukkitRunnable() {
@@ -9521,8 +9486,7 @@ class FetchSystem(
 
           fun cleanup(returnItem: Boolean) {
             // 移動速度を元に戻す
-            entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue =
-                originalSpeed
+            entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue = originalSpeed
 
             // 風船が残っていれば必ず削除
             if (balloon.isValid) {
@@ -9876,13 +9840,7 @@ class PetControlSystem(
               val curSpeed =
                   spec.baseSpeed + (spec.maxSpeed - spec.baseSpeed) * progress * cachedSpeed
               PetDebugger.updateActionBar(
-                  player,
-                  ticks,
-                  cachedFood,
-                  curSpeed,
-                  cachedSkillType,
-                  jumpThisTick,
-                  tickNs)
+                  player, ticks, cachedFood, curSpeed, cachedSkillType, jumpThisTick, tickNs)
               if (ticks % 20 == 0) {
                 PetDebugger.flushControlSummary(player, cachedFood, curSpeed)
               }
