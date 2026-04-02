@@ -17,9 +17,15 @@ shop:
 
 # スキルブック設定
 skillbook:
-  costLv1: 50                 # スキルブック Lv.1 コスト
-  costLv2: 100                # スキルブック Lv.2 コスト
-  costLv3: 150                # スキルブック Lv.3 コスト
+  # ショップ購入コスト
+  shopCostLv1: 50             # スキルブック Lv.1 購入コスト
+  shopCostLv2: 100            # スキルブック Lv.2 購入コスト
+  shopCostLv3: 150            # スキルブック Lv.3 購入コスト
+  # 使用時の消費コスト
+  useCostLv1: 50              # スキルブック Lv.1 使用コスト
+  useCostLv2: 100             # スキルブック Lv.2 使用コスト
+  useCostLv3: 150             # スキルブック Lv.3 使用コスト
+  # 旧キー costLv* も下位互換として読み込まれます（未指定時はshop/useに同じ値が入ります）
 
 # ペット復活設定
 revive:

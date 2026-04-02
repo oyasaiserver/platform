@@ -688,9 +688,12 @@ object BigWolfConfig {
   var defaultShopCost = 100
 
   // スキルブック設定
-  var skillBookCostLv1 = 50
-  var skillBookCostLv2 = 100
-  var skillBookCostLv3 = 150
+  var skillBookShopCostLv1 = 50
+  var skillBookShopCostLv2 = 100
+  var skillBookShopCostLv3 = 150
+  var skillBookUseCostLv1 = 50
+  var skillBookUseCostLv2 = 100
+  var skillBookUseCostLv3 = 150
 
   // 復活設定
   var reviveCost = 50
@@ -766,10 +769,16 @@ object BigWolfConfig {
     // ショップ設定
     defaultShopCost = config.getInt("shop.defaultCost", defaultShopCost)
 
-    // スキルブック設定
-    skillBookCostLv1 = config.getInt("skillbook.costLv1", skillBookCostLv1)
-    skillBookCostLv2 = config.getInt("skillbook.costLv2", skillBookCostLv2)
-    skillBookCostLv3 = config.getInt("skillbook.costLv3", skillBookCostLv3)
+    // スキルブック設定（購入/使用で別コスト対応）
+    val legacySkillCostLv1 = config.getInt("skillbook.costLv1", skillBookShopCostLv1)
+    val legacySkillCostLv2 = config.getInt("skillbook.costLv2", skillBookShopCostLv2)
+    val legacySkillCostLv3 = config.getInt("skillbook.costLv3", skillBookShopCostLv3)
+    skillBookShopCostLv1 = config.getInt("skillbook.shopCostLv1", legacySkillCostLv1)
+    skillBookShopCostLv2 = config.getInt("skillbook.shopCostLv2", legacySkillCostLv2)
+    skillBookShopCostLv3 = config.getInt("skillbook.shopCostLv3", legacySkillCostLv3)
+    skillBookUseCostLv1 = config.getInt("skillbook.useCostLv1", legacySkillCostLv1)
+    skillBookUseCostLv2 = config.getInt("skillbook.useCostLv2", legacySkillCostLv2)
+    skillBookUseCostLv3 = config.getInt("skillbook.useCostLv3", legacySkillCostLv3)
 
     // 復活設定
     reviveCost = config.getInt("revive.cost", reviveCost)
@@ -844,9 +853,16 @@ object BigWolfConfig {
     config.addDefault("shop.defaultCost", defaultShopCost)
 
     // スキルブック設定
-    config.addDefault("skillbook.costLv1", skillBookCostLv1)
-    config.addDefault("skillbook.costLv2", skillBookCostLv2)
-    config.addDefault("skillbook.costLv3", skillBookCostLv3)
+    // 旧キー（costLv*）は互換性維持のため残しつつ、新しいshop/useキーも設定
+    config.addDefault("skillbook.costLv1", skillBookShopCostLv1)
+    config.addDefault("skillbook.costLv2", skillBookShopCostLv2)
+    config.addDefault("skillbook.costLv3", skillBookShopCostLv3)
+    config.addDefault("skillbook.shopCostLv1", skillBookShopCostLv1)
+    config.addDefault("skillbook.shopCostLv2", skillBookShopCostLv2)
+    config.addDefault("skillbook.shopCostLv3", skillBookShopCostLv3)
+    config.addDefault("skillbook.useCostLv1", skillBookUseCostLv1)
+    config.addDefault("skillbook.useCostLv2", skillBookUseCostLv2)
+    config.addDefault("skillbook.useCostLv3", skillBookUseCostLv3)
 
     // 復活設定
     config.addDefault("revive.cost", reviveCost)
@@ -915,14 +931,26 @@ object BigWolfConfig {
     config.addDefault("traits.childAiEnabled", childAiEnabled)
   }
 
-  /** スキルブックレベルに応じたコストを取得 */
-  fun getSkillBookCost(level: Int): Int =
+  /** スキルブック購入時のコスト */
+  fun getSkillBookShopCost(level: Int): Int =
       when (level) {
-        1 -> skillBookCostLv1
-        2 -> skillBookCostLv2
-        3 -> skillBookCostLv3
+        1 -> skillBookShopCostLv1
+        2 -> skillBookShopCostLv2
+        3 -> skillBookShopCostLv3
         else -> 0
       }
+
+  /** スキルブック使用時のコスト */
+  fun getSkillBookUseCost(level: Int): Int =
+      when (level) {
+        1 -> skillBookUseCostLv1
+        2 -> skillBookUseCostLv2
+        3 -> skillBookUseCostLv3
+        else -> 0
+      }
+
+  @Deprecated("Use getSkillBookShopCost or getSkillBookUseCost instead", replaceWith = ReplaceWith("getSkillBookUseCost(level)"))
+  fun getSkillBookCost(level: Int): Int = getSkillBookUseCost(level)
 
   /** 全コンフィグキーと現在値のリストを返す */
   fun asEntryList(): List<Pair<String, Any>> =
@@ -930,9 +958,12 @@ object BigWolfConfig {
           "foodPointCost" to foodPointCost,
           "maxFoodLevel" to maxFoodLevel,
           "defaultShopCost" to defaultShopCost,
-          "skillBookCostLv1" to skillBookCostLv1,
-          "skillBookCostLv2" to skillBookCostLv2,
-          "skillBookCostLv3" to skillBookCostLv3,
+          "skillBookShopCostLv1" to skillBookShopCostLv1,
+          "skillBookShopCostLv2" to skillBookShopCostLv2,
+          "skillBookShopCostLv3" to skillBookShopCostLv3,
+          "skillBookUseCostLv1" to skillBookUseCostLv1,
+          "skillBookUseCostLv2" to skillBookUseCostLv2,
+          "skillBookUseCostLv3" to skillBookUseCostLv3,
           "reviveCost" to reviveCost,
           "recoverCost" to recoverCost,
           "healItemAmount" to healItemAmount,
@@ -964,7 +995,13 @@ object BigWolfConfig {
       )
 
   /** キー名から現在値を取得 */
-  fun getField(key: String): Any? = asEntryList().find { it.first == key }?.second
+  fun getField(key: String): Any? =
+      when (key) {
+        "skillBookCostLv1" -> skillBookUseCostLv1
+        "skillBookCostLv2" -> skillBookUseCostLv2
+        "skillBookCostLv3" -> skillBookUseCostLv3
+        else -> asEntryList().find { it.first == key }?.second
+      }
 
   /** キー名と文字列値でコンフィグを変更（成功時true） */
   fun setField(key: String, raw: String): Boolean =
@@ -972,9 +1009,27 @@ object BigWolfConfig {
         "foodPointCost" -> raw.toIntOrNull()?.also { foodPointCost = it } != null
         "maxFoodLevel" -> raw.toIntOrNull()?.also { maxFoodLevel = it } != null
         "defaultShopCost" -> raw.toIntOrNull()?.also { defaultShopCost = it } != null
-        "skillBookCostLv1" -> raw.toIntOrNull()?.also { skillBookCostLv1 = it } != null
-        "skillBookCostLv2" -> raw.toIntOrNull()?.also { skillBookCostLv2 = it } != null
-        "skillBookCostLv3" -> raw.toIntOrNull()?.also { skillBookCostLv3 = it } != null
+        "skillBookShopCostLv1" -> raw.toIntOrNull()?.also { skillBookShopCostLv1 = it } != null
+        "skillBookShopCostLv2" -> raw.toIntOrNull()?.also { skillBookShopCostLv2 = it } != null
+        "skillBookShopCostLv3" -> raw.toIntOrNull()?.also { skillBookShopCostLv3 = it } != null
+        "skillBookUseCostLv1" -> raw.toIntOrNull()?.also { skillBookUseCostLv1 = it } != null
+        "skillBookUseCostLv2" -> raw.toIntOrNull()?.also { skillBookUseCostLv2 = it } != null
+        "skillBookUseCostLv3" -> raw.toIntOrNull()?.also { skillBookUseCostLv3 = it } != null
+        "skillBookCostLv1" ->
+            raw.toIntOrNull()?.also {
+              skillBookShopCostLv1 = it
+              skillBookUseCostLv1 = it
+            } != null
+        "skillBookCostLv2" ->
+            raw.toIntOrNull()?.also {
+              skillBookShopCostLv2 = it
+              skillBookUseCostLv2 = it
+            } != null
+        "skillBookCostLv3" ->
+            raw.toIntOrNull()?.also {
+              skillBookShopCostLv3 = it
+              skillBookUseCostLv3 = it
+            } != null
         "reviveCost" -> raw.toIntOrNull()?.also { reviveCost = it } != null
         "recoverCost" -> raw.toIntOrNull()?.also { recoverCost = it } != null
         "healItemAmount" -> raw.toIntOrNull()?.also { healItemAmount = it } != null
@@ -1025,14 +1080,40 @@ object BigWolfConfig {
 
   /** 変更したキーをconfig.ymlに永続化 */
   fun saveField(key: String, plugin: JavaPlugin) {
+    when (key) {
+      "skillBookCostLv1" -> {
+        plugin.config.set("skillbook.shopCostLv1", skillBookShopCostLv1)
+        plugin.config.set("skillbook.useCostLv1", skillBookUseCostLv1)
+        plugin.config.set("skillbook.costLv1", skillBookUseCostLv1)
+        plugin.saveConfig()
+        return
+      }
+      "skillBookCostLv2" -> {
+        plugin.config.set("skillbook.shopCostLv2", skillBookShopCostLv2)
+        plugin.config.set("skillbook.useCostLv2", skillBookUseCostLv2)
+        plugin.config.set("skillbook.costLv2", skillBookUseCostLv2)
+        plugin.saveConfig()
+        return
+      }
+      "skillBookCostLv3" -> {
+        plugin.config.set("skillbook.shopCostLv3", skillBookShopCostLv3)
+        plugin.config.set("skillbook.useCostLv3", skillBookUseCostLv3)
+        plugin.config.set("skillbook.costLv3", skillBookUseCostLv3)
+        plugin.saveConfig()
+        return
+      }
+    }
     val path =
         when (key) {
           "foodPointCost" -> "economy.foodPointCost"
           "maxFoodLevel" -> "pets.maxFoodLevel"
           "defaultShopCost" -> "shop.defaultCost"
-          "skillBookCostLv1" -> "skillbook.costLv1"
-          "skillBookCostLv2" -> "skillbook.costLv2"
-          "skillBookCostLv3" -> "skillbook.costLv3"
+          "skillBookShopCostLv1" -> "skillbook.shopCostLv1"
+          "skillBookShopCostLv2" -> "skillbook.shopCostLv2"
+          "skillBookShopCostLv3" -> "skillbook.shopCostLv3"
+          "skillBookUseCostLv1" -> "skillbook.useCostLv1"
+          "skillBookUseCostLv2" -> "skillbook.useCostLv2"
+          "skillBookUseCostLv3" -> "skillbook.useCostLv3"
           "reviveCost" -> "revive.cost"
           "recoverCost" -> "recover.cost"
           "healItemAmount" -> "items.healAmount"
@@ -2320,6 +2401,12 @@ object CommandTabCompleter {
             "foodPointCost",
             "maxFoodLevel",
             "defaultShopCost",
+            "skillBookShopCostLv1",
+            "skillBookShopCostLv2",
+            "skillBookShopCostLv3",
+            "skillBookUseCostLv1",
+            "skillBookUseCostLv2",
+            "skillBookUseCostLv3",
             "skillBookCostLv1",
             "skillBookCostLv2",
             "skillBookCostLv3",
@@ -4984,7 +5071,7 @@ object PetItemFactory {
               3 -> "極意の書" to LIGHT_PURPLE
               else -> "未知の書" to WHITE
             }
-        val cost = BigWolfConfig.getSkillBookCost(level)
+        val cost = BigWolfConfig.getSkillBookUseCost(level)
         itemMeta =
             itemMeta.apply {
               displayName(Component.text("【スキル強化】$name", color))
@@ -6066,7 +6153,7 @@ class PetShopGuiListener(
       }
       val level = PetItemFactory.getUnlockItemLevel(clickedItem)
       if (level == 0) return
-      val cost = BigWolfConfig.getSkillBookCost(level)
+      val cost = BigWolfConfig.getSkillBookShopCost(level)
       if (!consumeTokensFn(player, cost)) {
         player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
         return
@@ -6445,7 +6532,7 @@ class PetInteractionService(@Suppress("unused") private val plugin: JavaPlugin) 
     }
 
     // ポイントコストを取得
-    val cost = BigWolfConfig.getSkillBookCost(itemLevel)
+    val cost = BigWolfConfig.getSkillBookUseCost(itemLevel)
 
     // ポイント残高チェックと消費
     if (cost > 0) {
@@ -7580,7 +7667,7 @@ class PetShopGuiService(
 
     listOf(1, 2, 3).forEach { level ->
       val item = PetItemFactory.createSkillUnlockItem(level)
-      val cost = BigWolfConfig.getSkillBookCost(level)
+      val cost = BigWolfConfig.getSkillBookShopCost(level)
       val meta = item.itemMeta ?: return@forEach
       val currentLore = meta.lore() ?: mutableListOf()
       meta.lore(
@@ -8506,7 +8593,7 @@ class BreedingSystem(
     // 突然変異
     val mutation =
         if (Math.random() < BigWolfConfig.breedMutationChance) {
-          BigWolfConfig.breedMutationBoost
+          1.0 + BigWolfConfig.breedMutationBoost
         } else {
           1.0
         }
