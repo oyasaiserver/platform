@@ -4,10 +4,21 @@ package me.ankokunsan.entityPose
 
 import me.ankokunsan.entityPose.commands.Boucommand
 import me.ankokunsan.entityPose.commands.Entityinfo
+import me.ankokunsan.entityPose.commands.KakudoCommand
+import me.ankokunsan.entityPose.commands.ZahyoCommand
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.NameTagVisibility
+
+fun isEntiStick(item: ItemStack?): Boolean {
+  if (item == null || item.type.isAir) return false
+  if (!item.hasItemMeta()) return false
+  val meta = item.itemMeta ?: return false
+  return meta.persistentDataContainer.has(EntityPose.ENTITY_STICK_KEY, PersistentDataType.BYTE)
+}
 
 class EntityPose : JavaPlugin() {
 
@@ -39,6 +50,8 @@ class EntityPose : JavaPlugin() {
     Bou.create()
     getCommand("entitystick")?.setExecutor(Boucommand())
     getCommand("entityinfo")?.setExecutor(Entityinfo())
+    getCommand("kakudo")?.setExecutor(KakudoCommand())
+    getCommand("zahyo")?.setExecutor(ZahyoCommand())
 
     val board = Bukkit.getScoreboardManager()!!.mainScoreboard
 

@@ -432,3 +432,6 @@ gradle/wrapper
 
 # archive
 archive
+
+# Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar

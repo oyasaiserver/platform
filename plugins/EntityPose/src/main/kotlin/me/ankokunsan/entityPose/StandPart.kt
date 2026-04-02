@@ -1,7 +1,6 @@
 package me.ankokunsan.entityPose
 
 enum class StandPart(val display: String) {
-  KAKUDO("角度変更"),
   HEAD_X("頭_X軸側"),
   HEAD_Y("頭_Y軸側"),
   HEAD_Z("頭_Z軸側"),
@@ -21,7 +20,6 @@ enum class StandPart(val display: String) {
   RIGHT_LEG_Y("右足_Y軸側"),
   RIGHT_LEG_Z("右足_Z軸側"),
   ALL("全体"),
-  ZAHYO("座標の動かす量を変更"),
   X("X座標"),
   Y("Y座標"),
   Z("Z座標");
