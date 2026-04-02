@@ -3,7 +3,8 @@ package icu.oyasai.citiesskymine.road
 import org.bukkit.Color
 import org.bukkit.Particle
 import org.bukkit.entity.Player
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.sin
 
 object RoadPreview {
 

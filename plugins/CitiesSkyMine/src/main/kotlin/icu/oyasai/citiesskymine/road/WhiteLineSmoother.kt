@@ -9,11 +9,7 @@ import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Bisected
 import org.bukkit.block.data.type.Stairs
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.floor
-import kotlin.math.sin
+import kotlin.math.*
 
 object WhiteLineSmoother {
 

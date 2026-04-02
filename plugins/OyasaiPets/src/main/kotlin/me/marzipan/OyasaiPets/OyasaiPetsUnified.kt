@@ -36,6 +36,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityDismountEvent
+import org.bukkit.event.entity.EntityMountEvent
 import org.bukkit.event.entity.EntityTeleportEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -228,7 +229,7 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
     }
 
     // リスナーの登録
-    val petEventListener = PetEventListener(this, dropCooldowns, activeFetchTasks)
+    val petEventListener = PetEventListener(dropCooldowns, activeFetchTasks)
     server.pluginManager.registerEvents(petEventListener, this)
 
     val petInteractionListener =
@@ -302,8 +303,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
             },
             storageService::storePetToItem,
             storageService::storeAllPets,
-            queryService::handleDeadPetsList,
-            queryService::handlePetHistory,
             petCommandService::handleBreedCommand,
             petShopGuiService::openMainShopGui)
     server.pluginManager.registerEvents(petInventoryListener, this)
@@ -756,7 +755,6 @@ object BigWolfConfig {
   // システム設定
   const val SKILL_COOLDOWN_MS = 5000L
   const val MAX_PET_COUNT = 3
-  const val REMOVEALL_CONFIRM_TIMEOUT_MS = 15_000L
 
   /** config.ymlから設定を読み込む */
   fun loadFrom(config: FileConfiguration) {
@@ -1051,12 +1049,16 @@ object BigWolfConfig {
             raw.toIntOrNull()?.also { breedOtherVariantWeight = it } != null
         "playLevelUpChance" -> raw.toDoubleOrNull()?.also { playLevelUpChance = it } != null
         "playLevelUpMaxLevel" -> raw.toIntOrNull()?.also { playLevelUpMaxLevel = it } != null
-        "spawnAiEnabled" ->
-            when (raw.lowercase()) {
-              "true" -> true.also { spawnAiEnabled = it }
-              "false" -> false.also { spawnAiEnabled = it }
-              else -> null
-            } != null
+        "spawnAiEnabled" -> {
+          val value =
+              when (raw.lowercase()) {
+                "true" -> true
+                "false" -> false
+                else -> return false
+              }
+          spawnAiEnabled = value
+          true
+        }
         "freeRoamSpeedMultiplier" ->
             raw.toDoubleOrNull()?.also { freeRoamSpeedMultiplier = it } != null
         "freeRoamFlyingSpeedMultiplier" ->
@@ -1069,12 +1071,16 @@ object BigWolfConfig {
         "atypicalLevelUpBonus" -> raw.toDoubleOrNull()?.also { atypicalLevelUpBonus = it } != null
         "atypicalAffectionBonus" ->
             raw.toDoubleOrNull()?.also { atypicalAffectionBonus = it } != null
-        "childAiEnabled" ->
-            when (raw.lowercase()) {
-              "true" -> true.also { childAiEnabled = it }
-              "false" -> false.also { childAiEnabled = it }
-              else -> null
-            } != null
+        "childAiEnabled" -> {
+          val value =
+              when (raw.lowercase()) {
+                "true" -> true
+                "false" -> false
+                else -> return false
+              }
+          childAiEnabled = value
+          true
+        }
         else -> false
       }
 
@@ -1369,8 +1375,7 @@ object PetDataManager {
   /** ペット死亡時にデータを保存 */
   fun recordDeath(ownerUuid: UUID, entity: LivingEntity) {
     val petId =
-        entity.persistentDataContainer.get(
-            BigWolfKeys.PET_ID, org.bukkit.persistence.PersistentDataType.STRING) ?: return
+        entity.persistentDataContainer.get(BigWolfKeys.PET_ID, PersistentDataType.STRING) ?: return
 
     val petData = getPetData(ownerUuid, petId) ?: return
 
@@ -1878,6 +1883,7 @@ object PetDebugger {
 
   private val controlStats = ConcurrentHashMap<UUID, ControlStats>()
 
+  @Suppress("unused")
   fun enable(playerUuid: UUID) {
     debugTargets.add(playerUuid)
     controlStats[playerUuid] = ControlStats()
@@ -2257,7 +2263,7 @@ object SpawnUtils {
    * - 基本的にクリックした位置をそのまま使用
    * - 固体ブロック内の場合のみ調整
    */
-  fun findSafeSpawnLocation(base: org.bukkit.Location): org.bukkit.Location {
+  fun findSafeSpawnLocation(base: Location): Location {
     val world = base.world ?: return base
     val loc = base.clone()
 
@@ -2279,7 +2285,7 @@ object SpawnUtils {
   }
 
   /** 旧式の安全な地上スポーン位置を検索（後方互換性のため残す） */
-  fun findSafeGroundLocation(base: org.bukkit.Location): org.bukkit.Location? {
+  fun findSafeGroundLocation(base: Location): Location? {
     val world = base.world ?: return null
     val loc = base.clone()
     if (!ensureAirColumn(world, loc)) {
@@ -2306,7 +2312,7 @@ object SpawnUtils {
     return null
   }
 
-  private fun ensureAirColumn(world: org.bukkit.World, loc: org.bukkit.Location): Boolean {
+  private fun ensureAirColumn(world: World, loc: Location): Boolean {
     for (offset in 0..1) {
       val block = world.getBlockAt(loc.blockX, loc.blockY + offset, loc.blockZ)
       if (!block.isPassable || block.isLiquid) {
@@ -2342,10 +2348,8 @@ class CommandManager(
     }
   }
 
-  private fun handlePlayerCommand(player: Player, args: Array<out String>): Boolean {
-    playerCommands.handleCommand(player, args)
-    return true
-  }
+  private fun handlePlayerCommand(player: Player, args: Array<out String>): Boolean =
+      playerCommands.handleCommand(player, args)
 
   private fun handleOpCommand(player: Player, args: Array<out String>): Boolean {
     if (!player.isOp) {
@@ -2353,8 +2357,7 @@ class CommandManager(
       return true
     }
 
-    opCommands.handleCommand(player, args)
-    return true
+    return opCommands.handleCommand(player, args)
   }
 }
 
@@ -2674,7 +2677,7 @@ class OpCommands(
       }
       else -> {
         player.sendMessage(Component.text("不明なサブコマンド: $sub", RED))
-        true
+        false
       }
     }
   }
@@ -2878,7 +2881,7 @@ class OpCommands(
   }
 
   private fun handleConfigCommand(player: Player, args: Array<out String>) {
-    when (val sub = args.getOrNull(1)?.lowercase()) {
+    when (args.getOrNull(1)?.lowercase()) {
       null,
       "list" -> {
         player.sendMessage(Component.text("=== BigWolf Config ===", GOLD))
@@ -2944,7 +2947,7 @@ class OpCommands(
                   player.sendMessage(Component.text("不明なモブ: $mobName", RED))
                   return
                 }
-        when (val mobSub = args.getOrNull(3)?.lowercase()) {
+        when (args.getOrNull(3)?.lowercase()) {
           null,
           "list" -> {
             player.sendMessage(Component.text("=== ${type.name.lowercase()} ===", GOLD))
@@ -3056,11 +3059,11 @@ class PlayerCommands(
         true
       }
       "dead" -> {
-        openPetListFn(player, PetListFilter.DEAD)
+        deadListFn(player)
         true
       }
       "history" -> {
-        openPetListFn(player, PetListFilter.ALL)
+        historyFn(player, args)
         true
       }
       "locate" -> {
@@ -3126,10 +3129,11 @@ class PlayerCommands(
         if (typeCheck) {
           player.sendMessage(Component.text("ペット購入は /bigwolf buy $sub で行ってください。", YELLOW))
           normalSummonFn(player, sub, args)
+          true
         } else {
           showUsage(player)
+          false
         }
-        true
       }
     }
   }
@@ -5382,7 +5386,6 @@ class BreedGuiListener(
  * - EntityDismount: Handles flying pet descent after dismount
  */
 class PetEventListener(
-    private val plugin: BigWolfPlugin,
     private val dropCooldowns: MutableMap<UUID, Long>,
     private val activeFetchTasks: MutableMap<UUID, BukkitTask>
 ) : Listener {
@@ -5436,7 +5439,7 @@ class PetInteractionListener(
   @EventHandler
   fun onEntityInteract(event: PlayerInteractEntityEvent) {
     // OFF_HANDのイベントはスキップ
-    if (event.hand != org.bukkit.inventory.EquipmentSlot.HAND) return
+    if (event.hand != EquipmentSlot.HAND) return
 
     val player = event.player
     val entity = event.rightClicked as? LivingEntity ?: return
@@ -5498,7 +5501,7 @@ class PetInteractionListener(
           fetchSystem.stopFetchTask(entity)
           // Set sitting to false if supported
           try {
-            val sittable = entity as? org.bukkit.entity.Sittable
+            val sittable = entity as? Sittable
             sittable?.isSitting = false
           } catch (_: Exception) {
             // Ignore if Sittable is not available
@@ -5541,8 +5544,6 @@ class PetInventoryListener(
     private val giveFoodFn: (Player, LivingEntity) -> Unit,
     private val storePetToItemFn: (Player, LivingEntity) -> Unit,
     private val storeAllPetsFn: (Player) -> Unit,
-    private val handleDeadPetsListFn: (Player) -> Unit,
-    private val handlePetHistoryFn: (Player, Array<out String>) -> Unit,
     private val handleBreedCommandFn: (Player) -> Unit,
     private val openShopFn: (Player) -> Unit
 ) : Listener {
@@ -6010,7 +6011,7 @@ class PetLifecycleListener(
 
   /** オウムへの乗車時: AI復帰 + 座り解除 */
   @EventHandler
-  fun onPetMount(event: org.bukkit.event.entity.EntityMountEvent) {
+  fun onPetMount(event: EntityMountEvent) {
     if (event.entity !is Player) return
     val entity = event.mount as? Parrot ?: return
     if (entity.ownerId == null) return
@@ -7285,7 +7286,7 @@ class PetReviveService(
   }
 
   /** 降臨演出タスク（テレポートで段階的に降下） */
-  private fun startDescentAnimation(entity: LivingEntity, safeGround: org.bukkit.Location) {
+  private fun startDescentAnimation(entity: LivingEntity, safeGround: Location) {
     val targetY = safeGround.y + 0.5 // 着地点
     val spawnY = entity.location.y
 
@@ -7955,9 +7956,7 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
     }
 
     val typeStr = pdc.get(BigWolfKeys.STORED_TYPE, PersistentDataType.STRING) ?: "WOLF"
-    val type =
-        runCatching { org.bukkit.entity.EntityType.valueOf(typeStr) }.getOrNull()
-            ?: org.bukkit.entity.EntityType.WOLF
+    val type = runCatching { EntityType.valueOf(typeStr) }.getOrNull() ?: EntityType.WOLF
     val spec = PetRegistry.get(type)
 
     // 通常のスポーンエッグと同じ挙動: クリック位置にそのままスポーン
@@ -8057,7 +8056,7 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
   /** 死亡ペットから回復用の収納アイテムを作成 */
   fun createRecoveredStoredPetItem(
       petData: PetData,
-      type: org.bukkit.entity.EntityType,
+      type: EntityType,
       ownerUuid: String
   ): ItemStack {
     val eggMat = Material.getMaterial("${type.name}_SPAWN_EGG") ?: Material.PIG_SPAWN_EGG
@@ -8183,15 +8182,15 @@ class PetStorageService(@Suppress("unused") private val plugin: JavaPlugin) {
       }
       getAttribute(Attribute.STEP_HEIGHT)?.baseValue = 1.1
 
-      if (this is org.bukkit.entity.Tameable) {
+      if (this is Tameable) {
         isTamed = true
         owner = player
       }
-      if (this is org.bukkit.entity.Sittable) isSitting = false
+      if (this is Sittable) isSitting = false
       // オウムは座り状態を維持して肩乗りを防止
       if (this is Parrot) isSitting = true
-      if (this is org.bukkit.entity.Ageable) setAdult()
-      if (this is org.bukkit.entity.Armadillo && state != org.bukkit.entity.Armadillo.State.IDLE) {
+      if (this is Ageable) setAdult()
+      if (this is Armadillo && state != Armadillo.State.IDLE) {
         rollOut()
       }
 
@@ -8451,7 +8450,7 @@ class BreedingSystem(
       val temperamentDisplay = TemperamentHelper.getDisplayName(entity.temperament)
 
       val item =
-          org.bukkit.inventory.ItemStack(eggMat).apply {
+          ItemStack(eggMat).apply {
             itemMeta =
                 itemMeta.apply {
                   displayName(
@@ -8475,7 +8474,7 @@ class BreedingSystem(
     // 3行目: 選択状態と操作ボタン
     // スロット18: 親1選択状態
     val parent1Item =
-        org.bukkit.inventory.ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE).apply {
+        ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE).apply {
           itemMeta =
               itemMeta.apply {
                 displayName(Component.text("親1: 未選択", AQUA))
@@ -8486,7 +8485,7 @@ class BreedingSystem(
 
     // スロット20: 親2選択状態
     val parent2Item =
-        org.bukkit.inventory.ItemStack(Material.PINK_STAINED_GLASS_PANE).apply {
+        ItemStack(Material.PINK_STAINED_GLASS_PANE).apply {
           itemMeta =
               itemMeta.apply {
                 displayName(Component.text("親2: 未選択", LIGHT_PURPLE))
@@ -8497,7 +8496,7 @@ class BreedingSystem(
 
     // スロット22: 説明
     val infoItem =
-        org.bukkit.inventory.ItemStack(Material.BOOK).apply {
+        ItemStack(Material.BOOK).apply {
           itemMeta =
               itemMeta.apply {
                 displayName(Component.text("交配の手順", GOLD))
@@ -8516,7 +8515,7 @@ class BreedingSystem(
 
     // スロット24: メインメニューへ戻る
     val backItem =
-        org.bukkit.inventory.ItemStack(Material.ARROW).apply {
+        ItemStack(Material.ARROW).apply {
           itemMeta =
               itemMeta.apply {
                 displayName(Component.text("← メインメニューへ", WHITE))
@@ -8527,7 +8526,7 @@ class BreedingSystem(
 
     // スロット26: 決定ボタン
     val confirmItem =
-        org.bukkit.inventory.ItemStack(Material.GREEN_WOOL).apply {
+        ItemStack(Material.GREEN_WOOL).apply {
           itemMeta =
               itemMeta.apply {
                 displayName(Component.text("交配を実行", GREEN))
@@ -8714,7 +8713,7 @@ class BreedingSystem(
     }
 
     // 降臨演出（着地時にonLandが呼ばれる）
-    spawnDescentEffect(newEntity, player, newGeneration, safeGround.y + 0.5, onLand)
+    spawnDescentEffect(newEntity, safeGround.y + 0.5, onLand)
 
     // ActivePetRegistryに登録
     onPetSpawned(newEntity)
@@ -8724,8 +8723,6 @@ class BreedingSystem(
 
   private fun spawnDescentEffect(
       entity: LivingEntity,
-      player: Player,
-      generation: Int,
       targetY: Double,
       onLand: (() -> Unit)? = null
   ) {
@@ -8984,17 +8981,17 @@ class ChildAISystem(private val plugin: JavaPlugin) {
   private fun performPlaySound(entity: LivingEntity) {
     val sound =
         when (entity.type) {
-          org.bukkit.entity.EntityType.WOLF -> Sound.ENTITY_WOLF_WHINE
-          org.bukkit.entity.EntityType.CAT -> Sound.ENTITY_CAT_AMBIENT
-          org.bukkit.entity.EntityType.PARROT -> Sound.ENTITY_PARROT_AMBIENT
-          org.bukkit.entity.EntityType.FOX -> Sound.ENTITY_FOX_AMBIENT
-          org.bukkit.entity.EntityType.DOLPHIN -> Sound.ENTITY_DOLPHIN_AMBIENT
-          org.bukkit.entity.EntityType.BEE -> Sound.ENTITY_BEE_LOOP
-          org.bukkit.entity.EntityType.FROG -> Sound.ENTITY_FROG_AMBIENT
-          org.bukkit.entity.EntityType.RABBIT -> Sound.ENTITY_RABBIT_AMBIENT
-          org.bukkit.entity.EntityType.PANDA -> Sound.ENTITY_PANDA_AMBIENT
-          org.bukkit.entity.EntityType.ALLAY -> Sound.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM
-          org.bukkit.entity.EntityType.AXOLOTL -> Sound.ENTITY_AXOLOTL_IDLE_AIR
+          EntityType.WOLF -> Sound.ENTITY_WOLF_WHINE
+          EntityType.CAT -> Sound.ENTITY_CAT_AMBIENT
+          EntityType.PARROT -> Sound.ENTITY_PARROT_AMBIENT
+          EntityType.FOX -> Sound.ENTITY_FOX_AMBIENT
+          EntityType.DOLPHIN -> Sound.ENTITY_DOLPHIN_AMBIENT
+          EntityType.BEE -> Sound.ENTITY_BEE_LOOP
+          EntityType.FROG -> Sound.ENTITY_FROG_AMBIENT
+          EntityType.RABBIT -> Sound.ENTITY_RABBIT_AMBIENT
+          EntityType.PANDA -> Sound.ENTITY_PANDA_AMBIENT
+          EntityType.ALLAY -> Sound.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM
+          EntityType.AXOLOTL -> Sound.ENTITY_AXOLOTL_IDLE_AIR
           else -> Sound.ENTITY_PLAYER_BREATH
         }
     entity.world.playSound(entity.location, sound, 0.6f, 1.2f)
@@ -9117,7 +9114,7 @@ class FetchSystem(
       }
 
   /** エンティティを目標地点に向かって移動させる（元のBigWolf.ktのmoveTo関数を復元） */
-  private fun moveTo(entity: LivingEntity, targetLoc: org.bukkit.Location) {
+  private fun moveTo(entity: LivingEntity, targetLoc: Location) {
     val spec = PetRegistry.get(entity.type)
     val targetVec =
         targetLoc.toVector().subtract(entity.location.toVector()).normalize().multiply(0.35)
@@ -9344,8 +9341,8 @@ class FetchSystem(
 
     // 元の移動速度を保存し、一時的にAI移動を有効化
     val originalSpeed =
-        entity.getAttribute(org.bukkit.attribute.Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
-    entity.getAttribute(org.bukkit.attribute.Attribute.MOVEMENT_SPEED)?.baseValue =
+        entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue ?: 0.0
+    entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue =
         0.3 // イルカのデフォルト速度
 
     val task =
@@ -9524,7 +9521,7 @@ class FetchSystem(
 
           fun cleanup(returnItem: Boolean) {
             // 移動速度を元に戻す
-            entity.getAttribute(org.bukkit.attribute.Attribute.MOVEMENT_SPEED)?.baseValue =
+            entity.getAttribute(Attribute.MOVEMENT_SPEED)?.baseValue =
                 originalSpeed
 
             // 風船が残っていれば必ず削除
@@ -9630,8 +9627,7 @@ class PetControlSystem(
             }
             if (entity is Sittable) entity.isSitting = false
             // アルマジロが丸まっている場合は解除
-            if (entity is org.bukkit.entity.Armadillo &&
-                entity.state != org.bukkit.entity.Armadillo.State.IDLE) {
+            if (entity is Armadillo && entity.state != Armadillo.State.IDLE) {
               entity.rollOut()
             }
 
@@ -9836,7 +9832,7 @@ class PetControlSystem(
               if (entity.type == EntityType.RABBIT && entity.isOnGround && !inWater) {
                 if (velocity.length() > 0.1 && entity.ticksLived % 8 == 0) {
                   try {
-                    entity.playEffect(org.bukkit.EntityEffect.RABBIT_JUMP)
+                    entity.playEffect(EntityEffect.RABBIT_JUMP)
                   } catch (_: Exception) {
                     val vel = entity.velocity
                     vel.y = 0.4
@@ -10002,6 +9998,7 @@ class PetSpawnSystem(
 class ShopSystem {
 
   /** ショップMOBを生成 */
+  @Suppress("unused")
   fun spawnShopMob(admin: Player, type: EntityType, variant: String?, cost: Int, yawDeg: Float?) {
     val loc = admin.location.block.location.add(0.5, 0.0, 0.5)
     val safeLoc =
@@ -10046,6 +10043,7 @@ class ShopSystem {
   }
 
   /** 最も近いショップMOBを削除 */
+  @Suppress("unused")
   fun removeNearestShopMob(admin: Player): Boolean {
     val nearbyEntities = admin.getNearbyEntities(10.0, 10.0, 10.0)
     val shopMob =

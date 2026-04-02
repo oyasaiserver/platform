@@ -8,7 +8,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter {
 

@@ -138,12 +138,12 @@ object SchematicFacadeGenerator {
                     val lz = A.FACE_LZ - dz                          // local Z in schematic
                     val clipPos = BlockVector3.at(srcX, srcY, lz + A.OFF_Z)
                     val state = try { clip.getBlock(clipPos) } catch (_: Exception) { continue }
-                    val id = state.blockType?.id ?: continue
+                    val id = state.blockType?.id() ?: continue
                     if (id == "minecraft:air" || id == "minecraft:__reserved__") continue
 
-                    val wx = origin.x + right.x * bx + back.x * dz
-                    val wy = origin.y + srcY
-                    val wz = origin.z + right.z * bx + back.z * dz
+                    val wx = origin.x() + right.x() * bx + back.x() * dz
+                    val wy = origin.y() + srcY
+                    val wz = origin.z() + right.z() * bx + back.z() * dz
 
                     es.setBlock(BlockVector3.at(wx, wy, wz), state)
                 }

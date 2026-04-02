@@ -1,17 +1,10 @@
 package icu.oyasai.citiesskymine
 
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
-import icu.oyasai.citiesskymine.road.IntersectionCommand
-import icu.oyasai.citiesskymine.road.IntersectionPreview
-import icu.oyasai.citiesskymine.road.IntersectionSession
-import icu.oyasai.citiesskymine.road.RoadCurveCommand
-import icu.oyasai.citiesskymine.road.RoadGeometry
-import icu.oyasai.citiesskymine.road.RoadPreview
-import icu.oyasai.citiesskymine.road.RoadSession
-import icu.oyasai.citiesskymine.road.WaypointListener
+import icu.oyasai.citiesskymine.road.*
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.UUID
+import java.util.*
 
 class Main : JavaPlugin() {
     private val sessions             = HashMap<UUID, RoadSession>()
@@ -86,8 +79,7 @@ class Main : JavaPlugin() {
     /** 設定変更・中心設定後に呼び出す。dirty フラグを立ててプレビュータスクを起動する。 */
     fun updateIntersectionPreview(player: Player) {
         val session = getIntersectionSession(player)
-        session.previewDirty = true
-        if (session.previewTask != null) return   // 既存タスクが dirty を見て再描画する
+        if (session.previewTask != null) return   // 既存タスクが再描画する
         if (session.center == null) return
 
         val roadSettings = getSession(player).settings

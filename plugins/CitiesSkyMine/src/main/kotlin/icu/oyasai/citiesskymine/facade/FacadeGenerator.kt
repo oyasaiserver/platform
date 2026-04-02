@@ -22,9 +22,9 @@ private class FacadeCtx(
 ) {
     @Suppress("DEPRECATION")
     fun set(x: Int, y: Int, depth: Int, mat: Material) {
-        val wx = origin.x + right.x * x + back.x * depth
-        val wy = origin.y + y
-        val wz = origin.z + right.z * x + back.z * depth
+        val wx = origin.x() + right.x() * x + back.x() * depth
+        val wy = origin.y() + y
+        val wz = origin.z() + right.z() * x + back.z() * depth
         try {
             es.setBlock(BlockVector3.at(wx, wy, wz), BukkitAdapter.adapt(mat.createBlockData()))
         } catch (e: Exception) { /* ignore out-of-bounds / limit */ }
