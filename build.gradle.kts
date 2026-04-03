@@ -15,7 +15,6 @@ allprojects {
     maven("https://nexus.frengor.com/repository/public/")
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.scarsz.me/content/groups/public/")
-    maven("https://mvn.intellectualsites.com/content/repositories/releases/")
     maven("https://maven.enginehub.org/repo/")
   }
 }
