@@ -43,6 +43,16 @@
       "hash": "sha256-JQ462savIipogNRCfRVpPTdVZrE6Neyb89TMxk03C/w="
     }
   },
+  "com.discordsrv:discordsrv:1.30.3": {
+    "discordsrv-1.30.3.jar": {
+      "url": "https://nexus.scarsz.me/content/groups/public/com/discordsrv/discordsrv/1.30.3/discordsrv-1.30.3.jar",
+      "hash": "sha256-3CQT68Gt3Gae7hHfN8osZ418PpBAGS6GwGxbkw1lEU4="
+    },
+    "discordsrv-1.30.3.pom": {
+      "url": "https://nexus.scarsz.me/content/groups/public/com/discordsrv/discordsrv/1.30.3/discordsrv-1.30.3.pom",
+      "hash": "sha256-WDrtXm/pHkpEsbgiuOL9hkyttTT4UgvdrqkUz0ZdBno="
+    }
+  },
   "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.15.0": {
     "FastAsyncWorldEdit-Bukkit-2.15.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/com/fastasyncworldedit/FastAsyncWorldEdit-Bukkit/2.15.0/FastAsyncWorldEdit-Bukkit-2.15.0.jar",
@@ -752,6 +762,14 @@
     }
   },
   "me.clip:placeholderapi:2.11.6": {
+    "placeholderapi-2.11.6.jar": {
+      "url": "https://nexus.scarsz.me/content/groups/public/me/clip/placeholderapi/2.11.6/placeholderapi-2.11.6.jar",
+      "hash": "sha256-v+oPI12p6dV2V3IVrLUMdLuBIuA9zZiDFbYRRce2Fyc="
+    },
+    "placeholderapi-2.11.6.module": {
+      "url": "https://nexus.scarsz.me/content/groups/public/me/clip/placeholderapi/2.11.6/placeholderapi-2.11.6.module",
+      "hash": "sha256-AEFLfmTGS8slyhP4UOj1DTzVdizX7wF5EkKFrqC0zp0="
+    },
     "placeholderapi-2.11.6.pom": {
       "url": "https://nexus.scarsz.me/content/groups/public/me/clip/placeholderapi/2.11.6/placeholderapi-2.11.6.pom",
       "hash": "sha256-bkrbl6zliQAQQTLlpvFJ3VhJqjLqsgtdXeIov+jpNdw="
@@ -1693,6 +1711,12 @@
     "annotations-26.0.2.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/26.0.2/annotations-26.0.2.pom",
       "hash": "sha256-fr7Oreja2nyxfv8+AUkiw5Ai0qN44+LSRh8o8Bb/x/c="
+    }
+  },
+  "org.jetbrains:annotations:23.0.0": {
+    "annotations-23.0.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/23.0.0/annotations-23.0.0.pom",
+      "hash": "sha256-yUkPZVEyMo3yz7z990P1P8ORbWwdEENxdabKbjpndxw="
     }
   },
   "org.jetbrains:annotations:13.0": {
