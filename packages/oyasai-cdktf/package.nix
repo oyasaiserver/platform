@@ -4,6 +4,7 @@
   nodejs,
   terraform,
   writeShellApplication,
+  lib
 }:
 let
   oyasaiCdktf = package-lock2nix.mkNpmModule {
@@ -18,7 +19,7 @@ in
 writeShellApplication {
   name = "oyasai-cdktf";
   runtimeEnv = {
-    CDKTF_APP = "${oyasaiCdktf}/bin/oyasai-cdktf";
+    CDKTF_APP = lib.getExe oyasaiCdktf;
   };
   runtimeInputs = [ cdktf-cli ];
   text = ''
