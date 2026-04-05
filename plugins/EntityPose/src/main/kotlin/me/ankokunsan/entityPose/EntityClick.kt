@@ -635,7 +635,6 @@ class EntityClick : Listener {
       FollowEntity.stop(player)
       event.isCancelled = true
       player.sendMessage("§6[EntityPose] §aエンティティを固定しました！")
-
     } else {
       val hand = player.inventory.itemInMainHand
       if (!isEntiStick(hand)) return
@@ -660,22 +659,25 @@ class EntityClick : Listener {
         val rad = Math.toRadians(delta.toDouble())
         val selected = activeselection[player.uniqueId]
         val ismoveMode =
-          part == StandPart.X || part == StandPart.Y || part == StandPart.Z || part == StandPart.ALL
+            part == StandPart.X ||
+                part == StandPart.Y ||
+                part == StandPart.Z ||
+                part == StandPart.ALL
         val targets =
-          if (ismoveMode && selected != null && selected.contains(entity)) {
-            selected.filter {
-              it.isValid &&
-                !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            if (ismoveMode && selected != null && selected.contains(entity)) {
+              selected.filter {
+                it.isValid &&
+                    !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+            } else {
+              listOf(entity)
             }
-          } else {
-            listOf(entity)
-          }
         val suffix =
-          if (targets.size > 1) {
-            "§6(${targets.size}体を同時に操作中)"
-          } else {
-            ""
-          }
+            if (targets.size > 1) {
+              "§6(${targets.size}体を同時に操作中)"
+            } else {
+              ""
+            }
         when (part) {
           StandPart.HEAD_X -> {
             entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
@@ -817,23 +819,26 @@ class EntityClick : Listener {
         val part1 = selectPart[key] ?: return
         val selected1 = activeselection[player.uniqueId]
         val ismoveMode1 =
-          part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
+            part1 == EntiPart.X ||
+                part1 == EntiPart.Y ||
+                part1 == EntiPart.Z ||
+                part1 == EntiPart.ALL
         val targets =
-          if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
-            selected1.filter {
-              it.isValid &&
-                !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+            if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
+              selected1.filter {
+                it.isValid &&
+                    !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+            } else {
+              listOf(entity)
             }
-          } else {
-            listOf(entity)
-          }
         val deltaF = (if (player.isSneaking) -step else step).toFloat()
         val suffix =
-          if (targets.size > 1) {
-            "§6(${targets.size}体を同時に操作中)"
-          } else {
-            ""
-          }
+            if (targets.size > 1) {
+              "§6(${targets.size}体を同時に操作中)"
+            } else {
+              ""
+            }
 
         when (part1) {
           EntiPart.HEAD -> {
