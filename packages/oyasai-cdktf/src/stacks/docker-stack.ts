@@ -87,19 +87,11 @@ export class DockerStack extends OyasaiTerraformStack {
           udp: [19132],
         }),
         env: envs({
-          EULA: true,
-          TYPE: "PURPUR",
-          VERSION: DockerStack.minecraftVersion,
-          USE_MEOWICE_FLAGS: this.environment !== "local",
-          ENABLE_ROLLING_LOGS: true,
-          LOG_TIMESTAMP: true,
-          MOTD: `§l§r                 §b§lOyasai§f§lServer§7 [v${DockerStack.minecraftVersion}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！`,
           MEMORY: this.envAwareConfig({
             production: "28G",
             development: "12G",
             local: "5G",
           }),
-          ICON: "https://avatars.githubusercontent.com/oyasaiserver",
           RCON_PASSWORD: this.secrets.RCON_PASSWORD,
         }),
         healthcheck: {
@@ -110,7 +102,7 @@ export class DockerStack extends OyasaiTerraformStack {
         },
         volumes: [
           {
-            containerPath: "/data",
+            containerPath: ".",
             hostPath: join(this.workdir, "minecraft-main"),
           },
         ],
@@ -146,7 +138,7 @@ export class DockerStack extends OyasaiTerraformStack {
         volumes: [
           {
             hostPath: join(this.workdir, "minecraft-main"),
-            containerPath: "/data",
+            containerPath: ".",
             readOnly: true,
           },
         ],

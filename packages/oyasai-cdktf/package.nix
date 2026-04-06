@@ -4,7 +4,7 @@
   nodejs,
   terraform,
   writeShellApplication,
-  lib
+  lib,
 }:
 let
   oyasaiCdktf = package-lock2nix.mkNpmModule {

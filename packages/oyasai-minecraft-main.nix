@@ -11,6 +11,12 @@ let
     name = "oyasai-minecraft-main";
     version = "1.21.8";
 
+    icon = ../assets/icon.png;
+
+    properties = ''
+      motd=§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！
+    '';
+
     plugins = with (oyasai-plugin-registry.forVersion version); [
       advancedban
       arceon
@@ -75,8 +81,6 @@ let
       worldguard
       zvoteparty
     ];
-
-    # TODO: world container config
 
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {
