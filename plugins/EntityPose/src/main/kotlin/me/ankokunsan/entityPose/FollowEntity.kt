@@ -16,7 +16,7 @@ import org.bukkit.util.EulerAngle
 object FollowEntity {
 
   // プレイヤーが現在操作中のエンティティとタスクをペアで管理
-  private val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
+  val activePreviews = mutableMapOf<UUID, Pair<Entity, BukkitTask>>()
 
   @Suppress("UNCHECKED_CAST")
   fun <T : Entity> start(player: Player, type: EntityType, setup: (T) -> Unit) {

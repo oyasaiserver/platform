@@ -10,6 +10,7 @@ import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.SIZE_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.WOLF_KEY
+import me.ankokunsan.entityPose.FollowEntity.activePreviews
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -622,275 +623,282 @@ class EntityClick : Listener {
   }
 
   @EventHandler
-  fun onentityInstall(event: PlayerInteractAtEntityEvent) {
-    val player = event.player
-    val entity = event.rightClicked
-
-    val currentPreview = FollowEntity.stop(player) ?: return
-
-    // 叩いた対象が、今追従させているものと一致する場合のみ実行
-    if (currentPreview != entity) return
-    event.isCancelled = true
-    entity.setGravity(false)
-
-    player.sendMessage("§6[EntityPose] §aエンティティを固定しました！")
-  }
-
-  @EventHandler
   fun onRightClick(event: PlayerInteractAtEntityEvent) {
     if (event.hand == EquipmentSlot.OFF_HAND) return
 
     val player = event.player
-    val hand = player.inventory.itemInMainHand
-    if (!isEntiStick(hand)) return
-    if (!player.hasPermission("entitypose_arrange")) return //
     val entity = event.rightClicked
-    if (entity.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
-      actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
-      return
-    }
-    if (entity is Player) {
-      actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
-      return
-    }
-    event.isCancelled = true
-    entity.isPersistent = true
-    val key = player.uniqueId to entity.type
-    val step = currentStep[player.uniqueId] ?: 1.0
-    val delta = (if (player.isSneaking) -step else step).toFloat()
-    val step2 = currentZah[player.uniqueId] ?: 1.0
-    val move1 = if (player.isSneaking) -step2 else step2
-
-    if (entity is ArmorStand) {
-      val part = selectedPart[key] ?: return
-      val rad = Math.toRadians(delta.toDouble())
-      val selected = activeselection[player.uniqueId]
-      val ismoveMode =
-          part == StandPart.X || part == StandPart.Y || part == StandPart.Z || part == StandPart.ALL
-      val targets =
-          if (ismoveMode && selected != null && selected.contains(entity)) {
-            selected.filter {
-              it.isValid &&
-                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
-            }
-          } else {
-            listOf(entity)
-          }
-      val suffix =
-          if (targets.size > 1) {
-            "§6(${targets.size}体を同時に操作中)"
-          } else {
-            ""
-          }
-      when (part) {
-        StandPart.HEAD_X -> {
-          entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
-          val deg = Math.toDegrees(entity.headPose.x)
-          actionBar(player, "§a頭_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.HEAD_Y -> {
-          entity.headPose = entity.headPose.setY(entity.headPose.y + rad)
-          val deg = Math.toDegrees(entity.headPose.y)
-          actionBar(player, "§a頭_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.HEAD_Z -> {
-          entity.headPose = entity.headPose.setZ(entity.headPose.z + rad)
-          val deg = Math.toDegrees(entity.headPose.z)
-          actionBar(player, "§a頭_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.BODY_X -> {
-          entity.bodyPose = entity.bodyPose.setX(entity.bodyPose.x + rad)
-          val deg = Math.toDegrees(entity.bodyPose.x)
-          actionBar(player, "§a上半身_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.BODY_Y -> {
-          entity.bodyPose = entity.bodyPose.setY(entity.bodyPose.y + rad)
-          val deg = Math.toDegrees(entity.bodyPose.y)
-          actionBar(player, "§a上半身_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.BODY_Z -> {
-          entity.bodyPose = entity.bodyPose.setZ(entity.bodyPose.z + rad)
-          val deg = Math.toDegrees(entity.bodyPose.z)
-          actionBar(player, "§a上半身_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_ARM_X -> {
-          entity.leftArmPose = entity.leftArmPose.setX(entity.leftArmPose.x + rad)
-          val deg = Math.toDegrees(entity.leftArmPose.x)
-          actionBar(player, "§a左手_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_ARM_Y -> {
-          entity.leftArmPose = entity.leftArmPose.setY(entity.leftArmPose.y + rad)
-          val deg = Math.toDegrees(entity.leftArmPose.y)
-          actionBar(player, "§a左手_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_ARM_Z -> {
-          entity.leftArmPose = entity.leftArmPose.setZ(entity.leftArmPose.z + rad)
-          val deg = Math.toDegrees(entity.leftArmPose.z)
-          actionBar(player, "§a左手_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_ARM_X -> {
-          entity.rightArmPose = entity.rightArmPose.setX(entity.rightArmPose.x + rad)
-          val deg = Math.toDegrees(entity.rightArmPose.x)
-          actionBar(player, "§a右手_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_ARM_Y -> {
-          entity.rightArmPose = entity.rightArmPose.setY(entity.rightArmPose.y + rad)
-          val deg = Math.toDegrees(entity.rightArmPose.y)
-          actionBar(player, "§a右手_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_ARM_Z -> {
-          entity.rightArmPose = entity.rightArmPose.setZ(entity.rightArmPose.z + rad)
-          val deg = Math.toDegrees(entity.rightArmPose.z)
-          actionBar(player, "§a右手_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_LEG_X -> {
-          entity.leftLegPose = entity.leftLegPose.setX(entity.leftLegPose.x + rad)
-          val deg = Math.toDegrees(entity.leftLegPose.x)
-          actionBar(player, "§a左足_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_LEG_Y -> {
-          entity.leftLegPose = entity.leftLegPose.setY(entity.leftLegPose.y + rad)
-          val deg = Math.toDegrees(entity.leftLegPose.y)
-          actionBar(player, "§a左足_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.LEFT_LEG_Z -> {
-          entity.leftLegPose = entity.leftLegPose.setZ(entity.leftLegPose.z + rad)
-          val deg = Math.toDegrees(entity.leftLegPose.z)
-          actionBar(player, "§a左足_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_LEG_X -> {
-          entity.rightLegPose = entity.rightLegPose.setX(entity.rightLegPose.x + rad)
-          val deg = Math.toDegrees(entity.rightLegPose.x)
-          actionBar(player, "§a右足_X軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_LEG_Y -> {
-          entity.rightLegPose = entity.rightLegPose.setY(entity.rightLegPose.y + rad)
-          val deg = Math.toDegrees(entity.rightLegPose.y)
-          actionBar(player, "§a右足_Y軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.RIGHT_LEG_Z -> {
-          entity.rightLegPose = entity.rightLegPose.setZ(entity.rightLegPose.z + rad)
-          val deg = Math.toDegrees(entity.rightLegPose.z)
-          actionBar(player, "§a右足_Z軸側: ${formatDeg(deg)}")
-        }
-
-        StandPart.ALL -> {
-          targets.forEach { target ->
-            val loc = target.location.clone()
-            loc.yaw += delta
-            target.teleport(loc)
-          }
-          val deg = entity.location.yaw.toDouble()
-          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
-        }
-        StandPart.X -> {
-          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
-        }
-        StandPart.Y -> {
-          targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
-          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
-        }
-        StandPart.Z -> {
-          targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
-          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
-        }
+    if (!player.hasPermission("entitypose_arrange")) return //
+    val previewData = activePreviews[player.uniqueId]
+    if (previewData != null && previewData.first == entity) {
+      // 固定する時の処理
+      FollowEntity.stop(player)
+      event.isCancelled = true
+      player.sendMessage("§6[EntityPose] §aエンティティを固定しました！")
+    } else {
+      val hand = player.inventory.itemInMainHand
+      if (!isEntiStick(hand)) return
+      if (entity.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)) {
+        actionBar(player, "§6[EntityPose] §cこのエンティティはロックされています")
+        return
       }
-      return
-    }
+      if (entity is Player) {
+        actionBar(player, "§6[EntityPose] §cプレイヤーをいじろうとしないでね")
+        return
+      }
+      event.isCancelled = true
+      entity.isPersistent = true
+      val key = player.uniqueId to entity.type
+      val step = currentStep[player.uniqueId] ?: 1.0
+      val delta = (if (player.isSneaking) -step else step).toFloat()
+      val step2 = currentZah[player.uniqueId] ?: 1.0
+      val move1 = if (player.isSneaking) -step2 else step2
 
-    if (entity is LivingEntity) {
-      val part1 = selectPart[key] ?: return
-      val selected1 = activeselection[player.uniqueId]
-      val ismoveMode1 =
-          part1 == EntiPart.X || part1 == EntiPart.Y || part1 == EntiPart.Z || part1 == EntiPart.ALL
-      val targets =
-          if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
-            selected1.filter {
-              it.isValid &&
-                  !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+      if (entity is ArmorStand) {
+        val part = selectedPart[key] ?: return
+        val rad = Math.toRadians(delta.toDouble())
+        val selected = activeselection[player.uniqueId]
+        val ismoveMode =
+            part == StandPart.X ||
+                part == StandPart.Y ||
+                part == StandPart.Z ||
+                part == StandPart.ALL
+        val targets =
+            if (ismoveMode && selected != null && selected.contains(entity)) {
+              selected.filter {
+                it.isValid &&
+                    !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+            } else {
+              listOf(entity)
             }
-          } else {
-            listOf(entity)
-          }
-      val deltaF = (if (player.isSneaking) -step else step).toFloat()
-      val suffix =
-          if (targets.size > 1) {
-            "§6(${targets.size}体を同時に操作中)"
-          } else {
-            ""
-          }
-
-      when (part1) {
-        EntiPart.HEAD -> {
-          val loc = entity.location.clone()
-          loc.pitch = (loc.pitch + deltaF).coerceIn(-90f, 90f)
-          entity.teleport(loc)
-
-          val displayDeg = -loc.pitch
-          actionBar(player, "§a頭: ${String.format("%.1f", displayDeg)}°")
-        }
-
-        EntiPart.ALL -> {
-          targets.forEach { target ->
-            val loc = target.location.clone()
-            loc.yaw += deltaF
-            target.teleport(loc)
-          }
-          val deg = entity.location.yaw.toDouble()
-          actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
-        }
-
-        EntiPart.SITTING -> {
-          when (entity) {
-            is Sittable -> {
-              entity.isSitting = !entity.isSitting
-              actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
+        val suffix =
+            if (targets.size > 1) {
+              "§6(${targets.size}体を同時に操作中)"
+            } else {
+              ""
             }
-            else -> actionBar(player, "§6[EntityPose] §cこのエンティティは座れません。残念;;")
-          }
-        }
-        EntiPart.X -> {
-          targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
-          actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
-        }
-        EntiPart.Y -> {
-          targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
-          actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
-        }
-        EntiPart.Z -> {
-          targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
-          actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
-        }
-        EntiPart.HAN -> {
-          val board = Bukkit.getScoreboardManager()!!.mainScoreboard
-          val team = board.getTeam("animal_things_hide_name") ?: return
-          if (entity.customName == "Dinnerbone") {
-            entity.customName = null
-            team.removeEntry(entity.uniqueId.toString())
-          } else {
-            entity.customName = "Dinnerbone"
-            team.addEntry(entity.uniqueId.toString())
+        when (part) {
+          StandPart.HEAD_X -> {
+            entity.headPose = entity.headPose.setX(entity.headPose.x + rad)
+            val deg = Math.toDegrees(entity.headPose.x)
+            actionBar(player, "§a頭_X軸側: ${formatDeg(deg)}")
           }
 
-          entity.isCustomNameVisible = false
+          StandPart.HEAD_Y -> {
+            entity.headPose = entity.headPose.setY(entity.headPose.y + rad)
+            val deg = Math.toDegrees(entity.headPose.y)
+            actionBar(player, "§a頭_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.HEAD_Z -> {
+            entity.headPose = entity.headPose.setZ(entity.headPose.z + rad)
+            val deg = Math.toDegrees(entity.headPose.z)
+            actionBar(player, "§a頭_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.BODY_X -> {
+            entity.bodyPose = entity.bodyPose.setX(entity.bodyPose.x + rad)
+            val deg = Math.toDegrees(entity.bodyPose.x)
+            actionBar(player, "§a上半身_X軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.BODY_Y -> {
+            entity.bodyPose = entity.bodyPose.setY(entity.bodyPose.y + rad)
+            val deg = Math.toDegrees(entity.bodyPose.y)
+            actionBar(player, "§a上半身_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.BODY_Z -> {
+            entity.bodyPose = entity.bodyPose.setZ(entity.bodyPose.z + rad)
+            val deg = Math.toDegrees(entity.bodyPose.z)
+            actionBar(player, "§a上半身_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_ARM_X -> {
+            entity.leftArmPose = entity.leftArmPose.setX(entity.leftArmPose.x + rad)
+            val deg = Math.toDegrees(entity.leftArmPose.x)
+            actionBar(player, "§a左手_X軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_ARM_Y -> {
+            entity.leftArmPose = entity.leftArmPose.setY(entity.leftArmPose.y + rad)
+            val deg = Math.toDegrees(entity.leftArmPose.y)
+            actionBar(player, "§a左手_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_ARM_Z -> {
+            entity.leftArmPose = entity.leftArmPose.setZ(entity.leftArmPose.z + rad)
+            val deg = Math.toDegrees(entity.leftArmPose.z)
+            actionBar(player, "§a左手_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_ARM_X -> {
+            entity.rightArmPose = entity.rightArmPose.setX(entity.rightArmPose.x + rad)
+            val deg = Math.toDegrees(entity.rightArmPose.x)
+            actionBar(player, "§a右手_X軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_ARM_Y -> {
+            entity.rightArmPose = entity.rightArmPose.setY(entity.rightArmPose.y + rad)
+            val deg = Math.toDegrees(entity.rightArmPose.y)
+            actionBar(player, "§a右手_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_ARM_Z -> {
+            entity.rightArmPose = entity.rightArmPose.setZ(entity.rightArmPose.z + rad)
+            val deg = Math.toDegrees(entity.rightArmPose.z)
+            actionBar(player, "§a右手_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_LEG_X -> {
+            entity.leftLegPose = entity.leftLegPose.setX(entity.leftLegPose.x + rad)
+            val deg = Math.toDegrees(entity.leftLegPose.x)
+            actionBar(player, "§a左足_X軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_LEG_Y -> {
+            entity.leftLegPose = entity.leftLegPose.setY(entity.leftLegPose.y + rad)
+            val deg = Math.toDegrees(entity.leftLegPose.y)
+            actionBar(player, "§a左足_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.LEFT_LEG_Z -> {
+            entity.leftLegPose = entity.leftLegPose.setZ(entity.leftLegPose.z + rad)
+            val deg = Math.toDegrees(entity.leftLegPose.z)
+            actionBar(player, "§a左足_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_LEG_X -> {
+            entity.rightLegPose = entity.rightLegPose.setX(entity.rightLegPose.x + rad)
+            val deg = Math.toDegrees(entity.rightLegPose.x)
+            actionBar(player, "§a右足_X軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_LEG_Y -> {
+            entity.rightLegPose = entity.rightLegPose.setY(entity.rightLegPose.y + rad)
+            val deg = Math.toDegrees(entity.rightLegPose.y)
+            actionBar(player, "§a右足_Y軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.RIGHT_LEG_Z -> {
+            entity.rightLegPose = entity.rightLegPose.setZ(entity.rightLegPose.z + rad)
+            val deg = Math.toDegrees(entity.rightLegPose.z)
+            actionBar(player, "§a右足_Z軸側: ${formatDeg(deg)}")
+          }
+
+          StandPart.ALL -> {
+            targets.forEach { target ->
+              val loc = target.location.clone()
+              loc.yaw += delta
+              target.teleport(loc)
+            }
+            val deg = entity.location.yaw.toDouble()
+            actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
+          }
+
+          StandPart.X -> {
+            targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+            actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
+          }
+
+          StandPart.Y -> {
+            targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
+            actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
+          }
+
+          StandPart.Z -> {
+            targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
+            actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
+          }
+        }
+        return
+      }
+
+      if (entity is LivingEntity) {
+        val part1 = selectPart[key] ?: return
+        val selected1 = activeselection[player.uniqueId]
+        val ismoveMode1 =
+            part1 == EntiPart.X ||
+                part1 == EntiPart.Y ||
+                part1 == EntiPart.Z ||
+                part1 == EntiPart.ALL
+        val targets =
+            if (ismoveMode1 && selected1 != null && selected1.contains(entity)) {
+              selected1.filter {
+                it.isValid &&
+                    !it.persistentDataContainer.has(EntityPose.ARRANGELOCK, PersistentDataType.BYTE)
+              }
+            } else {
+              listOf(entity)
+            }
+        val deltaF = (if (player.isSneaking) -step else step).toFloat()
+        val suffix =
+            if (targets.size > 1) {
+              "§6(${targets.size}体を同時に操作中)"
+            } else {
+              ""
+            }
+
+        when (part1) {
+          EntiPart.HEAD -> {
+            val loc = entity.location.clone()
+            loc.pitch = (loc.pitch + deltaF).coerceIn(-90f, 90f)
+            entity.teleport(loc)
+
+            val displayDeg = -loc.pitch
+            actionBar(player, "§a頭: ${String.format("%.1f", displayDeg)}°")
+          }
+
+          EntiPart.ALL -> {
+            targets.forEach { target ->
+              val loc = target.location.clone()
+              loc.yaw += deltaF
+              target.teleport(loc)
+            }
+            val deg = entity.location.yaw.toDouble()
+            actionBar(player, "§a全体: ${formatDeg(deg)}$suffix")
+          }
+
+          EntiPart.SITTING -> {
+            when (entity) {
+              is Sittable -> {
+                entity.isSitting = !entity.isSitting
+                actionBar(player, "§a座る: ${if (entity.isSitting) "ON" else "OFF"}")
+              }
+
+              else -> actionBar(player, "§6[EntityPose] §cこのエンティティは座れません。残念;;")
+            }
+          }
+
+          EntiPart.X -> {
+            targets.forEach { target -> target.teleport(target.location.add(move1, 0.0, 0.0)) }
+            actionBar(player, "§aX座標: ${formatLoc(entity.location.x)}$suffix")
+          }
+
+          EntiPart.Y -> {
+            targets.forEach { target -> target.teleport(target.location.add(0.0, move1, 0.0)) }
+            actionBar(player, "§aY座標: ${formatLoc(entity.location.y)}$suffix")
+          }
+
+          EntiPart.Z -> {
+            targets.forEach { target -> target.teleport(target.location.add(0.0, 0.0, move1)) }
+            actionBar(player, "§aZ座標: ${formatLoc(entity.location.z)}$suffix")
+          }
+
+          EntiPart.HAN -> {
+            val board = Bukkit.getScoreboardManager()!!.mainScoreboard
+            val team = board.getTeam("animal_things_hide_name") ?: return
+            if (entity.customName == "Dinnerbone") {
+              entity.customName = null
+              team.removeEntry(entity.uniqueId.toString())
+            } else {
+              entity.customName = "Dinnerbone"
+              team.addEntry(entity.uniqueId.toString())
+            }
+
+            entity.isCustomNameVisible = false
+          }
         }
       }
     }
@@ -901,6 +909,7 @@ class EntityClick : Listener {
     val uuid = event.player.uniqueId
     currentStep.remove(uuid)
     currentZah.remove(uuid)
+    FollowEntity.stop(event.player)
 
     if (selection.containsKey(uuid)) {
       stopHighlight(uuid)
