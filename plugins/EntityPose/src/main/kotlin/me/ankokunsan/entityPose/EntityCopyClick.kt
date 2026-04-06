@@ -56,7 +56,7 @@ class EntityCopyClick : Listener {
       highlightTasks[uuid]?.cancel()
       val targets =
           world.getNearbyEntities(box).filter { entity ->
-            entity != player && (entity as? LivingEntity)?.hasAI() == false
+            entity !is Player && (entity as? LivingEntity)?.hasAI() == false
           }
       activeselection[uuid] = targets
       player.sendMessage("§6[EntityPose] §f範囲内に${targets.size}体見つかりました")
@@ -118,7 +118,7 @@ class EntityCopyClick : Listener {
       highlightTasks[uuid]?.cancel()
       val targets =
           world.getNearbyEntities(box).filter { entity ->
-            entity != player && (entity as? LivingEntity)?.hasAI() == false
+            entity !is Player && (entity as? LivingEntity)?.hasAI() == false
           }
       activeselection[uuid] = targets
       player.sendMessage("§6[EntityPose] §f範囲内に${targets.size}体見つかりました")
