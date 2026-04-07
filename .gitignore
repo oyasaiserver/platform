@@ -426,5 +426,8 @@ result-*
 # Claude Code
 .claude
 
+# archive
+archive
+
 # Gradle wrapper
 !gradle/wrapper/gradle-wrapper.jar

@@ -1,0 +1,33 @@
+name: CitiesSkyMine
+description: "CitiesSkyMine Plugin"
+authors: [marzipan]
+main: icu.oyasai.citiesskymine.Main
+api-version: "1.21"
+version: "0.2.0"
+depend:
+  - FastAsyncWorldEdit
+
+commands:
+  rc:
+    description: "道路カーブを生成するコマンド"
+    usage: "/rc <help|set|build|undo|reset|version>"
+    permission: citiesskymine.road
+    permission-message: "このコマンドはOP権限が必要です。"
+  ri:
+    description: "交差点を自動生成するコマンド"
+    usage: "/ri <here|set|build|undo|status|help>"
+    permission: citiesskymine.road
+    permission-message: "このコマンドはOP権限が必要です。"
+  hb:
+    description: "オスマン様式ファサードを生成するコマンド"
+    usage: "/hb <build|undo|help> [ベイ数] [パレット]"
+    permission: citiesskymine.build
+    permission-message: "このコマンドはOP権限が必要です。"
+
+permissions:
+  citiesskymine.road:
+    description: "道路生成コマンドの使用権限"
+    default: op
+  citiesskymine.build:
+    description: "建築生成コマンドの使用権限"
+    default: op
