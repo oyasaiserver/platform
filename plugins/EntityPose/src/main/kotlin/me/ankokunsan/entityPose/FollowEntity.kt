@@ -100,18 +100,17 @@ object FollowEntity {
     // 1. 追従タスク（タイマー）を即座に停止
     task.cancel()
     // 2. エンティティが生きている場合、最終的な状態を確定させる
-    if (!entity.isDead) {
+    if (!entity.isDead && entity is LivingEntity) {
       entity.setGravity(false) // 重力を無効化（空中浮遊を維持する場合）
       entity.isPersistent = true // 設置後はサーバー再起動で消えないようにする（任意）
+      entity.removeWhenFarAway = false
+      entity.setAI(false) // AIを完全に停止
+      entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
+      entity.isInvulnerable = false
+      entity.isSilent = true
+      entity.persistentDataContainer.set(
+        EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
 
-      if (entity is LivingEntity) {
-        entity.setAI(false) // AIを完全に停止
-        entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
-        entity.isInvulnerable = false
-        entity.isSilent = true
-        entity.persistentDataContainer.set(
-            EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
-      }
     }
 
     return entity
