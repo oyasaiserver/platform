@@ -108,9 +108,7 @@ object FollowEntity {
       entity.isCollidable = true // 設置後は当たり判定を戻す（必要に応じて）
       entity.isInvulnerable = false
       entity.isSilent = true
-      entity.persistentDataContainer.set(
-        EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
-
+      entity.persistentDataContainer.set(EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
     }
 
     return entity
