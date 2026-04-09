@@ -49,7 +49,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       player.sendMessage("§l/ep cut/cu  §r範囲選択したｴﾝﾃｨﾃｨを削除")
       player.sendMessage("§l/ep info/in  §rｴﾝﾃｨﾃｨの情報をチャット欄に表示")
       player.sendMessage("§l/ep infoset/ins  §rｴﾝﾃｨﾃｨの情報を変更するGUIを開く(範囲選択で同時設定可)")
-      player.sendMessage("/ep insはエンティティ棒を捨てても開ける(+しゃがみで捨てられる)")
+      player.sendMessage("/ep insはエンティティ棒を捨てても開く(+しゃがみで捨てる)")
       player.sendMessage("§l/ep scale/sc (0.3~3.0)  §rｴﾝﾃｨﾃｨの大きさ変更(範囲選択で同時設定可)")
       player.sendMessage("範囲選択で[全体],[X,Y,Z座標]を同時に動かせる")
       player.sendMessage("§b-----------------おまけ-----------------")
