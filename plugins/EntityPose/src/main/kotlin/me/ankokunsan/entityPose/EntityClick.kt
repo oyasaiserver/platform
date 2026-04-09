@@ -5,6 +5,7 @@ import kotlin.collections.filter
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.activeselection
 import me.ankokunsan.entityPose.EntityCopyClick.Companion.selection
 import me.ankokunsan.entityPose.EntityPose.Companion.CAT_KEY
+import me.ankokunsan.entityPose.EntityPose.Companion.ENTITY_STICK_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.GUI_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.PARROT_KEY
 import me.ankokunsan.entityPose.EntityPose.Companion.RABBIT_KEY
@@ -26,6 +27,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerDropItemEvent
@@ -918,6 +920,14 @@ class EntityClick : Listener {
     }
     selectedPart.keys.removeIf { it.first == uuid }
     selectPart.keys.removeIf { it.first == uuid }
+  }
+
+  @EventHandler
+  fun onCraftItem(event: CraftItemEvent) {
+    val entitystick = event.inventory.matrix.any{item -> item?.itemMeta?.persistentDataContainer?.has(ENTITY_STICK_KEY, PersistentDataType.BYTE) == true }
+    if(entitystick) {
+      event.isCancelled = true
+    }
   }
 
   private fun formatDeg(value: Double): String {
