@@ -924,8 +924,12 @@ class EntityClick : Listener {
 
   @EventHandler
   fun onCraftItem(event: CraftItemEvent) {
-    val entitystick = event.inventory.matrix.any{item -> item?.itemMeta?.persistentDataContainer?.has(ENTITY_STICK_KEY, PersistentDataType.BYTE) == true }
-    if(entitystick) {
+    val entitystick =
+        event.inventory.matrix.any { item ->
+          item?.itemMeta?.persistentDataContainer?.has(ENTITY_STICK_KEY, PersistentDataType.BYTE) ==
+              true
+        }
+    if (entitystick) {
       event.isCancelled = true
     }
   }
