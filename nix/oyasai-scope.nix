@@ -45,7 +45,7 @@ lib.makeScope pkgs.newScope (
     inherit inputs;
 
     terraform = pkgs.terraform.withPlugins (
-      _: with (pkgs.terraform-providers-bin.providers); [
+      _: with (inputs.nixpkgs-terraform-providers-bin.legacyPackages.${system}.providers); [
         cloudflare.cloudflare
         kreuzwerker.docker
         integrations.github

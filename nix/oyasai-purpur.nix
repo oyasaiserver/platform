@@ -12,7 +12,8 @@
   version,
   plugins ? [ ],
   icon ? null,
-  properties ? { },
+  # Can make this an attrset
+  properties ? "",
   passthru ? { },
 }:
 

@@ -23,7 +23,7 @@
       inputs.systems.follows = "systems";
     };
     nixpkgs-terraform-providers-bin = {
-      url = "github:nix-community/nixpkgs-terraform-providers-bin";
+      url = "github:nix-community/nixpkgs-terraform-providers-bin/ccb661b46e0aadcae31081dc6f71d7ab4300bf33";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
