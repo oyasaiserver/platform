@@ -1,0 +1,205 @@
+package io.oyasai
+
+import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderItem
+import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
+import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.toolbox.CustomYaml
+import io.oyasai.toolbox.legacyTextComponent
+import io.oyasai.toolbox.translateColors
+import java.util.*
+import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryAction
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryDragEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.inventory.InventoryView
+import org.bukkit.inventory.ItemStack
+
+object VehicleGarageService : Listener {
+  private const val DEFAULT_SIZE = 54
+  private const val VEHICLE_LIMIT = 6
+  private val fileCache: MutableMap<UUID, CustomYaml> = LinkedHashMap()
+  private val itemCache: MutableMap<UUID, MutableList<ItemStack?>> = LinkedHashMap()
+  private val userInvList: MutableMap<UUID, InventoryView> = LinkedHashMap()
+
+  @EventHandler fun joinPlayer(e: PlayerJoinEvent) = loadPlayerCache(e.player)
+
+  @EventHandler
+  fun quitPlayer(e: PlayerQuitEvent) {
+    val uuid = e.player.uniqueId
+    userInvList[uuid]?.let { closeTask(it, uuid) }
+    removePlayerCache(e.player)
+  }
+
+  private fun loadPlayerCache(player: OfflinePlayer) {
+    val uuid = player.uniqueId
+    val file = CustomYaml("VehicleGarage/${uuid}.yml")
+    val requestedSize = file.getInt("ItemSize", DEFAULT_SIZE)
+    val size = requestedSize.coerceAtMost(DEFAULT_SIZE)
+    if (requestedSize > DEFAULT_SIZE) {
+      Bukkit.getLogger()
+          .warning(
+              "[VehicleGarage] Garage for $uuid exceeded $DEFAULT_SIZE slots. Truncating on load.")
+    }
+    val itemList = (1..size).map { file.getItemStack(it.toString()) }.toMutableList()
+
+    fileCache[uuid] = file
+    itemCache[uuid] = itemList
+  }
+
+  private fun removePlayerCache(player: OfflinePlayer) {
+    val uuid = player.uniqueId
+    fileCache.remove(uuid)
+    itemCache.remove(uuid)
+  }
+
+  fun isVehicleItem(item: ItemStack?): Boolean {
+    return CarBuilder2Item.checkCarItem(item) || AircraftBuilderItem.checkItem(item)
+  }
+
+  fun countSpawnedVehicleItems(uuid: UUID): Int {
+    return CarBuilder2EntityList.countOwnedVehicles(uuid) +
+        AircraftBuilderEntityList.countOwnedVehicles(uuid)
+  }
+
+  fun canSpawnPurchasedVehicle(player: Player): Boolean {
+    return player.canHaveUnlimitedVehicles() ||
+        countSpawnedVehicleItems(player.uniqueId) < VEHICLE_LIMIT
+  }
+
+  fun getItemList(uuid: UUID): MutableList<ItemStack?> = itemCache[uuid] ?: mutableListOf()
+
+  fun save(uuid: UUID, newList: MutableList<ItemStack?>) {
+    val file = fileCache[uuid] ?: return
+
+    val oldSize = file.getInt("ItemSize", DEFAULT_SIZE)
+    (1..oldSize).forEach { file.set(it.toString(), null) }
+
+    val normalizedList = newList.take(DEFAULT_SIZE).toMutableList()
+    if (newList.size > DEFAULT_SIZE) {
+      Bukkit.getLogger()
+          .warning(
+              "[VehicleGarage] VehicleGarage for $uuid exceeded $DEFAULT_SIZE slots. Truncating on save.")
+    }
+
+    file.set("ItemSize", normalizedList.size)
+    normalizedList.forEachIndexed { index, item -> file.set((index + 1).toString(), item) }
+
+    itemCache[uuid] = normalizedList
+    file.save()
+  }
+
+  fun addItem(player: Player, item: ItemStack): Boolean =
+      addItemInternal(player, item, notifyOnline = true)
+
+  fun addItem(player: OfflinePlayer, item: ItemStack): Boolean =
+      addItemInternal(player, item, notifyOnline = false)
+
+  private fun addItemInternal(
+      player: OfflinePlayer,
+      item: ItemStack,
+      notifyOnline: Boolean
+  ): Boolean {
+    val uuid = player.uniqueId
+    var itemList = itemCache[uuid]
+
+    if (itemList == null) {
+      loadPlayerCache(player)
+      itemList =
+          itemCache[uuid]
+              ?: MutableList<ItemStack?>(DEFAULT_SIZE) { null }.also { itemCache[uuid] = it }
+    }
+
+    val index = itemList.indexOfFirst { it == null }
+
+    return if (index == -1) {
+      if (notifyOnline && player is Player) {
+        player.world.dropItem(player.eyeLocation, item)
+        player.sendMessage(translateColors("[OyasaiVehicles] &eガレージに空きがないため、足元にアイテムをドロップしました!"))
+      }
+      removePlayerCache(player)
+      false
+    } else {
+      itemList[index] = item
+      if (!player.isOnline) {
+        save(uuid, itemList)
+        removePlayerCache(player)
+      }
+      true
+    }
+  }
+
+  fun disableFix() {
+    for ((uuid, view) in userInvList.toMap()) {
+      closeTask(view, uuid)
+      view.close()
+    }
+    Bukkit.getOnlinePlayers().forEach { player ->
+      itemCache[player.uniqueId]?.let { save(player.uniqueId, it) }
+    }
+  }
+
+  fun enableFix() {
+    Bukkit.getOnlinePlayers().forEach { loadPlayerCache(it) }
+  }
+
+  fun openInventoryGUI(player: Player) {
+    val itemList = getItemList(player.uniqueId)
+    val newInv =
+        Bukkit.createInventory(null, 54, legacyTextComponent("車庫 &c(LeftClick & VehicleItem Only)"))
+
+    itemList.forEachIndexed { index, item ->
+      if (index < 54) {
+        newInv.setItem(index, item)
+      }
+    }
+
+    val view = player.openInventory(newInv)
+    if (view != null) {
+      userInvList[player.uniqueId] = view
+    }
+  }
+
+  @EventHandler
+  fun clickInventory(event: InventoryClickEvent) {
+    if (event.view != userInvList[event.whoClicked.uniqueId]) return
+
+    if (event.rawSlot > 53) {
+      event.isCancelled = !(event.isLeftClick && !event.isShiftClick)
+      return
+    }
+    event.isCancelled =
+        when (event.action) {
+          InventoryAction.PICKUP_ALL -> !isVehicleItem(event.currentItem)
+          InventoryAction.PLACE_ALL -> !isVehicleItem(event.cursor)
+          else -> true
+        }
+  }
+
+  @EventHandler
+  fun dragInventory(event: InventoryDragEvent) {
+    if (event.view == userInvList[event.whoClicked.uniqueId]) {
+      event.isCancelled = true
+    }
+  }
+
+  @EventHandler
+  fun closeInventory(event: InventoryCloseEvent) {
+    if (event.view == userInvList[event.player.uniqueId]) {
+      closeTask(event.view, event.player.uniqueId)
+    }
+  }
+
+  private fun closeTask(view: InventoryView, uuid: UUID) {
+    val contents = view.topInventory.contents
+    save(uuid, contents.toMutableList())
+    userInvList.remove(uuid)
+  }
+}
