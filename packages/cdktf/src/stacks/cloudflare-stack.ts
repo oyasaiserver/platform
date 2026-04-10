@@ -1,15 +1,15 @@
-import { DnsRecord } from "@cdktf/provider-cloudflare/lib/dns-record/index.js";
-import { CloudflareProvider } from "@cdktf/provider-cloudflare/lib/provider/index.js";
-import { R2Bucket } from "@cdktf/provider-cloudflare/lib/r2-bucket/index.js";
-import type { WorkerVersionModules } from "@cdktf/provider-cloudflare/lib/worker-version/index.js";
+import { DnsRecord } from "@oyasaiserver/cdktf-providers/cloudflare/dns-record";
+import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
+import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
+import type { WorkerVersionModules } from "@oyasaiserver/cdktf-providers/cloudflare/worker-version";
 import {
   WorkerVersion,
   type WorkerVersionConfig,
-} from "@cdktf/provider-cloudflare/lib/worker-version/index.js";
-import { Worker } from "@cdktf/provider-cloudflare/lib/worker/index.js";
-import { WorkersDeployment } from "@cdktf/provider-cloudflare/lib/workers-deployment/index.js";
-import { WorkersRoute } from "@cdktf/provider-cloudflare/lib/workers-route/index.js";
-import { ZoneDnssec } from "@cdktf/provider-cloudflare/lib/zone-dnssec/index.js";
+} from "@oyasaiserver/cdktf-providers/cloudflare/worker-version";
+import { Worker } from "@oyasaiserver/cdktf-providers/cloudflare/worker";
+import { WorkersDeployment } from "@oyasaiserver/cdktf-providers/cloudflare/workers-deployment";
+import { WorkersRoute } from "@oyasaiserver/cdktf-providers/cloudflare/workers-route";
+import { ZoneDnssec } from "@oyasaiserver/cdktf-providers/cloudflare/zone-dnssec";
 import type { Secrets } from "@oyasaiserver/secrets";
 import type { Construct } from "constructs";
 import { globSync, readdirSync } from "node:fs";

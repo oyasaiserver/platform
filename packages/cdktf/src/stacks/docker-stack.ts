@@ -1,7 +1,7 @@
-import { Container } from "@cdktf/provider-docker/lib/container/index.js";
-import { Image } from "@cdktf/provider-docker/lib/image/index.js";
-import { Network } from "@cdktf/provider-docker/lib/network/index.js";
-import { DockerProvider } from "@cdktf/provider-docker/lib/provider/index.js";
+import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
+import { Image } from "@oyasaiserver/cdktf-providers/docker/image";
+import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
+import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import type { Secrets } from "@oyasaiserver/secrets";
 import { Construct } from "constructs";
 import { join } from "node:path";

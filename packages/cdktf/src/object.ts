@@ -1,4 +1,4 @@
-import type { ContainerPorts } from "@cdktf/provider-docker/lib/container/index.js";
+import type { ContainerPorts } from "@oyasaiserver/cdktf-providers/docker/container";
 
 export function mapValues<T extends object, V>(
   object: T,

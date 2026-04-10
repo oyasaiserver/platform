@@ -10,6 +10,7 @@ export * as secret from './secret';
 export * as service from './service';
 export * as tag from './tag';
 export * as volume from './volume';
+export * as dataDockerContainers from './data-docker-containers';
 export * as dataDockerImage from './data-docker-image';
 export * as dataDockerLogs from './data-docker-logs';
 export * as dataDockerNetwork from './data-docker-network';
