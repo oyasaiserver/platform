@@ -1,3 +1,3 @@
 # `docker_image`
 
-Refer to the Terraform Registry for docs: [`docker_image`](https://registry.terraform.io/providers/kreuzwerker/docker/4.0.0/docs/resources/image).
+Refer to the Terraform Registry for docs: [`docker_image`](https://registry.terraform.io/providers/kreuzwerker/docker/4.1.0/docs/resources/image).

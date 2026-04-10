@@ -12,12 +12,11 @@
     "test:integration": "node --test"
   },
   "dependencies": {
-    "@cdktf/provider-cloudflare": "13.7.0",
-    "@cdktf/provider-docker": "12.0.3",
-    "@cdktf/provider-github": "15.3.1",
     "@oyasaiserver/secrets": "file:../secrets",
+    "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",
     "cdktf": "0.21.0",
-    "cdktf-cli": "0.21.0"
+    "cdktf-cli": "0.21.0",
+    "constructs": "10.5.1"
   },
   "peerDependencies": {
     "@types/node": "25.0.3",

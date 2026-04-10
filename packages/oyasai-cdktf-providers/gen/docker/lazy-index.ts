@@ -10,6 +10,7 @@ Object.defineProperty(exports, 'secret', { get: function () { return require('./
 Object.defineProperty(exports, 'service', { get: function () { return require('./service'); } });
 Object.defineProperty(exports, 'tag', { get: function () { return require('./tag'); } });
 Object.defineProperty(exports, 'volume', { get: function () { return require('./volume'); } });
+Object.defineProperty(exports, 'dataDockerContainers', { get: function () { return require('./data-docker-containers'); } });
 Object.defineProperty(exports, 'dataDockerImage', { get: function () { return require('./data-docker-image'); } });
 Object.defineProperty(exports, 'dataDockerLogs', { get: function () { return require('./data-docker-logs'); } });
 Object.defineProperty(exports, 'dataDockerNetwork', { get: function () { return require('./data-docker-network'); } });
