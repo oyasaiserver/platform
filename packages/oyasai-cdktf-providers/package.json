@@ -1,5 +1,5 @@
 {
-  "name": "cdktf-providers",
+  "name": "@oyasaiserver/cdktf-providers",
   "type": "module",
   "exports": {
     "./*": {
