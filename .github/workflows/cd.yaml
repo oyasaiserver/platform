@@ -53,6 +53,11 @@ jobs:
         run: |
           npm ci
         working-directory: packages/oyasai-plugin-registry
+      - name: Build cdktf providers
+        run: |
+          npm ci
+          npm run build
+        working-directory: packages/oyasai-cdktf-providers
       - name: Download cdktf deps
         run: |
           npm ci
