@@ -20,10 +20,16 @@ jobs:
           path: "~/.cache/nix"
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
-          name: oyasaiserver
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          extra_nix_config: |
+            extra-substituters = s3://nix-cache?endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+            extra-trusted-public-keys = ${{ env.NIX_CACHE_PUBLIC_KEY }}
+      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+        with:
+          endpoint: s3://nix-cache?endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+          awsAccessKeyId: "${{ vars.AWS_ACCESS_KEY_ID }}"
+          awsSecretAccessKey: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
       - run: nix run .#nix-flake-check-changed
 
   nix-flake-health:

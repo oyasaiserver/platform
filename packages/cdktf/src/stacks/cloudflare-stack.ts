@@ -46,6 +46,14 @@ export class CloudflareStack extends OyasaiTerraformStack {
       },
     );
 
+    // TODO: create "internal" stack
+    if (this.environment === "production") {
+      new R2Bucket(this, "nix-cache", {
+        accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+        name: "nix-cache",
+      });
+    }
+
     for (const { name, config } of this.getApps()) {
       const domain = `${name}.${rootDnsRecord.name}`;
 
