@@ -25,7 +25,7 @@ runs:
     - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
       with:
         extra_nix_config: |
-          extra-substituters = s3://nix-cache?scheme=https&region=auto&endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+          extra-substituters = s3://nix-cache?endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
           extra-trusted-public-keys = ${{ inputs.nix-cache-public-key }}
     - name: Make R2 credentials accessible to nix-daemon
       shell: bash
