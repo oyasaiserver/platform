@@ -1,0 +1,41 @@
+name: Setup Nix with S3 binary cache
+description: Installs Nix and configures R2/S3 binary cache for reads and writes
+
+inputs:
+  nix-cache-public-key:
+    description: Public key for verifying nix cache signatures
+    required: true
+  nix-cache-signing-key:
+    description: Private key for signing nix store paths pushed to the cache
+    required: true
+  aws-access-key-id:
+    description: AWS access key ID for R2
+    required: true
+  aws-secret-access-key:
+    description: AWS secret access key for R2
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+      with:
+        key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+        path: "~/.cache/nix"
+    - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
+      with:
+        extra_nix_config: |
+          extra-substituters = s3://nix-cache?scheme=https&region=auto&endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+          extra-trusted-public-keys = ${{ inputs.nix-cache-public-key }}
+    - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+      with:
+        endpoint: s3://nix-cache?scheme=https&region=auto&endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+        signingKey: "${{ inputs.nix-cache-signing-key }}"
+        awsAccessKeyId: "${{ inputs.aws-access-key-id }}"
+        awsSecretAccessKey: "${{ inputs.aws-secret-access-key }}"
+    - name: Make R2 credentials accessible to nix-daemon
+      shell: bash
+      run: |
+        sudo -i aws configure set aws_access_key_id "${{ inputs.aws-access-key-id }}"
+        sudo -i aws configure set aws_secret_access_key "${{ inputs.aws-secret-access-key }}"
+        sudo -i aws configure set region "auto"
