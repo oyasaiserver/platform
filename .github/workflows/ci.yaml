@@ -22,11 +22,11 @@ jobs:
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
         with:
           extra_nix_config: |
-            extra-substituters = s3://nix-cache?endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
-            extra-trusted-public-keys = ${{ env.NIX_CACHE_PUBLIC_KEY }}
+            extra-substituters = s3://nix-cache?scheme=https&endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
       - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
         with:
-          endpoint: s3://nix-cache?endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
+          endpoint: s3://nix-cache?scheme=https&endpoint=7befe273c79e6f7993c1cd4534d6afff.r2.cloudflarestorage.com
           signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
           awsAccessKeyId: "${{ vars.AWS_ACCESS_KEY_ID }}"
           awsSecretAccessKey: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
