@@ -25,6 +25,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       - run: nix run .#nix-flake-check-changed
 
   nix-flake-health:
@@ -37,6 +38,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       - run: nix flake show
       - run: nix flake lock --no-update-lock-file
       - run: nix flake check --no-build
@@ -55,6 +57,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
 
   nix-devshell-windows:
@@ -87,6 +90,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io

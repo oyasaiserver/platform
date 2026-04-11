@@ -14,6 +14,9 @@ inputs:
   aws-secret-access-key:
     description: AWS secret access key for R2
     required: true
+  substituter:
+    description: S3/HTTPS substituter URL for the nix binary cache
+    required: true
 
 runs:
   using: composite
@@ -25,7 +28,7 @@ runs:
     - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
       with:
         extra_nix_config: |
-          extra-substituters = https://nix-cache.oyasai.io
+          extra-substituters = ${{ inputs.substituter }}
           extra-trusted-public-keys = ${{ inputs.nix-cache-public-key }}
     - name: Make R2 credentials accessible to nix-daemon
       shell: bash
@@ -35,5 +38,5 @@ runs:
         sudo -i aws configure set region "auto"
     - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
       with:
-        endpoint: https://nix-cache.oyasai.io
+        endpoint: ${{ inputs.substituter }}
         signingKey: "${{ inputs.nix-cache-signing-key }}"

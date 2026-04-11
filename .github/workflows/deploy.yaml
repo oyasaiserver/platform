@@ -28,6 +28,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       - run: nix profile add nixpkgs#bore-cli
       - name: Compute tunnel config
         id: tunnel-config

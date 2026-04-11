@@ -41,6 +41,7 @@ jobs:
           nix-cache-signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
           aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          substituter: ${{ vars.NIX_CACHE_SUBSTITUTER }}
       # FIXME: super ugly, non-nix deployment. Fix my nixifying cdktf (or switching to terranix)
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
       - name: Build plugins
