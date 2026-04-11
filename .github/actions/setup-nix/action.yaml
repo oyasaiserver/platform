@@ -30,12 +30,10 @@ runs:
         extra_nix_config: |
           extra-substituters = ${{ inputs.substituter }}
           extra-trusted-public-keys = ${{ inputs.nix-cache-public-key }}
-    - name: Make R2 credentials accessible to nix-daemon
+    - run: |
+        aws configure set aws_access_key_id "${{ inputs.aws-access-key-id }}"
+        aws configure set aws_secret_access_key "${{ inputs.aws-secret-access-key }}"
       shell: bash
-      run: |
-        sudo -i aws configure set aws_access_key_id "${{ inputs.aws-access-key-id }}"
-        sudo -i aws configure set aws_secret_access_key "${{ inputs.aws-secret-access-key }}"
-        sudo -i aws configure set region "auto"
     - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
       with:
         endpoint: ${{ inputs.substituter }}
