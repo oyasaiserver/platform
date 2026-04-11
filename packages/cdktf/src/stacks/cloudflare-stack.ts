@@ -60,7 +60,7 @@ export class CloudflareStack extends OyasaiTerraformStack {
         domain: `nix-cache.${rootDnsRecord.name}`,
         enabled: true,
         zoneId: this.zoneId,
-      })
+      });
     }
 
     for (const { name, config } of this.getApps()) {
