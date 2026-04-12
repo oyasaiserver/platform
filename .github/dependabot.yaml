@@ -1,21 +1,26 @@
 version: 2
+
 updates:
   - package-ecosystem: "npm"
     directory: "/"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
     groups:
       all:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "@cdktf/*"
   - package-ecosystem: "github-actions"
     directory: "/"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
   - package-ecosystem: "gradle"
     directory: "/"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
     groups:
