@@ -12,50 +12,82 @@ jobs:
       - uses: nobssoftware/nocommit@5c3cf9519fe40b80b0954d254085b67b532a5dc3
 
   nix-flake-check:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
-          name: oyasaiserver
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
       - run: nix run .#nix-flake-check-changed
 
   nix-flake-health:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
-          name: oyasaiserver
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
       - run: nix flake show
       - run: nix flake lock --no-update-lock-file
       - run: nix flake check --no-build
 
   nix-devshell:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
-          name: oyasaiserver
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
 
   nix-devshell-windows:
@@ -81,16 +113,24 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c
         with:
-          name: oyasaiserver
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
       - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io

@@ -10,11 +10,12 @@ import { Worker } from "@oyasaiserver/cdktf-providers/cloudflare/worker";
 import { WorkersDeployment } from "@oyasaiserver/cdktf-providers/cloudflare/workers-deployment";
 import { WorkersRoute } from "@oyasaiserver/cdktf-providers/cloudflare/workers-route";
 import { ZoneDnssec } from "@oyasaiserver/cdktf-providers/cloudflare/zone-dnssec";
+import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
 import type { Secrets } from "@oyasaiserver/secrets";
 import type { Construct } from "constructs";
-import { globSync, readdirSync } from "node:fs";
+import { globSync } from "node:fs";
 import { join } from "node:path";
-import { directory, readJsonFileSync } from "../fs.ts";
+import { readJsonFileSync } from "../fs.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export class CloudflareStack extends OyasaiTerraformStack {
@@ -45,6 +46,22 @@ export class CloudflareStack extends OyasaiTerraformStack {
         content: this.secrets.PUBLIC_IPV4,
       },
     );
+
+    // TODO: create "internal" stack
+    if (this.environment === "production") {
+      const nixCacheBucket = new R2Bucket(this, "nix-cache", {
+        accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+        name: "nix-cache",
+      });
+
+      new R2CustomDomain(this, "nix-cache-custom-hostname", {
+        accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+        bucketName: nixCacheBucket.name,
+        domain: `nix-cache.${rootDnsRecord.name}`,
+        enabled: true,
+        zoneId: this.zoneId,
+      });
+    }
 
     for (const { name, config } of this.getApps()) {
       const domain = `${name}.${rootDnsRecord.name}`;

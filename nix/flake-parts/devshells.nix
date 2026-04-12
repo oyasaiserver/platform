@@ -18,6 +18,8 @@
             gradle2nix-cli
             nixd
             typescript-language-server
+            infisical
+            awscli2
           ];
       };
     };
