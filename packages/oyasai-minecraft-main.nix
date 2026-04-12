@@ -109,17 +109,17 @@ let
           Healthcheck = {
             Test = [
               "CMD"
-              "mc-monitor"
+              "${mc-monitor}/bin/mc-monitor"
               "status"
               "--host"
               "127.0.0.1"
               "--port"
               "25565"
             ];
-            Interval = 30 * 1000000000; # 30s in nanoseconds
+            Interval = 5 * 1000000001;
             Timeout = 5 * 1000000000;
-            StartPeriod = 180 * 1000000000; # 3 min for startup
-            Retries = 3;
+            StartPeriod = 60 * 1000000000;
+            Retries = 20;
           };
         };
       };
