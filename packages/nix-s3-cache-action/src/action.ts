@@ -8,6 +8,7 @@ import {
 import { join, dirname } from "node:path";
 import { EOL, homedir, tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
+import { URL } from "node:url";
 
 const NIX_STORE_PATH = "/nix/store";
 const NIX_KEY_PATH = join(homedir(), ".nix", "nix-cache-key.sec");
@@ -42,14 +43,6 @@ export function push(endpoint: string): void {
     readFileSync(STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
   );
   const newPaths = lsNixStore().filter((p) => !preBuild.has(p));
-
-  if (!newPaths.length) {
-    console.log("No new store paths to push");
-    return;
-  }
-
-  console.log(`Pushing ${newPaths.length} paths to ${endpoint}`);
-
   spawnSync(
     "nix",
     ["copy", "--to", mkSubstituterUrl(endpoint).href, ...newPaths],

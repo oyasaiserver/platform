@@ -54,6 +54,10 @@ export class CloudflareStack extends OyasaiTerraformStack {
         name: "nix-cache",
       });
 
+      // Practically read-only because Cloudflare limits upload to 100MB for
+      // "proxied" domains. - shun 2026-04
+      //
+      // https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/#cloudflare-specific-information
       new R2CustomDomain(this, "nix-cache-custom-hostname", {
         accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
         bucketName: nixCacheBucket.name,
