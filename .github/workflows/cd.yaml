@@ -4,7 +4,7 @@ on:
     branches:
       - master
       # NOMERGE
-      # - build/nixify-cdktf
+      - build/nixify-cdktf
   workflow_dispatch:
     inputs:
       environment:
@@ -40,6 +40,9 @@ jobs:
     environment: ${{ needs.envs.outputs.environment }}
     env:
       ENVIRONMENT: ${{ needs.envs.outputs.environment }}
+    defaults:
+      run:
+        working-directory: packages/oyasai-cdktf
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
@@ -60,6 +63,10 @@ jobs:
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
           signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+      - name: Compute docker image names
+        run: |
+          nix build .#all-docker-tags.json
+          <result tee /dev/stderr > images.json
       - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
         with:
           project-slug: "platform"
@@ -68,5 +75,4 @@ jobs:
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - name: Deploy
         run: |
-          nix run .#oyasai-cdktf -- deploy '*' --auto-approve
-        working-directory: packages/cdktf
+          OYASAI_IMAGE_ID="$(cat images.json)" nix run .#oyasai-cdktf -- deploy '*' --auto-approve
