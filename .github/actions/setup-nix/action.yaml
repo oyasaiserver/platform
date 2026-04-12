@@ -30,10 +30,11 @@ runs:
         extra_nix_config: |
           extra-substituters = ${{ inputs.substituter }}
           extra-trusted-public-keys = ${{ inputs.nix-cache-public-key }}
-    - run: |
+    - name: Configure Cloudflare credentials
+      shell: bash
+      run: |
         aws configure set aws_access_key_id "${{ inputs.aws-access-key-id }}"
         aws configure set aws_secret_access_key "${{ inputs.aws-secret-access-key }}"
-      shell: bash
     - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
       with:
         endpoint: ${{ inputs.substituter }}
