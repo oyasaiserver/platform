@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { EOL, homedir, tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { URL } from "node:url";
-import { lsNixStore, STORE_SNAPSHOT_PATH } from "./common.ts";
+import { listNixStore, STORE_SNAPSHOT_PATH } from "./common.ts";
 import { getInput } from "./toolkit.ts";
 
 const NIX_KEY_PATH = join(homedir(), ".nix", "nix-cache-key.sec");
@@ -21,11 +21,6 @@ function post() {
   const skipPush = getInput("skip-push") === "true";
   const signingKey = getInput("signing-key");
 
-  const preBuild = new Set(
-    readFileSync(STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
-  );
-
-  const newPaths = lsNixStore().filter((p) => !preBuild.has(p));
   if (signingKey) {
     mkdirSync(dirname(NIX_KEY_PATH), { recursive: true });
     writeFileSync(NIX_KEY_PATH, signingKey, { mode: constants.S_IRUSR });
@@ -40,6 +35,11 @@ function post() {
     console.warn("Skipping push: signing-key not set");
     return;
   }
+
+  const snapshot = new Set(
+    readFileSync(STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
+  );
+  const newPaths = new Set(listNixStore()).difference(snapshot);
 
   // FIXME: assumes Nix is installed in multi-user mode (daemon runs as root)
   // and that creds are configured for root (e.g. via `sudo -i aws configure`).
