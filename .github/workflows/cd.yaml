@@ -75,7 +75,7 @@ jobs:
           npm ci
           npm run download-plugins
         working-directory: packages/minecraft-main
-      - uses: infisical/secrets-action@v1.0.15
+      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
         with:
           project-slug: "platform"
           env-slug: ${{ env.ENVIRONMENT }}
