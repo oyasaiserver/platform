@@ -25,6 +25,7 @@ function mkSubstituterUrl(endpoint: string): URL {
   const url = new URL(endpoint);
   url.searchParams.set("compression", "zstd");
   url.searchParams.set("parallel-compression", "true");
+  url.searchParams.set("multipart-upload", "true");
   url.searchParams.set("secret-key", NIX_KEY_PATH);
   return url;
 }
