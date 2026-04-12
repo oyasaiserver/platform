@@ -1,0 +1,11 @@
+{
+  "name": "nix-s3-cache-action",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "25.0.3",
+    "typescript": "5.9.3"
+  }
+}
