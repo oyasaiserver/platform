@@ -5,6 +5,7 @@
   coreutils,
   purpurServers,
   writeTextFile,
+  mc-monitor,
 }:
 
 {
@@ -28,7 +29,10 @@ in
 writeShellApplication {
   inherit name passthru;
 
-  runtimeInputs = [ coreutils ];
+  runtimeInputs = [
+    coreutils
+    mc-monitor
+  ];
 
   text = ''
     echo "eula=true" > eula.txt

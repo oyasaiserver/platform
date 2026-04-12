@@ -17,6 +17,10 @@
       url = "github:oyasaiserver/gradle2nix?ref=v2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mc-monitor = {
+      url = "github:itzg/mc-monitor";
+      flake = false;
+    };
     nix-minecraft = {
       url = "github:infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";

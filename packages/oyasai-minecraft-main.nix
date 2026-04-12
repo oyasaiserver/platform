@@ -4,6 +4,7 @@
   lib,
   oyasaiDockerTools,
   stdenv,
+  mc-monitor,
 }:
 
 let
@@ -105,6 +106,21 @@ let
         config = {
           Cmd = [ (lib.getExe final) ];
           WorkingDir = "/data";
+          Healthcheck = {
+            Test = [
+              "CMD"
+              "mc-monitor"
+              "status"
+              "--host"
+              "127.0.0.1"
+              "--port"
+              "25565"
+            ];
+            Interval = 30 * 1000000000; # 30s in nanoseconds
+            Timeout = 5 * 1000000000;
+            StartPeriod = 180 * 1000000000; # 3 min for startup
+            Retries = 3;
+          };
         };
       };
     };
