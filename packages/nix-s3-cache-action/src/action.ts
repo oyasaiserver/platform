@@ -43,9 +43,12 @@ export function push(endpoint: string): void {
     readFileSync(STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
   );
   const newPaths = lsNixStore().filter((p) => !preBuild.has(p));
+  // FIXME: assumes Nix is installed in multi-user mode (daemon runs as root)
+  // and that creds are configured for root (e.g. via `sudo -i aws configure`).
+  // This will break on single-user Nix installs. - shun 2026-04
   spawnSync(
-    "nix",
-    ["copy", "--to", mkSubstituterUrl(endpoint).href, ...newPaths],
+    "sudo",
+    ["-i", "nix", "copy", "--to", mkSubstituterUrl(endpoint).href, ...newPaths],
     { stdio: "inherit" },
   );
 }
