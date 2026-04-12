@@ -5,31 +5,37 @@ import { spawnSync } from "node:child_process";
 const IS_POST = !!process.env["STATE_isPost"];
 
 // GitHub Actions protocol — no dependencies needed
-function getInput(name: string) {
+function getInput(name: string): string {
   return (
     process.env[`INPUT_${name.toUpperCase().replace(/-/g, "_")}`] ?? ""
   ).trim();
 }
 
-function info(msg) {
+function info(msg: string): void {
   console.log(msg);
 }
 
-function setFailed(msg) {
+function setFailed(msg: string): void {
   console.error(`::error::${msg}`);
   process.exitCode = 1;
 }
 
-function saveState(key, val) {
-  fs.appendFileSync(process.env.GITHUB_STATE, `${key}=${val}\n`);
+function saveState(key: string, val: string): void {
+  // GITHUB_STATE is always set in a GitHub Actions runner
+  fs.appendFileSync(process.env["GITHUB_STATE"]!, `${key}=${val}\n`);
+}
+
+function errorMessage(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
 }
 
 // ---
 
-const NIX_KEY_PATH = path.join(process.env.HOME, ".nix", "nix-cache-key.sec");
+// HOME and GITHUB_STATE are always set in a GitHub Actions runner
+const NIX_KEY_PATH = path.join(process.env["HOME"]!, ".nix", "nix-cache-key.sec");
 const STORE_SNAPSHOT_PATH = "/tmp/nix-store-pre-build";
 
-function listNixStore() {
+function listNixStore(): string[] {
   const skip = [".drv", ".drv.chroot", ".check", ".lock"];
   return fs
     .readdirSync("/nix/store")
@@ -38,13 +44,13 @@ function listNixStore() {
     .sort();
 }
 
-function buildCacheUrl(endpoint) {
+function buildCacheUrl(endpoint: string): string {
   const sep = endpoint.includes("?") ? "&" : "?";
   const keyParam = `secret-key=${encodeURIComponent(NIX_KEY_PATH)}`;
   return `${endpoint}${sep}compression=zstd&parallel-compression=true&${keyParam}`;
 }
 
-function setup() {
+function setup(): void {
   const signingKey = getInput("signing-key");
 
   if (signingKey) {
@@ -55,7 +61,7 @@ function setup() {
   fs.writeFileSync(STORE_SNAPSHOT_PATH, listNixStore().join("\n"));
 }
 
-function push() {
+function push(): void {
   const endpoint = getInput("endpoint");
   const signingKey = getInput("signing-key");
   const skipPush = getInput("skip-push") === "true";
@@ -89,7 +95,7 @@ function push() {
   );
 
   if (result.status !== 0) {
-    throw new Error(`nix copy exited with status ${result.status}`);
+    throw new Error(`nix copy exited with status ${result.status ?? "unknown"}`);
   }
 }
 
@@ -100,12 +106,12 @@ if (!IS_POST) {
   try {
     setup();
   } catch (e) {
-    setFailed(e.message);
+    setFailed(errorMessage(e));
   }
 } else {
   try {
     push();
   } catch (e) {
-    setFailed(e.message);
+    setFailed(errorMessage(e));
   }
 }

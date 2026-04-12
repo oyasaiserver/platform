@@ -15,5 +15,5 @@ inputs:
 
 runs:
   using: node24
-  main: index.ts
-  post: index.ts
+  main: src/index.ts
+  post: src/index.ts
