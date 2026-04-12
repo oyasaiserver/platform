@@ -44,8 +44,8 @@ export function push(endpoint: string): void {
   );
   const newPaths = lsNixStore().filter((p) => !preBuild.has(p));
   spawnSync(
-    "nix",
-    ["copy", "--to", mkSubstituterUrl(endpoint).href, ...newPaths],
+    "sudo",
+    ["-i", "nix", "copy", "--to", mkSubstituterUrl(endpoint).href, ...newPaths],
     { stdio: "inherit" },
   );
 }
