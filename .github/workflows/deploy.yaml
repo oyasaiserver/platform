@@ -35,10 +35,10 @@ jobs:
         run: |
           aws configure set aws_access_key_id "${{ vars.AWS_ACCESS_KEY_ID }}"
           aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-      - uses: nix-ocaml/nix-s3-action@84d7b6415d8603e815741fe77f0aaffa22736d4b
+      - uses: ./packages/nix-s3-cache-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signingKey: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
       - run: nix profile add nixpkgs#bore-cli
       - name: Compute tunnel config
         id: tunnel-config

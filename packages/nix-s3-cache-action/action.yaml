@@ -1,0 +1,19 @@
+name: Nix S3 Cache Action
+description: Configures Nix to use an S3-compatible binary cache for reads and writes
+
+inputs:
+  endpoint:
+    description: S3 endpoint URL (e.g. https://nix-cache.example.com or s3://bucket?...)
+    required: true
+  signing-key:
+    description: Private key for signing store paths (from `nix key generate-secret`). If omitted, no paths are pushed.
+    required: false
+  skip-push:
+    description: Set to true to disable pushing build results to the cache
+    required: false
+    default: "false"
+
+runs:
+  using: node24
+  main: index.ts
+  post: index.ts
