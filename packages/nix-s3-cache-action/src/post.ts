@@ -1,26 +1,12 @@
-import {
-  readdirSync,
-  mkdirSync,
-  writeFileSync,
-  readFileSync,
-  constants,
-} from "node:fs";
-import { join, dirname } from "node:path";
+import { constants, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { EOL, homedir, tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { URL } from "node:url";
+import { listNixStore, STORE_SNAPSHOT_PATH } from "./common.ts";
+import { getInput } from "./toolkit.ts";
 
-const NIX_STORE_PATH = "/nix/store";
 const NIX_KEY_PATH = join(homedir(), ".nix", "nix-cache-key.sec");
-const STORE_SNAPSHOT_PATH = join(tmpdir(), "nix-store-pre-build");
-
-function lsNixStore(): string[] {
-  const skip = [".drv", ".drv.chroot", ".check", ".lock"];
-  return readdirSync(NIX_STORE_PATH)
-    .filter((e) => !skip.some((s) => e.endsWith(s)))
-    .map((e) => join(NIX_STORE_PATH, e))
-    .sort();
-}
 
 function mkSubstituterUrl(endpoint: string): URL {
   const url = new URL(endpoint);
@@ -30,19 +16,31 @@ function mkSubstituterUrl(endpoint: string): URL {
   return url;
 }
 
-export function setup(signingKey: string): void {
+function post() {
+  const endpoint = getInput("endpoint", { required: true });
+  const skipPush = getInput("skip-push") === "true";
+  const signingKey = getInput("signing-key");
+
   if (signingKey) {
     mkdirSync(dirname(NIX_KEY_PATH), { recursive: true });
     writeFileSync(NIX_KEY_PATH, signingKey, { mode: constants.S_IRUSR });
   }
-  writeFileSync(STORE_SNAPSHOT_PATH, lsNixStore().join(EOL));
-}
 
-export function push(endpoint: string): void {
-  const preBuild = new Set(
+  if (skipPush) {
+    console.log("Skipping push: skip-push is true");
+    return;
+  }
+
+  if (!signingKey) {
+    console.warn("Skipping push: signing-key not set");
+    return;
+  }
+
+  const snapshot = new Set(
     readFileSync(STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
   );
-  const newPaths = lsNixStore().filter((p) => !preBuild.has(p));
+  const newPaths = new Set(listNixStore()).difference(snapshot);
+
   // FIXME: assumes Nix is installed in multi-user mode (daemon runs as root)
   // and that creds are configured for root (e.g. via `sudo -i aws configure`).
   // This will break on single-user Nix installs. - shun 2026-04
@@ -52,3 +50,5 @@ export function push(endpoint: string): void {
     { stdio: "inherit" },
   );
 }
+
+post();
