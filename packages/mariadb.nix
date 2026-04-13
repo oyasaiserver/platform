@@ -2,6 +2,7 @@
   oyasaiDockerTools,
   dockerTools,
   stdenv,
+  lib,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -21,7 +22,9 @@ oyasaiDockerTools.buildImage {
     finalImageName = name;
     finalImageTag = "10.4.28";
   };
-  config.Entrypoint = [ "docker-entrypoint.sh" ];
-  config.Cmd = [ "mysqld" ];
-  platforms = builtins.attrNames hashes;
+  config = {
+    Entrypoint = [ "docker-entrypoint.sh" ];
+    Cmd = [ "mysqld" ];
+  };
+  platforms = lib.attrNames hashes;
 }
