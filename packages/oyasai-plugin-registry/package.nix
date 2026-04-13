@@ -32,9 +32,7 @@ let
           mkdir -p ${builtins.dirOf out}
         ''
         + (
-          if (oyasai-plugins ? id) then
-            "cp ${oyasai-plugins.${id}}/${definition.name} ${out}"
-          else if definition.type == "static" then
+          if definition.type == "static" then
             "cp ${directory.static}/${definition.name} ${out}"
           else
             "${final}/bin/plugin-registry-download-helper ${
@@ -61,7 +59,11 @@ let
       };
 
       forVersion = (
-        version: (lib.mapAttrs (id: _: "${final}/${mkOut version id}") (data.${version} // oyasai-plugins))
+        version:
+        (lib.mapAttrs (
+          id: _:
+          if (lib.hasAttr id oyasai-plugins) then oyasai-plugins.${id} else "${final}/${mkOut version id}"
+        ) (data.${version} // oyasai-plugins))
       );
     };
   };

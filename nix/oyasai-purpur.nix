@@ -45,7 +45,13 @@ writeShellApplication {
     rm -rf plugins/.paper-remapped
     rm -f plugins/*.jar
 
-    ${lib.concatMapStringsSep "\n" (k: "cp --no-preserve=ownership,mode ${k} plugins") plugins}
+    ${lib.concatMapStringsSep "\n" (
+      k:
+      "cp --no-preserve=ownership,mode ${k} ${
+        # HOTFIX come up with a better way - shun 2026-04
+        if (lib.hasSuffix ".jar" k) then "plugins" else "plugins/${builtins.baseNameOf k}.jar"
+      }"
+    ) plugins}
 
     if [ -n "''${RCON_PASSWORD:-}" ]; then
       printf '\nrcon.password=%s\n' "''${RCON_PASSWORD}" >> server.properties
