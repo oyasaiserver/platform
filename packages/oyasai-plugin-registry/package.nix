@@ -32,7 +32,7 @@ let
           mkdir -p ${builtins.dirOf out}
         ''
         + (
-          if definition.type == "local" then
+          if (oyasai-plugins ? id) then
             "cp ${oyasai-plugins.${id}}/${definition.name} ${out}"
           else if definition.type == "static" then
             "cp ${directory.static}/${definition.name} ${out}"
