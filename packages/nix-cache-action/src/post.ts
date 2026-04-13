@@ -1,9 +1,10 @@
 import { constants, readFileSync, writeFileSync } from "node:fs";
-import { EOL } from "node:os";
+import { EOL, homedir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { URL } from "node:url";
 import { listNixStore, NIX_STORE_SNAPSHOT_PATH } from "./common.ts";
 import { getInput } from "./actions-toolkit.ts";
+import { join } from "node:path";
 
 function post() {
   const endpoint = getInput("endpoint", { required: true });
@@ -25,7 +26,7 @@ function post() {
   );
   const pathsToPush = new Set(listNixStore()).difference(snapshot);
 
-  const signingKeyPath = ".nix-cache-signing-key";
+  const signingKeyPath = join(homedir(), ".nix-cache-signing-key");
   writeFileSync(signingKeyPath, signingKey, { mode: constants.S_IRUSR });
 
   const url = new URL(endpoint);
