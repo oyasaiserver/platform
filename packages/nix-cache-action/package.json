@@ -1,5 +1,5 @@
 {
-  "name": "nix-s3-cache-action",
+  "name": "nix-cache-action",
   "type": "module",
   "scripts": {
     "build": "tsc"
