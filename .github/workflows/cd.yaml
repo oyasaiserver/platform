@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - master
-      # NOMERGE
-      - build/nixify-cdktf
   workflow_dispatch:
     inputs:
       environment:
