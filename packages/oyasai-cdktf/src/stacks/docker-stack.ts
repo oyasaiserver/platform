@@ -34,6 +34,7 @@ export class DockerStack extends OyasaiTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       mariadb: imageIds.mariadb,
+      mysqlBackup: imageIds["mysql-backup"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       minecraftBackup: imageIds["mc-backup"],
     } as const;
@@ -138,7 +139,7 @@ export class DockerStack extends OyasaiTerraformStack {
       new Container(this, this.envAwareId("mariadb-backup-container"), {
         name: "mariadb-backup",
         dependsOn: [mariadbContainer],
-        image: "databack/mysql-backup",
+        image: images.mysqlBackup,
         restart: "unless-stopped",
         networksAdvanced: [network],
         command: ["dump"],

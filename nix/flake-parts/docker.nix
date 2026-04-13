@@ -13,7 +13,7 @@
         let
           oyasaiScope = config.oyasai.scope;
           standalone-docker-images = lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) {
-            inherit (oyasaiScope) mc-backup mariadb;
+            inherit (oyasaiScope) mc-backup mariadb mysql-backup;
           };
           docker-image-derivs =
             lib.flatten (
