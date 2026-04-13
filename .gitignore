@@ -431,3 +431,6 @@ archive
 
 # Gradle wrapper
 !gradle/wrapper/gradle-wrapper.jar
+
+# Misc
+data

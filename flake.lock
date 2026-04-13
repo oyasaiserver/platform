@@ -141,6 +141,22 @@
         "type": "github"
       }
     },
+    "mc-monitor": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773144417,
+        "narHash": "sha256-EKsASQZ84D5S+eUEh8yUqhhdfFib4XtnGltN/hIpHMc=",
+        "owner": "itzg",
+        "repo": "mc-monitor",
+        "rev": "fcb19bdeb0a3d564d03156b9528c2d6bd7afb294",
+        "type": "github"
+      },
+      "original": {
+        "owner": "itzg",
+        "repo": "mc-monitor",
+        "type": "github"
+      }
+    },
     "nix-minecraft": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -267,6 +283,7 @@
         "devshell": "devshell",
         "flake-parts": "flake-parts",
         "gradle2nix": "gradle2nix",
+        "mc-monitor": "mc-monitor",
         "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs",
         "nixpkgs-terraform-providers-bin": "nixpkgs-terraform-providers-bin",

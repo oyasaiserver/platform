@@ -11,7 +11,7 @@
 }:
 let
   final = gradle2nix.buildGradlePackage {
-    pname = "plugins";
+    name = "oyasai-plugins";
     version = "0.0.0";
     src =
       with lib.fileset;
@@ -24,10 +24,16 @@ let
           ../settings.gradle.kts
         ];
       };
+
     inherit gradle;
     buildJdk = jdk;
     lockFile = ../gradle.lock;
-    gradleBuildFlags = [ "build" ];
+
+    gradleBuildFlags = [
+      "build"
+      "--no-daemon"
+    ];
+
     installPhase = ''
       runHook preInstall
 
