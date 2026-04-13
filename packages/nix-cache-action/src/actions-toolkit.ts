@@ -5,24 +5,17 @@
  * relatively stable actions protocol. - shun 2026-04
  */
 import { ok } from "node:assert";
-import { appendFileSync } from "node:fs";
-import { EOL } from "node:os";
 import { env } from "node:process";
 
 export interface InputOptions {
   required?: boolean;
 }
 
+/*
+ * Inspired by: https://github.com/actions/toolkit/blob/b68d046fe39bcaf86bb49660cb3f307c35d6efb9/packages/core/src/core.ts#L151
+ */
 export function getInput(name: string, options?: InputOptions): string {
-  const val = env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
+  const val = env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] ?? "";
   ok(!options?.required || val, `Missing required input: ${name}`);
   return val.trim();
-}
-
-export function saveState(key: string, val: string): void {
-  appendFileSync(env["GITHUB_STATE"]!, `${key}=${val}` + EOL);
-}
-
-export function getState(key: string): string {
-  return process.env[`STATE_${key}`] ?? "";
 }

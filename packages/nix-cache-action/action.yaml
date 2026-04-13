@@ -1,0 +1,19 @@
+name: Nix Cache Action
+description: Configures Nix to use a custom HTTP/S3 binary cache store
+
+inputs:
+  endpoint:
+    description: URL of the destination Nix store.
+    required: true
+  signing-key:
+    description: Path to the secret key used to sign the binary cache. If omitted, no paths are pushed.
+    required: false
+  skip-push:
+    description: Set to true to disable pushing build results to the cache
+    required: false
+    default: "false"
+
+runs:
+  using: node24
+  main: src/main.ts
+  post: src/post.ts
