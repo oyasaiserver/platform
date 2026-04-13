@@ -109,12 +109,8 @@ let
           Healthcheck = {
             Test = [
               "CMD"
-              "${mc-monitor}/bin/mc-monitor"
+              (lib.getExe mc-monitor)
               "status"
-              "--host"
-              "127.0.0.1"
-              "--port"
-              "25565"
             ];
             Interval = 5 * 1000000000;
             Timeout = 5 * 1000000000;
