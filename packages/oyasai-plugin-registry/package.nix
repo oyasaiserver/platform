@@ -60,7 +60,9 @@ let
         '';
       };
 
-      forVersion = (version: (lib.mapAttrs (id: _: "${final}/${mkOut version id}") data.${version}));
+      forVersion = (
+        version: (lib.mapAttrs (id: _: "${final}/${mkOut version id}") (data.${version} // oyasai-plugins))
+      );
     };
   };
 in

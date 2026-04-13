@@ -34,6 +34,10 @@ let
       "--no-daemon"
     ];
 
+    # TODO: this feels like a weird place to set these options, but without the
+    # build fails with OOM.
+    _JAVA_OPTIONS = "-Xmx4g -Xms512m -XX:MaxMetaspaceSize=512m";
+
     installPhase = ''
       runHook preInstall
 
