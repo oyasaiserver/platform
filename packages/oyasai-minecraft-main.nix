@@ -116,7 +116,7 @@ let
               "--port"
               "25565"
             ];
-            Interval = 5 * 1000000001;
+            Interval = 5 * 1000000000;
             Timeout = 5 * 1000000000;
             StartPeriod = 60 * 1000000000;
             Retries = 20;

@@ -91,12 +91,6 @@ export class DockerStack extends OyasaiTerraformStack {
           }),
           RCON_PASSWORD: this.secrets.RCON_PASSWORD,
         }),
-        healthcheck: {
-          test: ["mc-health"],
-          startPeriod: "1m",
-          interval: "5s",
-          retries: 20,
-        },
         volumes: [
           {
             containerPath: "/data",
