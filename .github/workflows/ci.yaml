@@ -88,7 +88,7 @@ jobs:
     uses: ./.github/workflows/push-to-ghcr.yaml
     secrets: inherit
 
-  cdktf:
+  deploy-platform:
     needs:
       - push-to-ghcr
     uses: ./.github/workflows/deploy-platform.yaml

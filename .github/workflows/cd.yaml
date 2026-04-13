@@ -30,7 +30,8 @@ jobs:
             ENVIRONMENT="${{ github.event.inputs.environment }}"
           fi
           echo "ENVIRONMENT=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
-  cdktf:
+
+  deploy-platform:
     needs:
       - envs
       - push-to-ghcr
