@@ -35,6 +35,15 @@ export class CloudflareStack extends OyasaiTerraformStack {
       },
     );
 
+    new DnsRecord(this, this.envAwareId("seesaawiki-cname-dns-record"), {
+      ttl: 1, // automatic
+      zoneId: this.zoneId,
+      name: this.environment === "production" ? "wiki" : "wiki.dev",
+      type: "CNAME",
+      proxied: true,
+      content: "wiki-01.seesaawiki.jp",
+    });
+
     // TODO: create "internal" stack
     if (this.environment === "production") {
       const nixCacheBucket = new R2Bucket(this, "nix-cache", {
