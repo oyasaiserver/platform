@@ -1,10 +1,23 @@
-import { constants, readFileSync, writeFileSync } from "node:fs";
-import { EOL, homedir } from "node:os";
+import { constants, writeFileSync, type PathLike } from "node:fs";
+import { homedir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { URL } from "node:url";
-import { listNixStore, NIX_STORE_SNAPSHOT_PATH } from "./common.ts";
 import { getInput } from "./actions-toolkit.ts";
 import { join } from "node:path";
+import { readdirSync } from "node:fs";
+
+/*
+ * Inspired by: https://github.com/cachix/cachix-action/blob/a593539ec5b1ba1eb95f89a396efd45ca2cdaf5d/dist/list-nix-store.sh
+ *
+ * Node.js is a massive overkill for this, but the cost of spawning a
+ * child process is much more complicated, dangerous, and slow.
+ */
+function listNixStore(storePath: PathLike): readonly string[] {
+  const skip = [".drv", ".drv.chroot", ".check", ".lock"];
+  return readdirSync(storePath)
+    .filter((e) => !skip.some((s) => e.endsWith(s)))
+    .map((e) => join(storePath.toString(), e));
+}
 
 function post() {
   const endpoint = getInput("endpoint", { required: true });
@@ -21,10 +34,9 @@ function post() {
     return;
   }
 
-  const snapshot = new Set(
-    readFileSync(NIX_STORE_SNAPSHOT_PATH).toString().split(EOL).filter(Boolean),
-  );
-  const pathsToPush = new Set(listNixStore()).difference(snapshot);
+  // _Technically_ customizable
+  const nixStorePath = "/nix/store";
+  const pathsToPush = listNixStore(nixStorePath);
 
   const signingKeyPath = join(homedir(), ".nix-cache-signing-key");
   writeFileSync(signingKeyPath, signingKey, { mode: constants.S_IRUSR });
