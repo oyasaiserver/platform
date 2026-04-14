@@ -6,8 +6,7 @@
   },
   "bin": "src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "test:integration": "node --test"
+    "build": "tsc"
   },
   "dependencies": {
     "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",

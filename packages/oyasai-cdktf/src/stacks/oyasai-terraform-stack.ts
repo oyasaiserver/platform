@@ -1,42 +1,45 @@
-import type { Secrets, Environment } from "../secrets.ts";
-import {
-  CloudBackend,
-  LocalBackend,
-  NamedCloudWorkspace,
-  TerraformStack,
-} from "cdktf";
+import { CloudBackend, Fn, NamedCloudWorkspace, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
+import { mustEnv } from "../helpers.ts";
 
 /**
  * An opinionated stack for managing Oyasai infrastructure.
  */
 export abstract class OyasaiTerraformStack extends TerraformStack {
-  protected readonly environment: Environment;
-  protected readonly secrets: Secrets;
+  protected readonly id: string;
 
-  protected constructor(scope: Construct, id: string, secrets: Secrets) {
+  protected constructor(scope: Construct, id: string) {
     super(scope, id);
-    this.secrets = secrets;
-    this.environment = secrets.ENVIRONMENT;
-
-    if (this.environment === "local") {
-      new LocalBackend(this);
-    } else {
-      new CloudBackend(this, {
-        hostname: "app.terraform.io",
-        organization: "oyasaiserver",
-        workspaces: new NamedCloudWorkspace(this.envAwareId(id)),
-      });
-    }
+    this.id = id;
   }
 
-  protected envAwareId(...fragments: readonly string[]): string {
-    return [...fragments, this.environment].join("-");
+  protected t(...fragments: string[]): string {
+    return fragments.join("-");
   }
 
-  protected envAwareConfig<const T extends Record<Environment, any>>(
-    config: T,
-  ): Readonly<T[keyof T]> {
-    return config[this.environment];
+  protected createCloudBackend(): CloudBackend {
+    return new CloudBackend(this, {
+      hostname: "app.terraform.io",
+      organization: "oyasaiserver",
+      workspaces: new NamedCloudWorkspace(this.id),
+    });
+  }
+}
+
+/**
+ * OyasaiTerraformStack with environment.
+ */
+export abstract class OyasaiPlatformTerraformStack extends OyasaiTerraformStack {
+  protected readonly environment: string;
+  protected readonly isMaster: boolean;
+
+  constructor(scope: Construct, id: string, environment: string) {
+    super(scope, id);
+    this.environment = environment;
+    this.isMaster = this.environment === "master";
+  }
+
+  protected override t(...fragments: string[]): string {
+    return super.t(this.environment, ...fragments);
   }
 }

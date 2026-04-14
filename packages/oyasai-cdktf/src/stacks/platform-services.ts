@@ -1,0 +1,171 @@
+import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
+import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
+import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
+import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
+import { Construct } from "constructs";
+import { join } from "node:path";
+import { envs, ports } from "../helpers.ts";
+import { LocalBackend } from "cdktf";
+import type { PlatformInfra } from "./platform-infra.ts";
+
+type Props = Readonly<{
+  platformInfra: PlatformInfra;
+}>;
+
+export class PlatformServices extends OyasaiPlatformTerraformStack {
+  private readonly workdir = "/opt/platform";
+
+  constructor(
+    scope: Construct,
+    id: string,
+    environment: string,
+    { platformInfra }: Props,
+  ) {
+    super(scope, id, environment);
+
+    const { secrets, r2Bucket } = platformInfra;
+
+    if (this.isMaster) {
+      this.createCloudBackend();
+
+      new DockerProvider(this, id, {
+        host: `tcp://${platformInfra.ipv4}:2376`,
+        caMaterial: secrets.TLS_CA_PEM,
+        certMaterial: secrets.TLS_CERT_PEM,
+        keyMaterial: secrets.TLS_KEY_PEM,
+      });
+    } else {
+      new LocalBackend(this);
+
+      new DockerProvider(this, id, {
+        host: "unix:///var/run/docker.sock",
+      });
+    }
+
+    const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
+    const images = {
+      mariadb: imageIds.mariadb,
+      mysqlBackup: imageIds["mysql-backup"],
+      minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftBackup: imageIds["mc-backup"],
+    } as const;
+
+    const network = new Network(this, this.t("network"), {
+      name: "network",
+    });
+
+    const mariadbContainer = new Container(this, this.t("mariadb-container"), {
+      image: images.mariadb,
+      name: "mariadb",
+      restart: "unless-stopped",
+      env: envs({
+        MARIADB_ROOT_PASSWORD: secrets.MARIADB_PASSWORD,
+      }),
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/var/lib/mysql",
+          hostPath: join(this.workdir, "mariadb"),
+        },
+        {
+          containerPath: "/docker-entrypoint-initdb.d",
+          hostPath: join(this.workdir, "mariadb"),
+        },
+      ],
+    });
+
+    const minecraftMainContainer = new Container(
+      this,
+      this.t("minecraft-main-container"),
+      {
+        image: images.minecraftMain,
+        name: "minecraft-main",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        ports: ports({
+          tcp: [8100, 8192, 25565, 25575],
+          udp: [19132],
+        }),
+        env: envs({
+          MEMORY: this.isMaster
+            ? // On-prem has 64GB but looks like 28GB is the most stable because
+              // JVM GC overhead. No calculation, based on experiments.
+              "28G"
+            : // GitHub Action runners have 16GB, but also runs other containers
+              // so limiting to 10GB.
+              "10G",
+          RCON_PASSWORD: secrets.RCON_PASSWORD,
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "minecraft-main"),
+          },
+        ],
+      },
+    );
+
+    if (this.isMaster) {
+      const cloudflareBaseUrl = `https://${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`;
+
+      new Container(this, this.t("minecraft-backup-container"), {
+        name: "minecraft-main-backup",
+        dependsOn: [minecraftMainContainer],
+        image: images.minecraftBackup,
+        networksAdvanced: [network],
+        restart: "unless-stopped",
+        env: envs({
+          // keep-sorted start
+          AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
+          AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+          BACKUP_INTERVAL: "6h",
+          BACKUP_METHOD: "restic",
+          EXCLUDES: "*.jar,cache,logs,*.tmp,bluemap",
+          PRUNE_RESTIC_RETENTION:
+            "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+          RCON_HOST: "minecraft-main",
+          RCON_PASSWORD: secrets.RCON_PASSWORD,
+          RESTIC_PASSWORD: secrets.RESTIC_PASSWORD,
+          RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/minecraft-main-backup`,
+          RESTIC_VERBOSE: true,
+          // keep-sorted end
+        }),
+        volumes: [
+          {
+            hostPath: join(this.workdir, "minecraft-main"),
+            containerPath: "/data",
+            readOnly: true,
+          },
+        ],
+      });
+
+      new Container(this, this.t("mariadb-backup-container"), {
+        name: "mariadb-backup",
+        dependsOn: [mariadbContainer],
+        image: images.mysqlBackup,
+        restart: "unless-stopped",
+        networksAdvanced: [network],
+        command: ["dump"],
+        env: envs({
+          DB_SERVER: "mariadb",
+          DB_USER: "root",
+          DB_PASS: secrets.MARIADB_PASSWORD,
+          DB_DUMP_FREQUENCY: 360,
+          DB_DUMP_TARGET: `s3://${r2Bucket.name}/mariadb-backup`,
+          AWS_ACCESS_KEY_ID: secrets.CLOUDFLARE_ACCESS_KEY_ID,
+          AWS_SECRET_ACCESS_KEY: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+          AWS_REGION: "auto",
+          AWS_ENDPOINT_URL: cloudflareBaseUrl,
+          DB_DUMP_COMPRESSION: "gzip",
+          DB_DUMP_RETENTION: "14d",
+          DB_DEBUG: true,
+        }),
+      });
+    }
+  }
+}

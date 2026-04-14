@@ -1,41 +1,16 @@
 name: CD
+
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "⚠️ Manual deploy ⚠️"
-        required: true
-        default: production
-        type: choice
-        options:
-          - production
-          - development
+
 jobs:
-  push-to-ghcr:
-    uses: ./.github/workflows/push-to-ghcr.yaml
+  deploy:
     secrets: inherit
-
-  envs:
-    runs-on: ubuntu-latest
-    outputs:
-      environment: ${{ steps.environment.outputs.ENVIRONMENT }}
-    steps:
-      - id: environment
-        run: |
-          ENVIRONMENT="development"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            ENVIRONMENT="${{ github.event.inputs.environment }}"
-          fi
-          echo "ENVIRONMENT=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
-
-  deploy-platform:
-    needs:
-      - envs
-      - push-to-ghcr
+    permissions:
+      id-token: write
     uses: ./.github/workflows/deploy-platform.yaml
-    secrets: inherit
     with:
-      environment: ${{ needs.envs.outputs.environment }}
+      environment: master

@@ -1,19 +1,30 @@
 #!/usr/bin/env node --enable-source-maps
 import { App } from "cdktf";
-import { createTerraformSensitiveSecrets } from "./secrets.ts";
-import { CloudflareStack } from "./stacks/cloudflare-stack.ts";
-import { DockerStack } from "./stacks/docker-stack.ts";
-import { GitHubStack } from "./stacks/github-stack.ts";
+import { PlatformInfra } from "./stacks/platform-infra.ts";
+import { CommonInternal } from "./stacks/common-internal.ts";
+import { PlatformServices } from "./stacks/platform-services.ts";
+import { mustEnv } from "./helpers.ts";
+import { CommonInfra } from "./stacks/common-infra.ts";
 
-const secrets = createTerraformSensitiveSecrets();
+function synth() {
+  const app = new App();
+  const environment = mustEnv("ENVIRONMENT");
 
-const app = new App();
+  new CommonInternal(app, "common-internal");
 
-if (secrets.ENVIRONMENT !== "local") {
-  new CloudflareStack(app, "cloudflare", secrets);
-  new GitHubStack(app, "github", secrets);
+  new CommonInfra(app, "common-infra");
+
+  const platformInfra = new PlatformInfra(
+    app,
+    `platform-${environment}-infra`,
+    environment,
+  );
+
+  new PlatformServices(app, `platform-${environment}-services`, environment, {
+    platformInfra,
+  });
+
+  app.synth();
 }
 
-new DockerStack(app, "docker", secrets);
-
-app.synth();
+synth();

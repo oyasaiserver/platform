@@ -7,47 +7,22 @@ on:
         required: true
         type: string
 
+permissions:
+  id-token: write
+
 jobs:
-  cdktf:
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
-    defaults:
-      run:
-        working-directory: packages/oyasai-cdktf
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
-        with:
-          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
-          path: "~/.cache/nix"
-      - uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b
-        with:
-          extra_nix_config: |
-            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
-            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
-      - name: Configure Cloudflare R2 credentials
-        run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
-      - name: Compute docker image names
-        run: |
-          nix build .#all-docker-tags.json
-          <result tee /dev/stderr > images.json
-      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
-        # TODO: centralize secret management
-        if: ${{ inputs.environment != 'local' }}
-        with:
-          project-slug: "platform-old"
-          env-slug: ${{ env.ENVIRONMENT }}
-          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      - name: Deploy
-        run: |
-          OYASAI_IMAGE_ID="$(cat images.json)" nix run .#oyasai-cdktf -- deploy '*' --auto-approve
+  infra:
+    secrets: inherit
+    uses: ./.github/workflows/deploy-platform-stack.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      stack: infra
+
+  services:
+    needs:
+      - infra
+    secrets: inherit
+    uses: ./.github/workflows/deploy-platform-stack.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      stack: services
