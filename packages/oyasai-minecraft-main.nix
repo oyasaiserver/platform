@@ -36,6 +36,7 @@ let
     '';
 
     plugins = with (oyasai-plugin-registry.forVersion version); [
+      # keep-sorted start
       advancedban
       arceon
       bkcommonlib
@@ -46,6 +47,7 @@ let
       decentholograms
       discordsrv
       dynamicprofile
+      entitypose
       essentialsx
       essentialsxchat
       essentialsxspawn
@@ -98,6 +100,7 @@ let
       worldeditsui
       worldguard
       zvoteparty
+      # keep-sorted end
     ];
 
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
