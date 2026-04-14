@@ -87,13 +87,3 @@ jobs:
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
     secrets: inherit
-
-  deploy-platform:
-    needs:
-      - push-to-ghcr
-    uses: ./.github/workflows/deploy-platform.yaml
-    secrets: inherit
-    with:
-      # TODO: For now it's only to test if the "local" deploy works. I want to
-      # introduce production-clone, "ephemeral" environment in the future.
-      environment: local

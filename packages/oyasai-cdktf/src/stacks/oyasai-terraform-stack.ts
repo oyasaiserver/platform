@@ -1,5 +1,4 @@
-import type { Secrets } from "@oyasaiserver/secrets";
-import { type Environment } from "@oyasaiserver/secrets/environment";
+import type { Secrets, Environment } from "../secrets.ts";
 import {
   CloudBackend,
   LocalBackend,

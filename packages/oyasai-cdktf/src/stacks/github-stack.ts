@@ -1,7 +1,7 @@
 import { DataGithubRepository } from "@oyasaiserver/cdktf-providers/github/data-github-repository";
 import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
 import { RepositoryEnvironment } from "@oyasaiserver/cdktf-providers/github/repository-environment";
-import type { Secrets } from "@oyasaiserver/secrets";
+import type { Secrets } from "../secrets.ts";
 import type { Construct } from "constructs";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
