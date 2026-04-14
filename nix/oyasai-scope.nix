@@ -18,6 +18,7 @@ lib.makeScope pkgs.newScope (
         cloudflare.cloudflare
         kreuzwerker.docker
         integrations.github
+        infisical.infisical
       ];
 
     pl2nixOverlay = final: prev: {
