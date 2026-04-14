@@ -73,6 +73,7 @@ let
       oyasaiadmintools
       oyasaipets
       oyasaiutilities
+      oyasaivehicles
       painttools
       particlehats
       placeholderapi

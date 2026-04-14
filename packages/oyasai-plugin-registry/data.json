@@ -207,6 +207,10 @@
       "type": "static",
       "name": "Arceon.jar"
     },
+    "oyasaivehicles": {
+      "type": "static",
+      "name": "OyasaiVehicles.jar"
+    },
     "ezedits": {
       "type": "static",
       "name": "ezEdits.jar"
