@@ -10,7 +10,6 @@
     "test:integration": "node --test"
   },
   "dependencies": {
-    "@oyasaiserver/secrets": "file:../secrets",
     "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",
     "cdktf": "0.21.0",
     "constructs": "10.5.1"

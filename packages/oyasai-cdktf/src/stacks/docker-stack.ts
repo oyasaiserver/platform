@@ -1,8 +1,7 @@
 import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
-import { Image } from "@oyasaiserver/cdktf-providers/docker/image";
 import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
 import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
-import type { Secrets } from "@oyasaiserver/secrets";
+import type { Secrets } from "../secrets.ts";
 import { Construct } from "constructs";
 import { join } from "node:path";
 import { directory } from "../fs.ts";

@@ -3,7 +3,7 @@ import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/pro
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import { ZoneDnssec } from "@oyasaiserver/cdktf-providers/cloudflare/zone-dnssec";
 import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
-import type { Secrets } from "@oyasaiserver/secrets";
+import type { Secrets } from "../secrets.ts";
 import type { Construct } from "constructs";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 

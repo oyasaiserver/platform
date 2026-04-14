@@ -1,4 +1,4 @@
-import { createSecrets } from "@oyasaiserver/secrets";
+import { createSecrets } from "../../src/secrets.ts";
 import { Testing } from "cdktf";
 import { toBeValidTerraform } from "cdktf/lib/testing/matchers.js";
 import { ok } from "node:assert";
