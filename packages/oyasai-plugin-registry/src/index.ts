@@ -111,6 +111,10 @@ export const registry = {
     type: "local",
     path: toStaticPath("Arceon.jar"),
   },
+  oyasaivehicles: {
+    type: "local",
+    path: toStaticPath("OyasaiVehicles.jar"),
+  },
   ezedits: {
     type: "local",
     path: toStaticPath("ezEdits.jar"),
