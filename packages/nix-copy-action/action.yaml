@@ -1,4 +1,4 @@
-name: Nix Cache Action
+name: Nix Copy Action
 description: Configures Nix to use a custom HTTP/S3 binary cache store
 
 inputs:
