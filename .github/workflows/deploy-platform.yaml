@@ -44,7 +44,7 @@ jobs:
         # TODO: centralize secret management
         if: ${{ inputs.environment != 'local' }}
         with:
-          project-slug: "platform"
+          project-slug: "platform-old"
           env-slug: ${{ env.ENVIRONMENT }}
           client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
           client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
