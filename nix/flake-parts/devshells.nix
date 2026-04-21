@@ -11,15 +11,18 @@
           with pkgs;
           with oyasaiScope;
           [
-            nodejs
-            jdk
-            terraform
+            # keep-sorted start
+            awscli2
             gradle
             gradle2nix-cli
-            nixd
-            typescript-language-server
             infisical
-            awscli2
+            jdk
+            just
+            nixd
+            nodejs
+            terraform
+            typescript-language-server
+            # keep-sorted end
           ];
       };
     };
