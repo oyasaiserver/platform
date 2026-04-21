@@ -30,6 +30,7 @@
       url = "github:nix-community/nixpkgs-terraform-providers-bin/pull/96/head";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     package-lock2nix = {
       url = "github:anteriorcore/package-lock2nix";
