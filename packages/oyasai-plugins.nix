@@ -8,6 +8,7 @@
   gradle,
   jdk,
   runCommand,
+  paperweight-userdev-setup-hook,
 }:
 let
   final = gradle2nix.buildGradlePackage {
@@ -29,6 +30,8 @@ let
     buildJdk = jdk;
     lockFile = ../gradle.lock;
 
+    nativeBuildInputs = [ paperweight-userdev-setup-hook ];
+
     gradleBuildFlags = [
       "build"
       "--no-daemon"
@@ -36,7 +39,7 @@ let
 
     # TODO: this feels like a weird place to set these options, but without the
     # build fails with OOM.
-    _JAVA_OPTIONS = "-Xmx4g -Xms512m -XX:MaxMetaspaceSize=512m";
+    _JAVA_OPTIONS = "-Xmx8g -Xms1g -XX:MaxMetaspaceSize=512m";
 
     installPhase = ''
       runHook preInstall
