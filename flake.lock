@@ -127,19 +127,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1776822945,
-        "narHash": "sha256-4/HqKirYOYW//P0/Sh1I8U5CGP8ZBnFu6qZ+71Gbl8c=",
-        "owner": "oyasaiserver",
-        "repo": "gradle2nix",
-        "rev": "f9f265c0d2d10cd899c2e6af084ca99172531433",
-        "type": "github"
+        "path": "./gradle2nix",
+        "type": "path"
       },
       "original": {
-        "owner": "oyasaiserver",
-        "ref": "v2",
-        "repo": "gradle2nix",
-        "type": "github"
-      }
+        "path": "./gradle2nix",
+        "type": "path"
+      },
+      "parent": []
     },
     "mc-monitor": {
       "flake": false,

@@ -14,7 +14,7 @@
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     gradle2nix = {
-      url = "github:oyasaiserver/gradle2nix?ref=v2";
+      url = "path:./gradle2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mc-monitor = {
