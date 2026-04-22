@@ -36,7 +36,9 @@ buildGradlePackage {
     ln -sf $out/lib/gradle2nix/bin/gradle2nix $out/bin
   '';
 
-  passthru = { inherit buildGradlePackage buildMavenRepo gradleSetupHook; };
+  passthru = {
+    inherit buildGradlePackage buildMavenRepo gradleSetupHook;
+  };
 
   meta = with lib; {
     inherit (gradle.meta) platforms;

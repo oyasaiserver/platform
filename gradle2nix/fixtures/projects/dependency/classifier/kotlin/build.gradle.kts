@@ -1,5 +1,11 @@
-plugins { java }
+plugins {
+    java
+}
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
-dependencies { implementation("com.badlogicgames.gdx:gdx-platform:1.9.9:natives-desktop") }
+dependencies {
+    implementation("com.badlogicgames.gdx:gdx-platform:1.9.9:natives-desktop")
+}

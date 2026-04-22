@@ -12,16 +12,15 @@ class DependencySetModelBuilder(
     private val checksumService: ChecksumService,
     private val fileStoreAndIndexProvider: FileStoreAndIndexProvider,
 ) : ToolingModelBuilder {
-  override fun canBuild(modelName: String): Boolean =
-      modelName == DependencySet::class.qualifiedName
+    override fun canBuild(modelName: String): Boolean = modelName == DependencySet::class.qualifiedName
 
-  override fun buildAll(
-      modelName: String,
-      project: Project,
-  ): DependencySet =
-      dependencyExtractor.buildDependencySet(
-          cacheAccess,
-          checksumService,
-          fileStoreAndIndexProvider,
-      )
+    override fun buildAll(
+        modelName: String,
+        project: Project,
+    ): DependencySet =
+        dependencyExtractor.buildDependencySet(
+            cacheAccess,
+            checksumService,
+            fileStoreAndIndexProvider,
+        )
 }

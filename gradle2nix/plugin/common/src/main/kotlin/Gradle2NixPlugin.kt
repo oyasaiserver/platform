@@ -11,12 +11,10 @@ abstract class AbstractGradle2NixPlugin(
     private val dependencyExtractorApplier: DependencyExtractorApplier,
     private val resolveAllArtifactsApplier: ResolveAllArtifactsApplier,
 ) : Plugin<Gradle> {
-  override fun apply(gradle: Gradle) {
-    val extractor = DependencyExtractor()
+    override fun apply(gradle: Gradle) {
+        val extractor = DependencyExtractor()
 
-    gradle
-        .service<ToolingModelBuilderRegistry>()
-        .register(
+        gradle.service<ToolingModelBuilderRegistry>().register(
             DependencySetModelBuilder(
                 extractor,
                 cacheAccessFactory.create(gradle),
@@ -25,8 +23,10 @@ abstract class AbstractGradle2NixPlugin(
             ),
         )
 
-    dependencyExtractorApplier.apply(gradle, extractor)
+        dependencyExtractorApplier.apply(gradle, extractor)
 
-    gradle.projectsEvaluated { resolveAllArtifactsApplier.apply(gradle) }
-  }
+        gradle.projectsEvaluated {
+            resolveAllArtifactsApplier.apply(gradle)
+        }
+    }
 }

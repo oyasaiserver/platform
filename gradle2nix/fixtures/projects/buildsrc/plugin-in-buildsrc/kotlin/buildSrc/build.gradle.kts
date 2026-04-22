@@ -1,14 +1,20 @@
-plugins { `kotlin-dsl` }
+plugins {
+    `kotlin-dsl`
+}
 
-repositories { gradlePluginPortal() }
+repositories {
+    gradlePluginPortal()
+}
 
-dependencies { implementation("com.gradle.publish:plugin-publish-plugin:1.2.1") }
+dependencies {
+    implementation("com.gradle.publish:plugin-publish-plugin:1.2.1")
+}
 
 gradlePlugin {
-  plugins {
-    register("apply-plugin-publish") {
-      id = "com.example.apply-plugin-publish"
-      implementationClass = "com.example.ApplyPluginPublishPlugin"
+    plugins {
+        register("apply-plugin-publish") {
+            id = "com.example.apply-plugin-publish"
+            implementationClass = "com.example.ApplyPluginPublishPlugin"
+        }
     }
-  }
 }

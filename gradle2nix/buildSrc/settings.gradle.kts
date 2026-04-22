@@ -1,10 +1,14 @@
 @file:Suppress("UnstableApiUsage")
 
 dependencyResolutionManagement {
-  repositories {
-    mavenCentral()
-    gradlePluginPortal()
-  }
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
 
-  versionCatalogs { register("libs") { from(files("../gradle/libs.versions.toml")) } }
+    versionCatalogs {
+        register("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }

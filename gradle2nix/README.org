@@ -347,9 +347,9 @@ and fetches it into the Nix store. For example:
 
 #+begin_src nix
 {
-  s3 = { name, url, hash }: fetches3 {
+  s3 = { name, url, hash }: fetchs3 {
     s3url = url;
-    # TODO This doesn't work without patching fetches3 to accept SRI hashes
+    # TODO This doesn't work without patching fetchs3 to accept SRI hashes
     inherit name hash;
     region = "us-west-2";
     credentials = {

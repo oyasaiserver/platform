@@ -1,4 +1,4 @@
 plugins {
-  `java-library`
-  id("com.example.apply-plugin-publish")
+    `java-library`
+    id("com.example.apply-plugin-publish")
 }

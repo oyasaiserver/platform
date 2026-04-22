@@ -16,9 +16,9 @@
   # `{ urls, hash }` and fetch into the Nix store. For example:
   #
   #   {
-  #     s3 = { name, urls, hash }: fetches3 {
+  #     s3 = { name, urls, hash }: fetchs3 {
   #       s3url = builtins.head urls;
-  #       # TODO This doesn't work without patching fetches3 to accept SRI hashes
+  #       # TODO This doesn't work without patching fetchs3 to accept SRI hashes
   #       inherit name hash;
   #       region = "us-west-2";
   #       credentials = {
@@ -121,8 +121,7 @@ let
   fetchers' = {
     http = fetchurl;
     https = fetchurl;
-  }
-  // fetchers;
+  } // fetchers;
 
   fetch =
     overrides: path:
@@ -149,9 +148,7 @@ let
     id: artifacts:
     let
       coords = toCoordinates id;
-      modulePath = "${
-        replaceStrings [ "." ] [ "/" ] coords.group
-      }/${coords.module}/${toVersionDir coords.version}";
+      modulePath = "${replaceStrings [ "." ] [ "/" ] coords.group}/${coords.module}/${toVersionDir coords.version}";
       moduleOverrides = overrides.${id} or { };
       fetchArtifact = fetch moduleOverrides;
     in

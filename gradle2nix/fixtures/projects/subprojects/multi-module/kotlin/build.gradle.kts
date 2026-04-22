@@ -1,5 +1,13 @@
-plugins { java }
+plugins {
+    java
+}
 
-allprojects { repositories { mavenCentral() } }
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
 
-dependencies { testImplementation("junit:junit:4.12") }
+dependencies {
+    testImplementation("junit:junit:4.12")
+}

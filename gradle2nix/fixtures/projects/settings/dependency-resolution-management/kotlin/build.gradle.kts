@@ -1,3 +1,8 @@
-plugins { java }
 
-dependencies { implementation("org.apache:test:1.0.0") }
+plugins {
+    java
+}
+
+dependencies {
+    implementation("org.apache:test:1.0.0")
+}

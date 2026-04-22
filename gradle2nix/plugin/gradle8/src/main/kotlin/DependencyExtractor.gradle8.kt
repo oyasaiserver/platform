@@ -12,46 +12,50 @@ import org.gradle.internal.operations.OperationProgressEvent
 import org.gradle.internal.operations.OperationStartEvent
 
 object DependencyExtractorApplierG8 : DependencyExtractorApplier {
-  @Suppress("UnstableApiUsage")
-  override fun apply(
-      gradle: Gradle,
-      extractor: DependencyExtractor,
-  ) {
-    val serviceProvider =
-        gradle.sharedServices
-            .registerIfAbsent(
-                "nixDependencyExtractor",
-                DependencyExtractorService::class.java,
-            ) {}
-            .map { service -> service.apply { this.extractor = extractor } }
+    @Suppress("UnstableApiUsage")
+    override fun apply(
+        gradle: Gradle,
+        extractor: DependencyExtractor,
+    ) {
+        val serviceProvider =
+            gradle.sharedServices
+                .registerIfAbsent(
+                    "nixDependencyExtractor",
+                    DependencyExtractorService::class.java,
+                ) {}
+                .map { service ->
+                    service.apply { this.extractor = extractor }
+                }
 
-    gradle.service<BuildEventListenerRegistryInternal>().onOperationCompletion(serviceProvider)
-  }
+        gradle.service<BuildEventListenerRegistryInternal>().onOperationCompletion(serviceProvider)
+    }
 }
 
 @Suppress("UnstableApiUsage")
 internal abstract class DependencyExtractorService :
-    BuildService<BuildServiceParameters.None>, BuildOperationListener, AutoCloseable {
-  var extractor: DependencyExtractor? = null
+    BuildService<BuildServiceParameters.None>,
+    BuildOperationListener,
+    AutoCloseable {
+    var extractor: DependencyExtractor? = null
 
-  override fun started(
-      buildOperation: BuildOperationDescriptor,
-      startEvent: OperationStartEvent,
-  ) {}
+    override fun started(
+        buildOperation: BuildOperationDescriptor,
+        startEvent: OperationStartEvent,
+    ) {}
 
-  override fun progress(
-      operationIdentifier: OperationIdentifier,
-      progressEvent: OperationProgressEvent,
-  ) {}
+    override fun progress(
+        operationIdentifier: OperationIdentifier,
+        progressEvent: OperationProgressEvent,
+    ) {}
 
-  override fun finished(
-      buildOperation: BuildOperationDescriptor,
-      finishEvent: OperationFinishEvent,
-  ) {
-    extractor?.finished(buildOperation, finishEvent)
-  }
+    override fun finished(
+        buildOperation: BuildOperationDescriptor,
+        finishEvent: OperationFinishEvent,
+    ) {
+        extractor?.finished(buildOperation, finishEvent)
+    }
 
-  override fun close() {
-    extractor = null
-  }
+    override fun close() {
+        extractor = null
+    }
 }

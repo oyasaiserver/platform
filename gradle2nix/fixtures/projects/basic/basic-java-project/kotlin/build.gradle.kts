@@ -1,8 +1,12 @@
-plugins { java }
+plugins {
+    java
+}
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-  implementation("com.squareup.okio:okio:2.2.2")
-  implementation("com.squareup.moshi:moshi:1.8.0")
+    implementation("com.squareup.okio:okio:2.2.2")
+    implementation("com.squareup.moshi:moshi:1.8.0")
 }

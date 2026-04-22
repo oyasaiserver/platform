@@ -18,9 +18,9 @@
   # `{ urls, hash }` and fetch into the Nix store. For example:
   #
   #   {
-  #     s3 = { name, urls, hash }: fetches3 {
+  #     s3 = { name, urls, hash }: fetchs3 {
   #       s3url = builtins.head urls;
-  #       # TODO This doesn't work without patching fetches3 to accept SRI hashes
+  #       # TODO This doesn't work without patching fetchs3 to accept SRI hashes
   #       inherit name hash;
   #       region = "us-west-2";
   #       credentials = {
@@ -100,10 +100,9 @@ let
 
       nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ finalAttrs.gradleSetupHook ];
 
-      gradleFlags = [
-        "--console=plain"
-      ]
-      ++ lib.optional (finalAttrs.buildJdk != null) "-Dorg.gradle.java.home=${finalAttrs.buildJdk.home}";
+      gradleFlags =
+        [ "--console=plain" ]
+        ++ lib.optional (finalAttrs.buildJdk != null) "-Dorg.gradle.java.home=${finalAttrs.buildJdk.home}";
 
       passthru =
         lib.optionalAttrs (offlineRepo != null) { inherit offlineRepo; } // (args.passthru or { });
