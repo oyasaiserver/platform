@@ -14,7 +14,6 @@
             # keep-sorted start
             awscli2
             gradle
-            gradle2nix-cli
             infisical
             jdk
             just

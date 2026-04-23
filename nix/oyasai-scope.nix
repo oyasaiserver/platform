@@ -64,14 +64,6 @@ lib.makeScope pkgs.newScope (
 
     gradle2nix = inputs.gradle2nix.builders.${system};
 
-    gradle2nix-cli = inputs.gradle2nix.packages.${system}.default.overrideAttrs (old: {
-      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-      postFixup = (old.postFixup or "") + ''
-        wrapProgram $out/bin/gradle2nix \
-          --add-flags '--gradle-home=${scopeSelf.gradle}/lib/gradle'
-      '';
-    });
-
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
