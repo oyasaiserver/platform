@@ -85,7 +85,7 @@ $ gradle :plugins:<name>:build
 依存関係を変更した場合は、`gradle.lock`の再生成が必要です：
 
 ```console
-$ gradle2nix
+$ gradle lock
 ```
 
 ## コードレビュー
