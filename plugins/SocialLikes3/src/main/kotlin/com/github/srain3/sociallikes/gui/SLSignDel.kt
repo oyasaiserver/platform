@@ -11,6 +11,7 @@ import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.HopperGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Sign
@@ -29,7 +30,7 @@ object SLSignDel {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
-    val pane = StaticPane(0, 0, 5, 1)
+    val pane = StaticPane(5, 1)
     val buttonY =
         GuiItem(
             ItemStack(Material.GREEN_BED).apply {
@@ -58,7 +59,7 @@ object SLSignDel {
 
     pane.addItem(buttonY, 4, 0)
     pane.addItem(buttonN, 0, 0)
-    gui.slotsComponent.addPane(pane)
+    gui.slotsComponent.addPane(Slot.fromXY(0, 0), pane)
     gui.update()
 
     return gui

@@ -11,6 +11,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -57,7 +58,7 @@ object PublicityHistoryGUI {
         )
     thread.start()
 
-    val pagePane = PaginatedPane(0, 0, 9, 5)
+    val pagePane = PaginatedPane(9, 5)
     pagePane.populateWithItemStacks(itemList)
     pagePane.setOnClick {
       val id =
@@ -66,9 +67,9 @@ object PublicityHistoryGUI {
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
-    gui.addPane(pagePane)
+    gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(0, 5, 9, 1)
+    val navigation = StaticPane(9, 1)
     navigation.addItem(
         GuiItem(
             ItemStack(Material.RED_WOOL).apply {
@@ -110,7 +111,7 @@ object PublicityHistoryGUI {
         4,
         0,
     )
-    gui.addPane(navigation)
+    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     return gui
