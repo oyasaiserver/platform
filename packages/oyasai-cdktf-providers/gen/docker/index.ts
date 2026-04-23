@@ -17,5 +17,6 @@ export * as dataDockerNetwork from './data-docker-network';
 export * as dataDockerPlugin from './data-docker-plugin';
 export * as dataDockerRegistryImage from './data-docker-registry-image';
 export * as dataDockerRegistryImageManifests from './data-docker-registry-image-manifests';
+export * as dataDockerRegistryImageTags from './data-docker-registry-image-tags';
 export * as provider from './provider';
 

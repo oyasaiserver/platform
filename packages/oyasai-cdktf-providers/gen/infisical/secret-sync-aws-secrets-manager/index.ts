@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncAwsSecretsManagerConfig extends cdktf.TerraformMetaAr
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#auto_sync_enabled SecretSyncAwsSecretsManager#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#auto_sync_enabled SecretSyncAwsSecretsManager#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the aws Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#connection_id SecretSyncAwsSecretsManager#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#connection_id SecretSyncAwsSecretsManager#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the AWS Secrets Manager sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#description SecretSyncAwsSecretsManager#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#description SecretSyncAwsSecretsManager#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#destination_config SecretSyncAwsSecretsManager#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#destination_config SecretSyncAwsSecretsManager#destination_config}
   */
   readonly destinationConfig: SecretSyncAwsSecretsManagerDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#environment SecretSyncAwsSecretsManager#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#environment SecretSyncAwsSecretsManager#environment}
   */
   readonly environment: string;
   /**
   * The name of the AWS Secrets Manager sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#name SecretSyncAwsSecretsManager#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#name SecretSyncAwsSecretsManager#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#project_id SecretSyncAwsSecretsManager#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#project_id SecretSyncAwsSecretsManager#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#secret_path SecretSyncAwsSecretsManager#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#secret_path SecretSyncAwsSecretsManager#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#sync_options SecretSyncAwsSecretsManager#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#sync_options SecretSyncAwsSecretsManager#sync_options}
   */
   readonly syncOptions: SecretSyncAwsSecretsManagerSyncOptions;
 }
@@ -66,19 +66,19 @@ export interface SecretSyncAwsSecretsManagerDestinationConfig {
   /**
   * The AWS region of your AWS Secrets Manager
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#aws_region SecretSyncAwsSecretsManager#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#aws_region SecretSyncAwsSecretsManager#aws_region}
   */
   readonly awsRegion: string;
   /**
   * The name of the AWS secret to map to. This only applies when mapping_behavior is set to 'many-to-one'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#aws_secrets_manager_secret_name SecretSyncAwsSecretsManager#aws_secrets_manager_secret_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#aws_secrets_manager_secret_name SecretSyncAwsSecretsManager#aws_secrets_manager_secret_name}
   */
   readonly awsSecretsManagerSecretName?: string;
   /**
   * The behavior of the mapping. Can be 'many-to-one' or 'one-to-one'. Many to One: All Infisical secrets will be mapped to a single AWS secret. One to One: Each Infisical secret will be mapped to its own AWS secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#mapping_behavior SecretSyncAwsSecretsManager#mapping_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#mapping_behavior SecretSyncAwsSecretsManager#mapping_behavior}
   */
   readonly mappingBehavior?: string;
 }
@@ -229,13 +229,13 @@ export interface SecretSyncAwsSecretsManagerSyncOptionsTags {
   /**
   * The key of the tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#key SecretSyncAwsSecretsManager#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#key SecretSyncAwsSecretsManager#key}
   */
   readonly key: string;
   /**
   * The value of the tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#value SecretSyncAwsSecretsManager#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#value SecretSyncAwsSecretsManager#value}
   */
   readonly value: string;
 }
@@ -376,37 +376,37 @@ export interface SecretSyncAwsSecretsManagerSyncOptions {
   /**
   * The AWS KMS key ID to use for encryption
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#aws_kms_key_id SecretSyncAwsSecretsManager#aws_kms_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#aws_kms_key_id SecretSyncAwsSecretsManager#aws_kms_key_id}
   */
   readonly awsKmsKeyId?: string;
   /**
   * When set to true, Infisical will not remove secrets from AWS Secrets Manager. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#disable_secret_deletion SecretSyncAwsSecretsManager#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#disable_secret_deletion SecretSyncAwsSecretsManager#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#initial_sync_behavior SecretSyncAwsSecretsManager#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#initial_sync_behavior SecretSyncAwsSecretsManager#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the AWS Secrets Manager destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#key_schema SecretSyncAwsSecretsManager#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#key_schema SecretSyncAwsSecretsManager#key_schema}
   */
   readonly keySchema?: string;
   /**
   * Whether to sync the secret metadata as tags. This is only supported for the 'one-to-one' mapping behavior.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#sync_secret_metadata_as_tags SecretSyncAwsSecretsManager#sync_secret_metadata_as_tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#sync_secret_metadata_as_tags SecretSyncAwsSecretsManager#sync_secret_metadata_as_tags}
   */
   readonly syncSecretMetadataAsTags?: boolean | cdktf.IResolvable;
   /**
   * The tags to sync to the secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#tags SecretSyncAwsSecretsManager#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#tags SecretSyncAwsSecretsManager#tags}
   */
   readonly tags?: SecretSyncAwsSecretsManagerSyncOptionsTags[] | cdktf.IResolvable;
 }
@@ -642,7 +642,7 @@ export class SecretSyncAwsSecretsManagerSyncOptionsOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager infisical_secret_sync_aws_secrets_manager}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager infisical_secret_sync_aws_secrets_manager}
 */
 export class SecretSyncAwsSecretsManager extends cdktf.TerraformResource {
 
@@ -658,7 +658,7 @@ export class SecretSyncAwsSecretsManager extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncAwsSecretsManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncAwsSecretsManager to import
-  * @param importFromId The id of the existing SecretSyncAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncAwsSecretsManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -670,7 +670,7 @@ export class SecretSyncAwsSecretsManager extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_sync_aws_secrets_manager infisical_secret_sync_aws_secrets_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_aws_secrets_manager infisical_secret_sync_aws_secrets_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -681,7 +681,7 @@ export class SecretSyncAwsSecretsManager extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_aws_secrets_manager',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

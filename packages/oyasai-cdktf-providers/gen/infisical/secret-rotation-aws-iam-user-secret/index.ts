@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface SecretRotationAwsIamUserSecretConfig extends cdktf.TerraformMet
   /**
   * Whether secrets should be automatically rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#auto_rotation_enabled SecretRotationAwsIamUserSecret#auto_rotation_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#auto_rotation_enabled SecretRotationAwsIamUserSecret#auto_rotation_enabled}
   */
   readonly autoRotationEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the connection to use for the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#connection_id SecretRotationAwsIamUserSecret#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#connection_id SecretRotationAwsIamUserSecret#connection_id}
   */
   readonly connectionId: string;
   /**
   * The description of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#description SecretRotationAwsIamUserSecret#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#description SecretRotationAwsIamUserSecret#description}
   */
   readonly description?: string;
   /**
   * The slug of the project environment to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#environment SecretRotationAwsIamUserSecret#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#environment SecretRotationAwsIamUserSecret#environment}
   */
   readonly environment: string;
   /**
   * The name of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#name SecretRotationAwsIamUserSecret#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#name SecretRotationAwsIamUserSecret#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#parameters SecretRotationAwsIamUserSecret#parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#parameters SecretRotationAwsIamUserSecret#parameters}
   */
   readonly parameters: SecretRotationAwsIamUserSecretParameters;
   /**
   * The ID of the Infisical project to create the secret rotation in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#project_id SecretRotationAwsIamUserSecret#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#project_id SecretRotationAwsIamUserSecret#project_id}
   */
   readonly projectId: string;
   /**
   * At which UTC time the rotation should occur.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#rotate_at_utc SecretRotationAwsIamUserSecret#rotate_at_utc}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#rotate_at_utc SecretRotationAwsIamUserSecret#rotate_at_utc}
   */
   readonly rotateAtUtc?: SecretRotationAwsIamUserSecretRotateAtUtc;
   /**
   * How many days to wait between each rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#rotation_interval SecretRotationAwsIamUserSecret#rotation_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#rotation_interval SecretRotationAwsIamUserSecret#rotation_interval}
   */
   readonly rotationInterval?: number;
   /**
   * The folder path to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#secret_path SecretRotationAwsIamUserSecret#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#secret_path SecretRotationAwsIamUserSecret#secret_path}
   */
   readonly secretPath: string;
   /**
   * Secret mappings to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#secrets_mapping SecretRotationAwsIamUserSecret#secrets_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#secrets_mapping SecretRotationAwsIamUserSecret#secrets_mapping}
   */
   readonly secretsMapping: SecretRotationAwsIamUserSecretSecretsMapping;
   /**
   * Temporary parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#temporary_parameters SecretRotationAwsIamUserSecret#temporary_parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#temporary_parameters SecretRotationAwsIamUserSecret#temporary_parameters}
   */
   readonly temporaryParameters?: SecretRotationAwsIamUserSecretTemporaryParameters;
 }
@@ -84,13 +84,13 @@ export interface SecretRotationAwsIamUserSecretParameters {
   /**
   * The AWS region the client is present in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#region SecretRotationAwsIamUserSecret#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#region SecretRotationAwsIamUserSecret#region}
   */
   readonly region: string;
   /**
   * The name of the client to rotate credentials for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#user_name SecretRotationAwsIamUserSecret#user_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#user_name SecretRotationAwsIamUserSecret#user_name}
   */
   readonly userName: string;
 }
@@ -209,13 +209,13 @@ export interface SecretRotationAwsIamUserSecretRotateAtUtc {
   /**
   * The hour at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#hours SecretRotationAwsIamUserSecret#hours}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#hours SecretRotationAwsIamUserSecret#hours}
   */
   readonly hours?: number;
   /**
   * The minute at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#minutes SecretRotationAwsIamUserSecret#minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#minutes SecretRotationAwsIamUserSecret#minutes}
   */
   readonly minutes?: number;
 }
@@ -340,13 +340,13 @@ export interface SecretRotationAwsIamUserSecretSecretsMapping {
   /**
   * The name of the secret that the access key ID will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#access_key_id SecretRotationAwsIamUserSecret#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#access_key_id SecretRotationAwsIamUserSecret#access_key_id}
   */
   readonly accessKeyId: string;
   /**
   * The name of the secret that the rotated secret access key will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#secret_access_key SecretRotationAwsIamUserSecret#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#secret_access_key SecretRotationAwsIamUserSecret#secret_access_key}
   */
   readonly secretAccessKey: string;
 }
@@ -522,7 +522,7 @@ export class SecretRotationAwsIamUserSecretTemporaryParametersOutputReference ex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret infisical_secret_rotation_aws_iam_user_secret}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret infisical_secret_rotation_aws_iam_user_secret}
 */
 export class SecretRotationAwsIamUserSecret extends cdktf.TerraformResource {
 
@@ -538,7 +538,7 @@ export class SecretRotationAwsIamUserSecret extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretRotationAwsIamUserSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretRotationAwsIamUserSecret to import
-  * @param importFromId The id of the existing SecretRotationAwsIamUserSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretRotationAwsIamUserSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretRotationAwsIamUserSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -550,7 +550,7 @@ export class SecretRotationAwsIamUserSecret extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/secret_rotation_aws_iam_user_secret infisical_secret_rotation_aws_iam_user_secret} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_rotation_aws_iam_user_secret infisical_secret_rotation_aws_iam_user_secret} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -561,7 +561,7 @@ export class SecretRotationAwsIamUserSecret extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_rotation_aws_iam_user_secret',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

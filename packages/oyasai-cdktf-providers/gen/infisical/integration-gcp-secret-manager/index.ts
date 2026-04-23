@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface IntegrationGcpSecretManagerConfig extends cdktf.TerraformMetaAr
   /**
   * The slug of the environment to sync to GCP Secret Manager (prod, dev, staging, etc).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#environment IntegrationGcpSecretManager#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#environment IntegrationGcpSecretManager#environment}
   */
   readonly environment: string;
   /**
   * The ID of the GCP project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#gcp_project_id IntegrationGcpSecretManager#gcp_project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#gcp_project_id IntegrationGcpSecretManager#gcp_project_id}
   */
   readonly gcpProjectId: string;
   /**
   * Integration options
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#options IntegrationGcpSecretManager#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#options IntegrationGcpSecretManager#options}
   */
   readonly options?: IntegrationGcpSecretManagerOptions;
   /**
   * The ID of your Infisical project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#project_id IntegrationGcpSecretManager#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#project_id IntegrationGcpSecretManager#project_id}
   */
   readonly projectId: string;
   /**
   * The secret path in Infisical to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#secret_path IntegrationGcpSecretManager#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#secret_path IntegrationGcpSecretManager#secret_path}
   */
   readonly secretPath: string;
   /**
   * Service account json for the GCP project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#service_account_json IntegrationGcpSecretManager#service_account_json}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#service_account_json IntegrationGcpSecretManager#service_account_json}
   */
   readonly serviceAccountJson: string;
 }
@@ -48,13 +48,13 @@ export interface IntegrationGcpSecretManagerOptions {
   /**
   * The prefix to add to the secret name in GCP Secret Manager.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#secret_prefix IntegrationGcpSecretManager#secret_prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#secret_prefix IntegrationGcpSecretManager#secret_prefix}
   */
   readonly secretPrefix?: string;
   /**
   * The suffix to add to the secret name in GCP Secret Manager.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#secret_suffix IntegrationGcpSecretManager#secret_suffix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#secret_suffix IntegrationGcpSecretManager#secret_suffix}
   */
   readonly secretSuffix?: string;
 }
@@ -177,7 +177,7 @@ export class IntegrationGcpSecretManagerOptionsOutputReference extends cdktf.Com
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager infisical_integration_gcp_secret_manager}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager infisical_integration_gcp_secret_manager}
 */
 export class IntegrationGcpSecretManager extends cdktf.TerraformResource {
 
@@ -193,7 +193,7 @@ export class IntegrationGcpSecretManager extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IntegrationGcpSecretManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IntegrationGcpSecretManager to import
-  * @param importFromId The id of the existing IntegrationGcpSecretManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IntegrationGcpSecretManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IntegrationGcpSecretManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -205,7 +205,7 @@ export class IntegrationGcpSecretManager extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_gcp_secret_manager infisical_integration_gcp_secret_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_gcp_secret_manager infisical_integration_gcp_secret_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -216,7 +216,7 @@ export class IntegrationGcpSecretManager extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_integration_gcp_secret_manager',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

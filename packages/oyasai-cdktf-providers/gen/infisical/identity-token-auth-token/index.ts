@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface IdentityTokenAuthTokenConfig extends cdktf.TerraformMetaArgumen
   /**
   * The ID of the identity to create a token for
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token#identity_id IdentityTokenAuthToken#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token#identity_id IdentityTokenAuthToken#identity_id}
   */
   readonly identityId: string;
   /**
   * The name of the token auth token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token#name IdentityTokenAuthToken#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token#name IdentityTokenAuthToken#name}
   */
   readonly name?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token infisical_identity_token_auth_token}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token infisical_identity_token_auth_token}
 */
 export class IdentityTokenAuthToken extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class IdentityTokenAuthToken extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityTokenAuthToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityTokenAuthToken to import
-  * @param importFromId The id of the existing IdentityTokenAuthToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityTokenAuthToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityTokenAuthToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class IdentityTokenAuthToken extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth_token infisical_identity_token_auth_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth_token infisical_identity_token_auth_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class IdentityTokenAuthToken extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_token_auth_token',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

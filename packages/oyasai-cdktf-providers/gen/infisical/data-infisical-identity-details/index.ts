@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/data-sources/identity_details
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/data-sources/identity_details
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -74,7 +74,7 @@ export class DataInfisicalIdentityDetailsOrganizationOutputReference extends cdk
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/data-sources/identity_details infisical_identity_details}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/data-sources/identity_details infisical_identity_details}
 */
 export class DataInfisicalIdentityDetails extends cdktf.TerraformDataSource {
 
@@ -90,7 +90,7 @@ export class DataInfisicalIdentityDetails extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalIdentityDetails resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalIdentityDetails to import
-  * @param importFromId The id of the existing DataInfisicalIdentityDetails that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/data-sources/identity_details#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalIdentityDetails that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/data-sources/identity_details#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalIdentityDetails to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -102,7 +102,7 @@ export class DataInfisicalIdentityDetails extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/data-sources/identity_details infisical_identity_details} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/data-sources/identity_details infisical_identity_details} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -113,7 +113,7 @@ export class DataInfisicalIdentityDetails extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_identity_details',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

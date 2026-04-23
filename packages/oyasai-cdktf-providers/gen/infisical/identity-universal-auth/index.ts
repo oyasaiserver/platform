@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface IdentityUniversalAuthConfig extends cdktf.TerraformMetaArgument
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#access_token_max_ttl IdentityUniversalAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#access_token_max_ttl IdentityUniversalAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#access_token_num_uses_limit IdentityUniversalAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#access_token_num_uses_limit IdentityUniversalAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#access_token_trusted_ips IdentityUniversalAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#access_token_trusted_ips IdentityUniversalAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityUniversalAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#access_token_ttl IdentityUniversalAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#access_token_ttl IdentityUniversalAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * A list of IPs or CIDR ranges that the Client Secret can be used from together with the Client ID to get back an access token. You can use 0.0.0.0/0, to allow usage from any network address.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#client_secret_trusted_ips IdentityUniversalAuth#client_secret_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#client_secret_trusted_ips IdentityUniversalAuth#client_secret_trusted_ips}
   */
   readonly clientSecretTrustedIps?: IdentityUniversalAuthClientSecretTrustedIps[] | cdktf.IResolvable;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#identity_id IdentityUniversalAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#identity_id IdentityUniversalAuth#identity_id}
   */
   readonly identityId: string;
 }
 export interface IdentityUniversalAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#ip_address IdentityUniversalAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#ip_address IdentityUniversalAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -162,7 +162,7 @@ export class IdentityUniversalAuthAccessTokenTrustedIpsList extends cdktf.Comple
 }
 export interface IdentityUniversalAuthClientSecretTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#ip_address IdentityUniversalAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#ip_address IdentityUniversalAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -278,7 +278,7 @@ export class IdentityUniversalAuthClientSecretTrustedIpsList extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth infisical_identity_universal_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth infisical_identity_universal_auth}
 */
 export class IdentityUniversalAuth extends cdktf.TerraformResource {
 
@@ -294,7 +294,7 @@ export class IdentityUniversalAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityUniversalAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityUniversalAuth to import
-  * @param importFromId The id of the existing IdentityUniversalAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityUniversalAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityUniversalAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -306,7 +306,7 @@ export class IdentityUniversalAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_universal_auth infisical_identity_universal_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_universal_auth infisical_identity_universal_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -317,7 +317,7 @@ export class IdentityUniversalAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_universal_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionMssqlConfig extends cdktf.TerraformMetaArguments {
   /**
   * The credentials for the MsSQL App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#credentials AppConnectionMssql#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#credentials AppConnectionMssql#credentials}
   */
   readonly credentials: AppConnectionMssqlCredentials;
   /**
   * An optional description for the MsSQL App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#description AppConnectionMssql#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#description AppConnectionMssql#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with MsSQL. Possible values are: username-and-password
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#method AppConnectionMssql#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#method AppConnectionMssql#method}
   */
   readonly method: string;
   /**
   * The name of the MsSQL App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#name AppConnectionMssql#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#name AppConnectionMssql#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#project_id AppConnectionMssql#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#project_id AppConnectionMssql#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,49 +42,49 @@ export interface AppConnectionMssqlCredentials {
   /**
   * The name of the database to connect to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#database AppConnectionMssql#database}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#database AppConnectionMssql#database}
   */
   readonly database: string;
   /**
   * The hostname of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#host AppConnectionMssql#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#host AppConnectionMssql#host}
   */
   readonly host: string;
   /**
   * The password to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#password AppConnectionMssql#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#password AppConnectionMssql#password}
   */
   readonly password: string;
   /**
   * The port number of the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#port AppConnectionMssql#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#port AppConnectionMssql#port}
   */
   readonly port?: number;
   /**
   * The SSL certificate to use for connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#ssl_certificate AppConnectionMssql#ssl_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#ssl_certificate AppConnectionMssql#ssl_certificate}
   */
   readonly sslCertificate?: string;
   /**
   * Whether or not to use SSL when connecting to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#ssl_enabled AppConnectionMssql#ssl_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#ssl_enabled AppConnectionMssql#ssl_enabled}
   */
   readonly sslEnabled?: boolean | cdktf.IResolvable;
   /**
   * Whether or not to reject unauthorized SSL certificates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#ssl_reject_unauthorized AppConnectionMssql#ssl_reject_unauthorized}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#ssl_reject_unauthorized AppConnectionMssql#ssl_reject_unauthorized}
   */
   readonly sslRejectUnauthorized?: boolean | cdktf.IResolvable;
   /**
   * The username to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#username AppConnectionMssql#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#username AppConnectionMssql#username}
   */
   readonly username: string;
 }
@@ -369,7 +369,7 @@ export class AppConnectionMssqlCredentialsOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql infisical_app_connection_mssql}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql infisical_app_connection_mssql}
 */
 export class AppConnectionMssql extends cdktf.TerraformResource {
 
@@ -385,7 +385,7 @@ export class AppConnectionMssql extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionMssql resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionMssql to import
-  * @param importFromId The id of the existing AppConnectionMssql that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionMssql that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionMssql to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -397,7 +397,7 @@ export class AppConnectionMssql extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mssql infisical_app_connection_mssql} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mssql infisical_app_connection_mssql} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -408,7 +408,7 @@ export class AppConnectionMssql extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_mssql',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

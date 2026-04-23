@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionMysqlConfig extends cdktf.TerraformMetaArguments {
   /**
   * The credentials for the MySQL App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#credentials AppConnectionMysql#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#credentials AppConnectionMysql#credentials}
   */
   readonly credentials: AppConnectionMysqlCredentials;
   /**
   * An optional description for the MySQL App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#description AppConnectionMysql#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#description AppConnectionMysql#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with MySQL. Possible values are: username-and-password
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#method AppConnectionMysql#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#method AppConnectionMysql#method}
   */
   readonly method: string;
   /**
   * The name of the MySQL App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#name AppConnectionMysql#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#name AppConnectionMysql#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#project_id AppConnectionMysql#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#project_id AppConnectionMysql#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,49 +42,49 @@ export interface AppConnectionMysqlCredentials {
   /**
   * The name of the database to connect to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#database AppConnectionMysql#database}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#database AppConnectionMysql#database}
   */
   readonly database: string;
   /**
   * The hostname of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#host AppConnectionMysql#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#host AppConnectionMysql#host}
   */
   readonly host: string;
   /**
   * The password to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#password AppConnectionMysql#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#password AppConnectionMysql#password}
   */
   readonly password: string;
   /**
   * The port number of the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#port AppConnectionMysql#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#port AppConnectionMysql#port}
   */
   readonly port?: number;
   /**
   * The SSL certificate to use for connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#ssl_certificate AppConnectionMysql#ssl_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#ssl_certificate AppConnectionMysql#ssl_certificate}
   */
   readonly sslCertificate?: string;
   /**
   * Whether or not to use SSL when connecting to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#ssl_enabled AppConnectionMysql#ssl_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#ssl_enabled AppConnectionMysql#ssl_enabled}
   */
   readonly sslEnabled?: boolean | cdktf.IResolvable;
   /**
   * Whether or not to reject unauthorized SSL certificates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#ssl_reject_unauthorized AppConnectionMysql#ssl_reject_unauthorized}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#ssl_reject_unauthorized AppConnectionMysql#ssl_reject_unauthorized}
   */
   readonly sslRejectUnauthorized?: boolean | cdktf.IResolvable;
   /**
   * The username to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#username AppConnectionMysql#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#username AppConnectionMysql#username}
   */
   readonly username: string;
 }
@@ -369,7 +369,7 @@ export class AppConnectionMysqlCredentialsOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql infisical_app_connection_mysql}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql infisical_app_connection_mysql}
 */
 export class AppConnectionMysql extends cdktf.TerraformResource {
 
@@ -385,7 +385,7 @@ export class AppConnectionMysql extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionMysql resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionMysql to import
-  * @param importFromId The id of the existing AppConnectionMysql that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionMysql that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionMysql to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -397,7 +397,7 @@ export class AppConnectionMysql extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/app_connection_mysql infisical_app_connection_mysql} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/app_connection_mysql infisical_app_connection_mysql} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -408,7 +408,7 @@ export class AppConnectionMysql extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_mysql',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

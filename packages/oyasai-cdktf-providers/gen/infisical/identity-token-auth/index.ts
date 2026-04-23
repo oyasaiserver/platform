@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface IdentityTokenAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#access_token_max_ttl IdentityTokenAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#access_token_max_ttl IdentityTokenAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#access_token_num_uses_limit IdentityTokenAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#access_token_num_uses_limit IdentityTokenAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address...
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#access_token_trusted_ips IdentityTokenAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#access_token_trusted_ips IdentityTokenAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityTokenAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#access_token_ttl IdentityTokenAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#access_token_ttl IdentityTokenAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#identity_id IdentityTokenAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#identity_id IdentityTokenAuth#identity_id}
   */
   readonly identityId: string;
 }
 export interface IdentityTokenAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#ip_address IdentityTokenAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#ip_address IdentityTokenAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -156,7 +156,7 @@ export class IdentityTokenAuthAccessTokenTrustedIpsList extends cdktf.ComplexLis
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth infisical_identity_token_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth infisical_identity_token_auth}
 */
 export class IdentityTokenAuth extends cdktf.TerraformResource {
 
@@ -172,7 +172,7 @@ export class IdentityTokenAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityTokenAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityTokenAuth to import
-  * @param importFromId The id of the existing IdentityTokenAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityTokenAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityTokenAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -184,7 +184,7 @@ export class IdentityTokenAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/identity_token_auth infisical_identity_token_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/identity_token_auth infisical_identity_token_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -195,7 +195,7 @@ export class IdentityTokenAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_token_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

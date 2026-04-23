@@ -17,5 +17,6 @@ Object.defineProperty(exports, 'dataDockerNetwork', { get: function () { return 
 Object.defineProperty(exports, 'dataDockerPlugin', { get: function () { return require('./data-docker-plugin'); } });
 Object.defineProperty(exports, 'dataDockerRegistryImage', { get: function () { return require('./data-docker-registry-image'); } });
 Object.defineProperty(exports, 'dataDockerRegistryImageManifests', { get: function () { return require('./data-docker-registry-image-manifests'); } });
+Object.defineProperty(exports, 'dataDockerRegistryImageTags', { get: function () { return require('./data-docker-registry-image-tags'); } });
 Object.defineProperty(exports, 'provider', { get: function () { return require('./provider'); } });
 

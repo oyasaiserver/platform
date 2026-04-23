@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager
+// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface IntegrationAwsSecretsManagerConfig extends cdktf.TerraformMetaA
   /**
   * The AWS access key ID. Used to authenticate with AWS Secrets Manager. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#access_key_id IntegrationAwsSecretsManager#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#access_key_id IntegrationAwsSecretsManager#access_key_id}
   */
   readonly accessKeyId?: string;
   /**
   * The ARN of the role to assume when syncing secrets to AWS Secrets Manager. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#assume_role_arn IntegrationAwsSecretsManager#assume_role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#assume_role_arn IntegrationAwsSecretsManager#assume_role_arn}
   */
   readonly assumeRoleArn?: string;
   /**
   * The AWS region to sync secrets to. (us-east-1, us-east-2, etc)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#aws_region IntegrationAwsSecretsManager#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#aws_region IntegrationAwsSecretsManager#aws_region}
   */
   readonly awsRegion: string;
   /**
   * The slug of the environment to sync to AWS Secrets Manager (prod, dev, staging, etc).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#environment IntegrationAwsSecretsManager#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#environment IntegrationAwsSecretsManager#environment}
   */
   readonly environment: string;
   /**
   * The behavior of the mapping. Can be 'many-to-one' or 'one-to-one'. Many to One: All Infisical secrets will be mapped to a single AWS secret. One to One: Each Infisical secret will be mapped to its own AWS secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#mapping_behavior IntegrationAwsSecretsManager#mapping_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#mapping_behavior IntegrationAwsSecretsManager#mapping_behavior}
   */
   readonly mappingBehavior?: string;
   /**
   * Integration options
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#options IntegrationAwsSecretsManager#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#options IntegrationAwsSecretsManager#options}
   */
   readonly options?: IntegrationAwsSecretsManagerOptions;
   /**
   * The ID of your Infisical project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#project_id IntegrationAwsSecretsManager#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#project_id IntegrationAwsSecretsManager#project_id}
   */
   readonly projectId: string;
   /**
   * The AWS secret access key. Used to authenticate with AWS Secrets Manager. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#secret_access_key IntegrationAwsSecretsManager#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#secret_access_key IntegrationAwsSecretsManager#secret_access_key}
   */
   readonly secretAccessKey?: string;
   /**
   * The secret path in Infisical to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#secret_path IntegrationAwsSecretsManager#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#secret_path IntegrationAwsSecretsManager#secret_path}
   */
   readonly secretPath: string;
   /**
   * The path in AWS Secrets Manager to sync secrets to. This is required if mapping_behavior is 'many-to-one'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#secrets_manager_path IntegrationAwsSecretsManager#secrets_manager_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#secrets_manager_path IntegrationAwsSecretsManager#secrets_manager_path}
   */
   readonly secretsManagerPath?: string;
 }
@@ -72,13 +72,13 @@ export interface IntegrationAwsSecretsManagerOptionsAwsTags {
   /**
   * The key of the tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#key IntegrationAwsSecretsManager#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#key IntegrationAwsSecretsManager#key}
   */
   readonly key?: string;
   /**
   * The value of the tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#value IntegrationAwsSecretsManager#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#value IntegrationAwsSecretsManager#value}
   */
   readonly value?: string;
 }
@@ -225,19 +225,19 @@ export interface IntegrationAwsSecretsManagerOptions {
   /**
   * Tags to attach to the AWS Secrets Manager secrets.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#aws_tags IntegrationAwsSecretsManager#aws_tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#aws_tags IntegrationAwsSecretsManager#aws_tags}
   */
   readonly awsTags?: IntegrationAwsSecretsManagerOptionsAwsTags[] | cdktf.IResolvable;
   /**
   * The sync mode for AWS tags. The supported options are `secret-metadata` and `custom`. If `secret-metadata` is selected, the metadata of the Infisical secrets are used as tags in AWS (only supported for one-to-one integrations). If `custom` is selected, then the key/value pairs in the `aws_tags` field is used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#metadata_sync_mode IntegrationAwsSecretsManager#metadata_sync_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#metadata_sync_mode IntegrationAwsSecretsManager#metadata_sync_mode}
   */
   readonly metadataSyncMode?: string;
   /**
   * The prefix to add to the secret name in AWS Secrets Manager.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#secret_prefix IntegrationAwsSecretsManager#secret_prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#secret_prefix IntegrationAwsSecretsManager#secret_prefix}
   */
   readonly secretPrefix?: string;
 }
@@ -389,7 +389,7 @@ export class IntegrationAwsSecretsManagerOptionsOutputReference extends cdktf.Co
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager infisical_integration_aws_secrets_manager}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager infisical_integration_aws_secrets_manager}
 */
 export class IntegrationAwsSecretsManager extends cdktf.TerraformResource {
 
@@ -405,7 +405,7 @@ export class IntegrationAwsSecretsManager extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IntegrationAwsSecretsManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IntegrationAwsSecretsManager to import
-  * @param importFromId The id of the existing IntegrationAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IntegrationAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IntegrationAwsSecretsManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -417,7 +417,7 @@ export class IntegrationAwsSecretsManager extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.15/docs/resources/integration_aws_secrets_manager infisical_integration_aws_secrets_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/integration_aws_secrets_manager infisical_integration_aws_secrets_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -428,7 +428,7 @@ export class IntegrationAwsSecretsManager extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_integration_aws_secrets_manager',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.15'
+        providerVersion: '0.16.17'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
