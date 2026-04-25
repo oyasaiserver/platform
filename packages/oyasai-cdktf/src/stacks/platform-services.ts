@@ -15,8 +15,7 @@ type Props = Readonly<{
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
-  // TODO: for historic reason
-  private readonly workdir = `/opt/platform/${this.isMaster ? "production" : this.environment}`;
+  private readonly workdir = join("/opt/platform", this.environment);
 
   constructor(
     scope: Construct,
