@@ -9,6 +9,7 @@
         excludes = [ "plugins/*" ];
       };
       jsonfmt.enable = true;
+      just.enable = true;
       keep-sorted.enable = true;
       ktfmt.enable = true;
       mdformat = {

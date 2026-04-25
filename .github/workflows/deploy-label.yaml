@@ -1,0 +1,19 @@
+name: Deploy
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - opened
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  deploy:
+    if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    secrets: inherit
+    uses: ./.github/workflows/deploy-platform.yaml
+    with:
+      environment: pr-${{ github.event.pull_request.number }}
