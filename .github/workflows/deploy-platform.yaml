@@ -13,16 +13,18 @@ permissions:
 jobs:
   infra:
     secrets: inherit
-    uses: ./.github/workflows/deploy-platform-stack.yaml
+    uses: ./.github/workflows/modify-platform-stack.yaml
     with:
       environment: ${{ inputs.environment }}
       stack: infra
+      operation: deploy
 
   services:
     needs:
       - infra
     secrets: inherit
-    uses: ./.github/workflows/deploy-platform-stack.yaml
+    uses: ./.github/workflows/modify-platform-stack.yaml
     with:
       environment: ${{ inputs.environment }}
       stack: services
+      operation: deploy

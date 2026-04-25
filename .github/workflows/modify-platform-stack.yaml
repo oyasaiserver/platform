@@ -1,8 +1,11 @@
-name: Deploy Platform Stack
+name: Modify Platform Stack
 
 on:
   workflow_call:
     inputs:
+      operation:
+        required: true
+        type: string
       environment:
         required: true
         type: string
@@ -44,7 +47,7 @@ jobs:
       - name: Create images.json
         run: echo "{}" > images.json
       - name: Compute docker image names
-        if: ${{ inputs.stack == 'services' }}
+        if: ${{ inputs.stack == 'services' && inputs.operation != 'destroy' }}
         run: |
           nix build .#all-docker-tags.json
           <result tee /dev/stderr > images.json
@@ -55,9 +58,14 @@ jobs:
           project-slug: platform
           identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
       - name: Create TF Workspace
+        if: ${{ inputs.operation == 'deploy' }}
         run: |
           nix run .#oyasai-infra -- terraform_io::create_workspace platform-${{ inputs.environment }}-${{ inputs.stack }}
-      - name: Deploy
+      - name: cdktf
         run: |
           OYASAI_IMAGE_ID="$(cat images.json)" \
-          nix run .#oyasai-cdktf -- deploy platform-${{ inputs.environment}}-${{ inputs.stack }} --auto-approve --ignore-missing-stack-dependencies
+          nix run .#oyasai-cdktf -- ${{ inputs.operation }} platform-${{ inputs.environment}}-${{ inputs.stack }} --auto-approve --ignore-missing-stack-dependencies
+      - name: Delete TF Workspace
+        if: ${{ inputs.operation == 'destroy' }}
+        run: |
+          nix run .#oyasai-infra -- terraform_io::destroy_workspace platform-${{ inputs.environment }}-${{ inputs.stack }}
