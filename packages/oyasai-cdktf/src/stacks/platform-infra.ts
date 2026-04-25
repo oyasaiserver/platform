@@ -12,9 +12,6 @@ type Props = {
 export class PlatformInfra extends OyasaiPlatformTerraformStack {
   public readonly ipv4 = "121.81.157.109";
 
-  // TODO: root dns belongs in common-infra?
-  private readonly zoneId = "3a06bb11a935fe62b10f7ee4a312e85d";
-
   public readonly r2Bucket: R2Bucket;
 
   public constructor(
@@ -27,7 +24,7 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
 
     this.createCloudBackend();
 
-    const { secrets } = commonInfra;
+    const { secrets, oyasaiIoZone, oyasaiIoRegistrarDomain } = commonInfra;
 
     new CloudflareProvider(this, this.t("cloudflare-provider"));
 
@@ -41,8 +38,8 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
       // unnecessary. - shun 2026-04
       new DnsRecord(this, this.t("root-dns-record"), {
         ttl: 1, // automatic
-        zoneId: this.zoneId,
-        name: "oyasai.io",
+        zoneId: oyasaiIoZone.id,
+        name: oyasaiIoRegistrarDomain.domainName,
         type: "A",
         proxied: false,
         content: this.ipv4,
@@ -51,7 +48,7 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
       // Proxy to our seesaawiki. Implicitly reserves `wiki.oyasai.io`.
       new DnsRecord(this, "seesaawiki-cname-dns-record", {
         ttl: 1, // automatic
-        zoneId: this.zoneId,
+        zoneId: oyasaiIoZone.id,
         name: "wiki",
         type: "CNAME",
         proxied: true,

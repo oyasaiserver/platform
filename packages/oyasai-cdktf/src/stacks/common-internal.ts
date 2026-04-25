@@ -11,13 +11,10 @@ type Props = {
 };
 
 export class CommonInternal extends OyasaiTerraformStack {
-  // TODO: root dns belongs in common-infra?
-  private readonly zoneId = "3a06bb11a935fe62b10f7ee4a312e85d";
-
   constructor(scope: Construct, id: string, { commonInfra }: Props) {
     super(scope, id);
 
-    const { secrets } = commonInfra;
+    const { secrets, oyasaiIoRegistrarDomain, oyasaiIoZone } = commonInfra;
 
     this.createCloudBackend();
 
@@ -42,9 +39,9 @@ export class CommonInternal extends OyasaiTerraformStack {
     new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
       accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
       bucketName: nixCacheBucket.name,
-      domain: `nix-cache.oyasai.io`,
+      domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
       enabled: true,
-      zoneId: this.zoneId,
+      zoneId: oyasaiIoZone.id,
     });
   }
 }
