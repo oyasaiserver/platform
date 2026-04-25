@@ -31,6 +31,9 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
     this.r2Bucket = new R2Bucket(this, this.t("r2-bucket"), {
       accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
       name: `oyasai-${this.t("platform")}`,
+      // If master, pick the closest to on-prem server location, otherwise use
+      // the most popular location for GitHub Action runners.
+      location: this.isMaster ? "apac" : "enam",
     });
 
     if (this.isMaster) {
