@@ -12,15 +12,17 @@ function synth() {
 
   new CommonInternal(app, "common-internal");
 
-  new CommonInfra(app, "common-infra");
+  const commonInfra = new CommonInfra(app, "common-infra");
 
   const platformInfra = new PlatformInfra(
     app,
     `platform-${environment}-infra`,
     environment,
+    { commonInfra },
   );
 
   new PlatformServices(app, `platform-${environment}-services`, environment, {
+    commonInfra,
     platformInfra,
   });
 

@@ -6,9 +6,26 @@ import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identi
 import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
 import { ProjectEnvironment } from "@oyasaiserver/cdktf-providers/infisical/project-environment";
 import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project-identity";
+import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-providers/infisical/data-infisical-secrets";
+import { arrayToObject } from "../helpers.ts";
+
+export const secretKeys = [
+  "CLOUDFLARE_ACCOUNT_ID",
+  "CLOUDFLARE_ACCESS_KEY_ID",
+  "CLOUDFLARE_SECRET_ACCESS_KEY",
+  "MARIADB_PASSWORD",
+  "RCON_PASSWORD",
+  "RESTIC_PASSWORD",
+  "TLS_CA_PEM",
+  "TLS_CERT_PEM",
+  "TLS_KEY_PEM",
+] as const;
+
+export type SecretKey = (typeof secretKeys)[number];
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
+  public readonly secrets: Record<SecretKey, string>;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -58,7 +75,7 @@ export class CommonInfra extends OyasaiTerraformStack {
       ],
     });
 
-    new ProjectEnvironment(
+    const platformInfisicalProjectEnvironment = new ProjectEnvironment(
       this,
       this.t("platform-common-infisical-project-environment"),
       {
@@ -67,5 +84,23 @@ export class CommonInfra extends OyasaiTerraformStack {
         slug: "common",
       },
     );
+
+    const dataSecrets = new DataInfisicalSecrets(
+      this,
+      this.t("platform-data-infisical-secrets"),
+      {
+        folderPath: "/",
+        workspaceId: platformInfisicalProject.id,
+        envSlug: platformInfisicalProjectEnvironment.slug,
+      },
+    );
+
+    // Use getStringAttribute rather than DataInfisicalSecretsSecretsMap.get()
+    // for cross-stack compatibility. ComplexMap.get() generates malformed
+    // Terraform expressions (unquoted map keys, spurious friendly-name suffix)
+    // when CDKTF serialises cross-stack outputs.
+    this.secrets = arrayToObject(secretKeys, (k) => {
+      return dataSecrets.getStringAttribute(`secrets["${k}"].value`);
+    });
   }
 }

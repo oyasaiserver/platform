@@ -7,8 +7,10 @@ import { join } from "node:path";
 import { envs, ports } from "../helpers.ts";
 import { LocalBackend } from "cdktf";
 import type { PlatformInfra } from "./platform-infra.ts";
+import type { CommonInfra } from "./common-infra.ts";
 
 type Props = Readonly<{
+  commonInfra: CommonInfra;
   platformInfra: PlatformInfra;
 }>;
 
@@ -19,11 +21,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     scope: Construct,
     id: string,
     environment: string,
-    { platformInfra }: Props,
+    { commonInfra, platformInfra }: Props,
   ) {
     super(scope, id, environment);
 
-    const { secrets, r2Bucket } = platformInfra;
+    const { r2Bucket } = platformInfra;
+    const { secrets } = commonInfra;
 
     if (this.isMaster) {
       this.createCloudBackend();
