@@ -1,0 +1,22 @@
+name: CD
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "⚠️ Manual deploy ⚠️"
+        required: true
+        type: string
+        default: master
+
+jobs:
+  push-to-ghcr:
+    uses: ./.github/workflows/push-to-ghcr.yaml
+    secrets: inherit
+
+  deploy-platform:
+    needs:
+      - push-to-ghcr
+    uses: ./.github/workflows/deploy-platform.yaml
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
