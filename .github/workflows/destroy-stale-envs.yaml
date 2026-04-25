@@ -1,0 +1,80 @@
+name: Destroy Stale Envs
+
+on:
+  workflow_dispatch:
+  # NOMERGE cron
+  push:
+    branches:
+      - ci/cron-destroy-stale-envs
+
+jobs:
+  list-stale-environments:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    outputs:
+      stale-environments: ${{ steps.list-stale-step.outputs.stale-environments }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        with:
+          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+          path: "~/.cache/nix"
+      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
+        with:
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - name: Setup Nix S3 cache
+        uses: ./packages/nix-copy-action
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
+        with:
+          method: oidc
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+      - name: List State Environments
+        id: list-stale-step
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # We use TF workspace as the source-of-truth. TODO: maybe one day we'd
+        # manage workspace via labels, but this is ok for now.
+        run: |
+          stale_environments="$(
+            nix run .#oyasai-infra -- terraform_io::list_workspaces |
+              jq -r '
+                .data
+                  | map(.attributes.name
+                    | scan("pr-[[:digit:]]+"))
+                    | unique
+                    | .[]' |
+              while read -r stale_environment; do
+                pr_number="$(echo "$stale_environment" | grep -oE '[[:digit:]]+')"
+                gh_state=$(gh api \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "X-GitHub-Api-Version: 2022-11-28" \
+                  --jq '.state' \
+                  "/repos/${{ github.repository }}/pulls/$pr_number")
+                  if [[ "$gh_state" == "closed" ]]; then
+                    echo "$stale_environment"
+                  fi
+              done | jq -Rcn '[inputs]')"
+          echo "stale-environments=$stale_environments" >> "$GITHUB_OUTPUT"
+
+  destroy-stale-environments:
+    needs:
+      - list-stale-environments
+    secrets: inherit
+    strategy:
+      matrix:
+        environment: ${{ fromJson(needs.list-stale-environments.outputs.stale-environments) }}
+    uses: ./.github/workflows/destroy-platform.yaml
+    with:
+      environment: ${{ matrix.environment  }}

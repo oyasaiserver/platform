@@ -12,6 +12,15 @@ content_type_header := "Content-Type: application/vnd.api+json"
 org_name := "oyasaiserver"
 project_id := "prj-r6Ro1KhgZwLG4sGC"
 
+list_workspaces:
+    curl \
+      -v \
+      -L \
+      --fail \
+      -H "{{ auth_header }}" \
+      -H "{{ content_type_header }}" \
+      "{{ org_base_url }}/workspaces"
+
 create_workspace workspace:
     #!/usr/bin/env bash
     set -euo pipefail

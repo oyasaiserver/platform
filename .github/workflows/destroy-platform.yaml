@@ -1,0 +1,30 @@
+name: Destroy Platform
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+
+jobs:
+  services:
+    secrets: inherit
+    uses: ./.github/workflows/modify-platform-stack.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      stack: services
+      operation: destroy
+
+  infra:
+    needs:
+      - services
+    secrets: inherit
+    uses: ./.github/workflows/modify-platform-stack.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      stack: infra
+      operation: destroy

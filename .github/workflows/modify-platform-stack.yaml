@@ -14,9 +14,18 @@ on:
         type: string
 
 jobs:
+  prevent-master-destroy:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Prevent master destroy
+        if: inputs.environment == 'master' && inputs.operation == 'destroy'
+        run: exit 1
+
   cdktf:
+    needs:
+      - prevent-master-destroy
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.operation == 'deploy' && inputs.environment || '' }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
     defaults:
@@ -47,7 +56,7 @@ jobs:
       - name: Create images.json
         run: echo "{}" > images.json
       - name: Compute docker image names
-        if: ${{ inputs.stack == 'services' && inputs.operation != 'destroy' }}
+        if: ${{ inputs.stack == 'services' }}
         run: |
           nix build .#all-docker-tags.json
           <result tee /dev/stderr > images.json
@@ -68,4 +77,4 @@ jobs:
       - name: Delete TF Workspace
         if: ${{ inputs.operation == 'destroy' }}
         run: |
-          nix run .#oyasai-infra -- terraform_io::destroy_workspace platform-${{ inputs.environment }}-${{ inputs.stack }}
+          nix run .#oyasai-infra -- terraform_io::delete_workspace platform-${{ inputs.environment }}-${{ inputs.stack }}
