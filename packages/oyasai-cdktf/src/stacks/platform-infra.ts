@@ -3,7 +3,6 @@ import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/pro
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import type { Construct } from "constructs";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
-import { arrayToObject, mustEnv } from "../helpers.ts";
 import type { CommonInfra } from "./common-infra.ts";
 
 type Props = {
@@ -13,6 +12,7 @@ type Props = {
 export class PlatformInfra extends OyasaiPlatformTerraformStack {
   public readonly ipv4 = "121.81.157.109";
 
+  // TODO: root dns belongs in common-infra?
   private readonly zoneId = "3a06bb11a935fe62b10f7ee4a312e85d";
 
   public readonly r2Bucket: R2Bucket;

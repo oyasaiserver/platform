@@ -10,9 +10,9 @@ function synth() {
   const app = new App();
   const environment = mustEnv("ENVIRONMENT");
 
-  new CommonInternal(app, "common-internal");
-
   const commonInfra = new CommonInfra(app, "common-infra");
+
+  new CommonInternal(app, "common-internal", { commonInfra });
 
   const platformInfra = new PlatformInfra(
     app,
