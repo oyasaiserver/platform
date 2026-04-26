@@ -54,7 +54,7 @@ jobs:
       - run: nix flake lock --no-update-lock-file
       - run: nix flake check --no-build
 
-  nix-devshell:
+  no-nix-development:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -64,25 +64,10 @@ jobs:
           - macos-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
-        with:
-          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
-          path: "~/.cache/nix"
-      - uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b
-        with:
-          extra_nix_config: |
-            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
-            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
-      - name: Configure Cloudflare R2 credentials
-        run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
-      - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+      - run: |
+          ./gradlew build --parallel
+          ./gradlew lock
+
 
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
