@@ -14,15 +14,18 @@ import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/clo
 import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
 
 export const secretKeys = [
-  "CLOUDFLARE_ACCOUNT_ID",
+  // keep-sorted start
   "CLOUDFLARE_ACCESS_KEY_ID",
+  "CLOUDFLARE_ACCOUNT_ID",
   "CLOUDFLARE_SECRET_ACCESS_KEY",
   "MARIADB_PASSWORD",
+  "NIX_CACHE_SIGNING_KEY",
   "RCON_PASSWORD",
   "RESTIC_PASSWORD",
   "TLS_CA_PEM",
   "TLS_CERT_PEM",
   "TLS_KEY_PEM",
+  // keep-sorted end
 ] as const;
 
 export type SecretKey = (typeof secretKeys)[number];
