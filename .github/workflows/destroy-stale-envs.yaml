@@ -1,11 +1,10 @@
 name: Destroy Stale Envs
 
 on:
+  # 4AM JST = 7PM EST
+  schedule:
+    - cron: "0 19 * * *"
   workflow_dispatch:
-  # NOMERGE cron
-  push:
-    branches:
-      - ci/cron-destroy-stale-envs
 
 jobs:
   list-stale-environments:
