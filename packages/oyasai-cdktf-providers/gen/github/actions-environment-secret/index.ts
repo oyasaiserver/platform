@@ -1,0 +1,366 @@
+// https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret
+// generated from terraform resource schema
+
+import { Construct } from 'constructs';
+import * as cdktf from 'cdktf';
+
+// Configuration
+
+export interface ActionsEnvironmentSecretConfig extends cdktf.TerraformMetaArguments {
+  /**
+  * Encrypted value of the secret using the GitHub public key in Base64 format.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#encrypted_value ActionsEnvironmentSecret#encrypted_value}
+  */
+  readonly encryptedValue?: string;
+  /**
+  * Name of the environment.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#environment ActionsEnvironmentSecret#environment}
+  */
+  readonly environment: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#id ActionsEnvironmentSecret#id}
+  *
+  * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
+  * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+  */
+  readonly id?: string;
+  /**
+  * ID of the public key used to encrypt the secret.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#key_id ActionsEnvironmentSecret#key_id}
+  */
+  readonly keyId?: string;
+  /**
+  * Plaintext value of the secret to be encrypted.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#plaintext_value ActionsEnvironmentSecret#plaintext_value}
+  */
+  readonly plaintextValue?: string;
+  /**
+  * Name of the repository.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#repository ActionsEnvironmentSecret#repository}
+  */
+  readonly repository: string;
+  /**
+  * Name of the secret.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#secret_name ActionsEnvironmentSecret#secret_name}
+  */
+  readonly secretName: string;
+  /**
+  * Plaintext value to be encrypted.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#value ActionsEnvironmentSecret#value}
+  */
+  readonly value?: string;
+  /**
+  * Value encrypted with the GitHub public key, defined by key_id, in Base64 format.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#value_encrypted ActionsEnvironmentSecret#value_encrypted}
+  */
+  readonly valueEncrypted?: string;
+}
+
+/**
+* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret github_actions_environment_secret}
+*/
+export class ActionsEnvironmentSecret extends cdktf.TerraformResource {
+
+  // =================
+  // STATIC PROPERTIES
+  // =================
+  public static readonly tfResourceType = "github_actions_environment_secret";
+
+  // ==============
+  // STATIC Methods
+  // ==============
+  /**
+  * Generates CDKTF code for importing a ActionsEnvironmentSecret resource upon running "cdktf plan <stack-name>"
+  * @param scope The scope in which to define this construct
+  * @param importToId The construct id used in the generated config for the ActionsEnvironmentSecret to import
+  * @param importFromId The id of the existing ActionsEnvironmentSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret#import import section} in the documentation of this resource for the id to use
+  * @param provider? Optional instance of the provider where the ActionsEnvironmentSecret to import is found
+  */
+  public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_environment_secret", importId: importFromId, provider });
+      }
+
+  // ===========
+  // INITIALIZER
+  // ===========
+
+  /**
+  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_environment_secret github_actions_environment_secret} Resource
+  *
+  * @param scope The scope in which to define this construct
+  * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+  * @param options ActionsEnvironmentSecretConfig
+  */
+  public constructor(scope: Construct, id: string, config: ActionsEnvironmentSecretConfig) {
+    super(scope, id, {
+      terraformResourceType: 'github_actions_environment_secret',
+      terraformGeneratorMetadata: {
+        providerName: 'github',
+        providerVersion: '6.12.0'
+      },
+      provider: config.provider,
+      dependsOn: config.dependsOn,
+      count: config.count,
+      lifecycle: config.lifecycle,
+      provisioners: config.provisioners,
+      connection: config.connection,
+      forEach: config.forEach
+    });
+    this._encryptedValue = config.encryptedValue;
+    this._environment = config.environment;
+    this._id = config.id;
+    this._keyId = config.keyId;
+    this._plaintextValue = config.plaintextValue;
+    this._repository = config.repository;
+    this._secretName = config.secretName;
+    this._value = config.value;
+    this._valueEncrypted = config.valueEncrypted;
+  }
+
+  // ==========
+  // ATTRIBUTES
+  // ==========
+
+  // created_at - computed: true, optional: false, required: false
+  public get createdAt() {
+    return this.getStringAttribute('created_at');
+  }
+
+  // encrypted_value - computed: false, optional: true, required: false
+  private _encryptedValue?: string; 
+  public get encryptedValue() {
+    return this.getStringAttribute('encrypted_value');
+  }
+  public set encryptedValue(value: string) {
+    this._encryptedValue = value;
+  }
+  public resetEncryptedValue() {
+    this._encryptedValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get encryptedValueInput() {
+    return this._encryptedValue;
+  }
+
+  // environment - computed: false, optional: false, required: true
+  private _environment?: string; 
+  public get environment() {
+    return this.getStringAttribute('environment');
+  }
+  public set environment(value: string) {
+    this._environment = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get environmentInput() {
+    return this._environment;
+  }
+
+  // id - computed: true, optional: true, required: false
+  private _id?: string; 
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+  public set id(value: string) {
+    this._id = value;
+  }
+  public resetId() {
+    this._id = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get idInput() {
+    return this._id;
+  }
+
+  // key_id - computed: true, optional: true, required: false
+  private _keyId?: string; 
+  public get keyId() {
+    return this.getStringAttribute('key_id');
+  }
+  public set keyId(value: string) {
+    this._keyId = value;
+  }
+  public resetKeyId() {
+    this._keyId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get keyIdInput() {
+    return this._keyId;
+  }
+
+  // plaintext_value - computed: false, optional: true, required: false
+  private _plaintextValue?: string; 
+  public get plaintextValue() {
+    return this.getStringAttribute('plaintext_value');
+  }
+  public set plaintextValue(value: string) {
+    this._plaintextValue = value;
+  }
+  public resetPlaintextValue() {
+    this._plaintextValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get plaintextValueInput() {
+    return this._plaintextValue;
+  }
+
+  // remote_updated_at - computed: true, optional: false, required: false
+  public get remoteUpdatedAt() {
+    return this.getStringAttribute('remote_updated_at');
+  }
+
+  // repository - computed: false, optional: false, required: true
+  private _repository?: string; 
+  public get repository() {
+    return this.getStringAttribute('repository');
+  }
+  public set repository(value: string) {
+    this._repository = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get repositoryInput() {
+    return this._repository;
+  }
+
+  // repository_id - computed: true, optional: false, required: false
+  public get repositoryId() {
+    return this.getNumberAttribute('repository_id');
+  }
+
+  // secret_name - computed: false, optional: false, required: true
+  private _secretName?: string; 
+  public get secretName() {
+    return this.getStringAttribute('secret_name');
+  }
+  public set secretName(value: string) {
+    this._secretName = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get secretNameInput() {
+    return this._secretName;
+  }
+
+  // updated_at - computed: true, optional: false, required: false
+  public get updatedAt() {
+    return this.getStringAttribute('updated_at');
+  }
+
+  // value - computed: false, optional: true, required: false
+  private _value?: string; 
+  public get value() {
+    return this.getStringAttribute('value');
+  }
+  public set value(value: string) {
+    this._value = value;
+  }
+  public resetValue() {
+    this._value = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get valueInput() {
+    return this._value;
+  }
+
+  // value_encrypted - computed: false, optional: true, required: false
+  private _valueEncrypted?: string; 
+  public get valueEncrypted() {
+    return this.getStringAttribute('value_encrypted');
+  }
+  public set valueEncrypted(value: string) {
+    this._valueEncrypted = value;
+  }
+  public resetValueEncrypted() {
+    this._valueEncrypted = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get valueEncryptedInput() {
+    return this._valueEncrypted;
+  }
+
+  // =========
+  // SYNTHESIS
+  // =========
+
+  protected synthesizeAttributes(): { [name: string]: any } {
+    return {
+      encrypted_value: cdktf.stringToTerraform(this._encryptedValue),
+      environment: cdktf.stringToTerraform(this._environment),
+      id: cdktf.stringToTerraform(this._id),
+      key_id: cdktf.stringToTerraform(this._keyId),
+      plaintext_value: cdktf.stringToTerraform(this._plaintextValue),
+      repository: cdktf.stringToTerraform(this._repository),
+      secret_name: cdktf.stringToTerraform(this._secretName),
+      value: cdktf.stringToTerraform(this._value),
+      value_encrypted: cdktf.stringToTerraform(this._valueEncrypted),
+    };
+  }
+
+  protected synthesizeHclAttributes(): { [name: string]: any } {
+    const attrs = {
+      encrypted_value: {
+        value: cdktf.stringToHclTerraform(this._encryptedValue),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      environment: {
+        value: cdktf.stringToHclTerraform(this._environment),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      id: {
+        value: cdktf.stringToHclTerraform(this._id),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      key_id: {
+        value: cdktf.stringToHclTerraform(this._keyId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      plaintext_value: {
+        value: cdktf.stringToHclTerraform(this._plaintextValue),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      repository: {
+        value: cdktf.stringToHclTerraform(this._repository),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      secret_name: {
+        value: cdktf.stringToHclTerraform(this._secretName),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      value: {
+        value: cdktf.stringToHclTerraform(this._value),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      value_encrypted: {
+        value: cdktf.stringToHclTerraform(this._valueEncrypted),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+    };
+
+    // remove undefined attributes
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined ))
+  }
+}

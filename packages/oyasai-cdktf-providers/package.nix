@@ -8,7 +8,6 @@
   lib,
   oyasaiTerraformProviders,
   package-lock2nix,
-  typescript,
 }:
 
 let
@@ -35,7 +34,6 @@ let
       terraform
       # cdktf wants to write in homedir for cache
       writableTmpDirAsHomeHook
-      typescript
     ];
 
     dontUnpack = true;
@@ -45,24 +43,14 @@ let
 
     buildPhase = ''
       cp ${cdktfJson} cdktf.json
-      cdktf get
 
-      shopt -s globstar
-      tsc \
-        --target es2022 \
-        --noCheck \
-        --noEmit false \
-        --declaration \
-        --rootDir .gen \
-        --outDir dist \
-        --declarationDir dist \
-        .gen/**/*.ts
+      cdktf get
     '';
 
     installPhase = ''
       mkdir -p $out
 
-      cp -r dist/* $out/
+      cp -r .gen/* $out/
     '';
   };
 in
