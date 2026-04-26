@@ -50,6 +50,7 @@ lib.makeScope pkgs.newScope (
   in
   {
     inherit inputs oyasaiTerraformProviders;
+    inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
 
     terraform = pkgs.terraform.withPlugins (_: oyasaiTerraformProviders);
     nodejs = pkgs.nodejs_24;
@@ -62,7 +63,15 @@ lib.makeScope pkgs.newScope (
       overrideScope = pl2nixOverlay;
     };
 
-    gradle2nix = inputs.gradle2nix.builders.${system};
+    buildGradlePackage =
+      args:
+      inputs.gradle2nix.builders.${system}.buildGradlePackage (
+        args
+        // {
+          inherit (scopeSelf) gradle;
+          buildJdk = scopeSelf.jdk;
+        }
+      );
 
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 

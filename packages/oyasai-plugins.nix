@@ -3,15 +3,13 @@
 # Gradle makes it very hard as local (`project`) dependencies are
 # not part of the lockfile.
 {
-  gradle2nix,
+  buildGradlePackage,
   lib,
-  gradle,
-  jdk,
   runCommand,
   paperweight-userdev-setup-hook,
 }:
 let
-  final = gradle2nix.buildGradlePackage {
+  final = buildGradlePackage {
     name = "oyasai-plugins";
     version = "0.0.0";
     src =
@@ -26,8 +24,6 @@ let
         ];
       };
 
-    inherit gradle;
-    buildJdk = jdk;
     lockFile = ../gradle.lock;
 
     nativeBuildInputs = [ paperweight-userdev-setup-hook ];
