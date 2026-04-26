@@ -8,63 +8,21 @@ on:
         type: string
 
 jobs:
-  cdktf:
-    runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
-    defaults:
-      run:
-        working-directory: packages/oyasai-cdktf
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
-        with:
-          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
-          path: "~/.cache/nix"
-      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
-        with:
-          extra_nix_config: |
-            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
-            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
-      - name: Configure Cloudflare R2 credentials
-        run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
-      - name: Compute docker image names
-        run: |
-          nix build .#all-docker-tags.json
-          echo "OYASAI_IMAGE_ID=$(<result tee /dev/stderr)" >> "$GITHUB_ENV"
-      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
-        with:
-          method: oidc
-          env-slug: common
-          project-slug: platform
-          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
-      # FIXME - for some reason these need to be separate steps - shun 2026-04
-      - name: Destroy services
-        run: |
-          nix run .#oyasai-cdktf -- \
-            destroy \
-            platform-${{ inputs.environment}}-services \
-            --auto-approve
-      - name: Destroy infra
-        run: |
-          nix run .#oyasai-cdktf -- \
-            destroy \
-            platform-${{ inputs.environment}}-infra \
-            --auto-approve
-      - name: Delete TF Workspace
-        run: |
-          nix run .#oyasai-infra -- \
-            terraform_io::delete_workspace \
-            platform-${{ inputs.environment }}-infra
-          nix run .#oyasai-infra -- \
-            terraform_io::delete_workspace \
-            platform-${{ inputs.environment }}-services
+  services:
+    uses: ./.github/workflows/modify-platform-stack.yaml
+    secrets: inherit
+    with:
+      stack: platform-${{ inputs.environment }}-services
+      environment: ${{ inputs.environment }}
+      operation: destroy
+      cancel-in-progress: ${{ inputs.environment != 'master' }}
+
+  infra:
+    needs: services
+    uses: ./.github/workflows/modify-platform-stack.yaml
+    secrets: inherit
+    with:
+      stack: platform-${{ inputs.environment }}-infra
+      environment: ${{ inputs.environment }}
+      operation: destroy
+      cancel-in-progress: false
