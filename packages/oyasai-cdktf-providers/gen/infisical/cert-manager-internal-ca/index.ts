@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca
+// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface CertManagerInternalCaConfig extends cdktf.TerraformMetaArgument
   /**
   * The common name (CN) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#common_name CertManagerInternalCa#common_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#common_name CertManagerInternalCa#common_name}
   */
   readonly commonName?: string;
   /**
   * The country (C) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#country CertManagerInternalCa#country}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#country CertManagerInternalCa#country}
   */
   readonly country?: string;
   /**
   * The key algorithm for the CA. Supported values: RSA_2048, RSA_3072, RSA_4096, EC_prime256v1, EC_secp384r1, EC_secp521r1. Defaults to 'RSA_2048'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#key_algorithm CertManagerInternalCa#key_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#key_algorithm CertManagerInternalCa#key_algorithm}
   */
   readonly keyAlgorithm?: string;
   /**
   * The locality (L) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#locality CertManagerInternalCa#locality}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#locality CertManagerInternalCa#locality}
   */
   readonly locality?: string;
   /**
   * The name of the CA
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#name CertManagerInternalCa#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#name CertManagerInternalCa#name}
   */
   readonly name: string;
   /**
   * The organization (O) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#organization CertManagerInternalCa#organization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#organization CertManagerInternalCa#organization}
   */
   readonly organization?: string;
   /**
   * The organizational unit (OU) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#ou CertManagerInternalCa#ou}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#ou CertManagerInternalCa#ou}
   */
   readonly ou?: string;
   /**
   * The slug of the cert-manager project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#project_slug CertManagerInternalCa#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#project_slug CertManagerInternalCa#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The state/province (ST) of the CA certificate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#province CertManagerInternalCa#province}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#province CertManagerInternalCa#province}
   */
   readonly province?: string;
   /**
   * The status of the CA. Supported values: active, disabled. Defaults to 'active'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#status CertManagerInternalCa#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#status CertManagerInternalCa#status}
   */
   readonly status?: string;
   /**
   * The type of the CA. Supported values: root, intermediate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#type CertManagerInternalCa#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#type CertManagerInternalCa#type}
   */
   readonly type: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca infisical_cert_manager_internal_ca}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca infisical_cert_manager_internal_ca}
 */
 export class CertManagerInternalCa extends cdktf.TerraformResource {
 
@@ -92,7 +92,7 @@ export class CertManagerInternalCa extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerInternalCa resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerInternalCa to import
-  * @param importFromId The id of the existing CertManagerInternalCa that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerInternalCa that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerInternalCa to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -104,7 +104,7 @@ export class CertManagerInternalCa extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/cert_manager_internal_ca infisical_cert_manager_internal_ca} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca infisical_cert_manager_internal_ca} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -115,7 +115,7 @@ export class CertManagerInternalCa extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_internal_ca',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.17'
+        providerVersion: '0.16.18'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

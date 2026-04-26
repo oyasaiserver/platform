@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret
+// https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,11 +10,11 @@ export interface DependabotSecretConfig extends cdktf.TerraformMetaArguments {
   /**
   * Encrypted value of the secret using the GitHub public key in Base64 format.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#encrypted_value DependabotSecret#encrypted_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#encrypted_value DependabotSecret#encrypted_value}
   */
   readonly encryptedValue?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#id DependabotSecret#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#id DependabotSecret#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -23,31 +23,43 @@ export interface DependabotSecretConfig extends cdktf.TerraformMetaArguments {
   /**
   * ID of the public key used to encrypt the secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#key_id DependabotSecret#key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#key_id DependabotSecret#key_id}
   */
   readonly keyId?: string;
   /**
   * Plaintext value of the secret to be encrypted.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#plaintext_value DependabotSecret#plaintext_value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#plaintext_value DependabotSecret#plaintext_value}
   */
   readonly plaintextValue?: string;
   /**
   * Name of the repository.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#repository DependabotSecret#repository}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#repository DependabotSecret#repository}
   */
   readonly repository: string;
   /**
   * Name of the secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#secret_name DependabotSecret#secret_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#secret_name DependabotSecret#secret_name}
   */
   readonly secretName: string;
+  /**
+  * Plaintext value to be encrypted.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#value DependabotSecret#value}
+  */
+  readonly value?: string;
+  /**
+  * Value encrypted with the GitHub public key, defined by key_id, in Base64 format.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#value_encrypted DependabotSecret#value_encrypted}
+  */
+  readonly valueEncrypted?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret github_dependabot_secret}
+* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret github_dependabot_secret}
 */
 export class DependabotSecret extends cdktf.TerraformResource {
 
@@ -63,7 +75,7 @@ export class DependabotSecret extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DependabotSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DependabotSecret to import
-  * @param importFromId The id of the existing DependabotSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DependabotSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DependabotSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +87,7 @@ export class DependabotSecret extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.11.1/docs/resources/dependabot_secret github_dependabot_secret} Resource
+  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret github_dependabot_secret} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +98,7 @@ export class DependabotSecret extends cdktf.TerraformResource {
       terraformResourceType: 'github_dependabot_secret',
       terraformGeneratorMetadata: {
         providerName: 'github',
-        providerVersion: '6.11.1'
+        providerVersion: '6.12.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -102,6 +114,8 @@ export class DependabotSecret extends cdktf.TerraformResource {
     this._plaintextValue = config.plaintextValue;
     this._repository = config.repository;
     this._secretName = config.secretName;
+    this._value = config.value;
+    this._valueEncrypted = config.valueEncrypted;
   }
 
   // ==========
@@ -218,6 +232,38 @@ export class DependabotSecret extends cdktf.TerraformResource {
     return this.getStringAttribute('updated_at');
   }
 
+  // value - computed: false, optional: true, required: false
+  private _value?: string; 
+  public get value() {
+    return this.getStringAttribute('value');
+  }
+  public set value(value: string) {
+    this._value = value;
+  }
+  public resetValue() {
+    this._value = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get valueInput() {
+    return this._value;
+  }
+
+  // value_encrypted - computed: false, optional: true, required: false
+  private _valueEncrypted?: string; 
+  public get valueEncrypted() {
+    return this.getStringAttribute('value_encrypted');
+  }
+  public set valueEncrypted(value: string) {
+    this._valueEncrypted = value;
+  }
+  public resetValueEncrypted() {
+    this._valueEncrypted = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get valueEncryptedInput() {
+    return this._valueEncrypted;
+  }
+
   // =========
   // SYNTHESIS
   // =========
@@ -230,6 +276,8 @@ export class DependabotSecret extends cdktf.TerraformResource {
       plaintext_value: cdktf.stringToTerraform(this._plaintextValue),
       repository: cdktf.stringToTerraform(this._repository),
       secret_name: cdktf.stringToTerraform(this._secretName),
+      value: cdktf.stringToTerraform(this._value),
+      value_encrypted: cdktf.stringToTerraform(this._valueEncrypted),
     };
   }
 
@@ -267,6 +315,18 @@ export class DependabotSecret extends cdktf.TerraformResource {
       },
       secret_name: {
         value: cdktf.stringToHclTerraform(this._secretName),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      value: {
+        value: cdktf.stringToHclTerraform(this._value),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      value_encrypted: {
+        value: cdktf.stringToHclTerraform(this._valueEncrypted),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

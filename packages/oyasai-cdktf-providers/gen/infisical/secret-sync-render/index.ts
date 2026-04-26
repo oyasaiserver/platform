@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render
+// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncRenderConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#auto_sync_enabled SecretSyncRender#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#auto_sync_enabled SecretSyncRender#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the render Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#connection_id SecretSyncRender#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#connection_id SecretSyncRender#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Render sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#description SecretSyncRender#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#description SecretSyncRender#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#destination_config SecretSyncRender#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#destination_config SecretSyncRender#destination_config}
   */
   readonly destinationConfig: SecretSyncRenderDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#environment SecretSyncRender#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#environment SecretSyncRender#environment}
   */
   readonly environment: string;
   /**
   * The name of the Render sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#name SecretSyncRender#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#name SecretSyncRender#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#project_id SecretSyncRender#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#project_id SecretSyncRender#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#secret_path SecretSyncRender#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#secret_path SecretSyncRender#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#sync_options SecretSyncRender#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#sync_options SecretSyncRender#sync_options}
   */
   readonly syncOptions: SecretSyncRenderSyncOptions;
 }
@@ -66,19 +66,19 @@ export interface SecretSyncRenderDestinationConfig {
   /**
   * The Render scope that secrets should be synced to. Supported options: service
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#scope SecretSyncRender#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#scope SecretSyncRender#scope}
   */
   readonly scope: string;
   /**
   * The ID of the Render service to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#service_id SecretSyncRender#service_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#service_id SecretSyncRender#service_id}
   */
   readonly serviceId: string;
   /**
   * The Render resource type to sync secrets to. Supported options: env, file
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#type SecretSyncRender#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#type SecretSyncRender#type}
   */
   readonly type: string;
 }
@@ -223,19 +223,19 @@ export interface SecretSyncRenderSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Render. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#disable_secret_deletion SecretSyncRender#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#disable_secret_deletion SecretSyncRender#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#initial_sync_behavior SecretSyncRender#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#initial_sync_behavior SecretSyncRender#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Render destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#key_schema SecretSyncRender#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#key_schema SecretSyncRender#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -384,7 +384,7 @@ export class SecretSyncRenderSyncOptionsOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render infisical_secret_sync_render}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render infisical_secret_sync_render}
 */
 export class SecretSyncRender extends cdktf.TerraformResource {
 
@@ -400,7 +400,7 @@ export class SecretSyncRender extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncRender resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncRender to import
-  * @param importFromId The id of the existing SecretSyncRender that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncRender that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncRender to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -412,7 +412,7 @@ export class SecretSyncRender extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_render infisical_secret_sync_render} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_render infisical_secret_sync_render} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -423,7 +423,7 @@ export class SecretSyncRender extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_render',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.17'
+        providerVersion: '0.16.18'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

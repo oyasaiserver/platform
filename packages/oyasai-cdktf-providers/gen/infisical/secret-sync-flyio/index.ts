@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio
+// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncFlyioConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#auto_sync_enabled SecretSyncFlyio#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#auto_sync_enabled SecretSyncFlyio#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the flyio Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#connection_id SecretSyncFlyio#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#connection_id SecretSyncFlyio#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Fly.io sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#description SecretSyncFlyio#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#description SecretSyncFlyio#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#destination_config SecretSyncFlyio#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#destination_config SecretSyncFlyio#destination_config}
   */
   readonly destinationConfig: SecretSyncFlyioDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#environment SecretSyncFlyio#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#environment SecretSyncFlyio#environment}
   */
   readonly environment: string;
   /**
   * The name of the Fly.io sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#name SecretSyncFlyio#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#name SecretSyncFlyio#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#project_id SecretSyncFlyio#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#project_id SecretSyncFlyio#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#secret_path SecretSyncFlyio#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#secret_path SecretSyncFlyio#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#sync_options SecretSyncFlyio#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#sync_options SecretSyncFlyio#sync_options}
   */
   readonly syncOptions: SecretSyncFlyioSyncOptions;
 }
@@ -66,7 +66,7 @@ export interface SecretSyncFlyioDestinationConfig {
   /**
   * The Fly.io app ID to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#app_id SecretSyncFlyio#app_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#app_id SecretSyncFlyio#app_id}
   */
   readonly appId: string;
 }
@@ -159,19 +159,19 @@ export interface SecretSyncFlyioSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Fly.io. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#disable_secret_deletion SecretSyncFlyio#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#disable_secret_deletion SecretSyncFlyio#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#initial_sync_behavior SecretSyncFlyio#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#initial_sync_behavior SecretSyncFlyio#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Fly.io destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#key_schema SecretSyncFlyio#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#key_schema SecretSyncFlyio#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -320,7 +320,7 @@ export class SecretSyncFlyioSyncOptionsOutputReference extends cdktf.ComplexObje
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio infisical_secret_sync_flyio}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio infisical_secret_sync_flyio}
 */
 export class SecretSyncFlyio extends cdktf.TerraformResource {
 
@@ -336,7 +336,7 @@ export class SecretSyncFlyio extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncFlyio resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncFlyio to import
-  * @param importFromId The id of the existing SecretSyncFlyio that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncFlyio that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncFlyio to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -348,7 +348,7 @@ export class SecretSyncFlyio extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.17/docs/resources/secret_sync_flyio infisical_secret_sync_flyio} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_flyio infisical_secret_sync_flyio} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -359,7 +359,7 @@ export class SecretSyncFlyio extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_flyio',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.17'
+        providerVersion: '0.16.18'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

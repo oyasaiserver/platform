@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,21 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareAiSearchTokensConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens#account_id DataCloudflareAiSearchTokens#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens#account_id DataCloudflareAiSearchTokens#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens#max_items DataCloudflareAiSearchTokens#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens#max_items DataCloudflareAiSearchTokens#max_items}
   */
   readonly maxItems?: number;
+  /**
+  * Filter tokens whose name contains this string (case-insensitive).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens#search DataCloudflareAiSearchTokens#search}
+  */
+  readonly search?: string;
 }
 export interface DataCloudflareAiSearchTokensResult {
 }
@@ -135,7 +141,7 @@ export class DataCloudflareAiSearchTokensResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens cloudflare_ai_search_tokens}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens cloudflare_ai_search_tokens}
 */
 export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
 
@@ -151,7 +157,7 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareAiSearchTokens resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAiSearchTokens to import
-  * @param importFromId The id of the existing DataCloudflareAiSearchTokens that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAiSearchTokens that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAiSearchTokens to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -163,18 +169,18 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/ai_search_tokens cloudflare_ai_search_tokens} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_tokens cloudflare_ai_search_tokens} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareAiSearchTokensConfig
+  * @param options DataCloudflareAiSearchTokensConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareAiSearchTokensConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareAiSearchTokensConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_ai_search_tokens',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -186,19 +192,23 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
     });
     this._accountId = config.accountId;
     this._maxItems = config.maxItems;
+    this._search = config.search;
   }
 
   // ==========
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
@@ -227,6 +237,22 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
     return this._result;
   }
 
+  // search - computed: false, optional: true, required: false
+  private _search?: string; 
+  public get search() {
+    return this.getStringAttribute('search');
+  }
+  public set search(value: string) {
+    this._search = value;
+  }
+  public resetSearch() {
+    this._search = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get searchInput() {
+    return this._search;
+  }
+
   // =========
   // SYNTHESIS
   // =========
@@ -235,6 +261,7 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       max_items: cdktf.numberToTerraform(this._maxItems),
+      search: cdktf.stringToTerraform(this._search),
     };
   }
 
@@ -251,6 +278,12 @@ export class DataCloudflareAiSearchTokens extends cdktf.TerraformDataSource {
         isBlock: false,
         type: "simple",
         storageClassType: "number",
+      },
+      search: {
+        value: cdktf.stringToHclTerraform(this._search),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
     };
 

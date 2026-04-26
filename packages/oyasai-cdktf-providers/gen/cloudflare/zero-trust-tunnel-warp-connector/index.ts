@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,25 @@ export interface ZeroTrustTunnelWarpConnectorConfig extends cdktf.TerraformMetaA
   /**
   * Cloudflare account ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector#account_id ZeroTrustTunnelWarpConnector#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector#account_id ZeroTrustTunnelWarpConnector#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
+  /**
+  * Indicates that the tunnel will be created to be highly available. If omitted, defaults to false.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector#ha ZeroTrustTunnelWarpConnector#ha}
+  */
+  readonly ha?: boolean | cdktf.IResolvable;
   /**
   * A user-friendly name for a tunnel.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector#name ZeroTrustTunnelWarpConnector#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector#name ZeroTrustTunnelWarpConnector#name}
   */
   readonly name: string;
   /**
   * Sets the password required to run a locally-managed tunnel. Must be at least 32 bytes and encoded as a base64 string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector#tunnel_secret ZeroTrustTunnelWarpConnector#tunnel_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector#tunnel_secret ZeroTrustTunnelWarpConnector#tunnel_secret}
   */
   readonly tunnelSecret?: string;
 }
@@ -138,7 +144,7 @@ export class ZeroTrustTunnelWarpConnectorConnectionsList extends cdktf.ComplexLi
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector cloudflare_zero_trust_tunnel_warp_connector}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector cloudflare_zero_trust_tunnel_warp_connector}
 */
 export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
 
@@ -154,7 +160,7 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ZeroTrustTunnelWarpConnector resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ZeroTrustTunnelWarpConnector to import
-  * @param importFromId The id of the existing ZeroTrustTunnelWarpConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ZeroTrustTunnelWarpConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ZeroTrustTunnelWarpConnector to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -166,7 +172,7 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/zero_trust_tunnel_warp_connector cloudflare_zero_trust_tunnel_warp_connector} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_warp_connector cloudflare_zero_trust_tunnel_warp_connector} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -177,7 +183,7 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_zero_trust_tunnel_warp_connector',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -188,6 +194,7 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._ha = config.ha;
     this._name = config.name;
     this._tunnelSecret = config.tunnelSecret;
   }
@@ -196,13 +203,16 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
@@ -238,6 +248,22 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
   // deleted_at - computed: true, optional: false, required: false
   public get deletedAt() {
     return this.getStringAttribute('deleted_at');
+  }
+
+  // ha - computed: true, optional: true, required: false
+  private _ha?: boolean | cdktf.IResolvable; 
+  public get ha() {
+    return this.getBooleanAttribute('ha');
+  }
+  public set ha(value: boolean | cdktf.IResolvable) {
+    this._ha = value;
+  }
+  public resetHa() {
+    this._ha = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get haInput() {
+    return this._ha;
   }
 
   // id - computed: true, optional: false, required: false
@@ -296,6 +322,7 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      ha: cdktf.booleanToTerraform(this._ha),
       name: cdktf.stringToTerraform(this._name),
       tunnel_secret: cdktf.stringToTerraform(this._tunnelSecret),
     };
@@ -308,6 +335,12 @@ export class ZeroTrustTunnelWarpConnector extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      ha: {
+        value: cdktf.booleanToHclTerraform(this._ha),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
