@@ -1,4 +1,4 @@
-name: Destroy Platform
+name: Destroy platform
 
 on:
   workflow_call:
@@ -7,24 +7,56 @@ on:
         required: true
         type: string
 
-permissions:
-  id-token: write
-
 jobs:
-  services:
-    secrets: inherit
-    uses: ./.github/workflows/modify-platform-stack.yaml
-    with:
-      environment: ${{ inputs.environment }}
-      stack: services
-      operation: destroy
-
-  infra:
-    needs:
-      - services
-    secrets: inherit
-    uses: ./.github/workflows/modify-platform-stack.yaml
-    with:
-      environment: ${{ inputs.environment }}
-      stack: infra
-      operation: destroy
+  cdktf:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+      OYASAI_IMAGE_ID: "{}"
+    defaults:
+      run:
+        working-directory: packages/oyasai-cdktf
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        with:
+          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+          path: "~/.cache/nix"
+      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe
+        with:
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - name: Setup Nix S3 cache
+        uses: ./packages/nix-copy-action
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
+        with:
+          method: oidc
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+      - name: Destroy
+        run: |
+          nix run .#oyasai-cdktf -- \
+            destroy \
+            platform-${{ inputs.environment}}-infra platform-${{ inputs.environment}}-services \
+            --ignore-missing-stack-dependencies \
+            --auto-approve
+      - name: Delete TF Workspace
+        run: |
+          nix run .#oyasai-infra -- \
+            terraform_io::delete_workspace \
+            platform-${{ inputs.environment }}-infra
+          nix run .#oyasai-infra -- \
+            terraform_io::delete_workspace \
+            platform-${{ inputs.environment }}-services
