@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/release
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubRelease = exports.DataGithubReleaseAssetsList = exports.DataGithubReleaseAssetsOutputReference = void 0;
-exports.dataGithubReleaseAssetsToTerraform = dataGithubReleaseAssetsToTerraform;
-exports.dataGithubReleaseAssetsToHclTerraform = dataGithubReleaseAssetsToHclTerraform;
-var cdktf = require("cdktf");
-function dataGithubReleaseAssetsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataGithubReleaseAssetsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,157 +10,124 @@ function dataGithubReleaseAssetsToTerraform(struct) {
     }
     return {};
 }
-function dataGithubReleaseAssetsToHclTerraform(struct) {
+export function dataGithubReleaseAssetsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataGithubReleaseAssetsOutputReference = /** @class */ (function (_super) {
-    __extends(DataGithubReleaseAssetsOutputReference, _super);
+export class DataGithubReleaseAssetsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubReleaseAssetsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "browserDownloadUrl", {
-        // browser_download_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('browser_download_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "contentType", {
-        // content_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('content_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "label", {
-        // label - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "nodeId", {
-        // node_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('node_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "size", {
-        // size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubReleaseAssetsOutputReference.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataGithubReleaseAssetsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataGithubReleaseAssetsOutputReference = DataGithubReleaseAssetsOutputReference;
-var DataGithubReleaseAssetsList = /** @class */ (function (_super) {
-    __extends(DataGithubReleaseAssetsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // browser_download_url - computed: true, optional: false, required: false
+    get browserDownloadUrl() {
+        return this.getStringAttribute('browser_download_url');
+    }
+    // content_type - computed: true, optional: false, required: false
+    get contentType() {
+        return this.getStringAttribute('content_type');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getNumberAttribute('id');
+    }
+    // label - computed: true, optional: false, required: false
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // node_id - computed: true, optional: false, required: false
+    get nodeId() {
+        return this.getStringAttribute('node_id');
+    }
+    // size - computed: true, optional: false, required: false
+    get size() {
+        return this.getNumberAttribute('size');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+}
+export class DataGithubReleaseAssetsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubReleaseAssetsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataGithubReleaseAssetsList.prototype.get = function (index) {
+    get(index) {
         return new DataGithubReleaseAssetsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataGithubReleaseAssetsList;
-}(cdktf.ComplexList));
-exports.DataGithubReleaseAssetsList = DataGithubReleaseAssetsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/release github_release}
 */
-var DataGithubRelease = /** @class */ (function (_super) {
-    __extends(DataGithubRelease, _super);
+export class DataGithubRelease extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_release";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubRelease resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubRelease to import
+    * @param importFromId The id of the existing DataGithubRelease that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/release#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubRelease to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_release", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -191,8 +138,8 @@ var DataGithubRelease = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubReleaseConfig
     */
-    function DataGithubRelease(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_release',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -205,273 +152,163 @@ var DataGithubRelease = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // assets - computed: true, optional: false, required: false
-        _this._assets = new DataGithubReleaseAssetsList(_this, "assets", false);
-        _this._id = config.id;
-        _this._owner = config.owner;
-        _this._releaseId = config.releaseId;
-        _this._releaseTag = config.releaseTag;
-        _this._repository = config.repository;
-        _this._retrieveBy = config.retrieveBy;
-        return _this;
+        });
+        this._id = config.id;
+        this._owner = config.owner;
+        this._releaseId = config.releaseId;
+        this._releaseTag = config.releaseTag;
+        this._repository = config.repository;
+        this._retrieveBy = config.retrieveBy;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubRelease resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubRelease to import
-    * @param importFromId The id of the existing DataGithubRelease that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/release#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubRelease to import is found
-    */
-    DataGithubRelease.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_release", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubRelease.prototype, "assertsUrl", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // asserts_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('asserts_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "assets", {
-        get: function () {
-            return this._assets;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "assetsUrl", {
-        // assets_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('assets_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "body", {
-        // body - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('body');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "draft", {
-        // draft - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('draft');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "htmlUrl", {
-        // html_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('html_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRelease.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // asserts_url - computed: true, optional: false, required: false
+    get assertsUrl() {
+        return this.getStringAttribute('asserts_url');
+    }
+    // assets - computed: true, optional: false, required: false
+    _assets = new DataGithubReleaseAssetsList(this, "assets", false);
+    get assets() {
+        return this._assets;
+    }
+    // assets_url - computed: true, optional: false, required: false
+    get assetsUrl() {
+        return this.getStringAttribute('assets_url');
+    }
+    // body - computed: true, optional: false, required: false
+    get body() {
+        return this.getStringAttribute('body');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // draft - computed: true, optional: false, required: false
+    get draft() {
+        return this.getBooleanAttribute('draft');
+    }
+    // html_url - computed: true, optional: false, required: false
+    get htmlUrl() {
+        return this.getStringAttribute('html_url');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubRelease.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "owner", {
-        get: function () {
-            return this.getStringAttribute('owner');
-        },
-        set: function (value) {
-            this._owner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "ownerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "prerelease", {
-        // prerelease - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('prerelease');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "publishedAt", {
-        // published_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('published_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "releaseId", {
-        get: function () {
-            return this.getNumberAttribute('release_id');
-        },
-        set: function (value) {
-            this._releaseId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRelease.prototype.resetReleaseId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // owner - computed: false, optional: false, required: true
+    _owner;
+    get owner() {
+        return this.getStringAttribute('owner');
+    }
+    set owner(value) {
+        this._owner = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ownerInput() {
+        return this._owner;
+    }
+    // prerelease - computed: true, optional: false, required: false
+    get prerelease() {
+        return this.getBooleanAttribute('prerelease');
+    }
+    // published_at - computed: true, optional: false, required: false
+    get publishedAt() {
+        return this.getStringAttribute('published_at');
+    }
+    // release_id - computed: false, optional: true, required: false
+    _releaseId;
+    get releaseId() {
+        return this.getNumberAttribute('release_id');
+    }
+    set releaseId(value) {
+        this._releaseId = value;
+    }
+    resetReleaseId() {
         this._releaseId = undefined;
-    };
-    Object.defineProperty(DataGithubRelease.prototype, "releaseIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._releaseId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "releaseTag", {
-        get: function () {
-            return this.getStringAttribute('release_tag');
-        },
-        set: function (value) {
-            this._releaseTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRelease.prototype.resetReleaseTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get releaseIdInput() {
+        return this._releaseId;
+    }
+    // release_tag - computed: false, optional: true, required: false
+    _releaseTag;
+    get releaseTag() {
+        return this.getStringAttribute('release_tag');
+    }
+    set releaseTag(value) {
+        this._releaseTag = value;
+    }
+    resetReleaseTag() {
         this._releaseTag = undefined;
-    };
-    Object.defineProperty(DataGithubRelease.prototype, "releaseTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._releaseTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "retrieveBy", {
-        get: function () {
-            return this.getStringAttribute('retrieve_by');
-        },
-        set: function (value) {
-            this._retrieveBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "retrieveByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retrieveBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "tarballUrl", {
-        // tarball_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tarball_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "targetCommitish", {
-        // target_commitish - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('target_commitish');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "uploadUrl", {
-        // upload_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('upload_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRelease.prototype, "zipballUrl", {
-        // zipball_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zipball_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get releaseTagInput() {
+        return this._releaseTag;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // retrieve_by - computed: false, optional: false, required: true
+    _retrieveBy;
+    get retrieveBy() {
+        return this.getStringAttribute('retrieve_by');
+    }
+    set retrieveBy(value) {
+        this._retrieveBy = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get retrieveByInput() {
+        return this._retrieveBy;
+    }
+    // tarball_url - computed: true, optional: false, required: false
+    get tarballUrl() {
+        return this.getStringAttribute('tarball_url');
+    }
+    // target_commitish - computed: true, optional: false, required: false
+    get targetCommitish() {
+        return this.getStringAttribute('target_commitish');
+    }
+    // upload_url - computed: true, optional: false, required: false
+    get uploadUrl() {
+        return this.getStringAttribute('upload_url');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    // zipball_url - computed: true, optional: false, required: false
+    get zipballUrl() {
+        return this.getStringAttribute('zipball_url');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubRelease.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             owner: cdktf.stringToTerraform(this._owner),
@@ -480,9 +317,9 @@ var DataGithubRelease = /** @class */ (function (_super) {
             repository: cdktf.stringToTerraform(this._repository),
             retrieve_by: cdktf.stringToTerraform(this._retrieveBy),
         };
-    };
-    DataGithubRelease.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -521,15 +358,6 @@ var DataGithubRelease = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubRelease.tfResourceType = "github_release";
-    return DataGithubRelease;
-}(cdktf.TerraformDataSource));
-exports.DataGithubRelease = DataGithubRelease;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_db
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DynamicSecretMongoDb = exports.DynamicSecretMongoDbMetadataList = exports.DynamicSecretMongoDbMetadataOutputReference = exports.DynamicSecretMongoDbConfigurationOutputReference = void 0;
-exports.dynamicSecretMongoDbConfigurationToTerraform = dynamicSecretMongoDbConfigurationToTerraform;
-exports.dynamicSecretMongoDbConfigurationToHclTerraform = dynamicSecretMongoDbConfigurationToHclTerraform;
-exports.dynamicSecretMongoDbMetadataToTerraform = dynamicSecretMongoDbMetadataToTerraform;
-exports.dynamicSecretMongoDbMetadataToHclTerraform = dynamicSecretMongoDbMetadataToHclTerraform;
-var cdktf = require("cdktf");
-function dynamicSecretMongoDbConfigurationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dynamicSecretMongoDbConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +18,14 @@ function dynamicSecretMongoDbConfigurationToTerraform(struct) {
         username: cdktf.stringToTerraform(struct.username),
     };
 }
-function dynamicSecretMongoDbConfigurationToHclTerraform(struct) {
+export function dynamicSecretMongoDbConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ca: {
             value: cdktf.stringToHclTerraform(struct.ca),
             isBlock: false,
@@ -92,226 +70,174 @@ function dynamicSecretMongoDbConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoDbConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoDbConfigurationOutputReference, _super);
+export class DynamicSecretMongoDbConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretMongoDbConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ca !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ca = this._ca;
-            }
-            if (this._database !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.database = this._database;
-            }
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._password !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.password = this._password;
-            }
-            if (this._port !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.port = this._port;
-            }
-            if (this._roles !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.roles = this._roles;
-            }
-            if (this._username !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.username = this._username;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ca = undefined;
-                this._database = undefined;
-                this._host = undefined;
-                this._password = undefined;
-                this._port = undefined;
-                this._roles = undefined;
-                this._username = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ca = value.ca;
-                this._database = value.database;
-                this._host = value.host;
-                this._password = value.password;
-                this._port = value.port;
-                this._roles = value.roles;
-                this._username = value.username;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "ca", {
-        get: function () {
-            return this.getStringAttribute('ca');
-        },
-        set: function (value) {
-            this._ca = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDbConfigurationOutputReference.prototype.resetCa = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ca !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ca = this._ca;
+        }
+        if (this._database !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.database = this._database;
+        }
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._password !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.password = this._password;
+        }
+        if (this._port !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.port = this._port;
+        }
+        if (this._roles !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.roles = this._roles;
+        }
+        if (this._username !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.username = this._username;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ca = undefined;
+            this._database = undefined;
+            this._host = undefined;
+            this._password = undefined;
+            this._port = undefined;
+            this._roles = undefined;
+            this._username = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ca = value.ca;
+            this._database = value.database;
+            this._host = value.host;
+            this._password = value.password;
+            this._port = value.port;
+            this._roles = value.roles;
+            this._username = value.username;
+        }
+    }
+    // ca - computed: false, optional: true, required: false
+    _ca;
+    get ca() {
+        return this.getStringAttribute('ca');
+    }
+    set ca(value) {
+        this._ca = value;
+    }
+    resetCa() {
         this._ca = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "caInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ca;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "database", {
-        get: function () {
-            return this.getStringAttribute('database');
-        },
-        set: function (value) {
-            this._database = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "databaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._database;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "password", {
-        get: function () {
-            return this.getStringAttribute('password');
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "passwordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._password;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "port", {
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        set: function (value) {
-            this._port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDbConfigurationOutputReference.prototype.resetPort = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caInput() {
+        return this._ca;
+    }
+    // database - computed: false, optional: false, required: true
+    _database;
+    get database() {
+        return this.getStringAttribute('database');
+    }
+    set database(value) {
+        this._database = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseInput() {
+        return this._database;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // password - computed: false, optional: false, required: true
+    _password;
+    get password() {
+        return this.getStringAttribute('password');
+    }
+    set password(value) {
+        this._password = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordInput() {
+        return this._password;
+    }
+    // port - computed: false, optional: true, required: false
+    _port;
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    set port(value) {
+        this._port = value;
+    }
+    resetPort() {
         this._port = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "portInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._port;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "roles", {
-        get: function () {
-            return this.getListAttribute('roles');
-        },
-        set: function (value) {
-            this._roles = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "rolesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._roles;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbConfigurationOutputReference.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoDbConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoDbConfigurationOutputReference = DynamicSecretMongoDbConfigurationOutputReference;
-function dynamicSecretMongoDbMetadataToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portInput() {
+        return this._port;
+    }
+    // roles - computed: false, optional: false, required: true
+    _roles;
+    get roles() {
+        return this.getListAttribute('roles');
+    }
+    set roles(value) {
+        this._roles = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rolesInput() {
+        return this._roles;
+    }
+    // username - computed: false, optional: false, required: true
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
+}
+export function dynamicSecretMongoDbMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -323,14 +249,14 @@ function dynamicSecretMongoDbMetadataToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function dynamicSecretMongoDbMetadataToHclTerraform(struct) {
+export function dynamicSecretMongoDbMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key: {
             value: cdktf.stringToHclTerraform(struct.key),
             isBlock: false,
@@ -345,129 +271,123 @@ function dynamicSecretMongoDbMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoDbMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoDbMetadataOutputReference, _super);
+export class DynamicSecretMongoDbMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoDbMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretMongoDbMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.key = this._key;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._key = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._key = value.key;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbMetadataOutputReference.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbMetadataOutputReference.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbMetadataOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDbMetadataOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoDbMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoDbMetadataOutputReference = DynamicSecretMongoDbMetadataOutputReference;
-var DynamicSecretMongoDbMetadataList = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoDbMetadataList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.key = this._key;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._key = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._key = value.key;
+            this._value = value.value;
+        }
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class DynamicSecretMongoDbMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoDbMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretMongoDbMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretMongoDbMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretMongoDbMetadataList;
-}(cdktf.ComplexList));
-exports.DynamicSecretMongoDbMetadataList = DynamicSecretMongoDbMetadataList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_db infisical_dynamic_secret_mongo_db}
 */
-var DynamicSecretMongoDb = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoDb, _super);
+export class DynamicSecretMongoDb extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_dynamic_secret_mongo_db";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DynamicSecretMongoDb resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DynamicSecretMongoDb to import
+    * @param importFromId The id of the existing DynamicSecretMongoDb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_db#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DynamicSecretMongoDb to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_mongo_db", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -478,8 +398,8 @@ var DynamicSecretMongoDb = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DynamicSecretMongoDbConfig
     */
-    function DynamicSecretMongoDb(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_dynamic_secret_mongo_db',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -492,221 +412,145 @@ var DynamicSecretMongoDb = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configuration - computed: false, optional: false, required: true
-        _this._configuration = new DynamicSecretMongoDbConfigurationOutputReference(_this, "configuration");
-        // metadata - computed: false, optional: true, required: false
-        _this._metadata = new DynamicSecretMongoDbMetadataList(_this, "metadata", true);
-        _this._configuration.internalValue = config.configuration;
-        _this._defaultTtl = config.defaultTtl;
-        _this._environmentSlug = config.environmentSlug;
-        _this._maxTtl = config.maxTtl;
-        _this._metadata.internalValue = config.metadata;
-        _this._name = config.name;
-        _this._path = config.path;
-        _this._projectSlug = config.projectSlug;
-        _this._usernameTemplate = config.usernameTemplate;
-        return _this;
+        });
+        this._configuration.internalValue = config.configuration;
+        this._defaultTtl = config.defaultTtl;
+        this._environmentSlug = config.environmentSlug;
+        this._maxTtl = config.maxTtl;
+        this._metadata.internalValue = config.metadata;
+        this._name = config.name;
+        this._path = config.path;
+        this._projectSlug = config.projectSlug;
+        this._usernameTemplate = config.usernameTemplate;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DynamicSecretMongoDb resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DynamicSecretMongoDb to import
-    * @param importFromId The id of the existing DynamicSecretMongoDb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_db#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DynamicSecretMongoDb to import is found
-    */
-    DynamicSecretMongoDb.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_mongo_db", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDb.prototype.putConfiguration = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configuration - computed: false, optional: false, required: true
+    _configuration = new DynamicSecretMongoDbConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "defaultTtl", {
-        get: function () {
-            return this.getStringAttribute('default_ttl');
-        },
-        set: function (value) {
-            this._defaultTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "defaultTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "maxTtl", {
-        get: function () {
-            return this.getStringAttribute('max_ttl');
-        },
-        set: function (value) {
-            this._maxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDb.prototype.resetMaxTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
+    // default_ttl - computed: false, optional: false, required: true
+    _defaultTtl;
+    get defaultTtl() {
+        return this.getStringAttribute('default_ttl');
+    }
+    set defaultTtl(value) {
+        this._defaultTtl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultTtlInput() {
+        return this._defaultTtl;
+    }
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_ttl - computed: false, optional: true, required: false
+    _maxTtl;
+    get maxTtl() {
+        return this.getStringAttribute('max_ttl');
+    }
+    set maxTtl(value) {
+        this._maxTtl = value;
+    }
+    resetMaxTtl() {
         this._maxTtl = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "maxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDb.prototype.putMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxTtlInput() {
+        return this._maxTtl;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata = new DynamicSecretMongoDbMetadataList(this, "metadata", true);
+    get metadata() {
+        return this._metadata;
+    }
+    putMetadata(value) {
         this._metadata.internalValue = value;
-    };
-    DynamicSecretMongoDb.prototype.resetMetadata = function () {
+    }
+    resetMetadata() {
         this._metadata.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "usernameTemplate", {
-        get: function () {
-            return this.getStringAttribute('username_template');
-        },
-        set: function (value) {
-            this._usernameTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoDb.prototype.resetUsernameTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // username_template - computed: false, optional: true, required: false
+    _usernameTemplate;
+    get usernameTemplate() {
+        return this.getStringAttribute('username_template');
+    }
+    set usernameTemplate(value) {
+        this._usernameTemplate = value;
+    }
+    resetUsernameTemplate() {
         this._usernameTemplate = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoDb.prototype, "usernameTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usernameTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameTemplateInput() {
+        return this._usernameTemplate;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DynamicSecretMongoDb.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             configuration: dynamicSecretMongoDbConfigurationToTerraform(this._configuration.internalValue),
             default_ttl: cdktf.stringToTerraform(this._defaultTtl),
@@ -718,9 +562,9 @@ var DynamicSecretMongoDb = /** @class */ (function (_super) {
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             username_template: cdktf.stringToTerraform(this._usernameTemplate),
         };
-    };
-    DynamicSecretMongoDb.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             configuration: {
                 value: dynamicSecretMongoDbConfigurationToHclTerraform(this._configuration.internalValue),
                 isBlock: true,
@@ -777,15 +621,6 @@ var DynamicSecretMongoDb = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DynamicSecretMongoDb.tfResourceType = "infisical_dynamic_secret_mongo_db";
-    return DynamicSecretMongoDb;
-}(cdktf.TerraformResource));
-exports.DynamicSecretMongoDb = DynamicSecretMongoDb;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

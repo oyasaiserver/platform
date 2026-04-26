@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Stream = exports.StreamWatermarkOutputReference = exports.StreamStatusOutputReference = exports.StreamPublicDetailsOutputReference = exports.StreamPlaybackOutputReference = exports.StreamInputOutputReference = void 0;
-exports.streamInputToTerraform = streamInputToTerraform;
-exports.streamInputToHclTerraform = streamInputToHclTerraform;
-exports.streamPlaybackToTerraform = streamPlaybackToTerraform;
-exports.streamPlaybackToHclTerraform = streamPlaybackToHclTerraform;
-exports.streamPublicDetailsToTerraform = streamPublicDetailsToTerraform;
-exports.streamPublicDetailsToHclTerraform = streamPublicDetailsToHclTerraform;
-exports.streamStatusToTerraform = streamStatusToTerraform;
-exports.streamStatusToHclTerraform = streamStatusToHclTerraform;
-exports.streamWatermarkToTerraform = streamWatermarkToTerraform;
-exports.streamWatermarkToHclTerraform = streamWatermarkToHclTerraform;
-var cdktf = require("cdktf");
-function streamInputToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function streamInputToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -38,64 +10,48 @@ function streamInputToTerraform(struct) {
     }
     return {};
 }
-function streamInputToHclTerraform(struct) {
+export function streamInputToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var StreamInputOutputReference = /** @class */ (function (_super) {
-    __extends(StreamInputOutputReference, _super);
+export class StreamInputOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function StreamInputOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(StreamInputOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamInputOutputReference.prototype, "height", {
-        // height - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('height');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamInputOutputReference.prototype, "width", {
-        // width - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('width');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamInputOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamInputOutputReference = StreamInputOutputReference;
-function streamPlaybackToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // height - computed: true, optional: false, required: false
+    get height() {
+        return this.getNumberAttribute('height');
+    }
+    // width - computed: true, optional: false, required: false
+    get width() {
+        return this.getNumberAttribute('width');
+    }
+}
+export function streamPlaybackToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -104,64 +60,48 @@ function streamPlaybackToTerraform(struct) {
     }
     return {};
 }
-function streamPlaybackToHclTerraform(struct) {
+export function streamPlaybackToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var StreamPlaybackOutputReference = /** @class */ (function (_super) {
-    __extends(StreamPlaybackOutputReference, _super);
+export class StreamPlaybackOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function StreamPlaybackOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(StreamPlaybackOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPlaybackOutputReference.prototype, "dash", {
-        // dash - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('dash');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPlaybackOutputReference.prototype, "hls", {
-        // hls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamPlaybackOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamPlaybackOutputReference = StreamPlaybackOutputReference;
-function streamPublicDetailsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // dash - computed: true, optional: false, required: false
+    get dash() {
+        return this.getStringAttribute('dash');
+    }
+    // hls - computed: true, optional: false, required: false
+    get hls() {
+        return this.getStringAttribute('hls');
+    }
+}
+export function streamPublicDetailsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -175,14 +115,14 @@ function streamPublicDetailsToTerraform(struct) {
         title: cdktf.stringToTerraform(struct.title),
     };
 }
-function streamPublicDetailsToHclTerraform(struct) {
+export function streamPublicDetailsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         channel_link: {
             value: cdktf.stringToHclTerraform(struct.channelLink),
             isBlock: false,
@@ -209,160 +149,126 @@ function streamPublicDetailsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var StreamPublicDetailsOutputReference = /** @class */ (function (_super) {
-    __extends(StreamPublicDetailsOutputReference, _super);
+export class StreamPublicDetailsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function StreamPublicDetailsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._channelLink !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.channelLink = this._channelLink;
-            }
-            if (this._logo !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.logo = this._logo;
-            }
-            if (this._shareLink !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.shareLink = this._shareLink;
-            }
-            if (this._title !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.title = this._title;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._channelLink = undefined;
-                this._logo = undefined;
-                this._shareLink = undefined;
-                this._title = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._channelLink = value.channelLink;
-                this._logo = value.logo;
-                this._shareLink = value.shareLink;
-                this._title = value.title;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "channelLink", {
-        get: function () {
-            return this.getStringAttribute('channel_link');
-        },
-        set: function (value) {
-            this._channelLink = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamPublicDetailsOutputReference.prototype.resetChannelLink = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._channelLink !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.channelLink = this._channelLink;
+        }
+        if (this._logo !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.logo = this._logo;
+        }
+        if (this._shareLink !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.shareLink = this._shareLink;
+        }
+        if (this._title !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.title = this._title;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._channelLink = undefined;
+            this._logo = undefined;
+            this._shareLink = undefined;
+            this._title = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._channelLink = value.channelLink;
+            this._logo = value.logo;
+            this._shareLink = value.shareLink;
+            this._title = value.title;
+        }
+    }
+    // channel_link - computed: false, optional: true, required: false
+    _channelLink;
+    get channelLink() {
+        return this.getStringAttribute('channel_link');
+    }
+    set channelLink(value) {
+        this._channelLink = value;
+    }
+    resetChannelLink() {
         this._channelLink = undefined;
-    };
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "channelLinkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._channelLink;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "logo", {
-        get: function () {
-            return this.getStringAttribute('logo');
-        },
-        set: function (value) {
-            this._logo = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamPublicDetailsOutputReference.prototype.resetLogo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get channelLinkInput() {
+        return this._channelLink;
+    }
+    // logo - computed: false, optional: true, required: false
+    _logo;
+    get logo() {
+        return this.getStringAttribute('logo');
+    }
+    set logo(value) {
+        this._logo = value;
+    }
+    resetLogo() {
         this._logo = undefined;
-    };
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "logoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "shareLink", {
-        get: function () {
-            return this.getStringAttribute('share_link');
-        },
-        set: function (value) {
-            this._shareLink = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamPublicDetailsOutputReference.prototype.resetShareLink = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logoInput() {
+        return this._logo;
+    }
+    // share_link - computed: false, optional: true, required: false
+    _shareLink;
+    get shareLink() {
+        return this.getStringAttribute('share_link');
+    }
+    set shareLink(value) {
+        this._shareLink = value;
+    }
+    resetShareLink() {
         this._shareLink = undefined;
-    };
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "shareLinkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._shareLink;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "title", {
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        set: function (value) {
-            this._title = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamPublicDetailsOutputReference.prototype.resetTitle = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get shareLinkInput() {
+        return this._shareLink;
+    }
+    // title - computed: false, optional: true, required: false
+    _title;
+    get title() {
+        return this.getStringAttribute('title');
+    }
+    set title(value) {
+        this._title = value;
+    }
+    resetTitle() {
         this._title = undefined;
-    };
-    Object.defineProperty(StreamPublicDetailsOutputReference.prototype, "titleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._title;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamPublicDetailsOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamPublicDetailsOutputReference = StreamPublicDetailsOutputReference;
-function streamStatusToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get titleInput() {
+        return this._title;
+    }
+}
+export function streamStatusToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -371,80 +277,56 @@ function streamStatusToTerraform(struct) {
     }
     return {};
 }
-function streamStatusToHclTerraform(struct) {
+export function streamStatusToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var StreamStatusOutputReference = /** @class */ (function (_super) {
-    __extends(StreamStatusOutputReference, _super);
+export class StreamStatusOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function StreamStatusOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(StreamStatusOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamStatusOutputReference.prototype, "errorReasonCode", {
-        // error_reason_code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('error_reason_code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamStatusOutputReference.prototype, "errorReasonText", {
-        // error_reason_text - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('error_reason_text');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamStatusOutputReference.prototype, "pctComplete", {
-        // pct_complete - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('pct_complete');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamStatusOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamStatusOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamStatusOutputReference = StreamStatusOutputReference;
-function streamWatermarkToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // error_reason_code - computed: true, optional: false, required: false
+    get errorReasonCode() {
+        return this.getStringAttribute('error_reason_code');
+    }
+    // error_reason_text - computed: true, optional: false, required: false
+    get errorReasonText() {
+        return this.getStringAttribute('error_reason_text');
+    }
+    // pct_complete - computed: true, optional: false, required: false
+    get pctComplete() {
+        return this.getStringAttribute('pct_complete');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+}
+export function streamWatermarkToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -453,140 +335,104 @@ function streamWatermarkToTerraform(struct) {
     }
     return {};
 }
-function streamWatermarkToHclTerraform(struct) {
+export function streamWatermarkToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var StreamWatermarkOutputReference = /** @class */ (function (_super) {
-    __extends(StreamWatermarkOutputReference, _super);
+export class StreamWatermarkOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function StreamWatermarkOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "downloadedFrom", {
-        // downloaded_from - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('downloaded_from');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "height", {
-        // height - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('height');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "opacity", {
-        // opacity - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('opacity');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "padding", {
-        // padding - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('padding');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "position", {
-        // position - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('position');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "scale", {
-        // scale - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('scale');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "size", {
-        // size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "uid", {
-        // uid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkOutputReference.prototype, "width", {
-        // width - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('width');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamWatermarkOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamWatermarkOutputReference = StreamWatermarkOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // downloaded_from - computed: true, optional: false, required: false
+    get downloadedFrom() {
+        return this.getStringAttribute('downloaded_from');
+    }
+    // height - computed: true, optional: false, required: false
+    get height() {
+        return this.getNumberAttribute('height');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // opacity - computed: true, optional: false, required: false
+    get opacity() {
+        return this.getNumberAttribute('opacity');
+    }
+    // padding - computed: true, optional: false, required: false
+    get padding() {
+        return this.getNumberAttribute('padding');
+    }
+    // position - computed: true, optional: false, required: false
+    get position() {
+        return this.getStringAttribute('position');
+    }
+    // scale - computed: true, optional: false, required: false
+    get scale() {
+        return this.getNumberAttribute('scale');
+    }
+    // size - computed: true, optional: false, required: false
+    get size() {
+        return this.getNumberAttribute('size');
+    }
+    // uid - computed: true, optional: false, required: false
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
+    // width - computed: true, optional: false, required: false
+    get width() {
+        return this.getNumberAttribute('width');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream cloudflare_stream}
 */
-var Stream = /** @class */ (function (_super) {
-    __extends(Stream, _super);
+export class Stream extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_stream";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Stream resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Stream to import
+    * @param importFromId The id of the existing Stream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Stream to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -597,9 +443,8 @@ var Stream = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options StreamConfig = {}
     */
-    function Stream(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_stream',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -612,424 +457,275 @@ var Stream = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // input - computed: true, optional: false, required: false
-        _this._input = new StreamInputOutputReference(_this, "input");
-        // playback - computed: true, optional: false, required: false
-        _this._playback = new StreamPlaybackOutputReference(_this, "playback");
-        // public_details - computed: false, optional: true, required: false
-        _this._publicDetails = new StreamPublicDetailsOutputReference(_this, "public_details");
-        // status - computed: true, optional: false, required: false
-        _this._status = new StreamStatusOutputReference(_this, "status");
-        // watermark - computed: true, optional: false, required: false
-        _this._watermark = new StreamWatermarkOutputReference(_this, "watermark");
-        _this._accountId = config.accountId;
-        _this._allowedOrigins = config.allowedOrigins;
-        _this._creator = config.creator;
-        _this._identifier = config.identifier;
-        _this._maxDurationSeconds = config.maxDurationSeconds;
-        _this._meta = config.meta;
-        _this._publicDetails.internalValue = config.publicDetails;
-        _this._requireSignedUrls = config.requireSignedUrls;
-        _this._scheduledDeletion = config.scheduledDeletion;
-        _this._thumbnailTimestampPct = config.thumbnailTimestampPct;
-        _this._uid = config.uid;
-        _this._uploadExpiry = config.uploadExpiry;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._allowedOrigins = config.allowedOrigins;
+        this._creator = config.creator;
+        this._identifier = config.identifier;
+        this._maxDurationSeconds = config.maxDurationSeconds;
+        this._meta = config.meta;
+        this._publicDetails.internalValue = config.publicDetails;
+        this._requireSignedUrls = config.requireSignedUrls;
+        this._scheduledDeletion = config.scheduledDeletion;
+        this._thumbnailTimestampPct = config.thumbnailTimestampPct;
+        this._uid = config.uid;
+        this._uploadExpiry = config.uploadExpiry;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Stream resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Stream to import
-    * @param importFromId The id of the existing Stream that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Stream to import is found
-    */
-    Stream.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Stream.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "allowedOrigins", {
-        get: function () {
-            return this.getListAttribute('allowed_origins');
-        },
-        set: function (value) {
-            this._allowedOrigins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetAllowedOrigins = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // allowed_origins - computed: false, optional: true, required: false
+    _allowedOrigins;
+    get allowedOrigins() {
+        return this.getListAttribute('allowed_origins');
+    }
+    set allowedOrigins(value) {
+        this._allowedOrigins = value;
+    }
+    resetAllowedOrigins() {
         this._allowedOrigins = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "allowedOriginsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedOrigins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "clippedFrom", {
-        // clipped_from - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('clipped_from');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "creator", {
-        get: function () {
-            return this.getStringAttribute('creator');
-        },
-        set: function (value) {
-            this._creator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetCreator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedOriginsInput() {
+        return this._allowedOrigins;
+    }
+    // clipped_from - computed: true, optional: false, required: false
+    get clippedFrom() {
+        return this.getStringAttribute('clipped_from');
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // creator - computed: false, optional: true, required: false
+    _creator;
+    get creator() {
+        return this.getStringAttribute('creator');
+    }
+    set creator(value) {
+        this._creator = value;
+    }
+    resetCreator() {
         this._creator = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "creatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._creator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "duration", {
-        // duration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('duration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "identifier", {
-        get: function () {
-            return this.getStringAttribute('identifier');
-        },
-        set: function (value) {
-            this._identifier = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetIdentifier = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get creatorInput() {
+        return this._creator;
+    }
+    // duration - computed: true, optional: false, required: false
+    get duration() {
+        return this.getNumberAttribute('duration');
+    }
+    // identifier - computed: false, optional: true, required: false
+    _identifier;
+    get identifier() {
+        return this.getStringAttribute('identifier');
+    }
+    set identifier(value) {
+        this._identifier = value;
+    }
+    resetIdentifier() {
         this._identifier = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "identifierInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identifier;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "input", {
-        get: function () {
-            return this._input;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "liveInput", {
-        // live_input - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('live_input');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "maxDurationSeconds", {
-        get: function () {
-            return this.getNumberAttribute('max_duration_seconds');
-        },
-        set: function (value) {
-            this._maxDurationSeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetMaxDurationSeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get identifierInput() {
+        return this._identifier;
+    }
+    // input - computed: true, optional: false, required: false
+    _input = new StreamInputOutputReference(this, "input");
+    get input() {
+        return this._input;
+    }
+    // live_input - computed: true, optional: false, required: false
+    get liveInput() {
+        return this.getStringAttribute('live_input');
+    }
+    // max_duration_seconds - computed: false, optional: true, required: false
+    _maxDurationSeconds;
+    get maxDurationSeconds() {
+        return this.getNumberAttribute('max_duration_seconds');
+    }
+    set maxDurationSeconds(value) {
+        this._maxDurationSeconds = value;
+    }
+    resetMaxDurationSeconds() {
         this._maxDurationSeconds = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "maxDurationSecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxDurationSeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "maxSizeBytes", {
-        // max_size_bytes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_size_bytes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "meta", {
-        get: function () {
-            return this.getStringAttribute('meta');
-        },
-        set: function (value) {
-            this._meta = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetMeta = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxDurationSecondsInput() {
+        return this._maxDurationSeconds;
+    }
+    // max_size_bytes - computed: true, optional: false, required: false
+    get maxSizeBytes() {
+        return this.getNumberAttribute('max_size_bytes');
+    }
+    // meta - computed: false, optional: true, required: false
+    _meta;
+    get meta() {
+        return this.getStringAttribute('meta');
+    }
+    set meta(value) {
+        this._meta = value;
+    }
+    resetMeta() {
         this._meta = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "metaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "modified", {
-        // modified - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "playback", {
-        get: function () {
-            return this._playback;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "preview", {
-        // preview - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('preview');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "publicDetails", {
-        get: function () {
-            return this._publicDetails;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.putPublicDetails = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metaInput() {
+        return this._meta;
+    }
+    // modified - computed: true, optional: false, required: false
+    get modified() {
+        return this.getStringAttribute('modified');
+    }
+    // playback - computed: true, optional: false, required: false
+    _playback = new StreamPlaybackOutputReference(this, "playback");
+    get playback() {
+        return this._playback;
+    }
+    // preview - computed: true, optional: false, required: false
+    get preview() {
+        return this.getStringAttribute('preview');
+    }
+    // public_details - computed: false, optional: true, required: false
+    _publicDetails = new StreamPublicDetailsOutputReference(this, "public_details");
+    get publicDetails() {
+        return this._publicDetails;
+    }
+    putPublicDetails(value) {
         this._publicDetails.internalValue = value;
-    };
-    Stream.prototype.resetPublicDetails = function () {
+    }
+    resetPublicDetails() {
         this._publicDetails.internalValue = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "publicDetailsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publicDetails.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "readyToStream", {
-        // ready_to_stream - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ready_to_stream');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "readyToStreamAt", {
-        // ready_to_stream_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ready_to_stream_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "requireSignedUrls", {
-        get: function () {
-            return this.getBooleanAttribute('require_signed_urls');
-        },
-        set: function (value) {
-            this._requireSignedUrls = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetRequireSignedUrls = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get publicDetailsInput() {
+        return this._publicDetails.internalValue;
+    }
+    // ready_to_stream - computed: true, optional: false, required: false
+    get readyToStream() {
+        return this.getBooleanAttribute('ready_to_stream');
+    }
+    // ready_to_stream_at - computed: true, optional: false, required: false
+    get readyToStreamAt() {
+        return this.getStringAttribute('ready_to_stream_at');
+    }
+    // require_signed_urls - computed: true, optional: true, required: false
+    _requireSignedUrls;
+    get requireSignedUrls() {
+        return this.getBooleanAttribute('require_signed_urls');
+    }
+    set requireSignedUrls(value) {
+        this._requireSignedUrls = value;
+    }
+    resetRequireSignedUrls() {
         this._requireSignedUrls = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "requireSignedUrlsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireSignedUrls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "scheduledDeletion", {
-        get: function () {
-            return this.getStringAttribute('scheduled_deletion');
-        },
-        set: function (value) {
-            this._scheduledDeletion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetScheduledDeletion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireSignedUrlsInput() {
+        return this._requireSignedUrls;
+    }
+    // scheduled_deletion - computed: false, optional: true, required: false
+    _scheduledDeletion;
+    get scheduledDeletion() {
+        return this.getStringAttribute('scheduled_deletion');
+    }
+    set scheduledDeletion(value) {
+        this._scheduledDeletion = value;
+    }
+    resetScheduledDeletion() {
         this._scheduledDeletion = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "scheduledDeletionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scheduledDeletion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "size", {
-        // size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "status", {
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "thumbnail", {
-        // thumbnail - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('thumbnail');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "thumbnailTimestampPct", {
-        get: function () {
-            return this.getNumberAttribute('thumbnail_timestamp_pct');
-        },
-        set: function (value) {
-            this._thumbnailTimestampPct = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetThumbnailTimestampPct = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scheduledDeletionInput() {
+        return this._scheduledDeletion;
+    }
+    // size - computed: true, optional: false, required: false
+    get size() {
+        return this.getNumberAttribute('size');
+    }
+    // status - computed: true, optional: false, required: false
+    _status = new StreamStatusOutputReference(this, "status");
+    get status() {
+        return this._status;
+    }
+    // thumbnail - computed: true, optional: false, required: false
+    get thumbnail() {
+        return this.getStringAttribute('thumbnail');
+    }
+    // thumbnail_timestamp_pct - computed: true, optional: true, required: false
+    _thumbnailTimestampPct;
+    get thumbnailTimestampPct() {
+        return this.getNumberAttribute('thumbnail_timestamp_pct');
+    }
+    set thumbnailTimestampPct(value) {
+        this._thumbnailTimestampPct = value;
+    }
+    resetThumbnailTimestampPct() {
         this._thumbnailTimestampPct = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "thumbnailTimestampPctInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._thumbnailTimestampPct;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "uid", {
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        set: function (value) {
-            this._uid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetUid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get thumbnailTimestampPctInput() {
+        return this._thumbnailTimestampPct;
+    }
+    // uid - computed: false, optional: true, required: false
+    _uid;
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
+    set uid(value) {
+        this._uid = value;
+    }
+    resetUid() {
         this._uid = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "uidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "uploadExpiry", {
-        get: function () {
-            return this.getStringAttribute('upload_expiry');
-        },
-        set: function (value) {
-            this._uploadExpiry = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Stream.prototype.resetUploadExpiry = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get uidInput() {
+        return this._uid;
+    }
+    // upload_expiry - computed: false, optional: true, required: false
+    _uploadExpiry;
+    get uploadExpiry() {
+        return this.getStringAttribute('upload_expiry');
+    }
+    set uploadExpiry(value) {
+        this._uploadExpiry = value;
+    }
+    resetUploadExpiry() {
         this._uploadExpiry = undefined;
-    };
-    Object.defineProperty(Stream.prototype, "uploadExpiryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uploadExpiry;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "uploaded", {
-        // uploaded - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Stream.prototype, "watermark", {
-        get: function () {
-            return this._watermark;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get uploadExpiryInput() {
+        return this._uploadExpiry;
+    }
+    // uploaded - computed: true, optional: false, required: false
+    get uploaded() {
+        return this.getStringAttribute('uploaded');
+    }
+    // watermark - computed: true, optional: false, required: false
+    _watermark = new StreamWatermarkOutputReference(this, "watermark");
+    get watermark() {
+        return this._watermark;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Stream.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             allowed_origins: cdktf.listMapper(cdktf.stringToTerraform, false)(this._allowedOrigins),
@@ -1044,9 +740,9 @@ var Stream = /** @class */ (function (_super) {
             uid: cdktf.stringToTerraform(this._uid),
             upload_expiry: cdktf.stringToTerraform(this._uploadExpiry),
         };
-    };
-    Stream.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1121,15 +817,6 @@ var Stream = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Stream.tfResourceType = "cloudflare_stream";
-    return Stream;
-}(cdktf.TerraformResource));
-exports.Stream = Stream;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

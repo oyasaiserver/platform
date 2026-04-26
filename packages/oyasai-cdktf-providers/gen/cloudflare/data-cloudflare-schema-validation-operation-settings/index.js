@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareSchemaValidationOperationSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings cloudflare_schema_validation_operation_settings}
 */
-var DataCloudflareSchemaValidationOperationSettings = /** @class */ (function (_super) {
-    __extends(DataCloudflareSchemaValidationOperationSettings, _super);
+export class DataCloudflareSchemaValidationOperationSettings extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_schema_validation_operation_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareSchemaValidationOperationSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareSchemaValidationOperationSettings to import
+    * @param importFromId The id of the existing DataCloudflareSchemaValidationOperationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareSchemaValidationOperationSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_schema_validation_operation_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareSchemaValidationOperationSettings = /** @class */ (function (_
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareSchemaValidationOperationSettingsConfig
     */
-    function DataCloudflareSchemaValidationOperationSettings(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_schema_validation_operation_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,85 +46,55 @@ var DataCloudflareSchemaValidationOperationSettings = /** @class */ (function (_
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._operationId = config.operationId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._operationId = config.operationId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareSchemaValidationOperationSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareSchemaValidationOperationSettings to import
-    * @param importFromId The id of the existing DataCloudflareSchemaValidationOperationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareSchemaValidationOperationSettings to import is found
-    */
-    DataCloudflareSchemaValidationOperationSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_schema_validation_operation_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareSchemaValidationOperationSettings.prototype, "mitigationAction", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // mitigation_action - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('mitigation_action');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSchemaValidationOperationSettings.prototype, "operationId", {
-        get: function () {
-            return this.getStringAttribute('operation_id');
-        },
-        set: function (value) {
-            this._operationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSchemaValidationOperationSettings.prototype, "operationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSchemaValidationOperationSettings.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareSchemaValidationOperationSettings.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // mitigation_action - computed: true, optional: false, required: false
+    get mitigationAction() {
+        return this.getStringAttribute('mitigation_action');
+    }
+    // operation_id - computed: false, optional: false, required: true
+    _operationId;
+    get operationId() {
+        return this.getStringAttribute('operation_id');
+    }
+    set operationId(value) {
+        this._operationId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operationIdInput() {
+        return this._operationId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareSchemaValidationOperationSettings.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareSchemaValidationOperationSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             operation_id: cdktf.stringToTerraform(this._operationId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareSchemaValidationOperationSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             operation_id: {
                 value: cdktf.stringToHclTerraform(this._operationId),
                 isBlock: false,
@@ -141,15 +109,6 @@ var DataCloudflareSchemaValidationOperationSettings = /** @class */ (function (_
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareSchemaValidationOperationSettings.tfResourceType = "cloudflare_schema_validation_operation_settings";
-    return DataCloudflareSchemaValidationOperationSettings;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareSchemaValidationOperationSettings = DataCloudflareSchemaValidationOperationSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

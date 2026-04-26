@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_managed_domain
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.R2ManagedDomain = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_managed_domain cloudflare_r2_managed_domain}
 */
-var R2ManagedDomain = /** @class */ (function (_super) {
-    __extends(R2ManagedDomain, _super);
+export class R2ManagedDomain extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_r2_managed_domain";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a R2ManagedDomain resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the R2ManagedDomain to import
+    * @param importFromId The id of the existing R2ManagedDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_managed_domain#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the R2ManagedDomain to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_managed_domain", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var R2ManagedDomain = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options R2ManagedDomainConfig
     */
-    function R2ManagedDomain(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_r2_managed_domain',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,133 +46,90 @@ var R2ManagedDomain = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._bucketName = config.bucketName;
-        _this._enabled = config.enabled;
-        _this._jurisdiction = config.jurisdiction;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._bucketName = config.bucketName;
+        this._enabled = config.enabled;
+        this._jurisdiction = config.jurisdiction;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a R2ManagedDomain resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the R2ManagedDomain to import
-    * @param importFromId The id of the existing R2ManagedDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_managed_domain#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the R2ManagedDomain to import is found
-    */
-    R2ManagedDomain.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_managed_domain", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(R2ManagedDomain.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2ManagedDomain.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(R2ManagedDomain.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "bucketId", {
-        // bucket_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bucket_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "domain", {
-        // domain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2ManagedDomain.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2ManagedDomain.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket_id - computed: true, optional: false, required: false
+    get bucketId() {
+        return this.getStringAttribute('bucket_id');
+    }
+    // bucket_name - computed: false, optional: false, required: true
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // domain - computed: true, optional: false, required: false
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // jurisdiction - computed: true, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(R2ManagedDomain.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
     // =========
     // SYNTHESIS
     // =========
-    R2ManagedDomain.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bucket_name: cdktf.stringToTerraform(this._bucketName),
             enabled: cdktf.booleanToTerraform(this._enabled),
             jurisdiction: cdktf.stringToTerraform(this._jurisdiction),
         };
-    };
-    R2ManagedDomain.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -201,15 +156,6 @@ var R2ManagedDomain = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    R2ManagedDomain.tfResourceType = "cloudflare_r2_managed_domain";
-    return R2ManagedDomain;
-}(cdktf.TerraformResource));
-exports.R2ManagedDomain = R2ManagedDomain;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

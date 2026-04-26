@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountDnsSettings = exports.AccountDnsSettingsZoneDefaultsOutputReference = exports.AccountDnsSettingsZoneDefaultsSoaOutputReference = exports.AccountDnsSettingsZoneDefaultsNameserversOutputReference = exports.AccountDnsSettingsZoneDefaultsInternalDnsOutputReference = void 0;
-exports.accountDnsSettingsZoneDefaultsInternalDnsToTerraform = accountDnsSettingsZoneDefaultsInternalDnsToTerraform;
-exports.accountDnsSettingsZoneDefaultsInternalDnsToHclTerraform = accountDnsSettingsZoneDefaultsInternalDnsToHclTerraform;
-exports.accountDnsSettingsZoneDefaultsNameserversToTerraform = accountDnsSettingsZoneDefaultsNameserversToTerraform;
-exports.accountDnsSettingsZoneDefaultsNameserversToHclTerraform = accountDnsSettingsZoneDefaultsNameserversToHclTerraform;
-exports.accountDnsSettingsZoneDefaultsSoaToTerraform = accountDnsSettingsZoneDefaultsSoaToTerraform;
-exports.accountDnsSettingsZoneDefaultsSoaToHclTerraform = accountDnsSettingsZoneDefaultsSoaToHclTerraform;
-exports.accountDnsSettingsZoneDefaultsToTerraform = accountDnsSettingsZoneDefaultsToTerraform;
-exports.accountDnsSettingsZoneDefaultsToHclTerraform = accountDnsSettingsZoneDefaultsToHclTerraform;
-var cdktf = require("cdktf");
-function accountDnsSettingsZoneDefaultsInternalDnsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function accountDnsSettingsZoneDefaultsInternalDnsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -38,14 +12,14 @@ function accountDnsSettingsZoneDefaultsInternalDnsToTerraform(struct) {
         reference_zone_id: cdktf.stringToTerraform(struct.referenceZoneId),
     };
 }
-function accountDnsSettingsZoneDefaultsInternalDnsToHclTerraform(struct) {
+export function accountDnsSettingsZoneDefaultsInternalDnsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         reference_zone_id: {
             value: cdktf.stringToHclTerraform(struct.referenceZoneId),
             isBlock: false,
@@ -54,79 +28,63 @@ function accountDnsSettingsZoneDefaultsInternalDnsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountDnsSettingsZoneDefaultsInternalDnsOutputReference = /** @class */ (function (_super) {
-    __extends(AccountDnsSettingsZoneDefaultsInternalDnsOutputReference, _super);
+export class AccountDnsSettingsZoneDefaultsInternalDnsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountDnsSettingsZoneDefaultsInternalDnsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsInternalDnsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._referenceZoneId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.referenceZoneId = this._referenceZoneId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._referenceZoneId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._referenceZoneId = value.referenceZoneId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsInternalDnsOutputReference.prototype, "referenceZoneId", {
-        get: function () {
-            return this.getStringAttribute('reference_zone_id');
-        },
-        set: function (value) {
-            this._referenceZoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsInternalDnsOutputReference.prototype.resetReferenceZoneId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._referenceZoneId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.referenceZoneId = this._referenceZoneId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._referenceZoneId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._referenceZoneId = value.referenceZoneId;
+        }
+    }
+    // reference_zone_id - computed: false, optional: true, required: false
+    _referenceZoneId;
+    get referenceZoneId() {
+        return this.getStringAttribute('reference_zone_id');
+    }
+    set referenceZoneId(value) {
+        this._referenceZoneId = value;
+    }
+    resetReferenceZoneId() {
         this._referenceZoneId = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsInternalDnsOutputReference.prototype, "referenceZoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._referenceZoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountDnsSettingsZoneDefaultsInternalDnsOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountDnsSettingsZoneDefaultsInternalDnsOutputReference = AccountDnsSettingsZoneDefaultsInternalDnsOutputReference;
-function accountDnsSettingsZoneDefaultsNameserversToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get referenceZoneIdInput() {
+        return this._referenceZoneId;
+    }
+}
+export function accountDnsSettingsZoneDefaultsNameserversToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -137,14 +95,14 @@ function accountDnsSettingsZoneDefaultsNameserversToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function accountDnsSettingsZoneDefaultsNameserversToHclTerraform(struct) {
+export function accountDnsSettingsZoneDefaultsNameserversToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         type: {
             value: cdktf.stringToHclTerraform(struct.type),
             isBlock: false,
@@ -153,79 +111,63 @@ function accountDnsSettingsZoneDefaultsNameserversToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountDnsSettingsZoneDefaultsNameserversOutputReference = /** @class */ (function (_super) {
-    __extends(AccountDnsSettingsZoneDefaultsNameserversOutputReference, _super);
+export class AccountDnsSettingsZoneDefaultsNameserversOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountDnsSettingsZoneDefaultsNameserversOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsNameserversOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsNameserversOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsNameserversOutputReference.prototype.resetType = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._type = value.type;
+        }
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsNameserversOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountDnsSettingsZoneDefaultsNameserversOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountDnsSettingsZoneDefaultsNameserversOutputReference = AccountDnsSettingsZoneDefaultsNameserversOutputReference;
-function accountDnsSettingsZoneDefaultsSoaToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export function accountDnsSettingsZoneDefaultsSoaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -242,14 +184,14 @@ function accountDnsSettingsZoneDefaultsSoaToTerraform(struct) {
         ttl: cdktf.numberToTerraform(struct.ttl),
     };
 }
-function accountDnsSettingsZoneDefaultsSoaToHclTerraform(struct) {
+export function accountDnsSettingsZoneDefaultsSoaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         expire: {
             value: cdktf.numberToHclTerraform(struct.expire),
             isBlock: false,
@@ -294,241 +236,189 @@ function accountDnsSettingsZoneDefaultsSoaToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountDnsSettingsZoneDefaultsSoaOutputReference = /** @class */ (function (_super) {
-    __extends(AccountDnsSettingsZoneDefaultsSoaOutputReference, _super);
+export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountDnsSettingsZoneDefaultsSoaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._expire !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.expire = this._expire;
-            }
-            if (this._minTtl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.minTtl = this._minTtl;
-            }
-            if (this._mname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mname = this._mname;
-            }
-            if (this._refresh !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.refresh = this._refresh;
-            }
-            if (this._retry !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.retry = this._retry;
-            }
-            if (this._rname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rname = this._rname;
-            }
-            if (this._ttl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ttl = this._ttl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._expire = undefined;
-                this._minTtl = undefined;
-                this._mname = undefined;
-                this._refresh = undefined;
-                this._retry = undefined;
-                this._rname = undefined;
-                this._ttl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._expire = value.expire;
-                this._minTtl = value.minTtl;
-                this._mname = value.mname;
-                this._refresh = value.refresh;
-                this._retry = value.retry;
-                this._rname = value.rname;
-                this._ttl = value.ttl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "expire", {
-        get: function () {
-            return this.getNumberAttribute('expire');
-        },
-        set: function (value) {
-            this._expire = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetExpire = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._expire !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.expire = this._expire;
+        }
+        if (this._minTtl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.minTtl = this._minTtl;
+        }
+        if (this._mname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mname = this._mname;
+        }
+        if (this._refresh !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.refresh = this._refresh;
+        }
+        if (this._retry !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.retry = this._retry;
+        }
+        if (this._rname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rname = this._rname;
+        }
+        if (this._ttl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ttl = this._ttl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._expire = undefined;
+            this._minTtl = undefined;
+            this._mname = undefined;
+            this._refresh = undefined;
+            this._retry = undefined;
+            this._rname = undefined;
+            this._ttl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._expire = value.expire;
+            this._minTtl = value.minTtl;
+            this._mname = value.mname;
+            this._refresh = value.refresh;
+            this._retry = value.retry;
+            this._rname = value.rname;
+            this._ttl = value.ttl;
+        }
+    }
+    // expire - computed: false, optional: true, required: false
+    _expire;
+    get expire() {
+        return this.getNumberAttribute('expire');
+    }
+    set expire(value) {
+        this._expire = value;
+    }
+    resetExpire() {
         this._expire = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "expireInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._expire;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "minTtl", {
-        get: function () {
-            return this.getNumberAttribute('min_ttl');
-        },
-        set: function (value) {
-            this._minTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetMinTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get expireInput() {
+        return this._expire;
+    }
+    // min_ttl - computed: false, optional: true, required: false
+    _minTtl;
+    get minTtl() {
+        return this.getNumberAttribute('min_ttl');
+    }
+    set minTtl(value) {
+        this._minTtl = value;
+    }
+    resetMinTtl() {
         this._minTtl = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "minTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._minTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "mname", {
-        get: function () {
-            return this.getStringAttribute('mname');
-        },
-        set: function (value) {
-            this._mname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetMname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get minTtlInput() {
+        return this._minTtl;
+    }
+    // mname - computed: false, optional: true, required: false
+    _mname;
+    get mname() {
+        return this.getStringAttribute('mname');
+    }
+    set mname(value) {
+        this._mname = value;
+    }
+    resetMname() {
         this._mname = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "mnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "refresh", {
-        get: function () {
-            return this.getNumberAttribute('refresh');
-        },
-        set: function (value) {
-            this._refresh = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetRefresh = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mnameInput() {
+        return this._mname;
+    }
+    // refresh - computed: false, optional: true, required: false
+    _refresh;
+    get refresh() {
+        return this.getNumberAttribute('refresh');
+    }
+    set refresh(value) {
+        this._refresh = value;
+    }
+    resetRefresh() {
         this._refresh = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "refreshInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._refresh;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "retry", {
-        get: function () {
-            return this.getNumberAttribute('retry');
-        },
-        set: function (value) {
-            this._retry = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetRetry = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get refreshInput() {
+        return this._refresh;
+    }
+    // retry - computed: false, optional: true, required: false
+    _retry;
+    get retry() {
+        return this.getNumberAttribute('retry');
+    }
+    set retry(value) {
+        this._retry = value;
+    }
+    resetRetry() {
         this._retry = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "retryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retry;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "rname", {
-        get: function () {
-            return this.getStringAttribute('rname');
-        },
-        set: function (value) {
-            this._rname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetRname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retryInput() {
+        return this._retry;
+    }
+    // rname - computed: false, optional: true, required: false
+    _rname;
+    get rname() {
+        return this.getStringAttribute('rname');
+    }
+    set rname(value) {
+        this._rname = value;
+    }
+    resetRname() {
         this._rname = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "rnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "ttl", {
-        get: function () {
-            return this.getNumberAttribute('ttl');
-        },
-        set: function (value) {
-            this._ttl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype.resetTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rnameInput() {
+        return this._rname;
+    }
+    // ttl - computed: false, optional: true, required: false
+    _ttl;
+    get ttl() {
+        return this.getNumberAttribute('ttl');
+    }
+    set ttl(value) {
+        this._ttl = value;
+    }
+    resetTtl() {
         this._ttl = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsSoaOutputReference.prototype, "ttlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ttl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountDnsSettingsZoneDefaultsSoaOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountDnsSettingsZoneDefaultsSoaOutputReference = AccountDnsSettingsZoneDefaultsSoaOutputReference;
-function accountDnsSettingsZoneDefaultsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ttlInput() {
+        return this._ttl;
+    }
+}
+export function accountDnsSettingsZoneDefaultsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -547,14 +437,14 @@ function accountDnsSettingsZoneDefaultsToTerraform(struct) {
         zone_mode: cdktf.stringToTerraform(struct.zoneMode),
     };
 }
-function accountDnsSettingsZoneDefaultsToHclTerraform(struct) {
+export function accountDnsSettingsZoneDefaultsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         flatten_all_cnames: {
             value: cdktf.booleanToHclTerraform(struct.flattenAllCnames),
             isBlock: false,
@@ -611,306 +501,251 @@ function accountDnsSettingsZoneDefaultsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountDnsSettingsZoneDefaultsOutputReference = /** @class */ (function (_super) {
-    __extends(AccountDnsSettingsZoneDefaultsOutputReference, _super);
+export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountDnsSettingsZoneDefaultsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // internal_dns - computed: false, optional: true, required: false
-        _this._internalDns = new AccountDnsSettingsZoneDefaultsInternalDnsOutputReference(_this, "internal_dns");
-        // nameservers - computed: false, optional: true, required: false
-        _this._nameservers = new AccountDnsSettingsZoneDefaultsNameserversOutputReference(_this, "nameservers");
-        // soa - computed: false, optional: true, required: false
-        _this._soa = new AccountDnsSettingsZoneDefaultsSoaOutputReference(_this, "soa");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._flattenAllCnames !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.flattenAllCnames = this._flattenAllCnames;
-            }
-            if (this._foundationDns !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.foundationDns = this._foundationDns;
-            }
-            if (((_a = this._internalDns) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.internalDns = (_b = this._internalDns) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._multiProvider !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.multiProvider = this._multiProvider;
-            }
-            if (((_c = this._nameservers) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nameservers = (_d = this._nameservers) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._nsTtl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nsTtl = this._nsTtl;
-            }
-            if (this._secondaryOverrides !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secondaryOverrides = this._secondaryOverrides;
-            }
-            if (((_e = this._soa) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.soa = (_f = this._soa) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (this._zoneMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zoneMode = this._zoneMode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._flattenAllCnames = undefined;
-                this._foundationDns = undefined;
-                this._internalDns.internalValue = undefined;
-                this._multiProvider = undefined;
-                this._nameservers.internalValue = undefined;
-                this._nsTtl = undefined;
-                this._secondaryOverrides = undefined;
-                this._soa.internalValue = undefined;
-                this._zoneMode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._flattenAllCnames = value.flattenAllCnames;
-                this._foundationDns = value.foundationDns;
-                this._internalDns.internalValue = value.internalDns;
-                this._multiProvider = value.multiProvider;
-                this._nameservers.internalValue = value.nameservers;
-                this._nsTtl = value.nsTtl;
-                this._secondaryOverrides = value.secondaryOverrides;
-                this._soa.internalValue = value.soa;
-                this._zoneMode = value.zoneMode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "flattenAllCnames", {
-        get: function () {
-            return this.getBooleanAttribute('flatten_all_cnames');
-        },
-        set: function (value) {
-            this._flattenAllCnames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetFlattenAllCnames = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._flattenAllCnames !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.flattenAllCnames = this._flattenAllCnames;
+        }
+        if (this._foundationDns !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.foundationDns = this._foundationDns;
+        }
+        if (this._internalDns?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.internalDns = this._internalDns?.internalValue;
+        }
+        if (this._multiProvider !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.multiProvider = this._multiProvider;
+        }
+        if (this._nameservers?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nameservers = this._nameservers?.internalValue;
+        }
+        if (this._nsTtl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nsTtl = this._nsTtl;
+        }
+        if (this._secondaryOverrides !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secondaryOverrides = this._secondaryOverrides;
+        }
+        if (this._soa?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.soa = this._soa?.internalValue;
+        }
+        if (this._zoneMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zoneMode = this._zoneMode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._flattenAllCnames = undefined;
+            this._foundationDns = undefined;
+            this._internalDns.internalValue = undefined;
+            this._multiProvider = undefined;
+            this._nameservers.internalValue = undefined;
+            this._nsTtl = undefined;
+            this._secondaryOverrides = undefined;
+            this._soa.internalValue = undefined;
+            this._zoneMode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._flattenAllCnames = value.flattenAllCnames;
+            this._foundationDns = value.foundationDns;
+            this._internalDns.internalValue = value.internalDns;
+            this._multiProvider = value.multiProvider;
+            this._nameservers.internalValue = value.nameservers;
+            this._nsTtl = value.nsTtl;
+            this._secondaryOverrides = value.secondaryOverrides;
+            this._soa.internalValue = value.soa;
+            this._zoneMode = value.zoneMode;
+        }
+    }
+    // flatten_all_cnames - computed: false, optional: true, required: false
+    _flattenAllCnames;
+    get flattenAllCnames() {
+        return this.getBooleanAttribute('flatten_all_cnames');
+    }
+    set flattenAllCnames(value) {
+        this._flattenAllCnames = value;
+    }
+    resetFlattenAllCnames() {
         this._flattenAllCnames = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "flattenAllCnamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._flattenAllCnames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "foundationDns", {
-        get: function () {
-            return this.getBooleanAttribute('foundation_dns');
-        },
-        set: function (value) {
-            this._foundationDns = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetFoundationDns = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get flattenAllCnamesInput() {
+        return this._flattenAllCnames;
+    }
+    // foundation_dns - computed: false, optional: true, required: false
+    _foundationDns;
+    get foundationDns() {
+        return this.getBooleanAttribute('foundation_dns');
+    }
+    set foundationDns(value) {
+        this._foundationDns = value;
+    }
+    resetFoundationDns() {
         this._foundationDns = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "foundationDnsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._foundationDns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "internalDns", {
-        get: function () {
-            return this._internalDns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.putInternalDns = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get foundationDnsInput() {
+        return this._foundationDns;
+    }
+    // internal_dns - computed: false, optional: true, required: false
+    _internalDns = new AccountDnsSettingsZoneDefaultsInternalDnsOutputReference(this, "internal_dns");
+    get internalDns() {
+        return this._internalDns;
+    }
+    putInternalDns(value) {
         this._internalDns.internalValue = value;
-    };
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetInternalDns = function () {
+    }
+    resetInternalDns() {
         this._internalDns.internalValue = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "internalDnsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._internalDns.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "multiProvider", {
-        get: function () {
-            return this.getBooleanAttribute('multi_provider');
-        },
-        set: function (value) {
-            this._multiProvider = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetMultiProvider = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get internalDnsInput() {
+        return this._internalDns.internalValue;
+    }
+    // multi_provider - computed: false, optional: true, required: false
+    _multiProvider;
+    get multiProvider() {
+        return this.getBooleanAttribute('multi_provider');
+    }
+    set multiProvider(value) {
+        this._multiProvider = value;
+    }
+    resetMultiProvider() {
         this._multiProvider = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "multiProviderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._multiProvider;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "nameservers", {
-        get: function () {
-            return this._nameservers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.putNameservers = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get multiProviderInput() {
+        return this._multiProvider;
+    }
+    // nameservers - computed: false, optional: true, required: false
+    _nameservers = new AccountDnsSettingsZoneDefaultsNameserversOutputReference(this, "nameservers");
+    get nameservers() {
+        return this._nameservers;
+    }
+    putNameservers(value) {
         this._nameservers.internalValue = value;
-    };
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetNameservers = function () {
+    }
+    resetNameservers() {
         this._nameservers.internalValue = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "nameserversInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nameservers.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "nsTtl", {
-        get: function () {
-            return this.getNumberAttribute('ns_ttl');
-        },
-        set: function (value) {
-            this._nsTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetNsTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameserversInput() {
+        return this._nameservers.internalValue;
+    }
+    // ns_ttl - computed: false, optional: true, required: false
+    _nsTtl;
+    get nsTtl() {
+        return this.getNumberAttribute('ns_ttl');
+    }
+    set nsTtl(value) {
+        this._nsTtl = value;
+    }
+    resetNsTtl() {
         this._nsTtl = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "nsTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nsTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "secondaryOverrides", {
-        get: function () {
-            return this.getBooleanAttribute('secondary_overrides');
-        },
-        set: function (value) {
-            this._secondaryOverrides = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetSecondaryOverrides = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nsTtlInput() {
+        return this._nsTtl;
+    }
+    // secondary_overrides - computed: false, optional: true, required: false
+    _secondaryOverrides;
+    get secondaryOverrides() {
+        return this.getBooleanAttribute('secondary_overrides');
+    }
+    set secondaryOverrides(value) {
+        this._secondaryOverrides = value;
+    }
+    resetSecondaryOverrides() {
         this._secondaryOverrides = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "secondaryOverridesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secondaryOverrides;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "soa", {
-        get: function () {
-            return this._soa;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.putSoa = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secondaryOverridesInput() {
+        return this._secondaryOverrides;
+    }
+    // soa - computed: false, optional: true, required: false
+    _soa = new AccountDnsSettingsZoneDefaultsSoaOutputReference(this, "soa");
+    get soa() {
+        return this._soa;
+    }
+    putSoa(value) {
         this._soa.internalValue = value;
-    };
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetSoa = function () {
+    }
+    resetSoa() {
         this._soa.internalValue = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "soaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._soa.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "zoneMode", {
-        get: function () {
-            return this.getStringAttribute('zone_mode');
-        },
-        set: function (value) {
-            this._zoneMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsZoneDefaultsOutputReference.prototype.resetZoneMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get soaInput() {
+        return this._soa.internalValue;
+    }
+    // zone_mode - computed: false, optional: true, required: false
+    _zoneMode;
+    get zoneMode() {
+        return this.getStringAttribute('zone_mode');
+    }
+    set zoneMode(value) {
+        this._zoneMode = value;
+    }
+    resetZoneMode() {
         this._zoneMode = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsZoneDefaultsOutputReference.prototype, "zoneModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountDnsSettingsZoneDefaultsOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountDnsSettingsZoneDefaultsOutputReference = AccountDnsSettingsZoneDefaultsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneModeInput() {
+        return this._zoneMode;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings cloudflare_account_dns_settings}
 */
-var AccountDnsSettings = /** @class */ (function (_super) {
-    __extends(AccountDnsSettings, _super);
+export class AccountDnsSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account_dns_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AccountDnsSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AccountDnsSettings to import
+    * @param importFromId The id of the existing AccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AccountDnsSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -921,9 +756,8 @@ var AccountDnsSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AccountDnsSettingsConfig = {}
     */
-    function AccountDnsSettings(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account_dns_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -936,102 +770,71 @@ var AccountDnsSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // zone_defaults - computed: false, optional: true, required: false
-        _this._zoneDefaults = new AccountDnsSettingsZoneDefaultsOutputReference(_this, "zone_defaults");
-        _this._accountId = config.accountId;
-        _this._enforceDnsOnly = config.enforceDnsOnly;
-        _this._zoneDefaults.internalValue = config.zoneDefaults;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._enforceDnsOnly = config.enforceDnsOnly;
+        this._zoneDefaults.internalValue = config.zoneDefaults;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AccountDnsSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AccountDnsSettings to import
-    * @param importFromId The id of the existing AccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AccountDnsSettings to import is found
-    */
-    AccountDnsSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AccountDnsSettings.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettings.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(AccountDnsSettings.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettings.prototype, "enforceDnsOnly", {
-        get: function () {
-            return this.getBooleanAttribute('enforce_dns_only');
-        },
-        set: function (value) {
-            this._enforceDnsOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettings.prototype.resetEnforceDnsOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // enforce_dns_only - computed: false, optional: true, required: false
+    _enforceDnsOnly;
+    get enforceDnsOnly() {
+        return this.getBooleanAttribute('enforce_dns_only');
+    }
+    set enforceDnsOnly(value) {
+        this._enforceDnsOnly = value;
+    }
+    resetEnforceDnsOnly() {
         this._enforceDnsOnly = undefined;
-    };
-    Object.defineProperty(AccountDnsSettings.prototype, "enforceDnsOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enforceDnsOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettings.prototype, "zoneDefaults", {
-        get: function () {
-            return this._zoneDefaults;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettings.prototype.putZoneDefaults = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enforceDnsOnlyInput() {
+        return this._enforceDnsOnly;
+    }
+    // zone_defaults - computed: false, optional: true, required: false
+    _zoneDefaults = new AccountDnsSettingsZoneDefaultsOutputReference(this, "zone_defaults");
+    get zoneDefaults() {
+        return this._zoneDefaults;
+    }
+    putZoneDefaults(value) {
         this._zoneDefaults.internalValue = value;
-    };
-    AccountDnsSettings.prototype.resetZoneDefaults = function () {
+    }
+    resetZoneDefaults() {
         this._zoneDefaults.internalValue = undefined;
-    };
-    Object.defineProperty(AccountDnsSettings.prototype, "zoneDefaultsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneDefaults.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneDefaultsInput() {
+        return this._zoneDefaults.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AccountDnsSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             enforce_dns_only: cdktf.booleanToTerraform(this._enforceDnsOnly),
             zone_defaults: accountDnsSettingsZoneDefaultsToTerraform(this._zoneDefaults.internalValue),
         };
-    };
-    AccountDnsSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1052,15 +855,6 @@ var AccountDnsSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AccountDnsSettings.tfResourceType = "cloudflare_account_dns_settings";
-    return AccountDnsSettings;
-}(cdktf.TerraformResource));
-exports.AccountDnsSettings = AccountDnsSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

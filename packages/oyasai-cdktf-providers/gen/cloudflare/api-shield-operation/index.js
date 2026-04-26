@@ -1,51 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiShieldOperation = exports.ApiShieldOperationFeaturesOutputReference = exports.ApiShieldOperationFeaturesThresholdsOutputReference = exports.ApiShieldOperationFeaturesSchemaInfoOutputReference = exports.ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference = exports.ApiShieldOperationFeaturesParameterSchemasOutputReference = exports.ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsOutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference = exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference = exports.ApiShieldOperationFeaturesApiRoutingOutputReference = void 0;
-exports.apiShieldOperationFeaturesApiRoutingToTerraform = apiShieldOperationFeaturesApiRoutingToTerraform;
-exports.apiShieldOperationFeaturesApiRoutingToHclTerraform = apiShieldOperationFeaturesApiRoutingToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToHclTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsToTerraform = apiShieldOperationFeaturesConfidenceIntervalsToTerraform;
-exports.apiShieldOperationFeaturesConfidenceIntervalsToHclTerraform = apiShieldOperationFeaturesConfidenceIntervalsToHclTerraform;
-exports.apiShieldOperationFeaturesParameterSchemasParameterSchemasToTerraform = apiShieldOperationFeaturesParameterSchemasParameterSchemasToTerraform;
-exports.apiShieldOperationFeaturesParameterSchemasParameterSchemasToHclTerraform = apiShieldOperationFeaturesParameterSchemasParameterSchemasToHclTerraform;
-exports.apiShieldOperationFeaturesParameterSchemasToTerraform = apiShieldOperationFeaturesParameterSchemasToTerraform;
-exports.apiShieldOperationFeaturesParameterSchemasToHclTerraform = apiShieldOperationFeaturesParameterSchemasToHclTerraform;
-exports.apiShieldOperationFeaturesSchemaInfoActiveSchemaToTerraform = apiShieldOperationFeaturesSchemaInfoActiveSchemaToTerraform;
-exports.apiShieldOperationFeaturesSchemaInfoActiveSchemaToHclTerraform = apiShieldOperationFeaturesSchemaInfoActiveSchemaToHclTerraform;
-exports.apiShieldOperationFeaturesSchemaInfoToTerraform = apiShieldOperationFeaturesSchemaInfoToTerraform;
-exports.apiShieldOperationFeaturesSchemaInfoToHclTerraform = apiShieldOperationFeaturesSchemaInfoToHclTerraform;
-exports.apiShieldOperationFeaturesThresholdsToTerraform = apiShieldOperationFeaturesThresholdsToTerraform;
-exports.apiShieldOperationFeaturesThresholdsToHclTerraform = apiShieldOperationFeaturesThresholdsToHclTerraform;
-exports.apiShieldOperationFeaturesToTerraform = apiShieldOperationFeaturesToTerraform;
-exports.apiShieldOperationFeaturesToHclTerraform = apiShieldOperationFeaturesToHclTerraform;
-var cdktf = require("cdktf");
-function apiShieldOperationFeaturesApiRoutingToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function apiShieldOperationFeaturesApiRoutingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -54,64 +10,48 @@ function apiShieldOperationFeaturesApiRoutingToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesApiRoutingToHclTerraform(struct) {
+export function apiShieldOperationFeaturesApiRoutingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesApiRoutingOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesApiRoutingOutputReference, _super);
+export class ApiShieldOperationFeaturesApiRoutingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesApiRoutingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesApiRoutingOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesApiRoutingOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesApiRoutingOutputReference.prototype, "route", {
-        // route - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('route');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesApiRoutingOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesApiRoutingOutputReference = ApiShieldOperationFeaturesApiRoutingOutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // route - computed: true, optional: false, required: false
+    get route() {
+        return this.getStringAttribute('route');
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -120,64 +60,48 @@ function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfiden
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference.prototype, "lower", {
-        // lower - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lower');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference.prototype, "upper", {
-        // upper - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('upper');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference = ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // lower - computed: true, optional: false, required: false
+    get lower() {
+        return this.getNumberAttribute('lower');
+    }
+    // upper - computed: true, optional: false, required: false
+    get upper() {
+        return this.getNumberAttribute('upper');
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -186,64 +110,48 @@ function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfiden
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference.prototype, "lower", {
-        // lower - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lower');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference.prototype, "upper", {
-        // upper - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('upper');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference = ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // lower - computed: true, optional: false, required: false
+    get lower() {
+        return this.getNumberAttribute('lower');
+    }
+    // upper - computed: true, optional: false, required: false
+    get upper() {
+        return this.getNumberAttribute('upper');
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -252,64 +160,48 @@ function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfiden
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference.prototype, "lower", {
-        // lower - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lower');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference.prototype, "upper", {
-        // upper - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('upper');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference = ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // lower - computed: true, optional: false, required: false
+    get lower() {
+        return this.getNumberAttribute('lower');
+    }
+    // upper - computed: true, optional: false, required: false
+    get upper() {
+        return this.getNumberAttribute('upper');
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -318,75 +210,55 @@ function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfiden
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // p90 - computed: true, optional: false, required: false
-        _this._p90 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference(_this, "p90");
-        // p95 - computed: true, optional: false, required: false
-        _this._p95 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference(_this, "p95");
-        // p99 - computed: true, optional: false, required: false
-        _this._p99 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference(_this, "p99");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference.prototype, "p90", {
-        get: function () {
-            return this._p90;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference.prototype, "p95", {
-        get: function () {
-            return this._p95;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference.prototype, "p99", {
-        get: function () {
-            return this._p99;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference = ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // p90 - computed: true, optional: false, required: false
+    _p90 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90OutputReference(this, "p90");
+    get p90() {
+        return this._p90;
+    }
+    // p95 - computed: true, optional: false, required: false
+    _p95 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95OutputReference(this, "p95");
+    get p95() {
+        return this._p95;
+    }
+    // p99 - computed: true, optional: false, required: false
+    _p99 = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99OutputReference(this, "p99");
+    get p99() {
+        return this._p99;
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -395,65 +267,49 @@ function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToTerraf
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // confidence_intervals - computed: true, optional: false, required: false
-        _this._confidenceIntervals = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference(_this, "confidence_intervals");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference.prototype, "confidenceIntervals", {
-        get: function () {
-            return this._confidenceIntervals;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference.prototype, "mean", {
-        // mean - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('mean');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference = ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference;
-function apiShieldOperationFeaturesConfidenceIntervalsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // confidence_intervals - computed: true, optional: false, required: false
+    _confidenceIntervals = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdConfidenceIntervalsOutputReference(this, "confidence_intervals");
+    get confidenceIntervals() {
+        return this._confidenceIntervals;
+    }
+    // mean - computed: true, optional: false, required: false
+    get mean() {
+        return this.getNumberAttribute('mean');
+    }
+}
+export function apiShieldOperationFeaturesConfidenceIntervalsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -462,65 +318,49 @@ function apiShieldOperationFeaturesConfidenceIntervalsToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesConfidenceIntervalsToHclTerraform(struct) {
+export function apiShieldOperationFeaturesConfidenceIntervalsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesConfidenceIntervalsOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesConfidenceIntervalsOutputReference, _super);
+export class ApiShieldOperationFeaturesConfidenceIntervalsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesConfidenceIntervalsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // suggested_threshold - computed: true, optional: false, required: false
-        _this._suggestedThreshold = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference(_this, "suggested_threshold");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesConfidenceIntervalsOutputReference.prototype, "suggestedThreshold", {
-        get: function () {
-            return this._suggestedThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesConfidenceIntervalsOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesConfidenceIntervalsOutputReference = ApiShieldOperationFeaturesConfidenceIntervalsOutputReference;
-function apiShieldOperationFeaturesParameterSchemasParameterSchemasToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // suggested_threshold - computed: true, optional: false, required: false
+    _suggestedThreshold = new ApiShieldOperationFeaturesConfidenceIntervalsSuggestedThresholdOutputReference(this, "suggested_threshold");
+    get suggestedThreshold() {
+        return this._suggestedThreshold;
+    }
+}
+export function apiShieldOperationFeaturesParameterSchemasParameterSchemasToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -529,64 +369,48 @@ function apiShieldOperationFeaturesParameterSchemasParameterSchemasToTerraform(s
     }
     return {};
 }
-function apiShieldOperationFeaturesParameterSchemasParameterSchemasToHclTerraform(struct) {
+export function apiShieldOperationFeaturesParameterSchemasParameterSchemasToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference, _super);
+export class ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference.prototype, "parameters", {
-        // parameters - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('parameters');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference.prototype, "responses", {
-        // responses - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('responses');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference = ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference;
-function apiShieldOperationFeaturesParameterSchemasToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // parameters - computed: true, optional: false, required: false
+    get parameters() {
+        return this.getListAttribute('parameters');
+    }
+    // responses - computed: true, optional: false, required: false
+    get responses() {
+        return this.getStringAttribute('responses');
+    }
+}
+export function apiShieldOperationFeaturesParameterSchemasToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -595,65 +419,49 @@ function apiShieldOperationFeaturesParameterSchemasToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesParameterSchemasToHclTerraform(struct) {
+export function apiShieldOperationFeaturesParameterSchemasToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesParameterSchemasOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesParameterSchemasOutputReference, _super);
+export class ApiShieldOperationFeaturesParameterSchemasOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesParameterSchemasOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // parameter_schemas - computed: true, optional: false, required: false
-        _this._parameterSchemas = new ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference(_this, "parameter_schemas");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesParameterSchemasOutputReference.prototype, "parameterSchemas", {
-        get: function () {
-            return this._parameterSchemas;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesParameterSchemasOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesParameterSchemasOutputReference = ApiShieldOperationFeaturesParameterSchemasOutputReference;
-function apiShieldOperationFeaturesSchemaInfoActiveSchemaToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // parameter_schemas - computed: true, optional: false, required: false
+    _parameterSchemas = new ApiShieldOperationFeaturesParameterSchemasParameterSchemasOutputReference(this, "parameter_schemas");
+    get parameterSchemas() {
+        return this._parameterSchemas;
+    }
+}
+export function apiShieldOperationFeaturesSchemaInfoActiveSchemaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -662,80 +470,56 @@ function apiShieldOperationFeaturesSchemaInfoActiveSchemaToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesSchemaInfoActiveSchemaToHclTerraform(struct) {
+export function apiShieldOperationFeaturesSchemaInfoActiveSchemaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference, _super);
+export class ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference.prototype, "isLearned", {
-        // is_learned - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_learned');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference = ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference;
-function apiShieldOperationFeaturesSchemaInfoToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_learned - computed: true, optional: false, required: false
+    get isLearned() {
+        return this.getBooleanAttribute('is_learned');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function apiShieldOperationFeaturesSchemaInfoToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -744,73 +528,53 @@ function apiShieldOperationFeaturesSchemaInfoToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesSchemaInfoToHclTerraform(struct) {
+export function apiShieldOperationFeaturesSchemaInfoToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesSchemaInfoOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesSchemaInfoOutputReference, _super);
+export class ApiShieldOperationFeaturesSchemaInfoOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesSchemaInfoOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // active_schema - computed: true, optional: false, required: false
-        _this._activeSchema = new ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference(_this, "active_schema");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoOutputReference.prototype, "activeSchema", {
-        get: function () {
-            return this._activeSchema;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoOutputReference.prototype, "learnedAvailable", {
-        // learned_available - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('learned_available');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesSchemaInfoOutputReference.prototype, "mitigationAction", {
-        // mitigation_action - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('mitigation_action');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesSchemaInfoOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesSchemaInfoOutputReference = ApiShieldOperationFeaturesSchemaInfoOutputReference;
-function apiShieldOperationFeaturesThresholdsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // active_schema - computed: true, optional: false, required: false
+    _activeSchema = new ApiShieldOperationFeaturesSchemaInfoActiveSchemaOutputReference(this, "active_schema");
+    get activeSchema() {
+        return this._activeSchema;
+    }
+    // learned_available - computed: true, optional: false, required: false
+    get learnedAvailable() {
+        return this.getBooleanAttribute('learned_available');
+    }
+    // mitigation_action - computed: true, optional: false, required: false
+    get mitigationAction() {
+        return this.getStringAttribute('mitigation_action');
+    }
+}
+export function apiShieldOperationFeaturesThresholdsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -819,120 +583,76 @@ function apiShieldOperationFeaturesThresholdsToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesThresholdsToHclTerraform(struct) {
+export function apiShieldOperationFeaturesThresholdsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesThresholdsOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesThresholdsOutputReference, _super);
+export class ApiShieldOperationFeaturesThresholdsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesThresholdsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "authIdTokens", {
-        // auth_id_tokens - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('auth_id_tokens');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "dataPoints", {
-        // data_points - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('data_points');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "p50", {
-        // p50 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('p50');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "p90", {
-        // p90 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('p90');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "p99", {
-        // p99 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('p99');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "periodSeconds", {
-        // period_seconds - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('period_seconds');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "requests", {
-        // requests - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('requests');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesThresholdsOutputReference.prototype, "suggestedThreshold", {
-        // suggested_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('suggested_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesThresholdsOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesThresholdsOutputReference = ApiShieldOperationFeaturesThresholdsOutputReference;
-function apiShieldOperationFeaturesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // auth_id_tokens - computed: true, optional: false, required: false
+    get authIdTokens() {
+        return this.getNumberAttribute('auth_id_tokens');
+    }
+    // data_points - computed: true, optional: false, required: false
+    get dataPoints() {
+        return this.getNumberAttribute('data_points');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // p50 - computed: true, optional: false, required: false
+    get p50() {
+        return this.getNumberAttribute('p50');
+    }
+    // p90 - computed: true, optional: false, required: false
+    get p90() {
+        return this.getNumberAttribute('p90');
+    }
+    // p99 - computed: true, optional: false, required: false
+    get p99() {
+        return this.getNumberAttribute('p99');
+    }
+    // period_seconds - computed: true, optional: false, required: false
+    get periodSeconds() {
+        return this.getNumberAttribute('period_seconds');
+    }
+    // requests - computed: true, optional: false, required: false
+    get requests() {
+        return this.getNumberAttribute('requests');
+    }
+    // suggested_threshold - computed: true, optional: false, required: false
+    get suggestedThreshold() {
+        return this.getNumberAttribute('suggested_threshold');
+    }
+}
+export function apiShieldOperationFeaturesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -941,97 +661,85 @@ function apiShieldOperationFeaturesToTerraform(struct) {
     }
     return {};
 }
-function apiShieldOperationFeaturesToHclTerraform(struct) {
+export function apiShieldOperationFeaturesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldOperationFeaturesOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationFeaturesOutputReference, _super);
+export class ApiShieldOperationFeaturesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldOperationFeaturesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // api_routing - computed: true, optional: false, required: false
-        _this._apiRouting = new ApiShieldOperationFeaturesApiRoutingOutputReference(_this, "api_routing");
-        // confidence_intervals - computed: true, optional: false, required: false
-        _this._confidenceIntervals = new ApiShieldOperationFeaturesConfidenceIntervalsOutputReference(_this, "confidence_intervals");
-        // parameter_schemas - computed: true, optional: false, required: false
-        _this._parameterSchemas = new ApiShieldOperationFeaturesParameterSchemasOutputReference(_this, "parameter_schemas");
-        // schema_info - computed: true, optional: false, required: false
-        _this._schemaInfo = new ApiShieldOperationFeaturesSchemaInfoOutputReference(_this, "schema_info");
-        // thresholds - computed: true, optional: false, required: false
-        _this._thresholds = new ApiShieldOperationFeaturesThresholdsOutputReference(_this, "thresholds");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "apiRouting", {
-        get: function () {
-            return this._apiRouting;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "confidenceIntervals", {
-        get: function () {
-            return this._confidenceIntervals;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "parameterSchemas", {
-        get: function () {
-            return this._parameterSchemas;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "schemaInfo", {
-        get: function () {
-            return this._schemaInfo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationFeaturesOutputReference.prototype, "thresholds", {
-        get: function () {
-            return this._thresholds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldOperationFeaturesOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldOperationFeaturesOutputReference = ApiShieldOperationFeaturesOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // api_routing - computed: true, optional: false, required: false
+    _apiRouting = new ApiShieldOperationFeaturesApiRoutingOutputReference(this, "api_routing");
+    get apiRouting() {
+        return this._apiRouting;
+    }
+    // confidence_intervals - computed: true, optional: false, required: false
+    _confidenceIntervals = new ApiShieldOperationFeaturesConfidenceIntervalsOutputReference(this, "confidence_intervals");
+    get confidenceIntervals() {
+        return this._confidenceIntervals;
+    }
+    // parameter_schemas - computed: true, optional: false, required: false
+    _parameterSchemas = new ApiShieldOperationFeaturesParameterSchemasOutputReference(this, "parameter_schemas");
+    get parameterSchemas() {
+        return this._parameterSchemas;
+    }
+    // schema_info - computed: true, optional: false, required: false
+    _schemaInfo = new ApiShieldOperationFeaturesSchemaInfoOutputReference(this, "schema_info");
+    get schemaInfo() {
+        return this._schemaInfo;
+    }
+    // thresholds - computed: true, optional: false, required: false
+    _thresholds = new ApiShieldOperationFeaturesThresholdsOutputReference(this, "thresholds");
+    get thresholds() {
+        return this._thresholds;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation cloudflare_api_shield_operation}
 */
-var ApiShieldOperation = /** @class */ (function (_super) {
-    __extends(ApiShieldOperation, _super);
+export class ApiShieldOperation extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_api_shield_operation";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ApiShieldOperation resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ApiShieldOperation to import
+    * @param importFromId The id of the existing ApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ApiShieldOperation to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_operation", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1042,8 +750,8 @@ var ApiShieldOperation = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ApiShieldOperationConfig
     */
-    function ApiShieldOperation(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_api_shield_operation',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1056,147 +764,96 @@ var ApiShieldOperation = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // features - computed: true, optional: false, required: false
-        _this._features = new ApiShieldOperationFeaturesOutputReference(_this, "features");
-        _this._endpoint = config.endpoint;
-        _this._host = config.host;
-        _this._method = config.method;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._endpoint = config.endpoint;
+        this._host = config.host;
+        this._method = config.method;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ApiShieldOperation resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ApiShieldOperation to import
-    * @param importFromId The id of the existing ApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ApiShieldOperation to import is found
-    */
-    ApiShieldOperation.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_operation", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ApiShieldOperation.prototype, "endpoint", {
-        get: function () {
-            return this.getStringAttribute('endpoint');
-        },
-        set: function (value) {
-            this._endpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "endpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "features", {
-        get: function () {
-            return this._features;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "method", {
-        get: function () {
-            return this.getStringAttribute('method');
-        },
-        set: function (value) {
-            this._method = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "methodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._method;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "operationId", {
-        // operation_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('operation_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperation.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldOperation.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // endpoint - computed: false, optional: false, required: true
+    _endpoint;
+    get endpoint() {
+        return this.getStringAttribute('endpoint');
+    }
+    set endpoint(value) {
+        this._endpoint = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get endpointInput() {
+        return this._endpoint;
+    }
+    // features - computed: true, optional: false, required: false
+    _features = new ApiShieldOperationFeaturesOutputReference(this, "features");
+    get features() {
+        return this._features;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // method - computed: false, optional: false, required: true
+    _method;
+    get method() {
+        return this.getStringAttribute('method');
+    }
+    set method(value) {
+        this._method = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get methodInput() {
+        return this._method;
+    }
+    // operation_id - computed: true, optional: false, required: false
+    get operationId() {
+        return this.getStringAttribute('operation_id');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ApiShieldOperation.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ApiShieldOperation.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             endpoint: cdktf.stringToTerraform(this._endpoint),
             host: cdktf.stringToTerraform(this._host),
             method: cdktf.stringToTerraform(this._method),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ApiShieldOperation.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             endpoint: {
                 value: cdktf.stringToHclTerraform(this._endpoint),
                 isBlock: false,
@@ -1223,15 +880,6 @@ var ApiShieldOperation = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ApiShieldOperation.tfResourceType = "cloudflare_api_shield_operation";
-    return ApiShieldOperation;
-}(cdktf.TerraformResource));
-exports.ApiShieldOperation = ApiShieldOperation;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

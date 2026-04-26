@@ -1,182 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_group
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustAccessGroupIncludeSamlOutputReference = exports.ZeroTrustAccessGroupIncludeOktaOutputReference = exports.ZeroTrustAccessGroupIncludeOidcOutputReference = exports.ZeroTrustAccessGroupIncludeLoginMethodOutputReference = exports.ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference = exports.ZeroTrustAccessGroupIncludeIpListStructOutputReference = exports.ZeroTrustAccessGroupIncludeIpOutputReference = exports.ZeroTrustAccessGroupIncludeGsuiteOutputReference = exports.ZeroTrustAccessGroupIncludeGroupOutputReference = exports.ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference = exports.ZeroTrustAccessGroupIncludeGeoOutputReference = exports.ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference = exports.ZeroTrustAccessGroupIncludeEveryoneOutputReference = exports.ZeroTrustAccessGroupIncludeEmailListStructOutputReference = exports.ZeroTrustAccessGroupIncludeEmailDomainOutputReference = exports.ZeroTrustAccessGroupIncludeEmailOutputReference = exports.ZeroTrustAccessGroupIncludeDevicePostureOutputReference = exports.ZeroTrustAccessGroupIncludeCommonNameOutputReference = exports.ZeroTrustAccessGroupIncludeCertificateOutputReference = exports.ZeroTrustAccessGroupIncludeAzureAdOutputReference = exports.ZeroTrustAccessGroupIncludeAuthMethodOutputReference = exports.ZeroTrustAccessGroupIncludeAuthContextOutputReference = exports.ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference = exports.ZeroTrustAccessGroupExcludeList = exports.ZeroTrustAccessGroupExcludeOutputReference = exports.ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference = exports.ZeroTrustAccessGroupExcludeServiceTokenOutputReference = exports.ZeroTrustAccessGroupExcludeSamlOutputReference = exports.ZeroTrustAccessGroupExcludeOktaOutputReference = exports.ZeroTrustAccessGroupExcludeOidcOutputReference = exports.ZeroTrustAccessGroupExcludeLoginMethodOutputReference = exports.ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference = exports.ZeroTrustAccessGroupExcludeIpListStructOutputReference = exports.ZeroTrustAccessGroupExcludeIpOutputReference = exports.ZeroTrustAccessGroupExcludeGsuiteOutputReference = exports.ZeroTrustAccessGroupExcludeGroupOutputReference = exports.ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference = exports.ZeroTrustAccessGroupExcludeGeoOutputReference = exports.ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference = exports.ZeroTrustAccessGroupExcludeEveryoneOutputReference = exports.ZeroTrustAccessGroupExcludeEmailListStructOutputReference = exports.ZeroTrustAccessGroupExcludeEmailDomainOutputReference = exports.ZeroTrustAccessGroupExcludeEmailOutputReference = exports.ZeroTrustAccessGroupExcludeDevicePostureOutputReference = exports.ZeroTrustAccessGroupExcludeCommonNameOutputReference = exports.ZeroTrustAccessGroupExcludeCertificateOutputReference = exports.ZeroTrustAccessGroupExcludeAzureAdOutputReference = exports.ZeroTrustAccessGroupExcludeAuthMethodOutputReference = exports.ZeroTrustAccessGroupExcludeAuthContextOutputReference = exports.ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference = void 0;
-exports.ZeroTrustAccessGroup = exports.ZeroTrustAccessGroupRequireList = exports.ZeroTrustAccessGroupRequireOutputReference = exports.ZeroTrustAccessGroupRequireUserRiskScoreOutputReference = exports.ZeroTrustAccessGroupRequireServiceTokenOutputReference = exports.ZeroTrustAccessGroupRequireSamlOutputReference = exports.ZeroTrustAccessGroupRequireOktaOutputReference = exports.ZeroTrustAccessGroupRequireOidcOutputReference = exports.ZeroTrustAccessGroupRequireLoginMethodOutputReference = exports.ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference = exports.ZeroTrustAccessGroupRequireIpListStructOutputReference = exports.ZeroTrustAccessGroupRequireIpOutputReference = exports.ZeroTrustAccessGroupRequireGsuiteOutputReference = exports.ZeroTrustAccessGroupRequireGroupOutputReference = exports.ZeroTrustAccessGroupRequireGithubOrganizationOutputReference = exports.ZeroTrustAccessGroupRequireGeoOutputReference = exports.ZeroTrustAccessGroupRequireExternalEvaluationOutputReference = exports.ZeroTrustAccessGroupRequireEveryoneOutputReference = exports.ZeroTrustAccessGroupRequireEmailListStructOutputReference = exports.ZeroTrustAccessGroupRequireEmailDomainOutputReference = exports.ZeroTrustAccessGroupRequireEmailOutputReference = exports.ZeroTrustAccessGroupRequireDevicePostureOutputReference = exports.ZeroTrustAccessGroupRequireCommonNameOutputReference = exports.ZeroTrustAccessGroupRequireCertificateOutputReference = exports.ZeroTrustAccessGroupRequireAzureAdOutputReference = exports.ZeroTrustAccessGroupRequireAuthMethodOutputReference = exports.ZeroTrustAccessGroupRequireAuthContextOutputReference = exports.ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference = exports.ZeroTrustAccessGroupIncludeList = exports.ZeroTrustAccessGroupIncludeOutputReference = exports.ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference = exports.ZeroTrustAccessGroupIncludeServiceTokenOutputReference = void 0;
-exports.zeroTrustAccessGroupExcludeAnyValidServiceTokenToTerraform = zeroTrustAccessGroupExcludeAnyValidServiceTokenToTerraform;
-exports.zeroTrustAccessGroupExcludeAnyValidServiceTokenToHclTerraform = zeroTrustAccessGroupExcludeAnyValidServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupExcludeAuthContextToTerraform = zeroTrustAccessGroupExcludeAuthContextToTerraform;
-exports.zeroTrustAccessGroupExcludeAuthContextToHclTerraform = zeroTrustAccessGroupExcludeAuthContextToHclTerraform;
-exports.zeroTrustAccessGroupExcludeAuthMethodToTerraform = zeroTrustAccessGroupExcludeAuthMethodToTerraform;
-exports.zeroTrustAccessGroupExcludeAuthMethodToHclTerraform = zeroTrustAccessGroupExcludeAuthMethodToHclTerraform;
-exports.zeroTrustAccessGroupExcludeAzureAdToTerraform = zeroTrustAccessGroupExcludeAzureAdToTerraform;
-exports.zeroTrustAccessGroupExcludeAzureAdToHclTerraform = zeroTrustAccessGroupExcludeAzureAdToHclTerraform;
-exports.zeroTrustAccessGroupExcludeCertificateToTerraform = zeroTrustAccessGroupExcludeCertificateToTerraform;
-exports.zeroTrustAccessGroupExcludeCertificateToHclTerraform = zeroTrustAccessGroupExcludeCertificateToHclTerraform;
-exports.zeroTrustAccessGroupExcludeCommonNameToTerraform = zeroTrustAccessGroupExcludeCommonNameToTerraform;
-exports.zeroTrustAccessGroupExcludeCommonNameToHclTerraform = zeroTrustAccessGroupExcludeCommonNameToHclTerraform;
-exports.zeroTrustAccessGroupExcludeDevicePostureToTerraform = zeroTrustAccessGroupExcludeDevicePostureToTerraform;
-exports.zeroTrustAccessGroupExcludeDevicePostureToHclTerraform = zeroTrustAccessGroupExcludeDevicePostureToHclTerraform;
-exports.zeroTrustAccessGroupExcludeEmailToTerraform = zeroTrustAccessGroupExcludeEmailToTerraform;
-exports.zeroTrustAccessGroupExcludeEmailToHclTerraform = zeroTrustAccessGroupExcludeEmailToHclTerraform;
-exports.zeroTrustAccessGroupExcludeEmailDomainToTerraform = zeroTrustAccessGroupExcludeEmailDomainToTerraform;
-exports.zeroTrustAccessGroupExcludeEmailDomainToHclTerraform = zeroTrustAccessGroupExcludeEmailDomainToHclTerraform;
-exports.zeroTrustAccessGroupExcludeEmailListStructToTerraform = zeroTrustAccessGroupExcludeEmailListStructToTerraform;
-exports.zeroTrustAccessGroupExcludeEmailListStructToHclTerraform = zeroTrustAccessGroupExcludeEmailListStructToHclTerraform;
-exports.zeroTrustAccessGroupExcludeEveryoneToTerraform = zeroTrustAccessGroupExcludeEveryoneToTerraform;
-exports.zeroTrustAccessGroupExcludeEveryoneToHclTerraform = zeroTrustAccessGroupExcludeEveryoneToHclTerraform;
-exports.zeroTrustAccessGroupExcludeExternalEvaluationToTerraform = zeroTrustAccessGroupExcludeExternalEvaluationToTerraform;
-exports.zeroTrustAccessGroupExcludeExternalEvaluationToHclTerraform = zeroTrustAccessGroupExcludeExternalEvaluationToHclTerraform;
-exports.zeroTrustAccessGroupExcludeGeoToTerraform = zeroTrustAccessGroupExcludeGeoToTerraform;
-exports.zeroTrustAccessGroupExcludeGeoToHclTerraform = zeroTrustAccessGroupExcludeGeoToHclTerraform;
-exports.zeroTrustAccessGroupExcludeGithubOrganizationToTerraform = zeroTrustAccessGroupExcludeGithubOrganizationToTerraform;
-exports.zeroTrustAccessGroupExcludeGithubOrganizationToHclTerraform = zeroTrustAccessGroupExcludeGithubOrganizationToHclTerraform;
-exports.zeroTrustAccessGroupExcludeGroupToTerraform = zeroTrustAccessGroupExcludeGroupToTerraform;
-exports.zeroTrustAccessGroupExcludeGroupToHclTerraform = zeroTrustAccessGroupExcludeGroupToHclTerraform;
-exports.zeroTrustAccessGroupExcludeGsuiteToTerraform = zeroTrustAccessGroupExcludeGsuiteToTerraform;
-exports.zeroTrustAccessGroupExcludeGsuiteToHclTerraform = zeroTrustAccessGroupExcludeGsuiteToHclTerraform;
-exports.zeroTrustAccessGroupExcludeIpToTerraform = zeroTrustAccessGroupExcludeIpToTerraform;
-exports.zeroTrustAccessGroupExcludeIpToHclTerraform = zeroTrustAccessGroupExcludeIpToHclTerraform;
-exports.zeroTrustAccessGroupExcludeIpListStructToTerraform = zeroTrustAccessGroupExcludeIpListStructToTerraform;
-exports.zeroTrustAccessGroupExcludeIpListStructToHclTerraform = zeroTrustAccessGroupExcludeIpListStructToHclTerraform;
-exports.zeroTrustAccessGroupExcludeLinkedAppTokenToTerraform = zeroTrustAccessGroupExcludeLinkedAppTokenToTerraform;
-exports.zeroTrustAccessGroupExcludeLinkedAppTokenToHclTerraform = zeroTrustAccessGroupExcludeLinkedAppTokenToHclTerraform;
-exports.zeroTrustAccessGroupExcludeLoginMethodToTerraform = zeroTrustAccessGroupExcludeLoginMethodToTerraform;
-exports.zeroTrustAccessGroupExcludeLoginMethodToHclTerraform = zeroTrustAccessGroupExcludeLoginMethodToHclTerraform;
-exports.zeroTrustAccessGroupExcludeOidcToTerraform = zeroTrustAccessGroupExcludeOidcToTerraform;
-exports.zeroTrustAccessGroupExcludeOidcToHclTerraform = zeroTrustAccessGroupExcludeOidcToHclTerraform;
-exports.zeroTrustAccessGroupExcludeOktaToTerraform = zeroTrustAccessGroupExcludeOktaToTerraform;
-exports.zeroTrustAccessGroupExcludeOktaToHclTerraform = zeroTrustAccessGroupExcludeOktaToHclTerraform;
-exports.zeroTrustAccessGroupExcludeSamlToTerraform = zeroTrustAccessGroupExcludeSamlToTerraform;
-exports.zeroTrustAccessGroupExcludeSamlToHclTerraform = zeroTrustAccessGroupExcludeSamlToHclTerraform;
-exports.zeroTrustAccessGroupExcludeServiceTokenToTerraform = zeroTrustAccessGroupExcludeServiceTokenToTerraform;
-exports.zeroTrustAccessGroupExcludeServiceTokenToHclTerraform = zeroTrustAccessGroupExcludeServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupExcludeUserRiskScoreToTerraform = zeroTrustAccessGroupExcludeUserRiskScoreToTerraform;
-exports.zeroTrustAccessGroupExcludeUserRiskScoreToHclTerraform = zeroTrustAccessGroupExcludeUserRiskScoreToHclTerraform;
-exports.zeroTrustAccessGroupExcludeToTerraform = zeroTrustAccessGroupExcludeToTerraform;
-exports.zeroTrustAccessGroupExcludeToHclTerraform = zeroTrustAccessGroupExcludeToHclTerraform;
-exports.zeroTrustAccessGroupIncludeAnyValidServiceTokenToTerraform = zeroTrustAccessGroupIncludeAnyValidServiceTokenToTerraform;
-exports.zeroTrustAccessGroupIncludeAnyValidServiceTokenToHclTerraform = zeroTrustAccessGroupIncludeAnyValidServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupIncludeAuthContextToTerraform = zeroTrustAccessGroupIncludeAuthContextToTerraform;
-exports.zeroTrustAccessGroupIncludeAuthContextToHclTerraform = zeroTrustAccessGroupIncludeAuthContextToHclTerraform;
-exports.zeroTrustAccessGroupIncludeAuthMethodToTerraform = zeroTrustAccessGroupIncludeAuthMethodToTerraform;
-exports.zeroTrustAccessGroupIncludeAuthMethodToHclTerraform = zeroTrustAccessGroupIncludeAuthMethodToHclTerraform;
-exports.zeroTrustAccessGroupIncludeAzureAdToTerraform = zeroTrustAccessGroupIncludeAzureAdToTerraform;
-exports.zeroTrustAccessGroupIncludeAzureAdToHclTerraform = zeroTrustAccessGroupIncludeAzureAdToHclTerraform;
-exports.zeroTrustAccessGroupIncludeCertificateToTerraform = zeroTrustAccessGroupIncludeCertificateToTerraform;
-exports.zeroTrustAccessGroupIncludeCertificateToHclTerraform = zeroTrustAccessGroupIncludeCertificateToHclTerraform;
-exports.zeroTrustAccessGroupIncludeCommonNameToTerraform = zeroTrustAccessGroupIncludeCommonNameToTerraform;
-exports.zeroTrustAccessGroupIncludeCommonNameToHclTerraform = zeroTrustAccessGroupIncludeCommonNameToHclTerraform;
-exports.zeroTrustAccessGroupIncludeDevicePostureToTerraform = zeroTrustAccessGroupIncludeDevicePostureToTerraform;
-exports.zeroTrustAccessGroupIncludeDevicePostureToHclTerraform = zeroTrustAccessGroupIncludeDevicePostureToHclTerraform;
-exports.zeroTrustAccessGroupIncludeEmailToTerraform = zeroTrustAccessGroupIncludeEmailToTerraform;
-exports.zeroTrustAccessGroupIncludeEmailToHclTerraform = zeroTrustAccessGroupIncludeEmailToHclTerraform;
-exports.zeroTrustAccessGroupIncludeEmailDomainToTerraform = zeroTrustAccessGroupIncludeEmailDomainToTerraform;
-exports.zeroTrustAccessGroupIncludeEmailDomainToHclTerraform = zeroTrustAccessGroupIncludeEmailDomainToHclTerraform;
-exports.zeroTrustAccessGroupIncludeEmailListStructToTerraform = zeroTrustAccessGroupIncludeEmailListStructToTerraform;
-exports.zeroTrustAccessGroupIncludeEmailListStructToHclTerraform = zeroTrustAccessGroupIncludeEmailListStructToHclTerraform;
-exports.zeroTrustAccessGroupIncludeEveryoneToTerraform = zeroTrustAccessGroupIncludeEveryoneToTerraform;
-exports.zeroTrustAccessGroupIncludeEveryoneToHclTerraform = zeroTrustAccessGroupIncludeEveryoneToHclTerraform;
-exports.zeroTrustAccessGroupIncludeExternalEvaluationToTerraform = zeroTrustAccessGroupIncludeExternalEvaluationToTerraform;
-exports.zeroTrustAccessGroupIncludeExternalEvaluationToHclTerraform = zeroTrustAccessGroupIncludeExternalEvaluationToHclTerraform;
-exports.zeroTrustAccessGroupIncludeGeoToTerraform = zeroTrustAccessGroupIncludeGeoToTerraform;
-exports.zeroTrustAccessGroupIncludeGeoToHclTerraform = zeroTrustAccessGroupIncludeGeoToHclTerraform;
-exports.zeroTrustAccessGroupIncludeGithubOrganizationToTerraform = zeroTrustAccessGroupIncludeGithubOrganizationToTerraform;
-exports.zeroTrustAccessGroupIncludeGithubOrganizationToHclTerraform = zeroTrustAccessGroupIncludeGithubOrganizationToHclTerraform;
-exports.zeroTrustAccessGroupIncludeGroupToTerraform = zeroTrustAccessGroupIncludeGroupToTerraform;
-exports.zeroTrustAccessGroupIncludeGroupToHclTerraform = zeroTrustAccessGroupIncludeGroupToHclTerraform;
-exports.zeroTrustAccessGroupIncludeGsuiteToTerraform = zeroTrustAccessGroupIncludeGsuiteToTerraform;
-exports.zeroTrustAccessGroupIncludeGsuiteToHclTerraform = zeroTrustAccessGroupIncludeGsuiteToHclTerraform;
-exports.zeroTrustAccessGroupIncludeIpToTerraform = zeroTrustAccessGroupIncludeIpToTerraform;
-exports.zeroTrustAccessGroupIncludeIpToHclTerraform = zeroTrustAccessGroupIncludeIpToHclTerraform;
-exports.zeroTrustAccessGroupIncludeIpListStructToTerraform = zeroTrustAccessGroupIncludeIpListStructToTerraform;
-exports.zeroTrustAccessGroupIncludeIpListStructToHclTerraform = zeroTrustAccessGroupIncludeIpListStructToHclTerraform;
-exports.zeroTrustAccessGroupIncludeLinkedAppTokenToTerraform = zeroTrustAccessGroupIncludeLinkedAppTokenToTerraform;
-exports.zeroTrustAccessGroupIncludeLinkedAppTokenToHclTerraform = zeroTrustAccessGroupIncludeLinkedAppTokenToHclTerraform;
-exports.zeroTrustAccessGroupIncludeLoginMethodToTerraform = zeroTrustAccessGroupIncludeLoginMethodToTerraform;
-exports.zeroTrustAccessGroupIncludeLoginMethodToHclTerraform = zeroTrustAccessGroupIncludeLoginMethodToHclTerraform;
-exports.zeroTrustAccessGroupIncludeOidcToTerraform = zeroTrustAccessGroupIncludeOidcToTerraform;
-exports.zeroTrustAccessGroupIncludeOidcToHclTerraform = zeroTrustAccessGroupIncludeOidcToHclTerraform;
-exports.zeroTrustAccessGroupIncludeOktaToTerraform = zeroTrustAccessGroupIncludeOktaToTerraform;
-exports.zeroTrustAccessGroupIncludeOktaToHclTerraform = zeroTrustAccessGroupIncludeOktaToHclTerraform;
-exports.zeroTrustAccessGroupIncludeSamlToTerraform = zeroTrustAccessGroupIncludeSamlToTerraform;
-exports.zeroTrustAccessGroupIncludeSamlToHclTerraform = zeroTrustAccessGroupIncludeSamlToHclTerraform;
-exports.zeroTrustAccessGroupIncludeServiceTokenToTerraform = zeroTrustAccessGroupIncludeServiceTokenToTerraform;
-exports.zeroTrustAccessGroupIncludeServiceTokenToHclTerraform = zeroTrustAccessGroupIncludeServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupIncludeUserRiskScoreToTerraform = zeroTrustAccessGroupIncludeUserRiskScoreToTerraform;
-exports.zeroTrustAccessGroupIncludeUserRiskScoreToHclTerraform = zeroTrustAccessGroupIncludeUserRiskScoreToHclTerraform;
-exports.zeroTrustAccessGroupIncludeToTerraform = zeroTrustAccessGroupIncludeToTerraform;
-exports.zeroTrustAccessGroupIncludeToHclTerraform = zeroTrustAccessGroupIncludeToHclTerraform;
-exports.zeroTrustAccessGroupRequireAnyValidServiceTokenToTerraform = zeroTrustAccessGroupRequireAnyValidServiceTokenToTerraform;
-exports.zeroTrustAccessGroupRequireAnyValidServiceTokenToHclTerraform = zeroTrustAccessGroupRequireAnyValidServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupRequireAuthContextToTerraform = zeroTrustAccessGroupRequireAuthContextToTerraform;
-exports.zeroTrustAccessGroupRequireAuthContextToHclTerraform = zeroTrustAccessGroupRequireAuthContextToHclTerraform;
-exports.zeroTrustAccessGroupRequireAuthMethodToTerraform = zeroTrustAccessGroupRequireAuthMethodToTerraform;
-exports.zeroTrustAccessGroupRequireAuthMethodToHclTerraform = zeroTrustAccessGroupRequireAuthMethodToHclTerraform;
-exports.zeroTrustAccessGroupRequireAzureAdToTerraform = zeroTrustAccessGroupRequireAzureAdToTerraform;
-exports.zeroTrustAccessGroupRequireAzureAdToHclTerraform = zeroTrustAccessGroupRequireAzureAdToHclTerraform;
-exports.zeroTrustAccessGroupRequireCertificateToTerraform = zeroTrustAccessGroupRequireCertificateToTerraform;
-exports.zeroTrustAccessGroupRequireCertificateToHclTerraform = zeroTrustAccessGroupRequireCertificateToHclTerraform;
-exports.zeroTrustAccessGroupRequireCommonNameToTerraform = zeroTrustAccessGroupRequireCommonNameToTerraform;
-exports.zeroTrustAccessGroupRequireCommonNameToHclTerraform = zeroTrustAccessGroupRequireCommonNameToHclTerraform;
-exports.zeroTrustAccessGroupRequireDevicePostureToTerraform = zeroTrustAccessGroupRequireDevicePostureToTerraform;
-exports.zeroTrustAccessGroupRequireDevicePostureToHclTerraform = zeroTrustAccessGroupRequireDevicePostureToHclTerraform;
-exports.zeroTrustAccessGroupRequireEmailToTerraform = zeroTrustAccessGroupRequireEmailToTerraform;
-exports.zeroTrustAccessGroupRequireEmailToHclTerraform = zeroTrustAccessGroupRequireEmailToHclTerraform;
-exports.zeroTrustAccessGroupRequireEmailDomainToTerraform = zeroTrustAccessGroupRequireEmailDomainToTerraform;
-exports.zeroTrustAccessGroupRequireEmailDomainToHclTerraform = zeroTrustAccessGroupRequireEmailDomainToHclTerraform;
-exports.zeroTrustAccessGroupRequireEmailListStructToTerraform = zeroTrustAccessGroupRequireEmailListStructToTerraform;
-exports.zeroTrustAccessGroupRequireEmailListStructToHclTerraform = zeroTrustAccessGroupRequireEmailListStructToHclTerraform;
-exports.zeroTrustAccessGroupRequireEveryoneToTerraform = zeroTrustAccessGroupRequireEveryoneToTerraform;
-exports.zeroTrustAccessGroupRequireEveryoneToHclTerraform = zeroTrustAccessGroupRequireEveryoneToHclTerraform;
-exports.zeroTrustAccessGroupRequireExternalEvaluationToTerraform = zeroTrustAccessGroupRequireExternalEvaluationToTerraform;
-exports.zeroTrustAccessGroupRequireExternalEvaluationToHclTerraform = zeroTrustAccessGroupRequireExternalEvaluationToHclTerraform;
-exports.zeroTrustAccessGroupRequireGeoToTerraform = zeroTrustAccessGroupRequireGeoToTerraform;
-exports.zeroTrustAccessGroupRequireGeoToHclTerraform = zeroTrustAccessGroupRequireGeoToHclTerraform;
-exports.zeroTrustAccessGroupRequireGithubOrganizationToTerraform = zeroTrustAccessGroupRequireGithubOrganizationToTerraform;
-exports.zeroTrustAccessGroupRequireGithubOrganizationToHclTerraform = zeroTrustAccessGroupRequireGithubOrganizationToHclTerraform;
-exports.zeroTrustAccessGroupRequireGroupToTerraform = zeroTrustAccessGroupRequireGroupToTerraform;
-exports.zeroTrustAccessGroupRequireGroupToHclTerraform = zeroTrustAccessGroupRequireGroupToHclTerraform;
-exports.zeroTrustAccessGroupRequireGsuiteToTerraform = zeroTrustAccessGroupRequireGsuiteToTerraform;
-exports.zeroTrustAccessGroupRequireGsuiteToHclTerraform = zeroTrustAccessGroupRequireGsuiteToHclTerraform;
-exports.zeroTrustAccessGroupRequireIpToTerraform = zeroTrustAccessGroupRequireIpToTerraform;
-exports.zeroTrustAccessGroupRequireIpToHclTerraform = zeroTrustAccessGroupRequireIpToHclTerraform;
-exports.zeroTrustAccessGroupRequireIpListStructToTerraform = zeroTrustAccessGroupRequireIpListStructToTerraform;
-exports.zeroTrustAccessGroupRequireIpListStructToHclTerraform = zeroTrustAccessGroupRequireIpListStructToHclTerraform;
-exports.zeroTrustAccessGroupRequireLinkedAppTokenToTerraform = zeroTrustAccessGroupRequireLinkedAppTokenToTerraform;
-exports.zeroTrustAccessGroupRequireLinkedAppTokenToHclTerraform = zeroTrustAccessGroupRequireLinkedAppTokenToHclTerraform;
-exports.zeroTrustAccessGroupRequireLoginMethodToTerraform = zeroTrustAccessGroupRequireLoginMethodToTerraform;
-exports.zeroTrustAccessGroupRequireLoginMethodToHclTerraform = zeroTrustAccessGroupRequireLoginMethodToHclTerraform;
-exports.zeroTrustAccessGroupRequireOidcToTerraform = zeroTrustAccessGroupRequireOidcToTerraform;
-exports.zeroTrustAccessGroupRequireOidcToHclTerraform = zeroTrustAccessGroupRequireOidcToHclTerraform;
-exports.zeroTrustAccessGroupRequireOktaToTerraform = zeroTrustAccessGroupRequireOktaToTerraform;
-exports.zeroTrustAccessGroupRequireOktaToHclTerraform = zeroTrustAccessGroupRequireOktaToHclTerraform;
-exports.zeroTrustAccessGroupRequireSamlToTerraform = zeroTrustAccessGroupRequireSamlToTerraform;
-exports.zeroTrustAccessGroupRequireSamlToHclTerraform = zeroTrustAccessGroupRequireSamlToHclTerraform;
-exports.zeroTrustAccessGroupRequireServiceTokenToTerraform = zeroTrustAccessGroupRequireServiceTokenToTerraform;
-exports.zeroTrustAccessGroupRequireServiceTokenToHclTerraform = zeroTrustAccessGroupRequireServiceTokenToHclTerraform;
-exports.zeroTrustAccessGroupRequireUserRiskScoreToTerraform = zeroTrustAccessGroupRequireUserRiskScoreToTerraform;
-exports.zeroTrustAccessGroupRequireUserRiskScoreToHclTerraform = zeroTrustAccessGroupRequireUserRiskScoreToHclTerraform;
-exports.zeroTrustAccessGroupRequireToTerraform = zeroTrustAccessGroupRequireToTerraform;
-exports.zeroTrustAccessGroupRequireToHclTerraform = zeroTrustAccessGroupRequireToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustAccessGroupExcludeAnyValidServiceTokenToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustAccessGroupExcludeAnyValidServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -185,57 +10,50 @@ function zeroTrustAccessGroupExcludeAnyValidServiceTokenToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupExcludeAnyValidServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeAnyValidServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference = ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference;
-function zeroTrustAccessGroupExcludeAuthContextToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupExcludeAuthContextToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -248,14 +66,14 @@ function zeroTrustAccessGroupExcludeAuthContextToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupExcludeAuthContextToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeAuthContextToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ac_id: {
             value: cdktf.stringToHclTerraform(struct.acId),
             isBlock: false,
@@ -276,124 +94,96 @@ function zeroTrustAccessGroupExcludeAuthContextToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeAuthContextOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeAuthContextOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeAuthContextOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeAuthContextOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._acId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.acId = this._acId;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._acId = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._acId = value.acId;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "acId", {
-        get: function () {
-            return this.getStringAttribute('ac_id');
-        },
-        set: function (value) {
-            this._acId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "acIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._acId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthContextOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeAuthContextOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeAuthContextOutputReference = ZeroTrustAccessGroupExcludeAuthContextOutputReference;
-function zeroTrustAccessGroupExcludeAuthMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._acId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.acId = this._acId;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._acId = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._acId = value.acId;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // ac_id - computed: false, optional: false, required: true
+    _acId;
+    get acId() {
+        return this.getStringAttribute('ac_id');
+    }
+    set acId(value) {
+        this._acId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get acIdInput() {
+        return this._acId;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupExcludeAuthMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -404,14 +194,14 @@ function zeroTrustAccessGroupExcludeAuthMethodToTerraform(struct) {
         auth_method: cdktf.stringToTerraform(struct.authMethod),
     };
 }
-function zeroTrustAccessGroupExcludeAuthMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeAuthMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         auth_method: {
             value: cdktf.stringToHclTerraform(struct.authMethod),
             isBlock: false,
@@ -420,76 +210,60 @@ function zeroTrustAccessGroupExcludeAuthMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeAuthMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeAuthMethodOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeAuthMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeAuthMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authMethod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = this._authMethod;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authMethod = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authMethod = value.authMethod;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthMethodOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this.getStringAttribute('auth_method');
-        },
-        set: function (value) {
-            this._authMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAuthMethodOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeAuthMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeAuthMethodOutputReference = ZeroTrustAccessGroupExcludeAuthMethodOutputReference;
-function zeroTrustAccessGroupExcludeAzureAdToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authMethod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authMethod = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authMethod = value.authMethod;
+        }
+    }
+    // auth_method - computed: false, optional: false, required: true
+    _authMethod;
+    get authMethod() {
+        return this.getStringAttribute('auth_method');
+    }
+    set authMethod(value) {
+        this._authMethod = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod;
+    }
+}
+export function zeroTrustAccessGroupExcludeAzureAdToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -501,14 +275,14 @@ function zeroTrustAccessGroupExcludeAzureAdToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupExcludeAzureAdToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeAzureAdToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -523,100 +297,78 @@ function zeroTrustAccessGroupExcludeAzureAdToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeAzureAdOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeAzureAdOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeAzureAdOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeAzureAdOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAzureAdOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAzureAdOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAzureAdOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAzureAdOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeAzureAdOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeAzureAdOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeAzureAdOutputReference = ZeroTrustAccessGroupExcludeAzureAdOutputReference;
-function zeroTrustAccessGroupExcludeCertificateToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupExcludeCertificateToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -625,57 +377,50 @@ function zeroTrustAccessGroupExcludeCertificateToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupExcludeCertificateToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeCertificateToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupExcludeCertificateOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeCertificateOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeCertificateOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeCertificateOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeCertificateOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeCertificateOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeCertificateOutputReference = ZeroTrustAccessGroupExcludeCertificateOutputReference;
-function zeroTrustAccessGroupExcludeCommonNameToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupExcludeCommonNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -686,14 +431,14 @@ function zeroTrustAccessGroupExcludeCommonNameToTerraform(struct) {
         common_name: cdktf.stringToTerraform(struct.commonName),
     };
 }
-function zeroTrustAccessGroupExcludeCommonNameToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeCommonNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         common_name: {
             value: cdktf.stringToHclTerraform(struct.commonName),
             isBlock: false,
@@ -702,76 +447,60 @@ function zeroTrustAccessGroupExcludeCommonNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeCommonNameOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeCommonNameOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeCommonNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeCommonNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeCommonNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._commonName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = this._commonName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._commonName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._commonName = value.commonName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeCommonNameOutputReference.prototype, "commonName", {
-        get: function () {
-            return this.getStringAttribute('common_name');
-        },
-        set: function (value) {
-            this._commonName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeCommonNameOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeCommonNameOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeCommonNameOutputReference = ZeroTrustAccessGroupExcludeCommonNameOutputReference;
-function zeroTrustAccessGroupExcludeDevicePostureToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._commonName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._commonName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._commonName = value.commonName;
+        }
+    }
+    // common_name - computed: false, optional: false, required: true
+    _commonName;
+    get commonName() {
+        return this.getStringAttribute('common_name');
+    }
+    set commonName(value) {
+        this._commonName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName;
+    }
+}
+export function zeroTrustAccessGroupExcludeDevicePostureToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -782,14 +511,14 @@ function zeroTrustAccessGroupExcludeDevicePostureToTerraform(struct) {
         integration_uid: cdktf.stringToTerraform(struct.integrationUid),
     };
 }
-function zeroTrustAccessGroupExcludeDevicePostureToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeDevicePostureToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         integration_uid: {
             value: cdktf.stringToHclTerraform(struct.integrationUid),
             isBlock: false,
@@ -798,76 +527,60 @@ function zeroTrustAccessGroupExcludeDevicePostureToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeDevicePostureOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeDevicePostureOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeDevicePostureOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeDevicePostureOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeDevicePostureOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._integrationUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.integrationUid = this._integrationUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._integrationUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._integrationUid = value.integrationUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeDevicePostureOutputReference.prototype, "integrationUid", {
-        get: function () {
-            return this.getStringAttribute('integration_uid');
-        },
-        set: function (value) {
-            this._integrationUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeDevicePostureOutputReference.prototype, "integrationUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._integrationUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeDevicePostureOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeDevicePostureOutputReference = ZeroTrustAccessGroupExcludeDevicePostureOutputReference;
-function zeroTrustAccessGroupExcludeEmailToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._integrationUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.integrationUid = this._integrationUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._integrationUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._integrationUid = value.integrationUid;
+        }
+    }
+    // integration_uid - computed: false, optional: false, required: true
+    _integrationUid;
+    get integrationUid() {
+        return this.getStringAttribute('integration_uid');
+    }
+    set integrationUid(value) {
+        this._integrationUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get integrationUidInput() {
+        return this._integrationUid;
+    }
+}
+export function zeroTrustAccessGroupExcludeEmailToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -878,14 +591,14 @@ function zeroTrustAccessGroupExcludeEmailToTerraform(struct) {
         email: cdktf.stringToTerraform(struct.email),
     };
 }
-function zeroTrustAccessGroupExcludeEmailToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeEmailToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -894,76 +607,60 @@ function zeroTrustAccessGroupExcludeEmailToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeEmailOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeEmailOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeEmailOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeEmailOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeEmailOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeEmailOutputReference = ZeroTrustAccessGroupExcludeEmailOutputReference;
-function zeroTrustAccessGroupExcludeEmailDomainToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+}
+export function zeroTrustAccessGroupExcludeEmailDomainToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -974,14 +671,14 @@ function zeroTrustAccessGroupExcludeEmailDomainToTerraform(struct) {
         domain: cdktf.stringToTerraform(struct.domain),
     };
 }
-function zeroTrustAccessGroupExcludeEmailDomainToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeEmailDomainToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         domain: {
             value: cdktf.stringToHclTerraform(struct.domain),
             isBlock: false,
@@ -990,76 +687,60 @@ function zeroTrustAccessGroupExcludeEmailDomainToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeEmailDomainOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeEmailDomainOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeEmailDomainOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeEmailDomainOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailDomainOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._domain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.domain = this._domain;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._domain = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._domain = value.domain;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailDomainOutputReference.prototype, "domain", {
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        set: function (value) {
-            this._domain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailDomainOutputReference.prototype, "domainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeEmailDomainOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeEmailDomainOutputReference = ZeroTrustAccessGroupExcludeEmailDomainOutputReference;
-function zeroTrustAccessGroupExcludeEmailListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._domain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.domain = this._domain;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._domain = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._domain = value.domain;
+        }
+    }
+    // domain - computed: false, optional: false, required: true
+    _domain;
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    set domain(value) {
+        this._domain = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainInput() {
+        return this._domain;
+    }
+}
+export function zeroTrustAccessGroupExcludeEmailListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1070,14 +751,14 @@ function zeroTrustAccessGroupExcludeEmailListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupExcludeEmailListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeEmailListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1086,76 +767,60 @@ function zeroTrustAccessGroupExcludeEmailListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeEmailListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeEmailListStructOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeEmailListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeEmailListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEmailListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeEmailListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeEmailListStructOutputReference = ZeroTrustAccessGroupExcludeEmailListStructOutputReference;
-function zeroTrustAccessGroupExcludeEveryoneToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupExcludeEveryoneToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1164,57 +829,50 @@ function zeroTrustAccessGroupExcludeEveryoneToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupExcludeEveryoneToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeEveryoneToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupExcludeEveryoneOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeEveryoneOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeEveryoneOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeEveryoneOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeEveryoneOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeEveryoneOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeEveryoneOutputReference = ZeroTrustAccessGroupExcludeEveryoneOutputReference;
-function zeroTrustAccessGroupExcludeExternalEvaluationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupExcludeExternalEvaluationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1226,14 +884,14 @@ function zeroTrustAccessGroupExcludeExternalEvaluationToTerraform(struct) {
         keys_url: cdktf.stringToTerraform(struct.keysUrl),
     };
 }
-function zeroTrustAccessGroupExcludeExternalEvaluationToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeExternalEvaluationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         evaluate_url: {
             value: cdktf.stringToHclTerraform(struct.evaluateUrl),
             isBlock: false,
@@ -1248,100 +906,78 @@ function zeroTrustAccessGroupExcludeExternalEvaluationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._evaluateUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.evaluateUrl = this._evaluateUrl;
-            }
-            if (this._keysUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keysUrl = this._keysUrl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = undefined;
-                this._keysUrl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = value.evaluateUrl;
-                this._keysUrl = value.keysUrl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference.prototype, "evaluateUrl", {
-        get: function () {
-            return this.getStringAttribute('evaluate_url');
-        },
-        set: function (value) {
-            this._evaluateUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference.prototype, "evaluateUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._evaluateUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference.prototype, "keysUrl", {
-        get: function () {
-            return this.getStringAttribute('keys_url');
-        },
-        set: function (value) {
-            this._keysUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference.prototype, "keysUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keysUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference = ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference;
-function zeroTrustAccessGroupExcludeGeoToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._evaluateUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.evaluateUrl = this._evaluateUrl;
+        }
+        if (this._keysUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keysUrl = this._keysUrl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = undefined;
+            this._keysUrl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = value.evaluateUrl;
+            this._keysUrl = value.keysUrl;
+        }
+    }
+    // evaluate_url - computed: false, optional: false, required: true
+    _evaluateUrl;
+    get evaluateUrl() {
+        return this.getStringAttribute('evaluate_url');
+    }
+    set evaluateUrl(value) {
+        this._evaluateUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get evaluateUrlInput() {
+        return this._evaluateUrl;
+    }
+    // keys_url - computed: false, optional: false, required: true
+    _keysUrl;
+    get keysUrl() {
+        return this.getStringAttribute('keys_url');
+    }
+    set keysUrl(value) {
+        this._keysUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keysUrlInput() {
+        return this._keysUrl;
+    }
+}
+export function zeroTrustAccessGroupExcludeGeoToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1352,14 +988,14 @@ function zeroTrustAccessGroupExcludeGeoToTerraform(struct) {
         country_code: cdktf.stringToTerraform(struct.countryCode),
     };
 }
-function zeroTrustAccessGroupExcludeGeoToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeGeoToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         country_code: {
             value: cdktf.stringToHclTerraform(struct.countryCode),
             isBlock: false,
@@ -1368,76 +1004,60 @@ function zeroTrustAccessGroupExcludeGeoToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeGeoOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeGeoOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeGeoOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeGeoOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGeoOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._countryCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.countryCode = this._countryCode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._countryCode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._countryCode = value.countryCode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGeoOutputReference.prototype, "countryCode", {
-        get: function () {
-            return this.getStringAttribute('country_code');
-        },
-        set: function (value) {
-            this._countryCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGeoOutputReference.prototype, "countryCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._countryCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeGeoOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeGeoOutputReference = ZeroTrustAccessGroupExcludeGeoOutputReference;
-function zeroTrustAccessGroupExcludeGithubOrganizationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._countryCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.countryCode = this._countryCode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._countryCode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._countryCode = value.countryCode;
+        }
+    }
+    // country_code - computed: false, optional: false, required: true
+    _countryCode;
+    get countryCode() {
+        return this.getStringAttribute('country_code');
+    }
+    set countryCode(value) {
+        this._countryCode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get countryCodeInput() {
+        return this._countryCode;
+    }
+}
+export function zeroTrustAccessGroupExcludeGithubOrganizationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1450,14 +1070,14 @@ function zeroTrustAccessGroupExcludeGithubOrganizationToTerraform(struct) {
         team: cdktf.stringToTerraform(struct.team),
     };
 }
-function zeroTrustAccessGroupExcludeGithubOrganizationToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeGithubOrganizationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -1478,127 +1098,99 @@ function zeroTrustAccessGroupExcludeGithubOrganizationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._team !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.team = this._team;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-                this._team = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-                this._team = value.team;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "team", {
-        get: function () {
-            return this.getStringAttribute('team');
-        },
-        set: function (value) {
-            this._team = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype.resetTeam = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._team !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.team = this._team;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+            this._team = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+            this._team = value.team;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // team - computed: false, optional: true, required: false
+    _team;
+    get team() {
+        return this.getStringAttribute('team');
+    }
+    set team(value) {
+        this._team = value;
+    }
+    resetTeam() {
         this._team = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference.prototype, "teamInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._team;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference = ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference;
-function zeroTrustAccessGroupExcludeGroupToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamInput() {
+        return this._team;
+    }
+}
+export function zeroTrustAccessGroupExcludeGroupToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1609,14 +1201,14 @@ function zeroTrustAccessGroupExcludeGroupToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupExcludeGroupToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeGroupToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1625,76 +1217,60 @@ function zeroTrustAccessGroupExcludeGroupToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeGroupOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeGroupOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeGroupOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeGroupOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGroupOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGroupOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGroupOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeGroupOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeGroupOutputReference = ZeroTrustAccessGroupExcludeGroupOutputReference;
-function zeroTrustAccessGroupExcludeGsuiteToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupExcludeGsuiteToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1706,14 +1282,14 @@ function zeroTrustAccessGroupExcludeGsuiteToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupExcludeGsuiteToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeGsuiteToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -1728,100 +1304,78 @@ function zeroTrustAccessGroupExcludeGsuiteToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeGsuiteOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeGsuiteOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeGsuiteOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeGsuiteOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGsuiteOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGsuiteOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGsuiteOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGsuiteOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeGsuiteOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeGsuiteOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeGsuiteOutputReference = ZeroTrustAccessGroupExcludeGsuiteOutputReference;
-function zeroTrustAccessGroupExcludeIpToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupExcludeIpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1832,14 +1386,14 @@ function zeroTrustAccessGroupExcludeIpToTerraform(struct) {
         ip: cdktf.stringToTerraform(struct.ip),
     };
 }
-function zeroTrustAccessGroupExcludeIpToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeIpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip: {
             value: cdktf.stringToHclTerraform(struct.ip),
             isBlock: false,
@@ -1848,76 +1402,60 @@ function zeroTrustAccessGroupExcludeIpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeIpOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeIpOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeIpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeIpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ip = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ip = value.ip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeIpOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeIpOutputReference = ZeroTrustAccessGroupExcludeIpOutputReference;
-function zeroTrustAccessGroupExcludeIpListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ip = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ip = value.ip;
+        }
+    }
+    // ip - computed: false, optional: false, required: true
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+}
+export function zeroTrustAccessGroupExcludeIpListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1928,14 +1466,14 @@ function zeroTrustAccessGroupExcludeIpListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupExcludeIpListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeIpListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1944,76 +1482,60 @@ function zeroTrustAccessGroupExcludeIpListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeIpListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeIpListStructOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeIpListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeIpListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeIpListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeIpListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeIpListStructOutputReference = ZeroTrustAccessGroupExcludeIpListStructOutputReference;
-function zeroTrustAccessGroupExcludeLinkedAppTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupExcludeLinkedAppTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2024,14 +1546,14 @@ function zeroTrustAccessGroupExcludeLinkedAppTokenToTerraform(struct) {
         app_uid: cdktf.stringToTerraform(struct.appUid),
     };
 }
-function zeroTrustAccessGroupExcludeLinkedAppTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeLinkedAppTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         app_uid: {
             value: cdktf.stringToHclTerraform(struct.appUid),
             isBlock: false,
@@ -2040,76 +1562,60 @@ function zeroTrustAccessGroupExcludeLinkedAppTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._appUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.appUid = this._appUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._appUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._appUid = value.appUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference.prototype, "appUid", {
-        get: function () {
-            return this.getStringAttribute('app_uid');
-        },
-        set: function (value) {
-            this._appUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference.prototype, "appUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._appUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference = ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference;
-function zeroTrustAccessGroupExcludeLoginMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._appUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.appUid = this._appUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._appUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._appUid = value.appUid;
+        }
+    }
+    // app_uid - computed: false, optional: false, required: true
+    _appUid;
+    get appUid() {
+        return this.getStringAttribute('app_uid');
+    }
+    set appUid(value) {
+        this._appUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get appUidInput() {
+        return this._appUid;
+    }
+}
+export function zeroTrustAccessGroupExcludeLoginMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2120,14 +1626,14 @@ function zeroTrustAccessGroupExcludeLoginMethodToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupExcludeLoginMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeLoginMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -2136,76 +1642,60 @@ function zeroTrustAccessGroupExcludeLoginMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeLoginMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeLoginMethodOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeLoginMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeLoginMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLoginMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLoginMethodOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeLoginMethodOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeLoginMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeLoginMethodOutputReference = ZeroTrustAccessGroupExcludeLoginMethodOutputReference;
-function zeroTrustAccessGroupExcludeOidcToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupExcludeOidcToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2218,14 +1708,14 @@ function zeroTrustAccessGroupExcludeOidcToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupExcludeOidcToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeOidcToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         claim_name: {
             value: cdktf.stringToHclTerraform(struct.claimName),
             isBlock: false,
@@ -2246,124 +1736,96 @@ function zeroTrustAccessGroupExcludeOidcToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeOidcOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeOidcOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeOidcOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeOidcOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._claimName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimName = this._claimName;
-            }
-            if (this._claimValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimValue = this._claimValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._claimName = undefined;
-                this._claimValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._claimName = value.claimName;
-                this._claimValue = value.claimValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "claimName", {
-        get: function () {
-            return this.getStringAttribute('claim_name');
-        },
-        set: function (value) {
-            this._claimName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "claimNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "claimValue", {
-        get: function () {
-            return this.getStringAttribute('claim_value');
-        },
-        set: function (value) {
-            this._claimValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "claimValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOidcOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeOidcOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeOidcOutputReference = ZeroTrustAccessGroupExcludeOidcOutputReference;
-function zeroTrustAccessGroupExcludeOktaToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._claimName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimName = this._claimName;
+        }
+        if (this._claimValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimValue = this._claimValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._claimName = undefined;
+            this._claimValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._claimName = value.claimName;
+            this._claimValue = value.claimValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // claim_name - computed: false, optional: false, required: true
+    _claimName;
+    get claimName() {
+        return this.getStringAttribute('claim_name');
+    }
+    set claimName(value) {
+        this._claimName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimNameInput() {
+        return this._claimName;
+    }
+    // claim_value - computed: false, optional: false, required: true
+    _claimValue;
+    get claimValue() {
+        return this.getStringAttribute('claim_value');
+    }
+    set claimValue(value) {
+        this._claimValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimValueInput() {
+        return this._claimValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupExcludeOktaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2375,14 +1837,14 @@ function zeroTrustAccessGroupExcludeOktaToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function zeroTrustAccessGroupExcludeOktaToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeOktaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -2397,100 +1859,78 @@ function zeroTrustAccessGroupExcludeOktaToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeOktaOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeOktaOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeOktaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeOktaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOktaOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOktaOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOktaOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOktaOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOktaOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeOktaOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeOktaOutputReference = ZeroTrustAccessGroupExcludeOktaOutputReference;
-function zeroTrustAccessGroupExcludeSamlToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export function zeroTrustAccessGroupExcludeSamlToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2503,14 +1943,14 @@ function zeroTrustAccessGroupExcludeSamlToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupExcludeSamlToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeSamlToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         attribute_name: {
             value: cdktf.stringToHclTerraform(struct.attributeName),
             isBlock: false,
@@ -2531,124 +1971,96 @@ function zeroTrustAccessGroupExcludeSamlToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeSamlOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeSamlOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeSamlOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeSamlOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._attributeName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeName = this._attributeName;
-            }
-            if (this._attributeValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeValue = this._attributeValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._attributeName = undefined;
-                this._attributeValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._attributeName = value.attributeName;
-                this._attributeValue = value.attributeValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "attributeName", {
-        get: function () {
-            return this.getStringAttribute('attribute_name');
-        },
-        set: function (value) {
-            this._attributeName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "attributeNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "attributeValue", {
-        get: function () {
-            return this.getStringAttribute('attribute_value');
-        },
-        set: function (value) {
-            this._attributeValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "attributeValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeSamlOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeSamlOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeSamlOutputReference = ZeroTrustAccessGroupExcludeSamlOutputReference;
-function zeroTrustAccessGroupExcludeServiceTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._attributeName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeName = this._attributeName;
+        }
+        if (this._attributeValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeValue = this._attributeValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._attributeName = undefined;
+            this._attributeValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._attributeName = value.attributeName;
+            this._attributeValue = value.attributeValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // attribute_name - computed: false, optional: false, required: true
+    _attributeName;
+    get attributeName() {
+        return this.getStringAttribute('attribute_name');
+    }
+    set attributeName(value) {
+        this._attributeName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeNameInput() {
+        return this._attributeName;
+    }
+    // attribute_value - computed: false, optional: false, required: true
+    _attributeValue;
+    get attributeValue() {
+        return this.getStringAttribute('attribute_value');
+    }
+    set attributeValue(value) {
+        this._attributeValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeValueInput() {
+        return this._attributeValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupExcludeServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2659,14 +2071,14 @@ function zeroTrustAccessGroupExcludeServiceTokenToTerraform(struct) {
         token_id: cdktf.stringToTerraform(struct.tokenId),
     };
 }
-function zeroTrustAccessGroupExcludeServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         token_id: {
             value: cdktf.stringToHclTerraform(struct.tokenId),
             isBlock: false,
@@ -2675,76 +2087,60 @@ function zeroTrustAccessGroupExcludeServiceTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._tokenId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tokenId = this._tokenId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._tokenId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._tokenId = value.tokenId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeServiceTokenOutputReference.prototype, "tokenId", {
-        get: function () {
-            return this.getStringAttribute('token_id');
-        },
-        set: function (value) {
-            this._tokenId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeServiceTokenOutputReference.prototype, "tokenIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeServiceTokenOutputReference = ZeroTrustAccessGroupExcludeServiceTokenOutputReference;
-function zeroTrustAccessGroupExcludeUserRiskScoreToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._tokenId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tokenId = this._tokenId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._tokenId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._tokenId = value.tokenId;
+        }
+    }
+    // token_id - computed: false, optional: false, required: true
+    _tokenId;
+    get tokenId() {
+        return this.getStringAttribute('token_id');
+    }
+    set tokenId(value) {
+        this._tokenId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenIdInput() {
+        return this._tokenId;
+    }
+}
+export function zeroTrustAccessGroupExcludeUserRiskScoreToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2755,14 +2151,14 @@ function zeroTrustAccessGroupExcludeUserRiskScoreToTerraform(struct) {
         user_risk_score: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupExcludeUserRiskScoreToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeUserRiskScoreToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         user_risk_score: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.userRiskScore),
             isBlock: false,
@@ -2771,76 +2167,60 @@ function zeroTrustAccessGroupExcludeUserRiskScoreToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._userRiskScore !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = this._userRiskScore;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._userRiskScore = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._userRiskScore = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this.getListAttribute('user_risk_score');
-        },
-        set: function (value) {
-            this._userRiskScore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference = ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference;
-function zeroTrustAccessGroupExcludeToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._userRiskScore !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._userRiskScore = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._userRiskScore = value.userRiskScore;
+        }
+    }
+    // user_risk_score - computed: false, optional: false, required: true
+    _userRiskScore;
+    get userRiskScore() {
+        return this.getListAttribute('user_risk_score');
+    }
+    set userRiskScore(value) {
+        this._userRiskScore = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore;
+    }
+}
+export function zeroTrustAccessGroupExcludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2875,14 +2255,14 @@ function zeroTrustAccessGroupExcludeToTerraform(struct) {
         user_risk_score: zeroTrustAccessGroupExcludeUserRiskScoreToTerraform(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupExcludeToHclTerraform(struct) {
+export function zeroTrustAccessGroupExcludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         any_valid_service_token: {
             value: zeroTrustAccessGroupExcludeAnyValidServiceTokenToHclTerraform(struct.anyValidServiceToken),
             isBlock: true,
@@ -3035,803 +2415,592 @@ function zeroTrustAccessGroupExcludeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupExcludeOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeOutputReference, _super);
+export class ZeroTrustAccessGroupExcludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupExcludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // any_valid_service_token - computed: false, optional: true, required: false
-        _this._anyValidServiceToken = new ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference(_this, "any_valid_service_token");
-        // auth_context - computed: false, optional: true, required: false
-        _this._authContext = new ZeroTrustAccessGroupExcludeAuthContextOutputReference(_this, "auth_context");
-        // auth_method - computed: false, optional: true, required: false
-        _this._authMethod = new ZeroTrustAccessGroupExcludeAuthMethodOutputReference(_this, "auth_method");
-        // azure_ad - computed: false, optional: true, required: false
-        _this._azureAd = new ZeroTrustAccessGroupExcludeAzureAdOutputReference(_this, "azure_ad");
-        // certificate - computed: false, optional: true, required: false
-        _this._certificate = new ZeroTrustAccessGroupExcludeCertificateOutputReference(_this, "certificate");
-        // common_name - computed: false, optional: true, required: false
-        _this._commonName = new ZeroTrustAccessGroupExcludeCommonNameOutputReference(_this, "common_name");
-        // device_posture - computed: false, optional: true, required: false
-        _this._devicePosture = new ZeroTrustAccessGroupExcludeDevicePostureOutputReference(_this, "device_posture");
-        // email - computed: false, optional: true, required: false
-        _this._email = new ZeroTrustAccessGroupExcludeEmailOutputReference(_this, "email");
-        // email_domain - computed: false, optional: true, required: false
-        _this._emailDomain = new ZeroTrustAccessGroupExcludeEmailDomainOutputReference(_this, "email_domain");
-        // email_list - computed: false, optional: true, required: false
-        _this._emailList = new ZeroTrustAccessGroupExcludeEmailListStructOutputReference(_this, "email_list");
-        // everyone - computed: false, optional: true, required: false
-        _this._everyone = new ZeroTrustAccessGroupExcludeEveryoneOutputReference(_this, "everyone");
-        // external_evaluation - computed: false, optional: true, required: false
-        _this._externalEvaluation = new ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference(_this, "external_evaluation");
-        // geo - computed: false, optional: true, required: false
-        _this._geo = new ZeroTrustAccessGroupExcludeGeoOutputReference(_this, "geo");
-        // github_organization - computed: false, optional: true, required: false
-        _this._githubOrganization = new ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference(_this, "github_organization");
-        // group - computed: false, optional: true, required: false
-        _this._group = new ZeroTrustAccessGroupExcludeGroupOutputReference(_this, "group");
-        // gsuite - computed: false, optional: true, required: false
-        _this._gsuite = new ZeroTrustAccessGroupExcludeGsuiteOutputReference(_this, "gsuite");
-        // ip - computed: false, optional: true, required: false
-        _this._ip = new ZeroTrustAccessGroupExcludeIpOutputReference(_this, "ip");
-        // ip_list - computed: false, optional: true, required: false
-        _this._ipList = new ZeroTrustAccessGroupExcludeIpListStructOutputReference(_this, "ip_list");
-        // linked_app_token - computed: false, optional: true, required: false
-        _this._linkedAppToken = new ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference(_this, "linked_app_token");
-        // login_method - computed: false, optional: true, required: false
-        _this._loginMethod = new ZeroTrustAccessGroupExcludeLoginMethodOutputReference(_this, "login_method");
-        // oidc - computed: false, optional: true, required: false
-        _this._oidc = new ZeroTrustAccessGroupExcludeOidcOutputReference(_this, "oidc");
-        // okta - computed: false, optional: true, required: false
-        _this._okta = new ZeroTrustAccessGroupExcludeOktaOutputReference(_this, "okta");
-        // saml - computed: false, optional: true, required: false
-        _this._saml = new ZeroTrustAccessGroupExcludeSamlOutputReference(_this, "saml");
-        // service_token - computed: false, optional: true, required: false
-        _this._serviceToken = new ZeroTrustAccessGroupExcludeServiceTokenOutputReference(_this, "service_token");
-        // user_risk_score - computed: false, optional: true, required: false
-        _this._userRiskScore = new ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference(_this, "user_risk_score");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._anyValidServiceToken) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.anyValidServiceToken = (_b = this._anyValidServiceToken) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._authContext) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authContext = (_d = this._authContext) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._authMethod) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = (_f = this._authMethod) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._azureAd) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.azureAd = (_h = this._azureAd) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._certificate) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificate = (_k = this._certificate) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._commonName) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = (_m = this._commonName) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            if (((_o = this._devicePosture) === null || _o === void 0 ? void 0 : _o.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.devicePosture = (_p = this._devicePosture) === null || _p === void 0 ? void 0 : _p.internalValue;
-            }
-            if (((_q = this._email) === null || _q === void 0 ? void 0 : _q.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = (_r = this._email) === null || _r === void 0 ? void 0 : _r.internalValue;
-            }
-            if (((_s = this._emailDomain) === null || _s === void 0 ? void 0 : _s.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailDomain = (_t = this._emailDomain) === null || _t === void 0 ? void 0 : _t.internalValue;
-            }
-            if (((_u = this._emailList) === null || _u === void 0 ? void 0 : _u.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailList = (_v = this._emailList) === null || _v === void 0 ? void 0 : _v.internalValue;
-            }
-            if (((_w = this._everyone) === null || _w === void 0 ? void 0 : _w.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.everyone = (_x = this._everyone) === null || _x === void 0 ? void 0 : _x.internalValue;
-            }
-            if (((_y = this._externalEvaluation) === null || _y === void 0 ? void 0 : _y.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.externalEvaluation = (_z = this._externalEvaluation) === null || _z === void 0 ? void 0 : _z.internalValue;
-            }
-            if (((_0 = this._geo) === null || _0 === void 0 ? void 0 : _0.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.geo = (_1 = this._geo) === null || _1 === void 0 ? void 0 : _1.internalValue;
-            }
-            if (((_2 = this._githubOrganization) === null || _2 === void 0 ? void 0 : _2.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.githubOrganization = (_3 = this._githubOrganization) === null || _3 === void 0 ? void 0 : _3.internalValue;
-            }
-            if (((_4 = this._group) === null || _4 === void 0 ? void 0 : _4.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.group = (_5 = this._group) === null || _5 === void 0 ? void 0 : _5.internalValue;
-            }
-            if (((_6 = this._gsuite) === null || _6 === void 0 ? void 0 : _6.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gsuite = (_7 = this._gsuite) === null || _7 === void 0 ? void 0 : _7.internalValue;
-            }
-            if (((_8 = this._ip) === null || _8 === void 0 ? void 0 : _8.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = (_9 = this._ip) === null || _9 === void 0 ? void 0 : _9.internalValue;
-            }
-            if (((_10 = this._ipList) === null || _10 === void 0 ? void 0 : _10.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipList = (_11 = this._ipList) === null || _11 === void 0 ? void 0 : _11.internalValue;
-            }
-            if (((_12 = this._linkedAppToken) === null || _12 === void 0 ? void 0 : _12.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.linkedAppToken = (_13 = this._linkedAppToken) === null || _13 === void 0 ? void 0 : _13.internalValue;
-            }
-            if (((_14 = this._loginMethod) === null || _14 === void 0 ? void 0 : _14.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.loginMethod = (_15 = this._loginMethod) === null || _15 === void 0 ? void 0 : _15.internalValue;
-            }
-            if (((_16 = this._oidc) === null || _16 === void 0 ? void 0 : _16.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.oidc = (_17 = this._oidc) === null || _17 === void 0 ? void 0 : _17.internalValue;
-            }
-            if (((_18 = this._okta) === null || _18 === void 0 ? void 0 : _18.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.okta = (_19 = this._okta) === null || _19 === void 0 ? void 0 : _19.internalValue;
-            }
-            if (((_20 = this._saml) === null || _20 === void 0 ? void 0 : _20.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.saml = (_21 = this._saml) === null || _21 === void 0 ? void 0 : _21.internalValue;
-            }
-            if (((_22 = this._serviceToken) === null || _22 === void 0 ? void 0 : _22.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceToken = (_23 = this._serviceToken) === null || _23 === void 0 ? void 0 : _23.internalValue;
-            }
-            if (((_24 = this._userRiskScore) === null || _24 === void 0 ? void 0 : _24.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = (_25 = this._userRiskScore) === null || _25 === void 0 ? void 0 : _25.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = undefined;
-                this._authContext.internalValue = undefined;
-                this._authMethod.internalValue = undefined;
-                this._azureAd.internalValue = undefined;
-                this._certificate.internalValue = undefined;
-                this._commonName.internalValue = undefined;
-                this._devicePosture.internalValue = undefined;
-                this._email.internalValue = undefined;
-                this._emailDomain.internalValue = undefined;
-                this._emailList.internalValue = undefined;
-                this._everyone.internalValue = undefined;
-                this._externalEvaluation.internalValue = undefined;
-                this._geo.internalValue = undefined;
-                this._githubOrganization.internalValue = undefined;
-                this._group.internalValue = undefined;
-                this._gsuite.internalValue = undefined;
-                this._ip.internalValue = undefined;
-                this._ipList.internalValue = undefined;
-                this._linkedAppToken.internalValue = undefined;
-                this._loginMethod.internalValue = undefined;
-                this._oidc.internalValue = undefined;
-                this._okta.internalValue = undefined;
-                this._saml.internalValue = undefined;
-                this._serviceToken.internalValue = undefined;
-                this._userRiskScore.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
-                this._authContext.internalValue = value.authContext;
-                this._authMethod.internalValue = value.authMethod;
-                this._azureAd.internalValue = value.azureAd;
-                this._certificate.internalValue = value.certificate;
-                this._commonName.internalValue = value.commonName;
-                this._devicePosture.internalValue = value.devicePosture;
-                this._email.internalValue = value.email;
-                this._emailDomain.internalValue = value.emailDomain;
-                this._emailList.internalValue = value.emailList;
-                this._everyone.internalValue = value.everyone;
-                this._externalEvaluation.internalValue = value.externalEvaluation;
-                this._geo.internalValue = value.geo;
-                this._githubOrganization.internalValue = value.githubOrganization;
-                this._group.internalValue = value.group;
-                this._gsuite.internalValue = value.gsuite;
-                this._ip.internalValue = value.ip;
-                this._ipList.internalValue = value.ipList;
-                this._linkedAppToken.internalValue = value.linkedAppToken;
-                this._loginMethod.internalValue = value.loginMethod;
-                this._oidc.internalValue = value.oidc;
-                this._okta.internalValue = value.okta;
-                this._saml.internalValue = value.saml;
-                this._serviceToken.internalValue = value.serviceToken;
-                this._userRiskScore.internalValue = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "anyValidServiceToken", {
-        get: function () {
-            return this._anyValidServiceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putAnyValidServiceToken = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._anyValidServiceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.anyValidServiceToken = this._anyValidServiceToken?.internalValue;
+        }
+        if (this._authContext?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authContext = this._authContext?.internalValue;
+        }
+        if (this._authMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod?.internalValue;
+        }
+        if (this._azureAd?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.azureAd = this._azureAd?.internalValue;
+        }
+        if (this._certificate?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificate = this._certificate?.internalValue;
+        }
+        if (this._commonName?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName?.internalValue;
+        }
+        if (this._devicePosture?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.devicePosture = this._devicePosture?.internalValue;
+        }
+        if (this._email?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email?.internalValue;
+        }
+        if (this._emailDomain?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailDomain = this._emailDomain?.internalValue;
+        }
+        if (this._emailList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailList = this._emailList?.internalValue;
+        }
+        if (this._everyone?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.everyone = this._everyone?.internalValue;
+        }
+        if (this._externalEvaluation?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.externalEvaluation = this._externalEvaluation?.internalValue;
+        }
+        if (this._geo?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.geo = this._geo?.internalValue;
+        }
+        if (this._githubOrganization?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.githubOrganization = this._githubOrganization?.internalValue;
+        }
+        if (this._group?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.group = this._group?.internalValue;
+        }
+        if (this._gsuite?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gsuite = this._gsuite?.internalValue;
+        }
+        if (this._ip?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip?.internalValue;
+        }
+        if (this._ipList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipList = this._ipList?.internalValue;
+        }
+        if (this._linkedAppToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.linkedAppToken = this._linkedAppToken?.internalValue;
+        }
+        if (this._loginMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.loginMethod = this._loginMethod?.internalValue;
+        }
+        if (this._oidc?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.oidc = this._oidc?.internalValue;
+        }
+        if (this._okta?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.okta = this._okta?.internalValue;
+        }
+        if (this._saml?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.saml = this._saml?.internalValue;
+        }
+        if (this._serviceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceToken = this._serviceToken?.internalValue;
+        }
+        if (this._userRiskScore?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = undefined;
+            this._authContext.internalValue = undefined;
+            this._authMethod.internalValue = undefined;
+            this._azureAd.internalValue = undefined;
+            this._certificate.internalValue = undefined;
+            this._commonName.internalValue = undefined;
+            this._devicePosture.internalValue = undefined;
+            this._email.internalValue = undefined;
+            this._emailDomain.internalValue = undefined;
+            this._emailList.internalValue = undefined;
+            this._everyone.internalValue = undefined;
+            this._externalEvaluation.internalValue = undefined;
+            this._geo.internalValue = undefined;
+            this._githubOrganization.internalValue = undefined;
+            this._group.internalValue = undefined;
+            this._gsuite.internalValue = undefined;
+            this._ip.internalValue = undefined;
+            this._ipList.internalValue = undefined;
+            this._linkedAppToken.internalValue = undefined;
+            this._loginMethod.internalValue = undefined;
+            this._oidc.internalValue = undefined;
+            this._okta.internalValue = undefined;
+            this._saml.internalValue = undefined;
+            this._serviceToken.internalValue = undefined;
+            this._userRiskScore.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
+            this._authContext.internalValue = value.authContext;
+            this._authMethod.internalValue = value.authMethod;
+            this._azureAd.internalValue = value.azureAd;
+            this._certificate.internalValue = value.certificate;
+            this._commonName.internalValue = value.commonName;
+            this._devicePosture.internalValue = value.devicePosture;
+            this._email.internalValue = value.email;
+            this._emailDomain.internalValue = value.emailDomain;
+            this._emailList.internalValue = value.emailList;
+            this._everyone.internalValue = value.everyone;
+            this._externalEvaluation.internalValue = value.externalEvaluation;
+            this._geo.internalValue = value.geo;
+            this._githubOrganization.internalValue = value.githubOrganization;
+            this._group.internalValue = value.group;
+            this._gsuite.internalValue = value.gsuite;
+            this._ip.internalValue = value.ip;
+            this._ipList.internalValue = value.ipList;
+            this._linkedAppToken.internalValue = value.linkedAppToken;
+            this._loginMethod.internalValue = value.loginMethod;
+            this._oidc.internalValue = value.oidc;
+            this._okta.internalValue = value.okta;
+            this._saml.internalValue = value.saml;
+            this._serviceToken.internalValue = value.serviceToken;
+            this._userRiskScore.internalValue = value.userRiskScore;
+        }
+    }
+    // any_valid_service_token - computed: false, optional: true, required: false
+    _anyValidServiceToken = new ZeroTrustAccessGroupExcludeAnyValidServiceTokenOutputReference(this, "any_valid_service_token");
+    get anyValidServiceToken() {
+        return this._anyValidServiceToken;
+    }
+    putAnyValidServiceToken(value) {
         this._anyValidServiceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetAnyValidServiceToken = function () {
+    }
+    resetAnyValidServiceToken() {
         this._anyValidServiceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "anyValidServiceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._anyValidServiceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "authContext", {
-        get: function () {
-            return this._authContext;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putAuthContext = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get anyValidServiceTokenInput() {
+        return this._anyValidServiceToken.internalValue;
+    }
+    // auth_context - computed: false, optional: true, required: false
+    _authContext = new ZeroTrustAccessGroupExcludeAuthContextOutputReference(this, "auth_context");
+    get authContext() {
+        return this._authContext;
+    }
+    putAuthContext(value) {
         this._authContext.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetAuthContext = function () {
+    }
+    resetAuthContext() {
         this._authContext.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "authContextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authContext.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putAuthMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authContextInput() {
+        return this._authContext.internalValue;
+    }
+    // auth_method - computed: false, optional: true, required: false
+    _authMethod = new ZeroTrustAccessGroupExcludeAuthMethodOutputReference(this, "auth_method");
+    get authMethod() {
+        return this._authMethod;
+    }
+    putAuthMethod(value) {
         this._authMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetAuthMethod = function () {
+    }
+    resetAuthMethod() {
         this._authMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "azureAd", {
-        get: function () {
-            return this._azureAd;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putAzureAd = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod.internalValue;
+    }
+    // azure_ad - computed: false, optional: true, required: false
+    _azureAd = new ZeroTrustAccessGroupExcludeAzureAdOutputReference(this, "azure_ad");
+    get azureAd() {
+        return this._azureAd;
+    }
+    putAzureAd(value) {
         this._azureAd.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetAzureAd = function () {
+    }
+    resetAzureAd() {
         this._azureAd.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "azureAdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._azureAd.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "certificate", {
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putCertificate = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get azureAdInput() {
+        return this._azureAd.internalValue;
+    }
+    // certificate - computed: false, optional: true, required: false
+    _certificate = new ZeroTrustAccessGroupExcludeCertificateOutputReference(this, "certificate");
+    get certificate() {
+        return this._certificate;
+    }
+    putCertificate(value) {
         this._certificate.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetCertificate = function () {
+    }
+    resetCertificate() {
         this._certificate.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "commonName", {
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putCommonName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate.internalValue;
+    }
+    // common_name - computed: false, optional: true, required: false
+    _commonName = new ZeroTrustAccessGroupExcludeCommonNameOutputReference(this, "common_name");
+    get commonName() {
+        return this._commonName;
+    }
+    putCommonName(value) {
         this._commonName.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetCommonName = function () {
+    }
+    resetCommonName() {
         this._commonName.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "devicePosture", {
-        get: function () {
-            return this._devicePosture;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putDevicePosture = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName.internalValue;
+    }
+    // device_posture - computed: false, optional: true, required: false
+    _devicePosture = new ZeroTrustAccessGroupExcludeDevicePostureOutputReference(this, "device_posture");
+    get devicePosture() {
+        return this._devicePosture;
+    }
+    putDevicePosture(value) {
         this._devicePosture.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetDevicePosture = function () {
+    }
+    resetDevicePosture() {
         this._devicePosture.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "devicePostureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._devicePosture.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putEmail = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get devicePostureInput() {
+        return this._devicePosture.internalValue;
+    }
+    // email - computed: false, optional: true, required: false
+    _email = new ZeroTrustAccessGroupExcludeEmailOutputReference(this, "email");
+    get email() {
+        return this._email;
+    }
+    putEmail(value) {
         this._email.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetEmail = function () {
+    }
+    resetEmail() {
         this._email.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "emailDomain", {
-        get: function () {
-            return this._emailDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putEmailDomain = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email.internalValue;
+    }
+    // email_domain - computed: false, optional: true, required: false
+    _emailDomain = new ZeroTrustAccessGroupExcludeEmailDomainOutputReference(this, "email_domain");
+    get emailDomain() {
+        return this._emailDomain;
+    }
+    putEmailDomain(value) {
         this._emailDomain.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetEmailDomain = function () {
+    }
+    resetEmailDomain() {
         this._emailDomain.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "emailDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailDomain.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "emailList", {
-        get: function () {
-            return this._emailList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putEmailList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailDomainInput() {
+        return this._emailDomain.internalValue;
+    }
+    // email_list - computed: false, optional: true, required: false
+    _emailList = new ZeroTrustAccessGroupExcludeEmailListStructOutputReference(this, "email_list");
+    get emailList() {
+        return this._emailList;
+    }
+    putEmailList(value) {
         this._emailList.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetEmailList = function () {
+    }
+    resetEmailList() {
         this._emailList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "emailListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "everyone", {
-        get: function () {
-            return this._everyone;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putEveryone = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailListInput() {
+        return this._emailList.internalValue;
+    }
+    // everyone - computed: false, optional: true, required: false
+    _everyone = new ZeroTrustAccessGroupExcludeEveryoneOutputReference(this, "everyone");
+    get everyone() {
+        return this._everyone;
+    }
+    putEveryone(value) {
         this._everyone.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetEveryone = function () {
+    }
+    resetEveryone() {
         this._everyone.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "everyoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._everyone.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "externalEvaluation", {
-        get: function () {
-            return this._externalEvaluation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putExternalEvaluation = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get everyoneInput() {
+        return this._everyone.internalValue;
+    }
+    // external_evaluation - computed: false, optional: true, required: false
+    _externalEvaluation = new ZeroTrustAccessGroupExcludeExternalEvaluationOutputReference(this, "external_evaluation");
+    get externalEvaluation() {
+        return this._externalEvaluation;
+    }
+    putExternalEvaluation(value) {
         this._externalEvaluation.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetExternalEvaluation = function () {
+    }
+    resetExternalEvaluation() {
         this._externalEvaluation.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "externalEvaluationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEvaluation.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "geo", {
-        get: function () {
-            return this._geo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putGeo = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEvaluationInput() {
+        return this._externalEvaluation.internalValue;
+    }
+    // geo - computed: false, optional: true, required: false
+    _geo = new ZeroTrustAccessGroupExcludeGeoOutputReference(this, "geo");
+    get geo() {
+        return this._geo;
+    }
+    putGeo(value) {
         this._geo.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetGeo = function () {
+    }
+    resetGeo() {
         this._geo.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "geoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._geo.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "githubOrganization", {
-        get: function () {
-            return this._githubOrganization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putGithubOrganization = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get geoInput() {
+        return this._geo.internalValue;
+    }
+    // github_organization - computed: false, optional: true, required: false
+    _githubOrganization = new ZeroTrustAccessGroupExcludeGithubOrganizationOutputReference(this, "github_organization");
+    get githubOrganization() {
+        return this._githubOrganization;
+    }
+    putGithubOrganization(value) {
         this._githubOrganization.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetGithubOrganization = function () {
+    }
+    resetGithubOrganization() {
         this._githubOrganization.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "githubOrganizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._githubOrganization.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "group", {
-        get: function () {
-            return this._group;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putGroup = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get githubOrganizationInput() {
+        return this._githubOrganization.internalValue;
+    }
+    // group - computed: false, optional: true, required: false
+    _group = new ZeroTrustAccessGroupExcludeGroupOutputReference(this, "group");
+    get group() {
+        return this._group;
+    }
+    putGroup(value) {
         this._group.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetGroup = function () {
+    }
+    resetGroup() {
         this._group.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "groupInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._group.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "gsuite", {
-        get: function () {
-            return this._gsuite;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putGsuite = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupInput() {
+        return this._group.internalValue;
+    }
+    // gsuite - computed: false, optional: true, required: false
+    _gsuite = new ZeroTrustAccessGroupExcludeGsuiteOutputReference(this, "gsuite");
+    get gsuite() {
+        return this._gsuite;
+    }
+    putGsuite(value) {
         this._gsuite.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetGsuite = function () {
+    }
+    resetGsuite() {
         this._gsuite.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "gsuiteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gsuite.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "ip", {
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putIp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gsuiteInput() {
+        return this._gsuite.internalValue;
+    }
+    // ip - computed: false, optional: true, required: false
+    _ip = new ZeroTrustAccessGroupExcludeIpOutputReference(this, "ip");
+    get ip() {
+        return this._ip;
+    }
+    putIp(value) {
         this._ip.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetIp = function () {
+    }
+    resetIp() {
         this._ip.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "ipList", {
-        get: function () {
-            return this._ipList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putIpList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip.internalValue;
+    }
+    // ip_list - computed: false, optional: true, required: false
+    _ipList = new ZeroTrustAccessGroupExcludeIpListStructOutputReference(this, "ip_list");
+    get ipList() {
+        return this._ipList;
+    }
+    putIpList(value) {
         this._ipList.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetIpList = function () {
+    }
+    resetIpList() {
         this._ipList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "ipListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "linkedAppToken", {
-        get: function () {
-            return this._linkedAppToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putLinkedAppToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipListInput() {
+        return this._ipList.internalValue;
+    }
+    // linked_app_token - computed: false, optional: true, required: false
+    _linkedAppToken = new ZeroTrustAccessGroupExcludeLinkedAppTokenOutputReference(this, "linked_app_token");
+    get linkedAppToken() {
+        return this._linkedAppToken;
+    }
+    putLinkedAppToken(value) {
         this._linkedAppToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetLinkedAppToken = function () {
+    }
+    resetLinkedAppToken() {
         this._linkedAppToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "linkedAppTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._linkedAppToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "loginMethod", {
-        get: function () {
-            return this._loginMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putLoginMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get linkedAppTokenInput() {
+        return this._linkedAppToken.internalValue;
+    }
+    // login_method - computed: false, optional: true, required: false
+    _loginMethod = new ZeroTrustAccessGroupExcludeLoginMethodOutputReference(this, "login_method");
+    get loginMethod() {
+        return this._loginMethod;
+    }
+    putLoginMethod(value) {
         this._loginMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetLoginMethod = function () {
+    }
+    resetLoginMethod() {
         this._loginMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "loginMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._loginMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "oidc", {
-        get: function () {
-            return this._oidc;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putOidc = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get loginMethodInput() {
+        return this._loginMethod.internalValue;
+    }
+    // oidc - computed: false, optional: true, required: false
+    _oidc = new ZeroTrustAccessGroupExcludeOidcOutputReference(this, "oidc");
+    get oidc() {
+        return this._oidc;
+    }
+    putOidc(value) {
         this._oidc.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetOidc = function () {
+    }
+    resetOidc() {
         this._oidc.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "oidcInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oidc.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "okta", {
-        get: function () {
-            return this._okta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putOkta = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oidcInput() {
+        return this._oidc.internalValue;
+    }
+    // okta - computed: false, optional: true, required: false
+    _okta = new ZeroTrustAccessGroupExcludeOktaOutputReference(this, "okta");
+    get okta() {
+        return this._okta;
+    }
+    putOkta(value) {
         this._okta.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetOkta = function () {
+    }
+    resetOkta() {
         this._okta.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "oktaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._okta.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "saml", {
-        get: function () {
-            return this._saml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putSaml = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oktaInput() {
+        return this._okta.internalValue;
+    }
+    // saml - computed: false, optional: true, required: false
+    _saml = new ZeroTrustAccessGroupExcludeSamlOutputReference(this, "saml");
+    get saml() {
+        return this._saml;
+    }
+    putSaml(value) {
         this._saml.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetSaml = function () {
+    }
+    resetSaml() {
         this._saml.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "samlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._saml.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "serviceToken", {
-        get: function () {
-            return this._serviceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putServiceToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get samlInput() {
+        return this._saml.internalValue;
+    }
+    // service_token - computed: false, optional: true, required: false
+    _serviceToken = new ZeroTrustAccessGroupExcludeServiceTokenOutputReference(this, "service_token");
+    get serviceToken() {
+        return this._serviceToken;
+    }
+    putServiceToken(value) {
         this._serviceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetServiceToken = function () {
+    }
+    resetServiceToken() {
         this._serviceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "serviceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.putUserRiskScore = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceTokenInput() {
+        return this._serviceToken.internalValue;
+    }
+    // user_risk_score - computed: false, optional: true, required: false
+    _userRiskScore = new ZeroTrustAccessGroupExcludeUserRiskScoreOutputReference(this, "user_risk_score");
+    get userRiskScore() {
+        return this._userRiskScore;
+    }
+    putUserRiskScore(value) {
         this._userRiskScore.internalValue = value;
-    };
-    ZeroTrustAccessGroupExcludeOutputReference.prototype.resetUserRiskScore = function () {
+    }
+    resetUserRiskScore() {
         this._userRiskScore.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupExcludeOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupExcludeOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupExcludeOutputReference = ZeroTrustAccessGroupExcludeOutputReference;
-var ZeroTrustAccessGroupExcludeList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupExcludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore.internalValue;
+    }
+}
+export class ZeroTrustAccessGroupExcludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupExcludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessGroupExcludeList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessGroupExcludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessGroupExcludeList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessGroupExcludeList = ZeroTrustAccessGroupExcludeList;
-function zeroTrustAccessGroupIncludeAnyValidServiceTokenToTerraform(struct) {
+    }
+}
+export function zeroTrustAccessGroupIncludeAnyValidServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3840,57 +3009,50 @@ function zeroTrustAccessGroupIncludeAnyValidServiceTokenToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupIncludeAnyValidServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeAnyValidServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference = ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference;
-function zeroTrustAccessGroupIncludeAuthContextToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupIncludeAuthContextToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3903,14 +3065,14 @@ function zeroTrustAccessGroupIncludeAuthContextToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupIncludeAuthContextToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeAuthContextToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ac_id: {
             value: cdktf.stringToHclTerraform(struct.acId),
             isBlock: false,
@@ -3931,124 +3093,96 @@ function zeroTrustAccessGroupIncludeAuthContextToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeAuthContextOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeAuthContextOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeAuthContextOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeAuthContextOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._acId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.acId = this._acId;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._acId = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._acId = value.acId;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "acId", {
-        get: function () {
-            return this.getStringAttribute('ac_id');
-        },
-        set: function (value) {
-            this._acId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "acIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._acId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthContextOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeAuthContextOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeAuthContextOutputReference = ZeroTrustAccessGroupIncludeAuthContextOutputReference;
-function zeroTrustAccessGroupIncludeAuthMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._acId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.acId = this._acId;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._acId = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._acId = value.acId;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // ac_id - computed: false, optional: false, required: true
+    _acId;
+    get acId() {
+        return this.getStringAttribute('ac_id');
+    }
+    set acId(value) {
+        this._acId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get acIdInput() {
+        return this._acId;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupIncludeAuthMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4059,14 +3193,14 @@ function zeroTrustAccessGroupIncludeAuthMethodToTerraform(struct) {
         auth_method: cdktf.stringToTerraform(struct.authMethod),
     };
 }
-function zeroTrustAccessGroupIncludeAuthMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeAuthMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         auth_method: {
             value: cdktf.stringToHclTerraform(struct.authMethod),
             isBlock: false,
@@ -4075,76 +3209,60 @@ function zeroTrustAccessGroupIncludeAuthMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeAuthMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeAuthMethodOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeAuthMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeAuthMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authMethod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = this._authMethod;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authMethod = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authMethod = value.authMethod;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthMethodOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this.getStringAttribute('auth_method');
-        },
-        set: function (value) {
-            this._authMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAuthMethodOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeAuthMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeAuthMethodOutputReference = ZeroTrustAccessGroupIncludeAuthMethodOutputReference;
-function zeroTrustAccessGroupIncludeAzureAdToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authMethod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authMethod = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authMethod = value.authMethod;
+        }
+    }
+    // auth_method - computed: false, optional: false, required: true
+    _authMethod;
+    get authMethod() {
+        return this.getStringAttribute('auth_method');
+    }
+    set authMethod(value) {
+        this._authMethod = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod;
+    }
+}
+export function zeroTrustAccessGroupIncludeAzureAdToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4156,14 +3274,14 @@ function zeroTrustAccessGroupIncludeAzureAdToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupIncludeAzureAdToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeAzureAdToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -4178,100 +3296,78 @@ function zeroTrustAccessGroupIncludeAzureAdToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeAzureAdOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeAzureAdOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeAzureAdOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeAzureAdOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAzureAdOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAzureAdOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAzureAdOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAzureAdOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeAzureAdOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeAzureAdOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeAzureAdOutputReference = ZeroTrustAccessGroupIncludeAzureAdOutputReference;
-function zeroTrustAccessGroupIncludeCertificateToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupIncludeCertificateToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4280,57 +3376,50 @@ function zeroTrustAccessGroupIncludeCertificateToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupIncludeCertificateToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeCertificateToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupIncludeCertificateOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeCertificateOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeCertificateOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeCertificateOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeCertificateOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeCertificateOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeCertificateOutputReference = ZeroTrustAccessGroupIncludeCertificateOutputReference;
-function zeroTrustAccessGroupIncludeCommonNameToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupIncludeCommonNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4341,14 +3430,14 @@ function zeroTrustAccessGroupIncludeCommonNameToTerraform(struct) {
         common_name: cdktf.stringToTerraform(struct.commonName),
     };
 }
-function zeroTrustAccessGroupIncludeCommonNameToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeCommonNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         common_name: {
             value: cdktf.stringToHclTerraform(struct.commonName),
             isBlock: false,
@@ -4357,76 +3446,60 @@ function zeroTrustAccessGroupIncludeCommonNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeCommonNameOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeCommonNameOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeCommonNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeCommonNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeCommonNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._commonName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = this._commonName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._commonName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._commonName = value.commonName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeCommonNameOutputReference.prototype, "commonName", {
-        get: function () {
-            return this.getStringAttribute('common_name');
-        },
-        set: function (value) {
-            this._commonName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeCommonNameOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeCommonNameOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeCommonNameOutputReference = ZeroTrustAccessGroupIncludeCommonNameOutputReference;
-function zeroTrustAccessGroupIncludeDevicePostureToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._commonName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._commonName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._commonName = value.commonName;
+        }
+    }
+    // common_name - computed: false, optional: false, required: true
+    _commonName;
+    get commonName() {
+        return this.getStringAttribute('common_name');
+    }
+    set commonName(value) {
+        this._commonName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName;
+    }
+}
+export function zeroTrustAccessGroupIncludeDevicePostureToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4437,14 +3510,14 @@ function zeroTrustAccessGroupIncludeDevicePostureToTerraform(struct) {
         integration_uid: cdktf.stringToTerraform(struct.integrationUid),
     };
 }
-function zeroTrustAccessGroupIncludeDevicePostureToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeDevicePostureToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         integration_uid: {
             value: cdktf.stringToHclTerraform(struct.integrationUid),
             isBlock: false,
@@ -4453,76 +3526,60 @@ function zeroTrustAccessGroupIncludeDevicePostureToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeDevicePostureOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeDevicePostureOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeDevicePostureOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeDevicePostureOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeDevicePostureOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._integrationUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.integrationUid = this._integrationUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._integrationUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._integrationUid = value.integrationUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeDevicePostureOutputReference.prototype, "integrationUid", {
-        get: function () {
-            return this.getStringAttribute('integration_uid');
-        },
-        set: function (value) {
-            this._integrationUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeDevicePostureOutputReference.prototype, "integrationUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._integrationUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeDevicePostureOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeDevicePostureOutputReference = ZeroTrustAccessGroupIncludeDevicePostureOutputReference;
-function zeroTrustAccessGroupIncludeEmailToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._integrationUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.integrationUid = this._integrationUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._integrationUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._integrationUid = value.integrationUid;
+        }
+    }
+    // integration_uid - computed: false, optional: false, required: true
+    _integrationUid;
+    get integrationUid() {
+        return this.getStringAttribute('integration_uid');
+    }
+    set integrationUid(value) {
+        this._integrationUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get integrationUidInput() {
+        return this._integrationUid;
+    }
+}
+export function zeroTrustAccessGroupIncludeEmailToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4533,14 +3590,14 @@ function zeroTrustAccessGroupIncludeEmailToTerraform(struct) {
         email: cdktf.stringToTerraform(struct.email),
     };
 }
-function zeroTrustAccessGroupIncludeEmailToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeEmailToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -4549,76 +3606,60 @@ function zeroTrustAccessGroupIncludeEmailToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeEmailOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeEmailOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeEmailOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeEmailOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeEmailOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeEmailOutputReference = ZeroTrustAccessGroupIncludeEmailOutputReference;
-function zeroTrustAccessGroupIncludeEmailDomainToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+}
+export function zeroTrustAccessGroupIncludeEmailDomainToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4629,14 +3670,14 @@ function zeroTrustAccessGroupIncludeEmailDomainToTerraform(struct) {
         domain: cdktf.stringToTerraform(struct.domain),
     };
 }
-function zeroTrustAccessGroupIncludeEmailDomainToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeEmailDomainToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         domain: {
             value: cdktf.stringToHclTerraform(struct.domain),
             isBlock: false,
@@ -4645,76 +3686,60 @@ function zeroTrustAccessGroupIncludeEmailDomainToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeEmailDomainOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeEmailDomainOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeEmailDomainOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeEmailDomainOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailDomainOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._domain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.domain = this._domain;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._domain = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._domain = value.domain;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailDomainOutputReference.prototype, "domain", {
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        set: function (value) {
-            this._domain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailDomainOutputReference.prototype, "domainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeEmailDomainOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeEmailDomainOutputReference = ZeroTrustAccessGroupIncludeEmailDomainOutputReference;
-function zeroTrustAccessGroupIncludeEmailListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._domain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.domain = this._domain;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._domain = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._domain = value.domain;
+        }
+    }
+    // domain - computed: false, optional: false, required: true
+    _domain;
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    set domain(value) {
+        this._domain = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainInput() {
+        return this._domain;
+    }
+}
+export function zeroTrustAccessGroupIncludeEmailListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4725,14 +3750,14 @@ function zeroTrustAccessGroupIncludeEmailListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupIncludeEmailListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeEmailListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -4741,76 +3766,60 @@ function zeroTrustAccessGroupIncludeEmailListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeEmailListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeEmailListStructOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeEmailListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeEmailListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEmailListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeEmailListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeEmailListStructOutputReference = ZeroTrustAccessGroupIncludeEmailListStructOutputReference;
-function zeroTrustAccessGroupIncludeEveryoneToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupIncludeEveryoneToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4819,57 +3828,50 @@ function zeroTrustAccessGroupIncludeEveryoneToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupIncludeEveryoneToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeEveryoneToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupIncludeEveryoneOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeEveryoneOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeEveryoneOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeEveryoneOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeEveryoneOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeEveryoneOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeEveryoneOutputReference = ZeroTrustAccessGroupIncludeEveryoneOutputReference;
-function zeroTrustAccessGroupIncludeExternalEvaluationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupIncludeExternalEvaluationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4881,14 +3883,14 @@ function zeroTrustAccessGroupIncludeExternalEvaluationToTerraform(struct) {
         keys_url: cdktf.stringToTerraform(struct.keysUrl),
     };
 }
-function zeroTrustAccessGroupIncludeExternalEvaluationToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeExternalEvaluationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         evaluate_url: {
             value: cdktf.stringToHclTerraform(struct.evaluateUrl),
             isBlock: false,
@@ -4903,100 +3905,78 @@ function zeroTrustAccessGroupIncludeExternalEvaluationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._evaluateUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.evaluateUrl = this._evaluateUrl;
-            }
-            if (this._keysUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keysUrl = this._keysUrl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = undefined;
-                this._keysUrl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = value.evaluateUrl;
-                this._keysUrl = value.keysUrl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference.prototype, "evaluateUrl", {
-        get: function () {
-            return this.getStringAttribute('evaluate_url');
-        },
-        set: function (value) {
-            this._evaluateUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference.prototype, "evaluateUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._evaluateUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference.prototype, "keysUrl", {
-        get: function () {
-            return this.getStringAttribute('keys_url');
-        },
-        set: function (value) {
-            this._keysUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference.prototype, "keysUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keysUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference = ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference;
-function zeroTrustAccessGroupIncludeGeoToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._evaluateUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.evaluateUrl = this._evaluateUrl;
+        }
+        if (this._keysUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keysUrl = this._keysUrl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = undefined;
+            this._keysUrl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = value.evaluateUrl;
+            this._keysUrl = value.keysUrl;
+        }
+    }
+    // evaluate_url - computed: false, optional: false, required: true
+    _evaluateUrl;
+    get evaluateUrl() {
+        return this.getStringAttribute('evaluate_url');
+    }
+    set evaluateUrl(value) {
+        this._evaluateUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get evaluateUrlInput() {
+        return this._evaluateUrl;
+    }
+    // keys_url - computed: false, optional: false, required: true
+    _keysUrl;
+    get keysUrl() {
+        return this.getStringAttribute('keys_url');
+    }
+    set keysUrl(value) {
+        this._keysUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keysUrlInput() {
+        return this._keysUrl;
+    }
+}
+export function zeroTrustAccessGroupIncludeGeoToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5007,14 +3987,14 @@ function zeroTrustAccessGroupIncludeGeoToTerraform(struct) {
         country_code: cdktf.stringToTerraform(struct.countryCode),
     };
 }
-function zeroTrustAccessGroupIncludeGeoToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeGeoToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         country_code: {
             value: cdktf.stringToHclTerraform(struct.countryCode),
             isBlock: false,
@@ -5023,76 +4003,60 @@ function zeroTrustAccessGroupIncludeGeoToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeGeoOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeGeoOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeGeoOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeGeoOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGeoOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._countryCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.countryCode = this._countryCode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._countryCode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._countryCode = value.countryCode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGeoOutputReference.prototype, "countryCode", {
-        get: function () {
-            return this.getStringAttribute('country_code');
-        },
-        set: function (value) {
-            this._countryCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGeoOutputReference.prototype, "countryCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._countryCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeGeoOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeGeoOutputReference = ZeroTrustAccessGroupIncludeGeoOutputReference;
-function zeroTrustAccessGroupIncludeGithubOrganizationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._countryCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.countryCode = this._countryCode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._countryCode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._countryCode = value.countryCode;
+        }
+    }
+    // country_code - computed: false, optional: false, required: true
+    _countryCode;
+    get countryCode() {
+        return this.getStringAttribute('country_code');
+    }
+    set countryCode(value) {
+        this._countryCode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get countryCodeInput() {
+        return this._countryCode;
+    }
+}
+export function zeroTrustAccessGroupIncludeGithubOrganizationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5105,14 +4069,14 @@ function zeroTrustAccessGroupIncludeGithubOrganizationToTerraform(struct) {
         team: cdktf.stringToTerraform(struct.team),
     };
 }
-function zeroTrustAccessGroupIncludeGithubOrganizationToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeGithubOrganizationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -5133,127 +4097,99 @@ function zeroTrustAccessGroupIncludeGithubOrganizationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._team !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.team = this._team;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-                this._team = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-                this._team = value.team;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "team", {
-        get: function () {
-            return this.getStringAttribute('team');
-        },
-        set: function (value) {
-            this._team = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype.resetTeam = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._team !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.team = this._team;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+            this._team = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+            this._team = value.team;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // team - computed: false, optional: true, required: false
+    _team;
+    get team() {
+        return this.getStringAttribute('team');
+    }
+    set team(value) {
+        this._team = value;
+    }
+    resetTeam() {
         this._team = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference.prototype, "teamInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._team;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference = ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference;
-function zeroTrustAccessGroupIncludeGroupToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamInput() {
+        return this._team;
+    }
+}
+export function zeroTrustAccessGroupIncludeGroupToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5264,14 +4200,14 @@ function zeroTrustAccessGroupIncludeGroupToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupIncludeGroupToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeGroupToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -5280,76 +4216,60 @@ function zeroTrustAccessGroupIncludeGroupToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeGroupOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeGroupOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeGroupOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeGroupOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGroupOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGroupOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGroupOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeGroupOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeGroupOutputReference = ZeroTrustAccessGroupIncludeGroupOutputReference;
-function zeroTrustAccessGroupIncludeGsuiteToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupIncludeGsuiteToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5361,14 +4281,14 @@ function zeroTrustAccessGroupIncludeGsuiteToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupIncludeGsuiteToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeGsuiteToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -5383,100 +4303,78 @@ function zeroTrustAccessGroupIncludeGsuiteToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeGsuiteOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeGsuiteOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeGsuiteOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeGsuiteOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGsuiteOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGsuiteOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGsuiteOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGsuiteOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeGsuiteOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeGsuiteOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeGsuiteOutputReference = ZeroTrustAccessGroupIncludeGsuiteOutputReference;
-function zeroTrustAccessGroupIncludeIpToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupIncludeIpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5487,14 +4385,14 @@ function zeroTrustAccessGroupIncludeIpToTerraform(struct) {
         ip: cdktf.stringToTerraform(struct.ip),
     };
 }
-function zeroTrustAccessGroupIncludeIpToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeIpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip: {
             value: cdktf.stringToHclTerraform(struct.ip),
             isBlock: false,
@@ -5503,76 +4401,60 @@ function zeroTrustAccessGroupIncludeIpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeIpOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeIpOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeIpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeIpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ip = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ip = value.ip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeIpOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeIpOutputReference = ZeroTrustAccessGroupIncludeIpOutputReference;
-function zeroTrustAccessGroupIncludeIpListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ip = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ip = value.ip;
+        }
+    }
+    // ip - computed: false, optional: false, required: true
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+}
+export function zeroTrustAccessGroupIncludeIpListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5583,14 +4465,14 @@ function zeroTrustAccessGroupIncludeIpListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupIncludeIpListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeIpListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -5599,76 +4481,60 @@ function zeroTrustAccessGroupIncludeIpListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeIpListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeIpListStructOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeIpListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeIpListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeIpListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeIpListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeIpListStructOutputReference = ZeroTrustAccessGroupIncludeIpListStructOutputReference;
-function zeroTrustAccessGroupIncludeLinkedAppTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupIncludeLinkedAppTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5679,14 +4545,14 @@ function zeroTrustAccessGroupIncludeLinkedAppTokenToTerraform(struct) {
         app_uid: cdktf.stringToTerraform(struct.appUid),
     };
 }
-function zeroTrustAccessGroupIncludeLinkedAppTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeLinkedAppTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         app_uid: {
             value: cdktf.stringToHclTerraform(struct.appUid),
             isBlock: false,
@@ -5695,76 +4561,60 @@ function zeroTrustAccessGroupIncludeLinkedAppTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._appUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.appUid = this._appUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._appUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._appUid = value.appUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference.prototype, "appUid", {
-        get: function () {
-            return this.getStringAttribute('app_uid');
-        },
-        set: function (value) {
-            this._appUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference.prototype, "appUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._appUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference = ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference;
-function zeroTrustAccessGroupIncludeLoginMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._appUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.appUid = this._appUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._appUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._appUid = value.appUid;
+        }
+    }
+    // app_uid - computed: false, optional: false, required: true
+    _appUid;
+    get appUid() {
+        return this.getStringAttribute('app_uid');
+    }
+    set appUid(value) {
+        this._appUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get appUidInput() {
+        return this._appUid;
+    }
+}
+export function zeroTrustAccessGroupIncludeLoginMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5775,14 +4625,14 @@ function zeroTrustAccessGroupIncludeLoginMethodToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupIncludeLoginMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeLoginMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -5791,76 +4641,60 @@ function zeroTrustAccessGroupIncludeLoginMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeLoginMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeLoginMethodOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeLoginMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeLoginMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLoginMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLoginMethodOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeLoginMethodOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeLoginMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeLoginMethodOutputReference = ZeroTrustAccessGroupIncludeLoginMethodOutputReference;
-function zeroTrustAccessGroupIncludeOidcToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupIncludeOidcToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5873,14 +4707,14 @@ function zeroTrustAccessGroupIncludeOidcToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupIncludeOidcToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeOidcToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         claim_name: {
             value: cdktf.stringToHclTerraform(struct.claimName),
             isBlock: false,
@@ -5901,124 +4735,96 @@ function zeroTrustAccessGroupIncludeOidcToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeOidcOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeOidcOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeOidcOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeOidcOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._claimName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimName = this._claimName;
-            }
-            if (this._claimValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimValue = this._claimValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._claimName = undefined;
-                this._claimValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._claimName = value.claimName;
-                this._claimValue = value.claimValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "claimName", {
-        get: function () {
-            return this.getStringAttribute('claim_name');
-        },
-        set: function (value) {
-            this._claimName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "claimNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "claimValue", {
-        get: function () {
-            return this.getStringAttribute('claim_value');
-        },
-        set: function (value) {
-            this._claimValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "claimValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOidcOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeOidcOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeOidcOutputReference = ZeroTrustAccessGroupIncludeOidcOutputReference;
-function zeroTrustAccessGroupIncludeOktaToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._claimName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimName = this._claimName;
+        }
+        if (this._claimValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimValue = this._claimValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._claimName = undefined;
+            this._claimValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._claimName = value.claimName;
+            this._claimValue = value.claimValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // claim_name - computed: false, optional: false, required: true
+    _claimName;
+    get claimName() {
+        return this.getStringAttribute('claim_name');
+    }
+    set claimName(value) {
+        this._claimName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimNameInput() {
+        return this._claimName;
+    }
+    // claim_value - computed: false, optional: false, required: true
+    _claimValue;
+    get claimValue() {
+        return this.getStringAttribute('claim_value');
+    }
+    set claimValue(value) {
+        this._claimValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimValueInput() {
+        return this._claimValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupIncludeOktaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6030,14 +4836,14 @@ function zeroTrustAccessGroupIncludeOktaToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function zeroTrustAccessGroupIncludeOktaToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeOktaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -6052,100 +4858,78 @@ function zeroTrustAccessGroupIncludeOktaToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeOktaOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeOktaOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeOktaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeOktaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOktaOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOktaOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOktaOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOktaOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOktaOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeOktaOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeOktaOutputReference = ZeroTrustAccessGroupIncludeOktaOutputReference;
-function zeroTrustAccessGroupIncludeSamlToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export function zeroTrustAccessGroupIncludeSamlToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6158,14 +4942,14 @@ function zeroTrustAccessGroupIncludeSamlToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupIncludeSamlToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeSamlToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         attribute_name: {
             value: cdktf.stringToHclTerraform(struct.attributeName),
             isBlock: false,
@@ -6186,124 +4970,96 @@ function zeroTrustAccessGroupIncludeSamlToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeSamlOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeSamlOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeSamlOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeSamlOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._attributeName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeName = this._attributeName;
-            }
-            if (this._attributeValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeValue = this._attributeValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._attributeName = undefined;
-                this._attributeValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._attributeName = value.attributeName;
-                this._attributeValue = value.attributeValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "attributeName", {
-        get: function () {
-            return this.getStringAttribute('attribute_name');
-        },
-        set: function (value) {
-            this._attributeName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "attributeNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "attributeValue", {
-        get: function () {
-            return this.getStringAttribute('attribute_value');
-        },
-        set: function (value) {
-            this._attributeValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "attributeValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeSamlOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeSamlOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeSamlOutputReference = ZeroTrustAccessGroupIncludeSamlOutputReference;
-function zeroTrustAccessGroupIncludeServiceTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._attributeName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeName = this._attributeName;
+        }
+        if (this._attributeValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeValue = this._attributeValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._attributeName = undefined;
+            this._attributeValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._attributeName = value.attributeName;
+            this._attributeValue = value.attributeValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // attribute_name - computed: false, optional: false, required: true
+    _attributeName;
+    get attributeName() {
+        return this.getStringAttribute('attribute_name');
+    }
+    set attributeName(value) {
+        this._attributeName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeNameInput() {
+        return this._attributeName;
+    }
+    // attribute_value - computed: false, optional: false, required: true
+    _attributeValue;
+    get attributeValue() {
+        return this.getStringAttribute('attribute_value');
+    }
+    set attributeValue(value) {
+        this._attributeValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeValueInput() {
+        return this._attributeValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupIncludeServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6314,14 +5070,14 @@ function zeroTrustAccessGroupIncludeServiceTokenToTerraform(struct) {
         token_id: cdktf.stringToTerraform(struct.tokenId),
     };
 }
-function zeroTrustAccessGroupIncludeServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         token_id: {
             value: cdktf.stringToHclTerraform(struct.tokenId),
             isBlock: false,
@@ -6330,76 +5086,60 @@ function zeroTrustAccessGroupIncludeServiceTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._tokenId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tokenId = this._tokenId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._tokenId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._tokenId = value.tokenId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeServiceTokenOutputReference.prototype, "tokenId", {
-        get: function () {
-            return this.getStringAttribute('token_id');
-        },
-        set: function (value) {
-            this._tokenId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeServiceTokenOutputReference.prototype, "tokenIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeServiceTokenOutputReference = ZeroTrustAccessGroupIncludeServiceTokenOutputReference;
-function zeroTrustAccessGroupIncludeUserRiskScoreToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._tokenId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tokenId = this._tokenId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._tokenId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._tokenId = value.tokenId;
+        }
+    }
+    // token_id - computed: false, optional: false, required: true
+    _tokenId;
+    get tokenId() {
+        return this.getStringAttribute('token_id');
+    }
+    set tokenId(value) {
+        this._tokenId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenIdInput() {
+        return this._tokenId;
+    }
+}
+export function zeroTrustAccessGroupIncludeUserRiskScoreToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6410,14 +5150,14 @@ function zeroTrustAccessGroupIncludeUserRiskScoreToTerraform(struct) {
         user_risk_score: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupIncludeUserRiskScoreToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeUserRiskScoreToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         user_risk_score: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.userRiskScore),
             isBlock: false,
@@ -6426,76 +5166,60 @@ function zeroTrustAccessGroupIncludeUserRiskScoreToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._userRiskScore !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = this._userRiskScore;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._userRiskScore = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._userRiskScore = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this.getListAttribute('user_risk_score');
-        },
-        set: function (value) {
-            this._userRiskScore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference = ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference;
-function zeroTrustAccessGroupIncludeToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._userRiskScore !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._userRiskScore = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._userRiskScore = value.userRiskScore;
+        }
+    }
+    // user_risk_score - computed: false, optional: false, required: true
+    _userRiskScore;
+    get userRiskScore() {
+        return this.getListAttribute('user_risk_score');
+    }
+    set userRiskScore(value) {
+        this._userRiskScore = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore;
+    }
+}
+export function zeroTrustAccessGroupIncludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6530,14 +5254,14 @@ function zeroTrustAccessGroupIncludeToTerraform(struct) {
         user_risk_score: zeroTrustAccessGroupIncludeUserRiskScoreToTerraform(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupIncludeToHclTerraform(struct) {
+export function zeroTrustAccessGroupIncludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         any_valid_service_token: {
             value: zeroTrustAccessGroupIncludeAnyValidServiceTokenToHclTerraform(struct.anyValidServiceToken),
             isBlock: true,
@@ -6690,803 +5414,592 @@ function zeroTrustAccessGroupIncludeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupIncludeOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeOutputReference, _super);
+export class ZeroTrustAccessGroupIncludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupIncludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // any_valid_service_token - computed: false, optional: true, required: false
-        _this._anyValidServiceToken = new ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference(_this, "any_valid_service_token");
-        // auth_context - computed: false, optional: true, required: false
-        _this._authContext = new ZeroTrustAccessGroupIncludeAuthContextOutputReference(_this, "auth_context");
-        // auth_method - computed: false, optional: true, required: false
-        _this._authMethod = new ZeroTrustAccessGroupIncludeAuthMethodOutputReference(_this, "auth_method");
-        // azure_ad - computed: false, optional: true, required: false
-        _this._azureAd = new ZeroTrustAccessGroupIncludeAzureAdOutputReference(_this, "azure_ad");
-        // certificate - computed: false, optional: true, required: false
-        _this._certificate = new ZeroTrustAccessGroupIncludeCertificateOutputReference(_this, "certificate");
-        // common_name - computed: false, optional: true, required: false
-        _this._commonName = new ZeroTrustAccessGroupIncludeCommonNameOutputReference(_this, "common_name");
-        // device_posture - computed: false, optional: true, required: false
-        _this._devicePosture = new ZeroTrustAccessGroupIncludeDevicePostureOutputReference(_this, "device_posture");
-        // email - computed: false, optional: true, required: false
-        _this._email = new ZeroTrustAccessGroupIncludeEmailOutputReference(_this, "email");
-        // email_domain - computed: false, optional: true, required: false
-        _this._emailDomain = new ZeroTrustAccessGroupIncludeEmailDomainOutputReference(_this, "email_domain");
-        // email_list - computed: false, optional: true, required: false
-        _this._emailList = new ZeroTrustAccessGroupIncludeEmailListStructOutputReference(_this, "email_list");
-        // everyone - computed: false, optional: true, required: false
-        _this._everyone = new ZeroTrustAccessGroupIncludeEveryoneOutputReference(_this, "everyone");
-        // external_evaluation - computed: false, optional: true, required: false
-        _this._externalEvaluation = new ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference(_this, "external_evaluation");
-        // geo - computed: false, optional: true, required: false
-        _this._geo = new ZeroTrustAccessGroupIncludeGeoOutputReference(_this, "geo");
-        // github_organization - computed: false, optional: true, required: false
-        _this._githubOrganization = new ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference(_this, "github_organization");
-        // group - computed: false, optional: true, required: false
-        _this._group = new ZeroTrustAccessGroupIncludeGroupOutputReference(_this, "group");
-        // gsuite - computed: false, optional: true, required: false
-        _this._gsuite = new ZeroTrustAccessGroupIncludeGsuiteOutputReference(_this, "gsuite");
-        // ip - computed: false, optional: true, required: false
-        _this._ip = new ZeroTrustAccessGroupIncludeIpOutputReference(_this, "ip");
-        // ip_list - computed: false, optional: true, required: false
-        _this._ipList = new ZeroTrustAccessGroupIncludeIpListStructOutputReference(_this, "ip_list");
-        // linked_app_token - computed: false, optional: true, required: false
-        _this._linkedAppToken = new ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference(_this, "linked_app_token");
-        // login_method - computed: false, optional: true, required: false
-        _this._loginMethod = new ZeroTrustAccessGroupIncludeLoginMethodOutputReference(_this, "login_method");
-        // oidc - computed: false, optional: true, required: false
-        _this._oidc = new ZeroTrustAccessGroupIncludeOidcOutputReference(_this, "oidc");
-        // okta - computed: false, optional: true, required: false
-        _this._okta = new ZeroTrustAccessGroupIncludeOktaOutputReference(_this, "okta");
-        // saml - computed: false, optional: true, required: false
-        _this._saml = new ZeroTrustAccessGroupIncludeSamlOutputReference(_this, "saml");
-        // service_token - computed: false, optional: true, required: false
-        _this._serviceToken = new ZeroTrustAccessGroupIncludeServiceTokenOutputReference(_this, "service_token");
-        // user_risk_score - computed: false, optional: true, required: false
-        _this._userRiskScore = new ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference(_this, "user_risk_score");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._anyValidServiceToken) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.anyValidServiceToken = (_b = this._anyValidServiceToken) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._authContext) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authContext = (_d = this._authContext) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._authMethod) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = (_f = this._authMethod) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._azureAd) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.azureAd = (_h = this._azureAd) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._certificate) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificate = (_k = this._certificate) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._commonName) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = (_m = this._commonName) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            if (((_o = this._devicePosture) === null || _o === void 0 ? void 0 : _o.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.devicePosture = (_p = this._devicePosture) === null || _p === void 0 ? void 0 : _p.internalValue;
-            }
-            if (((_q = this._email) === null || _q === void 0 ? void 0 : _q.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = (_r = this._email) === null || _r === void 0 ? void 0 : _r.internalValue;
-            }
-            if (((_s = this._emailDomain) === null || _s === void 0 ? void 0 : _s.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailDomain = (_t = this._emailDomain) === null || _t === void 0 ? void 0 : _t.internalValue;
-            }
-            if (((_u = this._emailList) === null || _u === void 0 ? void 0 : _u.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailList = (_v = this._emailList) === null || _v === void 0 ? void 0 : _v.internalValue;
-            }
-            if (((_w = this._everyone) === null || _w === void 0 ? void 0 : _w.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.everyone = (_x = this._everyone) === null || _x === void 0 ? void 0 : _x.internalValue;
-            }
-            if (((_y = this._externalEvaluation) === null || _y === void 0 ? void 0 : _y.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.externalEvaluation = (_z = this._externalEvaluation) === null || _z === void 0 ? void 0 : _z.internalValue;
-            }
-            if (((_0 = this._geo) === null || _0 === void 0 ? void 0 : _0.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.geo = (_1 = this._geo) === null || _1 === void 0 ? void 0 : _1.internalValue;
-            }
-            if (((_2 = this._githubOrganization) === null || _2 === void 0 ? void 0 : _2.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.githubOrganization = (_3 = this._githubOrganization) === null || _3 === void 0 ? void 0 : _3.internalValue;
-            }
-            if (((_4 = this._group) === null || _4 === void 0 ? void 0 : _4.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.group = (_5 = this._group) === null || _5 === void 0 ? void 0 : _5.internalValue;
-            }
-            if (((_6 = this._gsuite) === null || _6 === void 0 ? void 0 : _6.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gsuite = (_7 = this._gsuite) === null || _7 === void 0 ? void 0 : _7.internalValue;
-            }
-            if (((_8 = this._ip) === null || _8 === void 0 ? void 0 : _8.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = (_9 = this._ip) === null || _9 === void 0 ? void 0 : _9.internalValue;
-            }
-            if (((_10 = this._ipList) === null || _10 === void 0 ? void 0 : _10.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipList = (_11 = this._ipList) === null || _11 === void 0 ? void 0 : _11.internalValue;
-            }
-            if (((_12 = this._linkedAppToken) === null || _12 === void 0 ? void 0 : _12.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.linkedAppToken = (_13 = this._linkedAppToken) === null || _13 === void 0 ? void 0 : _13.internalValue;
-            }
-            if (((_14 = this._loginMethod) === null || _14 === void 0 ? void 0 : _14.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.loginMethod = (_15 = this._loginMethod) === null || _15 === void 0 ? void 0 : _15.internalValue;
-            }
-            if (((_16 = this._oidc) === null || _16 === void 0 ? void 0 : _16.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.oidc = (_17 = this._oidc) === null || _17 === void 0 ? void 0 : _17.internalValue;
-            }
-            if (((_18 = this._okta) === null || _18 === void 0 ? void 0 : _18.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.okta = (_19 = this._okta) === null || _19 === void 0 ? void 0 : _19.internalValue;
-            }
-            if (((_20 = this._saml) === null || _20 === void 0 ? void 0 : _20.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.saml = (_21 = this._saml) === null || _21 === void 0 ? void 0 : _21.internalValue;
-            }
-            if (((_22 = this._serviceToken) === null || _22 === void 0 ? void 0 : _22.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceToken = (_23 = this._serviceToken) === null || _23 === void 0 ? void 0 : _23.internalValue;
-            }
-            if (((_24 = this._userRiskScore) === null || _24 === void 0 ? void 0 : _24.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = (_25 = this._userRiskScore) === null || _25 === void 0 ? void 0 : _25.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = undefined;
-                this._authContext.internalValue = undefined;
-                this._authMethod.internalValue = undefined;
-                this._azureAd.internalValue = undefined;
-                this._certificate.internalValue = undefined;
-                this._commonName.internalValue = undefined;
-                this._devicePosture.internalValue = undefined;
-                this._email.internalValue = undefined;
-                this._emailDomain.internalValue = undefined;
-                this._emailList.internalValue = undefined;
-                this._everyone.internalValue = undefined;
-                this._externalEvaluation.internalValue = undefined;
-                this._geo.internalValue = undefined;
-                this._githubOrganization.internalValue = undefined;
-                this._group.internalValue = undefined;
-                this._gsuite.internalValue = undefined;
-                this._ip.internalValue = undefined;
-                this._ipList.internalValue = undefined;
-                this._linkedAppToken.internalValue = undefined;
-                this._loginMethod.internalValue = undefined;
-                this._oidc.internalValue = undefined;
-                this._okta.internalValue = undefined;
-                this._saml.internalValue = undefined;
-                this._serviceToken.internalValue = undefined;
-                this._userRiskScore.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
-                this._authContext.internalValue = value.authContext;
-                this._authMethod.internalValue = value.authMethod;
-                this._azureAd.internalValue = value.azureAd;
-                this._certificate.internalValue = value.certificate;
-                this._commonName.internalValue = value.commonName;
-                this._devicePosture.internalValue = value.devicePosture;
-                this._email.internalValue = value.email;
-                this._emailDomain.internalValue = value.emailDomain;
-                this._emailList.internalValue = value.emailList;
-                this._everyone.internalValue = value.everyone;
-                this._externalEvaluation.internalValue = value.externalEvaluation;
-                this._geo.internalValue = value.geo;
-                this._githubOrganization.internalValue = value.githubOrganization;
-                this._group.internalValue = value.group;
-                this._gsuite.internalValue = value.gsuite;
-                this._ip.internalValue = value.ip;
-                this._ipList.internalValue = value.ipList;
-                this._linkedAppToken.internalValue = value.linkedAppToken;
-                this._loginMethod.internalValue = value.loginMethod;
-                this._oidc.internalValue = value.oidc;
-                this._okta.internalValue = value.okta;
-                this._saml.internalValue = value.saml;
-                this._serviceToken.internalValue = value.serviceToken;
-                this._userRiskScore.internalValue = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "anyValidServiceToken", {
-        get: function () {
-            return this._anyValidServiceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putAnyValidServiceToken = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._anyValidServiceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.anyValidServiceToken = this._anyValidServiceToken?.internalValue;
+        }
+        if (this._authContext?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authContext = this._authContext?.internalValue;
+        }
+        if (this._authMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod?.internalValue;
+        }
+        if (this._azureAd?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.azureAd = this._azureAd?.internalValue;
+        }
+        if (this._certificate?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificate = this._certificate?.internalValue;
+        }
+        if (this._commonName?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName?.internalValue;
+        }
+        if (this._devicePosture?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.devicePosture = this._devicePosture?.internalValue;
+        }
+        if (this._email?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email?.internalValue;
+        }
+        if (this._emailDomain?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailDomain = this._emailDomain?.internalValue;
+        }
+        if (this._emailList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailList = this._emailList?.internalValue;
+        }
+        if (this._everyone?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.everyone = this._everyone?.internalValue;
+        }
+        if (this._externalEvaluation?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.externalEvaluation = this._externalEvaluation?.internalValue;
+        }
+        if (this._geo?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.geo = this._geo?.internalValue;
+        }
+        if (this._githubOrganization?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.githubOrganization = this._githubOrganization?.internalValue;
+        }
+        if (this._group?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.group = this._group?.internalValue;
+        }
+        if (this._gsuite?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gsuite = this._gsuite?.internalValue;
+        }
+        if (this._ip?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip?.internalValue;
+        }
+        if (this._ipList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipList = this._ipList?.internalValue;
+        }
+        if (this._linkedAppToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.linkedAppToken = this._linkedAppToken?.internalValue;
+        }
+        if (this._loginMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.loginMethod = this._loginMethod?.internalValue;
+        }
+        if (this._oidc?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.oidc = this._oidc?.internalValue;
+        }
+        if (this._okta?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.okta = this._okta?.internalValue;
+        }
+        if (this._saml?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.saml = this._saml?.internalValue;
+        }
+        if (this._serviceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceToken = this._serviceToken?.internalValue;
+        }
+        if (this._userRiskScore?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = undefined;
+            this._authContext.internalValue = undefined;
+            this._authMethod.internalValue = undefined;
+            this._azureAd.internalValue = undefined;
+            this._certificate.internalValue = undefined;
+            this._commonName.internalValue = undefined;
+            this._devicePosture.internalValue = undefined;
+            this._email.internalValue = undefined;
+            this._emailDomain.internalValue = undefined;
+            this._emailList.internalValue = undefined;
+            this._everyone.internalValue = undefined;
+            this._externalEvaluation.internalValue = undefined;
+            this._geo.internalValue = undefined;
+            this._githubOrganization.internalValue = undefined;
+            this._group.internalValue = undefined;
+            this._gsuite.internalValue = undefined;
+            this._ip.internalValue = undefined;
+            this._ipList.internalValue = undefined;
+            this._linkedAppToken.internalValue = undefined;
+            this._loginMethod.internalValue = undefined;
+            this._oidc.internalValue = undefined;
+            this._okta.internalValue = undefined;
+            this._saml.internalValue = undefined;
+            this._serviceToken.internalValue = undefined;
+            this._userRiskScore.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
+            this._authContext.internalValue = value.authContext;
+            this._authMethod.internalValue = value.authMethod;
+            this._azureAd.internalValue = value.azureAd;
+            this._certificate.internalValue = value.certificate;
+            this._commonName.internalValue = value.commonName;
+            this._devicePosture.internalValue = value.devicePosture;
+            this._email.internalValue = value.email;
+            this._emailDomain.internalValue = value.emailDomain;
+            this._emailList.internalValue = value.emailList;
+            this._everyone.internalValue = value.everyone;
+            this._externalEvaluation.internalValue = value.externalEvaluation;
+            this._geo.internalValue = value.geo;
+            this._githubOrganization.internalValue = value.githubOrganization;
+            this._group.internalValue = value.group;
+            this._gsuite.internalValue = value.gsuite;
+            this._ip.internalValue = value.ip;
+            this._ipList.internalValue = value.ipList;
+            this._linkedAppToken.internalValue = value.linkedAppToken;
+            this._loginMethod.internalValue = value.loginMethod;
+            this._oidc.internalValue = value.oidc;
+            this._okta.internalValue = value.okta;
+            this._saml.internalValue = value.saml;
+            this._serviceToken.internalValue = value.serviceToken;
+            this._userRiskScore.internalValue = value.userRiskScore;
+        }
+    }
+    // any_valid_service_token - computed: false, optional: true, required: false
+    _anyValidServiceToken = new ZeroTrustAccessGroupIncludeAnyValidServiceTokenOutputReference(this, "any_valid_service_token");
+    get anyValidServiceToken() {
+        return this._anyValidServiceToken;
+    }
+    putAnyValidServiceToken(value) {
         this._anyValidServiceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetAnyValidServiceToken = function () {
+    }
+    resetAnyValidServiceToken() {
         this._anyValidServiceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "anyValidServiceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._anyValidServiceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "authContext", {
-        get: function () {
-            return this._authContext;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putAuthContext = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get anyValidServiceTokenInput() {
+        return this._anyValidServiceToken.internalValue;
+    }
+    // auth_context - computed: false, optional: true, required: false
+    _authContext = new ZeroTrustAccessGroupIncludeAuthContextOutputReference(this, "auth_context");
+    get authContext() {
+        return this._authContext;
+    }
+    putAuthContext(value) {
         this._authContext.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetAuthContext = function () {
+    }
+    resetAuthContext() {
         this._authContext.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "authContextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authContext.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putAuthMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authContextInput() {
+        return this._authContext.internalValue;
+    }
+    // auth_method - computed: false, optional: true, required: false
+    _authMethod = new ZeroTrustAccessGroupIncludeAuthMethodOutputReference(this, "auth_method");
+    get authMethod() {
+        return this._authMethod;
+    }
+    putAuthMethod(value) {
         this._authMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetAuthMethod = function () {
+    }
+    resetAuthMethod() {
         this._authMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "azureAd", {
-        get: function () {
-            return this._azureAd;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putAzureAd = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod.internalValue;
+    }
+    // azure_ad - computed: false, optional: true, required: false
+    _azureAd = new ZeroTrustAccessGroupIncludeAzureAdOutputReference(this, "azure_ad");
+    get azureAd() {
+        return this._azureAd;
+    }
+    putAzureAd(value) {
         this._azureAd.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetAzureAd = function () {
+    }
+    resetAzureAd() {
         this._azureAd.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "azureAdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._azureAd.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "certificate", {
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putCertificate = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get azureAdInput() {
+        return this._azureAd.internalValue;
+    }
+    // certificate - computed: false, optional: true, required: false
+    _certificate = new ZeroTrustAccessGroupIncludeCertificateOutputReference(this, "certificate");
+    get certificate() {
+        return this._certificate;
+    }
+    putCertificate(value) {
         this._certificate.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetCertificate = function () {
+    }
+    resetCertificate() {
         this._certificate.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "commonName", {
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putCommonName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate.internalValue;
+    }
+    // common_name - computed: false, optional: true, required: false
+    _commonName = new ZeroTrustAccessGroupIncludeCommonNameOutputReference(this, "common_name");
+    get commonName() {
+        return this._commonName;
+    }
+    putCommonName(value) {
         this._commonName.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetCommonName = function () {
+    }
+    resetCommonName() {
         this._commonName.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "devicePosture", {
-        get: function () {
-            return this._devicePosture;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putDevicePosture = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName.internalValue;
+    }
+    // device_posture - computed: false, optional: true, required: false
+    _devicePosture = new ZeroTrustAccessGroupIncludeDevicePostureOutputReference(this, "device_posture");
+    get devicePosture() {
+        return this._devicePosture;
+    }
+    putDevicePosture(value) {
         this._devicePosture.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetDevicePosture = function () {
+    }
+    resetDevicePosture() {
         this._devicePosture.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "devicePostureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._devicePosture.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putEmail = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get devicePostureInput() {
+        return this._devicePosture.internalValue;
+    }
+    // email - computed: false, optional: true, required: false
+    _email = new ZeroTrustAccessGroupIncludeEmailOutputReference(this, "email");
+    get email() {
+        return this._email;
+    }
+    putEmail(value) {
         this._email.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetEmail = function () {
+    }
+    resetEmail() {
         this._email.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "emailDomain", {
-        get: function () {
-            return this._emailDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putEmailDomain = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email.internalValue;
+    }
+    // email_domain - computed: false, optional: true, required: false
+    _emailDomain = new ZeroTrustAccessGroupIncludeEmailDomainOutputReference(this, "email_domain");
+    get emailDomain() {
+        return this._emailDomain;
+    }
+    putEmailDomain(value) {
         this._emailDomain.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetEmailDomain = function () {
+    }
+    resetEmailDomain() {
         this._emailDomain.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "emailDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailDomain.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "emailList", {
-        get: function () {
-            return this._emailList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putEmailList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailDomainInput() {
+        return this._emailDomain.internalValue;
+    }
+    // email_list - computed: false, optional: true, required: false
+    _emailList = new ZeroTrustAccessGroupIncludeEmailListStructOutputReference(this, "email_list");
+    get emailList() {
+        return this._emailList;
+    }
+    putEmailList(value) {
         this._emailList.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetEmailList = function () {
+    }
+    resetEmailList() {
         this._emailList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "emailListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "everyone", {
-        get: function () {
-            return this._everyone;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putEveryone = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailListInput() {
+        return this._emailList.internalValue;
+    }
+    // everyone - computed: false, optional: true, required: false
+    _everyone = new ZeroTrustAccessGroupIncludeEveryoneOutputReference(this, "everyone");
+    get everyone() {
+        return this._everyone;
+    }
+    putEveryone(value) {
         this._everyone.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetEveryone = function () {
+    }
+    resetEveryone() {
         this._everyone.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "everyoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._everyone.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "externalEvaluation", {
-        get: function () {
-            return this._externalEvaluation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putExternalEvaluation = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get everyoneInput() {
+        return this._everyone.internalValue;
+    }
+    // external_evaluation - computed: false, optional: true, required: false
+    _externalEvaluation = new ZeroTrustAccessGroupIncludeExternalEvaluationOutputReference(this, "external_evaluation");
+    get externalEvaluation() {
+        return this._externalEvaluation;
+    }
+    putExternalEvaluation(value) {
         this._externalEvaluation.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetExternalEvaluation = function () {
+    }
+    resetExternalEvaluation() {
         this._externalEvaluation.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "externalEvaluationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEvaluation.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "geo", {
-        get: function () {
-            return this._geo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putGeo = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEvaluationInput() {
+        return this._externalEvaluation.internalValue;
+    }
+    // geo - computed: false, optional: true, required: false
+    _geo = new ZeroTrustAccessGroupIncludeGeoOutputReference(this, "geo");
+    get geo() {
+        return this._geo;
+    }
+    putGeo(value) {
         this._geo.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetGeo = function () {
+    }
+    resetGeo() {
         this._geo.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "geoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._geo.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "githubOrganization", {
-        get: function () {
-            return this._githubOrganization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putGithubOrganization = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get geoInput() {
+        return this._geo.internalValue;
+    }
+    // github_organization - computed: false, optional: true, required: false
+    _githubOrganization = new ZeroTrustAccessGroupIncludeGithubOrganizationOutputReference(this, "github_organization");
+    get githubOrganization() {
+        return this._githubOrganization;
+    }
+    putGithubOrganization(value) {
         this._githubOrganization.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetGithubOrganization = function () {
+    }
+    resetGithubOrganization() {
         this._githubOrganization.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "githubOrganizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._githubOrganization.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "group", {
-        get: function () {
-            return this._group;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putGroup = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get githubOrganizationInput() {
+        return this._githubOrganization.internalValue;
+    }
+    // group - computed: false, optional: true, required: false
+    _group = new ZeroTrustAccessGroupIncludeGroupOutputReference(this, "group");
+    get group() {
+        return this._group;
+    }
+    putGroup(value) {
         this._group.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetGroup = function () {
+    }
+    resetGroup() {
         this._group.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "groupInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._group.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "gsuite", {
-        get: function () {
-            return this._gsuite;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putGsuite = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupInput() {
+        return this._group.internalValue;
+    }
+    // gsuite - computed: false, optional: true, required: false
+    _gsuite = new ZeroTrustAccessGroupIncludeGsuiteOutputReference(this, "gsuite");
+    get gsuite() {
+        return this._gsuite;
+    }
+    putGsuite(value) {
         this._gsuite.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetGsuite = function () {
+    }
+    resetGsuite() {
         this._gsuite.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "gsuiteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gsuite.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "ip", {
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putIp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gsuiteInput() {
+        return this._gsuite.internalValue;
+    }
+    // ip - computed: false, optional: true, required: false
+    _ip = new ZeroTrustAccessGroupIncludeIpOutputReference(this, "ip");
+    get ip() {
+        return this._ip;
+    }
+    putIp(value) {
         this._ip.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetIp = function () {
+    }
+    resetIp() {
         this._ip.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "ipList", {
-        get: function () {
-            return this._ipList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putIpList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip.internalValue;
+    }
+    // ip_list - computed: false, optional: true, required: false
+    _ipList = new ZeroTrustAccessGroupIncludeIpListStructOutputReference(this, "ip_list");
+    get ipList() {
+        return this._ipList;
+    }
+    putIpList(value) {
         this._ipList.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetIpList = function () {
+    }
+    resetIpList() {
         this._ipList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "ipListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "linkedAppToken", {
-        get: function () {
-            return this._linkedAppToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putLinkedAppToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipListInput() {
+        return this._ipList.internalValue;
+    }
+    // linked_app_token - computed: false, optional: true, required: false
+    _linkedAppToken = new ZeroTrustAccessGroupIncludeLinkedAppTokenOutputReference(this, "linked_app_token");
+    get linkedAppToken() {
+        return this._linkedAppToken;
+    }
+    putLinkedAppToken(value) {
         this._linkedAppToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetLinkedAppToken = function () {
+    }
+    resetLinkedAppToken() {
         this._linkedAppToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "linkedAppTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._linkedAppToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "loginMethod", {
-        get: function () {
-            return this._loginMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putLoginMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get linkedAppTokenInput() {
+        return this._linkedAppToken.internalValue;
+    }
+    // login_method - computed: false, optional: true, required: false
+    _loginMethod = new ZeroTrustAccessGroupIncludeLoginMethodOutputReference(this, "login_method");
+    get loginMethod() {
+        return this._loginMethod;
+    }
+    putLoginMethod(value) {
         this._loginMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetLoginMethod = function () {
+    }
+    resetLoginMethod() {
         this._loginMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "loginMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._loginMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "oidc", {
-        get: function () {
-            return this._oidc;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putOidc = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get loginMethodInput() {
+        return this._loginMethod.internalValue;
+    }
+    // oidc - computed: false, optional: true, required: false
+    _oidc = new ZeroTrustAccessGroupIncludeOidcOutputReference(this, "oidc");
+    get oidc() {
+        return this._oidc;
+    }
+    putOidc(value) {
         this._oidc.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetOidc = function () {
+    }
+    resetOidc() {
         this._oidc.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "oidcInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oidc.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "okta", {
-        get: function () {
-            return this._okta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putOkta = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oidcInput() {
+        return this._oidc.internalValue;
+    }
+    // okta - computed: false, optional: true, required: false
+    _okta = new ZeroTrustAccessGroupIncludeOktaOutputReference(this, "okta");
+    get okta() {
+        return this._okta;
+    }
+    putOkta(value) {
         this._okta.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetOkta = function () {
+    }
+    resetOkta() {
         this._okta.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "oktaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._okta.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "saml", {
-        get: function () {
-            return this._saml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putSaml = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oktaInput() {
+        return this._okta.internalValue;
+    }
+    // saml - computed: false, optional: true, required: false
+    _saml = new ZeroTrustAccessGroupIncludeSamlOutputReference(this, "saml");
+    get saml() {
+        return this._saml;
+    }
+    putSaml(value) {
         this._saml.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetSaml = function () {
+    }
+    resetSaml() {
         this._saml.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "samlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._saml.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "serviceToken", {
-        get: function () {
-            return this._serviceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putServiceToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get samlInput() {
+        return this._saml.internalValue;
+    }
+    // service_token - computed: false, optional: true, required: false
+    _serviceToken = new ZeroTrustAccessGroupIncludeServiceTokenOutputReference(this, "service_token");
+    get serviceToken() {
+        return this._serviceToken;
+    }
+    putServiceToken(value) {
         this._serviceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetServiceToken = function () {
+    }
+    resetServiceToken() {
         this._serviceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "serviceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.putUserRiskScore = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceTokenInput() {
+        return this._serviceToken.internalValue;
+    }
+    // user_risk_score - computed: false, optional: true, required: false
+    _userRiskScore = new ZeroTrustAccessGroupIncludeUserRiskScoreOutputReference(this, "user_risk_score");
+    get userRiskScore() {
+        return this._userRiskScore;
+    }
+    putUserRiskScore(value) {
         this._userRiskScore.internalValue = value;
-    };
-    ZeroTrustAccessGroupIncludeOutputReference.prototype.resetUserRiskScore = function () {
+    }
+    resetUserRiskScore() {
         this._userRiskScore.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupIncludeOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupIncludeOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupIncludeOutputReference = ZeroTrustAccessGroupIncludeOutputReference;
-var ZeroTrustAccessGroupIncludeList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupIncludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore.internalValue;
+    }
+}
+export class ZeroTrustAccessGroupIncludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupIncludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessGroupIncludeList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessGroupIncludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessGroupIncludeList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessGroupIncludeList = ZeroTrustAccessGroupIncludeList;
-function zeroTrustAccessGroupRequireAnyValidServiceTokenToTerraform(struct) {
+    }
+}
+export function zeroTrustAccessGroupRequireAnyValidServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7495,57 +6008,50 @@ function zeroTrustAccessGroupRequireAnyValidServiceTokenToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupRequireAnyValidServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireAnyValidServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference = ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference;
-function zeroTrustAccessGroupRequireAuthContextToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupRequireAuthContextToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7558,14 +6064,14 @@ function zeroTrustAccessGroupRequireAuthContextToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupRequireAuthContextToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireAuthContextToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ac_id: {
             value: cdktf.stringToHclTerraform(struct.acId),
             isBlock: false,
@@ -7586,124 +6092,96 @@ function zeroTrustAccessGroupRequireAuthContextToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireAuthContextOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireAuthContextOutputReference, _super);
+export class ZeroTrustAccessGroupRequireAuthContextOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireAuthContextOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._acId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.acId = this._acId;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._acId = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._acId = value.acId;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "acId", {
-        get: function () {
-            return this.getStringAttribute('ac_id');
-        },
-        set: function (value) {
-            this._acId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "acIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._acId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthContextOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireAuthContextOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireAuthContextOutputReference = ZeroTrustAccessGroupRequireAuthContextOutputReference;
-function zeroTrustAccessGroupRequireAuthMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._acId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.acId = this._acId;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._acId = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._acId = value.acId;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // ac_id - computed: false, optional: false, required: true
+    _acId;
+    get acId() {
+        return this.getStringAttribute('ac_id');
+    }
+    set acId(value) {
+        this._acId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get acIdInput() {
+        return this._acId;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupRequireAuthMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7714,14 +6192,14 @@ function zeroTrustAccessGroupRequireAuthMethodToTerraform(struct) {
         auth_method: cdktf.stringToTerraform(struct.authMethod),
     };
 }
-function zeroTrustAccessGroupRequireAuthMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireAuthMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         auth_method: {
             value: cdktf.stringToHclTerraform(struct.authMethod),
             isBlock: false,
@@ -7730,76 +6208,60 @@ function zeroTrustAccessGroupRequireAuthMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireAuthMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireAuthMethodOutputReference, _super);
+export class ZeroTrustAccessGroupRequireAuthMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireAuthMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authMethod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = this._authMethod;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authMethod = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authMethod = value.authMethod;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthMethodOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this.getStringAttribute('auth_method');
-        },
-        set: function (value) {
-            this._authMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAuthMethodOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireAuthMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireAuthMethodOutputReference = ZeroTrustAccessGroupRequireAuthMethodOutputReference;
-function zeroTrustAccessGroupRequireAzureAdToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authMethod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authMethod = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authMethod = value.authMethod;
+        }
+    }
+    // auth_method - computed: false, optional: false, required: true
+    _authMethod;
+    get authMethod() {
+        return this.getStringAttribute('auth_method');
+    }
+    set authMethod(value) {
+        this._authMethod = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod;
+    }
+}
+export function zeroTrustAccessGroupRequireAzureAdToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7811,14 +6273,14 @@ function zeroTrustAccessGroupRequireAzureAdToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupRequireAzureAdToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireAzureAdToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -7833,100 +6295,78 @@ function zeroTrustAccessGroupRequireAzureAdToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireAzureAdOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireAzureAdOutputReference, _super);
+export class ZeroTrustAccessGroupRequireAzureAdOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireAzureAdOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireAzureAdOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAzureAdOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAzureAdOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAzureAdOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireAzureAdOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireAzureAdOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireAzureAdOutputReference = ZeroTrustAccessGroupRequireAzureAdOutputReference;
-function zeroTrustAccessGroupRequireCertificateToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupRequireCertificateToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7935,57 +6375,50 @@ function zeroTrustAccessGroupRequireCertificateToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupRequireCertificateToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireCertificateToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupRequireCertificateOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireCertificateOutputReference, _super);
+export class ZeroTrustAccessGroupRequireCertificateOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireCertificateOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireCertificateOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireCertificateOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireCertificateOutputReference = ZeroTrustAccessGroupRequireCertificateOutputReference;
-function zeroTrustAccessGroupRequireCommonNameToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupRequireCommonNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -7996,14 +6429,14 @@ function zeroTrustAccessGroupRequireCommonNameToTerraform(struct) {
         common_name: cdktf.stringToTerraform(struct.commonName),
     };
 }
-function zeroTrustAccessGroupRequireCommonNameToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireCommonNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         common_name: {
             value: cdktf.stringToHclTerraform(struct.commonName),
             isBlock: false,
@@ -8012,76 +6445,60 @@ function zeroTrustAccessGroupRequireCommonNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireCommonNameOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireCommonNameOutputReference, _super);
+export class ZeroTrustAccessGroupRequireCommonNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireCommonNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireCommonNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._commonName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = this._commonName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._commonName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._commonName = value.commonName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireCommonNameOutputReference.prototype, "commonName", {
-        get: function () {
-            return this.getStringAttribute('common_name');
-        },
-        set: function (value) {
-            this._commonName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireCommonNameOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireCommonNameOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireCommonNameOutputReference = ZeroTrustAccessGroupRequireCommonNameOutputReference;
-function zeroTrustAccessGroupRequireDevicePostureToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._commonName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._commonName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._commonName = value.commonName;
+        }
+    }
+    // common_name - computed: false, optional: false, required: true
+    _commonName;
+    get commonName() {
+        return this.getStringAttribute('common_name');
+    }
+    set commonName(value) {
+        this._commonName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName;
+    }
+}
+export function zeroTrustAccessGroupRequireDevicePostureToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8092,14 +6509,14 @@ function zeroTrustAccessGroupRequireDevicePostureToTerraform(struct) {
         integration_uid: cdktf.stringToTerraform(struct.integrationUid),
     };
 }
-function zeroTrustAccessGroupRequireDevicePostureToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireDevicePostureToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         integration_uid: {
             value: cdktf.stringToHclTerraform(struct.integrationUid),
             isBlock: false,
@@ -8108,76 +6525,60 @@ function zeroTrustAccessGroupRequireDevicePostureToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireDevicePostureOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireDevicePostureOutputReference, _super);
+export class ZeroTrustAccessGroupRequireDevicePostureOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireDevicePostureOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireDevicePostureOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._integrationUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.integrationUid = this._integrationUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._integrationUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._integrationUid = value.integrationUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireDevicePostureOutputReference.prototype, "integrationUid", {
-        get: function () {
-            return this.getStringAttribute('integration_uid');
-        },
-        set: function (value) {
-            this._integrationUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireDevicePostureOutputReference.prototype, "integrationUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._integrationUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireDevicePostureOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireDevicePostureOutputReference = ZeroTrustAccessGroupRequireDevicePostureOutputReference;
-function zeroTrustAccessGroupRequireEmailToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._integrationUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.integrationUid = this._integrationUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._integrationUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._integrationUid = value.integrationUid;
+        }
+    }
+    // integration_uid - computed: false, optional: false, required: true
+    _integrationUid;
+    get integrationUid() {
+        return this.getStringAttribute('integration_uid');
+    }
+    set integrationUid(value) {
+        this._integrationUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get integrationUidInput() {
+        return this._integrationUid;
+    }
+}
+export function zeroTrustAccessGroupRequireEmailToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8188,14 +6589,14 @@ function zeroTrustAccessGroupRequireEmailToTerraform(struct) {
         email: cdktf.stringToTerraform(struct.email),
     };
 }
-function zeroTrustAccessGroupRequireEmailToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireEmailToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -8204,76 +6605,60 @@ function zeroTrustAccessGroupRequireEmailToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireEmailOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireEmailOutputReference, _super);
+export class ZeroTrustAccessGroupRequireEmailOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireEmailOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireEmailOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireEmailOutputReference = ZeroTrustAccessGroupRequireEmailOutputReference;
-function zeroTrustAccessGroupRequireEmailDomainToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+}
+export function zeroTrustAccessGroupRequireEmailDomainToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8284,14 +6669,14 @@ function zeroTrustAccessGroupRequireEmailDomainToTerraform(struct) {
         domain: cdktf.stringToTerraform(struct.domain),
     };
 }
-function zeroTrustAccessGroupRequireEmailDomainToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireEmailDomainToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         domain: {
             value: cdktf.stringToHclTerraform(struct.domain),
             isBlock: false,
@@ -8300,76 +6685,60 @@ function zeroTrustAccessGroupRequireEmailDomainToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireEmailDomainOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireEmailDomainOutputReference, _super);
+export class ZeroTrustAccessGroupRequireEmailDomainOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireEmailDomainOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailDomainOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._domain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.domain = this._domain;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._domain = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._domain = value.domain;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailDomainOutputReference.prototype, "domain", {
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        set: function (value) {
-            this._domain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailDomainOutputReference.prototype, "domainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireEmailDomainOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireEmailDomainOutputReference = ZeroTrustAccessGroupRequireEmailDomainOutputReference;
-function zeroTrustAccessGroupRequireEmailListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._domain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.domain = this._domain;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._domain = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._domain = value.domain;
+        }
+    }
+    // domain - computed: false, optional: false, required: true
+    _domain;
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    set domain(value) {
+        this._domain = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainInput() {
+        return this._domain;
+    }
+}
+export function zeroTrustAccessGroupRequireEmailListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8380,14 +6749,14 @@ function zeroTrustAccessGroupRequireEmailListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupRequireEmailListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireEmailListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -8396,76 +6765,60 @@ function zeroTrustAccessGroupRequireEmailListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireEmailListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireEmailListStructOutputReference, _super);
+export class ZeroTrustAccessGroupRequireEmailListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireEmailListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireEmailListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireEmailListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireEmailListStructOutputReference = ZeroTrustAccessGroupRequireEmailListStructOutputReference;
-function zeroTrustAccessGroupRequireEveryoneToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupRequireEveryoneToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8474,57 +6827,50 @@ function zeroTrustAccessGroupRequireEveryoneToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustAccessGroupRequireEveryoneToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireEveryoneToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustAccessGroupRequireEveryoneOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireEveryoneOutputReference, _super);
+export class ZeroTrustAccessGroupRequireEveryoneOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireEveryoneOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireEveryoneOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireEveryoneOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireEveryoneOutputReference = ZeroTrustAccessGroupRequireEveryoneOutputReference;
-function zeroTrustAccessGroupRequireExternalEvaluationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+}
+export function zeroTrustAccessGroupRequireExternalEvaluationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8536,14 +6882,14 @@ function zeroTrustAccessGroupRequireExternalEvaluationToTerraform(struct) {
         keys_url: cdktf.stringToTerraform(struct.keysUrl),
     };
 }
-function zeroTrustAccessGroupRequireExternalEvaluationToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireExternalEvaluationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         evaluate_url: {
             value: cdktf.stringToHclTerraform(struct.evaluateUrl),
             isBlock: false,
@@ -8558,100 +6904,78 @@ function zeroTrustAccessGroupRequireExternalEvaluationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireExternalEvaluationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference, _super);
+export class ZeroTrustAccessGroupRequireExternalEvaluationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireExternalEvaluationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._evaluateUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.evaluateUrl = this._evaluateUrl;
-            }
-            if (this._keysUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keysUrl = this._keysUrl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = undefined;
-                this._keysUrl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._evaluateUrl = value.evaluateUrl;
-                this._keysUrl = value.keysUrl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference.prototype, "evaluateUrl", {
-        get: function () {
-            return this.getStringAttribute('evaluate_url');
-        },
-        set: function (value) {
-            this._evaluateUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference.prototype, "evaluateUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._evaluateUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference.prototype, "keysUrl", {
-        get: function () {
-            return this.getStringAttribute('keys_url');
-        },
-        set: function (value) {
-            this._keysUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireExternalEvaluationOutputReference.prototype, "keysUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keysUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireExternalEvaluationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireExternalEvaluationOutputReference = ZeroTrustAccessGroupRequireExternalEvaluationOutputReference;
-function zeroTrustAccessGroupRequireGeoToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._evaluateUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.evaluateUrl = this._evaluateUrl;
+        }
+        if (this._keysUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keysUrl = this._keysUrl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = undefined;
+            this._keysUrl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._evaluateUrl = value.evaluateUrl;
+            this._keysUrl = value.keysUrl;
+        }
+    }
+    // evaluate_url - computed: false, optional: false, required: true
+    _evaluateUrl;
+    get evaluateUrl() {
+        return this.getStringAttribute('evaluate_url');
+    }
+    set evaluateUrl(value) {
+        this._evaluateUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get evaluateUrlInput() {
+        return this._evaluateUrl;
+    }
+    // keys_url - computed: false, optional: false, required: true
+    _keysUrl;
+    get keysUrl() {
+        return this.getStringAttribute('keys_url');
+    }
+    set keysUrl(value) {
+        this._keysUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keysUrlInput() {
+        return this._keysUrl;
+    }
+}
+export function zeroTrustAccessGroupRequireGeoToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8662,14 +6986,14 @@ function zeroTrustAccessGroupRequireGeoToTerraform(struct) {
         country_code: cdktf.stringToTerraform(struct.countryCode),
     };
 }
-function zeroTrustAccessGroupRequireGeoToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireGeoToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         country_code: {
             value: cdktf.stringToHclTerraform(struct.countryCode),
             isBlock: false,
@@ -8678,76 +7002,60 @@ function zeroTrustAccessGroupRequireGeoToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireGeoOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireGeoOutputReference, _super);
+export class ZeroTrustAccessGroupRequireGeoOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireGeoOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireGeoOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._countryCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.countryCode = this._countryCode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._countryCode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._countryCode = value.countryCode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGeoOutputReference.prototype, "countryCode", {
-        get: function () {
-            return this.getStringAttribute('country_code');
-        },
-        set: function (value) {
-            this._countryCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGeoOutputReference.prototype, "countryCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._countryCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireGeoOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireGeoOutputReference = ZeroTrustAccessGroupRequireGeoOutputReference;
-function zeroTrustAccessGroupRequireGithubOrganizationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._countryCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.countryCode = this._countryCode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._countryCode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._countryCode = value.countryCode;
+        }
+    }
+    // country_code - computed: false, optional: false, required: true
+    _countryCode;
+    get countryCode() {
+        return this.getStringAttribute('country_code');
+    }
+    set countryCode(value) {
+        this._countryCode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get countryCodeInput() {
+        return this._countryCode;
+    }
+}
+export function zeroTrustAccessGroupRequireGithubOrganizationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8760,14 +7068,14 @@ function zeroTrustAccessGroupRequireGithubOrganizationToTerraform(struct) {
         team: cdktf.stringToTerraform(struct.team),
     };
 }
-function zeroTrustAccessGroupRequireGithubOrganizationToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireGithubOrganizationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -8788,127 +7096,99 @@ function zeroTrustAccessGroupRequireGithubOrganizationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireGithubOrganizationOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference, _super);
+export class ZeroTrustAccessGroupRequireGithubOrganizationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireGithubOrganizationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._team !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.team = this._team;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-                this._team = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-                this._team = value.team;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "team", {
-        get: function () {
-            return this.getStringAttribute('team');
-        },
-        set: function (value) {
-            this._team = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype.resetTeam = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._team !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.team = this._team;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+            this._team = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+            this._team = value.team;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // team - computed: false, optional: true, required: false
+    _team;
+    get team() {
+        return this.getStringAttribute('team');
+    }
+    set team(value) {
+        this._team = value;
+    }
+    resetTeam() {
         this._team = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireGithubOrganizationOutputReference.prototype, "teamInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._team;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireGithubOrganizationOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireGithubOrganizationOutputReference = ZeroTrustAccessGroupRequireGithubOrganizationOutputReference;
-function zeroTrustAccessGroupRequireGroupToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamInput() {
+        return this._team;
+    }
+}
+export function zeroTrustAccessGroupRequireGroupToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -8919,14 +7199,14 @@ function zeroTrustAccessGroupRequireGroupToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupRequireGroupToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireGroupToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -8935,76 +7215,60 @@ function zeroTrustAccessGroupRequireGroupToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireGroupOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireGroupOutputReference, _super);
+export class ZeroTrustAccessGroupRequireGroupOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireGroupOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireGroupOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGroupOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGroupOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireGroupOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireGroupOutputReference = ZeroTrustAccessGroupRequireGroupOutputReference;
-function zeroTrustAccessGroupRequireGsuiteToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupRequireGsuiteToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9016,14 +7280,14 @@ function zeroTrustAccessGroupRequireGsuiteToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupRequireGsuiteToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireGsuiteToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.stringToHclTerraform(struct.email),
             isBlock: false,
@@ -9038,100 +7302,78 @@ function zeroTrustAccessGroupRequireGsuiteToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireGsuiteOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireGsuiteOutputReference, _super);
+export class ZeroTrustAccessGroupRequireGsuiteOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireGsuiteOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireGsuiteOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._email !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = this._email;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email = value.email;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGsuiteOutputReference.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGsuiteOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGsuiteOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireGsuiteOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireGsuiteOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireGsuiteOutputReference = ZeroTrustAccessGroupRequireGsuiteOutputReference;
-function zeroTrustAccessGroupRequireIpToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email = value.email;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // email - computed: false, optional: false, required: true
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupRequireIpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9142,14 +7384,14 @@ function zeroTrustAccessGroupRequireIpToTerraform(struct) {
         ip: cdktf.stringToTerraform(struct.ip),
     };
 }
-function zeroTrustAccessGroupRequireIpToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireIpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip: {
             value: cdktf.stringToHclTerraform(struct.ip),
             isBlock: false,
@@ -9158,76 +7400,60 @@ function zeroTrustAccessGroupRequireIpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireIpOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireIpOutputReference, _super);
+export class ZeroTrustAccessGroupRequireIpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireIpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ip = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ip = value.ip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireIpOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireIpOutputReference = ZeroTrustAccessGroupRequireIpOutputReference;
-function zeroTrustAccessGroupRequireIpListStructToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ip = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ip = value.ip;
+        }
+    }
+    // ip - computed: false, optional: false, required: true
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+}
+export function zeroTrustAccessGroupRequireIpListStructToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9238,14 +7464,14 @@ function zeroTrustAccessGroupRequireIpListStructToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupRequireIpListStructToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireIpListStructToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -9254,76 +7480,60 @@ function zeroTrustAccessGroupRequireIpListStructToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireIpListStructOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireIpListStructOutputReference, _super);
+export class ZeroTrustAccessGroupRequireIpListStructOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireIpListStructOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpListStructOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpListStructOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireIpListStructOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireIpListStructOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireIpListStructOutputReference = ZeroTrustAccessGroupRequireIpListStructOutputReference;
-function zeroTrustAccessGroupRequireLinkedAppTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupRequireLinkedAppTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9334,14 +7544,14 @@ function zeroTrustAccessGroupRequireLinkedAppTokenToTerraform(struct) {
         app_uid: cdktf.stringToTerraform(struct.appUid),
     };
 }
-function zeroTrustAccessGroupRequireLinkedAppTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireLinkedAppTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         app_uid: {
             value: cdktf.stringToHclTerraform(struct.appUid),
             isBlock: false,
@@ -9350,76 +7560,60 @@ function zeroTrustAccessGroupRequireLinkedAppTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference, _super);
+export class ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._appUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.appUid = this._appUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._appUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._appUid = value.appUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference.prototype, "appUid", {
-        get: function () {
-            return this.getStringAttribute('app_uid');
-        },
-        set: function (value) {
-            this._appUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference.prototype, "appUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._appUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference = ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference;
-function zeroTrustAccessGroupRequireLoginMethodToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._appUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.appUid = this._appUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._appUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._appUid = value.appUid;
+        }
+    }
+    // app_uid - computed: false, optional: false, required: true
+    _appUid;
+    get appUid() {
+        return this.getStringAttribute('app_uid');
+    }
+    set appUid(value) {
+        this._appUid = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get appUidInput() {
+        return this._appUid;
+    }
+}
+export function zeroTrustAccessGroupRequireLoginMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9430,14 +7624,14 @@ function zeroTrustAccessGroupRequireLoginMethodToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustAccessGroupRequireLoginMethodToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireLoginMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -9446,76 +7640,60 @@ function zeroTrustAccessGroupRequireLoginMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireLoginMethodOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireLoginMethodOutputReference, _super);
+export class ZeroTrustAccessGroupRequireLoginMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireLoginMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireLoginMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireLoginMethodOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireLoginMethodOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireLoginMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireLoginMethodOutputReference = ZeroTrustAccessGroupRequireLoginMethodOutputReference;
-function zeroTrustAccessGroupRequireOidcToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zeroTrustAccessGroupRequireOidcToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9528,14 +7706,14 @@ function zeroTrustAccessGroupRequireOidcToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupRequireOidcToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireOidcToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         claim_name: {
             value: cdktf.stringToHclTerraform(struct.claimName),
             isBlock: false,
@@ -9556,124 +7734,96 @@ function zeroTrustAccessGroupRequireOidcToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireOidcOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireOidcOutputReference, _super);
+export class ZeroTrustAccessGroupRequireOidcOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireOidcOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._claimName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimName = this._claimName;
-            }
-            if (this._claimValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.claimValue = this._claimValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._claimName = undefined;
-                this._claimValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._claimName = value.claimName;
-                this._claimValue = value.claimValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "claimName", {
-        get: function () {
-            return this.getStringAttribute('claim_name');
-        },
-        set: function (value) {
-            this._claimName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "claimNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "claimValue", {
-        get: function () {
-            return this.getStringAttribute('claim_value');
-        },
-        set: function (value) {
-            this._claimValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "claimValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOidcOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireOidcOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireOidcOutputReference = ZeroTrustAccessGroupRequireOidcOutputReference;
-function zeroTrustAccessGroupRequireOktaToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._claimName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimName = this._claimName;
+        }
+        if (this._claimValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.claimValue = this._claimValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._claimName = undefined;
+            this._claimValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._claimName = value.claimName;
+            this._claimValue = value.claimValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // claim_name - computed: false, optional: false, required: true
+    _claimName;
+    get claimName() {
+        return this.getStringAttribute('claim_name');
+    }
+    set claimName(value) {
+        this._claimName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimNameInput() {
+        return this._claimName;
+    }
+    // claim_value - computed: false, optional: false, required: true
+    _claimValue;
+    get claimValue() {
+        return this.getStringAttribute('claim_value');
+    }
+    set claimValue(value) {
+        this._claimValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimValueInput() {
+        return this._claimValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupRequireOktaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9685,14 +7835,14 @@ function zeroTrustAccessGroupRequireOktaToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function zeroTrustAccessGroupRequireOktaToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireOktaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_provider_id: {
             value: cdktf.stringToHclTerraform(struct.identityProviderId),
             isBlock: false,
@@ -9707,100 +7857,78 @@ function zeroTrustAccessGroupRequireOktaToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireOktaOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireOktaOutputReference, _super);
+export class ZeroTrustAccessGroupRequireOktaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireOktaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireOktaOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._identityProviderId = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._identityProviderId = value.identityProviderId;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOktaOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOktaOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOktaOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOktaOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireOktaOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireOktaOutputReference = ZeroTrustAccessGroupRequireOktaOutputReference;
-function zeroTrustAccessGroupRequireSamlToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._identityProviderId = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._identityProviderId = value.identityProviderId;
+            this._name = value.name;
+        }
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export function zeroTrustAccessGroupRequireSamlToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9813,14 +7941,14 @@ function zeroTrustAccessGroupRequireSamlToTerraform(struct) {
         identity_provider_id: cdktf.stringToTerraform(struct.identityProviderId),
     };
 }
-function zeroTrustAccessGroupRequireSamlToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireSamlToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         attribute_name: {
             value: cdktf.stringToHclTerraform(struct.attributeName),
             isBlock: false,
@@ -9841,124 +7969,96 @@ function zeroTrustAccessGroupRequireSamlToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireSamlOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireSamlOutputReference, _super);
+export class ZeroTrustAccessGroupRequireSamlOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireSamlOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._attributeName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeName = this._attributeName;
-            }
-            if (this._attributeValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.attributeValue = this._attributeValue;
-            }
-            if (this._identityProviderId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityProviderId = this._identityProviderId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._attributeName = undefined;
-                this._attributeValue = undefined;
-                this._identityProviderId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._attributeName = value.attributeName;
-                this._attributeValue = value.attributeValue;
-                this._identityProviderId = value.identityProviderId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "attributeName", {
-        get: function () {
-            return this.getStringAttribute('attribute_name');
-        },
-        set: function (value) {
-            this._attributeName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "attributeNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "attributeValue", {
-        get: function () {
-            return this.getStringAttribute('attribute_value');
-        },
-        set: function (value) {
-            this._attributeValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "attributeValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attributeValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "identityProviderId", {
-        get: function () {
-            return this.getStringAttribute('identity_provider_id');
-        },
-        set: function (value) {
-            this._identityProviderId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireSamlOutputReference.prototype, "identityProviderIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityProviderId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireSamlOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireSamlOutputReference = ZeroTrustAccessGroupRequireSamlOutputReference;
-function zeroTrustAccessGroupRequireServiceTokenToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._attributeName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeName = this._attributeName;
+        }
+        if (this._attributeValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.attributeValue = this._attributeValue;
+        }
+        if (this._identityProviderId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityProviderId = this._identityProviderId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._attributeName = undefined;
+            this._attributeValue = undefined;
+            this._identityProviderId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._attributeName = value.attributeName;
+            this._attributeValue = value.attributeValue;
+            this._identityProviderId = value.identityProviderId;
+        }
+    }
+    // attribute_name - computed: false, optional: false, required: true
+    _attributeName;
+    get attributeName() {
+        return this.getStringAttribute('attribute_name');
+    }
+    set attributeName(value) {
+        this._attributeName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeNameInput() {
+        return this._attributeName;
+    }
+    // attribute_value - computed: false, optional: false, required: true
+    _attributeValue;
+    get attributeValue() {
+        return this.getStringAttribute('attribute_value');
+    }
+    set attributeValue(value) {
+        this._attributeValue = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get attributeValueInput() {
+        return this._attributeValue;
+    }
+    // identity_provider_id - computed: false, optional: false, required: true
+    _identityProviderId;
+    get identityProviderId() {
+        return this.getStringAttribute('identity_provider_id');
+    }
+    set identityProviderId(value) {
+        this._identityProviderId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityProviderIdInput() {
+        return this._identityProviderId;
+    }
+}
+export function zeroTrustAccessGroupRequireServiceTokenToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -9969,14 +8069,14 @@ function zeroTrustAccessGroupRequireServiceTokenToTerraform(struct) {
         token_id: cdktf.stringToTerraform(struct.tokenId),
     };
 }
-function zeroTrustAccessGroupRequireServiceTokenToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireServiceTokenToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         token_id: {
             value: cdktf.stringToHclTerraform(struct.tokenId),
             isBlock: false,
@@ -9985,76 +8085,60 @@ function zeroTrustAccessGroupRequireServiceTokenToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireServiceTokenOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireServiceTokenOutputReference, _super);
+export class ZeroTrustAccessGroupRequireServiceTokenOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireServiceTokenOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireServiceTokenOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._tokenId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tokenId = this._tokenId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._tokenId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._tokenId = value.tokenId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireServiceTokenOutputReference.prototype, "tokenId", {
-        get: function () {
-            return this.getStringAttribute('token_id');
-        },
-        set: function (value) {
-            this._tokenId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireServiceTokenOutputReference.prototype, "tokenIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireServiceTokenOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireServiceTokenOutputReference = ZeroTrustAccessGroupRequireServiceTokenOutputReference;
-function zeroTrustAccessGroupRequireUserRiskScoreToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._tokenId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tokenId = this._tokenId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._tokenId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._tokenId = value.tokenId;
+        }
+    }
+    // token_id - computed: false, optional: false, required: true
+    _tokenId;
+    get tokenId() {
+        return this.getStringAttribute('token_id');
+    }
+    set tokenId(value) {
+        this._tokenId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenIdInput() {
+        return this._tokenId;
+    }
+}
+export function zeroTrustAccessGroupRequireUserRiskScoreToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -10065,14 +8149,14 @@ function zeroTrustAccessGroupRequireUserRiskScoreToTerraform(struct) {
         user_risk_score: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupRequireUserRiskScoreToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireUserRiskScoreToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         user_risk_score: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.userRiskScore),
             isBlock: false,
@@ -10081,76 +8165,60 @@ function zeroTrustAccessGroupRequireUserRiskScoreToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireUserRiskScoreOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireUserRiskScoreOutputReference, _super);
+export class ZeroTrustAccessGroupRequireUserRiskScoreOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustAccessGroupRequireUserRiskScoreOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireUserRiskScoreOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._userRiskScore !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = this._userRiskScore;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._userRiskScore = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._userRiskScore = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireUserRiskScoreOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this.getListAttribute('user_risk_score');
-        },
-        set: function (value) {
-            this._userRiskScore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireUserRiskScoreOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireUserRiskScoreOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireUserRiskScoreOutputReference = ZeroTrustAccessGroupRequireUserRiskScoreOutputReference;
-function zeroTrustAccessGroupRequireToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._userRiskScore !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._userRiskScore = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._userRiskScore = value.userRiskScore;
+        }
+    }
+    // user_risk_score - computed: false, optional: false, required: true
+    _userRiskScore;
+    get userRiskScore() {
+        return this.getListAttribute('user_risk_score');
+    }
+    set userRiskScore(value) {
+        this._userRiskScore = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore;
+    }
+}
+export function zeroTrustAccessGroupRequireToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -10185,14 +8253,14 @@ function zeroTrustAccessGroupRequireToTerraform(struct) {
         user_risk_score: zeroTrustAccessGroupRequireUserRiskScoreToTerraform(struct.userRiskScore),
     };
 }
-function zeroTrustAccessGroupRequireToHclTerraform(struct) {
+export function zeroTrustAccessGroupRequireToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         any_valid_service_token: {
             value: zeroTrustAccessGroupRequireAnyValidServiceTokenToHclTerraform(struct.anyValidServiceToken),
             isBlock: true,
@@ -10345,807 +8413,612 @@ function zeroTrustAccessGroupRequireToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessGroupRequireOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireOutputReference, _super);
+export class ZeroTrustAccessGroupRequireOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupRequireOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // any_valid_service_token - computed: false, optional: true, required: false
-        _this._anyValidServiceToken = new ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference(_this, "any_valid_service_token");
-        // auth_context - computed: false, optional: true, required: false
-        _this._authContext = new ZeroTrustAccessGroupRequireAuthContextOutputReference(_this, "auth_context");
-        // auth_method - computed: false, optional: true, required: false
-        _this._authMethod = new ZeroTrustAccessGroupRequireAuthMethodOutputReference(_this, "auth_method");
-        // azure_ad - computed: false, optional: true, required: false
-        _this._azureAd = new ZeroTrustAccessGroupRequireAzureAdOutputReference(_this, "azure_ad");
-        // certificate - computed: false, optional: true, required: false
-        _this._certificate = new ZeroTrustAccessGroupRequireCertificateOutputReference(_this, "certificate");
-        // common_name - computed: false, optional: true, required: false
-        _this._commonName = new ZeroTrustAccessGroupRequireCommonNameOutputReference(_this, "common_name");
-        // device_posture - computed: false, optional: true, required: false
-        _this._devicePosture = new ZeroTrustAccessGroupRequireDevicePostureOutputReference(_this, "device_posture");
-        // email - computed: false, optional: true, required: false
-        _this._email = new ZeroTrustAccessGroupRequireEmailOutputReference(_this, "email");
-        // email_domain - computed: false, optional: true, required: false
-        _this._emailDomain = new ZeroTrustAccessGroupRequireEmailDomainOutputReference(_this, "email_domain");
-        // email_list - computed: false, optional: true, required: false
-        _this._emailList = new ZeroTrustAccessGroupRequireEmailListStructOutputReference(_this, "email_list");
-        // everyone - computed: false, optional: true, required: false
-        _this._everyone = new ZeroTrustAccessGroupRequireEveryoneOutputReference(_this, "everyone");
-        // external_evaluation - computed: false, optional: true, required: false
-        _this._externalEvaluation = new ZeroTrustAccessGroupRequireExternalEvaluationOutputReference(_this, "external_evaluation");
-        // geo - computed: false, optional: true, required: false
-        _this._geo = new ZeroTrustAccessGroupRequireGeoOutputReference(_this, "geo");
-        // github_organization - computed: false, optional: true, required: false
-        _this._githubOrganization = new ZeroTrustAccessGroupRequireGithubOrganizationOutputReference(_this, "github_organization");
-        // group - computed: false, optional: true, required: false
-        _this._group = new ZeroTrustAccessGroupRequireGroupOutputReference(_this, "group");
-        // gsuite - computed: false, optional: true, required: false
-        _this._gsuite = new ZeroTrustAccessGroupRequireGsuiteOutputReference(_this, "gsuite");
-        // ip - computed: false, optional: true, required: false
-        _this._ip = new ZeroTrustAccessGroupRequireIpOutputReference(_this, "ip");
-        // ip_list - computed: false, optional: true, required: false
-        _this._ipList = new ZeroTrustAccessGroupRequireIpListStructOutputReference(_this, "ip_list");
-        // linked_app_token - computed: false, optional: true, required: false
-        _this._linkedAppToken = new ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference(_this, "linked_app_token");
-        // login_method - computed: false, optional: true, required: false
-        _this._loginMethod = new ZeroTrustAccessGroupRequireLoginMethodOutputReference(_this, "login_method");
-        // oidc - computed: false, optional: true, required: false
-        _this._oidc = new ZeroTrustAccessGroupRequireOidcOutputReference(_this, "oidc");
-        // okta - computed: false, optional: true, required: false
-        _this._okta = new ZeroTrustAccessGroupRequireOktaOutputReference(_this, "okta");
-        // saml - computed: false, optional: true, required: false
-        _this._saml = new ZeroTrustAccessGroupRequireSamlOutputReference(_this, "saml");
-        // service_token - computed: false, optional: true, required: false
-        _this._serviceToken = new ZeroTrustAccessGroupRequireServiceTokenOutputReference(_this, "service_token");
-        // user_risk_score - computed: false, optional: true, required: false
-        _this._userRiskScore = new ZeroTrustAccessGroupRequireUserRiskScoreOutputReference(_this, "user_risk_score");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._anyValidServiceToken) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.anyValidServiceToken = (_b = this._anyValidServiceToken) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._authContext) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authContext = (_d = this._authContext) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._authMethod) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = (_f = this._authMethod) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._azureAd) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.azureAd = (_h = this._azureAd) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._certificate) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificate = (_k = this._certificate) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._commonName) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commonName = (_m = this._commonName) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            if (((_o = this._devicePosture) === null || _o === void 0 ? void 0 : _o.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.devicePosture = (_p = this._devicePosture) === null || _p === void 0 ? void 0 : _p.internalValue;
-            }
-            if (((_q = this._email) === null || _q === void 0 ? void 0 : _q.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = (_r = this._email) === null || _r === void 0 ? void 0 : _r.internalValue;
-            }
-            if (((_s = this._emailDomain) === null || _s === void 0 ? void 0 : _s.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailDomain = (_t = this._emailDomain) === null || _t === void 0 ? void 0 : _t.internalValue;
-            }
-            if (((_u = this._emailList) === null || _u === void 0 ? void 0 : _u.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailList = (_v = this._emailList) === null || _v === void 0 ? void 0 : _v.internalValue;
-            }
-            if (((_w = this._everyone) === null || _w === void 0 ? void 0 : _w.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.everyone = (_x = this._everyone) === null || _x === void 0 ? void 0 : _x.internalValue;
-            }
-            if (((_y = this._externalEvaluation) === null || _y === void 0 ? void 0 : _y.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.externalEvaluation = (_z = this._externalEvaluation) === null || _z === void 0 ? void 0 : _z.internalValue;
-            }
-            if (((_0 = this._geo) === null || _0 === void 0 ? void 0 : _0.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.geo = (_1 = this._geo) === null || _1 === void 0 ? void 0 : _1.internalValue;
-            }
-            if (((_2 = this._githubOrganization) === null || _2 === void 0 ? void 0 : _2.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.githubOrganization = (_3 = this._githubOrganization) === null || _3 === void 0 ? void 0 : _3.internalValue;
-            }
-            if (((_4 = this._group) === null || _4 === void 0 ? void 0 : _4.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.group = (_5 = this._group) === null || _5 === void 0 ? void 0 : _5.internalValue;
-            }
-            if (((_6 = this._gsuite) === null || _6 === void 0 ? void 0 : _6.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gsuite = (_7 = this._gsuite) === null || _7 === void 0 ? void 0 : _7.internalValue;
-            }
-            if (((_8 = this._ip) === null || _8 === void 0 ? void 0 : _8.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = (_9 = this._ip) === null || _9 === void 0 ? void 0 : _9.internalValue;
-            }
-            if (((_10 = this._ipList) === null || _10 === void 0 ? void 0 : _10.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipList = (_11 = this._ipList) === null || _11 === void 0 ? void 0 : _11.internalValue;
-            }
-            if (((_12 = this._linkedAppToken) === null || _12 === void 0 ? void 0 : _12.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.linkedAppToken = (_13 = this._linkedAppToken) === null || _13 === void 0 ? void 0 : _13.internalValue;
-            }
-            if (((_14 = this._loginMethod) === null || _14 === void 0 ? void 0 : _14.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.loginMethod = (_15 = this._loginMethod) === null || _15 === void 0 ? void 0 : _15.internalValue;
-            }
-            if (((_16 = this._oidc) === null || _16 === void 0 ? void 0 : _16.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.oidc = (_17 = this._oidc) === null || _17 === void 0 ? void 0 : _17.internalValue;
-            }
-            if (((_18 = this._okta) === null || _18 === void 0 ? void 0 : _18.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.okta = (_19 = this._okta) === null || _19 === void 0 ? void 0 : _19.internalValue;
-            }
-            if (((_20 = this._saml) === null || _20 === void 0 ? void 0 : _20.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.saml = (_21 = this._saml) === null || _21 === void 0 ? void 0 : _21.internalValue;
-            }
-            if (((_22 = this._serviceToken) === null || _22 === void 0 ? void 0 : _22.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceToken = (_23 = this._serviceToken) === null || _23 === void 0 ? void 0 : _23.internalValue;
-            }
-            if (((_24 = this._userRiskScore) === null || _24 === void 0 ? void 0 : _24.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userRiskScore = (_25 = this._userRiskScore) === null || _25 === void 0 ? void 0 : _25.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = undefined;
-                this._authContext.internalValue = undefined;
-                this._authMethod.internalValue = undefined;
-                this._azureAd.internalValue = undefined;
-                this._certificate.internalValue = undefined;
-                this._commonName.internalValue = undefined;
-                this._devicePosture.internalValue = undefined;
-                this._email.internalValue = undefined;
-                this._emailDomain.internalValue = undefined;
-                this._emailList.internalValue = undefined;
-                this._everyone.internalValue = undefined;
-                this._externalEvaluation.internalValue = undefined;
-                this._geo.internalValue = undefined;
-                this._githubOrganization.internalValue = undefined;
-                this._group.internalValue = undefined;
-                this._gsuite.internalValue = undefined;
-                this._ip.internalValue = undefined;
-                this._ipList.internalValue = undefined;
-                this._linkedAppToken.internalValue = undefined;
-                this._loginMethod.internalValue = undefined;
-                this._oidc.internalValue = undefined;
-                this._okta.internalValue = undefined;
-                this._saml.internalValue = undefined;
-                this._serviceToken.internalValue = undefined;
-                this._userRiskScore.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
-                this._authContext.internalValue = value.authContext;
-                this._authMethod.internalValue = value.authMethod;
-                this._azureAd.internalValue = value.azureAd;
-                this._certificate.internalValue = value.certificate;
-                this._commonName.internalValue = value.commonName;
-                this._devicePosture.internalValue = value.devicePosture;
-                this._email.internalValue = value.email;
-                this._emailDomain.internalValue = value.emailDomain;
-                this._emailList.internalValue = value.emailList;
-                this._everyone.internalValue = value.everyone;
-                this._externalEvaluation.internalValue = value.externalEvaluation;
-                this._geo.internalValue = value.geo;
-                this._githubOrganization.internalValue = value.githubOrganization;
-                this._group.internalValue = value.group;
-                this._gsuite.internalValue = value.gsuite;
-                this._ip.internalValue = value.ip;
-                this._ipList.internalValue = value.ipList;
-                this._linkedAppToken.internalValue = value.linkedAppToken;
-                this._loginMethod.internalValue = value.loginMethod;
-                this._oidc.internalValue = value.oidc;
-                this._okta.internalValue = value.okta;
-                this._saml.internalValue = value.saml;
-                this._serviceToken.internalValue = value.serviceToken;
-                this._userRiskScore.internalValue = value.userRiskScore;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "anyValidServiceToken", {
-        get: function () {
-            return this._anyValidServiceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putAnyValidServiceToken = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._anyValidServiceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.anyValidServiceToken = this._anyValidServiceToken?.internalValue;
+        }
+        if (this._authContext?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authContext = this._authContext?.internalValue;
+        }
+        if (this._authMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod?.internalValue;
+        }
+        if (this._azureAd?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.azureAd = this._azureAd?.internalValue;
+        }
+        if (this._certificate?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificate = this._certificate?.internalValue;
+        }
+        if (this._commonName?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commonName = this._commonName?.internalValue;
+        }
+        if (this._devicePosture?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.devicePosture = this._devicePosture?.internalValue;
+        }
+        if (this._email?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email?.internalValue;
+        }
+        if (this._emailDomain?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailDomain = this._emailDomain?.internalValue;
+        }
+        if (this._emailList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailList = this._emailList?.internalValue;
+        }
+        if (this._everyone?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.everyone = this._everyone?.internalValue;
+        }
+        if (this._externalEvaluation?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.externalEvaluation = this._externalEvaluation?.internalValue;
+        }
+        if (this._geo?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.geo = this._geo?.internalValue;
+        }
+        if (this._githubOrganization?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.githubOrganization = this._githubOrganization?.internalValue;
+        }
+        if (this._group?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.group = this._group?.internalValue;
+        }
+        if (this._gsuite?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gsuite = this._gsuite?.internalValue;
+        }
+        if (this._ip?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip?.internalValue;
+        }
+        if (this._ipList?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipList = this._ipList?.internalValue;
+        }
+        if (this._linkedAppToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.linkedAppToken = this._linkedAppToken?.internalValue;
+        }
+        if (this._loginMethod?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.loginMethod = this._loginMethod?.internalValue;
+        }
+        if (this._oidc?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.oidc = this._oidc?.internalValue;
+        }
+        if (this._okta?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.okta = this._okta?.internalValue;
+        }
+        if (this._saml?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.saml = this._saml?.internalValue;
+        }
+        if (this._serviceToken?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceToken = this._serviceToken?.internalValue;
+        }
+        if (this._userRiskScore?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userRiskScore = this._userRiskScore?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = undefined;
+            this._authContext.internalValue = undefined;
+            this._authMethod.internalValue = undefined;
+            this._azureAd.internalValue = undefined;
+            this._certificate.internalValue = undefined;
+            this._commonName.internalValue = undefined;
+            this._devicePosture.internalValue = undefined;
+            this._email.internalValue = undefined;
+            this._emailDomain.internalValue = undefined;
+            this._emailList.internalValue = undefined;
+            this._everyone.internalValue = undefined;
+            this._externalEvaluation.internalValue = undefined;
+            this._geo.internalValue = undefined;
+            this._githubOrganization.internalValue = undefined;
+            this._group.internalValue = undefined;
+            this._gsuite.internalValue = undefined;
+            this._ip.internalValue = undefined;
+            this._ipList.internalValue = undefined;
+            this._linkedAppToken.internalValue = undefined;
+            this._loginMethod.internalValue = undefined;
+            this._oidc.internalValue = undefined;
+            this._okta.internalValue = undefined;
+            this._saml.internalValue = undefined;
+            this._serviceToken.internalValue = undefined;
+            this._userRiskScore.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._anyValidServiceToken.internalValue = value.anyValidServiceToken;
+            this._authContext.internalValue = value.authContext;
+            this._authMethod.internalValue = value.authMethod;
+            this._azureAd.internalValue = value.azureAd;
+            this._certificate.internalValue = value.certificate;
+            this._commonName.internalValue = value.commonName;
+            this._devicePosture.internalValue = value.devicePosture;
+            this._email.internalValue = value.email;
+            this._emailDomain.internalValue = value.emailDomain;
+            this._emailList.internalValue = value.emailList;
+            this._everyone.internalValue = value.everyone;
+            this._externalEvaluation.internalValue = value.externalEvaluation;
+            this._geo.internalValue = value.geo;
+            this._githubOrganization.internalValue = value.githubOrganization;
+            this._group.internalValue = value.group;
+            this._gsuite.internalValue = value.gsuite;
+            this._ip.internalValue = value.ip;
+            this._ipList.internalValue = value.ipList;
+            this._linkedAppToken.internalValue = value.linkedAppToken;
+            this._loginMethod.internalValue = value.loginMethod;
+            this._oidc.internalValue = value.oidc;
+            this._okta.internalValue = value.okta;
+            this._saml.internalValue = value.saml;
+            this._serviceToken.internalValue = value.serviceToken;
+            this._userRiskScore.internalValue = value.userRiskScore;
+        }
+    }
+    // any_valid_service_token - computed: false, optional: true, required: false
+    _anyValidServiceToken = new ZeroTrustAccessGroupRequireAnyValidServiceTokenOutputReference(this, "any_valid_service_token");
+    get anyValidServiceToken() {
+        return this._anyValidServiceToken;
+    }
+    putAnyValidServiceToken(value) {
         this._anyValidServiceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetAnyValidServiceToken = function () {
+    }
+    resetAnyValidServiceToken() {
         this._anyValidServiceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "anyValidServiceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._anyValidServiceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "authContext", {
-        get: function () {
-            return this._authContext;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putAuthContext = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get anyValidServiceTokenInput() {
+        return this._anyValidServiceToken.internalValue;
+    }
+    // auth_context - computed: false, optional: true, required: false
+    _authContext = new ZeroTrustAccessGroupRequireAuthContextOutputReference(this, "auth_context");
+    get authContext() {
+        return this._authContext;
+    }
+    putAuthContext(value) {
         this._authContext.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetAuthContext = function () {
+    }
+    resetAuthContext() {
         this._authContext.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "authContextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authContext.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putAuthMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authContextInput() {
+        return this._authContext.internalValue;
+    }
+    // auth_method - computed: false, optional: true, required: false
+    _authMethod = new ZeroTrustAccessGroupRequireAuthMethodOutputReference(this, "auth_method");
+    get authMethod() {
+        return this._authMethod;
+    }
+    putAuthMethod(value) {
         this._authMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetAuthMethod = function () {
+    }
+    resetAuthMethod() {
         this._authMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "azureAd", {
-        get: function () {
-            return this._azureAd;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putAzureAd = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod.internalValue;
+    }
+    // azure_ad - computed: false, optional: true, required: false
+    _azureAd = new ZeroTrustAccessGroupRequireAzureAdOutputReference(this, "azure_ad");
+    get azureAd() {
+        return this._azureAd;
+    }
+    putAzureAd(value) {
         this._azureAd.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetAzureAd = function () {
+    }
+    resetAzureAd() {
         this._azureAd.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "azureAdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._azureAd.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "certificate", {
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putCertificate = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get azureAdInput() {
+        return this._azureAd.internalValue;
+    }
+    // certificate - computed: false, optional: true, required: false
+    _certificate = new ZeroTrustAccessGroupRequireCertificateOutputReference(this, "certificate");
+    get certificate() {
+        return this._certificate;
+    }
+    putCertificate(value) {
         this._certificate.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetCertificate = function () {
+    }
+    resetCertificate() {
         this._certificate.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "commonName", {
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putCommonName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate.internalValue;
+    }
+    // common_name - computed: false, optional: true, required: false
+    _commonName = new ZeroTrustAccessGroupRequireCommonNameOutputReference(this, "common_name");
+    get commonName() {
+        return this._commonName;
+    }
+    putCommonName(value) {
         this._commonName.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetCommonName = function () {
+    }
+    resetCommonName() {
         this._commonName.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "devicePosture", {
-        get: function () {
-            return this._devicePosture;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putDevicePosture = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName.internalValue;
+    }
+    // device_posture - computed: false, optional: true, required: false
+    _devicePosture = new ZeroTrustAccessGroupRequireDevicePostureOutputReference(this, "device_posture");
+    get devicePosture() {
+        return this._devicePosture;
+    }
+    putDevicePosture(value) {
         this._devicePosture.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetDevicePosture = function () {
+    }
+    resetDevicePosture() {
         this._devicePosture.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "devicePostureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._devicePosture.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putEmail = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get devicePostureInput() {
+        return this._devicePosture.internalValue;
+    }
+    // email - computed: false, optional: true, required: false
+    _email = new ZeroTrustAccessGroupRequireEmailOutputReference(this, "email");
+    get email() {
+        return this._email;
+    }
+    putEmail(value) {
         this._email.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetEmail = function () {
+    }
+    resetEmail() {
         this._email.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "emailDomain", {
-        get: function () {
-            return this._emailDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putEmailDomain = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email.internalValue;
+    }
+    // email_domain - computed: false, optional: true, required: false
+    _emailDomain = new ZeroTrustAccessGroupRequireEmailDomainOutputReference(this, "email_domain");
+    get emailDomain() {
+        return this._emailDomain;
+    }
+    putEmailDomain(value) {
         this._emailDomain.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetEmailDomain = function () {
+    }
+    resetEmailDomain() {
         this._emailDomain.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "emailDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailDomain.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "emailList", {
-        get: function () {
-            return this._emailList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putEmailList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailDomainInput() {
+        return this._emailDomain.internalValue;
+    }
+    // email_list - computed: false, optional: true, required: false
+    _emailList = new ZeroTrustAccessGroupRequireEmailListStructOutputReference(this, "email_list");
+    get emailList() {
+        return this._emailList;
+    }
+    putEmailList(value) {
         this._emailList.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetEmailList = function () {
+    }
+    resetEmailList() {
         this._emailList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "emailListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "everyone", {
-        get: function () {
-            return this._everyone;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putEveryone = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailListInput() {
+        return this._emailList.internalValue;
+    }
+    // everyone - computed: false, optional: true, required: false
+    _everyone = new ZeroTrustAccessGroupRequireEveryoneOutputReference(this, "everyone");
+    get everyone() {
+        return this._everyone;
+    }
+    putEveryone(value) {
         this._everyone.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetEveryone = function () {
+    }
+    resetEveryone() {
         this._everyone.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "everyoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._everyone.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "externalEvaluation", {
-        get: function () {
-            return this._externalEvaluation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putExternalEvaluation = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get everyoneInput() {
+        return this._everyone.internalValue;
+    }
+    // external_evaluation - computed: false, optional: true, required: false
+    _externalEvaluation = new ZeroTrustAccessGroupRequireExternalEvaluationOutputReference(this, "external_evaluation");
+    get externalEvaluation() {
+        return this._externalEvaluation;
+    }
+    putExternalEvaluation(value) {
         this._externalEvaluation.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetExternalEvaluation = function () {
+    }
+    resetExternalEvaluation() {
         this._externalEvaluation.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "externalEvaluationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEvaluation.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "geo", {
-        get: function () {
-            return this._geo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putGeo = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEvaluationInput() {
+        return this._externalEvaluation.internalValue;
+    }
+    // geo - computed: false, optional: true, required: false
+    _geo = new ZeroTrustAccessGroupRequireGeoOutputReference(this, "geo");
+    get geo() {
+        return this._geo;
+    }
+    putGeo(value) {
         this._geo.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetGeo = function () {
+    }
+    resetGeo() {
         this._geo.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "geoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._geo.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "githubOrganization", {
-        get: function () {
-            return this._githubOrganization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putGithubOrganization = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get geoInput() {
+        return this._geo.internalValue;
+    }
+    // github_organization - computed: false, optional: true, required: false
+    _githubOrganization = new ZeroTrustAccessGroupRequireGithubOrganizationOutputReference(this, "github_organization");
+    get githubOrganization() {
+        return this._githubOrganization;
+    }
+    putGithubOrganization(value) {
         this._githubOrganization.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetGithubOrganization = function () {
+    }
+    resetGithubOrganization() {
         this._githubOrganization.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "githubOrganizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._githubOrganization.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "group", {
-        get: function () {
-            return this._group;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putGroup = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get githubOrganizationInput() {
+        return this._githubOrganization.internalValue;
+    }
+    // group - computed: false, optional: true, required: false
+    _group = new ZeroTrustAccessGroupRequireGroupOutputReference(this, "group");
+    get group() {
+        return this._group;
+    }
+    putGroup(value) {
         this._group.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetGroup = function () {
+    }
+    resetGroup() {
         this._group.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "groupInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._group.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "gsuite", {
-        get: function () {
-            return this._gsuite;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putGsuite = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupInput() {
+        return this._group.internalValue;
+    }
+    // gsuite - computed: false, optional: true, required: false
+    _gsuite = new ZeroTrustAccessGroupRequireGsuiteOutputReference(this, "gsuite");
+    get gsuite() {
+        return this._gsuite;
+    }
+    putGsuite(value) {
         this._gsuite.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetGsuite = function () {
+    }
+    resetGsuite() {
         this._gsuite.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "gsuiteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gsuite.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "ip", {
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putIp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gsuiteInput() {
+        return this._gsuite.internalValue;
+    }
+    // ip - computed: false, optional: true, required: false
+    _ip = new ZeroTrustAccessGroupRequireIpOutputReference(this, "ip");
+    get ip() {
+        return this._ip;
+    }
+    putIp(value) {
         this._ip.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetIp = function () {
+    }
+    resetIp() {
         this._ip.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "ipList", {
-        get: function () {
-            return this._ipList;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putIpList = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip.internalValue;
+    }
+    // ip_list - computed: false, optional: true, required: false
+    _ipList = new ZeroTrustAccessGroupRequireIpListStructOutputReference(this, "ip_list");
+    get ipList() {
+        return this._ipList;
+    }
+    putIpList(value) {
         this._ipList.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetIpList = function () {
+    }
+    resetIpList() {
         this._ipList.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "ipListInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipList.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "linkedAppToken", {
-        get: function () {
-            return this._linkedAppToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putLinkedAppToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipListInput() {
+        return this._ipList.internalValue;
+    }
+    // linked_app_token - computed: false, optional: true, required: false
+    _linkedAppToken = new ZeroTrustAccessGroupRequireLinkedAppTokenOutputReference(this, "linked_app_token");
+    get linkedAppToken() {
+        return this._linkedAppToken;
+    }
+    putLinkedAppToken(value) {
         this._linkedAppToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetLinkedAppToken = function () {
+    }
+    resetLinkedAppToken() {
         this._linkedAppToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "linkedAppTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._linkedAppToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "loginMethod", {
-        get: function () {
-            return this._loginMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putLoginMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get linkedAppTokenInput() {
+        return this._linkedAppToken.internalValue;
+    }
+    // login_method - computed: false, optional: true, required: false
+    _loginMethod = new ZeroTrustAccessGroupRequireLoginMethodOutputReference(this, "login_method");
+    get loginMethod() {
+        return this._loginMethod;
+    }
+    putLoginMethod(value) {
         this._loginMethod.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetLoginMethod = function () {
+    }
+    resetLoginMethod() {
         this._loginMethod.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "loginMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._loginMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "oidc", {
-        get: function () {
-            return this._oidc;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putOidc = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get loginMethodInput() {
+        return this._loginMethod.internalValue;
+    }
+    // oidc - computed: false, optional: true, required: false
+    _oidc = new ZeroTrustAccessGroupRequireOidcOutputReference(this, "oidc");
+    get oidc() {
+        return this._oidc;
+    }
+    putOidc(value) {
         this._oidc.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetOidc = function () {
+    }
+    resetOidc() {
         this._oidc.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "oidcInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oidc.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "okta", {
-        get: function () {
-            return this._okta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putOkta = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oidcInput() {
+        return this._oidc.internalValue;
+    }
+    // okta - computed: false, optional: true, required: false
+    _okta = new ZeroTrustAccessGroupRequireOktaOutputReference(this, "okta");
+    get okta() {
+        return this._okta;
+    }
+    putOkta(value) {
         this._okta.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetOkta = function () {
+    }
+    resetOkta() {
         this._okta.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "oktaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._okta.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "saml", {
-        get: function () {
-            return this._saml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putSaml = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oktaInput() {
+        return this._okta.internalValue;
+    }
+    // saml - computed: false, optional: true, required: false
+    _saml = new ZeroTrustAccessGroupRequireSamlOutputReference(this, "saml");
+    get saml() {
+        return this._saml;
+    }
+    putSaml(value) {
         this._saml.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetSaml = function () {
+    }
+    resetSaml() {
         this._saml.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "samlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._saml.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "serviceToken", {
-        get: function () {
-            return this._serviceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putServiceToken = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get samlInput() {
+        return this._saml.internalValue;
+    }
+    // service_token - computed: false, optional: true, required: false
+    _serviceToken = new ZeroTrustAccessGroupRequireServiceTokenOutputReference(this, "service_token");
+    get serviceToken() {
+        return this._serviceToken;
+    }
+    putServiceToken(value) {
         this._serviceToken.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetServiceToken = function () {
+    }
+    resetServiceToken() {
         this._serviceToken.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "serviceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceToken.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "userRiskScore", {
-        get: function () {
-            return this._userRiskScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroupRequireOutputReference.prototype.putUserRiskScore = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceTokenInput() {
+        return this._serviceToken.internalValue;
+    }
+    // user_risk_score - computed: false, optional: true, required: false
+    _userRiskScore = new ZeroTrustAccessGroupRequireUserRiskScoreOutputReference(this, "user_risk_score");
+    get userRiskScore() {
+        return this._userRiskScore;
+    }
+    putUserRiskScore(value) {
         this._userRiskScore.internalValue = value;
-    };
-    ZeroTrustAccessGroupRequireOutputReference.prototype.resetUserRiskScore = function () {
+    }
+    resetUserRiskScore() {
         this._userRiskScore.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroupRequireOutputReference.prototype, "userRiskScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userRiskScore.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessGroupRequireOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessGroupRequireOutputReference = ZeroTrustAccessGroupRequireOutputReference;
-var ZeroTrustAccessGroupRequireList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroupRequireList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get userRiskScoreInput() {
+        return this._userRiskScore.internalValue;
+    }
+}
+export class ZeroTrustAccessGroupRequireList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessGroupRequireList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessGroupRequireList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessGroupRequireOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessGroupRequireList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessGroupRequireList = ZeroTrustAccessGroupRequireList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_group cloudflare_zero_trust_access_group}
 */
-var ZeroTrustAccessGroup = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessGroup, _super);
+export class ZeroTrustAccessGroup extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_group";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustAccessGroup resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustAccessGroup to import
+    * @param importFromId The id of the existing ZeroTrustAccessGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_group#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustAccessGroup to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_group", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -11156,8 +9029,8 @@ var ZeroTrustAccessGroup = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustAccessGroupConfig
     */
-    function ZeroTrustAccessGroup(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_group',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -11170,188 +9043,125 @@ var ZeroTrustAccessGroup = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // exclude - computed: false, optional: true, required: false
-        _this._exclude = new ZeroTrustAccessGroupExcludeList(_this, "exclude", false);
-        // include - computed: false, optional: false, required: true
-        _this._include = new ZeroTrustAccessGroupIncludeList(_this, "include", false);
-        // require - computed: false, optional: true, required: false
-        _this._require = new ZeroTrustAccessGroupRequireList(_this, "require", false);
-        _this._accountId = config.accountId;
-        _this._exclude.internalValue = config.exclude;
-        _this._include.internalValue = config.include;
-        _this._isDefault = config.isDefault;
-        _this._name = config.name;
-        _this._require.internalValue = config.require;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._exclude.internalValue = config.exclude;
+        this._include.internalValue = config.include;
+        this._isDefault = config.isDefault;
+        this._name = config.name;
+        this._require.internalValue = config.require;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustAccessGroup resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustAccessGroup to import
-    * @param importFromId The id of the existing ZeroTrustAccessGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_group#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustAccessGroup to import is found
-    */
-    ZeroTrustAccessGroup.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_group", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "exclude", {
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.putExclude = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // exclude - computed: false, optional: true, required: false
+    _exclude = new ZeroTrustAccessGroupExcludeList(this, "exclude", false);
+    get exclude() {
+        return this._exclude;
+    }
+    putExclude(value) {
         this._exclude.internalValue = value;
-    };
-    ZeroTrustAccessGroup.prototype.resetExclude = function () {
+    }
+    resetExclude() {
         this._exclude.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "include", {
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.putInclude = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // include - computed: false, optional: false, required: true
+    _include = new ZeroTrustAccessGroupIncludeList(this, "include", false);
+    get include() {
+        return this._include;
+    }
+    putInclude(value) {
         this._include.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "isDefault", {
-        get: function () {
-            return this.getBooleanAttribute('is_default');
-        },
-        set: function (value) {
-            this._isDefault = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.resetIsDefault = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include.internalValue;
+    }
+    // is_default - computed: false, optional: true, required: false
+    _isDefault;
+    get isDefault() {
+        return this.getBooleanAttribute('is_default');
+    }
+    set isDefault(value) {
+        this._isDefault = value;
+    }
+    resetIsDefault() {
         this._isDefault = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "isDefaultInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDefault;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "require", {
-        get: function () {
-            return this._require;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.putRequire = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDefaultInput() {
+        return this._isDefault;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // require - computed: false, optional: true, required: false
+    _require = new ZeroTrustAccessGroupRequireList(this, "require", false);
+    get require() {
+        return this._require;
+    }
+    putRequire(value) {
         this._require.internalValue = value;
-    };
-    ZeroTrustAccessGroup.prototype.resetRequire = function () {
+    }
+    resetRequire() {
         this._require.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "requireInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._require.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessGroup.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireInput() {
+        return this._require.internalValue;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessGroup.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustAccessGroup.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             exclude: cdktf.listMapper(zeroTrustAccessGroupExcludeToTerraform, false)(this._exclude.internalValue),
@@ -11361,9 +9171,9 @@ var ZeroTrustAccessGroup = /** @class */ (function (_super) {
             require: cdktf.listMapper(zeroTrustAccessGroupRequireToTerraform, false)(this._require.internalValue),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZeroTrustAccessGroup.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -11408,15 +9218,6 @@ var ZeroTrustAccessGroup = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustAccessGroup.tfResourceType = "cloudflare_zero_trust_access_group";
-    return ZeroTrustAccessGroup;
-}(cdktf.TerraformResource));
-exports.ZeroTrustAccessGroup = ZeroTrustAccessGroup;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

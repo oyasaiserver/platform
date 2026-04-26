@@ -1,37 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_ipsec_tunnel
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MagicWanIpsecTunnel = exports.MagicWanIpsecTunnelPskMetadataOutputReference = exports.MagicWanIpsecTunnelHealthCheckOutputReference = exports.MagicWanIpsecTunnelHealthCheckTargetOutputReference = exports.MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference = exports.MagicWanIpsecTunnelBgpStatusOutputReference = exports.MagicWanIpsecTunnelBgpOutputReference = void 0;
-exports.magicWanIpsecTunnelBgpToTerraform = magicWanIpsecTunnelBgpToTerraform;
-exports.magicWanIpsecTunnelBgpToHclTerraform = magicWanIpsecTunnelBgpToHclTerraform;
-exports.magicWanIpsecTunnelBgpStatusToTerraform = magicWanIpsecTunnelBgpStatusToTerraform;
-exports.magicWanIpsecTunnelBgpStatusToHclTerraform = magicWanIpsecTunnelBgpStatusToHclTerraform;
-exports.magicWanIpsecTunnelCustomRemoteIdentitiesToTerraform = magicWanIpsecTunnelCustomRemoteIdentitiesToTerraform;
-exports.magicWanIpsecTunnelCustomRemoteIdentitiesToHclTerraform = magicWanIpsecTunnelCustomRemoteIdentitiesToHclTerraform;
-exports.magicWanIpsecTunnelHealthCheckTargetToTerraform = magicWanIpsecTunnelHealthCheckTargetToTerraform;
-exports.magicWanIpsecTunnelHealthCheckTargetToHclTerraform = magicWanIpsecTunnelHealthCheckTargetToHclTerraform;
-exports.magicWanIpsecTunnelHealthCheckToTerraform = magicWanIpsecTunnelHealthCheckToTerraform;
-exports.magicWanIpsecTunnelHealthCheckToHclTerraform = magicWanIpsecTunnelHealthCheckToHclTerraform;
-exports.magicWanIpsecTunnelPskMetadataToTerraform = magicWanIpsecTunnelPskMetadataToTerraform;
-exports.magicWanIpsecTunnelPskMetadataToHclTerraform = magicWanIpsecTunnelPskMetadataToHclTerraform;
-var cdktf = require("cdktf");
-function magicWanIpsecTunnelBgpToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function magicWanIpsecTunnelBgpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -44,14 +14,14 @@ function magicWanIpsecTunnelBgpToTerraform(struct) {
         md5_key: cdktf.stringToTerraform(struct.md5Key),
     };
 }
-function magicWanIpsecTunnelBgpToHclTerraform(struct) {
+export function magicWanIpsecTunnelBgpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         customer_asn: {
             value: cdktf.numberToHclTerraform(struct.customerAsn),
             isBlock: false,
@@ -72,130 +42,102 @@ function magicWanIpsecTunnelBgpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanIpsecTunnelBgpOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelBgpOutputReference, _super);
+export class MagicWanIpsecTunnelBgpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelBgpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._customerAsn !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.customerAsn = this._customerAsn;
-            }
-            if (this._extraPrefixes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.extraPrefixes = this._extraPrefixes;
-            }
-            if (this._md5Key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.md5Key = this._md5Key;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._customerAsn = undefined;
-                this._extraPrefixes = undefined;
-                this._md5Key = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._customerAsn = value.customerAsn;
-                this._extraPrefixes = value.extraPrefixes;
-                this._md5Key = value.md5Key;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "customerAsn", {
-        get: function () {
-            return this.getNumberAttribute('customer_asn');
-        },
-        set: function (value) {
-            this._customerAsn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "customerAsnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customerAsn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "extraPrefixes", {
-        get: function () {
-            return this.getListAttribute('extra_prefixes');
-        },
-        set: function (value) {
-            this._extraPrefixes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelBgpOutputReference.prototype.resetExtraPrefixes = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._customerAsn !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.customerAsn = this._customerAsn;
+        }
+        if (this._extraPrefixes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.extraPrefixes = this._extraPrefixes;
+        }
+        if (this._md5Key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.md5Key = this._md5Key;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._customerAsn = undefined;
+            this._extraPrefixes = undefined;
+            this._md5Key = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._customerAsn = value.customerAsn;
+            this._extraPrefixes = value.extraPrefixes;
+            this._md5Key = value.md5Key;
+        }
+    }
+    // customer_asn - computed: false, optional: false, required: true
+    _customerAsn;
+    get customerAsn() {
+        return this.getNumberAttribute('customer_asn');
+    }
+    set customerAsn(value) {
+        this._customerAsn = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get customerAsnInput() {
+        return this._customerAsn;
+    }
+    // extra_prefixes - computed: true, optional: true, required: false
+    _extraPrefixes;
+    get extraPrefixes() {
+        return this.getListAttribute('extra_prefixes');
+    }
+    set extraPrefixes(value) {
+        this._extraPrefixes = value;
+    }
+    resetExtraPrefixes() {
         this._extraPrefixes = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "extraPrefixesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._extraPrefixes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "md5Key", {
-        get: function () {
-            return this.getStringAttribute('md5_key');
-        },
-        set: function (value) {
-            this._md5Key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelBgpOutputReference.prototype.resetMd5Key = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get extraPrefixesInput() {
+        return this._extraPrefixes;
+    }
+    // md5_key - computed: false, optional: true, required: false
+    _md5Key;
+    get md5Key() {
+        return this.getStringAttribute('md5_key');
+    }
+    set md5Key(value) {
+        this._md5Key = value;
+    }
+    resetMd5Key() {
         this._md5Key = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelBgpOutputReference.prototype, "md5KeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._md5Key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelBgpOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelBgpOutputReference = MagicWanIpsecTunnelBgpOutputReference;
-function magicWanIpsecTunnelBgpStatusToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get md5KeyInput() {
+        return this._md5Key;
+    }
+}
+export function magicWanIpsecTunnelBgpStatusToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -204,112 +146,72 @@ function magicWanIpsecTunnelBgpStatusToTerraform(struct) {
     }
     return {};
 }
-function magicWanIpsecTunnelBgpStatusToHclTerraform(struct) {
+export function magicWanIpsecTunnelBgpStatusToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var MagicWanIpsecTunnelBgpStatusOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelBgpStatusOutputReference, _super);
+export class MagicWanIpsecTunnelBgpStatusOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelBgpStatusOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "bgpState", {
-        // bgp_state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bgp_state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "cfSpeakerIp", {
-        // cf_speaker_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cf_speaker_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "cfSpeakerPort", {
-        // cf_speaker_port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('cf_speaker_port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "customerSpeakerIp", {
-        // customer_speaker_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('customer_speaker_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "customerSpeakerPort", {
-        // customer_speaker_port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('customer_speaker_port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "tcpEstablished", {
-        // tcp_established - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('tcp_established');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelBgpStatusOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelBgpStatusOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelBgpStatusOutputReference = MagicWanIpsecTunnelBgpStatusOutputReference;
-function magicWanIpsecTunnelCustomRemoteIdentitiesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // bgp_state - computed: true, optional: false, required: false
+    get bgpState() {
+        return this.getStringAttribute('bgp_state');
+    }
+    // cf_speaker_ip - computed: true, optional: false, required: false
+    get cfSpeakerIp() {
+        return this.getStringAttribute('cf_speaker_ip');
+    }
+    // cf_speaker_port - computed: true, optional: false, required: false
+    get cfSpeakerPort() {
+        return this.getNumberAttribute('cf_speaker_port');
+    }
+    // customer_speaker_ip - computed: true, optional: false, required: false
+    get customerSpeakerIp() {
+        return this.getStringAttribute('customer_speaker_ip');
+    }
+    // customer_speaker_port - computed: true, optional: false, required: false
+    get customerSpeakerPort() {
+        return this.getNumberAttribute('customer_speaker_port');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // tcp_established - computed: true, optional: false, required: false
+    get tcpEstablished() {
+        return this.getBooleanAttribute('tcp_established');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+}
+export function magicWanIpsecTunnelCustomRemoteIdentitiesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -320,14 +222,14 @@ function magicWanIpsecTunnelCustomRemoteIdentitiesToTerraform(struct) {
         fqdn_id: cdktf.stringToTerraform(struct.fqdnId),
     };
 }
-function magicWanIpsecTunnelCustomRemoteIdentitiesToHclTerraform(struct) {
+export function magicWanIpsecTunnelCustomRemoteIdentitiesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         fqdn_id: {
             value: cdktf.stringToHclTerraform(struct.fqdnId),
             isBlock: false,
@@ -336,79 +238,63 @@ function magicWanIpsecTunnelCustomRemoteIdentitiesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference, _super);
+export class MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._fqdnId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fqdnId = this._fqdnId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._fqdnId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._fqdnId = value.fqdnId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference.prototype, "fqdnId", {
-        get: function () {
-            return this.getStringAttribute('fqdn_id');
-        },
-        set: function (value) {
-            this._fqdnId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference.prototype.resetFqdnId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._fqdnId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fqdnId = this._fqdnId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._fqdnId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._fqdnId = value.fqdnId;
+        }
+    }
+    // fqdn_id - computed: false, optional: true, required: false
+    _fqdnId;
+    get fqdnId() {
+        return this.getStringAttribute('fqdn_id');
+    }
+    set fqdnId(value) {
+        this._fqdnId = value;
+    }
+    resetFqdnId() {
         this._fqdnId = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference.prototype, "fqdnIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fqdnId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference = MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference;
-function magicWanIpsecTunnelHealthCheckTargetToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fqdnIdInput() {
+        return this._fqdnId;
+    }
+}
+export function magicWanIpsecTunnelHealthCheckTargetToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -419,14 +305,14 @@ function magicWanIpsecTunnelHealthCheckTargetToTerraform(struct) {
         saved: cdktf.stringToTerraform(struct.saved),
     };
 }
-function magicWanIpsecTunnelHealthCheckTargetToHclTerraform(struct) {
+export function magicWanIpsecTunnelHealthCheckTargetToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         saved: {
             value: cdktf.stringToHclTerraform(struct.saved),
             isBlock: false,
@@ -435,87 +321,67 @@ function magicWanIpsecTunnelHealthCheckTargetToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanIpsecTunnelHealthCheckTargetOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelHealthCheckTargetOutputReference, _super);
+export class MagicWanIpsecTunnelHealthCheckTargetOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelHealthCheckTargetOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckTargetOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._saved !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.saved = this._saved;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._saved = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._saved = value.saved;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckTargetOutputReference.prototype, "effective", {
-        // effective - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('effective');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckTargetOutputReference.prototype, "saved", {
-        get: function () {
-            return this.getStringAttribute('saved');
-        },
-        set: function (value) {
-            this._saved = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckTargetOutputReference.prototype.resetSaved = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._saved !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.saved = this._saved;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._saved = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._saved = value.saved;
+        }
+    }
+    // effective - computed: true, optional: false, required: false
+    get effective() {
+        return this.getStringAttribute('effective');
+    }
+    // saved - computed: true, optional: true, required: false
+    _saved;
+    get saved() {
+        return this.getStringAttribute('saved');
+    }
+    set saved(value) {
+        this._saved = value;
+    }
+    resetSaved() {
         this._saved = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckTargetOutputReference.prototype, "savedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._saved;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelHealthCheckTargetOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelHealthCheckTargetOutputReference = MagicWanIpsecTunnelHealthCheckTargetOutputReference;
-function magicWanIpsecTunnelHealthCheckToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get savedInput() {
+        return this._saved;
+    }
+}
+export function magicWanIpsecTunnelHealthCheckToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -530,14 +396,14 @@ function magicWanIpsecTunnelHealthCheckToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function magicWanIpsecTunnelHealthCheckToHclTerraform(struct) {
+export function magicWanIpsecTunnelHealthCheckToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         direction: {
             value: cdktf.stringToHclTerraform(struct.direction),
             isBlock: false,
@@ -570,190 +436,147 @@ function magicWanIpsecTunnelHealthCheckToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanIpsecTunnelHealthCheckOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelHealthCheckOutputReference, _super);
+export class MagicWanIpsecTunnelHealthCheckOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelHealthCheckOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // target - computed: true, optional: true, required: false
-        _this._target = new MagicWanIpsecTunnelHealthCheckTargetOutputReference(_this, "target");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            if (((_a = this._target) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = (_b = this._target) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._direction = undefined;
-                this._enabled = undefined;
-                this._rate = undefined;
-                this._target.internalValue = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._direction = value.direction;
-                this._enabled = value.enabled;
-                this._rate = value.rate;
-                this._target.internalValue = value.target;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.resetDirection = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        if (this._target?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target?.internalValue;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._direction = undefined;
+            this._enabled = undefined;
+            this._rate = undefined;
+            this._target.internalValue = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._direction = value.direction;
+            this._enabled = value.enabled;
+            this._rate = value.rate;
+            this._target.internalValue = value.target;
+            this._type = value.type;
+        }
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getStringAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.resetRate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // rate - computed: true, optional: true, required: false
+    _rate;
+    get rate() {
+        return this.getStringAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    resetRate() {
         this._rate = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "target", {
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.putTarget = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+    // target - computed: true, optional: true, required: false
+    _target = new MagicWanIpsecTunnelHealthCheckTargetOutputReference(this, "target");
+    get target() {
+        return this._target;
+    }
+    putTarget(value) {
         this._target.internalValue = value;
-    };
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.resetTarget = function () {
+    }
+    resetTarget() {
         this._target.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnelHealthCheckOutputReference.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target.internalValue;
+    }
+    // type - computed: true, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnelHealthCheckOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelHealthCheckOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelHealthCheckOutputReference = MagicWanIpsecTunnelHealthCheckOutputReference;
-function magicWanIpsecTunnelPskMetadataToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export function magicWanIpsecTunnelPskMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -762,60 +585,64 @@ function magicWanIpsecTunnelPskMetadataToTerraform(struct) {
     }
     return {};
 }
-function magicWanIpsecTunnelPskMetadataToHclTerraform(struct) {
+export function magicWanIpsecTunnelPskMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var MagicWanIpsecTunnelPskMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnelPskMetadataOutputReference, _super);
+export class MagicWanIpsecTunnelPskMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanIpsecTunnelPskMetadataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanIpsecTunnelPskMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnelPskMetadataOutputReference.prototype, "lastGeneratedOn", {
-        // last_generated_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_generated_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanIpsecTunnelPskMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanIpsecTunnelPskMetadataOutputReference = MagicWanIpsecTunnelPskMetadataOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // last_generated_on - computed: true, optional: false, required: false
+    get lastGeneratedOn() {
+        return this.getStringAttribute('last_generated_on');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_ipsec_tunnel cloudflare_magic_wan_ipsec_tunnel}
 */
-var MagicWanIpsecTunnel = /** @class */ (function (_super) {
-    __extends(MagicWanIpsecTunnel, _super);
+export class MagicWanIpsecTunnel extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_wan_ipsec_tunnel";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a MagicWanIpsecTunnel resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the MagicWanIpsecTunnel to import
+    * @param importFromId The id of the existing MagicWanIpsecTunnel that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_ipsec_tunnel#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the MagicWanIpsecTunnel to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_wan_ipsec_tunnel", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -826,8 +653,8 @@ var MagicWanIpsecTunnel = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options MagicWanIpsecTunnelConfig
     */
-    function MagicWanIpsecTunnel(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_wan_ipsec_tunnel',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -840,356 +667,237 @@ var MagicWanIpsecTunnel = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // bgp - computed: false, optional: true, required: false
-        _this._bgp = new MagicWanIpsecTunnelBgpOutputReference(_this, "bgp");
-        // bgp_status - computed: true, optional: false, required: false
-        _this._bgpStatus = new MagicWanIpsecTunnelBgpStatusOutputReference(_this, "bgp_status");
-        // custom_remote_identities - computed: false, optional: true, required: false
-        _this._customRemoteIdentities = new MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference(_this, "custom_remote_identities");
-        // health_check - computed: true, optional: true, required: false
-        _this._healthCheck = new MagicWanIpsecTunnelHealthCheckOutputReference(_this, "health_check");
-        // psk_metadata - computed: true, optional: false, required: false
-        _this._pskMetadata = new MagicWanIpsecTunnelPskMetadataOutputReference(_this, "psk_metadata");
-        _this._accountId = config.accountId;
-        _this._automaticReturnRouting = config.automaticReturnRouting;
-        _this._bgp.internalValue = config.bgp;
-        _this._cloudflareEndpoint = config.cloudflareEndpoint;
-        _this._customRemoteIdentities.internalValue = config.customRemoteIdentities;
-        _this._customerEndpoint = config.customerEndpoint;
-        _this._description = config.description;
-        _this._healthCheck.internalValue = config.healthCheck;
-        _this._interfaceAddress = config.interfaceAddress;
-        _this._interfaceAddress6 = config.interfaceAddress6;
-        _this._name = config.name;
-        _this._psk = config.psk;
-        _this._replayProtection = config.replayProtection;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._automaticReturnRouting = config.automaticReturnRouting;
+        this._bgp.internalValue = config.bgp;
+        this._cloudflareEndpoint = config.cloudflareEndpoint;
+        this._customRemoteIdentities.internalValue = config.customRemoteIdentities;
+        this._customerEndpoint = config.customerEndpoint;
+        this._description = config.description;
+        this._healthCheck.internalValue = config.healthCheck;
+        this._interfaceAddress = config.interfaceAddress;
+        this._interfaceAddress6 = config.interfaceAddress6;
+        this._name = config.name;
+        this._psk = config.psk;
+        this._replayProtection = config.replayProtection;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a MagicWanIpsecTunnel resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the MagicWanIpsecTunnel to import
-    * @param importFromId The id of the existing MagicWanIpsecTunnel that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_ipsec_tunnel#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the MagicWanIpsecTunnel to import is found
-    */
-    MagicWanIpsecTunnel.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_wan_ipsec_tunnel", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "allowNullCipher", {
-        // allow_null_cipher - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('allow_null_cipher');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "automaticReturnRouting", {
-        get: function () {
-            return this.getBooleanAttribute('automatic_return_routing');
-        },
-        set: function (value) {
-            this._automaticReturnRouting = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetAutomaticReturnRouting = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // allow_null_cipher - computed: true, optional: false, required: false
+    get allowNullCipher() {
+        return this.getBooleanAttribute('allow_null_cipher');
+    }
+    // automatic_return_routing - computed: true, optional: true, required: false
+    _automaticReturnRouting;
+    get automaticReturnRouting() {
+        return this.getBooleanAttribute('automatic_return_routing');
+    }
+    set automaticReturnRouting(value) {
+        this._automaticReturnRouting = value;
+    }
+    resetAutomaticReturnRouting() {
         this._automaticReturnRouting = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "automaticReturnRoutingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._automaticReturnRouting;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "bgp", {
-        get: function () {
-            return this._bgp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.putBgp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get automaticReturnRoutingInput() {
+        return this._automaticReturnRouting;
+    }
+    // bgp - computed: false, optional: true, required: false
+    _bgp = new MagicWanIpsecTunnelBgpOutputReference(this, "bgp");
+    get bgp() {
+        return this._bgp;
+    }
+    putBgp(value) {
         this._bgp.internalValue = value;
-    };
-    MagicWanIpsecTunnel.prototype.resetBgp = function () {
+    }
+    resetBgp() {
         this._bgp.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "bgpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bgp.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "bgpStatus", {
-        get: function () {
-            return this._bgpStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "cloudflareEndpoint", {
-        get: function () {
-            return this.getStringAttribute('cloudflare_endpoint');
-        },
-        set: function (value) {
-            this._cloudflareEndpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "cloudflareEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cloudflareEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "customRemoteIdentities", {
-        get: function () {
-            return this._customRemoteIdentities;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.putCustomRemoteIdentities = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bgpInput() {
+        return this._bgp.internalValue;
+    }
+    // bgp_status - computed: true, optional: false, required: false
+    _bgpStatus = new MagicWanIpsecTunnelBgpStatusOutputReference(this, "bgp_status");
+    get bgpStatus() {
+        return this._bgpStatus;
+    }
+    // cloudflare_endpoint - computed: false, optional: false, required: true
+    _cloudflareEndpoint;
+    get cloudflareEndpoint() {
+        return this.getStringAttribute('cloudflare_endpoint');
+    }
+    set cloudflareEndpoint(value) {
+        this._cloudflareEndpoint = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cloudflareEndpointInput() {
+        return this._cloudflareEndpoint;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // custom_remote_identities - computed: false, optional: true, required: false
+    _customRemoteIdentities = new MagicWanIpsecTunnelCustomRemoteIdentitiesOutputReference(this, "custom_remote_identities");
+    get customRemoteIdentities() {
+        return this._customRemoteIdentities;
+    }
+    putCustomRemoteIdentities(value) {
         this._customRemoteIdentities.internalValue = value;
-    };
-    MagicWanIpsecTunnel.prototype.resetCustomRemoteIdentities = function () {
+    }
+    resetCustomRemoteIdentities() {
         this._customRemoteIdentities.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "customRemoteIdentitiesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customRemoteIdentities.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "customerEndpoint", {
-        get: function () {
-            return this.getStringAttribute('customer_endpoint');
-        },
-        set: function (value) {
-            this._customerEndpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetCustomerEndpoint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customRemoteIdentitiesInput() {
+        return this._customRemoteIdentities.internalValue;
+    }
+    // customer_endpoint - computed: false, optional: true, required: false
+    _customerEndpoint;
+    get customerEndpoint() {
+        return this.getStringAttribute('customer_endpoint');
+    }
+    set customerEndpoint(value) {
+        this._customerEndpoint = value;
+    }
+    resetCustomerEndpoint() {
         this._customerEndpoint = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "customerEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customerEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customerEndpointInput() {
+        return this._customerEndpoint;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "healthCheck", {
-        get: function () {
-            return this._healthCheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.putHealthCheck = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // health_check - computed: true, optional: true, required: false
+    _healthCheck = new MagicWanIpsecTunnelHealthCheckOutputReference(this, "health_check");
+    get healthCheck() {
+        return this._healthCheck;
+    }
+    putHealthCheck(value) {
         this._healthCheck.internalValue = value;
-    };
-    MagicWanIpsecTunnel.prototype.resetHealthCheck = function () {
+    }
+    resetHealthCheck() {
         this._healthCheck.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "healthCheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._healthCheck.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "interfaceAddress", {
-        get: function () {
-            return this.getStringAttribute('interface_address');
-        },
-        set: function (value) {
-            this._interfaceAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "interfaceAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interfaceAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "interfaceAddress6", {
-        get: function () {
-            return this.getStringAttribute('interface_address6');
-        },
-        set: function (value) {
-            this._interfaceAddress6 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetInterfaceAddress6 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get healthCheckInput() {
+        return this._healthCheck.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // interface_address - computed: false, optional: false, required: true
+    _interfaceAddress;
+    get interfaceAddress() {
+        return this.getStringAttribute('interface_address');
+    }
+    set interfaceAddress(value) {
+        this._interfaceAddress = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get interfaceAddressInput() {
+        return this._interfaceAddress;
+    }
+    // interface_address6 - computed: false, optional: true, required: false
+    _interfaceAddress6;
+    get interfaceAddress6() {
+        return this.getStringAttribute('interface_address6');
+    }
+    set interfaceAddress6(value) {
+        this._interfaceAddress6 = value;
+    }
+    resetInterfaceAddress6() {
         this._interfaceAddress6 = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "interfaceAddress6Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interfaceAddress6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "psk", {
-        get: function () {
-            return this.getStringAttribute('psk');
-        },
-        set: function (value) {
-            this._psk = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetPsk = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get interfaceAddress6Input() {
+        return this._interfaceAddress6;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // psk - computed: false, optional: true, required: false
+    _psk;
+    get psk() {
+        return this.getStringAttribute('psk');
+    }
+    set psk(value) {
+        this._psk = value;
+    }
+    resetPsk() {
         this._psk = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "pskInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._psk;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "pskMetadata", {
-        get: function () {
-            return this._pskMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "replayProtection", {
-        get: function () {
-            return this.getBooleanAttribute('replay_protection');
-        },
-        set: function (value) {
-            this._replayProtection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanIpsecTunnel.prototype.resetReplayProtection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pskInput() {
+        return this._psk;
+    }
+    // psk_metadata - computed: true, optional: false, required: false
+    _pskMetadata = new MagicWanIpsecTunnelPskMetadataOutputReference(this, "psk_metadata");
+    get pskMetadata() {
+        return this._pskMetadata;
+    }
+    // replay_protection - computed: true, optional: true, required: false
+    _replayProtection;
+    get replayProtection() {
+        return this.getBooleanAttribute('replay_protection');
+    }
+    set replayProtection(value) {
+        this._replayProtection = value;
+    }
+    resetReplayProtection() {
         this._replayProtection = undefined;
-    };
-    Object.defineProperty(MagicWanIpsecTunnel.prototype, "replayProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._replayProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get replayProtectionInput() {
+        return this._replayProtection;
+    }
     // =========
     // SYNTHESIS
     // =========
-    MagicWanIpsecTunnel.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             automatic_return_routing: cdktf.booleanToTerraform(this._automaticReturnRouting),
@@ -1205,9 +913,9 @@ var MagicWanIpsecTunnel = /** @class */ (function (_super) {
             psk: cdktf.stringToTerraform(this._psk),
             replay_protection: cdktf.booleanToTerraform(this._replayProtection),
         };
-    };
-    MagicWanIpsecTunnel.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1288,15 +996,6 @@ var MagicWanIpsecTunnel = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    MagicWanIpsecTunnel.tfResourceType = "cloudflare_magic_wan_ipsec_tunnel";
-    return MagicWanIpsecTunnel;
-}(cdktf.TerraformResource));
-exports.MagicWanIpsecTunnel = MagicWanIpsecTunnel;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

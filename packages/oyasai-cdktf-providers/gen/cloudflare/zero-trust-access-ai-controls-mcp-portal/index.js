@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_ai_controls_mcp_portal
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustAccessAiControlsMcpPortal = exports.ZeroTrustAccessAiControlsMcpPortalServersList = exports.ZeroTrustAccessAiControlsMcpPortalServersOutputReference = exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList = exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference = exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList = exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference = void 0;
-exports.zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToTerraform = zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToTerraform;
-exports.zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToHclTerraform = zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToHclTerraform;
-exports.zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform = zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform;
-exports.zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToHclTerraform = zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToHclTerraform;
-exports.zeroTrustAccessAiControlsMcpPortalServersToTerraform = zeroTrustAccessAiControlsMcpPortalServersToTerraform;
-exports.zeroTrustAccessAiControlsMcpPortalServersToHclTerraform = zeroTrustAccessAiControlsMcpPortalServersToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -39,14 +15,14 @@ function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToTerraform(stru
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToHclTerraform(struct) {
+export function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         alias: {
             value: cdktf.stringToHclTerraform(struct.alias),
             isBlock: false,
@@ -73,182 +49,148 @@ function zeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsToHclTerraform(s
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference, _super);
+export class ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._alias !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alias = this._alias;
-            }
-            if (this._description !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.description = this._description;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._alias = undefined;
-                this._description = undefined;
-                this._enabled = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._alias = value.alias;
-                this._description = value.description;
-                this._enabled = value.enabled;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "alias", {
-        get: function () {
-            return this.getStringAttribute('alias');
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype.resetAlias = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._alias !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alias = this._alias;
+        }
+        if (this._description !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.description = this._description;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._alias = undefined;
+            this._description = undefined;
+            this._enabled = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._alias = value.alias;
+            this._description = value.description;
+            this._enabled = value.enabled;
+            this._name = value.name;
+        }
+    }
+    // alias - computed: true, optional: true, required: false
+    _alias;
+    get alias() {
+        return this.getStringAttribute('alias');
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference = ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference;
-var ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // name - computed: true, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export class ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList = ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList;
-function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform(struct) {
+    }
+}
+export function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -262,14 +204,14 @@ function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform(struct
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToHclTerraform(struct) {
+export function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         alias: {
             value: cdktf.stringToHclTerraform(struct.alias),
             isBlock: false,
@@ -296,182 +238,148 @@ function zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToHclTerraform(str
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference, _super);
+export class ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._alias !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alias = this._alias;
-            }
-            if (this._description !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.description = this._description;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._alias = undefined;
-                this._description = undefined;
-                this._enabled = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._alias = value.alias;
-                this._description = value.description;
-                this._enabled = value.enabled;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "alias", {
-        get: function () {
-            return this.getStringAttribute('alias');
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype.resetAlias = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._alias !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alias = this._alias;
+        }
+        if (this._description !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.description = this._description;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._alias = undefined;
+            this._description = undefined;
+            this._enabled = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._alias = value.alias;
+            this._description = value.description;
+            this._enabled = value.enabled;
+            this._name = value.name;
+        }
+    }
+    // alias - computed: true, optional: true, required: false
+    _alias;
+    get alias() {
+        return this.getStringAttribute('alias');
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference = ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference;
-var ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // name - computed: true, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export class ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList = ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList;
-function zeroTrustAccessAiControlsMcpPortalServersToTerraform(struct) {
+    }
+}
+export function zeroTrustAccessAiControlsMcpPortalServersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -486,14 +394,14 @@ function zeroTrustAccessAiControlsMcpPortalServersToTerraform(struct) {
         updated_tools: cdktf.listMapper(zeroTrustAccessAiControlsMcpPortalServersUpdatedToolsToTerraform, false)(struct.updatedTools),
     };
 }
-function zeroTrustAccessAiControlsMcpPortalServersToHclTerraform(struct) {
+export function zeroTrustAccessAiControlsMcpPortalServersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         default_disabled: {
             value: cdktf.booleanToHclTerraform(struct.defaultDisabled),
             isBlock: false,
@@ -526,218 +434,189 @@ function zeroTrustAccessAiControlsMcpPortalServersToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustAccessAiControlsMcpPortalServersOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersOutputReference, _super);
+export class ZeroTrustAccessAiControlsMcpPortalServersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // updated_prompts - computed: true, optional: true, required: false
-        _this._updatedPrompts = new ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList(_this, "updated_prompts", false);
-        // updated_tools - computed: true, optional: true, required: false
-        _this._updatedTools = new ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList(_this, "updated_tools", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._defaultDisabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.defaultDisabled = this._defaultDisabled;
-            }
-            if (this._onBehalf !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.onBehalf = this._onBehalf;
-            }
-            if (this._serverId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serverId = this._serverId;
-            }
-            if (((_a = this._updatedPrompts) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.updatedPrompts = (_b = this._updatedPrompts) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._updatedTools) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.updatedTools = (_d = this._updatedTools) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._defaultDisabled = undefined;
-                this._onBehalf = undefined;
-                this._serverId = undefined;
-                this._updatedPrompts.internalValue = undefined;
-                this._updatedTools.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._defaultDisabled = value.defaultDisabled;
-                this._onBehalf = value.onBehalf;
-                this._serverId = value.serverId;
-                this._updatedPrompts.internalValue = value.updatedPrompts;
-                this._updatedTools.internalValue = value.updatedTools;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "defaultDisabled", {
-        get: function () {
-            return this.getBooleanAttribute('default_disabled');
-        },
-        set: function (value) {
-            this._defaultDisabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.resetDefaultDisabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._defaultDisabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.defaultDisabled = this._defaultDisabled;
+        }
+        if (this._onBehalf !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.onBehalf = this._onBehalf;
+        }
+        if (this._serverId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serverId = this._serverId;
+        }
+        if (this._updatedPrompts?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.updatedPrompts = this._updatedPrompts?.internalValue;
+        }
+        if (this._updatedTools?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.updatedTools = this._updatedTools?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._defaultDisabled = undefined;
+            this._onBehalf = undefined;
+            this._serverId = undefined;
+            this._updatedPrompts.internalValue = undefined;
+            this._updatedTools.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._defaultDisabled = value.defaultDisabled;
+            this._onBehalf = value.onBehalf;
+            this._serverId = value.serverId;
+            this._updatedPrompts.internalValue = value.updatedPrompts;
+            this._updatedTools.internalValue = value.updatedTools;
+        }
+    }
+    // default_disabled - computed: true, optional: true, required: false
+    _defaultDisabled;
+    get defaultDisabled() {
+        return this.getBooleanAttribute('default_disabled');
+    }
+    set defaultDisabled(value) {
+        this._defaultDisabled = value;
+    }
+    resetDefaultDisabled() {
         this._defaultDisabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "defaultDisabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultDisabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "onBehalf", {
-        get: function () {
-            return this.getBooleanAttribute('on_behalf');
-        },
-        set: function (value) {
-            this._onBehalf = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.resetOnBehalf = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultDisabledInput() {
+        return this._defaultDisabled;
+    }
+    // on_behalf - computed: true, optional: true, required: false
+    _onBehalf;
+    get onBehalf() {
+        return this.getBooleanAttribute('on_behalf');
+    }
+    set onBehalf(value) {
+        this._onBehalf = value;
+    }
+    resetOnBehalf() {
         this._onBehalf = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "onBehalfInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._onBehalf;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "serverId", {
-        get: function () {
-            return this.getStringAttribute('server_id');
-        },
-        set: function (value) {
-            this._serverId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "serverIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serverId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "updatedPrompts", {
-        get: function () {
-            return this._updatedPrompts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.putUpdatedPrompts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get onBehalfInput() {
+        return this._onBehalf;
+    }
+    // server_id - computed: true, optional: false, required: true
+    _serverId;
+    get serverId() {
+        return this.getStringAttribute('server_id');
+    }
+    set serverId(value) {
+        this._serverId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serverIdInput() {
+        return this._serverId;
+    }
+    // updated_prompts - computed: true, optional: true, required: false
+    _updatedPrompts = new ZeroTrustAccessAiControlsMcpPortalServersUpdatedPromptsList(this, "updated_prompts", false);
+    get updatedPrompts() {
+        return this._updatedPrompts;
+    }
+    putUpdatedPrompts(value) {
         this._updatedPrompts.internalValue = value;
-    };
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.resetUpdatedPrompts = function () {
+    }
+    resetUpdatedPrompts() {
         this._updatedPrompts.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "updatedPromptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._updatedPrompts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "updatedTools", {
-        get: function () {
-            return this._updatedTools;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.putUpdatedTools = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get updatedPromptsInput() {
+        return this._updatedPrompts.internalValue;
+    }
+    // updated_tools - computed: true, optional: true, required: false
+    _updatedTools = new ZeroTrustAccessAiControlsMcpPortalServersUpdatedToolsList(this, "updated_tools", false);
+    get updatedTools() {
+        return this._updatedTools;
+    }
+    putUpdatedTools(value) {
         this._updatedTools.internalValue = value;
-    };
-    ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype.resetUpdatedTools = function () {
+    }
+    resetUpdatedTools() {
         this._updatedTools.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortalServersOutputReference.prototype, "updatedToolsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._updatedTools.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustAccessAiControlsMcpPortalServersOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustAccessAiControlsMcpPortalServersOutputReference = ZeroTrustAccessAiControlsMcpPortalServersOutputReference;
-var ZeroTrustAccessAiControlsMcpPortalServersList = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortalServersList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get updatedToolsInput() {
+        return this._updatedTools.internalValue;
+    }
+}
+export class ZeroTrustAccessAiControlsMcpPortalServersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustAccessAiControlsMcpPortalServersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustAccessAiControlsMcpPortalServersList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustAccessAiControlsMcpPortalServersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustAccessAiControlsMcpPortalServersList;
-}(cdktf.ComplexList));
-exports.ZeroTrustAccessAiControlsMcpPortalServersList = ZeroTrustAccessAiControlsMcpPortalServersList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_ai_controls_mcp_portal cloudflare_zero_trust_access_ai_controls_mcp_portal}
 */
-var ZeroTrustAccessAiControlsMcpPortal = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessAiControlsMcpPortal, _super);
+export class ZeroTrustAccessAiControlsMcpPortal extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_ai_controls_mcp_portal";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustAccessAiControlsMcpPortal resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustAccessAiControlsMcpPortal to import
+    * @param importFromId The id of the existing ZeroTrustAccessAiControlsMcpPortal that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_ai_controls_mcp_portal#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustAccessAiControlsMcpPortal to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_ai_controls_mcp_portal", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -748,8 +627,8 @@ var ZeroTrustAccessAiControlsMcpPortal = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustAccessAiControlsMcpPortalConfig
     */
-    function ZeroTrustAccessAiControlsMcpPortal(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_ai_controls_mcp_portal',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -762,227 +641,150 @@ var ZeroTrustAccessAiControlsMcpPortal = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // servers - computed: true, optional: true, required: false
-        _this._servers = new ZeroTrustAccessAiControlsMcpPortalServersList(_this, "servers", false);
-        _this._accountId = config.accountId;
-        _this._allowCodeMode = config.allowCodeMode;
-        _this._description = config.description;
-        _this._hostname = config.hostname;
-        _this._id = config.id;
-        _this._name = config.name;
-        _this._secureWebGateway = config.secureWebGateway;
-        _this._servers.internalValue = config.servers;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._allowCodeMode = config.allowCodeMode;
+        this._description = config.description;
+        this._hostname = config.hostname;
+        this._id = config.id;
+        this._name = config.name;
+        this._secureWebGateway = config.secureWebGateway;
+        this._servers.internalValue = config.servers;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustAccessAiControlsMcpPortal resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustAccessAiControlsMcpPortal to import
-    * @param importFromId The id of the existing ZeroTrustAccessAiControlsMcpPortal that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_ai_controls_mcp_portal#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustAccessAiControlsMcpPortal to import is found
-    */
-    ZeroTrustAccessAiControlsMcpPortal.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_ai_controls_mcp_portal", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortal.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "allowCodeMode", {
-        get: function () {
-            return this.getBooleanAttribute('allow_code_mode');
-        },
-        set: function (value) {
-            this._allowCodeMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortal.prototype.resetAllowCodeMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // allow_code_mode - computed: true, optional: true, required: false
+    _allowCodeMode;
+    get allowCodeMode() {
+        return this.getBooleanAttribute('allow_code_mode');
+    }
+    set allowCodeMode(value) {
+        this._allowCodeMode = value;
+    }
+    resetAllowCodeMode() {
         this._allowCodeMode = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "allowCodeModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowCodeMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "createdBy", {
-        // created_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortal.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowCodeModeInput() {
+        return this._allowCodeMode;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // created_by - computed: true, optional: false, required: false
+    get createdBy() {
+        return this.getStringAttribute('created_by');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "modifiedBy", {
-        // modified_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "secureWebGateway", {
-        get: function () {
-            return this.getBooleanAttribute('secure_web_gateway');
-        },
-        set: function (value) {
-            this._secureWebGateway = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortal.prototype.resetSecureWebGateway = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // hostname - computed: false, optional: false, required: true
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // modified_by - computed: true, optional: false, required: false
+    get modifiedBy() {
+        return this.getStringAttribute('modified_by');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // secure_web_gateway - computed: true, optional: true, required: false
+    _secureWebGateway;
+    get secureWebGateway() {
+        return this.getBooleanAttribute('secure_web_gateway');
+    }
+    set secureWebGateway(value) {
+        this._secureWebGateway = value;
+    }
+    resetSecureWebGateway() {
         this._secureWebGateway = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "secureWebGatewayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secureWebGateway;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "servers", {
-        get: function () {
-            return this._servers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessAiControlsMcpPortal.prototype.putServers = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secureWebGatewayInput() {
+        return this._secureWebGateway;
+    }
+    // servers - computed: true, optional: true, required: false
+    _servers = new ZeroTrustAccessAiControlsMcpPortalServersList(this, "servers", false);
+    get servers() {
+        return this._servers;
+    }
+    putServers(value) {
         this._servers.internalValue = value;
-    };
-    ZeroTrustAccessAiControlsMcpPortal.prototype.resetServers = function () {
+    }
+    resetServers() {
         this._servers.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessAiControlsMcpPortal.prototype, "serversInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._servers.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get serversInput() {
+        return this._servers.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustAccessAiControlsMcpPortal.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             allow_code_mode: cdktf.booleanToTerraform(this._allowCodeMode),
@@ -993,9 +795,9 @@ var ZeroTrustAccessAiControlsMcpPortal = /** @class */ (function (_super) {
             secure_web_gateway: cdktf.booleanToTerraform(this._secureWebGateway),
             servers: cdktf.listMapper(zeroTrustAccessAiControlsMcpPortalServersToTerraform, false)(this._servers.internalValue),
         };
-    };
-    ZeroTrustAccessAiControlsMcpPortal.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1046,15 +848,6 @@ var ZeroTrustAccessAiControlsMcpPortal = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustAccessAiControlsMcpPortal.tfResourceType = "cloudflare_zero_trust_access_ai_controls_mcp_portal";
-    return ZeroTrustAccessAiControlsMcpPortal;
-}(cdktf.TerraformResource));
-exports.ZeroTrustAccessAiControlsMcpPortal = ZeroTrustAccessAiControlsMcpPortal;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/regional_tiered_cache
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegionalTieredCache = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/regional_tiered_cache cloudflare_regional_tiered_cache}
 */
-var RegionalTieredCache = /** @class */ (function (_super) {
-    __extends(RegionalTieredCache, _super);
+export class RegionalTieredCache extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_regional_tiered_cache";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RegionalTieredCache resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RegionalTieredCache to import
+    * @param importFromId The id of the existing RegionalTieredCache that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/regional_tiered_cache#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RegionalTieredCache to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_regional_tiered_cache", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var RegionalTieredCache = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RegionalTieredCacheConfig
     */
-    function RegionalTieredCache(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_regional_tiered_cache',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,101 +46,63 @@ var RegionalTieredCache = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._value = config.value;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._value = config.value;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RegionalTieredCache resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RegionalTieredCache to import
-    * @param importFromId The id of the existing RegionalTieredCache that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/regional_tiered_cache#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RegionalTieredCache to import is found
-    */
-    RegionalTieredCache.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_regional_tiered_cache", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RegionalTieredCache.prototype, "editable", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // editable - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('editable');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RegionalTieredCache.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RegionalTieredCache.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RegionalTieredCache.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RegionalTieredCache.prototype.resetValue = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // editable - computed: true, optional: false, required: false
+    get editable() {
+        return this.getBooleanAttribute('editable');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // value - computed: true, optional: true, required: false
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    resetValue() {
         this._value = undefined;
-    };
-    Object.defineProperty(RegionalTieredCache.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RegionalTieredCache.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RegionalTieredCache.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RegionalTieredCache.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             value: cdktf.stringToTerraform(this._value),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    RegionalTieredCache.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             value: {
                 value: cdktf.stringToHclTerraform(this._value),
                 isBlock: false,
@@ -157,15 +117,6 @@ var RegionalTieredCache = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RegionalTieredCache.tfResourceType = "cloudflare_regional_tiered_cache";
-    return RegionalTieredCache;
-}(cdktf.TerraformResource));
-exports.RegionalTieredCache = RegionalTieredCache;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

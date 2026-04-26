@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/tag
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tag = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/tag docker_tag}
 */
-var Tag = /** @class */ (function (_super) {
-    __extends(Tag, _super);
+export class Tag extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_tag";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Tag resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Tag to import
+    * @param importFromId The id of the existing Tag that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/tag#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Tag to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_tag", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var Tag = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TagConfig
     */
-    function Tag(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_tag',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -48,125 +46,86 @@ var Tag = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._sourceImage = config.sourceImage;
-        _this._tagTriggers = config.tagTriggers;
-        _this._targetImage = config.targetImage;
-        return _this;
+        });
+        this._id = config.id;
+        this._sourceImage = config.sourceImage;
+        this._tagTriggers = config.tagTriggers;
+        this._targetImage = config.targetImage;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Tag resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Tag to import
-    * @param importFromId The id of the existing Tag that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/tag#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Tag to import is found
-    */
-    Tag.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_tag", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Tag.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Tag.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Tag.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "sourceImage", {
-        get: function () {
-            return this.getStringAttribute('source_image');
-        },
-        set: function (value) {
-            this._sourceImage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "sourceImageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceImage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "sourceImageId", {
-        // source_image_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source_image_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "tagTriggers", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('tag_triggers'));
-        },
-        set: function (value) {
-            this._tagTriggers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Tag.prototype.resetTagTriggers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // source_image - computed: false, optional: false, required: true
+    _sourceImage;
+    get sourceImage() {
+        return this.getStringAttribute('source_image');
+    }
+    set sourceImage(value) {
+        this._sourceImage = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceImageInput() {
+        return this._sourceImage;
+    }
+    // source_image_id - computed: true, optional: false, required: false
+    get sourceImageId() {
+        return this.getStringAttribute('source_image_id');
+    }
+    // tag_triggers - computed: false, optional: true, required: false
+    _tagTriggers;
+    get tagTriggers() {
+        return cdktf.Fn.tolist(this.getListAttribute('tag_triggers'));
+    }
+    set tagTriggers(value) {
+        this._tagTriggers = value;
+    }
+    resetTagTriggers() {
         this._tagTriggers = undefined;
-    };
-    Object.defineProperty(Tag.prototype, "tagTriggersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tagTriggers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "targetImage", {
-        get: function () {
-            return this.getStringAttribute('target_image');
-        },
-        set: function (value) {
-            this._targetImage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Tag.prototype, "targetImageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetImage;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagTriggersInput() {
+        return this._tagTriggers;
+    }
+    // target_image - computed: false, optional: false, required: true
+    _targetImage;
+    get targetImage() {
+        return this.getStringAttribute('target_image');
+    }
+    set targetImage(value) {
+        this._targetImage = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetImageInput() {
+        return this._targetImage;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Tag.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             source_image: cdktf.stringToTerraform(this._sourceImage),
             tag_triggers: cdktf.listMapper(cdktf.stringToTerraform, false)(this._tagTriggers),
             target_image: cdktf.stringToTerraform(this._targetImage),
         };
-    };
-    Tag.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -193,15 +152,6 @@ var Tag = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Tag.tfResourceType = "docker_tag";
-    return Tag;
-}(cdktf.TerraformResource));
-exports.Tag = Tag;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

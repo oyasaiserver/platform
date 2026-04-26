@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_hold
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoneHold = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_hold cloudflare_zone_hold}
 */
-var ZoneHold = /** @class */ (function (_super) {
-    __extends(ZoneHold, _super);
+export class ZoneHold extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zone_hold";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZoneHold resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZoneHold to import
+    * @param importFromId The id of the existing ZoneHold that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_hold#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZoneHold to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_hold", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZoneHold = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZoneHoldConfig
     */
-    function ZoneHold(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zone_hold',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,116 +46,76 @@ var ZoneHold = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._holdAfter = config.holdAfter;
-        _this._includeSubdomains = config.includeSubdomains;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._holdAfter = config.holdAfter;
+        this._includeSubdomains = config.includeSubdomains;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZoneHold resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZoneHold to import
-    * @param importFromId The id of the existing ZoneHold that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_hold#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZoneHold to import is found
-    */
-    ZoneHold.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_hold", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZoneHold.prototype, "hold", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // hold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('hold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneHold.prototype, "holdAfter", {
-        get: function () {
-            return this.getStringAttribute('hold_after');
-        },
-        set: function (value) {
-            this._holdAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneHold.prototype.resetHoldAfter = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // hold - computed: true, optional: false, required: false
+    get hold() {
+        return this.getBooleanAttribute('hold');
+    }
+    // hold_after - computed: true, optional: true, required: false
+    _holdAfter;
+    get holdAfter() {
+        return this.getStringAttribute('hold_after');
+    }
+    set holdAfter(value) {
+        this._holdAfter = value;
+    }
+    resetHoldAfter() {
         this._holdAfter = undefined;
-    };
-    Object.defineProperty(ZoneHold.prototype, "holdAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._holdAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneHold.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneHold.prototype, "includeSubdomains", {
-        get: function () {
-            return this.getBooleanAttribute('include_subdomains');
-        },
-        set: function (value) {
-            this._includeSubdomains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneHold.prototype.resetIncludeSubdomains = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get holdAfterInput() {
+        return this._holdAfter;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // include_subdomains - computed: true, optional: true, required: false
+    _includeSubdomains;
+    get includeSubdomains() {
+        return this.getBooleanAttribute('include_subdomains');
+    }
+    set includeSubdomains(value) {
+        this._includeSubdomains = value;
+    }
+    resetIncludeSubdomains() {
         this._includeSubdomains = undefined;
-    };
-    Object.defineProperty(ZoneHold.prototype, "includeSubdomainsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeSubdomains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneHold.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneHold.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeSubdomainsInput() {
+        return this._includeSubdomains;
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZoneHold.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             hold_after: cdktf.stringToTerraform(this._holdAfter),
             include_subdomains: cdktf.booleanToTerraform(this._includeSubdomains),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZoneHold.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             hold_after: {
                 value: cdktf.stringToHclTerraform(this._holdAfter),
                 isBlock: false,
@@ -178,15 +136,6 @@ var ZoneHold = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZoneHold.tfResourceType = "cloudflare_zone_hold";
-    return ZoneHold;
-}(cdktf.TerraformResource));
-exports.ZoneHold = ZoneHold;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

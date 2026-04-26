@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deployment_branch_policy
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepositoryDeploymentBranchPolicy = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deployment_branch_policy github_repository_deployment_branch_policy}
 */
-var RepositoryDeploymentBranchPolicy = /** @class */ (function (_super) {
-    __extends(RepositoryDeploymentBranchPolicy, _super);
+export class RepositoryDeploymentBranchPolicy extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_deployment_branch_policy";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RepositoryDeploymentBranchPolicy resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RepositoryDeploymentBranchPolicy to import
+    * @param importFromId The id of the existing RepositoryDeploymentBranchPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deployment_branch_policy#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RepositoryDeploymentBranchPolicy to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_deployment_branch_policy", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var RepositoryDeploymentBranchPolicy = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryDeploymentBranchPolicyConfig
     */
-    function RepositoryDeploymentBranchPolicy(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_deployment_branch_policy',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,127 +46,86 @@ var RepositoryDeploymentBranchPolicy = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._environmentName = config.environmentName;
-        _this._etag = config.etag;
-        _this._id = config.id;
-        _this._name = config.name;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._environmentName = config.environmentName;
+        this._etag = config.etag;
+        this._id = config.id;
+        this._name = config.name;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RepositoryDeploymentBranchPolicy resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RepositoryDeploymentBranchPolicy to import
-    * @param importFromId The id of the existing RepositoryDeploymentBranchPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deployment_branch_policy#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RepositoryDeploymentBranchPolicy to import is found
-    */
-    RepositoryDeploymentBranchPolicy.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_deployment_branch_policy", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "environmentName", {
-        get: function () {
-            return this.getStringAttribute('environment_name');
-        },
-        set: function (value) {
-            this._environmentName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "environmentNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "etag", {
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        set: function (value) {
-            this._etag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryDeploymentBranchPolicy.prototype.resetEtag = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // environment_name - computed: false, optional: false, required: true
+    _environmentName;
+    get environmentName() {
+        return this.getStringAttribute('environment_name');
+    }
+    set environmentName(value) {
+        this._environmentName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentNameInput() {
+        return this._environmentName;
+    }
+    // etag - computed: true, optional: true, required: false
+    _etag;
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    set etag(value) {
+        this._etag = value;
+    }
+    resetEtag() {
         this._etag = undefined;
-    };
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "etagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._etag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryDeploymentBranchPolicy.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get etagInput() {
+        return this._etag;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeploymentBranchPolicy.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RepositoryDeploymentBranchPolicy.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             environment_name: cdktf.stringToTerraform(this._environmentName),
             etag: cdktf.stringToTerraform(this._etag),
@@ -176,9 +133,9 @@ var RepositoryDeploymentBranchPolicy = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    RepositoryDeploymentBranchPolicy.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             environment_name: {
                 value: cdktf.stringToHclTerraform(this._environmentName),
                 isBlock: false,
@@ -211,15 +168,6 @@ var RepositoryDeploymentBranchPolicy = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RepositoryDeploymentBranchPolicy.tfResourceType = "github_repository_deployment_branch_policy";
-    return RepositoryDeploymentBranchPolicy;
-}(cdktf.TerraformResource));
-exports.RepositoryDeploymentBranchPolicy = RepositoryDeploymentBranchPolicy;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

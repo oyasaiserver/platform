@@ -1,41 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/organization
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareOrganization = exports.DataCloudflareOrganizationProfileOutputReference = exports.DataCloudflareOrganizationParentOutputReference = exports.DataCloudflareOrganizationMetaOutputReference = exports.DataCloudflareOrganizationMetaFlagsOutputReference = exports.DataCloudflareOrganizationFilterOutputReference = exports.DataCloudflareOrganizationFilterParentOutputReference = exports.DataCloudflareOrganizationFilterNameOutputReference = exports.DataCloudflareOrganizationFilterContainingOutputReference = void 0;
-exports.dataCloudflareOrganizationFilterContainingToTerraform = dataCloudflareOrganizationFilterContainingToTerraform;
-exports.dataCloudflareOrganizationFilterContainingToHclTerraform = dataCloudflareOrganizationFilterContainingToHclTerraform;
-exports.dataCloudflareOrganizationFilterNameToTerraform = dataCloudflareOrganizationFilterNameToTerraform;
-exports.dataCloudflareOrganizationFilterNameToHclTerraform = dataCloudflareOrganizationFilterNameToHclTerraform;
-exports.dataCloudflareOrganizationFilterParentToTerraform = dataCloudflareOrganizationFilterParentToTerraform;
-exports.dataCloudflareOrganizationFilterParentToHclTerraform = dataCloudflareOrganizationFilterParentToHclTerraform;
-exports.dataCloudflareOrganizationFilterToTerraform = dataCloudflareOrganizationFilterToTerraform;
-exports.dataCloudflareOrganizationFilterToHclTerraform = dataCloudflareOrganizationFilterToHclTerraform;
-exports.dataCloudflareOrganizationMetaFlagsToTerraform = dataCloudflareOrganizationMetaFlagsToTerraform;
-exports.dataCloudflareOrganizationMetaFlagsToHclTerraform = dataCloudflareOrganizationMetaFlagsToHclTerraform;
-exports.dataCloudflareOrganizationMetaToTerraform = dataCloudflareOrganizationMetaToTerraform;
-exports.dataCloudflareOrganizationMetaToHclTerraform = dataCloudflareOrganizationMetaToHclTerraform;
-exports.dataCloudflareOrganizationParentToTerraform = dataCloudflareOrganizationParentToTerraform;
-exports.dataCloudflareOrganizationParentToHclTerraform = dataCloudflareOrganizationParentToHclTerraform;
-exports.dataCloudflareOrganizationProfileToTerraform = dataCloudflareOrganizationProfileToTerraform;
-exports.dataCloudflareOrganizationProfileToHclTerraform = dataCloudflareOrganizationProfileToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareOrganizationFilterContainingToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareOrganizationFilterContainingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -48,14 +14,14 @@ function dataCloudflareOrganizationFilterContainingToTerraform(struct) {
         user: cdktf.stringToTerraform(struct.user),
     };
 }
-function dataCloudflareOrganizationFilterContainingToHclTerraform(struct) {
+export function dataCloudflareOrganizationFilterContainingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         account: {
             value: cdktf.stringToHclTerraform(struct.account),
             isBlock: false,
@@ -76,133 +42,105 @@ function dataCloudflareOrganizationFilterContainingToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareOrganizationFilterContainingOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationFilterContainingOutputReference, _super);
+export class DataCloudflareOrganizationFilterContainingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationFilterContainingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._account !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.account = this._account;
-            }
-            if (this._organization !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.organization = this._organization;
-            }
-            if (this._user !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.user = this._user;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._account = undefined;
-                this._organization = undefined;
-                this._user = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._account = value.account;
-                this._organization = value.organization;
-                this._user = value.user;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "account", {
-        get: function () {
-            return this.getStringAttribute('account');
-        },
-        set: function (value) {
-            this._account = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterContainingOutputReference.prototype.resetAccount = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._account !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.account = this._account;
+        }
+        if (this._organization !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.organization = this._organization;
+        }
+        if (this._user !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.user = this._user;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._account = undefined;
+            this._organization = undefined;
+            this._user = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._account = value.account;
+            this._organization = value.organization;
+            this._user = value.user;
+        }
+    }
+    // account - computed: false, optional: true, required: false
+    _account;
+    get account() {
+        return this.getStringAttribute('account');
+    }
+    set account(value) {
+        this._account = value;
+    }
+    resetAccount() {
         this._account = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "accountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._account;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "organization", {
-        get: function () {
-            return this.getStringAttribute('organization');
-        },
-        set: function (value) {
-            this._organization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterContainingOutputReference.prototype.resetOrganization = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountInput() {
+        return this._account;
+    }
+    // organization - computed: false, optional: true, required: false
+    _organization;
+    get organization() {
+        return this.getStringAttribute('organization');
+    }
+    set organization(value) {
+        this._organization = value;
+    }
+    resetOrganization() {
         this._organization = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "organizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._organization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "user", {
-        get: function () {
-            return this.getStringAttribute('user');
-        },
-        set: function (value) {
-            this._user = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterContainingOutputReference.prototype.resetUser = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get organizationInput() {
+        return this._organization;
+    }
+    // user - computed: false, optional: true, required: false
+    _user;
+    get user() {
+        return this.getStringAttribute('user');
+    }
+    set user(value) {
+        this._user = value;
+    }
+    resetUser() {
         this._user = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterContainingOutputReference.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationFilterContainingOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationFilterContainingOutputReference = DataCloudflareOrganizationFilterContainingOutputReference;
-function dataCloudflareOrganizationFilterNameToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user;
+    }
+}
+export function dataCloudflareOrganizationFilterNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -215,14 +153,14 @@ function dataCloudflareOrganizationFilterNameToTerraform(struct) {
         starts_with: cdktf.stringToTerraform(struct.startsWith),
     };
 }
-function dataCloudflareOrganizationFilterNameToHclTerraform(struct) {
+export function dataCloudflareOrganizationFilterNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         contains: {
             value: cdktf.stringToHclTerraform(struct.contains),
             isBlock: false,
@@ -243,133 +181,105 @@ function dataCloudflareOrganizationFilterNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareOrganizationFilterNameOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationFilterNameOutputReference, _super);
+export class DataCloudflareOrganizationFilterNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationFilterNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endsWith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endsWith = this._endsWith;
-            }
-            if (this._startsWith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startsWith = this._startsWith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contains = undefined;
-                this._endsWith = undefined;
-                this._startsWith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contains = value.contains;
-                this._endsWith = value.endsWith;
-                this._startsWith = value.startsWith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterNameOutputReference.prototype.resetContains = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endsWith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endsWith = this._endsWith;
+        }
+        if (this._startsWith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startsWith = this._startsWith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contains = undefined;
+            this._endsWith = undefined;
+            this._startsWith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contains = value.contains;
+            this._endsWith = value.endsWith;
+            this._startsWith = value.startsWith;
+        }
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "endsWith", {
-        get: function () {
-            return this.getStringAttribute('ends_with');
-        },
-        set: function (value) {
-            this._endsWith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterNameOutputReference.prototype.resetEndsWith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // ends_with - computed: false, optional: true, required: false
+    _endsWith;
+    get endsWith() {
+        return this.getStringAttribute('ends_with');
+    }
+    set endsWith(value) {
+        this._endsWith = value;
+    }
+    resetEndsWith() {
         this._endsWith = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "endsWithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endsWith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "startsWith", {
-        get: function () {
-            return this.getStringAttribute('starts_with');
-        },
-        set: function (value) {
-            this._startsWith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterNameOutputReference.prototype.resetStartsWith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endsWithInput() {
+        return this._endsWith;
+    }
+    // starts_with - computed: false, optional: true, required: false
+    _startsWith;
+    get startsWith() {
+        return this.getStringAttribute('starts_with');
+    }
+    set startsWith(value) {
+        this._startsWith = value;
+    }
+    resetStartsWith() {
         this._startsWith = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterNameOutputReference.prototype, "startsWithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startsWith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationFilterNameOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationFilterNameOutputReference = DataCloudflareOrganizationFilterNameOutputReference;
-function dataCloudflareOrganizationFilterParentToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startsWithInput() {
+        return this._startsWith;
+    }
+}
+export function dataCloudflareOrganizationFilterParentToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -380,14 +290,14 @@ function dataCloudflareOrganizationFilterParentToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function dataCloudflareOrganizationFilterParentToHclTerraform(struct) {
+export function dataCloudflareOrganizationFilterParentToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -396,79 +306,63 @@ function dataCloudflareOrganizationFilterParentToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareOrganizationFilterParentOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationFilterParentOutputReference, _super);
+export class DataCloudflareOrganizationFilterParentOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationFilterParentOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationFilterParentOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterParentOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterParentOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterParentOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationFilterParentOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationFilterParentOutputReference = DataCloudflareOrganizationFilterParentOutputReference;
-function dataCloudflareOrganizationFilterToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function dataCloudflareOrganizationFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -484,14 +378,14 @@ function dataCloudflareOrganizationFilterToTerraform(struct) {
         parent: dataCloudflareOrganizationFilterParentToTerraform(struct.parent),
     };
 }
-function dataCloudflareOrganizationFilterToHclTerraform(struct) {
+export function dataCloudflareOrganizationFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         containing: {
             value: dataCloudflareOrganizationFilterContainingToHclTerraform(struct.containing),
             isBlock: true,
@@ -530,221 +424,168 @@ function dataCloudflareOrganizationFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareOrganizationFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationFilterOutputReference, _super);
+export class DataCloudflareOrganizationFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // containing - computed: false, optional: true, required: false
-        _this._containing = new DataCloudflareOrganizationFilterContainingOutputReference(_this, "containing");
-        // name - computed: false, optional: true, required: false
-        _this._name = new DataCloudflareOrganizationFilterNameOutputReference(_this, "name");
-        // parent - computed: false, optional: true, required: false
-        _this._parent = new DataCloudflareOrganizationFilterParentOutputReference(_this, "parent");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._containing) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.containing = (_b = this._containing) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (((_c = this._name) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = (_d = this._name) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._pageSize !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pageSize = this._pageSize;
-            }
-            if (this._pageToken !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pageToken = this._pageToken;
-            }
-            if (((_e = this._parent) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.parent = (_f = this._parent) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._containing.internalValue = undefined;
-                this._id = undefined;
-                this._name.internalValue = undefined;
-                this._pageSize = undefined;
-                this._pageToken = undefined;
-                this._parent.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._containing.internalValue = value.containing;
-                this._id = value.id;
-                this._name.internalValue = value.name;
-                this._pageSize = value.pageSize;
-                this._pageToken = value.pageToken;
-                this._parent.internalValue = value.parent;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "containing", {
-        get: function () {
-            return this._containing;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.putContaining = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._containing?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.containing = this._containing?.internalValue;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._name?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name?.internalValue;
+        }
+        if (this._pageSize !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pageSize = this._pageSize;
+        }
+        if (this._pageToken !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pageToken = this._pageToken;
+        }
+        if (this._parent?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.parent = this._parent?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._containing.internalValue = undefined;
+            this._id = undefined;
+            this._name.internalValue = undefined;
+            this._pageSize = undefined;
+            this._pageToken = undefined;
+            this._parent.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._containing.internalValue = value.containing;
+            this._id = value.id;
+            this._name.internalValue = value.name;
+            this._pageSize = value.pageSize;
+            this._pageToken = value.pageToken;
+            this._parent.internalValue = value.parent;
+        }
+    }
+    // containing - computed: false, optional: true, required: false
+    _containing = new DataCloudflareOrganizationFilterContainingOutputReference(this, "containing");
+    get containing() {
+        return this._containing;
+    }
+    putContaining(value) {
         this._containing.internalValue = value;
-    };
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetContaining = function () {
+    }
+    resetContaining() {
         this._containing.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "containingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._containing.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "id", {
-        get: function () {
-            return this.getListAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containingInput() {
+        return this._containing.internalValue;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getListAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.putName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: true, required: false
+    _name = new DataCloudflareOrganizationFilterNameOutputReference(this, "name");
+    get name() {
+        return this._name;
+    }
+    putName(value) {
         this._name.internalValue = value;
-    };
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetName = function () {
+    }
+    resetName() {
         this._name.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "pageSize", {
-        get: function () {
-            return this.getNumberAttribute('page_size');
-        },
-        set: function (value) {
-            this._pageSize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetPageSize = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name.internalValue;
+    }
+    // page_size - computed: false, optional: true, required: false
+    _pageSize;
+    get pageSize() {
+        return this.getNumberAttribute('page_size');
+    }
+    set pageSize(value) {
+        this._pageSize = value;
+    }
+    resetPageSize() {
         this._pageSize = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "pageSizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pageSize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "pageToken", {
-        get: function () {
-            return this.getStringAttribute('page_token');
-        },
-        set: function (value) {
-            this._pageToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetPageToken = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pageSizeInput() {
+        return this._pageSize;
+    }
+    // page_token - computed: false, optional: true, required: false
+    _pageToken;
+    get pageToken() {
+        return this.getStringAttribute('page_token');
+    }
+    set pageToken(value) {
+        this._pageToken = value;
+    }
+    resetPageToken() {
         this._pageToken = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "pageTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pageToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "parent", {
-        get: function () {
-            return this._parent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganizationFilterOutputReference.prototype.putParent = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pageTokenInput() {
+        return this._pageToken;
+    }
+    // parent - computed: false, optional: true, required: false
+    _parent = new DataCloudflareOrganizationFilterParentOutputReference(this, "parent");
+    get parent() {
+        return this._parent;
+    }
+    putParent(value) {
         this._parent.internalValue = value;
-    };
-    DataCloudflareOrganizationFilterOutputReference.prototype.resetParent = function () {
+    }
+    resetParent() {
         this._parent.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganizationFilterOutputReference.prototype, "parentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parent.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationFilterOutputReference = DataCloudflareOrganizationFilterOutputReference;
-function dataCloudflareOrganizationMetaFlagsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentInput() {
+        return this._parent.internalValue;
+    }
+}
+export function dataCloudflareOrganizationMetaFlagsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -753,88 +594,60 @@ function dataCloudflareOrganizationMetaFlagsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareOrganizationMetaFlagsToHclTerraform(struct) {
+export function dataCloudflareOrganizationMetaFlagsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareOrganizationMetaFlagsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationMetaFlagsOutputReference, _super);
+export class DataCloudflareOrganizationMetaFlagsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationMetaFlagsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "accountCreation", {
-        // account_creation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_creation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "accountDeletion", {
-        // account_deletion - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_deletion');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "accountMigration", {
-        // account_migration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_migration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "accountMobility", {
-        // account_mobility - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_mobility');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaFlagsOutputReference.prototype, "subOrgCreation", {
-        // sub_org_creation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sub_org_creation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationMetaFlagsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationMetaFlagsOutputReference = DataCloudflareOrganizationMetaFlagsOutputReference;
-function dataCloudflareOrganizationMetaToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // account_creation - computed: true, optional: false, required: false
+    get accountCreation() {
+        return this.getStringAttribute('account_creation');
+    }
+    // account_deletion - computed: true, optional: false, required: false
+    get accountDeletion() {
+        return this.getStringAttribute('account_deletion');
+    }
+    // account_migration - computed: true, optional: false, required: false
+    get accountMigration() {
+        return this.getStringAttribute('account_migration');
+    }
+    // account_mobility - computed: true, optional: false, required: false
+    get accountMobility() {
+        return this.getStringAttribute('account_mobility');
+    }
+    // sub_org_creation - computed: true, optional: false, required: false
+    get subOrgCreation() {
+        return this.getStringAttribute('sub_org_creation');
+    }
+}
+export function dataCloudflareOrganizationMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -843,65 +656,49 @@ function dataCloudflareOrganizationMetaToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareOrganizationMetaToHclTerraform(struct) {
+export function dataCloudflareOrganizationMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareOrganizationMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationMetaOutputReference, _super);
+export class DataCloudflareOrganizationMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // flags - computed: true, optional: false, required: false
-        _this._flags = new DataCloudflareOrganizationMetaFlagsOutputReference(_this, "flags");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaOutputReference.prototype, "flags", {
-        get: function () {
-            return this._flags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationMetaOutputReference.prototype, "managedBy", {
-        // managed_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('managed_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationMetaOutputReference = DataCloudflareOrganizationMetaOutputReference;
-function dataCloudflareOrganizationParentToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // flags - computed: true, optional: false, required: false
+    _flags = new DataCloudflareOrganizationMetaFlagsOutputReference(this, "flags");
+    get flags() {
+        return this._flags;
+    }
+    // managed_by - computed: true, optional: false, required: false
+    get managedBy() {
+        return this.getStringAttribute('managed_by');
+    }
+}
+export function dataCloudflareOrganizationParentToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -910,64 +707,48 @@ function dataCloudflareOrganizationParentToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareOrganizationParentToHclTerraform(struct) {
+export function dataCloudflareOrganizationParentToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareOrganizationParentOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationParentOutputReference, _super);
+export class DataCloudflareOrganizationParentOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationParentOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationParentOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationParentOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationParentOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationParentOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationParentOutputReference = DataCloudflareOrganizationParentOutputReference;
-function dataCloudflareOrganizationProfileToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function dataCloudflareOrganizationProfileToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -976,92 +757,80 @@ function dataCloudflareOrganizationProfileToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareOrganizationProfileToHclTerraform(struct) {
+export function dataCloudflareOrganizationProfileToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareOrganizationProfileOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganizationProfileOutputReference, _super);
+export class DataCloudflareOrganizationProfileOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareOrganizationProfileOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "businessAddress", {
-        // business_address - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('business_address');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "businessEmail", {
-        // business_email - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('business_email');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "businessName", {
-        // business_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('business_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "businessPhone", {
-        // business_phone - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('business_phone');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganizationProfileOutputReference.prototype, "externalMetadata", {
-        // external_metadata - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('external_metadata');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareOrganizationProfileOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareOrganizationProfileOutputReference = DataCloudflareOrganizationProfileOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // business_address - computed: true, optional: false, required: false
+    get businessAddress() {
+        return this.getStringAttribute('business_address');
+    }
+    // business_email - computed: true, optional: false, required: false
+    get businessEmail() {
+        return this.getStringAttribute('business_email');
+    }
+    // business_name - computed: true, optional: false, required: false
+    get businessName() {
+        return this.getStringAttribute('business_name');
+    }
+    // business_phone - computed: true, optional: false, required: false
+    get businessPhone() {
+        return this.getStringAttribute('business_phone');
+    }
+    // external_metadata - computed: true, optional: false, required: false
+    get externalMetadata() {
+        return this.getStringAttribute('external_metadata');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/organization cloudflare_organization}
 */
-var DataCloudflareOrganization = /** @class */ (function (_super) {
-    __extends(DataCloudflareOrganization, _super);
+export class DataCloudflareOrganization extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_organization";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareOrganization resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareOrganization to import
+    * @param importFromId The id of the existing DataCloudflareOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/organization#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareOrganization to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_organization", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1072,9 +841,8 @@ var DataCloudflareOrganization = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareOrganizationConfig = {}
     */
-    function DataCloudflareOrganization(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_organization',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1087,133 +855,81 @@ var DataCloudflareOrganization = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareOrganizationFilterOutputReference(_this, "filter");
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareOrganizationMetaOutputReference(_this, "meta");
-        // parent - computed: true, optional: false, required: false
-        _this._parent = new DataCloudflareOrganizationParentOutputReference(_this, "parent");
-        // profile - computed: true, optional: false, required: false
-        _this._profile = new DataCloudflareOrganizationProfileOutputReference(_this, "profile");
-        _this._filter.internalValue = config.filter;
-        _this._organizationId = config.organizationId;
-        return _this;
+        });
+        this._filter.internalValue = config.filter;
+        this._organizationId = config.organizationId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareOrganization resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareOrganization to import
-    * @param importFromId The id of the existing DataCloudflareOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/organization#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareOrganization to import is found
-    */
-    DataCloudflareOrganization.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_organization", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareOrganization.prototype, "createTime", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // create_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('create_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganization.prototype.putFilter = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // create_time - computed: true, optional: false, required: false
+    get createTime() {
+        return this.getStringAttribute('create_time');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareOrganizationFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareOrganization.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganization.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "organizationId", {
-        get: function () {
-            return this.getStringAttribute('organization_id');
-        },
-        set: function (value) {
-            this._organizationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareOrganization.prototype.resetOrganizationId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareOrganizationMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // organization_id - computed: false, optional: true, required: false
+    _organizationId;
+    get organizationId() {
+        return this.getStringAttribute('organization_id');
+    }
+    set organizationId(value) {
+        this._organizationId = value;
+    }
+    resetOrganizationId() {
         this._organizationId = undefined;
-    };
-    Object.defineProperty(DataCloudflareOrganization.prototype, "organizationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._organizationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "parent", {
-        get: function () {
-            return this._parent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareOrganization.prototype, "profile", {
-        get: function () {
-            return this._profile;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get organizationIdInput() {
+        return this._organizationId;
+    }
+    // parent - computed: true, optional: false, required: false
+    _parent = new DataCloudflareOrganizationParentOutputReference(this, "parent");
+    get parent() {
+        return this._parent;
+    }
+    // profile - computed: true, optional: false, required: false
+    _profile = new DataCloudflareOrganizationProfileOutputReference(this, "profile");
+    get profile() {
+        return this._profile;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareOrganization.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             filter: dataCloudflareOrganizationFilterToTerraform(this._filter.internalValue),
             organization_id: cdktf.stringToTerraform(this._organizationId),
         };
-    };
-    DataCloudflareOrganization.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             filter: {
                 value: dataCloudflareOrganizationFilterToHclTerraform(this._filter.internalValue),
                 isBlock: true,
@@ -1228,15 +944,6 @@ var DataCloudflareOrganization = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareOrganization.tfResourceType = "cloudflare_organization";
-    return DataCloudflareOrganization;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareOrganization = DataCloudflareOrganization;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationPolicy = exports.NotificationPolicyMechanismsOutputReference = exports.NotificationPolicyMechanismsWebhooksList = exports.NotificationPolicyMechanismsWebhooksOutputReference = exports.NotificationPolicyMechanismsPagerdutyList = exports.NotificationPolicyMechanismsPagerdutyOutputReference = exports.NotificationPolicyMechanismsEmailList = exports.NotificationPolicyMechanismsEmailOutputReference = exports.NotificationPolicyFiltersOutputReference = void 0;
-exports.notificationPolicyFiltersToTerraform = notificationPolicyFiltersToTerraform;
-exports.notificationPolicyFiltersToHclTerraform = notificationPolicyFiltersToHclTerraform;
-exports.notificationPolicyMechanismsEmailToTerraform = notificationPolicyMechanismsEmailToTerraform;
-exports.notificationPolicyMechanismsEmailToHclTerraform = notificationPolicyMechanismsEmailToHclTerraform;
-exports.notificationPolicyMechanismsPagerdutyToTerraform = notificationPolicyMechanismsPagerdutyToTerraform;
-exports.notificationPolicyMechanismsPagerdutyToHclTerraform = notificationPolicyMechanismsPagerdutyToHclTerraform;
-exports.notificationPolicyMechanismsWebhooksToTerraform = notificationPolicyMechanismsWebhooksToTerraform;
-exports.notificationPolicyMechanismsWebhooksToHclTerraform = notificationPolicyMechanismsWebhooksToHclTerraform;
-exports.notificationPolicyMechanismsToTerraform = notificationPolicyMechanismsToTerraform;
-exports.notificationPolicyMechanismsToHclTerraform = notificationPolicyMechanismsToHclTerraform;
-var cdktf = require("cdktf");
-function notificationPolicyFiltersToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function notificationPolicyFiltersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -82,14 +54,14 @@ function notificationPolicyFiltersToTerraform(struct) {
         zones: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.zones),
     };
 }
-function notificationPolicyFiltersToHclTerraform(struct) {
+export function notificationPolicyFiltersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         actions: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.actions),
             isBlock: false,
@@ -350,1213 +322,945 @@ function notificationPolicyFiltersToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NotificationPolicyFiltersOutputReference = /** @class */ (function (_super) {
-    __extends(NotificationPolicyFiltersOutputReference, _super);
+export class NotificationPolicyFiltersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function NotificationPolicyFiltersOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._actions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.actions = this._actions;
-            }
-            if (this._affectedAsns !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.affectedAsns = this._affectedAsns;
-            }
-            if (this._affectedComponents !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.affectedComponents = this._affectedComponents;
-            }
-            if (this._affectedLocations !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.affectedLocations = this._affectedLocations;
-            }
-            if (this._airportCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.airportCode = this._airportCode;
-            }
-            if (this._alertTriggerPreferences !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alertTriggerPreferences = this._alertTriggerPreferences;
-            }
-            if (this._alertTriggerPreferencesValue !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alertTriggerPreferencesValue = this._alertTriggerPreferencesValue;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._environment !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.environment = this._environment;
-            }
-            if (this._event !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.event = this._event;
-            }
-            if (this._eventSource !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.eventSource = this._eventSource;
-            }
-            if (this._eventType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.eventType = this._eventType;
-            }
-            if (this._groupBy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupBy = this._groupBy;
-            }
-            if (this._healthCheckId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.healthCheckId = this._healthCheckId;
-            }
-            if (this._incidentImpact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.incidentImpact = this._incidentImpact;
-            }
-            if (this._inputId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.inputId = this._inputId;
-            }
-            if (this._insightClass !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.insightClass = this._insightClass;
-            }
-            if (this._limit !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.limit = this._limit;
-            }
-            if (this._logoTag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.logoTag = this._logoTag;
-            }
-            if (this._megabitsPerSecond !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.megabitsPerSecond = this._megabitsPerSecond;
-            }
-            if (this._newHealth !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newHealth = this._newHealth;
-            }
-            if (this._newStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newStatus = this._newStatus;
-            }
-            if (this._packetsPerSecond !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.packetsPerSecond = this._packetsPerSecond;
-            }
-            if (this._poolId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.poolId = this._poolId;
-            }
-            if (this._popNames !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.popNames = this._popNames;
-            }
-            if (this._product !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.product = this._product;
-            }
-            if (this._projectId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.projectId = this._projectId;
-            }
-            if (this._protocol !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.protocol = this._protocol;
-            }
-            if (this._queryTag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.queryTag = this._queryTag;
-            }
-            if (this._requestsPerSecond !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requestsPerSecond = this._requestsPerSecond;
-            }
-            if (this._selectors !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.selectors = this._selectors;
-            }
-            if (this._services !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.services = this._services;
-            }
-            if (this._slo !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.slo = this._slo;
-            }
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            if (this._targetHostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.targetHostname = this._targetHostname;
-            }
-            if (this._targetIp !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.targetIp = this._targetIp;
-            }
-            if (this._targetZoneName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.targetZoneName = this._targetZoneName;
-            }
-            if (this._trafficExclusions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.trafficExclusions = this._trafficExclusions;
-            }
-            if (this._tunnelId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tunnelId = this._tunnelId;
-            }
-            if (this._tunnelName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tunnelName = this._tunnelName;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._where !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.where = this._where;
-            }
-            if (this._zones !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zones = this._zones;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._actions = undefined;
-                this._affectedAsns = undefined;
-                this._affectedComponents = undefined;
-                this._affectedLocations = undefined;
-                this._airportCode = undefined;
-                this._alertTriggerPreferences = undefined;
-                this._alertTriggerPreferencesValue = undefined;
-                this._enabled = undefined;
-                this._environment = undefined;
-                this._event = undefined;
-                this._eventSource = undefined;
-                this._eventType = undefined;
-                this._groupBy = undefined;
-                this._healthCheckId = undefined;
-                this._incidentImpact = undefined;
-                this._inputId = undefined;
-                this._insightClass = undefined;
-                this._limit = undefined;
-                this._logoTag = undefined;
-                this._megabitsPerSecond = undefined;
-                this._newHealth = undefined;
-                this._newStatus = undefined;
-                this._packetsPerSecond = undefined;
-                this._poolId = undefined;
-                this._popNames = undefined;
-                this._product = undefined;
-                this._projectId = undefined;
-                this._protocol = undefined;
-                this._queryTag = undefined;
-                this._requestsPerSecond = undefined;
-                this._selectors = undefined;
-                this._services = undefined;
-                this._slo = undefined;
-                this._status = undefined;
-                this._targetHostname = undefined;
-                this._targetIp = undefined;
-                this._targetZoneName = undefined;
-                this._trafficExclusions = undefined;
-                this._tunnelId = undefined;
-                this._tunnelName = undefined;
-                this._type = undefined;
-                this._where = undefined;
-                this._zones = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._actions = value.actions;
-                this._affectedAsns = value.affectedAsns;
-                this._affectedComponents = value.affectedComponents;
-                this._affectedLocations = value.affectedLocations;
-                this._airportCode = value.airportCode;
-                this._alertTriggerPreferences = value.alertTriggerPreferences;
-                this._alertTriggerPreferencesValue = value.alertTriggerPreferencesValue;
-                this._enabled = value.enabled;
-                this._environment = value.environment;
-                this._event = value.event;
-                this._eventSource = value.eventSource;
-                this._eventType = value.eventType;
-                this._groupBy = value.groupBy;
-                this._healthCheckId = value.healthCheckId;
-                this._incidentImpact = value.incidentImpact;
-                this._inputId = value.inputId;
-                this._insightClass = value.insightClass;
-                this._limit = value.limit;
-                this._logoTag = value.logoTag;
-                this._megabitsPerSecond = value.megabitsPerSecond;
-                this._newHealth = value.newHealth;
-                this._newStatus = value.newStatus;
-                this._packetsPerSecond = value.packetsPerSecond;
-                this._poolId = value.poolId;
-                this._popNames = value.popNames;
-                this._product = value.product;
-                this._projectId = value.projectId;
-                this._protocol = value.protocol;
-                this._queryTag = value.queryTag;
-                this._requestsPerSecond = value.requestsPerSecond;
-                this._selectors = value.selectors;
-                this._services = value.services;
-                this._slo = value.slo;
-                this._status = value.status;
-                this._targetHostname = value.targetHostname;
-                this._targetIp = value.targetIp;
-                this._targetZoneName = value.targetZoneName;
-                this._trafficExclusions = value.trafficExclusions;
-                this._tunnelId = value.tunnelId;
-                this._tunnelName = value.tunnelName;
-                this._type = value.type;
-                this._where = value.where;
-                this._zones = value.zones;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "actions", {
-        get: function () {
-            return this.getListAttribute('actions');
-        },
-        set: function (value) {
-            this._actions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetActions = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._actions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.actions = this._actions;
+        }
+        if (this._affectedAsns !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.affectedAsns = this._affectedAsns;
+        }
+        if (this._affectedComponents !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.affectedComponents = this._affectedComponents;
+        }
+        if (this._affectedLocations !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.affectedLocations = this._affectedLocations;
+        }
+        if (this._airportCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.airportCode = this._airportCode;
+        }
+        if (this._alertTriggerPreferences !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alertTriggerPreferences = this._alertTriggerPreferences;
+        }
+        if (this._alertTriggerPreferencesValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alertTriggerPreferencesValue = this._alertTriggerPreferencesValue;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._environment !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.environment = this._environment;
+        }
+        if (this._event !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.event = this._event;
+        }
+        if (this._eventSource !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.eventSource = this._eventSource;
+        }
+        if (this._eventType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.eventType = this._eventType;
+        }
+        if (this._groupBy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupBy = this._groupBy;
+        }
+        if (this._healthCheckId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.healthCheckId = this._healthCheckId;
+        }
+        if (this._incidentImpact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.incidentImpact = this._incidentImpact;
+        }
+        if (this._inputId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.inputId = this._inputId;
+        }
+        if (this._insightClass !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.insightClass = this._insightClass;
+        }
+        if (this._limit !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.limit = this._limit;
+        }
+        if (this._logoTag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.logoTag = this._logoTag;
+        }
+        if (this._megabitsPerSecond !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.megabitsPerSecond = this._megabitsPerSecond;
+        }
+        if (this._newHealth !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newHealth = this._newHealth;
+        }
+        if (this._newStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newStatus = this._newStatus;
+        }
+        if (this._packetsPerSecond !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.packetsPerSecond = this._packetsPerSecond;
+        }
+        if (this._poolId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.poolId = this._poolId;
+        }
+        if (this._popNames !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.popNames = this._popNames;
+        }
+        if (this._product !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.product = this._product;
+        }
+        if (this._projectId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.projectId = this._projectId;
+        }
+        if (this._protocol !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.protocol = this._protocol;
+        }
+        if (this._queryTag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.queryTag = this._queryTag;
+        }
+        if (this._requestsPerSecond !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requestsPerSecond = this._requestsPerSecond;
+        }
+        if (this._selectors !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.selectors = this._selectors;
+        }
+        if (this._services !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.services = this._services;
+        }
+        if (this._slo !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.slo = this._slo;
+        }
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        if (this._targetHostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.targetHostname = this._targetHostname;
+        }
+        if (this._targetIp !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.targetIp = this._targetIp;
+        }
+        if (this._targetZoneName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.targetZoneName = this._targetZoneName;
+        }
+        if (this._trafficExclusions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.trafficExclusions = this._trafficExclusions;
+        }
+        if (this._tunnelId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tunnelId = this._tunnelId;
+        }
+        if (this._tunnelName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tunnelName = this._tunnelName;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._where !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.where = this._where;
+        }
+        if (this._zones !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zones = this._zones;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._actions = undefined;
+            this._affectedAsns = undefined;
+            this._affectedComponents = undefined;
+            this._affectedLocations = undefined;
+            this._airportCode = undefined;
+            this._alertTriggerPreferences = undefined;
+            this._alertTriggerPreferencesValue = undefined;
+            this._enabled = undefined;
+            this._environment = undefined;
+            this._event = undefined;
+            this._eventSource = undefined;
+            this._eventType = undefined;
+            this._groupBy = undefined;
+            this._healthCheckId = undefined;
+            this._incidentImpact = undefined;
+            this._inputId = undefined;
+            this._insightClass = undefined;
+            this._limit = undefined;
+            this._logoTag = undefined;
+            this._megabitsPerSecond = undefined;
+            this._newHealth = undefined;
+            this._newStatus = undefined;
+            this._packetsPerSecond = undefined;
+            this._poolId = undefined;
+            this._popNames = undefined;
+            this._product = undefined;
+            this._projectId = undefined;
+            this._protocol = undefined;
+            this._queryTag = undefined;
+            this._requestsPerSecond = undefined;
+            this._selectors = undefined;
+            this._services = undefined;
+            this._slo = undefined;
+            this._status = undefined;
+            this._targetHostname = undefined;
+            this._targetIp = undefined;
+            this._targetZoneName = undefined;
+            this._trafficExclusions = undefined;
+            this._tunnelId = undefined;
+            this._tunnelName = undefined;
+            this._type = undefined;
+            this._where = undefined;
+            this._zones = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._actions = value.actions;
+            this._affectedAsns = value.affectedAsns;
+            this._affectedComponents = value.affectedComponents;
+            this._affectedLocations = value.affectedLocations;
+            this._airportCode = value.airportCode;
+            this._alertTriggerPreferences = value.alertTriggerPreferences;
+            this._alertTriggerPreferencesValue = value.alertTriggerPreferencesValue;
+            this._enabled = value.enabled;
+            this._environment = value.environment;
+            this._event = value.event;
+            this._eventSource = value.eventSource;
+            this._eventType = value.eventType;
+            this._groupBy = value.groupBy;
+            this._healthCheckId = value.healthCheckId;
+            this._incidentImpact = value.incidentImpact;
+            this._inputId = value.inputId;
+            this._insightClass = value.insightClass;
+            this._limit = value.limit;
+            this._logoTag = value.logoTag;
+            this._megabitsPerSecond = value.megabitsPerSecond;
+            this._newHealth = value.newHealth;
+            this._newStatus = value.newStatus;
+            this._packetsPerSecond = value.packetsPerSecond;
+            this._poolId = value.poolId;
+            this._popNames = value.popNames;
+            this._product = value.product;
+            this._projectId = value.projectId;
+            this._protocol = value.protocol;
+            this._queryTag = value.queryTag;
+            this._requestsPerSecond = value.requestsPerSecond;
+            this._selectors = value.selectors;
+            this._services = value.services;
+            this._slo = value.slo;
+            this._status = value.status;
+            this._targetHostname = value.targetHostname;
+            this._targetIp = value.targetIp;
+            this._targetZoneName = value.targetZoneName;
+            this._trafficExclusions = value.trafficExclusions;
+            this._tunnelId = value.tunnelId;
+            this._tunnelName = value.tunnelName;
+            this._type = value.type;
+            this._where = value.where;
+            this._zones = value.zones;
+        }
+    }
+    // actions - computed: false, optional: true, required: false
+    _actions;
+    get actions() {
+        return this.getListAttribute('actions');
+    }
+    set actions(value) {
+        this._actions = value;
+    }
+    resetActions() {
         this._actions = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "actionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._actions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedAsns", {
-        get: function () {
-            return this.getListAttribute('affected_asns');
-        },
-        set: function (value) {
-            this._affectedAsns = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAffectedAsns = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionsInput() {
+        return this._actions;
+    }
+    // affected_asns - computed: false, optional: true, required: false
+    _affectedAsns;
+    get affectedAsns() {
+        return this.getListAttribute('affected_asns');
+    }
+    set affectedAsns(value) {
+        this._affectedAsns = value;
+    }
+    resetAffectedAsns() {
         this._affectedAsns = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedAsnsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._affectedAsns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedComponents", {
-        get: function () {
-            return this.getListAttribute('affected_components');
-        },
-        set: function (value) {
-            this._affectedComponents = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAffectedComponents = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get affectedAsnsInput() {
+        return this._affectedAsns;
+    }
+    // affected_components - computed: false, optional: true, required: false
+    _affectedComponents;
+    get affectedComponents() {
+        return this.getListAttribute('affected_components');
+    }
+    set affectedComponents(value) {
+        this._affectedComponents = value;
+    }
+    resetAffectedComponents() {
         this._affectedComponents = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedComponentsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._affectedComponents;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedLocations", {
-        get: function () {
-            return this.getListAttribute('affected_locations');
-        },
-        set: function (value) {
-            this._affectedLocations = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAffectedLocations = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get affectedComponentsInput() {
+        return this._affectedComponents;
+    }
+    // affected_locations - computed: false, optional: true, required: false
+    _affectedLocations;
+    get affectedLocations() {
+        return this.getListAttribute('affected_locations');
+    }
+    set affectedLocations(value) {
+        this._affectedLocations = value;
+    }
+    resetAffectedLocations() {
         this._affectedLocations = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "affectedLocationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._affectedLocations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "airportCode", {
-        get: function () {
-            return this.getListAttribute('airport_code');
-        },
-        set: function (value) {
-            this._airportCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAirportCode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get affectedLocationsInput() {
+        return this._affectedLocations;
+    }
+    // airport_code - computed: false, optional: true, required: false
+    _airportCode;
+    get airportCode() {
+        return this.getListAttribute('airport_code');
+    }
+    set airportCode(value) {
+        this._airportCode = value;
+    }
+    resetAirportCode() {
         this._airportCode = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "airportCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._airportCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "alertTriggerPreferences", {
-        get: function () {
-            return this.getListAttribute('alert_trigger_preferences');
-        },
-        set: function (value) {
-            this._alertTriggerPreferences = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAlertTriggerPreferences = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get airportCodeInput() {
+        return this._airportCode;
+    }
+    // alert_trigger_preferences - computed: false, optional: true, required: false
+    _alertTriggerPreferences;
+    get alertTriggerPreferences() {
+        return this.getListAttribute('alert_trigger_preferences');
+    }
+    set alertTriggerPreferences(value) {
+        this._alertTriggerPreferences = value;
+    }
+    resetAlertTriggerPreferences() {
         this._alertTriggerPreferences = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "alertTriggerPreferencesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alertTriggerPreferences;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "alertTriggerPreferencesValue", {
-        get: function () {
-            return this.getListAttribute('alert_trigger_preferences_value');
-        },
-        set: function (value) {
-            this._alertTriggerPreferencesValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetAlertTriggerPreferencesValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get alertTriggerPreferencesInput() {
+        return this._alertTriggerPreferences;
+    }
+    // alert_trigger_preferences_value - computed: false, optional: true, required: false
+    _alertTriggerPreferencesValue;
+    get alertTriggerPreferencesValue() {
+        return this.getListAttribute('alert_trigger_preferences_value');
+    }
+    set alertTriggerPreferencesValue(value) {
+        this._alertTriggerPreferencesValue = value;
+    }
+    resetAlertTriggerPreferencesValue() {
         this._alertTriggerPreferencesValue = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "alertTriggerPreferencesValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alertTriggerPreferencesValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getListAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get alertTriggerPreferencesValueInput() {
+        return this._alertTriggerPreferencesValue;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getListAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "environment", {
-        get: function () {
-            return this.getListAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetEnvironment = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // environment - computed: false, optional: true, required: false
+    _environment;
+    get environment() {
+        return this.getListAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    resetEnvironment() {
         this._environment = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "event", {
-        get: function () {
-            return this.getListAttribute('event');
-        },
-        set: function (value) {
-            this._event = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetEvent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // event - computed: false, optional: true, required: false
+    _event;
+    get event() {
+        return this.getListAttribute('event');
+    }
+    set event(value) {
+        this._event = value;
+    }
+    resetEvent() {
         this._event = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "eventInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._event;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "eventSource", {
-        get: function () {
-            return this.getListAttribute('event_source');
-        },
-        set: function (value) {
-            this._eventSource = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetEventSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventInput() {
+        return this._event;
+    }
+    // event_source - computed: false, optional: true, required: false
+    _eventSource;
+    get eventSource() {
+        return this.getListAttribute('event_source');
+    }
+    set eventSource(value) {
+        this._eventSource = value;
+    }
+    resetEventSource() {
         this._eventSource = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "eventSourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eventSource;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "eventType", {
-        get: function () {
-            return this.getListAttribute('event_type');
-        },
-        set: function (value) {
-            this._eventType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetEventType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventSourceInput() {
+        return this._eventSource;
+    }
+    // event_type - computed: false, optional: true, required: false
+    _eventType;
+    get eventType() {
+        return this.getListAttribute('event_type');
+    }
+    set eventType(value) {
+        this._eventType = value;
+    }
+    resetEventType() {
         this._eventType = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "eventTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eventType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "groupBy", {
-        get: function () {
-            return this.getListAttribute('group_by');
-        },
-        set: function (value) {
-            this._groupBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetGroupBy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventTypeInput() {
+        return this._eventType;
+    }
+    // group_by - computed: false, optional: true, required: false
+    _groupBy;
+    get groupBy() {
+        return this.getListAttribute('group_by');
+    }
+    set groupBy(value) {
+        this._groupBy = value;
+    }
+    resetGroupBy() {
         this._groupBy = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "groupByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "healthCheckId", {
-        get: function () {
-            return this.getListAttribute('health_check_id');
-        },
-        set: function (value) {
-            this._healthCheckId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetHealthCheckId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupByInput() {
+        return this._groupBy;
+    }
+    // health_check_id - computed: false, optional: true, required: false
+    _healthCheckId;
+    get healthCheckId() {
+        return this.getListAttribute('health_check_id');
+    }
+    set healthCheckId(value) {
+        this._healthCheckId = value;
+    }
+    resetHealthCheckId() {
         this._healthCheckId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "healthCheckIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._healthCheckId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "incidentImpact", {
-        get: function () {
-            return this.getListAttribute('incident_impact');
-        },
-        set: function (value) {
-            this._incidentImpact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetIncidentImpact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get healthCheckIdInput() {
+        return this._healthCheckId;
+    }
+    // incident_impact - computed: false, optional: true, required: false
+    _incidentImpact;
+    get incidentImpact() {
+        return this.getListAttribute('incident_impact');
+    }
+    set incidentImpact(value) {
+        this._incidentImpact = value;
+    }
+    resetIncidentImpact() {
         this._incidentImpact = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "incidentImpactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._incidentImpact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "inputId", {
-        get: function () {
-            return this.getListAttribute('input_id');
-        },
-        set: function (value) {
-            this._inputId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetInputId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get incidentImpactInput() {
+        return this._incidentImpact;
+    }
+    // input_id - computed: false, optional: true, required: false
+    _inputId;
+    get inputId() {
+        return this.getListAttribute('input_id');
+    }
+    set inputId(value) {
+        this._inputId = value;
+    }
+    resetInputId() {
         this._inputId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "inputIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._inputId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "insightClass", {
-        get: function () {
-            return this.getListAttribute('insight_class');
-        },
-        set: function (value) {
-            this._insightClass = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetInsightClass = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get inputIdInput() {
+        return this._inputId;
+    }
+    // insight_class - computed: false, optional: true, required: false
+    _insightClass;
+    get insightClass() {
+        return this.getListAttribute('insight_class');
+    }
+    set insightClass(value) {
+        this._insightClass = value;
+    }
+    resetInsightClass() {
         this._insightClass = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "insightClassInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._insightClass;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "limit", {
-        get: function () {
-            return this.getListAttribute('limit');
-        },
-        set: function (value) {
-            this._limit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get insightClassInput() {
+        return this._insightClass;
+    }
+    // limit - computed: false, optional: true, required: false
+    _limit;
+    get limit() {
+        return this.getListAttribute('limit');
+    }
+    set limit(value) {
+        this._limit = value;
+    }
+    resetLimit() {
         this._limit = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "limitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._limit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "logoTag", {
-        get: function () {
-            return this.getListAttribute('logo_tag');
-        },
-        set: function (value) {
-            this._logoTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetLogoTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get limitInput() {
+        return this._limit;
+    }
+    // logo_tag - computed: false, optional: true, required: false
+    _logoTag;
+    get logoTag() {
+        return this.getListAttribute('logo_tag');
+    }
+    set logoTag(value) {
+        this._logoTag = value;
+    }
+    resetLogoTag() {
         this._logoTag = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "logoTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logoTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "megabitsPerSecond", {
-        get: function () {
-            return this.getListAttribute('megabits_per_second');
-        },
-        set: function (value) {
-            this._megabitsPerSecond = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetMegabitsPerSecond = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logoTagInput() {
+        return this._logoTag;
+    }
+    // megabits_per_second - computed: false, optional: true, required: false
+    _megabitsPerSecond;
+    get megabitsPerSecond() {
+        return this.getListAttribute('megabits_per_second');
+    }
+    set megabitsPerSecond(value) {
+        this._megabitsPerSecond = value;
+    }
+    resetMegabitsPerSecond() {
         this._megabitsPerSecond = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "megabitsPerSecondInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._megabitsPerSecond;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "newHealth", {
-        get: function () {
-            return this.getListAttribute('new_health');
-        },
-        set: function (value) {
-            this._newHealth = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetNewHealth = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get megabitsPerSecondInput() {
+        return this._megabitsPerSecond;
+    }
+    // new_health - computed: false, optional: true, required: false
+    _newHealth;
+    get newHealth() {
+        return this.getListAttribute('new_health');
+    }
+    set newHealth(value) {
+        this._newHealth = value;
+    }
+    resetNewHealth() {
         this._newHealth = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "newHealthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newHealth;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "newStatus", {
-        get: function () {
-            return this.getListAttribute('new_status');
-        },
-        set: function (value) {
-            this._newStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetNewStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newHealthInput() {
+        return this._newHealth;
+    }
+    // new_status - computed: false, optional: true, required: false
+    _newStatus;
+    get newStatus() {
+        return this.getListAttribute('new_status');
+    }
+    set newStatus(value) {
+        this._newStatus = value;
+    }
+    resetNewStatus() {
         this._newStatus = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "newStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "packetsPerSecond", {
-        get: function () {
-            return this.getListAttribute('packets_per_second');
-        },
-        set: function (value) {
-            this._packetsPerSecond = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetPacketsPerSecond = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newStatusInput() {
+        return this._newStatus;
+    }
+    // packets_per_second - computed: false, optional: true, required: false
+    _packetsPerSecond;
+    get packetsPerSecond() {
+        return this.getListAttribute('packets_per_second');
+    }
+    set packetsPerSecond(value) {
+        this._packetsPerSecond = value;
+    }
+    resetPacketsPerSecond() {
         this._packetsPerSecond = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "packetsPerSecondInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._packetsPerSecond;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "poolId", {
-        get: function () {
-            return this.getListAttribute('pool_id');
-        },
-        set: function (value) {
-            this._poolId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetPoolId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get packetsPerSecondInput() {
+        return this._packetsPerSecond;
+    }
+    // pool_id - computed: false, optional: true, required: false
+    _poolId;
+    get poolId() {
+        return this.getListAttribute('pool_id');
+    }
+    set poolId(value) {
+        this._poolId = value;
+    }
+    resetPoolId() {
         this._poolId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "poolIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._poolId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "popNames", {
-        get: function () {
-            return this.getListAttribute('pop_names');
-        },
-        set: function (value) {
-            this._popNames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetPopNames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get poolIdInput() {
+        return this._poolId;
+    }
+    // pop_names - computed: false, optional: true, required: false
+    _popNames;
+    get popNames() {
+        return this.getListAttribute('pop_names');
+    }
+    set popNames(value) {
+        this._popNames = value;
+    }
+    resetPopNames() {
         this._popNames = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "popNamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._popNames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "product", {
-        get: function () {
-            return this.getListAttribute('product');
-        },
-        set: function (value) {
-            this._product = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetProduct = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get popNamesInput() {
+        return this._popNames;
+    }
+    // product - computed: false, optional: true, required: false
+    _product;
+    get product() {
+        return this.getListAttribute('product');
+    }
+    set product(value) {
+        this._product = value;
+    }
+    resetProduct() {
         this._product = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "productInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._product;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "projectId", {
-        get: function () {
-            return this.getListAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetProjectId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get productInput() {
+        return this._product;
+    }
+    // project_id - computed: false, optional: true, required: false
+    _projectId;
+    get projectId() {
+        return this.getListAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    resetProjectId() {
         this._projectId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "protocol", {
-        get: function () {
-            return this.getListAttribute('protocol');
-        },
-        set: function (value) {
-            this._protocol = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetProtocol = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // protocol - computed: false, optional: true, required: false
+    _protocol;
+    get protocol() {
+        return this.getListAttribute('protocol');
+    }
+    set protocol(value) {
+        this._protocol = value;
+    }
+    resetProtocol() {
         this._protocol = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "protocolInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._protocol;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "queryTag", {
-        get: function () {
-            return this.getListAttribute('query_tag');
-        },
-        set: function (value) {
-            this._queryTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetQueryTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get protocolInput() {
+        return this._protocol;
+    }
+    // query_tag - computed: false, optional: true, required: false
+    _queryTag;
+    get queryTag() {
+        return this.getListAttribute('query_tag');
+    }
+    set queryTag(value) {
+        this._queryTag = value;
+    }
+    resetQueryTag() {
         this._queryTag = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "queryTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queryTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "requestsPerSecond", {
-        get: function () {
-            return this.getListAttribute('requests_per_second');
-        },
-        set: function (value) {
-            this._requestsPerSecond = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetRequestsPerSecond = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queryTagInput() {
+        return this._queryTag;
+    }
+    // requests_per_second - computed: false, optional: true, required: false
+    _requestsPerSecond;
+    get requestsPerSecond() {
+        return this.getListAttribute('requests_per_second');
+    }
+    set requestsPerSecond(value) {
+        this._requestsPerSecond = value;
+    }
+    resetRequestsPerSecond() {
         this._requestsPerSecond = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "requestsPerSecondInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requestsPerSecond;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "selectors", {
-        get: function () {
-            return this.getListAttribute('selectors');
-        },
-        set: function (value) {
-            this._selectors = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetSelectors = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requestsPerSecondInput() {
+        return this._requestsPerSecond;
+    }
+    // selectors - computed: false, optional: true, required: false
+    _selectors;
+    get selectors() {
+        return this.getListAttribute('selectors');
+    }
+    set selectors(value) {
+        this._selectors = value;
+    }
+    resetSelectors() {
         this._selectors = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "selectorsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selectors;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "services", {
-        get: function () {
-            return this.getListAttribute('services');
-        },
-        set: function (value) {
-            this._services = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetServices = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get selectorsInput() {
+        return this._selectors;
+    }
+    // services - computed: false, optional: true, required: false
+    _services;
+    get services() {
+        return this.getListAttribute('services');
+    }
+    set services(value) {
+        this._services = value;
+    }
+    resetServices() {
         this._services = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "servicesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._services;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "slo", {
-        get: function () {
-            return this.getListAttribute('slo');
-        },
-        set: function (value) {
-            this._slo = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetSlo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get servicesInput() {
+        return this._services;
+    }
+    // slo - computed: false, optional: true, required: false
+    _slo;
+    get slo() {
+        return this.getListAttribute('slo');
+    }
+    set slo(value) {
+        this._slo = value;
+    }
+    resetSlo() {
         this._slo = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "sloInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._slo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "status", {
-        get: function () {
-            return this.getListAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sloInput() {
+        return this._slo;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getListAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetHostname", {
-        get: function () {
-            return this.getListAttribute('target_hostname');
-        },
-        set: function (value) {
-            this._targetHostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTargetHostname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // target_hostname - computed: false, optional: true, required: false
+    _targetHostname;
+    get targetHostname() {
+        return this.getListAttribute('target_hostname');
+    }
+    set targetHostname(value) {
+        this._targetHostname = value;
+    }
+    resetTargetHostname() {
         this._targetHostname = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetHostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetHostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetIp", {
-        get: function () {
-            return this.getListAttribute('target_ip');
-        },
-        set: function (value) {
-            this._targetIp = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTargetIp = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetHostnameInput() {
+        return this._targetHostname;
+    }
+    // target_ip - computed: false, optional: true, required: false
+    _targetIp;
+    get targetIp() {
+        return this.getListAttribute('target_ip');
+    }
+    set targetIp(value) {
+        this._targetIp = value;
+    }
+    resetTargetIp() {
         this._targetIp = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetIpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetIp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetZoneName", {
-        get: function () {
-            return this.getListAttribute('target_zone_name');
-        },
-        set: function (value) {
-            this._targetZoneName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTargetZoneName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetIpInput() {
+        return this._targetIp;
+    }
+    // target_zone_name - computed: false, optional: true, required: false
+    _targetZoneName;
+    get targetZoneName() {
+        return this.getListAttribute('target_zone_name');
+    }
+    set targetZoneName(value) {
+        this._targetZoneName = value;
+    }
+    resetTargetZoneName() {
         this._targetZoneName = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "targetZoneNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetZoneName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "trafficExclusions", {
-        get: function () {
-            return this.getListAttribute('traffic_exclusions');
-        },
-        set: function (value) {
-            this._trafficExclusions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTrafficExclusions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetZoneNameInput() {
+        return this._targetZoneName;
+    }
+    // traffic_exclusions - computed: false, optional: true, required: false
+    _trafficExclusions;
+    get trafficExclusions() {
+        return this.getListAttribute('traffic_exclusions');
+    }
+    set trafficExclusions(value) {
+        this._trafficExclusions = value;
+    }
+    resetTrafficExclusions() {
         this._trafficExclusions = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "trafficExclusionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._trafficExclusions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "tunnelId", {
-        get: function () {
-            return this.getListAttribute('tunnel_id');
-        },
-        set: function (value) {
-            this._tunnelId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTunnelId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get trafficExclusionsInput() {
+        return this._trafficExclusions;
+    }
+    // tunnel_id - computed: false, optional: true, required: false
+    _tunnelId;
+    get tunnelId() {
+        return this.getListAttribute('tunnel_id');
+    }
+    set tunnelId(value) {
+        this._tunnelId = value;
+    }
+    resetTunnelId() {
         this._tunnelId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "tunnelIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tunnelId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "tunnelName", {
-        get: function () {
-            return this.getListAttribute('tunnel_name');
-        },
-        set: function (value) {
-            this._tunnelName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetTunnelName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tunnelIdInput() {
+        return this._tunnelId;
+    }
+    // tunnel_name - computed: false, optional: true, required: false
+    _tunnelName;
+    get tunnelName() {
+        return this.getListAttribute('tunnel_name');
+    }
+    set tunnelName(value) {
+        this._tunnelName = value;
+    }
+    resetTunnelName() {
         this._tunnelName = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "tunnelNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tunnelName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "type", {
-        get: function () {
-            return this.getListAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tunnelNameInput() {
+        return this._tunnelName;
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getListAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "where", {
-        get: function () {
-            return this.getListAttribute('where');
-        },
-        set: function (value) {
-            this._where = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetWhere = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // where - computed: false, optional: true, required: false
+    _where;
+    get where() {
+        return this.getListAttribute('where');
+    }
+    set where(value) {
+        this._where = value;
+    }
+    resetWhere() {
         this._where = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "whereInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._where;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "zones", {
-        get: function () {
-            return this.getListAttribute('zones');
-        },
-        set: function (value) {
-            this._zones = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyFiltersOutputReference.prototype.resetZones = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get whereInput() {
+        return this._where;
+    }
+    // zones - computed: false, optional: true, required: false
+    _zones;
+    get zones() {
+        return this.getListAttribute('zones');
+    }
+    set zones(value) {
+        this._zones = value;
+    }
+    resetZones() {
         this._zones = undefined;
-    };
-    Object.defineProperty(NotificationPolicyFiltersOutputReference.prototype, "zonesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zones;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NotificationPolicyFiltersOutputReference;
-}(cdktf.ComplexObject));
-exports.NotificationPolicyFiltersOutputReference = NotificationPolicyFiltersOutputReference;
-function notificationPolicyMechanismsEmailToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get zonesInput() {
+        return this._zones;
+    }
+}
+export function notificationPolicyMechanismsEmailToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1567,14 +1271,14 @@ function notificationPolicyMechanismsEmailToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function notificationPolicyMechanismsEmailToHclTerraform(struct) {
+export function notificationPolicyMechanismsEmailToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1583,104 +1287,88 @@ function notificationPolicyMechanismsEmailToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NotificationPolicyMechanismsEmailOutputReference = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsEmailOutputReference, _super);
+export class NotificationPolicyMechanismsEmailOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsEmailOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(NotificationPolicyMechanismsEmailOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsEmailOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsEmailOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsEmailOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NotificationPolicyMechanismsEmailOutputReference;
-}(cdktf.ComplexObject));
-exports.NotificationPolicyMechanismsEmailOutputReference = NotificationPolicyMechanismsEmailOutputReference;
-var NotificationPolicyMechanismsEmailList = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsEmailList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export class NotificationPolicyMechanismsEmailList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsEmailList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    NotificationPolicyMechanismsEmailList.prototype.get = function (index) {
+    get(index) {
         return new NotificationPolicyMechanismsEmailOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return NotificationPolicyMechanismsEmailList;
-}(cdktf.ComplexList));
-exports.NotificationPolicyMechanismsEmailList = NotificationPolicyMechanismsEmailList;
-function notificationPolicyMechanismsPagerdutyToTerraform(struct) {
+    }
+}
+export function notificationPolicyMechanismsPagerdutyToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1691,14 +1379,14 @@ function notificationPolicyMechanismsPagerdutyToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function notificationPolicyMechanismsPagerdutyToHclTerraform(struct) {
+export function notificationPolicyMechanismsPagerdutyToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1707,104 +1395,88 @@ function notificationPolicyMechanismsPagerdutyToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NotificationPolicyMechanismsPagerdutyOutputReference = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsPagerdutyOutputReference, _super);
+export class NotificationPolicyMechanismsPagerdutyOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsPagerdutyOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(NotificationPolicyMechanismsPagerdutyOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsPagerdutyOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsPagerdutyOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsPagerdutyOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NotificationPolicyMechanismsPagerdutyOutputReference;
-}(cdktf.ComplexObject));
-exports.NotificationPolicyMechanismsPagerdutyOutputReference = NotificationPolicyMechanismsPagerdutyOutputReference;
-var NotificationPolicyMechanismsPagerdutyList = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsPagerdutyList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export class NotificationPolicyMechanismsPagerdutyList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsPagerdutyList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    NotificationPolicyMechanismsPagerdutyList.prototype.get = function (index) {
+    get(index) {
         return new NotificationPolicyMechanismsPagerdutyOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return NotificationPolicyMechanismsPagerdutyList;
-}(cdktf.ComplexList));
-exports.NotificationPolicyMechanismsPagerdutyList = NotificationPolicyMechanismsPagerdutyList;
-function notificationPolicyMechanismsWebhooksToTerraform(struct) {
+    }
+}
+export function notificationPolicyMechanismsWebhooksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1815,14 +1487,14 @@ function notificationPolicyMechanismsWebhooksToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function notificationPolicyMechanismsWebhooksToHclTerraform(struct) {
+export function notificationPolicyMechanismsWebhooksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -1831,104 +1503,88 @@ function notificationPolicyMechanismsWebhooksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NotificationPolicyMechanismsWebhooksOutputReference = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsWebhooksOutputReference, _super);
+export class NotificationPolicyMechanismsWebhooksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsWebhooksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(NotificationPolicyMechanismsWebhooksOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsWebhooksOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsWebhooksOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsWebhooksOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NotificationPolicyMechanismsWebhooksOutputReference;
-}(cdktf.ComplexObject));
-exports.NotificationPolicyMechanismsWebhooksOutputReference = NotificationPolicyMechanismsWebhooksOutputReference;
-var NotificationPolicyMechanismsWebhooksList = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsWebhooksList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export class NotificationPolicyMechanismsWebhooksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NotificationPolicyMechanismsWebhooksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    NotificationPolicyMechanismsWebhooksList.prototype.get = function (index) {
+    get(index) {
         return new NotificationPolicyMechanismsWebhooksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return NotificationPolicyMechanismsWebhooksList;
-}(cdktf.ComplexList));
-exports.NotificationPolicyMechanismsWebhooksList = NotificationPolicyMechanismsWebhooksList;
-function notificationPolicyMechanismsToTerraform(struct) {
+    }
+}
+export function notificationPolicyMechanismsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1941,14 +1597,14 @@ function notificationPolicyMechanismsToTerraform(struct) {
         webhooks: cdktf.listMapper(notificationPolicyMechanismsWebhooksToTerraform, false)(struct.webhooks),
     };
 }
-function notificationPolicyMechanismsToHclTerraform(struct) {
+export function notificationPolicyMechanismsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         email: {
             value: cdktf.listMapperHcl(notificationPolicyMechanismsEmailToHclTerraform, false)(struct.email),
             isBlock: true,
@@ -1969,144 +1625,125 @@ function notificationPolicyMechanismsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NotificationPolicyMechanismsOutputReference = /** @class */ (function (_super) {
-    __extends(NotificationPolicyMechanismsOutputReference, _super);
+export class NotificationPolicyMechanismsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function NotificationPolicyMechanismsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // email - computed: false, optional: true, required: false
-        _this._email = new NotificationPolicyMechanismsEmailList(_this, "email", true);
-        // pagerduty - computed: false, optional: true, required: false
-        _this._pagerduty = new NotificationPolicyMechanismsPagerdutyList(_this, "pagerduty", true);
-        // webhooks - computed: false, optional: true, required: false
-        _this._webhooks = new NotificationPolicyMechanismsWebhooksList(_this, "webhooks", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._email) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.email = (_b = this._email) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._pagerduty) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pagerduty = (_d = this._pagerduty) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._webhooks) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.webhooks = (_f = this._webhooks) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._email.internalValue = undefined;
-                this._pagerduty.internalValue = undefined;
-                this._webhooks.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._email.internalValue = value.email;
-                this._pagerduty.internalValue = value.pagerduty;
-                this._webhooks.internalValue = value.webhooks;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsOutputReference.prototype.putEmail = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._email?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.email = this._email?.internalValue;
+        }
+        if (this._pagerduty?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pagerduty = this._pagerduty?.internalValue;
+        }
+        if (this._webhooks?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.webhooks = this._webhooks?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._email.internalValue = undefined;
+            this._pagerduty.internalValue = undefined;
+            this._webhooks.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._email.internalValue = value.email;
+            this._pagerduty.internalValue = value.pagerduty;
+            this._webhooks.internalValue = value.webhooks;
+        }
+    }
+    // email - computed: false, optional: true, required: false
+    _email = new NotificationPolicyMechanismsEmailList(this, "email", true);
+    get email() {
+        return this._email;
+    }
+    putEmail(value) {
         this._email.internalValue = value;
-    };
-    NotificationPolicyMechanismsOutputReference.prototype.resetEmail = function () {
+    }
+    resetEmail() {
         this._email.internalValue = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "pagerduty", {
-        get: function () {
-            return this._pagerduty;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsOutputReference.prototype.putPagerduty = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email.internalValue;
+    }
+    // pagerduty - computed: false, optional: true, required: false
+    _pagerduty = new NotificationPolicyMechanismsPagerdutyList(this, "pagerduty", true);
+    get pagerduty() {
+        return this._pagerduty;
+    }
+    putPagerduty(value) {
         this._pagerduty.internalValue = value;
-    };
-    NotificationPolicyMechanismsOutputReference.prototype.resetPagerduty = function () {
+    }
+    resetPagerduty() {
         this._pagerduty.internalValue = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "pagerdutyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pagerduty.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "webhooks", {
-        get: function () {
-            return this._webhooks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyMechanismsOutputReference.prototype.putWebhooks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pagerdutyInput() {
+        return this._pagerduty.internalValue;
+    }
+    // webhooks - computed: false, optional: true, required: false
+    _webhooks = new NotificationPolicyMechanismsWebhooksList(this, "webhooks", true);
+    get webhooks() {
+        return this._webhooks;
+    }
+    putWebhooks(value) {
         this._webhooks.internalValue = value;
-    };
-    NotificationPolicyMechanismsOutputReference.prototype.resetWebhooks = function () {
+    }
+    resetWebhooks() {
         this._webhooks.internalValue = undefined;
-    };
-    Object.defineProperty(NotificationPolicyMechanismsOutputReference.prototype, "webhooksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._webhooks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NotificationPolicyMechanismsOutputReference;
-}(cdktf.ComplexObject));
-exports.NotificationPolicyMechanismsOutputReference = NotificationPolicyMechanismsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get webhooksInput() {
+        return this._webhooks.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy cloudflare_notification_policy}
 */
-var NotificationPolicy = /** @class */ (function (_super) {
-    __extends(NotificationPolicy, _super);
+export class NotificationPolicy extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_notification_policy";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a NotificationPolicy resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the NotificationPolicy to import
+    * @param importFromId The id of the existing NotificationPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the NotificationPolicy to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policy", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -2117,8 +1754,8 @@ var NotificationPolicy = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options NotificationPolicyConfig
     */
-    function NotificationPolicy(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_notification_policy',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -2131,221 +1768,146 @@ var NotificationPolicy = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filters - computed: false, optional: true, required: false
-        _this._filters = new NotificationPolicyFiltersOutputReference(_this, "filters");
-        // mechanisms - computed: false, optional: false, required: true
-        _this._mechanisms = new NotificationPolicyMechanismsOutputReference(_this, "mechanisms");
-        _this._accountId = config.accountId;
-        _this._alertInterval = config.alertInterval;
-        _this._alertType = config.alertType;
-        _this._description = config.description;
-        _this._enabled = config.enabled;
-        _this._filters.internalValue = config.filters;
-        _this._mechanisms.internalValue = config.mechanisms;
-        _this._name = config.name;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._alertInterval = config.alertInterval;
+        this._alertType = config.alertType;
+        this._description = config.description;
+        this._enabled = config.enabled;
+        this._filters.internalValue = config.filters;
+        this._mechanisms.internalValue = config.mechanisms;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a NotificationPolicy resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the NotificationPolicy to import
-    * @param importFromId The id of the existing NotificationPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the NotificationPolicy to import is found
-    */
-    NotificationPolicy.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policy", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "alertInterval", {
-        get: function () {
-            return this.getStringAttribute('alert_interval');
-        },
-        set: function (value) {
-            this._alertInterval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.resetAlertInterval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // alert_interval - computed: false, optional: true, required: false
+    _alertInterval;
+    get alertInterval() {
+        return this.getStringAttribute('alert_interval');
+    }
+    set alertInterval(value) {
+        this._alertInterval = value;
+    }
+    resetAlertInterval() {
         this._alertInterval = undefined;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "alertIntervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alertInterval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "alertType", {
-        get: function () {
-            return this.getStringAttribute('alert_type');
-        },
-        set: function (value) {
-            this._alertType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "alertTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alertType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get alertIntervalInput() {
+        return this._alertInterval;
+    }
+    // alert_type - computed: false, optional: false, required: true
+    _alertType;
+    get alertType() {
+        return this.getStringAttribute('alert_type');
+    }
+    set alertType(value) {
+        this._alertType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get alertTypeInput() {
+        return this._alertType;
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "filters", {
-        get: function () {
-            return this._filters;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.putFilters = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // filters - computed: false, optional: true, required: false
+    _filters = new NotificationPolicyFiltersOutputReference(this, "filters");
+    get filters() {
+        return this._filters;
+    }
+    putFilters(value) {
         this._filters.internalValue = value;
-    };
-    NotificationPolicy.prototype.resetFilters = function () {
+    }
+    resetFilters() {
         this._filters.internalValue = undefined;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "filtersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filters.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "mechanisms", {
-        get: function () {
-            return this._mechanisms;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicy.prototype.putMechanisms = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filtersInput() {
+        return this._filters.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mechanisms - computed: false, optional: false, required: true
+    _mechanisms = new NotificationPolicyMechanismsOutputReference(this, "mechanisms");
+    get mechanisms() {
+        return this._mechanisms;
+    }
+    putMechanisms(value) {
         this._mechanisms.internalValue = value;
-    };
-    Object.defineProperty(NotificationPolicy.prototype, "mechanismsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mechanisms.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "modified", {
-        // modified - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicy.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get mechanismsInput() {
+        return this._mechanisms.internalValue;
+    }
+    // modified - computed: true, optional: false, required: false
+    get modified() {
+        return this.getStringAttribute('modified');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
     // =========
     // SYNTHESIS
     // =========
-    NotificationPolicy.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             alert_interval: cdktf.stringToTerraform(this._alertInterval),
@@ -2356,9 +1918,9 @@ var NotificationPolicy = /** @class */ (function (_super) {
             mechanisms: notificationPolicyMechanismsToTerraform(this._mechanisms.internalValue),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    NotificationPolicy.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -2409,15 +1971,6 @@ var NotificationPolicy = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    NotificationPolicy.tfResourceType = "cloudflare_notification_policy";
-    return NotificationPolicy;
-}(cdktf.TerraformResource));
-exports.NotificationPolicy = NotificationPolicy;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

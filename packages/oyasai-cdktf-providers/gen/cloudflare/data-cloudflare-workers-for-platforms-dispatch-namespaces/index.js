@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_for_platforms_dispatch_namespaces
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareWorkersForPlatformsDispatchNamespaces = exports.DataCloudflareWorkersForPlatformsDispatchNamespacesResultList = exports.DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference = void 0;
-exports.dataCloudflareWorkersForPlatformsDispatchNamespacesResultToTerraform = dataCloudflareWorkersForPlatformsDispatchNamespacesResultToTerraform;
-exports.dataCloudflareWorkersForPlatformsDispatchNamespacesResultToHclTerraform = dataCloudflareWorkersForPlatformsDispatchNamespacesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareWorkersForPlatformsDispatchNamespacesResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareWorkersForPlatformsDispatchNamespacesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,149 +10,120 @@ function dataCloudflareWorkersForPlatformsDispatchNamespacesResultToTerraform(st
     }
     return {};
 }
-function dataCloudflareWorkersForPlatformsDispatchNamespacesResultToHclTerraform(struct) {
+export function dataCloudflareWorkersForPlatformsDispatchNamespacesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference, _super);
+export class DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "createdBy", {
-        // created_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "modifiedBy", {
-        // modified_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "namespaceId", {
-        // namespace_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('namespace_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "namespaceName", {
-        // namespace_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('namespace_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "scriptCount", {
-        // script_count - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('script_count');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference.prototype, "trustedWorkers", {
-        // trusted_workers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('trusted_workers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference = DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference;
-var DataCloudflareWorkersForPlatformsDispatchNamespacesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareWorkersForPlatformsDispatchNamespacesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_by - computed: true, optional: false, required: false
+    get createdBy() {
+        return this.getStringAttribute('created_by');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_by - computed: true, optional: false, required: false
+    get modifiedBy() {
+        return this.getStringAttribute('modified_by');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // namespace_id - computed: true, optional: false, required: false
+    get namespaceId() {
+        return this.getStringAttribute('namespace_id');
+    }
+    // namespace_name - computed: true, optional: false, required: false
+    get namespaceName() {
+        return this.getStringAttribute('namespace_name');
+    }
+    // script_count - computed: true, optional: false, required: false
+    get scriptCount() {
+        return this.getNumberAttribute('script_count');
+    }
+    // trusted_workers - computed: true, optional: false, required: false
+    get trustedWorkers() {
+        return this.getBooleanAttribute('trusted_workers');
+    }
+}
+export class DataCloudflareWorkersForPlatformsDispatchNamespacesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareWorkersForPlatformsDispatchNamespacesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareWorkersForPlatformsDispatchNamespacesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareWorkersForPlatformsDispatchNamespacesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareWorkersForPlatformsDispatchNamespacesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareWorkersForPlatformsDispatchNamespacesResultList = DataCloudflareWorkersForPlatformsDispatchNamespacesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_for_platforms_dispatch_namespaces cloudflare_workers_for_platforms_dispatch_namespaces}
 */
-var DataCloudflareWorkersForPlatformsDispatchNamespaces = /** @class */ (function (_super) {
-    __extends(DataCloudflareWorkersForPlatformsDispatchNamespaces, _super);
+export class DataCloudflareWorkersForPlatformsDispatchNamespaces extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_for_platforms_dispatch_namespaces";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareWorkersForPlatformsDispatchNamespaces resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareWorkersForPlatformsDispatchNamespaces to import
+    * @param importFromId The id of the existing DataCloudflareWorkersForPlatformsDispatchNamespaces that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_for_platforms_dispatch_namespaces#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareWorkersForPlatformsDispatchNamespaces to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_for_platforms_dispatch_namespaces", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -183,9 +134,8 @@ var DataCloudflareWorkersForPlatformsDispatchNamespaces = /** @class */ (functio
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareWorkersForPlatformsDispatchNamespacesConfig = {}
     */
-    function DataCloudflareWorkersForPlatformsDispatchNamespaces(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_for_platforms_dispatch_namespaces',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -198,86 +148,59 @@ var DataCloudflareWorkersForPlatformsDispatchNamespaces = /** @class */ (functio
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareWorkersForPlatformsDispatchNamespacesResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._maxItems = config.maxItems;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._maxItems = config.maxItems;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareWorkersForPlatformsDispatchNamespaces resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareWorkersForPlatformsDispatchNamespaces to import
-    * @param importFromId The id of the existing DataCloudflareWorkersForPlatformsDispatchNamespaces that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_for_platforms_dispatch_namespaces#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareWorkersForPlatformsDispatchNamespaces to import is found
-    */
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_for_platforms_dispatch_namespaces", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareWorkersForPlatformsDispatchNamespacesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             max_items: cdktf.numberToTerraform(this._maxItems),
         };
-    };
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -292,15 +215,6 @@ var DataCloudflareWorkersForPlatformsDispatchNamespaces = /** @class */ (functio
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareWorkersForPlatformsDispatchNamespaces.tfResourceType = "cloudflare_workers_for_platforms_dispatch_namespaces";
-    return DataCloudflareWorkersForPlatformsDispatchNamespaces;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareWorkersForPlatformsDispatchNamespaces = DataCloudflareWorkersForPlatformsDispatchNamespaces;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

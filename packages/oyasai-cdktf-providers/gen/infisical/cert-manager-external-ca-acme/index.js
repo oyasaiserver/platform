@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_acme
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerExternalCaAcme = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_acme infisical_cert_manager_external_ca_acme}
 */
-var CertManagerExternalCaAcme = /** @class */ (function (_super) {
-    __extends(CertManagerExternalCaAcme, _super);
+export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_external_ca_acme";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerExternalCaAcme resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerExternalCaAcme to import
+    * @param importFromId The id of the existing CertManagerExternalCaAcme that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_acme#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerExternalCaAcme to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_external_ca_acme", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var CertManagerExternalCaAcme = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerExternalCaAcmeConfig
     */
-    function CertManagerExternalCaAcme(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_external_ca_acme',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,236 +46,161 @@ var CertManagerExternalCaAcme = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountEmail = config.accountEmail;
-        _this._directoryUrl = config.directoryUrl;
-        _this._dnsAppConnectionId = config.dnsAppConnectionId;
-        _this._dnsHostedZoneId = config.dnsHostedZoneId;
-        _this._dnsProvider = config.dnsProvider;
-        _this._eabHmacKey = config.eabHmacKey;
-        _this._eabKid = config.eabKid;
-        _this._name = config.name;
-        _this._projectSlug = config.projectSlug;
-        _this._status = config.status;
-        return _this;
+        });
+        this._accountEmail = config.accountEmail;
+        this._directoryUrl = config.directoryUrl;
+        this._dnsAppConnectionId = config.dnsAppConnectionId;
+        this._dnsHostedZoneId = config.dnsHostedZoneId;
+        this._dnsProvider = config.dnsProvider;
+        this._eabHmacKey = config.eabHmacKey;
+        this._eabKid = config.eabKid;
+        this._name = config.name;
+        this._projectSlug = config.projectSlug;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerExternalCaAcme resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerExternalCaAcme to import
-    * @param importFromId The id of the existing CertManagerExternalCaAcme that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_acme#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerExternalCaAcme to import is found
-    */
-    CertManagerExternalCaAcme.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_external_ca_acme", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "accountEmail", {
-        get: function () {
-            return this.getStringAttribute('account_email');
-        },
-        set: function (value) {
-            this._accountEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "accountEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "directoryUrl", {
-        get: function () {
-            return this.getStringAttribute('directory_url');
-        },
-        set: function (value) {
-            this._directoryUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "directoryUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._directoryUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsAppConnectionId", {
-        get: function () {
-            return this.getStringAttribute('dns_app_connection_id');
-        },
-        set: function (value) {
-            this._dnsAppConnectionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsAppConnectionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsAppConnectionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsHostedZoneId", {
-        get: function () {
-            return this.getStringAttribute('dns_hosted_zone_id');
-        },
-        set: function (value) {
-            this._dnsHostedZoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerExternalCaAcme.prototype.resetDnsHostedZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_email - computed: false, optional: false, required: true
+    _accountEmail;
+    get accountEmail() {
+        return this.getStringAttribute('account_email');
+    }
+    set accountEmail(value) {
+        this._accountEmail = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountEmailInput() {
+        return this._accountEmail;
+    }
+    // directory_url - computed: false, optional: false, required: true
+    _directoryUrl;
+    get directoryUrl() {
+        return this.getStringAttribute('directory_url');
+    }
+    set directoryUrl(value) {
+        this._directoryUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get directoryUrlInput() {
+        return this._directoryUrl;
+    }
+    // dns_app_connection_id - computed: false, optional: false, required: true
+    _dnsAppConnectionId;
+    get dnsAppConnectionId() {
+        return this.getStringAttribute('dns_app_connection_id');
+    }
+    set dnsAppConnectionId(value) {
+        this._dnsAppConnectionId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsAppConnectionIdInput() {
+        return this._dnsAppConnectionId;
+    }
+    // dns_hosted_zone_id - computed: false, optional: true, required: false
+    _dnsHostedZoneId;
+    get dnsHostedZoneId() {
+        return this.getStringAttribute('dns_hosted_zone_id');
+    }
+    set dnsHostedZoneId(value) {
+        this._dnsHostedZoneId = value;
+    }
+    resetDnsHostedZoneId() {
         this._dnsHostedZoneId = undefined;
-    };
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsHostedZoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsHostedZoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsProvider", {
-        get: function () {
-            return this.getStringAttribute('dns_provider');
-        },
-        set: function (value) {
-            this._dnsProvider = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "dnsProviderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsProvider;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "eabHmacKey", {
-        get: function () {
-            return this.getStringAttribute('eab_hmac_key');
-        },
-        set: function (value) {
-            this._eabHmacKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerExternalCaAcme.prototype.resetEabHmacKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsHostedZoneIdInput() {
+        return this._dnsHostedZoneId;
+    }
+    // dns_provider - computed: false, optional: false, required: true
+    _dnsProvider;
+    get dnsProvider() {
+        return this.getStringAttribute('dns_provider');
+    }
+    set dnsProvider(value) {
+        this._dnsProvider = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsProviderInput() {
+        return this._dnsProvider;
+    }
+    // eab_hmac_key - computed: false, optional: true, required: false
+    _eabHmacKey;
+    get eabHmacKey() {
+        return this.getStringAttribute('eab_hmac_key');
+    }
+    set eabHmacKey(value) {
+        this._eabHmacKey = value;
+    }
+    resetEabHmacKey() {
         this._eabHmacKey = undefined;
-    };
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "eabHmacKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eabHmacKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "eabKid", {
-        get: function () {
-            return this.getStringAttribute('eab_kid');
-        },
-        set: function (value) {
-            this._eabKid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerExternalCaAcme.prototype.resetEabKid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eabHmacKeyInput() {
+        return this._eabHmacKey;
+    }
+    // eab_kid - computed: false, optional: true, required: false
+    _eabKid;
+    get eabKid() {
+        return this.getStringAttribute('eab_kid');
+    }
+    set eabKid(value) {
+        this._eabKid = value;
+    }
+    resetEabKid() {
         this._eabKid = undefined;
-    };
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "eabKidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eabKid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerExternalCaAcme.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eabKidInput() {
+        return this._eabKid;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // status - computed: true, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(CertManagerExternalCaAcme.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerExternalCaAcme.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_email: cdktf.stringToTerraform(this._accountEmail),
             directory_url: cdktf.stringToTerraform(this._directoryUrl),
@@ -290,9 +213,9 @@ var CertManagerExternalCaAcme = /** @class */ (function (_super) {
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    CertManagerExternalCaAcme.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_email: {
                 value: cdktf.stringToHclTerraform(this._accountEmail),
                 isBlock: false,
@@ -355,15 +278,6 @@ var CertManagerExternalCaAcme = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerExternalCaAcme.tfResourceType = "infisical_cert_manager_external_ca_acme";
-    return CertManagerExternalCaAcme;
-}(cdktf.TerraformResource));
-exports.CertManagerExternalCaAcme = CertManagerExternalCaAcme;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

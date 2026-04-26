@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/organization
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Organization = exports.OrganizationProfileOutputReference = exports.OrganizationParentOutputReference = exports.OrganizationMetaOutputReference = exports.OrganizationMetaFlagsOutputReference = void 0;
-exports.organizationMetaFlagsToTerraform = organizationMetaFlagsToTerraform;
-exports.organizationMetaFlagsToHclTerraform = organizationMetaFlagsToHclTerraform;
-exports.organizationMetaToTerraform = organizationMetaToTerraform;
-exports.organizationMetaToHclTerraform = organizationMetaToHclTerraform;
-exports.organizationParentToTerraform = organizationParentToTerraform;
-exports.organizationParentToHclTerraform = organizationParentToHclTerraform;
-exports.organizationProfileToTerraform = organizationProfileToTerraform;
-exports.organizationProfileToHclTerraform = organizationProfileToHclTerraform;
-var cdktf = require("cdktf");
-function organizationMetaFlagsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function organizationMetaFlagsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,88 +10,60 @@ function organizationMetaFlagsToTerraform(struct) {
     }
     return {};
 }
-function organizationMetaFlagsToHclTerraform(struct) {
+export function organizationMetaFlagsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var OrganizationMetaFlagsOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationMetaFlagsOutputReference, _super);
+export class OrganizationMetaFlagsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationMetaFlagsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "accountCreation", {
-        // account_creation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_creation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "accountDeletion", {
-        // account_deletion - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_deletion');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "accountMigration", {
-        // account_migration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_migration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "accountMobility", {
-        // account_mobility - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_mobility');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaFlagsOutputReference.prototype, "subOrgCreation", {
-        // sub_org_creation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sub_org_creation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationMetaFlagsOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationMetaFlagsOutputReference = OrganizationMetaFlagsOutputReference;
-function organizationMetaToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // account_creation - computed: true, optional: false, required: false
+    get accountCreation() {
+        return this.getStringAttribute('account_creation');
+    }
+    // account_deletion - computed: true, optional: false, required: false
+    get accountDeletion() {
+        return this.getStringAttribute('account_deletion');
+    }
+    // account_migration - computed: true, optional: false, required: false
+    get accountMigration() {
+        return this.getStringAttribute('account_migration');
+    }
+    // account_mobility - computed: true, optional: false, required: false
+    get accountMobility() {
+        return this.getStringAttribute('account_mobility');
+    }
+    // sub_org_creation - computed: true, optional: false, required: false
+    get subOrgCreation() {
+        return this.getStringAttribute('sub_org_creation');
+    }
+}
+export function organizationMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -126,65 +72,49 @@ function organizationMetaToTerraform(struct) {
     }
     return {};
 }
-function organizationMetaToHclTerraform(struct) {
+export function organizationMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var OrganizationMetaOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationMetaOutputReference, _super);
+export class OrganizationMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // flags - computed: true, optional: false, required: false
-        _this._flags = new OrganizationMetaFlagsOutputReference(_this, "flags");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(OrganizationMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaOutputReference.prototype, "flags", {
-        get: function () {
-            return this._flags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationMetaOutputReference.prototype, "managedBy", {
-        // managed_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('managed_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationMetaOutputReference = OrganizationMetaOutputReference;
-function organizationParentToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // flags - computed: true, optional: false, required: false
+    _flags = new OrganizationMetaFlagsOutputReference(this, "flags");
+    get flags() {
+        return this._flags;
+    }
+    // managed_by - computed: true, optional: false, required: false
+    get managedBy() {
+        return this.getStringAttribute('managed_by');
+    }
+}
+export function organizationParentToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -195,14 +125,14 @@ function organizationParentToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function organizationParentToHclTerraform(struct) {
+export function organizationParentToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -211,84 +141,64 @@ function organizationParentToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationParentOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationParentOutputReference, _super);
+export class OrganizationParentOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationParentOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(OrganizationParentOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationParentOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationParentOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationParentOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationParentOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationParentOutputReference = OrganizationParentOutputReference;
-function organizationProfileToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: true, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function organizationProfileToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -303,14 +213,14 @@ function organizationProfileToTerraform(struct) {
         external_metadata: cdktf.stringToTerraform(struct.externalMetadata),
     };
 }
-function organizationProfileToHclTerraform(struct) {
+export function organizationProfileToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         business_address: {
             value: cdktf.stringToHclTerraform(struct.businessAddress),
             isBlock: false,
@@ -343,176 +253,152 @@ function organizationProfileToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationProfileOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationProfileOutputReference, _super);
+export class OrganizationProfileOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationProfileOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._businessAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.businessAddress = this._businessAddress;
-            }
-            if (this._businessEmail !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.businessEmail = this._businessEmail;
-            }
-            if (this._businessName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.businessName = this._businessName;
-            }
-            if (this._businessPhone !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.businessPhone = this._businessPhone;
-            }
-            if (this._externalMetadata !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.externalMetadata = this._externalMetadata;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._businessAddress = undefined;
-                this._businessEmail = undefined;
-                this._businessName = undefined;
-                this._businessPhone = undefined;
-                this._externalMetadata = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._businessAddress = value.businessAddress;
-                this._businessEmail = value.businessEmail;
-                this._businessName = value.businessName;
-                this._businessPhone = value.businessPhone;
-                this._externalMetadata = value.externalMetadata;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessAddress", {
-        get: function () {
-            return this.getStringAttribute('business_address');
-        },
-        set: function (value) {
-            this._businessAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._businessAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessEmail", {
-        get: function () {
-            return this.getStringAttribute('business_email');
-        },
-        set: function (value) {
-            this._businessEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._businessEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessName", {
-        get: function () {
-            return this.getStringAttribute('business_name');
-        },
-        set: function (value) {
-            this._businessName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._businessName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessPhone", {
-        get: function () {
-            return this.getStringAttribute('business_phone');
-        },
-        set: function (value) {
-            this._businessPhone = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "businessPhoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._businessPhone;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "externalMetadata", {
-        get: function () {
-            return this.getStringAttribute('external_metadata');
-        },
-        set: function (value) {
-            this._externalMetadata = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProfileOutputReference.prototype, "externalMetadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationProfileOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationProfileOutputReference = OrganizationProfileOutputReference;
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._businessAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.businessAddress = this._businessAddress;
+        }
+        if (this._businessEmail !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.businessEmail = this._businessEmail;
+        }
+        if (this._businessName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.businessName = this._businessName;
+        }
+        if (this._businessPhone !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.businessPhone = this._businessPhone;
+        }
+        if (this._externalMetadata !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.externalMetadata = this._externalMetadata;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._businessAddress = undefined;
+            this._businessEmail = undefined;
+            this._businessName = undefined;
+            this._businessPhone = undefined;
+            this._externalMetadata = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._businessAddress = value.businessAddress;
+            this._businessEmail = value.businessEmail;
+            this._businessName = value.businessName;
+            this._businessPhone = value.businessPhone;
+            this._externalMetadata = value.externalMetadata;
+        }
+    }
+    // business_address - computed: false, optional: false, required: true
+    _businessAddress;
+    get businessAddress() {
+        return this.getStringAttribute('business_address');
+    }
+    set businessAddress(value) {
+        this._businessAddress = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get businessAddressInput() {
+        return this._businessAddress;
+    }
+    // business_email - computed: false, optional: false, required: true
+    _businessEmail;
+    get businessEmail() {
+        return this.getStringAttribute('business_email');
+    }
+    set businessEmail(value) {
+        this._businessEmail = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get businessEmailInput() {
+        return this._businessEmail;
+    }
+    // business_name - computed: false, optional: false, required: true
+    _businessName;
+    get businessName() {
+        return this.getStringAttribute('business_name');
+    }
+    set businessName(value) {
+        this._businessName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get businessNameInput() {
+        return this._businessName;
+    }
+    // business_phone - computed: false, optional: false, required: true
+    _businessPhone;
+    get businessPhone() {
+        return this.getStringAttribute('business_phone');
+    }
+    set businessPhone(value) {
+        this._businessPhone = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get businessPhoneInput() {
+        return this._businessPhone;
+    }
+    // external_metadata - computed: false, optional: false, required: true
+    _externalMetadata;
+    get externalMetadata() {
+        return this.getStringAttribute('external_metadata');
+    }
+    set externalMetadata(value) {
+        this._externalMetadata = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalMetadataInput() {
+        return this._externalMetadata;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/organization cloudflare_organization}
 */
-var Organization = /** @class */ (function (_super) {
-    __extends(Organization, _super);
+export class Organization extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_organization";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Organization resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Organization to import
+    * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/organization#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Organization to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_organization", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -523,8 +409,8 @@ var Organization = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationConfig
     */
-    function Organization(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_organization',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -537,129 +423,81 @@ var Organization = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new OrganizationMetaOutputReference(_this, "meta");
-        // parent - computed: true, optional: true, required: false
-        _this._parent = new OrganizationParentOutputReference(_this, "parent");
-        // profile - computed: false, optional: true, required: false
-        _this._profile = new OrganizationProfileOutputReference(_this, "profile");
-        _this._name = config.name;
-        _this._parent.internalValue = config.parent;
-        _this._profile.internalValue = config.profile;
-        return _this;
+        });
+        this._name = config.name;
+        this._parent.internalValue = config.parent;
+        this._profile.internalValue = config.profile;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Organization resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Organization to import
-    * @param importFromId The id of the existing Organization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/organization#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Organization to import is found
-    */
-    Organization.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_organization", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Organization.prototype, "createTime", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // create_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('create_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "parent", {
-        get: function () {
-            return this._parent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Organization.prototype.putParent = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // create_time - computed: true, optional: false, required: false
+    get createTime() {
+        return this.getStringAttribute('create_time');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new OrganizationMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // parent - computed: true, optional: true, required: false
+    _parent = new OrganizationParentOutputReference(this, "parent");
+    get parent() {
+        return this._parent;
+    }
+    putParent(value) {
         this._parent.internalValue = value;
-    };
-    Organization.prototype.resetParent = function () {
+    }
+    resetParent() {
         this._parent.internalValue = undefined;
-    };
-    Object.defineProperty(Organization.prototype, "parentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parent.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Organization.prototype, "profile", {
-        get: function () {
-            return this._profile;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Organization.prototype.putProfile = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentInput() {
+        return this._parent.internalValue;
+    }
+    // profile - computed: false, optional: true, required: false
+    _profile = new OrganizationProfileOutputReference(this, "profile");
+    get profile() {
+        return this._profile;
+    }
+    putProfile(value) {
         this._profile.internalValue = value;
-    };
-    Organization.prototype.resetProfile = function () {
+    }
+    resetProfile() {
         this._profile.internalValue = undefined;
-    };
-    Object.defineProperty(Organization.prototype, "profileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._profile.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get profileInput() {
+        return this._profile.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Organization.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             name: cdktf.stringToTerraform(this._name),
             parent: organizationParentToTerraform(this._parent.internalValue),
             profile: organizationProfileToTerraform(this._profile.internalValue),
         };
-    };
-    Organization.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             name: {
                 value: cdktf.stringToHclTerraform(this._name),
                 isBlock: false,
@@ -680,15 +518,6 @@ var Organization = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Organization.tfResourceType = "cloudflare_organization";
-    return Organization;
-}(cdktf.TerraformResource));
-exports.Organization = Organization;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

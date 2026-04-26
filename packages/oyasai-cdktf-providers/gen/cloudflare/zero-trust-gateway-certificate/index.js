@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_gateway_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustGatewayCertificate = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_gateway_certificate cloudflare_zero_trust_gateway_certificate}
 */
-var ZeroTrustGatewayCertificate = /** @class */ (function (_super) {
-    __extends(ZeroTrustGatewayCertificate, _super);
+export class ZeroTrustGatewayCertificate extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_gateway_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustGatewayCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustGatewayCertificate to import
+    * @param importFromId The id of the existing ZeroTrustGatewayCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_gateway_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustGatewayCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_gateway_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var ZeroTrustGatewayCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustGatewayCertificateConfig = {}
     */
-    function ZeroTrustGatewayCertificate(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_gateway_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -49,196 +46,119 @@ var ZeroTrustGatewayCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._activate = config.activate;
-        _this._validityPeriodDays = config.validityPeriodDays;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._activate = config.activate;
+        this._validityPeriodDays = config.validityPeriodDays;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustGatewayCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustGatewayCertificate to import
-    * @param importFromId The id of the existing ZeroTrustGatewayCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_gateway_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustGatewayCertificate to import is found
-    */
-    ZeroTrustGatewayCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_gateway_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustGatewayCertificate.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "activate", {
-        get: function () {
-            return this.getBooleanAttribute('activate');
-        },
-        set: function (value) {
-            this._activate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustGatewayCertificate.prototype.resetActivate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // activate - computed: false, optional: true, required: false
+    _activate;
+    get activate() {
+        return this.getBooleanAttribute('activate');
+    }
+    set activate(value) {
+        this._activate = value;
+    }
+    resetActivate() {
         this._activate = undefined;
-    };
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "activateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._activate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "bindingStatus", {
-        // binding_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('binding_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "certificate", {
-        // certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "fingerprint", {
-        // fingerprint - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fingerprint');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "inUse", {
-        // in_use - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('in_use');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "issuerOrg", {
-        // issuer_org - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer_org');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "issuerRaw", {
-        // issuer_raw - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer_raw');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "validityPeriodDays", {
-        get: function () {
-            return this.getNumberAttribute('validity_period_days');
-        },
-        set: function (value) {
-            this._validityPeriodDays = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustGatewayCertificate.prototype.resetValidityPeriodDays = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get activateInput() {
+        return this._activate;
+    }
+    // binding_status - computed: true, optional: false, required: false
+    get bindingStatus() {
+        return this.getStringAttribute('binding_status');
+    }
+    // certificate - computed: true, optional: false, required: false
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // fingerprint - computed: true, optional: false, required: false
+    get fingerprint() {
+        return this.getStringAttribute('fingerprint');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // in_use - computed: true, optional: false, required: false
+    get inUse() {
+        return this.getBooleanAttribute('in_use');
+    }
+    // issuer_org - computed: true, optional: false, required: false
+    get issuerOrg() {
+        return this.getStringAttribute('issuer_org');
+    }
+    // issuer_raw - computed: true, optional: false, required: false
+    get issuerRaw() {
+        return this.getStringAttribute('issuer_raw');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
+    // validity_period_days - computed: false, optional: true, required: false
+    _validityPeriodDays;
+    get validityPeriodDays() {
+        return this.getNumberAttribute('validity_period_days');
+    }
+    set validityPeriodDays(value) {
+        this._validityPeriodDays = value;
+    }
+    resetValidityPeriodDays() {
         this._validityPeriodDays = undefined;
-    };
-    Object.defineProperty(ZeroTrustGatewayCertificate.prototype, "validityPeriodDaysInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._validityPeriodDays;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get validityPeriodDaysInput() {
+        return this._validityPeriodDays;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustGatewayCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             activate: cdktf.booleanToTerraform(this._activate),
             validity_period_days: cdktf.numberToTerraform(this._validityPeriodDays),
         };
-    };
-    ZeroTrustGatewayCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -259,15 +179,6 @@ var ZeroTrustGatewayCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustGatewayCertificate.tfResourceType = "cloudflare_zero_trust_gateway_certificate";
-    return ZeroTrustGatewayCertificate;
-}(cdktf.TerraformResource));
-exports.ZeroTrustGatewayCertificate = ZeroTrustGatewayCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

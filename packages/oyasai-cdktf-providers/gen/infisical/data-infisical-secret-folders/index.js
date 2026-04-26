@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_folders
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataInfisicalSecretFolders = exports.DataInfisicalSecretFoldersFoldersList = exports.DataInfisicalSecretFoldersFoldersOutputReference = void 0;
-exports.dataInfisicalSecretFoldersFoldersToTerraform = dataInfisicalSecretFoldersFoldersToTerraform;
-exports.dataInfisicalSecretFoldersFoldersToHclTerraform = dataInfisicalSecretFoldersFoldersToHclTerraform;
-var cdktf = require("cdktf");
-function dataInfisicalSecretFoldersFoldersToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataInfisicalSecretFoldersFoldersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,93 +10,92 @@ function dataInfisicalSecretFoldersFoldersToTerraform(struct) {
     }
     return {};
 }
-function dataInfisicalSecretFoldersFoldersToHclTerraform(struct) {
+export function dataInfisicalSecretFoldersFoldersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataInfisicalSecretFoldersFoldersOutputReference = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretFoldersFoldersOutputReference, _super);
+export class DataInfisicalSecretFoldersFoldersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretFoldersFoldersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataInfisicalSecretFoldersFoldersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFoldersFoldersOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFoldersFoldersOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataInfisicalSecretFoldersFoldersOutputReference;
-}(cdktf.ComplexObject));
-exports.DataInfisicalSecretFoldersFoldersOutputReference = DataInfisicalSecretFoldersFoldersOutputReference;
-var DataInfisicalSecretFoldersFoldersList = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretFoldersFoldersList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class DataInfisicalSecretFoldersFoldersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretFoldersFoldersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataInfisicalSecretFoldersFoldersList.prototype.get = function (index) {
+    get(index) {
         return new DataInfisicalSecretFoldersFoldersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataInfisicalSecretFoldersFoldersList;
-}(cdktf.ComplexList));
-exports.DataInfisicalSecretFoldersFoldersList = DataInfisicalSecretFoldersFoldersList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_folders infisical_secret_folders}
 */
-var DataInfisicalSecretFolders = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretFolders, _super);
+export class DataInfisicalSecretFolders extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_secret_folders";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataInfisicalSecretFolders resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataInfisicalSecretFolders to import
+    * @param importFromId The id of the existing DataInfisicalSecretFolders that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_folders#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataInfisicalSecretFolders to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_folders", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -127,8 +106,8 @@ var DataInfisicalSecretFolders = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataInfisicalSecretFoldersConfig
     */
-    function DataInfisicalSecretFolders(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_secret_folders',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -141,100 +120,67 @@ var DataInfisicalSecretFolders = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // folders - computed: true, optional: false, required: false
-        _this._folders = new DataInfisicalSecretFoldersFoldersList(_this, "folders", false);
-        _this._environmentSlug = config.environmentSlug;
-        _this._folderPath = config.folderPath;
-        _this._projectId = config.projectId;
-        return _this;
+        });
+        this._environmentSlug = config.environmentSlug;
+        this._folderPath = config.folderPath;
+        this._projectId = config.projectId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataInfisicalSecretFolders resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataInfisicalSecretFolders to import
-    * @param importFromId The id of the existing DataInfisicalSecretFolders that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_folders#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataInfisicalSecretFolders to import is found
-    */
-    DataInfisicalSecretFolders.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_folders", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "folderPath", {
-        get: function () {
-            return this.getStringAttribute('folder_path');
-        },
-        set: function (value) {
-            this._folderPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "folderPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._folderPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "folders", {
-        get: function () {
-            return this._folders;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretFolders.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // folder_path - computed: false, optional: false, required: true
+    _folderPath;
+    get folderPath() {
+        return this.getStringAttribute('folder_path');
+    }
+    set folderPath(value) {
+        this._folderPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get folderPathInput() {
+        return this._folderPath;
+    }
+    // folders - computed: true, optional: false, required: false
+    _folders = new DataInfisicalSecretFoldersFoldersList(this, "folders", false);
+    get folders() {
+        return this._folders;
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataInfisicalSecretFolders.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             environment_slug: cdktf.stringToTerraform(this._environmentSlug),
             folder_path: cdktf.stringToTerraform(this._folderPath),
             project_id: cdktf.stringToTerraform(this._projectId),
         };
-    };
-    DataInfisicalSecretFolders.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             environment_slug: {
                 value: cdktf.stringToHclTerraform(this._environmentSlug),
                 isBlock: false,
@@ -255,15 +201,6 @@ var DataInfisicalSecretFolders = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataInfisicalSecretFolders.tfResourceType = "infisical_secret_folders";
-    return DataInfisicalSecretFolders;
-}(cdktf.TerraformDataSource));
-exports.DataInfisicalSecretFolders = DataInfisicalSecretFolders;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

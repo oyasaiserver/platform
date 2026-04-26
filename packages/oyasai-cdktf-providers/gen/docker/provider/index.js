@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DockerProvider = void 0;
-exports.dockerProviderRegistryAuthToTerraform = dockerProviderRegistryAuthToTerraform;
-exports.dockerProviderRegistryAuthToHclTerraform = dockerProviderRegistryAuthToHclTerraform;
-var cdktf = require("cdktf");
-function dockerProviderRegistryAuthToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dockerProviderRegistryAuthToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +17,14 @@ function dockerProviderRegistryAuthToTerraform(struct) {
         username: cdktf.stringToTerraform(struct.username),
     };
 }
-function dockerProviderRegistryAuthToHclTerraform(struct) {
+export function dockerProviderRegistryAuthToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         address: {
             value: cdktf.stringToHclTerraform(struct.address),
             isBlock: false,
@@ -83,48 +63,16 @@ function dockerProviderRegistryAuthToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs docker}
 */
-var DockerProvider = /** @class */ (function (_super) {
-    __extends(DockerProvider, _super);
-    // ===========
-    // INITIALIZER
-    // ===========
-    /**
-    * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs docker} Resource
-    *
-    * @param scope The scope in which to define this construct
-    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-    * @param options DockerProviderConfig = {}
-    */
-    function DockerProvider(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
-            terraformResourceType: 'docker',
-            terraformGeneratorMetadata: {
-                providerName: 'docker',
-                providerVersion: '4.2.0'
-            },
-            terraformProviderSource: 'kreuzwerker/docker'
-        }) || this;
-        _this._caMaterial = config.caMaterial;
-        _this._certMaterial = config.certMaterial;
-        _this._certPath = config.certPath;
-        _this._context = config.context;
-        _this._disableDockerDaemonCheck = config.disableDockerDaemonCheck;
-        _this._host = config.host;
-        _this._keyMaterial = config.keyMaterial;
-        _this._sshOpts = config.sshOpts;
-        _this._alias = config.alias;
-        _this._registryAuth = config.registryAuth;
-        return _this;
-    }
+export class DockerProvider extends cdktf.TerraformProvider {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker";
     // ==============
     // STATIC Methods
     // ==============
@@ -135,223 +83,196 @@ var DockerProvider = /** @class */ (function (_super) {
     * @param importFromId The id of the existing DockerProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs#import import section} in the documentation of this resource for the id to use
     * @param provider? Optional instance of the provider where the DockerProvider to import is found
     */
-    DockerProvider.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DockerProvider.prototype, "caMaterial", {
-        get: function () {
-            return this._caMaterial;
-        },
-        set: function (value) {
-            this._caMaterial = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetCaMaterial = function () {
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker", importId: importFromId, provider });
+    }
+    // ===========
+    // INITIALIZER
+    // ===========
+    /**
+    * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs docker} Resource
+    *
+    * @param scope The scope in which to define this construct
+    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+    * @param options DockerProviderConfig = {}
+    */
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
+            terraformResourceType: 'docker',
+            terraformGeneratorMetadata: {
+                providerName: 'docker',
+                providerVersion: '4.2.0'
+            },
+            terraformProviderSource: 'kreuzwerker/docker'
+        });
+        this._caMaterial = config.caMaterial;
+        this._certMaterial = config.certMaterial;
+        this._certPath = config.certPath;
+        this._context = config.context;
+        this._disableDockerDaemonCheck = config.disableDockerDaemonCheck;
+        this._host = config.host;
+        this._keyMaterial = config.keyMaterial;
+        this._sshOpts = config.sshOpts;
+        this._alias = config.alias;
+        this._registryAuth = config.registryAuth;
+    }
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // ca_material - computed: false, optional: true, required: false
+    _caMaterial;
+    get caMaterial() {
+        return this._caMaterial;
+    }
+    set caMaterial(value) {
+        this._caMaterial = value;
+    }
+    resetCaMaterial() {
         this._caMaterial = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "caMaterialInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caMaterial;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "certMaterial", {
-        get: function () {
-            return this._certMaterial;
-        },
-        set: function (value) {
-            this._certMaterial = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetCertMaterial = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caMaterialInput() {
+        return this._caMaterial;
+    }
+    // cert_material - computed: false, optional: true, required: false
+    _certMaterial;
+    get certMaterial() {
+        return this._certMaterial;
+    }
+    set certMaterial(value) {
+        this._certMaterial = value;
+    }
+    resetCertMaterial() {
         this._certMaterial = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "certMaterialInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certMaterial;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "certPath", {
-        get: function () {
-            return this._certPath;
-        },
-        set: function (value) {
-            this._certPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetCertPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certMaterialInput() {
+        return this._certMaterial;
+    }
+    // cert_path - computed: false, optional: true, required: false
+    _certPath;
+    get certPath() {
+        return this._certPath;
+    }
+    set certPath(value) {
+        this._certPath = value;
+    }
+    resetCertPath() {
         this._certPath = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "certPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "context", {
-        get: function () {
-            return this._context;
-        },
-        set: function (value) {
-            this._context = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetContext = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certPathInput() {
+        return this._certPath;
+    }
+    // context - computed: false, optional: true, required: false
+    _context;
+    get context() {
+        return this._context;
+    }
+    set context(value) {
+        this._context = value;
+    }
+    resetContext() {
         this._context = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "contextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._context;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "disableDockerDaemonCheck", {
-        get: function () {
-            return this._disableDockerDaemonCheck;
-        },
-        set: function (value) {
-            this._disableDockerDaemonCheck = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetDisableDockerDaemonCheck = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contextInput() {
+        return this._context;
+    }
+    // disable_docker_daemon_check - computed: false, optional: true, required: false
+    _disableDockerDaemonCheck;
+    get disableDockerDaemonCheck() {
+        return this._disableDockerDaemonCheck;
+    }
+    set disableDockerDaemonCheck(value) {
+        this._disableDockerDaemonCheck = value;
+    }
+    resetDisableDockerDaemonCheck() {
         this._disableDockerDaemonCheck = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "disableDockerDaemonCheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableDockerDaemonCheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "host", {
-        get: function () {
-            return this._host;
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableDockerDaemonCheckInput() {
+        return this._disableDockerDaemonCheck;
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this._host;
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "keyMaterial", {
-        get: function () {
-            return this._keyMaterial;
-        },
-        set: function (value) {
-            this._keyMaterial = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetKeyMaterial = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // key_material - computed: false, optional: true, required: false
+    _keyMaterial;
+    get keyMaterial() {
+        return this._keyMaterial;
+    }
+    set keyMaterial(value) {
+        this._keyMaterial = value;
+    }
+    resetKeyMaterial() {
         this._keyMaterial = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "keyMaterialInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyMaterial;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "sshOpts", {
-        get: function () {
-            return this._sshOpts;
-        },
-        set: function (value) {
-            this._sshOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetSshOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyMaterialInput() {
+        return this._keyMaterial;
+    }
+    // ssh_opts - computed: false, optional: true, required: false
+    _sshOpts;
+    get sshOpts() {
+        return this._sshOpts;
+    }
+    set sshOpts(value) {
+        this._sshOpts = value;
+    }
+    resetSshOpts() {
         this._sshOpts = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "sshOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sshOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "alias", {
-        get: function () {
-            return this._alias;
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetAlias = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sshOptsInput() {
+        return this._sshOpts;
+    }
+    // alias - computed: false, optional: true, required: false
+    _alias;
+    get alias() {
+        return this._alias;
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DockerProvider.prototype, "registryAuth", {
-        get: function () {
-            return this._registryAuth;
-        },
-        set: function (value) {
-            this._registryAuth = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DockerProvider.prototype.resetRegistryAuth = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
+    // registry_auth - computed: false, optional: true, required: false
+    _registryAuth;
+    get registryAuth() {
+        return this._registryAuth;
+    }
+    set registryAuth(value) {
+        this._registryAuth = value;
+    }
+    resetRegistryAuth() {
         this._registryAuth = undefined;
-    };
-    Object.defineProperty(DockerProvider.prototype, "registryAuthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._registryAuth;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get registryAuthInput() {
+        return this._registryAuth;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DockerProvider.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             ca_material: cdktf.stringToTerraform(this._caMaterial),
             cert_material: cdktf.stringToTerraform(this._certMaterial),
@@ -364,9 +285,9 @@ var DockerProvider = /** @class */ (function (_super) {
             alias: cdktf.stringToTerraform(this._alias),
             registry_auth: cdktf.listMapper(dockerProviderRegistryAuthToTerraform, true)(this._registryAuth),
         };
-    };
-    DockerProvider.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             ca_material: {
                 value: cdktf.stringToHclTerraform(this._caMaterial),
                 isBlock: false,
@@ -429,15 +350,6 @@ var DockerProvider = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DockerProvider.tfResourceType = "docker";
-    return DockerProvider;
-}(cdktf.TerraformProvider));
-exports.DockerProvider = DockerProvider;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/emu_group_mapping
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EmuGroupMapping = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/emu_group_mapping github_emu_group_mapping}
 */
-var EmuGroupMapping = /** @class */ (function (_super) {
-    __extends(EmuGroupMapping, _super);
+export class EmuGroupMapping extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_emu_group_mapping";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a EmuGroupMapping resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the EmuGroupMapping to import
+    * @param importFromId The id of the existing EmuGroupMapping that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/emu_group_mapping#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the EmuGroupMapping to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_emu_group_mapping", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var EmuGroupMapping = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options EmuGroupMappingConfig
     */
-    function EmuGroupMapping(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_emu_group_mapping',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,121 +46,77 @@ var EmuGroupMapping = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._groupId = config.groupId;
-        _this._id = config.id;
-        _this._teamSlug = config.teamSlug;
-        return _this;
+        });
+        this._groupId = config.groupId;
+        this._id = config.id;
+        this._teamSlug = config.teamSlug;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a EmuGroupMapping resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the EmuGroupMapping to import
-    * @param importFromId The id of the existing EmuGroupMapping that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/emu_group_mapping#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the EmuGroupMapping to import is found
-    */
-    EmuGroupMapping.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_emu_group_mapping", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(EmuGroupMapping.prototype, "etag", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "groupId", {
-        get: function () {
-            return this.getNumberAttribute('group_id');
-        },
-        set: function (value) {
-            this._groupId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "groupIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "groupName", {
-        // group_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('group_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EmuGroupMapping.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // group_id - computed: false, optional: false, required: true
+    _groupId;
+    get groupId() {
+        return this.getNumberAttribute('group_id');
+    }
+    set groupId(value) {
+        this._groupId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupIdInput() {
+        return this._groupId;
+    }
+    // group_name - computed: true, optional: false, required: false
+    get groupName() {
+        return this.getStringAttribute('group_name');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(EmuGroupMapping.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "teamId", {
-        // team_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('team_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "teamSlug", {
-        get: function () {
-            return this.getStringAttribute('team_slug');
-        },
-        set: function (value) {
-            this._teamSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmuGroupMapping.prototype, "teamSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._teamSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // team_id - computed: true, optional: false, required: false
+    get teamId() {
+        return this.getNumberAttribute('team_id');
+    }
+    // team_slug - computed: false, optional: false, required: true
+    _teamSlug;
+    get teamSlug() {
+        return this.getStringAttribute('team_slug');
+    }
+    set teamSlug(value) {
+        this._teamSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamSlugInput() {
+        return this._teamSlug;
+    }
     // =========
     // SYNTHESIS
     // =========
-    EmuGroupMapping.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             group_id: cdktf.numberToTerraform(this._groupId),
             id: cdktf.stringToTerraform(this._id),
             team_slug: cdktf.stringToTerraform(this._teamSlug),
         };
-    };
-    EmuGroupMapping.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             group_id: {
                 value: cdktf.numberToHclTerraform(this._groupId),
                 isBlock: false,
@@ -183,15 +137,6 @@ var EmuGroupMapping = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    EmuGroupMapping.tfResourceType = "github_emu_group_mapping";
-    return EmuGroupMapping;
-}(cdktf.TerraformResource));
-exports.EmuGroupMapping = EmuGroupMapping;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

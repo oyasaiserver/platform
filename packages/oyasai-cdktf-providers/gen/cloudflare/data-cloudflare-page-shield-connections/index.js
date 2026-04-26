@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_connections
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflarePageShieldConnections = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_connections cloudflare_page_shield_connections}
 */
-var DataCloudflarePageShieldConnections = /** @class */ (function (_super) {
-    __extends(DataCloudflarePageShieldConnections, _super);
+export class DataCloudflarePageShieldConnections extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_page_shield_connections";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflarePageShieldConnections resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldConnections to import
+    * @param importFromId The id of the existing DataCloudflarePageShieldConnections that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_connections#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldConnections to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_connections", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflarePageShieldConnections = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflarePageShieldConnectionsConfig
     */
-    function DataCloudflarePageShieldConnections(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_page_shield_connections',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,181 +46,103 @@ var DataCloudflarePageShieldConnections = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._connectionId = config.connectionId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._connectionId = config.connectionId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflarePageShieldConnections resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldConnections to import
-    * @param importFromId The id of the existing DataCloudflarePageShieldConnections that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_connections#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldConnections to import is found
-    */
-    DataCloudflarePageShieldConnections.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_connections", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "addedAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // added_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('added_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "connectionId", {
-        get: function () {
-            return this.getStringAttribute('connection_id');
-        },
-        set: function (value) {
-            this._connectionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "connectionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._connectionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "domainReportedMalicious", {
-        // domain_reported_malicious - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('domain_reported_malicious');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "firstPageUrl", {
-        // first_page_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('first_page_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "firstSeenAt", {
-        // first_seen_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('first_seen_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "lastSeenAt", {
-        // last_seen_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_seen_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "maliciousDomainCategories", {
-        // malicious_domain_categories - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('malicious_domain_categories');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "maliciousUrlCategories", {
-        // malicious_url_categories - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('malicious_url_categories');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "pageUrls", {
-        // page_urls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('page_urls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "urlContainsCdnCgiPath", {
-        // url_contains_cdn_cgi_path - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('url_contains_cdn_cgi_path');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "urlReportedMalicious", {
-        // url_reported_malicious - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('url_reported_malicious');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldConnections.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // added_at - computed: true, optional: false, required: false
+    get addedAt() {
+        return this.getStringAttribute('added_at');
+    }
+    // connection_id - computed: false, optional: false, required: true
+    _connectionId;
+    get connectionId() {
+        return this.getStringAttribute('connection_id');
+    }
+    set connectionId(value) {
+        this._connectionId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get connectionIdInput() {
+        return this._connectionId;
+    }
+    // domain_reported_malicious - computed: true, optional: false, required: false
+    get domainReportedMalicious() {
+        return this.getBooleanAttribute('domain_reported_malicious');
+    }
+    // first_page_url - computed: true, optional: false, required: false
+    get firstPageUrl() {
+        return this.getStringAttribute('first_page_url');
+    }
+    // first_seen_at - computed: true, optional: false, required: false
+    get firstSeenAt() {
+        return this.getStringAttribute('first_seen_at');
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_seen_at - computed: true, optional: false, required: false
+    get lastSeenAt() {
+        return this.getStringAttribute('last_seen_at');
+    }
+    // malicious_domain_categories - computed: true, optional: false, required: false
+    get maliciousDomainCategories() {
+        return this.getListAttribute('malicious_domain_categories');
+    }
+    // malicious_url_categories - computed: true, optional: false, required: false
+    get maliciousUrlCategories() {
+        return this.getListAttribute('malicious_url_categories');
+    }
+    // page_urls - computed: true, optional: false, required: false
+    get pageUrls() {
+        return this.getListAttribute('page_urls');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    // url_contains_cdn_cgi_path - computed: true, optional: false, required: false
+    get urlContainsCdnCgiPath() {
+        return this.getBooleanAttribute('url_contains_cdn_cgi_path');
+    }
+    // url_reported_malicious - computed: true, optional: false, required: false
+    get urlReportedMalicious() {
+        return this.getBooleanAttribute('url_reported_malicious');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldConnections.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflarePageShieldConnections.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             connection_id: cdktf.stringToTerraform(this._connectionId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflarePageShieldConnections.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             connection_id: {
                 value: cdktf.stringToHclTerraform(this._connectionId),
                 isBlock: false,
@@ -237,15 +157,6 @@ var DataCloudflarePageShieldConnections = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflarePageShieldConnections.tfResourceType = "cloudflare_page_shield_connections";
-    return DataCloudflarePageShieldConnections;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflarePageShieldConnections = DataCloudflarePageShieldConnections;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

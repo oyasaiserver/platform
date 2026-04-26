@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerInternalCa = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca infisical_cert_manager_internal_ca}
 */
-var CertManagerInternalCa = /** @class */ (function (_super) {
-    __extends(CertManagerInternalCa, _super);
+export class CertManagerInternalCa extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_internal_ca";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerInternalCa resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerInternalCa to import
+    * @param importFromId The id of the existing CertManagerInternalCa that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerInternalCa to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_internal_ca", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var CertManagerInternalCa = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerInternalCaConfig
     */
-    function CertManagerInternalCa(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_internal_ca',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,267 +46,186 @@ var CertManagerInternalCa = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._commonName = config.commonName;
-        _this._country = config.country;
-        _this._keyAlgorithm = config.keyAlgorithm;
-        _this._locality = config.locality;
-        _this._name = config.name;
-        _this._organization = config.organization;
-        _this._ou = config.ou;
-        _this._projectSlug = config.projectSlug;
-        _this._province = config.province;
-        _this._status = config.status;
-        _this._type = config.type;
-        return _this;
+        });
+        this._commonName = config.commonName;
+        this._country = config.country;
+        this._keyAlgorithm = config.keyAlgorithm;
+        this._locality = config.locality;
+        this._name = config.name;
+        this._organization = config.organization;
+        this._ou = config.ou;
+        this._projectSlug = config.projectSlug;
+        this._province = config.province;
+        this._status = config.status;
+        this._type = config.type;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerInternalCa resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerInternalCa to import
-    * @param importFromId The id of the existing CertManagerInternalCa that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_internal_ca#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerInternalCa to import is found
-    */
-    CertManagerInternalCa.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_internal_ca", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "commonName", {
-        get: function () {
-            return this.getStringAttribute('common_name');
-        },
-        set: function (value) {
-            this._commonName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetCommonName = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // common_name - computed: false, optional: true, required: false
+    _commonName;
+    get commonName() {
+        return this.getStringAttribute('common_name');
+    }
+    set commonName(value) {
+        this._commonName = value;
+    }
+    resetCommonName() {
         this._commonName = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "commonNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commonName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "country", {
-        get: function () {
-            return this.getStringAttribute('country');
-        },
-        set: function (value) {
-            this._country = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetCountry = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commonNameInput() {
+        return this._commonName;
+    }
+    // country - computed: false, optional: true, required: false
+    _country;
+    get country() {
+        return this.getStringAttribute('country');
+    }
+    set country(value) {
+        this._country = value;
+    }
+    resetCountry() {
         this._country = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "countryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._country;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "keyAlgorithm", {
-        get: function () {
-            return this.getStringAttribute('key_algorithm');
-        },
-        set: function (value) {
-            this._keyAlgorithm = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetKeyAlgorithm = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get countryInput() {
+        return this._country;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // key_algorithm - computed: true, optional: true, required: false
+    _keyAlgorithm;
+    get keyAlgorithm() {
+        return this.getStringAttribute('key_algorithm');
+    }
+    set keyAlgorithm(value) {
+        this._keyAlgorithm = value;
+    }
+    resetKeyAlgorithm() {
         this._keyAlgorithm = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "keyAlgorithmInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyAlgorithm;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "locality", {
-        get: function () {
-            return this.getStringAttribute('locality');
-        },
-        set: function (value) {
-            this._locality = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetLocality = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyAlgorithmInput() {
+        return this._keyAlgorithm;
+    }
+    // locality - computed: false, optional: true, required: false
+    _locality;
+    get locality() {
+        return this.getStringAttribute('locality');
+    }
+    set locality(value) {
+        this._locality = value;
+    }
+    resetLocality() {
         this._locality = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "localityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._locality;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "organization", {
-        get: function () {
-            return this.getStringAttribute('organization');
-        },
-        set: function (value) {
-            this._organization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetOrganization = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get localityInput() {
+        return this._locality;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // organization - computed: false, optional: true, required: false
+    _organization;
+    get organization() {
+        return this.getStringAttribute('organization');
+    }
+    set organization(value) {
+        this._organization = value;
+    }
+    resetOrganization() {
         this._organization = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "organizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._organization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "ou", {
-        get: function () {
-            return this.getStringAttribute('ou');
-        },
-        set: function (value) {
-            this._ou = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetOu = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get organizationInput() {
+        return this._organization;
+    }
+    // ou - computed: false, optional: true, required: false
+    _ou;
+    get ou() {
+        return this.getStringAttribute('ou');
+    }
+    set ou(value) {
+        this._ou = value;
+    }
+    resetOu() {
         this._ou = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "ouInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ou;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "province", {
-        get: function () {
-            return this.getStringAttribute('province');
-        },
-        set: function (value) {
-            this._province = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetProvince = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ouInput() {
+        return this._ou;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // province - computed: false, optional: true, required: false
+    _province;
+    get province() {
+        return this.getStringAttribute('province');
+    }
+    set province(value) {
+        this._province = value;
+    }
+    resetProvince() {
         this._province = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "provinceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._province;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerInternalCa.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get provinceInput() {
+        return this._province;
+    }
+    // status - computed: true, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(CertManagerInternalCa.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerInternalCa.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerInternalCa.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             common_name: cdktf.stringToTerraform(this._commonName),
             country: cdktf.stringToTerraform(this._country),
@@ -322,9 +239,9 @@ var CertManagerInternalCa = /** @class */ (function (_super) {
             status: cdktf.stringToTerraform(this._status),
             type: cdktf.stringToTerraform(this._type),
         };
-    };
-    CertManagerInternalCa.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             common_name: {
                 value: cdktf.stringToHclTerraform(this._commonName),
                 isBlock: false,
@@ -393,15 +310,6 @@ var CertManagerInternalCa = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerInternalCa.tfResourceType = "infisical_cert_manager_internal_ca";
-    return CertManagerInternalCa;
-}(cdktf.TerraformResource));
-exports.CertManagerInternalCa = CertManagerInternalCa;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

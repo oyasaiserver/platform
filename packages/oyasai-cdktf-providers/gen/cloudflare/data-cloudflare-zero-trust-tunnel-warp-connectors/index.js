@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_tunnel_warp_connectors
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustTunnelWarpConnectors = exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultList = exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference = exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList = exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference = void 0;
-exports.dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToTerraform = dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToTerraform;
-exports.dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToHclTerraform = dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToHclTerraform;
-exports.dataCloudflareZeroTrustTunnelWarpConnectorsResultToTerraform = dataCloudflareZeroTrustTunnelWarpConnectorsResultToTerraform;
-exports.dataCloudflareZeroTrustTunnelWarpConnectorsResultToHclTerraform = dataCloudflareZeroTrustTunnelWarpConnectorsResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,137 +10,96 @@ function dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToTerraform
     }
     return {};
 }
-function dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToHclTerraform(struct) {
+export function dataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference, _super);
+export class DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "clientId", {
-        // client_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "clientVersion", {
-        // client_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "coloName", {
-        // colo_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('colo_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "isPendingReconnect", {
-        // is_pending_reconnect - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_pending_reconnect');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "openedAt", {
-        // opened_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('opened_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "originIp", {
-        // origin_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('origin_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference.prototype, "uuid", {
-        // uuid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uuid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference = DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference;
-var DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // client_id - computed: true, optional: false, required: false
+    get clientId() {
+        return this.getStringAttribute('client_id');
+    }
+    // client_version - computed: true, optional: false, required: false
+    get clientVersion() {
+        return this.getStringAttribute('client_version');
+    }
+    // colo_name - computed: true, optional: false, required: false
+    get coloName() {
+        return this.getStringAttribute('colo_name');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_pending_reconnect - computed: true, optional: false, required: false
+    get isPendingReconnect() {
+        return this.getBooleanAttribute('is_pending_reconnect');
+    }
+    // opened_at - computed: true, optional: false, required: false
+    get openedAt() {
+        return this.getStringAttribute('opened_at');
+    }
+    // origin_ip - computed: true, optional: false, required: false
+    get originIp() {
+        return this.getStringAttribute('origin_ip');
+    }
+    // uuid - computed: true, optional: false, required: false
+    get uuid() {
+        return this.getStringAttribute('uuid');
+    }
+}
+export class DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList = DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList;
-function dataCloudflareZeroTrustTunnelWarpConnectorsResultToTerraform(struct) {
+    }
+}
+export function dataCloudflareZeroTrustTunnelWarpConnectorsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -171,166 +108,129 @@ function dataCloudflareZeroTrustTunnelWarpConnectorsResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZeroTrustTunnelWarpConnectorsResultToHclTerraform(struct) {
+export function dataCloudflareZeroTrustTunnelWarpConnectorsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference, _super);
+export class DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // connections - computed: true, optional: false, required: false
-        _this._connections = new DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList(_this, "connections", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "accountTag", {
-        // account_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "connections", {
-        get: function () {
-            return this._connections;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "connsActiveAt", {
-        // conns_active_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('conns_active_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "connsInactiveAt", {
-        // conns_inactive_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('conns_inactive_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "deletedAt", {
-        // deleted_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('deleted_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "metadata", {
-        // metadata - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('metadata');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference.prototype, "tunType", {
-        // tun_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tun_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference = DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference;
-var DataCloudflareZeroTrustTunnelWarpConnectorsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustTunnelWarpConnectorsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // account_tag - computed: true, optional: false, required: false
+    get accountTag() {
+        return this.getStringAttribute('account_tag');
+    }
+    // connections - computed: true, optional: false, required: false
+    _connections = new DataCloudflareZeroTrustTunnelWarpConnectorsResultConnectionsList(this, "connections", false);
+    get connections() {
+        return this._connections;
+    }
+    // conns_active_at - computed: true, optional: false, required: false
+    get connsActiveAt() {
+        return this.getStringAttribute('conns_active_at');
+    }
+    // conns_inactive_at - computed: true, optional: false, required: false
+    get connsInactiveAt() {
+        return this.getStringAttribute('conns_inactive_at');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // deleted_at - computed: true, optional: false, required: false
+    get deletedAt() {
+        return this.getStringAttribute('deleted_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // metadata - computed: true, optional: false, required: false
+    get metadata() {
+        return this.getStringAttribute('metadata');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tun_type - computed: true, optional: false, required: false
+    get tunType() {
+        return this.getStringAttribute('tun_type');
+    }
+}
+export class DataCloudflareZeroTrustTunnelWarpConnectorsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustTunnelWarpConnectorsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustTunnelWarpConnectorsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustTunnelWarpConnectorsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustTunnelWarpConnectorsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustTunnelWarpConnectorsResultList = DataCloudflareZeroTrustTunnelWarpConnectorsResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_tunnel_warp_connectors cloudflare_zero_trust_tunnel_warp_connectors}
 */
-var DataCloudflareZeroTrustTunnelWarpConnectors = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustTunnelWarpConnectors, _super);
+export class DataCloudflareZeroTrustTunnelWarpConnectors extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_tunnel_warp_connectors";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustTunnelWarpConnectors resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustTunnelWarpConnectors to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustTunnelWarpConnectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_tunnel_warp_connectors#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustTunnelWarpConnectors to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_warp_connectors", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -341,9 +241,8 @@ var DataCloudflareZeroTrustTunnelWarpConnectors = /** @class */ (function (_supe
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustTunnelWarpConnectorsConfig = {}
     */
-    function DataCloudflareZeroTrustTunnelWarpConnectors(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_tunnel_warp_connectors',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -356,277 +255,196 @@ var DataCloudflareZeroTrustTunnelWarpConnectors = /** @class */ (function (_supe
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareZeroTrustTunnelWarpConnectorsResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._excludePrefix = config.excludePrefix;
-        _this._existedAt = config.existedAt;
-        _this._includePrefix = config.includePrefix;
-        _this._isDeleted = config.isDeleted;
-        _this._maxItems = config.maxItems;
-        _this._name = config.name;
-        _this._status = config.status;
-        _this._uuid = config.uuid;
-        _this._wasActiveAt = config.wasActiveAt;
-        _this._wasInactiveAt = config.wasInactiveAt;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._excludePrefix = config.excludePrefix;
+        this._existedAt = config.existedAt;
+        this._includePrefix = config.includePrefix;
+        this._isDeleted = config.isDeleted;
+        this._maxItems = config.maxItems;
+        this._name = config.name;
+        this._status = config.status;
+        this._uuid = config.uuid;
+        this._wasActiveAt = config.wasActiveAt;
+        this._wasInactiveAt = config.wasInactiveAt;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustTunnelWarpConnectors resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustTunnelWarpConnectors to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustTunnelWarpConnectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_tunnel_warp_connectors#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustTunnelWarpConnectors to import is found
-    */
-    DataCloudflareZeroTrustTunnelWarpConnectors.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_warp_connectors", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "excludePrefix", {
-        get: function () {
-            return this.getStringAttribute('exclude_prefix');
-        },
-        set: function (value) {
-            this._excludePrefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetExcludePrefix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // exclude_prefix - computed: false, optional: true, required: false
+    _excludePrefix;
+    get excludePrefix() {
+        return this.getStringAttribute('exclude_prefix');
+    }
+    set excludePrefix(value) {
+        this._excludePrefix = value;
+    }
+    resetExcludePrefix() {
         this._excludePrefix = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "excludePrefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._excludePrefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "existedAt", {
-        get: function () {
-            return this.getStringAttribute('existed_at');
-        },
-        set: function (value) {
-            this._existedAt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetExistedAt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludePrefixInput() {
+        return this._excludePrefix;
+    }
+    // existed_at - computed: false, optional: true, required: false
+    _existedAt;
+    get existedAt() {
+        return this.getStringAttribute('existed_at');
+    }
+    set existedAt(value) {
+        this._existedAt = value;
+    }
+    resetExistedAt() {
         this._existedAt = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "existedAtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._existedAt;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "includePrefix", {
-        get: function () {
-            return this.getStringAttribute('include_prefix');
-        },
-        set: function (value) {
-            this._includePrefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetIncludePrefix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get existedAtInput() {
+        return this._existedAt;
+    }
+    // include_prefix - computed: false, optional: true, required: false
+    _includePrefix;
+    get includePrefix() {
+        return this.getStringAttribute('include_prefix');
+    }
+    set includePrefix(value) {
+        this._includePrefix = value;
+    }
+    resetIncludePrefix() {
         this._includePrefix = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "includePrefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includePrefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "isDeleted", {
-        get: function () {
-            return this.getBooleanAttribute('is_deleted');
-        },
-        set: function (value) {
-            this._isDeleted = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetIsDeleted = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includePrefixInput() {
+        return this._includePrefix;
+    }
+    // is_deleted - computed: false, optional: true, required: false
+    _isDeleted;
+    get isDeleted() {
+        return this.getBooleanAttribute('is_deleted');
+    }
+    set isDeleted(value) {
+        this._isDeleted = value;
+    }
+    resetIsDeleted() {
         this._isDeleted = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "isDeletedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDeleted;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDeletedInput() {
+        return this._isDeleted;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareZeroTrustTunnelWarpConnectorsResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "uuid", {
-        get: function () {
-            return this.getStringAttribute('uuid');
-        },
-        set: function (value) {
-            this._uuid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetUuid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // uuid - computed: false, optional: true, required: false
+    _uuid;
+    get uuid() {
+        return this.getStringAttribute('uuid');
+    }
+    set uuid(value) {
+        this._uuid = value;
+    }
+    resetUuid() {
         this._uuid = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "uuidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uuid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "wasActiveAt", {
-        get: function () {
-            return this.getStringAttribute('was_active_at');
-        },
-        set: function (value) {
-            this._wasActiveAt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetWasActiveAt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get uuidInput() {
+        return this._uuid;
+    }
+    // was_active_at - computed: false, optional: true, required: false
+    _wasActiveAt;
+    get wasActiveAt() {
+        return this.getStringAttribute('was_active_at');
+    }
+    set wasActiveAt(value) {
+        this._wasActiveAt = value;
+    }
+    resetWasActiveAt() {
         this._wasActiveAt = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "wasActiveAtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._wasActiveAt;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "wasInactiveAt", {
-        get: function () {
-            return this.getStringAttribute('was_inactive_at');
-        },
-        set: function (value) {
-            this._wasInactiveAt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.resetWasInactiveAt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get wasActiveAtInput() {
+        return this._wasActiveAt;
+    }
+    // was_inactive_at - computed: false, optional: true, required: false
+    _wasInactiveAt;
+    get wasInactiveAt() {
+        return this.getStringAttribute('was_inactive_at');
+    }
+    set wasInactiveAt(value) {
+        this._wasInactiveAt = value;
+    }
+    resetWasInactiveAt() {
         this._wasInactiveAt = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustTunnelWarpConnectors.prototype, "wasInactiveAtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._wasInactiveAt;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get wasInactiveAtInput() {
+        return this._wasInactiveAt;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             exclude_prefix: cdktf.stringToTerraform(this._excludePrefix),
@@ -640,9 +458,9 @@ var DataCloudflareZeroTrustTunnelWarpConnectors = /** @class */ (function (_supe
             was_active_at: cdktf.stringToTerraform(this._wasActiveAt),
             was_inactive_at: cdktf.stringToTerraform(this._wasInactiveAt),
         };
-    };
-    DataCloudflareZeroTrustTunnelWarpConnectors.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -711,15 +529,6 @@ var DataCloudflareZeroTrustTunnelWarpConnectors = /** @class */ (function (_supe
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustTunnelWarpConnectors.tfResourceType = "cloudflare_zero_trust_tunnel_warp_connectors";
-    return DataCloudflareZeroTrustTunnelWarpConnectors;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustTunnelWarpConnectors = DataCloudflareZeroTrustTunnelWarpConnectors;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy_webhooks
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationPolicyWebhooks = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy_webhooks cloudflare_notification_policy_webhooks}
 */
-var NotificationPolicyWebhooks = /** @class */ (function (_super) {
-    __extends(NotificationPolicyWebhooks, _super);
+export class NotificationPolicyWebhooks extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_notification_policy_webhooks";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a NotificationPolicyWebhooks resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the NotificationPolicyWebhooks to import
+    * @param importFromId The id of the existing NotificationPolicyWebhooks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy_webhooks#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the NotificationPolicyWebhooks to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policy_webhooks", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var NotificationPolicyWebhooks = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options NotificationPolicyWebhooksConfig
     */
-    function NotificationPolicyWebhooks(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_notification_policy_webhooks',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,157 +46,102 @@ var NotificationPolicyWebhooks = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._name = config.name;
-        _this._secret = config.secret;
-        _this._url = config.url;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._name = config.name;
+        this._secret = config.secret;
+        this._url = config.url;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a NotificationPolicyWebhooks resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the NotificationPolicyWebhooks to import
-    * @param importFromId The id of the existing NotificationPolicyWebhooks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/notification_policy_webhooks#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the NotificationPolicyWebhooks to import is found
-    */
-    NotificationPolicyWebhooks.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policy_webhooks", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyWebhooks.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "lastFailure", {
-        // last_failure - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_failure');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "lastSuccess", {
-        // last_success - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_success');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "secret", {
-        get: function () {
-            return this.getStringAttribute('secret');
-        },
-        set: function (value) {
-            this._secret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NotificationPolicyWebhooks.prototype.resetSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_failure - computed: true, optional: false, required: false
+    get lastFailure() {
+        return this.getStringAttribute('last_failure');
+    }
+    // last_success - computed: true, optional: false, required: false
+    get lastSuccess() {
+        return this.getStringAttribute('last_success');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // secret - computed: false, optional: true, required: false
+    _secret;
+    get secret() {
+        return this.getStringAttribute('secret');
+    }
+    set secret(value) {
+        this._secret = value;
+    }
+    resetSecret() {
         this._secret = undefined;
-    };
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "secretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secret;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NotificationPolicyWebhooks.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretInput() {
+        return this._secret;
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // url - computed: false, optional: false, required: true
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
     // =========
     // SYNTHESIS
     // =========
-    NotificationPolicyWebhooks.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             name: cdktf.stringToTerraform(this._name),
             secret: cdktf.stringToTerraform(this._secret),
             url: cdktf.stringToTerraform(this._url),
         };
-    };
-    NotificationPolicyWebhooks.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -225,15 +168,6 @@ var NotificationPolicyWebhooks = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    NotificationPolicyWebhooks.tfResourceType = "cloudflare_notification_policy_webhooks";
-    return NotificationPolicyWebhooks;
-}(cdktf.TerraformResource));
-exports.NotificationPolicyWebhooks = NotificationPolicyWebhooks;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

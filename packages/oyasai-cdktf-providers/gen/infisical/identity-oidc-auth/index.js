@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_oidc_auth
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityOidcAuth = exports.IdentityOidcAuthAccessTokenTrustedIpsList = exports.IdentityOidcAuthAccessTokenTrustedIpsOutputReference = void 0;
-exports.identityOidcAuthAccessTokenTrustedIpsToTerraform = identityOidcAuthAccessTokenTrustedIpsToTerraform;
-exports.identityOidcAuthAccessTokenTrustedIpsToHclTerraform = identityOidcAuthAccessTokenTrustedIpsToHclTerraform;
-var cdktf = require("cdktf");
-function identityOidcAuthAccessTokenTrustedIpsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function identityOidcAuthAccessTokenTrustedIpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function identityOidcAuthAccessTokenTrustedIpsToTerraform(struct) {
         ip_address: cdktf.stringToTerraform(struct.ipAddress),
     };
 }
-function identityOidcAuthAccessTokenTrustedIpsToHclTerraform(struct) {
+export function identityOidcAuthAccessTokenTrustedIpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip_address: {
             value: cdktf.stringToHclTerraform(struct.ipAddress),
             isBlock: false,
@@ -48,108 +28,108 @@ function identityOidcAuthAccessTokenTrustedIpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var IdentityOidcAuthAccessTokenTrustedIpsOutputReference = /** @class */ (function (_super) {
-    __extends(IdentityOidcAuthAccessTokenTrustedIpsOutputReference, _super);
+export class IdentityOidcAuthAccessTokenTrustedIpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityOidcAuthAccessTokenTrustedIpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(IdentityOidcAuthAccessTokenTrustedIpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ipAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipAddress = this._ipAddress;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ipAddress = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ipAddress = value.ipAddress;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddress", {
-        get: function () {
-            return this.getStringAttribute('ip_address');
-        },
-        set: function (value) {
-            this._ipAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuthAccessTokenTrustedIpsOutputReference.prototype.resetIpAddress = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ipAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipAddress = this._ipAddress;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ipAddress = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ipAddress = value.ipAddress;
+        }
+    }
+    // ip_address - computed: true, optional: true, required: false
+    _ipAddress;
+    get ipAddress() {
+        return this.getStringAttribute('ip_address');
+    }
+    set ipAddress(value) {
+        this._ipAddress = value;
+    }
+    resetIpAddress() {
         this._ipAddress = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return IdentityOidcAuthAccessTokenTrustedIpsOutputReference;
-}(cdktf.ComplexObject));
-exports.IdentityOidcAuthAccessTokenTrustedIpsOutputReference = IdentityOidcAuthAccessTokenTrustedIpsOutputReference;
-var IdentityOidcAuthAccessTokenTrustedIpsList = /** @class */ (function (_super) {
-    __extends(IdentityOidcAuthAccessTokenTrustedIpsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipAddressInput() {
+        return this._ipAddress;
+    }
+}
+export class IdentityOidcAuthAccessTokenTrustedIpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityOidcAuthAccessTokenTrustedIpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    IdentityOidcAuthAccessTokenTrustedIpsList.prototype.get = function (index) {
+    get(index) {
         return new IdentityOidcAuthAccessTokenTrustedIpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return IdentityOidcAuthAccessTokenTrustedIpsList;
-}(cdktf.ComplexList));
-exports.IdentityOidcAuthAccessTokenTrustedIpsList = IdentityOidcAuthAccessTokenTrustedIpsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_oidc_auth infisical_identity_oidc_auth}
 */
-var IdentityOidcAuth = /** @class */ (function (_super) {
-    __extends(IdentityOidcAuth, _super);
+export class IdentityOidcAuth extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_identity_oidc_auth";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IdentityOidcAuth resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IdentityOidcAuth to import
+    * @param importFromId The id of the existing IdentityOidcAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_oidc_auth#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IdentityOidcAuth to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_oidc_auth", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -160,8 +140,8 @@ var IdentityOidcAuth = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IdentityOidcAuthConfig
     */
-    function IdentityOidcAuth(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_identity_oidc_auth',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -174,291 +154,202 @@ var IdentityOidcAuth = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // access_token_trusted_ips - computed: true, optional: true, required: false
-        _this._accessTokenTrustedIps = new IdentityOidcAuthAccessTokenTrustedIpsList(_this, "access_token_trusted_ips", false);
-        _this._accessTokenMaxTtl = config.accessTokenMaxTtl;
-        _this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
-        _this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
-        _this._accessTokenTtl = config.accessTokenTtl;
-        _this._boundAudiences = config.boundAudiences;
-        _this._boundClaims = config.boundClaims;
-        _this._boundIssuer = config.boundIssuer;
-        _this._boundSubject = config.boundSubject;
-        _this._claimMetadataMapping = config.claimMetadataMapping;
-        _this._identityId = config.identityId;
-        _this._oidcCaCertificate = config.oidcCaCertificate;
-        _this._oidcDiscoveryUrl = config.oidcDiscoveryUrl;
-        return _this;
+        });
+        this._accessTokenMaxTtl = config.accessTokenMaxTtl;
+        this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
+        this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
+        this._accessTokenTtl = config.accessTokenTtl;
+        this._boundAudiences = config.boundAudiences;
+        this._boundClaims = config.boundClaims;
+        this._boundIssuer = config.boundIssuer;
+        this._boundSubject = config.boundSubject;
+        this._claimMetadataMapping = config.claimMetadataMapping;
+        this._identityId = config.identityId;
+        this._oidcCaCertificate = config.oidcCaCertificate;
+        this._oidcDiscoveryUrl = config.oidcDiscoveryUrl;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IdentityOidcAuth resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IdentityOidcAuth to import
-    * @param importFromId The id of the existing IdentityOidcAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_oidc_auth#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IdentityOidcAuth to import is found
-    */
-    IdentityOidcAuth.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_oidc_auth", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenMaxTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_max_ttl');
-        },
-        set: function (value) {
-            this._accessTokenMaxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetAccessTokenMaxTtl = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // access_token_max_ttl - computed: true, optional: true, required: false
+    _accessTokenMaxTtl;
+    get accessTokenMaxTtl() {
+        return this.getNumberAttribute('access_token_max_ttl');
+    }
+    set accessTokenMaxTtl(value) {
+        this._accessTokenMaxTtl = value;
+    }
+    resetAccessTokenMaxTtl() {
         this._accessTokenMaxTtl = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenMaxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenMaxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenNumUsesLimit", {
-        get: function () {
-            return this.getNumberAttribute('access_token_num_uses_limit');
-        },
-        set: function (value) {
-            this._accessTokenNumUsesLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetAccessTokenNumUsesLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenMaxTtlInput() {
+        return this._accessTokenMaxTtl;
+    }
+    // access_token_num_uses_limit - computed: true, optional: true, required: false
+    _accessTokenNumUsesLimit;
+    get accessTokenNumUsesLimit() {
+        return this.getNumberAttribute('access_token_num_uses_limit');
+    }
+    set accessTokenNumUsesLimit(value) {
+        this._accessTokenNumUsesLimit = value;
+    }
+    resetAccessTokenNumUsesLimit() {
         this._accessTokenNumUsesLimit = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenNumUsesLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenNumUsesLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenTrustedIps", {
-        get: function () {
-            return this._accessTokenTrustedIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.putAccessTokenTrustedIps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenNumUsesLimitInput() {
+        return this._accessTokenNumUsesLimit;
+    }
+    // access_token_trusted_ips - computed: true, optional: true, required: false
+    _accessTokenTrustedIps = new IdentityOidcAuthAccessTokenTrustedIpsList(this, "access_token_trusted_ips", false);
+    get accessTokenTrustedIps() {
+        return this._accessTokenTrustedIps;
+    }
+    putAccessTokenTrustedIps(value) {
         this._accessTokenTrustedIps.internalValue = value;
-    };
-    IdentityOidcAuth.prototype.resetAccessTokenTrustedIps = function () {
+    }
+    resetAccessTokenTrustedIps() {
         this._accessTokenTrustedIps.internalValue = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenTrustedIpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTrustedIps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_ttl');
-        },
-        set: function (value) {
-            this._accessTokenTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetAccessTokenTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTrustedIpsInput() {
+        return this._accessTokenTrustedIps.internalValue;
+    }
+    // access_token_ttl - computed: true, optional: true, required: false
+    _accessTokenTtl;
+    get accessTokenTtl() {
+        return this.getNumberAttribute('access_token_ttl');
+    }
+    set accessTokenTtl(value) {
+        this._accessTokenTtl = value;
+    }
+    resetAccessTokenTtl() {
         this._accessTokenTtl = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "accessTokenTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundAudiences", {
-        get: function () {
-            return this.getListAttribute('bound_audiences');
-        },
-        set: function (value) {
-            this._boundAudiences = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetBoundAudiences = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTtlInput() {
+        return this._accessTokenTtl;
+    }
+    // bound_audiences - computed: true, optional: true, required: false
+    _boundAudiences;
+    get boundAudiences() {
+        return this.getListAttribute('bound_audiences');
+    }
+    set boundAudiences(value) {
+        this._boundAudiences = value;
+    }
+    resetBoundAudiences() {
         this._boundAudiences = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundAudiencesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._boundAudiences;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundClaims", {
-        get: function () {
-            return this.getStringMapAttribute('bound_claims');
-        },
-        set: function (value) {
-            this._boundClaims = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetBoundClaims = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get boundAudiencesInput() {
+        return this._boundAudiences;
+    }
+    // bound_claims - computed: true, optional: true, required: false
+    _boundClaims;
+    get boundClaims() {
+        return this.getStringMapAttribute('bound_claims');
+    }
+    set boundClaims(value) {
+        this._boundClaims = value;
+    }
+    resetBoundClaims() {
         this._boundClaims = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundClaimsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._boundClaims;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundIssuer", {
-        get: function () {
-            return this.getStringAttribute('bound_issuer');
-        },
-        set: function (value) {
-            this._boundIssuer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundIssuerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._boundIssuer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundSubject", {
-        get: function () {
-            return this.getStringAttribute('bound_subject');
-        },
-        set: function (value) {
-            this._boundSubject = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetBoundSubject = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get boundClaimsInput() {
+        return this._boundClaims;
+    }
+    // bound_issuer - computed: false, optional: false, required: true
+    _boundIssuer;
+    get boundIssuer() {
+        return this.getStringAttribute('bound_issuer');
+    }
+    set boundIssuer(value) {
+        this._boundIssuer = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get boundIssuerInput() {
+        return this._boundIssuer;
+    }
+    // bound_subject - computed: true, optional: true, required: false
+    _boundSubject;
+    get boundSubject() {
+        return this.getStringAttribute('bound_subject');
+    }
+    set boundSubject(value) {
+        this._boundSubject = value;
+    }
+    resetBoundSubject() {
         this._boundSubject = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "boundSubjectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._boundSubject;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "claimMetadataMapping", {
-        get: function () {
-            return this.getStringMapAttribute('claim_metadata_mapping');
-        },
-        set: function (value) {
-            this._claimMetadataMapping = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetClaimMetadataMapping = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get boundSubjectInput() {
+        return this._boundSubject;
+    }
+    // claim_metadata_mapping - computed: true, optional: true, required: false
+    _claimMetadataMapping;
+    get claimMetadataMapping() {
+        return this.getStringMapAttribute('claim_metadata_mapping');
+    }
+    set claimMetadataMapping(value) {
+        this._claimMetadataMapping = value;
+    }
+    resetClaimMetadataMapping() {
         this._claimMetadataMapping = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "claimMetadataMappingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._claimMetadataMapping;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "oidcCaCertificate", {
-        get: function () {
-            return this.getStringAttribute('oidc_ca_certificate');
-        },
-        set: function (value) {
-            this._oidcCaCertificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityOidcAuth.prototype.resetOidcCaCertificate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get claimMetadataMappingInput() {
+        return this._claimMetadataMapping;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // oidc_ca_certificate - computed: true, optional: true, required: false
+    _oidcCaCertificate;
+    get oidcCaCertificate() {
+        return this.getStringAttribute('oidc_ca_certificate');
+    }
+    set oidcCaCertificate(value) {
+        this._oidcCaCertificate = value;
+    }
+    resetOidcCaCertificate() {
         this._oidcCaCertificate = undefined;
-    };
-    Object.defineProperty(IdentityOidcAuth.prototype, "oidcCaCertificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oidcCaCertificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "oidcDiscoveryUrl", {
-        get: function () {
-            return this.getStringAttribute('oidc_discovery_url');
-        },
-        set: function (value) {
-            this._oidcDiscoveryUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityOidcAuth.prototype, "oidcDiscoveryUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oidcDiscoveryUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get oidcCaCertificateInput() {
+        return this._oidcCaCertificate;
+    }
+    // oidc_discovery_url - computed: false, optional: false, required: true
+    _oidcDiscoveryUrl;
+    get oidcDiscoveryUrl() {
+        return this.getStringAttribute('oidc_discovery_url');
+    }
+    set oidcDiscoveryUrl(value) {
+        this._oidcDiscoveryUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get oidcDiscoveryUrlInput() {
+        return this._oidcDiscoveryUrl;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IdentityOidcAuth.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             access_token_max_ttl: cdktf.numberToTerraform(this._accessTokenMaxTtl),
             access_token_num_uses_limit: cdktf.numberToTerraform(this._accessTokenNumUsesLimit),
@@ -473,9 +364,9 @@ var IdentityOidcAuth = /** @class */ (function (_super) {
             oidc_ca_certificate: cdktf.stringToTerraform(this._oidcCaCertificate),
             oidc_discovery_url: cdktf.stringToTerraform(this._oidcDiscoveryUrl),
         };
-    };
-    IdentityOidcAuth.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             access_token_max_ttl: {
                 value: cdktf.numberToHclTerraform(this._accessTokenMaxTtl),
                 isBlock: false,
@@ -550,15 +441,6 @@ var IdentityOidcAuth = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IdentityOidcAuth.tfResourceType = "infisical_identity_oidc_auth";
-    return IdentityOidcAuth;
-}(cdktf.TerraformResource));
-exports.IdentityOidcAuth = IdentityOidcAuth;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

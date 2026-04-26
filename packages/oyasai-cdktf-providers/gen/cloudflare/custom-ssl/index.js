@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/custom_ssl
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomSsl = exports.CustomSslKeylessServerOutputReference = exports.CustomSslKeylessServerTunnelOutputReference = exports.CustomSslGeoRestrictionsOutputReference = void 0;
-exports.customSslGeoRestrictionsToTerraform = customSslGeoRestrictionsToTerraform;
-exports.customSslGeoRestrictionsToHclTerraform = customSslGeoRestrictionsToHclTerraform;
-exports.customSslKeylessServerTunnelToTerraform = customSslKeylessServerTunnelToTerraform;
-exports.customSslKeylessServerTunnelToHclTerraform = customSslKeylessServerTunnelToHclTerraform;
-exports.customSslKeylessServerToTerraform = customSslKeylessServerToTerraform;
-exports.customSslKeylessServerToHclTerraform = customSslKeylessServerToHclTerraform;
-var cdktf = require("cdktf");
-function customSslGeoRestrictionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function customSslGeoRestrictionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,14 +12,14 @@ function customSslGeoRestrictionsToTerraform(struct) {
         label: cdktf.stringToTerraform(struct.label),
     };
 }
-function customSslGeoRestrictionsToHclTerraform(struct) {
+export function customSslGeoRestrictionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -52,79 +28,63 @@ function customSslGeoRestrictionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CustomSslGeoRestrictionsOutputReference = /** @class */ (function (_super) {
-    __extends(CustomSslGeoRestrictionsOutputReference, _super);
+export class CustomSslGeoRestrictionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CustomSslGeoRestrictionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CustomSslGeoRestrictionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslGeoRestrictionsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSslGeoRestrictionsOutputReference.prototype.resetLabel = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+        }
+    }
+    // label - computed: false, optional: true, required: false
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    resetLabel() {
         this._label = undefined;
-    };
-    Object.defineProperty(CustomSslGeoRestrictionsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CustomSslGeoRestrictionsOutputReference;
-}(cdktf.ComplexObject));
-exports.CustomSslGeoRestrictionsOutputReference = CustomSslGeoRestrictionsOutputReference;
-function customSslKeylessServerTunnelToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+}
+export function customSslKeylessServerTunnelToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -133,64 +93,48 @@ function customSslKeylessServerTunnelToTerraform(struct) {
     }
     return {};
 }
-function customSslKeylessServerTunnelToHclTerraform(struct) {
+export function customSslKeylessServerTunnelToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var CustomSslKeylessServerTunnelOutputReference = /** @class */ (function (_super) {
-    __extends(CustomSslKeylessServerTunnelOutputReference, _super);
+export class CustomSslKeylessServerTunnelOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CustomSslKeylessServerTunnelOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CustomSslKeylessServerTunnelOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerTunnelOutputReference.prototype, "privateIp", {
-        // private_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('private_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerTunnelOutputReference.prototype, "vnetId", {
-        // vnet_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('vnet_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CustomSslKeylessServerTunnelOutputReference;
-}(cdktf.ComplexObject));
-exports.CustomSslKeylessServerTunnelOutputReference = CustomSslKeylessServerTunnelOutputReference;
-function customSslKeylessServerToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // private_ip - computed: true, optional: false, required: false
+    get privateIp() {
+        return this.getStringAttribute('private_ip');
+    }
+    // vnet_id - computed: true, optional: false, required: false
+    get vnetId() {
+        return this.getStringAttribute('vnet_id');
+    }
+}
+export function customSslKeylessServerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -199,133 +143,101 @@ function customSslKeylessServerToTerraform(struct) {
     }
     return {};
 }
-function customSslKeylessServerToHclTerraform(struct) {
+export function customSslKeylessServerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var CustomSslKeylessServerOutputReference = /** @class */ (function (_super) {
-    __extends(CustomSslKeylessServerOutputReference, _super);
+export class CustomSslKeylessServerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CustomSslKeylessServerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // tunnel - computed: true, optional: false, required: false
-        _this._tunnel = new CustomSslKeylessServerTunnelOutputReference(_this, "tunnel");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "permissions", {
-        // permissions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('permissions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "port", {
-        // port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSslKeylessServerOutputReference.prototype, "tunnel", {
-        get: function () {
-            return this._tunnel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CustomSslKeylessServerOutputReference;
-}(cdktf.ComplexObject));
-exports.CustomSslKeylessServerOutputReference = CustomSslKeylessServerOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // permissions - computed: true, optional: false, required: false
+    get permissions() {
+        return this.getListAttribute('permissions');
+    }
+    // port - computed: true, optional: false, required: false
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tunnel - computed: true, optional: false, required: false
+    _tunnel = new CustomSslKeylessServerTunnelOutputReference(this, "tunnel");
+    get tunnel() {
+        return this._tunnel;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/custom_ssl cloudflare_custom_ssl}
 */
-var CustomSsl = /** @class */ (function (_super) {
-    __extends(CustomSsl, _super);
+export class CustomSsl extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_custom_ssl";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CustomSsl resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CustomSsl to import
+    * @param importFromId The id of the existing CustomSsl that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/custom_ssl#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CustomSsl to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_custom_ssl", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -336,8 +248,8 @@ var CustomSsl = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CustomSslConfig
     */
-    function CustomSsl(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_custom_ssl',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -350,309 +262,198 @@ var CustomSsl = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // geo_restrictions - computed: false, optional: true, required: false
-        _this._geoRestrictions = new CustomSslGeoRestrictionsOutputReference(_this, "geo_restrictions");
-        // keyless_server - computed: true, optional: false, required: false
-        _this._keylessServer = new CustomSslKeylessServerOutputReference(_this, "keyless_server");
-        _this._bundleMethod = config.bundleMethod;
-        _this._certificate = config.certificate;
-        _this._customCsrId = config.customCsrId;
-        _this._deploy = config.deploy;
-        _this._geoRestrictions.internalValue = config.geoRestrictions;
-        _this._policy = config.policy;
-        _this._privateKey = config.privateKey;
-        _this._type = config.type;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._bundleMethod = config.bundleMethod;
+        this._certificate = config.certificate;
+        this._customCsrId = config.customCsrId;
+        this._deploy = config.deploy;
+        this._geoRestrictions.internalValue = config.geoRestrictions;
+        this._policy = config.policy;
+        this._privateKey = config.privateKey;
+        this._type = config.type;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CustomSsl resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CustomSsl to import
-    * @param importFromId The id of the existing CustomSsl that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/custom_ssl#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CustomSsl to import is found
-    */
-    CustomSsl.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_custom_ssl", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CustomSsl.prototype, "bundleMethod", {
-        get: function () {
-            return this.getStringAttribute('bundle_method');
-        },
-        set: function (value) {
-            this._bundleMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetBundleMethod = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // bundle_method - computed: true, optional: true, required: false
+    _bundleMethod;
+    get bundleMethod() {
+        return this.getStringAttribute('bundle_method');
+    }
+    set bundleMethod(value) {
+        this._bundleMethod = value;
+    }
+    resetBundleMethod() {
         this._bundleMethod = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "bundleMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bundleMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "certificate", {
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        set: function (value) {
-            this._certificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "customCsrId", {
-        get: function () {
-            return this.getStringAttribute('custom_csr_id');
-        },
-        set: function (value) {
-            this._customCsrId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetCustomCsrId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bundleMethodInput() {
+        return this._bundleMethod;
+    }
+    // certificate - computed: false, optional: false, required: true
+    _certificate;
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    set certificate(value) {
+        this._certificate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate;
+    }
+    // custom_csr_id - computed: false, optional: true, required: false
+    _customCsrId;
+    get customCsrId() {
+        return this.getStringAttribute('custom_csr_id');
+    }
+    set customCsrId(value) {
+        this._customCsrId = value;
+    }
+    resetCustomCsrId() {
         this._customCsrId = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "customCsrIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customCsrId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "deploy", {
-        get: function () {
-            return this.getStringAttribute('deploy');
-        },
-        set: function (value) {
-            this._deploy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetDeploy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customCsrIdInput() {
+        return this._customCsrId;
+    }
+    // deploy - computed: false, optional: true, required: false
+    _deploy;
+    get deploy() {
+        return this.getStringAttribute('deploy');
+    }
+    set deploy(value) {
+        this._deploy = value;
+    }
+    resetDeploy() {
         this._deploy = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "deployInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deploy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "geoRestrictions", {
-        get: function () {
-            return this._geoRestrictions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.putGeoRestrictions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deployInput() {
+        return this._deploy;
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // geo_restrictions - computed: false, optional: true, required: false
+    _geoRestrictions = new CustomSslGeoRestrictionsOutputReference(this, "geo_restrictions");
+    get geoRestrictions() {
+        return this._geoRestrictions;
+    }
+    putGeoRestrictions(value) {
         this._geoRestrictions.internalValue = value;
-    };
-    CustomSsl.prototype.resetGeoRestrictions = function () {
+    }
+    resetGeoRestrictions() {
         this._geoRestrictions.internalValue = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "geoRestrictionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._geoRestrictions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "hosts", {
-        // hosts - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('hosts');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "issuer", {
-        // issuer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "keylessServer", {
-        get: function () {
-            return this._keylessServer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "policy", {
-        get: function () {
-            return this.getStringAttribute('policy');
-        },
-        set: function (value) {
-            this._policy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetPolicy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get geoRestrictionsInput() {
+        return this._geoRestrictions.internalValue;
+    }
+    // hosts - computed: true, optional: false, required: false
+    get hosts() {
+        return this.getListAttribute('hosts');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer - computed: true, optional: false, required: false
+    get issuer() {
+        return this.getStringAttribute('issuer');
+    }
+    // keyless_server - computed: true, optional: false, required: false
+    _keylessServer = new CustomSslKeylessServerOutputReference(this, "keyless_server");
+    get keylessServer() {
+        return this._keylessServer;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // policy - computed: false, optional: true, required: false
+    _policy;
+    get policy() {
+        return this.getStringAttribute('policy');
+    }
+    set policy(value) {
+        this._policy = value;
+    }
+    resetPolicy() {
         this._policy = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "policyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._policy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "policyRestrictions", {
-        // policy_restrictions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('policy_restrictions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "privateKey", {
-        get: function () {
-            return this.getStringAttribute('private_key');
-        },
-        set: function (value) {
-            this._privateKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "privateKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privateKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get policyInput() {
+        return this._policy;
+    }
+    // policy_restrictions - computed: true, optional: false, required: false
+    get policyRestrictions() {
+        return this.getStringAttribute('policy_restrictions');
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    // private_key - computed: false, optional: false, required: true
+    _privateKey;
+    get privateKey() {
+        return this.getStringAttribute('private_key');
+    }
+    set privateKey(value) {
+        this._privateKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get privateKeyInput() {
+        return this._privateKey;
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // type - computed: true, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CustomSsl.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CustomSsl.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(CustomSsl.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CustomSsl.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             bundle_method: cdktf.stringToTerraform(this._bundleMethod),
             certificate: cdktf.stringToTerraform(this._certificate),
@@ -664,9 +465,9 @@ var CustomSsl = /** @class */ (function (_super) {
             type: cdktf.stringToTerraform(this._type),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    CustomSsl.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             bundle_method: {
                 value: cdktf.stringToHclTerraform(this._bundleMethod),
                 isBlock: false,
@@ -723,15 +524,6 @@ var CustomSsl = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CustomSsl.tfResourceType = "cloudflare_custom_ssl";
-    return CustomSsl;
-}(cdktf.TerraformResource));
-exports.CustomSsl = CustomSsl;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

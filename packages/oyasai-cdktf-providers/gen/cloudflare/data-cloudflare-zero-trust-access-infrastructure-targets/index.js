@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_infrastructure_targets
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustAccessInfrastructureTargets = exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultList = exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference = exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference = exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference = exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference = void 0;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToHclTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToHclTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToHclTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToHclTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToHclTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToHclTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultToTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultToTerraform;
-exports.dataCloudflareZeroTrustAccessInfrastructureTargetsResultToHclTerraform = dataCloudflareZeroTrustAccessInfrastructureTargetsResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,64 +10,48 @@ function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToTerrafo
     }
     return {};
 }
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToHclTerraform(struct) {
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference, _super);
+export class DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference.prototype, "ipAddr", {
-        // ip_addr - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ip_addr');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference.prototype, "virtualNetworkId", {
-        // virtual_network_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('virtual_network_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference = DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference;
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ip_addr - computed: true, optional: false, required: false
+    get ipAddr() {
+        return this.getStringAttribute('ip_addr');
+    }
+    // virtual_network_id - computed: true, optional: false, required: false
+    get virtualNetworkId() {
+        return this.getStringAttribute('virtual_network_id');
+    }
+}
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -102,64 +60,48 @@ function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToTerrafo
     }
     return {};
 }
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToHclTerraform(struct) {
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference, _super);
+export class DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference.prototype, "ipAddr", {
-        // ip_addr - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ip_addr');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference.prototype, "virtualNetworkId", {
-        // virtual_network_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('virtual_network_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference = DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference;
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ip_addr - computed: true, optional: false, required: false
+    get ipAddr() {
+        return this.getStringAttribute('ip_addr');
+    }
+    // virtual_network_id - computed: true, optional: false, required: false
+    get virtualNetworkId() {
+        return this.getStringAttribute('virtual_network_id');
+    }
+}
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -168,66 +110,50 @@ function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToTerraform(s
     }
     return {};
 }
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToHclTerraform(struct) {
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultIpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference, _super);
+export class DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // ipv4 - computed: true, optional: false, required: false
-        _this._ipv4 = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference(_this, "ipv4");
-        // ipv6 - computed: true, optional: false, required: false
-        _this._ipv6 = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference(_this, "ipv6");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference.prototype, "ipv4", {
-        get: function () {
-            return this._ipv4;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference.prototype, "ipv6", {
-        get: function () {
-            return this._ipv6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference = DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference;
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ipv4 - computed: true, optional: false, required: false
+    _ipv4 = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv4OutputReference(this, "ipv4");
+    get ipv4() {
+        return this._ipv4;
+    }
+    // ipv6 - computed: true, optional: false, required: false
+    _ipv6 = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpIpv6OutputReference(this, "ipv6");
+    get ipv6() {
+        return this._ipv6;
+    }
+}
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -236,118 +162,105 @@ function dataCloudflareZeroTrustAccessInfrastructureTargetsResultToTerraform(str
     }
     return {};
 }
-function dataCloudflareZeroTrustAccessInfrastructureTargetsResultToHclTerraform(struct) {
+export function dataCloudflareZeroTrustAccessInfrastructureTargetsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference, _super);
+export class DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // ip - computed: true, optional: false, required: false
-        _this._ip = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference(_this, "ip");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "hostname", {
-        // hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "ip", {
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference = DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference;
-var DataCloudflareZeroTrustAccessInfrastructureTargetsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargetsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // hostname - computed: true, optional: false, required: false
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ip - computed: true, optional: false, required: false
+    _ip = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultIpOutputReference(this, "ip");
+    get ip() {
+        return this._ip;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+}
+export class DataCloudflareZeroTrustAccessInfrastructureTargetsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargetsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustAccessInfrastructureTargetsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustAccessInfrastructureTargetsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustAccessInfrastructureTargetsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargetsResultList = DataCloudflareZeroTrustAccessInfrastructureTargetsResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_infrastructure_targets cloudflare_zero_trust_access_infrastructure_targets}
 */
-var DataCloudflareZeroTrustAccessInfrastructureTargets = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessInfrastructureTargets, _super);
+export class DataCloudflareZeroTrustAccessInfrastructureTargets extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_infrastructure_targets";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessInfrastructureTargets resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessInfrastructureTargets to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustAccessInfrastructureTargets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_infrastructure_targets#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessInfrastructureTargets to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_infrastructure_targets", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -358,9 +271,8 @@ var DataCloudflareZeroTrustAccessInfrastructureTargets = /** @class */ (function
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustAccessInfrastructureTargetsConfig = {}
     */
-    function DataCloudflareZeroTrustAccessInfrastructureTargets(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_infrastructure_targets',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -373,475 +285,340 @@ var DataCloudflareZeroTrustAccessInfrastructureTargets = /** @class */ (function
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._createdAfter = config.createdAfter;
-        _this._createdBefore = config.createdBefore;
-        _this._direction = config.direction;
-        _this._hostname = config.hostname;
-        _this._hostnameContains = config.hostnameContains;
-        _this._ipLike = config.ipLike;
-        _this._ipV4 = config.ipV4;
-        _this._ipV6 = config.ipV6;
-        _this._ips = config.ips;
-        _this._ipv4End = config.ipv4End;
-        _this._ipv4Start = config.ipv4Start;
-        _this._ipv6End = config.ipv6End;
-        _this._ipv6Start = config.ipv6Start;
-        _this._maxItems = config.maxItems;
-        _this._modifiedAfter = config.modifiedAfter;
-        _this._modifiedBefore = config.modifiedBefore;
-        _this._order = config.order;
-        _this._targetIds = config.targetIds;
-        _this._virtualNetworkId = config.virtualNetworkId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._createdAfter = config.createdAfter;
+        this._createdBefore = config.createdBefore;
+        this._direction = config.direction;
+        this._hostname = config.hostname;
+        this._hostnameContains = config.hostnameContains;
+        this._ipLike = config.ipLike;
+        this._ipV4 = config.ipV4;
+        this._ipV6 = config.ipV6;
+        this._ips = config.ips;
+        this._ipv4End = config.ipv4End;
+        this._ipv4Start = config.ipv4Start;
+        this._ipv6End = config.ipv6End;
+        this._ipv6Start = config.ipv6Start;
+        this._maxItems = config.maxItems;
+        this._modifiedAfter = config.modifiedAfter;
+        this._modifiedBefore = config.modifiedBefore;
+        this._order = config.order;
+        this._targetIds = config.targetIds;
+        this._virtualNetworkId = config.virtualNetworkId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessInfrastructureTargets resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessInfrastructureTargets to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustAccessInfrastructureTargets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_infrastructure_targets#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessInfrastructureTargets to import is found
-    */
-    DataCloudflareZeroTrustAccessInfrastructureTargets.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_infrastructure_targets", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "createdAfter", {
-        get: function () {
-            return this.getStringAttribute('created_after');
-        },
-        set: function (value) {
-            this._createdAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetCreatedAfter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_after - computed: false, optional: true, required: false
+    _createdAfter;
+    get createdAfter() {
+        return this.getStringAttribute('created_after');
+    }
+    set createdAfter(value) {
+        this._createdAfter = value;
+    }
+    resetCreatedAfter() {
         this._createdAfter = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "createdAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createdAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "createdBefore", {
-        get: function () {
-            return this.getStringAttribute('created_before');
-        },
-        set: function (value) {
-            this._createdBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetCreatedBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createdAfterInput() {
+        return this._createdAfter;
+    }
+    // created_before - computed: false, optional: true, required: false
+    _createdBefore;
+    get createdBefore() {
+        return this.getStringAttribute('created_before');
+    }
+    set createdBefore(value) {
+        this._createdBefore = value;
+    }
+    resetCreatedBefore() {
         this._createdBefore = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "createdBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createdBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createdBeforeInput() {
+        return this._createdBefore;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetHostname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // hostname - computed: false, optional: true, required: false
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    resetHostname() {
         this._hostname = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "hostnameContains", {
-        get: function () {
-            return this.getStringAttribute('hostname_contains');
-        },
-        set: function (value) {
-            this._hostnameContains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetHostnameContains = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // hostname_contains - computed: false, optional: true, required: false
+    _hostnameContains;
+    get hostnameContains() {
+        return this.getStringAttribute('hostname_contains');
+    }
+    set hostnameContains(value) {
+        this._hostnameContains = value;
+    }
+    resetHostnameContains() {
         this._hostnameContains = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "hostnameContainsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostnameContains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipLike", {
-        get: function () {
-            return this.getStringAttribute('ip_like');
-        },
-        set: function (value) {
-            this._ipLike = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpLike = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameContainsInput() {
+        return this._hostnameContains;
+    }
+    // ip_like - computed: false, optional: true, required: false
+    _ipLike;
+    get ipLike() {
+        return this.getStringAttribute('ip_like');
+    }
+    set ipLike(value) {
+        this._ipLike = value;
+    }
+    resetIpLike() {
         this._ipLike = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipLikeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipLike;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipV4", {
-        get: function () {
-            return this.getStringAttribute('ip_v4');
-        },
-        set: function (value) {
-            this._ipV4 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpV4 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipLikeInput() {
+        return this._ipLike;
+    }
+    // ip_v4 - computed: false, optional: true, required: false
+    _ipV4;
+    get ipV4() {
+        return this.getStringAttribute('ip_v4');
+    }
+    set ipV4(value) {
+        this._ipV4 = value;
+    }
+    resetIpV4() {
         this._ipV4 = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipV4Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipV4;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipV6", {
-        get: function () {
-            return this.getStringAttribute('ip_v6');
-        },
-        set: function (value) {
-            this._ipV6 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpV6 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipV4Input() {
+        return this._ipV4;
+    }
+    // ip_v6 - computed: false, optional: true, required: false
+    _ipV6;
+    get ipV6() {
+        return this.getStringAttribute('ip_v6');
+    }
+    set ipV6(value) {
+        this._ipV6 = value;
+    }
+    resetIpV6() {
         this._ipV6 = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipV6Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipV6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ips", {
-        get: function () {
-            return this.getListAttribute('ips');
-        },
-        set: function (value) {
-            this._ips = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipV6Input() {
+        return this._ipV6;
+    }
+    // ips - computed: false, optional: true, required: false
+    _ips;
+    get ips() {
+        return this.getListAttribute('ips');
+    }
+    set ips(value) {
+        this._ips = value;
+    }
+    resetIps() {
         this._ips = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ips;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv4End", {
-        get: function () {
-            return this.getStringAttribute('ipv4_end');
-        },
-        set: function (value) {
-            this._ipv4End = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpv4End = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipsInput() {
+        return this._ips;
+    }
+    // ipv4_end - computed: false, optional: true, required: false
+    _ipv4End;
+    get ipv4End() {
+        return this.getStringAttribute('ipv4_end');
+    }
+    set ipv4End(value) {
+        this._ipv4End = value;
+    }
+    resetIpv4End() {
         this._ipv4End = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv4EndInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv4End;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv4Start", {
-        get: function () {
-            return this.getStringAttribute('ipv4_start');
-        },
-        set: function (value) {
-            this._ipv4Start = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpv4Start = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv4EndInput() {
+        return this._ipv4End;
+    }
+    // ipv4_start - computed: false, optional: true, required: false
+    _ipv4Start;
+    get ipv4Start() {
+        return this.getStringAttribute('ipv4_start');
+    }
+    set ipv4Start(value) {
+        this._ipv4Start = value;
+    }
+    resetIpv4Start() {
         this._ipv4Start = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv4StartInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv4Start;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv6End", {
-        get: function () {
-            return this.getStringAttribute('ipv6_end');
-        },
-        set: function (value) {
-            this._ipv6End = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpv6End = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv4StartInput() {
+        return this._ipv4Start;
+    }
+    // ipv6_end - computed: false, optional: true, required: false
+    _ipv6End;
+    get ipv6End() {
+        return this.getStringAttribute('ipv6_end');
+    }
+    set ipv6End(value) {
+        this._ipv6End = value;
+    }
+    resetIpv6End() {
         this._ipv6End = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv6EndInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv6End;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv6Start", {
-        get: function () {
-            return this.getStringAttribute('ipv6_start');
-        },
-        set: function (value) {
-            this._ipv6Start = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetIpv6Start = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv6EndInput() {
+        return this._ipv6End;
+    }
+    // ipv6_start - computed: false, optional: true, required: false
+    _ipv6Start;
+    get ipv6Start() {
+        return this.getStringAttribute('ipv6_start');
+    }
+    set ipv6Start(value) {
+        this._ipv6Start = value;
+    }
+    resetIpv6Start() {
         this._ipv6Start = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "ipv6StartInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv6Start;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv6StartInput() {
+        return this._ipv6Start;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "modifiedAfter", {
-        get: function () {
-            return this.getStringAttribute('modified_after');
-        },
-        set: function (value) {
-            this._modifiedAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetModifiedAfter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // modified_after - computed: false, optional: true, required: false
+    _modifiedAfter;
+    get modifiedAfter() {
+        return this.getStringAttribute('modified_after');
+    }
+    set modifiedAfter(value) {
+        this._modifiedAfter = value;
+    }
+    resetModifiedAfter() {
         this._modifiedAfter = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "modifiedAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._modifiedAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "modifiedBefore", {
-        get: function () {
-            return this.getStringAttribute('modified_before');
-        },
-        set: function (value) {
-            this._modifiedBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetModifiedBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modifiedAfterInput() {
+        return this._modifiedAfter;
+    }
+    // modified_before - computed: false, optional: true, required: false
+    _modifiedBefore;
+    get modifiedBefore() {
+        return this.getStringAttribute('modified_before');
+    }
+    set modifiedBefore(value) {
+        this._modifiedBefore = value;
+    }
+    resetModifiedBefore() {
         this._modifiedBefore = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "modifiedBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._modifiedBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modifiedBeforeInput() {
+        return this._modifiedBefore;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "targetIds", {
-        get: function () {
-            return this.getListAttribute('target_ids');
-        },
-        set: function (value) {
-            this._targetIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetTargetIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareZeroTrustAccessInfrastructureTargetsResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // target_ids - computed: false, optional: true, required: false
+    _targetIds;
+    get targetIds() {
+        return this.getListAttribute('target_ids');
+    }
+    set targetIds(value) {
+        this._targetIds = value;
+    }
+    resetTargetIds() {
         this._targetIds = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "targetIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "virtualNetworkId", {
-        get: function () {
-            return this.getStringAttribute('virtual_network_id');
-        },
-        set: function (value) {
-            this._virtualNetworkId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.resetVirtualNetworkId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetIdsInput() {
+        return this._targetIds;
+    }
+    // virtual_network_id - computed: false, optional: true, required: false
+    _virtualNetworkId;
+    get virtualNetworkId() {
+        return this.getStringAttribute('virtual_network_id');
+    }
+    set virtualNetworkId(value) {
+        this._virtualNetworkId = value;
+    }
+    resetVirtualNetworkId() {
         this._virtualNetworkId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessInfrastructureTargets.prototype, "virtualNetworkIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._virtualNetworkId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get virtualNetworkIdInput() {
+        return this._virtualNetworkId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             created_after: cdktf.stringToTerraform(this._createdAfter),
@@ -864,9 +641,9 @@ var DataCloudflareZeroTrustAccessInfrastructureTargets = /** @class */ (function
             target_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(this._targetIds),
             virtual_network_id: cdktf.stringToTerraform(this._virtualNetworkId),
         };
-    };
-    DataCloudflareZeroTrustAccessInfrastructureTargets.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -989,15 +766,6 @@ var DataCloudflareZeroTrustAccessInfrastructureTargets = /** @class */ (function
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustAccessInfrastructureTargets.tfResourceType = "cloudflare_zero_trust_access_infrastructure_targets";
-    return DataCloudflareZeroTrustAccessInfrastructureTargets;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustAccessInfrastructureTargets = DataCloudflareZeroTrustAccessInfrastructureTargets;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

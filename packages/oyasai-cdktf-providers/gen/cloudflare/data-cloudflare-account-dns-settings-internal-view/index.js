@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_dns_settings_internal_view
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareAccountDnsSettingsInternalView = exports.DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference = exports.DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference = void 0;
-exports.dataCloudflareAccountDnsSettingsInternalViewFilterNameToTerraform = dataCloudflareAccountDnsSettingsInternalViewFilterNameToTerraform;
-exports.dataCloudflareAccountDnsSettingsInternalViewFilterNameToHclTerraform = dataCloudflareAccountDnsSettingsInternalViewFilterNameToHclTerraform;
-exports.dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform = dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform;
-exports.dataCloudflareAccountDnsSettingsInternalViewFilterToHclTerraform = dataCloudflareAccountDnsSettingsInternalViewFilterToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareAccountDnsSettingsInternalViewFilterNameToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareAccountDnsSettingsInternalViewFilterNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +15,14 @@ function dataCloudflareAccountDnsSettingsInternalViewFilterNameToTerraform(struc
         startswith: cdktf.stringToTerraform(struct.startswith),
     };
 }
-function dataCloudflareAccountDnsSettingsInternalViewFilterNameToHclTerraform(struct) {
+export function dataCloudflareAccountDnsSettingsInternalViewFilterNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         contains: {
             value: cdktf.stringToHclTerraform(struct.contains),
             isBlock: false,
@@ -71,160 +49,126 @@ function dataCloudflareAccountDnsSettingsInternalViewFilterNameToHclTerraform(st
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference, _super);
+export class DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endswith = this._endswith;
-            }
-            if (this._exact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exact = this._exact;
-            }
-            if (this._startswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startswith = this._startswith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contains = undefined;
-                this._endswith = undefined;
-                this._exact = undefined;
-                this._startswith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contains = value.contains;
-                this._endswith = value.endswith;
-                this._exact = value.exact;
-                this._startswith = value.startswith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype.resetContains = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endswith = this._endswith;
+        }
+        if (this._exact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exact = this._exact;
+        }
+        if (this._startswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startswith = this._startswith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contains = undefined;
+            this._endswith = undefined;
+            this._exact = undefined;
+            this._startswith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contains = value.contains;
+            this._endswith = value.endswith;
+            this._exact = value.exact;
+            this._startswith = value.startswith;
+        }
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "endswith", {
-        get: function () {
-            return this.getStringAttribute('endswith');
-        },
-        set: function (value) {
-            this._endswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype.resetEndswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // endswith - computed: false, optional: true, required: false
+    _endswith;
+    get endswith() {
+        return this.getStringAttribute('endswith');
+    }
+    set endswith(value) {
+        this._endswith = value;
+    }
+    resetEndswith() {
         this._endswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "endswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "exact", {
-        get: function () {
-            return this.getStringAttribute('exact');
-        },
-        set: function (value) {
-            this._exact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype.resetExact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endswithInput() {
+        return this._endswith;
+    }
+    // exact - computed: false, optional: true, required: false
+    _exact;
+    get exact() {
+        return this.getStringAttribute('exact');
+    }
+    set exact(value) {
+        this._exact = value;
+    }
+    resetExact() {
         this._exact = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "exactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "startswith", {
-        get: function () {
-            return this.getStringAttribute('startswith');
-        },
-        set: function (value) {
-            this._startswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype.resetStartswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exactInput() {
+        return this._exact;
+    }
+    // startswith - computed: false, optional: true, required: false
+    _startswith;
+    get startswith() {
+        return this.getStringAttribute('startswith');
+    }
+    set startswith(value) {
+        this._startswith = value;
+    }
+    resetStartswith() {
         this._startswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference.prototype, "startswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference = DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference;
-function dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startswithInput() {
+        return this._startswith;
+    }
+}
+export function dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -240,14 +184,14 @@ function dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform(struct) {
         zone_name: cdktf.stringToTerraform(struct.zoneName),
     };
 }
-function dataCloudflareAccountDnsSettingsInternalViewFilterToHclTerraform(struct) {
+export function dataCloudflareAccountDnsSettingsInternalViewFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         direction: {
             value: cdktf.stringToHclTerraform(struct.direction),
             isBlock: false,
@@ -286,221 +230,188 @@ function dataCloudflareAccountDnsSettingsInternalViewFilterToHclTerraform(struct
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference, _super);
+export class DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // name - computed: false, optional: true, required: false
-        _this._name = new DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference(_this, "name");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._match !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.match = this._match;
-            }
-            if (((_a = this._name) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = (_b = this._name) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            if (this._zoneId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zoneId = this._zoneId;
-            }
-            if (this._zoneName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zoneName = this._zoneName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._direction = undefined;
-                this._match = undefined;
-                this._name.internalValue = undefined;
-                this._order = undefined;
-                this._zoneId = undefined;
-                this._zoneName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._direction = value.direction;
-                this._match = value.match;
-                this._name.internalValue = value.name;
-                this._order = value.order;
-                this._zoneId = value.zoneId;
-                this._zoneName = value.zoneName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetDirection = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._match !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.match = this._match;
+        }
+        if (this._name?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name?.internalValue;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        if (this._zoneId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zoneId = this._zoneId;
+        }
+        if (this._zoneName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zoneName = this._zoneName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._direction = undefined;
+            this._match = undefined;
+            this._name.internalValue = undefined;
+            this._order = undefined;
+            this._zoneId = undefined;
+            this._zoneName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._direction = value.direction;
+            this._match = value.match;
+            this._name.internalValue = value.name;
+            this._order = value.order;
+            this._zoneId = value.zoneId;
+            this._zoneName = value.zoneName;
+        }
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "match", {
-        get: function () {
-            return this.getStringAttribute('match');
-        },
-        set: function (value) {
-            this._match = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // match - computed: true, optional: true, required: false
+    _match;
+    get match() {
+        return this.getStringAttribute('match');
+    }
+    set match(value) {
+        this._match = value;
+    }
+    resetMatch() {
         this._match = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "matchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._match;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.putName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get matchInput() {
+        return this._match;
+    }
+    // name - computed: false, optional: true, required: false
+    _name = new DataCloudflareAccountDnsSettingsInternalViewFilterNameOutputReference(this, "name");
+    get name() {
+        return this._name;
+    }
+    putName(value) {
         this._name.internalValue = value;
-    };
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetName = function () {
+    }
+    resetName() {
         this._name.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name.internalValue;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "zoneName", {
-        get: function () {
-            return this.getStringAttribute('zone_name');
-        },
-        set: function (value) {
-            this._zoneName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype.resetZoneName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
+    // zone_name - computed: false, optional: true, required: false
+    _zoneName;
+    get zoneName() {
+        return this.getStringAttribute('zone_name');
+    }
+    set zoneName(value) {
+        this._zoneName = value;
+    }
+    resetZoneName() {
         this._zoneName = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference.prototype, "zoneNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference = DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneNameInput() {
+        return this._zoneName;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_dns_settings_internal_view cloudflare_account_dns_settings_internal_view}
 */
-var DataCloudflareAccountDnsSettingsInternalView = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountDnsSettingsInternalView, _super);
+export class DataCloudflareAccountDnsSettingsInternalView extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account_dns_settings_internal_view";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareAccountDnsSettingsInternalView resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareAccountDnsSettingsInternalView to import
+    * @param importFromId The id of the existing DataCloudflareAccountDnsSettingsInternalView that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_dns_settings_internal_view#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareAccountDnsSettingsInternalView to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings_internal_view", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -511,9 +422,8 @@ var DataCloudflareAccountDnsSettingsInternalView = /** @class */ (function (_sup
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareAccountDnsSettingsInternalViewConfig = {}
     */
-    function DataCloudflareAccountDnsSettingsInternalView(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account_dns_settings_internal_view',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -526,142 +436,91 @@ var DataCloudflareAccountDnsSettingsInternalView = /** @class */ (function (_sup
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference(_this, "filter");
-        _this._accountId = config.accountId;
-        _this._filter.internalValue = config.filter;
-        _this._viewId = config.viewId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._filter.internalValue = config.filter;
+        this._viewId = config.viewId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareAccountDnsSettingsInternalView resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareAccountDnsSettingsInternalView to import
-    * @param importFromId The id of the existing DataCloudflareAccountDnsSettingsInternalView that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_dns_settings_internal_view#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareAccountDnsSettingsInternalView to import is found
-    */
-    DataCloudflareAccountDnsSettingsInternalView.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings_internal_view", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalView.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "createdTime", {
-        // created_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalView.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_time - computed: true, optional: false, required: false
+    get createdTime() {
+        return this.getStringAttribute('created_time');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareAccountDnsSettingsInternalViewFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareAccountDnsSettingsInternalView.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "modifiedTime", {
-        // modified_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "viewId", {
-        get: function () {
-            return this.getStringAttribute('view_id');
-        },
-        set: function (value) {
-            this._viewId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountDnsSettingsInternalView.prototype.resetViewId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_time - computed: true, optional: false, required: false
+    get modifiedTime() {
+        return this.getStringAttribute('modified_time');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // view_id - computed: false, optional: true, required: false
+    _viewId;
+    get viewId() {
+        return this.getStringAttribute('view_id');
+    }
+    set viewId(value) {
+        this._viewId = value;
+    }
+    resetViewId() {
         this._viewId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "viewIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._viewId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountDnsSettingsInternalView.prototype, "zones", {
-        // zones - computed: true, optional: false, required: false
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('zones'));
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get viewIdInput() {
+        return this._viewId;
+    }
+    // zones - computed: true, optional: false, required: false
+    get zones() {
+        return cdktf.Fn.tolist(this.getListAttribute('zones'));
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareAccountDnsSettingsInternalView.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             filter: dataCloudflareAccountDnsSettingsInternalViewFilterToTerraform(this._filter.internalValue),
             view_id: cdktf.stringToTerraform(this._viewId),
         };
-    };
-    DataCloudflareAccountDnsSettingsInternalView.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -682,15 +541,6 @@ var DataCloudflareAccountDnsSettingsInternalView = /** @class */ (function (_sup
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareAccountDnsSettingsInternalView.tfResourceType = "cloudflare_account_dns_settings_internal_view";
-    return DataCloudflareAccountDnsSettingsInternalView;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareAccountDnsSettingsInternalView = DataCloudflareAccountDnsSettingsInternalView;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

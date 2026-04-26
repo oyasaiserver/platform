@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/access_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareAccessRule = exports.DataCloudflareAccessRuleScopeOutputReference = exports.DataCloudflareAccessRuleFilterOutputReference = exports.DataCloudflareAccessRuleFilterConfigurationOutputReference = exports.DataCloudflareAccessRuleConfigurationOutputReference = void 0;
-exports.dataCloudflareAccessRuleConfigurationToTerraform = dataCloudflareAccessRuleConfigurationToTerraform;
-exports.dataCloudflareAccessRuleConfigurationToHclTerraform = dataCloudflareAccessRuleConfigurationToHclTerraform;
-exports.dataCloudflareAccessRuleFilterConfigurationToTerraform = dataCloudflareAccessRuleFilterConfigurationToTerraform;
-exports.dataCloudflareAccessRuleFilterConfigurationToHclTerraform = dataCloudflareAccessRuleFilterConfigurationToHclTerraform;
-exports.dataCloudflareAccessRuleFilterToTerraform = dataCloudflareAccessRuleFilterToTerraform;
-exports.dataCloudflareAccessRuleFilterToHclTerraform = dataCloudflareAccessRuleFilterToHclTerraform;
-exports.dataCloudflareAccessRuleScopeToTerraform = dataCloudflareAccessRuleScopeToTerraform;
-exports.dataCloudflareAccessRuleScopeToHclTerraform = dataCloudflareAccessRuleScopeToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareAccessRuleConfigurationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareAccessRuleConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,64 +10,48 @@ function dataCloudflareAccessRuleConfigurationToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccessRuleConfigurationToHclTerraform(struct) {
+export function dataCloudflareAccessRuleConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccessRuleConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccessRuleConfigurationOutputReference, _super);
+export class DataCloudflareAccessRuleConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccessRuleConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccessRuleConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleConfigurationOutputReference.prototype, "target", {
-        // target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleConfigurationOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccessRuleConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccessRuleConfigurationOutputReference = DataCloudflareAccessRuleConfigurationOutputReference;
-function dataCloudflareAccessRuleFilterConfigurationToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // target - computed: true, optional: false, required: false
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareAccessRuleFilterConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -105,14 +63,14 @@ function dataCloudflareAccessRuleFilterConfigurationToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function dataCloudflareAccessRuleFilterConfigurationToHclTerraform(struct) {
+export function dataCloudflareAccessRuleFilterConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         target: {
             value: cdktf.stringToHclTerraform(struct.target),
             isBlock: false,
@@ -127,106 +85,84 @@ function dataCloudflareAccessRuleFilterConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareAccessRuleFilterConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccessRuleFilterConfigurationOutputReference, _super);
+export class DataCloudflareAccessRuleFilterConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccessRuleFilterConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._target !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = this._target;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._target = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._target = value.target;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype.resetTarget = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._target !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._target = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._target = value.target;
+            this._value = value.value;
+        }
+    }
+    // target - computed: false, optional: true, required: false
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    resetTarget() {
         this._target = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype.resetValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // value - computed: false, optional: true, required: false
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    resetValue() {
         this._value = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterConfigurationOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccessRuleFilterConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccessRuleFilterConfigurationOutputReference = DataCloudflareAccessRuleFilterConfigurationOutputReference;
-function dataCloudflareAccessRuleFilterToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export function dataCloudflareAccessRuleFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -242,14 +178,14 @@ function dataCloudflareAccessRuleFilterToTerraform(struct) {
         order: cdktf.stringToTerraform(struct.order),
     };
 }
-function dataCloudflareAccessRuleFilterToHclTerraform(struct) {
+export function dataCloudflareAccessRuleFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         configuration: {
             value: dataCloudflareAccessRuleFilterConfigurationToHclTerraform(struct.configuration),
             isBlock: true,
@@ -288,217 +224,168 @@ function dataCloudflareAccessRuleFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareAccessRuleFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccessRuleFilterOutputReference, _super);
+export class DataCloudflareAccessRuleFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccessRuleFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // configuration - computed: false, optional: true, required: false
-        _this._configuration = new DataCloudflareAccessRuleFilterConfigurationOutputReference(_this, "configuration");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._configuration) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.configuration = (_b = this._configuration) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._match !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.match = this._match;
-            }
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            if (this._notes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.notes = this._notes;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._configuration.internalValue = undefined;
-                this._direction = undefined;
-                this._match = undefined;
-                this._mode = undefined;
-                this._notes = undefined;
-                this._order = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._configuration.internalValue = value.configuration;
-                this._direction = value.direction;
-                this._match = value.match;
-                this._mode = value.mode;
-                this._notes = value.notes;
-                this._order = value.order;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.putConfiguration = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._configuration?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.configuration = this._configuration?.internalValue;
+        }
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._match !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.match = this._match;
+        }
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        if (this._notes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.notes = this._notes;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._configuration.internalValue = undefined;
+            this._direction = undefined;
+            this._match = undefined;
+            this._mode = undefined;
+            this._notes = undefined;
+            this._order = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._configuration.internalValue = value.configuration;
+            this._direction = value.direction;
+            this._match = value.match;
+            this._mode = value.mode;
+            this._notes = value.notes;
+            this._order = value.order;
+        }
+    }
+    // configuration - computed: false, optional: true, required: false
+    _configuration = new DataCloudflareAccessRuleFilterConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetConfiguration = function () {
+    }
+    resetConfiguration() {
         this._configuration.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "match", {
-        get: function () {
-            return this.getStringAttribute('match');
-        },
-        set: function (value) {
-            this._match = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // match - computed: true, optional: true, required: false
+    _match;
+    get match() {
+        return this.getStringAttribute('match');
+    }
+    set match(value) {
+        this._match = value;
+    }
+    resetMatch() {
         this._match = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "matchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._match;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get matchInput() {
+        return this._match;
+    }
+    // mode - computed: false, optional: true, required: false
+    _mode;
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    resetMode() {
         this._mode = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "notes", {
-        get: function () {
-            return this.getStringAttribute('notes');
-        },
-        set: function (value) {
-            this._notes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetNotes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // notes - computed: false, optional: true, required: false
+    _notes;
+    get notes() {
+        return this.getStringAttribute('notes');
+    }
+    set notes(value) {
+        this._notes = value;
+    }
+    resetNotes() {
         this._notes = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "notesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRuleFilterOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notesInput() {
+        return this._notes;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRuleFilterOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccessRuleFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccessRuleFilterOutputReference = DataCloudflareAccessRuleFilterOutputReference;
-function dataCloudflareAccessRuleScopeToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+}
+export function dataCloudflareAccessRuleScopeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -507,76 +394,72 @@ function dataCloudflareAccessRuleScopeToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccessRuleScopeToHclTerraform(struct) {
+export function dataCloudflareAccessRuleScopeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccessRuleScopeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccessRuleScopeOutputReference, _super);
+export class DataCloudflareAccessRuleScopeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccessRuleScopeOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccessRuleScopeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleScopeOutputReference.prototype, "email", {
-        // email - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleScopeOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRuleScopeOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccessRuleScopeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccessRuleScopeOutputReference = DataCloudflareAccessRuleScopeOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // email - computed: true, optional: false, required: false
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/access_rule cloudflare_access_rule}
 */
-var DataCloudflareAccessRule = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccessRule, _super);
+export class DataCloudflareAccessRule extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_access_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareAccessRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareAccessRule to import
+    * @param importFromId The id of the existing DataCloudflareAccessRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/access_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareAccessRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_access_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -587,9 +470,8 @@ var DataCloudflareAccessRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareAccessRuleConfig = {}
     */
-    function DataCloudflareAccessRule(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_access_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -602,191 +484,122 @@ var DataCloudflareAccessRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // configuration - computed: true, optional: false, required: false
-        _this._configuration = new DataCloudflareAccessRuleConfigurationOutputReference(_this, "configuration");
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareAccessRuleFilterOutputReference(_this, "filter");
-        // scope - computed: true, optional: false, required: false
-        _this._scope = new DataCloudflareAccessRuleScopeOutputReference(_this, "scope");
-        _this._accountId = config.accountId;
-        _this._filter.internalValue = config.filter;
-        _this._ruleId = config.ruleId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._filter.internalValue = config.filter;
+        this._ruleId = config.ruleId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareAccessRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareAccessRule to import
-    * @param importFromId The id of the existing DataCloudflareAccessRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/access_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareAccessRule to import is found
-    */
-    DataCloudflareAccessRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_access_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRule.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "allowedModes", {
-        // allowed_modes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('allowed_modes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRule.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // allowed_modes - computed: true, optional: false, required: false
+    get allowedModes() {
+        return this.getListAttribute('allowed_modes');
+    }
+    // configuration - computed: true, optional: false, required: false
+    _configuration = new DataCloudflareAccessRuleConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareAccessRuleFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareAccessRule.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "mode", {
-        // mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "notes", {
-        // notes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('notes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "ruleId", {
-        get: function () {
-            return this.getStringAttribute('rule_id');
-        },
-        set: function (value) {
-            this._ruleId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRule.prototype.resetRuleId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mode - computed: true, optional: false, required: false
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // notes - computed: true, optional: false, required: false
+    get notes() {
+        return this.getStringAttribute('notes');
+    }
+    // rule_id - computed: false, optional: true, required: false
+    _ruleId;
+    get ruleId() {
+        return this.getStringAttribute('rule_id');
+    }
+    set ruleId(value) {
+        this._ruleId = value;
+    }
+    resetRuleId() {
         this._ruleId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "ruleIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ruleId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "scope", {
-        get: function () {
-            return this._scope;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccessRule.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ruleIdInput() {
+        return this._ruleId;
+    }
+    // scope - computed: true, optional: false, required: false
+    _scope = new DataCloudflareAccessRuleScopeOutputReference(this, "scope");
+    get scope() {
+        return this._scope;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccessRule.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareAccessRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             filter: dataCloudflareAccessRuleFilterToTerraform(this._filter.internalValue),
             rule_id: cdktf.stringToTerraform(this._ruleId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareAccessRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -813,15 +626,6 @@ var DataCloudflareAccessRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareAccessRule.tfResourceType = "cloudflare_access_rule";
-    return DataCloudflareAccessRule;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareAccessRule = DataCloudflareAccessRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

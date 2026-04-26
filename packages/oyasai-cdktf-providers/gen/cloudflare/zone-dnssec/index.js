@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_dnssec
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoneDnssec = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_dnssec cloudflare_zone_dnssec}
 */
-var ZoneDnssec = /** @class */ (function (_super) {
-    __extends(ZoneDnssec, _super);
+export class ZoneDnssec extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zone_dnssec";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZoneDnssec resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZoneDnssec to import
+    * @param importFromId The id of the existing ZoneDnssec that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_dnssec#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZoneDnssec to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_dnssec", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZoneDnssec = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZoneDnssecConfig
     */
-    function ZoneDnssec(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zone_dnssec',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,224 +46,136 @@ var ZoneDnssec = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._dnssecMultiSigner = config.dnssecMultiSigner;
-        _this._dnssecPresigned = config.dnssecPresigned;
-        _this._dnssecUseNsec3 = config.dnssecUseNsec3;
-        _this._status = config.status;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._dnssecMultiSigner = config.dnssecMultiSigner;
+        this._dnssecPresigned = config.dnssecPresigned;
+        this._dnssecUseNsec3 = config.dnssecUseNsec3;
+        this._status = config.status;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZoneDnssec resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZoneDnssec to import
-    * @param importFromId The id of the existing ZoneDnssec that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_dnssec#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZoneDnssec to import is found
-    */
-    ZoneDnssec.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_dnssec", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZoneDnssec.prototype, "algorithm", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // algorithm - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('algorithm');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "digest", {
-        // digest - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('digest');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "digestAlgorithm", {
-        // digest_algorithm - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('digest_algorithm');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "digestType", {
-        // digest_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('digest_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecMultiSigner", {
-        get: function () {
-            return this.getBooleanAttribute('dnssec_multi_signer');
-        },
-        set: function (value) {
-            this._dnssecMultiSigner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneDnssec.prototype.resetDnssecMultiSigner = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // algorithm - computed: true, optional: false, required: false
+    get algorithm() {
+        return this.getStringAttribute('algorithm');
+    }
+    // digest - computed: true, optional: false, required: false
+    get digest() {
+        return this.getStringAttribute('digest');
+    }
+    // digest_algorithm - computed: true, optional: false, required: false
+    get digestAlgorithm() {
+        return this.getStringAttribute('digest_algorithm');
+    }
+    // digest_type - computed: true, optional: false, required: false
+    get digestType() {
+        return this.getStringAttribute('digest_type');
+    }
+    // dnssec_multi_signer - computed: false, optional: true, required: false
+    _dnssecMultiSigner;
+    get dnssecMultiSigner() {
+        return this.getBooleanAttribute('dnssec_multi_signer');
+    }
+    set dnssecMultiSigner(value) {
+        this._dnssecMultiSigner = value;
+    }
+    resetDnssecMultiSigner() {
         this._dnssecMultiSigner = undefined;
-    };
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecMultiSignerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnssecMultiSigner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecPresigned", {
-        get: function () {
-            return this.getBooleanAttribute('dnssec_presigned');
-        },
-        set: function (value) {
-            this._dnssecPresigned = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneDnssec.prototype.resetDnssecPresigned = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnssecMultiSignerInput() {
+        return this._dnssecMultiSigner;
+    }
+    // dnssec_presigned - computed: false, optional: true, required: false
+    _dnssecPresigned;
+    get dnssecPresigned() {
+        return this.getBooleanAttribute('dnssec_presigned');
+    }
+    set dnssecPresigned(value) {
+        this._dnssecPresigned = value;
+    }
+    resetDnssecPresigned() {
         this._dnssecPresigned = undefined;
-    };
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecPresignedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnssecPresigned;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecUseNsec3", {
-        get: function () {
-            return this.getBooleanAttribute('dnssec_use_nsec3');
-        },
-        set: function (value) {
-            this._dnssecUseNsec3 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneDnssec.prototype.resetDnssecUseNsec3 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnssecPresignedInput() {
+        return this._dnssecPresigned;
+    }
+    // dnssec_use_nsec3 - computed: false, optional: true, required: false
+    _dnssecUseNsec3;
+    get dnssecUseNsec3() {
+        return this.getBooleanAttribute('dnssec_use_nsec3');
+    }
+    set dnssecUseNsec3(value) {
+        this._dnssecUseNsec3 = value;
+    }
+    resetDnssecUseNsec3() {
         this._dnssecUseNsec3 = undefined;
-    };
-    Object.defineProperty(ZoneDnssec.prototype, "dnssecUseNsec3Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnssecUseNsec3;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "ds", {
-        // ds - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ds');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "flags", {
-        // flags - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('flags');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "keyTag", {
-        // key_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('key_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "keyType", {
-        // key_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "publicKey", {
-        // public_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('public_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneDnssec.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnssecUseNsec3Input() {
+        return this._dnssecUseNsec3;
+    }
+    // ds - computed: true, optional: false, required: false
+    get ds() {
+        return this.getStringAttribute('ds');
+    }
+    // flags - computed: true, optional: false, required: false
+    get flags() {
+        return this.getNumberAttribute('flags');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // key_tag - computed: true, optional: false, required: false
+    get keyTag() {
+        return this.getNumberAttribute('key_tag');
+    }
+    // key_type - computed: true, optional: false, required: false
+    get keyType() {
+        return this.getStringAttribute('key_type');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // public_key - computed: true, optional: false, required: false
+    get publicKey() {
+        return this.getStringAttribute('public_key');
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(ZoneDnssec.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneDnssec.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZoneDnssec.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             dnssec_multi_signer: cdktf.booleanToTerraform(this._dnssecMultiSigner),
             dnssec_presigned: cdktf.booleanToTerraform(this._dnssecPresigned),
@@ -273,9 +183,9 @@ var ZoneDnssec = /** @class */ (function (_super) {
             status: cdktf.stringToTerraform(this._status),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZoneDnssec.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             dnssec_multi_signer: {
                 value: cdktf.booleanToHclTerraform(this._dnssecMultiSigner),
                 isBlock: false,
@@ -308,15 +218,6 @@ var ZoneDnssec = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZoneDnssec.tfResourceType = "cloudflare_zone_dnssec";
-    return ZoneDnssec;
-}(cdktf.TerraformResource));
-exports.ZoneDnssec = ZoneDnssec;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

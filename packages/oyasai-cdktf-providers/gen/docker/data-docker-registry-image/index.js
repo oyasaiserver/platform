@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataDockerRegistryImage = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image docker_registry_image}
 */
-var DataDockerRegistryImage = /** @class */ (function (_super) {
-    __extends(DataDockerRegistryImage, _super);
+export class DataDockerRegistryImage extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_registry_image";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataDockerRegistryImage resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataDockerRegistryImage to import
+    * @param importFromId The id of the existing DataDockerRegistryImage that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataDockerRegistryImage to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_registry_image", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataDockerRegistryImage = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataDockerRegistryImageConfig
     */
-    function DataDockerRegistryImage(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_registry_image',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -48,105 +46,72 @@ var DataDockerRegistryImage = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._insecureSkipVerify = config.insecureSkipVerify;
-        _this._name = config.name;
-        return _this;
+        });
+        this._id = config.id;
+        this._insecureSkipVerify = config.insecureSkipVerify;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataDockerRegistryImage resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataDockerRegistryImage to import
-    * @param importFromId The id of the existing DataDockerRegistryImage that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataDockerRegistryImage to import is found
-    */
-    DataDockerRegistryImage.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_registry_image", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataDockerRegistryImage.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataDockerRegistryImage.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataDockerRegistryImage.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataDockerRegistryImage.prototype, "insecureSkipVerify", {
-        get: function () {
-            return this.getBooleanAttribute('insecure_skip_verify');
-        },
-        set: function (value) {
-            this._insecureSkipVerify = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataDockerRegistryImage.prototype.resetInsecureSkipVerify = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // insecure_skip_verify - computed: false, optional: true, required: false
+    _insecureSkipVerify;
+    get insecureSkipVerify() {
+        return this.getBooleanAttribute('insecure_skip_verify');
+    }
+    set insecureSkipVerify(value) {
+        this._insecureSkipVerify = value;
+    }
+    resetInsecureSkipVerify() {
         this._insecureSkipVerify = undefined;
-    };
-    Object.defineProperty(DataDockerRegistryImage.prototype, "insecureSkipVerifyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._insecureSkipVerify;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataDockerRegistryImage.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataDockerRegistryImage.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataDockerRegistryImage.prototype, "sha256Digest", {
-        // sha256_digest - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sha256_digest');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get insecureSkipVerifyInput() {
+        return this._insecureSkipVerify;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // sha256_digest - computed: true, optional: false, required: false
+    get sha256Digest() {
+        return this.getStringAttribute('sha256_digest');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataDockerRegistryImage.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             insecure_skip_verify: cdktf.booleanToTerraform(this._insecureSkipVerify),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    DataDockerRegistryImage.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -167,15 +132,6 @@ var DataDockerRegistryImage = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataDockerRegistryImage.tfResourceType = "docker_registry_image";
-    return DataDockerRegistryImage;
-}(cdktf.TerraformDataSource));
-exports.DataDockerRegistryImage = DataDockerRegistryImage;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

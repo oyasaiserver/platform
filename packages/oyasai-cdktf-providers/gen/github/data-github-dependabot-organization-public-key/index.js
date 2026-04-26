@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/dependabot_organization_public_key
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubDependabotOrganizationPublicKey = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/dependabot_organization_public_key github_dependabot_organization_public_key}
 */
-var DataGithubDependabotOrganizationPublicKey = /** @class */ (function (_super) {
-    __extends(DataGithubDependabotOrganizationPublicKey, _super);
+export class DataGithubDependabotOrganizationPublicKey extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_dependabot_organization_public_key";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubDependabotOrganizationPublicKey resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubDependabotOrganizationPublicKey to import
+    * @param importFromId The id of the existing DataGithubDependabotOrganizationPublicKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/dependabot_organization_public_key#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubDependabotOrganizationPublicKey to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_dependabot_organization_public_key", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var DataGithubDependabotOrganizationPublicKey = /** @class */ (function (_super)
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubDependabotOrganizationPublicKeyConfig = {}
     */
-    function DataGithubDependabotOrganizationPublicKey(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'github_dependabot_organization_public_key',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -49,70 +46,45 @@ var DataGithubDependabotOrganizationPublicKey = /** @class */ (function (_super)
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        return _this;
+        });
+        this._id = config.id;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubDependabotOrganizationPublicKey resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubDependabotOrganizationPublicKey to import
-    * @param importFromId The id of the existing DataGithubDependabotOrganizationPublicKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/dependabot_organization_public_key#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubDependabotOrganizationPublicKey to import is found
-    */
-    DataGithubDependabotOrganizationPublicKey.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_dependabot_organization_public_key", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubDependabotOrganizationPublicKey.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubDependabotOrganizationPublicKey.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubDependabotOrganizationPublicKey.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubDependabotOrganizationPublicKey.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubDependabotOrganizationPublicKey.prototype, "keyId", {
-        // key_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // key_id - computed: true, optional: false, required: false
+    get keyId() {
+        return this.getStringAttribute('key_id');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubDependabotOrganizationPublicKey.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
         };
-    };
-    DataGithubDependabotOrganizationPublicKey.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -121,15 +93,6 @@ var DataGithubDependabotOrganizationPublicKey = /** @class */ (function (_super)
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubDependabotOrganizationPublicKey.tfResourceType = "github_dependabot_organization_public_key";
-    return DataGithubDependabotOrganizationPublicKey;
-}(cdktf.TerraformDataSource));
-exports.DataGithubDependabotOrganizationPublicKey = DataGithubDependabotOrganizationPublicKey;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

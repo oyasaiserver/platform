@@ -1,43 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pipeline_sink
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PipelineSink = exports.PipelineSinkSchemaOutputReference = exports.PipelineSinkSchemaFormatOutputReference = exports.PipelineSinkSchemaFieldsList = exports.PipelineSinkSchemaFieldsOutputReference = exports.PipelineSinkFormatOutputReference = exports.PipelineSinkConfigAOutputReference = exports.PipelineSinkConfigRollingPolicyOutputReference = exports.PipelineSinkConfigPartitioningOutputReference = exports.PipelineSinkConfigFileNamingOutputReference = exports.PipelineSinkConfigCredentialsOutputReference = void 0;
-exports.pipelineSinkConfigCredentialsToTerraform = pipelineSinkConfigCredentialsToTerraform;
-exports.pipelineSinkConfigCredentialsToHclTerraform = pipelineSinkConfigCredentialsToHclTerraform;
-exports.pipelineSinkConfigFileNamingToTerraform = pipelineSinkConfigFileNamingToTerraform;
-exports.pipelineSinkConfigFileNamingToHclTerraform = pipelineSinkConfigFileNamingToHclTerraform;
-exports.pipelineSinkConfigPartitioningToTerraform = pipelineSinkConfigPartitioningToTerraform;
-exports.pipelineSinkConfigPartitioningToHclTerraform = pipelineSinkConfigPartitioningToHclTerraform;
-exports.pipelineSinkConfigRollingPolicyToTerraform = pipelineSinkConfigRollingPolicyToTerraform;
-exports.pipelineSinkConfigRollingPolicyToHclTerraform = pipelineSinkConfigRollingPolicyToHclTerraform;
-exports.pipelineSinkConfigAToTerraform = pipelineSinkConfigAToTerraform;
-exports.pipelineSinkConfigAToHclTerraform = pipelineSinkConfigAToHclTerraform;
-exports.pipelineSinkFormatToTerraform = pipelineSinkFormatToTerraform;
-exports.pipelineSinkFormatToHclTerraform = pipelineSinkFormatToHclTerraform;
-exports.pipelineSinkSchemaFieldsToTerraform = pipelineSinkSchemaFieldsToTerraform;
-exports.pipelineSinkSchemaFieldsToHclTerraform = pipelineSinkSchemaFieldsToHclTerraform;
-exports.pipelineSinkSchemaFormatToTerraform = pipelineSinkSchemaFormatToTerraform;
-exports.pipelineSinkSchemaFormatToHclTerraform = pipelineSinkSchemaFormatToHclTerraform;
-exports.pipelineSinkSchemaToTerraform = pipelineSinkSchemaToTerraform;
-exports.pipelineSinkSchemaToHclTerraform = pipelineSinkSchemaToHclTerraform;
-var cdktf = require("cdktf");
-function pipelineSinkConfigCredentialsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function pipelineSinkConfigCredentialsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -49,14 +13,14 @@ function pipelineSinkConfigCredentialsToTerraform(struct) {
         secret_access_key: cdktf.stringToTerraform(struct.secretAccessKey),
     };
 }
-function pipelineSinkConfigCredentialsToHclTerraform(struct) {
+export function pipelineSinkConfigCredentialsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         access_key_id: {
             value: cdktf.stringToHclTerraform(struct.accessKeyId),
             isBlock: false,
@@ -71,100 +35,78 @@ function pipelineSinkConfigCredentialsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkConfigCredentialsOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkConfigCredentialsOutputReference, _super);
+export class PipelineSinkConfigCredentialsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkConfigCredentialsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkConfigCredentialsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._accessKeyId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accessKeyId = this._accessKeyId;
-            }
-            if (this._secretAccessKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretAccessKey = this._secretAccessKey;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._accessKeyId = undefined;
-                this._secretAccessKey = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._accessKeyId = value.accessKeyId;
-                this._secretAccessKey = value.secretAccessKey;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigCredentialsOutputReference.prototype, "accessKeyId", {
-        get: function () {
-            return this.getStringAttribute('access_key_id');
-        },
-        set: function (value) {
-            this._accessKeyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigCredentialsOutputReference.prototype, "accessKeyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessKeyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigCredentialsOutputReference.prototype, "secretAccessKey", {
-        get: function () {
-            return this.getStringAttribute('secret_access_key');
-        },
-        set: function (value) {
-            this._secretAccessKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigCredentialsOutputReference.prototype, "secretAccessKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretAccessKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkConfigCredentialsOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkConfigCredentialsOutputReference = PipelineSinkConfigCredentialsOutputReference;
-function pipelineSinkConfigFileNamingToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._accessKeyId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accessKeyId = this._accessKeyId;
+        }
+        if (this._secretAccessKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretAccessKey = this._secretAccessKey;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._accessKeyId = undefined;
+            this._secretAccessKey = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._accessKeyId = value.accessKeyId;
+            this._secretAccessKey = value.secretAccessKey;
+        }
+    }
+    // access_key_id - computed: false, optional: false, required: true
+    _accessKeyId;
+    get accessKeyId() {
+        return this.getStringAttribute('access_key_id');
+    }
+    set accessKeyId(value) {
+        this._accessKeyId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessKeyIdInput() {
+        return this._accessKeyId;
+    }
+    // secret_access_key - computed: false, optional: false, required: true
+    _secretAccessKey;
+    get secretAccessKey() {
+        return this.getStringAttribute('secret_access_key');
+    }
+    set secretAccessKey(value) {
+        this._secretAccessKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretAccessKeyInput() {
+        return this._secretAccessKey;
+    }
+}
+export function pipelineSinkConfigFileNamingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -177,14 +119,14 @@ function pipelineSinkConfigFileNamingToTerraform(struct) {
         suffix: cdktf.stringToTerraform(struct.suffix),
     };
 }
-function pipelineSinkConfigFileNamingToHclTerraform(struct) {
+export function pipelineSinkConfigFileNamingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         prefix: {
             value: cdktf.stringToHclTerraform(struct.prefix),
             isBlock: false,
@@ -205,133 +147,105 @@ function pipelineSinkConfigFileNamingToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkConfigFileNamingOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkConfigFileNamingOutputReference, _super);
+export class PipelineSinkConfigFileNamingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkConfigFileNamingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._prefix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.prefix = this._prefix;
-            }
-            if (this._strategy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.strategy = this._strategy;
-            }
-            if (this._suffix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.suffix = this._suffix;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._prefix = undefined;
-                this._strategy = undefined;
-                this._suffix = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._prefix = value.prefix;
-                this._strategy = value.strategy;
-                this._suffix = value.suffix;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "prefix", {
-        get: function () {
-            return this.getStringAttribute('prefix');
-        },
-        set: function (value) {
-            this._prefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigFileNamingOutputReference.prototype.resetPrefix = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._prefix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.prefix = this._prefix;
+        }
+        if (this._strategy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.strategy = this._strategy;
+        }
+        if (this._suffix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.suffix = this._suffix;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._prefix = undefined;
+            this._strategy = undefined;
+            this._suffix = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._prefix = value.prefix;
+            this._strategy = value.strategy;
+            this._suffix = value.suffix;
+        }
+    }
+    // prefix - computed: false, optional: true, required: false
+    _prefix;
+    get prefix() {
+        return this.getStringAttribute('prefix');
+    }
+    set prefix(value) {
+        this._prefix = value;
+    }
+    resetPrefix() {
         this._prefix = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "prefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "strategy", {
-        get: function () {
-            return this.getStringAttribute('strategy');
-        },
-        set: function (value) {
-            this._strategy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigFileNamingOutputReference.prototype.resetStrategy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get prefixInput() {
+        return this._prefix;
+    }
+    // strategy - computed: false, optional: true, required: false
+    _strategy;
+    get strategy() {
+        return this.getStringAttribute('strategy');
+    }
+    set strategy(value) {
+        this._strategy = value;
+    }
+    resetStrategy() {
         this._strategy = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "strategyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._strategy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "suffix", {
-        get: function () {
-            return this.getStringAttribute('suffix');
-        },
-        set: function (value) {
-            this._suffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigFileNamingOutputReference.prototype.resetSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get strategyInput() {
+        return this._strategy;
+    }
+    // suffix - computed: false, optional: true, required: false
+    _suffix;
+    get suffix() {
+        return this.getStringAttribute('suffix');
+    }
+    set suffix(value) {
+        this._suffix = value;
+    }
+    resetSuffix() {
         this._suffix = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigFileNamingOutputReference.prototype, "suffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._suffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkConfigFileNamingOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkConfigFileNamingOutputReference = PipelineSinkConfigFileNamingOutputReference;
-function pipelineSinkConfigPartitioningToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get suffixInput() {
+        return this._suffix;
+    }
+}
+export function pipelineSinkConfigPartitioningToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -342,14 +256,14 @@ function pipelineSinkConfigPartitioningToTerraform(struct) {
         time_pattern: cdktf.stringToTerraform(struct.timePattern),
     };
 }
-function pipelineSinkConfigPartitioningToHclTerraform(struct) {
+export function pipelineSinkConfigPartitioningToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         time_pattern: {
             value: cdktf.stringToHclTerraform(struct.timePattern),
             isBlock: false,
@@ -358,79 +272,63 @@ function pipelineSinkConfigPartitioningToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkConfigPartitioningOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkConfigPartitioningOutputReference, _super);
+export class PipelineSinkConfigPartitioningOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkConfigPartitioningOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkConfigPartitioningOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._timePattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timePattern = this._timePattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._timePattern = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._timePattern = value.timePattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigPartitioningOutputReference.prototype, "timePattern", {
-        get: function () {
-            return this.getStringAttribute('time_pattern');
-        },
-        set: function (value) {
-            this._timePattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigPartitioningOutputReference.prototype.resetTimePattern = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._timePattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timePattern = this._timePattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._timePattern = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._timePattern = value.timePattern;
+        }
+    }
+    // time_pattern - computed: false, optional: true, required: false
+    _timePattern;
+    get timePattern() {
+        return this.getStringAttribute('time_pattern');
+    }
+    set timePattern(value) {
+        this._timePattern = value;
+    }
+    resetTimePattern() {
         this._timePattern = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigPartitioningOutputReference.prototype, "timePatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timePattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkConfigPartitioningOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkConfigPartitioningOutputReference = PipelineSinkConfigPartitioningOutputReference;
-function pipelineSinkConfigRollingPolicyToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timePatternInput() {
+        return this._timePattern;
+    }
+}
+export function pipelineSinkConfigRollingPolicyToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -443,14 +341,14 @@ function pipelineSinkConfigRollingPolicyToTerraform(struct) {
         interval_seconds: cdktf.numberToTerraform(struct.intervalSeconds),
     };
 }
-function pipelineSinkConfigRollingPolicyToHclTerraform(struct) {
+export function pipelineSinkConfigRollingPolicyToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         file_size_bytes: {
             value: cdktf.numberToHclTerraform(struct.fileSizeBytes),
             isBlock: false,
@@ -471,133 +369,105 @@ function pipelineSinkConfigRollingPolicyToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkConfigRollingPolicyOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkConfigRollingPolicyOutputReference, _super);
+export class PipelineSinkConfigRollingPolicyOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkConfigRollingPolicyOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._fileSizeBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileSizeBytes = this._fileSizeBytes;
-            }
-            if (this._inactivitySeconds !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.inactivitySeconds = this._inactivitySeconds;
-            }
-            if (this._intervalSeconds !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.intervalSeconds = this._intervalSeconds;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._fileSizeBytes = undefined;
-                this._inactivitySeconds = undefined;
-                this._intervalSeconds = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._fileSizeBytes = value.fileSizeBytes;
-                this._inactivitySeconds = value.inactivitySeconds;
-                this._intervalSeconds = value.intervalSeconds;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "fileSizeBytes", {
-        get: function () {
-            return this.getNumberAttribute('file_size_bytes');
-        },
-        set: function (value) {
-            this._fileSizeBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigRollingPolicyOutputReference.prototype.resetFileSizeBytes = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._fileSizeBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileSizeBytes = this._fileSizeBytes;
+        }
+        if (this._inactivitySeconds !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.inactivitySeconds = this._inactivitySeconds;
+        }
+        if (this._intervalSeconds !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.intervalSeconds = this._intervalSeconds;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._fileSizeBytes = undefined;
+            this._inactivitySeconds = undefined;
+            this._intervalSeconds = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._fileSizeBytes = value.fileSizeBytes;
+            this._inactivitySeconds = value.inactivitySeconds;
+            this._intervalSeconds = value.intervalSeconds;
+        }
+    }
+    // file_size_bytes - computed: false, optional: true, required: false
+    _fileSizeBytes;
+    get fileSizeBytes() {
+        return this.getNumberAttribute('file_size_bytes');
+    }
+    set fileSizeBytes(value) {
+        this._fileSizeBytes = value;
+    }
+    resetFileSizeBytes() {
         this._fileSizeBytes = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "fileSizeBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileSizeBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "inactivitySeconds", {
-        get: function () {
-            return this.getNumberAttribute('inactivity_seconds');
-        },
-        set: function (value) {
-            this._inactivitySeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigRollingPolicyOutputReference.prototype.resetInactivitySeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileSizeBytesInput() {
+        return this._fileSizeBytes;
+    }
+    // inactivity_seconds - computed: false, optional: true, required: false
+    _inactivitySeconds;
+    get inactivitySeconds() {
+        return this.getNumberAttribute('inactivity_seconds');
+    }
+    set inactivitySeconds(value) {
+        this._inactivitySeconds = value;
+    }
+    resetInactivitySeconds() {
         this._inactivitySeconds = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "inactivitySecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._inactivitySeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "intervalSeconds", {
-        get: function () {
-            return this.getNumberAttribute('interval_seconds');
-        },
-        set: function (value) {
-            this._intervalSeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigRollingPolicyOutputReference.prototype.resetIntervalSeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get inactivitySecondsInput() {
+        return this._inactivitySeconds;
+    }
+    // interval_seconds - computed: false, optional: true, required: false
+    _intervalSeconds;
+    get intervalSeconds() {
+        return this.getNumberAttribute('interval_seconds');
+    }
+    set intervalSeconds(value) {
+        this._intervalSeconds = value;
+    }
+    resetIntervalSeconds() {
         this._intervalSeconds = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigRollingPolicyOutputReference.prototype, "intervalSecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._intervalSeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkConfigRollingPolicyOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkConfigRollingPolicyOutputReference = PipelineSinkConfigRollingPolicyOutputReference;
-function pipelineSinkConfigAToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get intervalSecondsInput() {
+        return this._intervalSeconds;
+    }
+}
+export function pipelineSinkConfigAToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -618,14 +488,14 @@ function pipelineSinkConfigAToTerraform(struct) {
         token: cdktf.stringToTerraform(struct.token),
     };
 }
-function pipelineSinkConfigAToHclTerraform(struct) {
+export function pipelineSinkConfigAToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         account_id: {
             value: cdktf.stringToHclTerraform(struct.accountId),
             isBlock: false,
@@ -694,352 +564,267 @@ function pipelineSinkConfigAToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkConfigAOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkConfigAOutputReference, _super);
+export class PipelineSinkConfigAOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkConfigAOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // credentials - computed: false, optional: true, required: false
-        _this._credentials = new PipelineSinkConfigCredentialsOutputReference(_this, "credentials");
-        // file_naming - computed: false, optional: true, required: false
-        _this._fileNaming = new PipelineSinkConfigFileNamingOutputReference(_this, "file_naming");
-        // partitioning - computed: false, optional: true, required: false
-        _this._partitioning = new PipelineSinkConfigPartitioningOutputReference(_this, "partitioning");
-        // rolling_policy - computed: false, optional: true, required: false
-        _this._rollingPolicy = new PipelineSinkConfigRollingPolicyOutputReference(_this, "rolling_policy");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._accountId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accountId = this._accountId;
-            }
-            if (this._bucket !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bucket = this._bucket;
-            }
-            if (((_a = this._credentials) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.credentials = (_b = this._credentials) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._fileNaming) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileNaming = (_d = this._fileNaming) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._jurisdiction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.jurisdiction = this._jurisdiction;
-            }
-            if (this._namespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespace = this._namespace;
-            }
-            if (((_e = this._partitioning) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.partitioning = (_f = this._partitioning) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (((_g = this._rollingPolicy) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rollingPolicy = (_h = this._rollingPolicy) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (this._tableName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tableName = this._tableName;
-            }
-            if (this._token !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.token = this._token;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._accountId = undefined;
-                this._bucket = undefined;
-                this._credentials.internalValue = undefined;
-                this._fileNaming.internalValue = undefined;
-                this._jurisdiction = undefined;
-                this._namespace = undefined;
-                this._partitioning.internalValue = undefined;
-                this._path = undefined;
-                this._rollingPolicy.internalValue = undefined;
-                this._tableName = undefined;
-                this._token = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._accountId = value.accountId;
-                this._bucket = value.bucket;
-                this._credentials.internalValue = value.credentials;
-                this._fileNaming.internalValue = value.fileNaming;
-                this._jurisdiction = value.jurisdiction;
-                this._namespace = value.namespace;
-                this._partitioning.internalValue = value.partitioning;
-                this._path = value.path;
-                this._rollingPolicy.internalValue = value.rollingPolicy;
-                this._tableName = value.tableName;
-                this._token = value.token;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "bucket", {
-        get: function () {
-            return this.getStringAttribute('bucket');
-        },
-        set: function (value) {
-            this._bucket = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "bucketInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucket;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "credentials", {
-        get: function () {
-            return this._credentials;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.putCredentials = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._accountId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accountId = this._accountId;
+        }
+        if (this._bucket !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bucket = this._bucket;
+        }
+        if (this._credentials?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.credentials = this._credentials?.internalValue;
+        }
+        if (this._fileNaming?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileNaming = this._fileNaming?.internalValue;
+        }
+        if (this._jurisdiction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.jurisdiction = this._jurisdiction;
+        }
+        if (this._namespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespace = this._namespace;
+        }
+        if (this._partitioning?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.partitioning = this._partitioning?.internalValue;
+        }
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._rollingPolicy?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rollingPolicy = this._rollingPolicy?.internalValue;
+        }
+        if (this._tableName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tableName = this._tableName;
+        }
+        if (this._token !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.token = this._token;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._accountId = undefined;
+            this._bucket = undefined;
+            this._credentials.internalValue = undefined;
+            this._fileNaming.internalValue = undefined;
+            this._jurisdiction = undefined;
+            this._namespace = undefined;
+            this._partitioning.internalValue = undefined;
+            this._path = undefined;
+            this._rollingPolicy.internalValue = undefined;
+            this._tableName = undefined;
+            this._token = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._accountId = value.accountId;
+            this._bucket = value.bucket;
+            this._credentials.internalValue = value.credentials;
+            this._fileNaming.internalValue = value.fileNaming;
+            this._jurisdiction = value.jurisdiction;
+            this._namespace = value.namespace;
+            this._partitioning.internalValue = value.partitioning;
+            this._path = value.path;
+            this._rollingPolicy.internalValue = value.rollingPolicy;
+            this._tableName = value.tableName;
+            this._token = value.token;
+        }
+    }
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket - computed: false, optional: false, required: true
+    _bucket;
+    get bucket() {
+        return this.getStringAttribute('bucket');
+    }
+    set bucket(value) {
+        this._bucket = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketInput() {
+        return this._bucket;
+    }
+    // credentials - computed: false, optional: true, required: false
+    _credentials = new PipelineSinkConfigCredentialsOutputReference(this, "credentials");
+    get credentials() {
+        return this._credentials;
+    }
+    putCredentials(value) {
         this._credentials.internalValue = value;
-    };
-    PipelineSinkConfigAOutputReference.prototype.resetCredentials = function () {
+    }
+    resetCredentials() {
         this._credentials.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "credentialsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._credentials.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "fileNaming", {
-        get: function () {
-            return this._fileNaming;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.putFileNaming = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get credentialsInput() {
+        return this._credentials.internalValue;
+    }
+    // file_naming - computed: false, optional: true, required: false
+    _fileNaming = new PipelineSinkConfigFileNamingOutputReference(this, "file_naming");
+    get fileNaming() {
+        return this._fileNaming;
+    }
+    putFileNaming(value) {
         this._fileNaming.internalValue = value;
-    };
-    PipelineSinkConfigAOutputReference.prototype.resetFileNaming = function () {
+    }
+    resetFileNaming() {
         this._fileNaming.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "fileNamingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileNaming.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileNamingInput() {
+        return this._fileNaming.internalValue;
+    }
+    // jurisdiction - computed: false, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "namespace", {
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        set: function (value) {
-            this._namespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.resetNamespace = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
+    // namespace - computed: false, optional: true, required: false
+    _namespace;
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    set namespace(value) {
+        this._namespace = value;
+    }
+    resetNamespace() {
         this._namespace = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "namespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "partitioning", {
-        get: function () {
-            return this._partitioning;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.putPartitioning = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceInput() {
+        return this._namespace;
+    }
+    // partitioning - computed: false, optional: true, required: false
+    _partitioning = new PipelineSinkConfigPartitioningOutputReference(this, "partitioning");
+    get partitioning() {
+        return this._partitioning;
+    }
+    putPartitioning(value) {
         this._partitioning.internalValue = value;
-    };
-    PipelineSinkConfigAOutputReference.prototype.resetPartitioning = function () {
+    }
+    resetPartitioning() {
         this._partitioning.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "partitioningInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._partitioning.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.resetPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get partitioningInput() {
+        return this._partitioning.internalValue;
+    }
+    // path - computed: false, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "rollingPolicy", {
-        get: function () {
-            return this._rollingPolicy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.putRollingPolicy = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // rolling_policy - computed: false, optional: true, required: false
+    _rollingPolicy = new PipelineSinkConfigRollingPolicyOutputReference(this, "rolling_policy");
+    get rollingPolicy() {
+        return this._rollingPolicy;
+    }
+    putRollingPolicy(value) {
         this._rollingPolicy.internalValue = value;
-    };
-    PipelineSinkConfigAOutputReference.prototype.resetRollingPolicy = function () {
+    }
+    resetRollingPolicy() {
         this._rollingPolicy.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "rollingPolicyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rollingPolicy.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "tableName", {
-        get: function () {
-            return this.getStringAttribute('table_name');
-        },
-        set: function (value) {
-            this._tableName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.resetTableName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rollingPolicyInput() {
+        return this._rollingPolicy.internalValue;
+    }
+    // table_name - computed: false, optional: true, required: false
+    _tableName;
+    get tableName() {
+        return this.getStringAttribute('table_name');
+    }
+    set tableName(value) {
+        this._tableName = value;
+    }
+    resetTableName() {
         this._tableName = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "tableNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tableName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "token", {
-        get: function () {
-            return this.getStringAttribute('token');
-        },
-        set: function (value) {
-            this._token = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkConfigAOutputReference.prototype.resetToken = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tableNameInput() {
+        return this._tableName;
+    }
+    // token - computed: false, optional: true, required: false
+    _token;
+    get token() {
+        return this.getStringAttribute('token');
+    }
+    set token(value) {
+        this._token = value;
+    }
+    resetToken() {
         this._token = undefined;
-    };
-    Object.defineProperty(PipelineSinkConfigAOutputReference.prototype, "tokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._token;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkConfigAOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkConfigAOutputReference = PipelineSinkConfigAOutputReference;
-function pipelineSinkFormatToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenInput() {
+        return this._token;
+    }
+}
+export function pipelineSinkFormatToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1055,14 +840,14 @@ function pipelineSinkFormatToTerraform(struct) {
         unstructured: cdktf.booleanToTerraform(struct.unstructured),
     };
 }
-function pipelineSinkFormatToHclTerraform(struct) {
+export function pipelineSinkFormatToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         compression: {
             value: cdktf.stringToHclTerraform(struct.compression),
             isBlock: false,
@@ -1101,211 +886,165 @@ function pipelineSinkFormatToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkFormatOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkFormatOutputReference, _super);
+export class PipelineSinkFormatOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkFormatOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._compression !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.compression = this._compression;
-            }
-            if (this._decimalEncoding !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.decimalEncoding = this._decimalEncoding;
-            }
-            if (this._rowGroupBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rowGroupBytes = this._rowGroupBytes;
-            }
-            if (this._timestampFormat !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timestampFormat = this._timestampFormat;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._unstructured !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.unstructured = this._unstructured;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._compression = undefined;
-                this._decimalEncoding = undefined;
-                this._rowGroupBytes = undefined;
-                this._timestampFormat = undefined;
-                this._type = undefined;
-                this._unstructured = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._compression = value.compression;
-                this._decimalEncoding = value.decimalEncoding;
-                this._rowGroupBytes = value.rowGroupBytes;
-                this._timestampFormat = value.timestampFormat;
-                this._type = value.type;
-                this._unstructured = value.unstructured;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "compression", {
-        get: function () {
-            return this.getStringAttribute('compression');
-        },
-        set: function (value) {
-            this._compression = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkFormatOutputReference.prototype.resetCompression = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._compression !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.compression = this._compression;
+        }
+        if (this._decimalEncoding !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.decimalEncoding = this._decimalEncoding;
+        }
+        if (this._rowGroupBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rowGroupBytes = this._rowGroupBytes;
+        }
+        if (this._timestampFormat !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timestampFormat = this._timestampFormat;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._unstructured !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.unstructured = this._unstructured;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._compression = undefined;
+            this._decimalEncoding = undefined;
+            this._rowGroupBytes = undefined;
+            this._timestampFormat = undefined;
+            this._type = undefined;
+            this._unstructured = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._compression = value.compression;
+            this._decimalEncoding = value.decimalEncoding;
+            this._rowGroupBytes = value.rowGroupBytes;
+            this._timestampFormat = value.timestampFormat;
+            this._type = value.type;
+            this._unstructured = value.unstructured;
+        }
+    }
+    // compression - computed: false, optional: true, required: false
+    _compression;
+    get compression() {
+        return this.getStringAttribute('compression');
+    }
+    set compression(value) {
+        this._compression = value;
+    }
+    resetCompression() {
         this._compression = undefined;
-    };
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "compressionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._compression;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "decimalEncoding", {
-        get: function () {
-            return this.getStringAttribute('decimal_encoding');
-        },
-        set: function (value) {
-            this._decimalEncoding = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkFormatOutputReference.prototype.resetDecimalEncoding = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get compressionInput() {
+        return this._compression;
+    }
+    // decimal_encoding - computed: false, optional: true, required: false
+    _decimalEncoding;
+    get decimalEncoding() {
+        return this.getStringAttribute('decimal_encoding');
+    }
+    set decimalEncoding(value) {
+        this._decimalEncoding = value;
+    }
+    resetDecimalEncoding() {
         this._decimalEncoding = undefined;
-    };
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "decimalEncodingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._decimalEncoding;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "rowGroupBytes", {
-        get: function () {
-            return this.getNumberAttribute('row_group_bytes');
-        },
-        set: function (value) {
-            this._rowGroupBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkFormatOutputReference.prototype.resetRowGroupBytes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get decimalEncodingInput() {
+        return this._decimalEncoding;
+    }
+    // row_group_bytes - computed: false, optional: true, required: false
+    _rowGroupBytes;
+    get rowGroupBytes() {
+        return this.getNumberAttribute('row_group_bytes');
+    }
+    set rowGroupBytes(value) {
+        this._rowGroupBytes = value;
+    }
+    resetRowGroupBytes() {
         this._rowGroupBytes = undefined;
-    };
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "rowGroupBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rowGroupBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "timestampFormat", {
-        get: function () {
-            return this.getStringAttribute('timestamp_format');
-        },
-        set: function (value) {
-            this._timestampFormat = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkFormatOutputReference.prototype.resetTimestampFormat = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rowGroupBytesInput() {
+        return this._rowGroupBytes;
+    }
+    // timestamp_format - computed: false, optional: true, required: false
+    _timestampFormat;
+    get timestampFormat() {
+        return this.getStringAttribute('timestamp_format');
+    }
+    set timestampFormat(value) {
+        this._timestampFormat = value;
+    }
+    resetTimestampFormat() {
         this._timestampFormat = undefined;
-    };
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "timestampFormatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timestampFormat;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "unstructured", {
-        get: function () {
-            return this.getBooleanAttribute('unstructured');
-        },
-        set: function (value) {
-            this._unstructured = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkFormatOutputReference.prototype.resetUnstructured = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timestampFormatInput() {
+        return this._timestampFormat;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // unstructured - computed: false, optional: true, required: false
+    _unstructured;
+    get unstructured() {
+        return this.getBooleanAttribute('unstructured');
+    }
+    set unstructured(value) {
+        this._unstructured = value;
+    }
+    resetUnstructured() {
         this._unstructured = undefined;
-    };
-    Object.defineProperty(PipelineSinkFormatOutputReference.prototype, "unstructuredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._unstructured;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkFormatOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkFormatOutputReference = PipelineSinkFormatOutputReference;
-function pipelineSinkSchemaFieldsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get unstructuredInput() {
+        return this._unstructured;
+    }
+}
+export function pipelineSinkSchemaFieldsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1321,14 +1060,14 @@ function pipelineSinkSchemaFieldsToTerraform(struct) {
         unit: cdktf.stringToTerraform(struct.unit),
     };
 }
-function pipelineSinkSchemaFieldsToHclTerraform(struct) {
+export function pipelineSinkSchemaFieldsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         metadata_key: {
             value: cdktf.stringToHclTerraform(struct.metadataKey),
             isBlock: false,
@@ -1367,236 +1106,190 @@ function pipelineSinkSchemaFieldsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkSchemaFieldsOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkSchemaFieldsOutputReference, _super);
+export class PipelineSinkSchemaFieldsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function PipelineSinkSchemaFieldsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._metadataKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.metadataKey = this._metadataKey;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._required !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = this._required;
-            }
-            if (this._sqlName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sqlName = this._sqlName;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._unit !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.unit = this._unit;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._metadataKey = undefined;
-                this._name = undefined;
-                this._required = undefined;
-                this._sqlName = undefined;
-                this._type = undefined;
-                this._unit = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._metadataKey = value.metadataKey;
-                this._name = value.name;
-                this._required = value.required;
-                this._sqlName = value.sqlName;
-                this._type = value.type;
-                this._unit = value.unit;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "metadataKey", {
-        get: function () {
-            return this.getStringAttribute('metadata_key');
-        },
-        set: function (value) {
-            this._metadataKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFieldsOutputReference.prototype.resetMetadataKey = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._metadataKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.metadataKey = this._metadataKey;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._required !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required;
+        }
+        if (this._sqlName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sqlName = this._sqlName;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._unit !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.unit = this._unit;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._metadataKey = undefined;
+            this._name = undefined;
+            this._required = undefined;
+            this._sqlName = undefined;
+            this._type = undefined;
+            this._unit = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._metadataKey = value.metadataKey;
+            this._name = value.name;
+            this._required = value.required;
+            this._sqlName = value.sqlName;
+            this._type = value.type;
+            this._unit = value.unit;
+        }
+    }
+    // metadata_key - computed: false, optional: true, required: false
+    _metadataKey;
+    get metadataKey() {
+        return this.getStringAttribute('metadata_key');
+    }
+    set metadataKey(value) {
+        this._metadataKey = value;
+    }
+    resetMetadataKey() {
         this._metadataKey = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "metadataKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadataKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFieldsOutputReference.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataKeyInput() {
+        return this._metadataKey;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "required", {
-        get: function () {
-            return this.getBooleanAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFieldsOutputReference.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getBooleanAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "sqlName", {
-        get: function () {
-            return this.getStringAttribute('sql_name');
-        },
-        set: function (value) {
-            this._sqlName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFieldsOutputReference.prototype.resetSqlName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+    // sql_name - computed: false, optional: true, required: false
+    _sqlName;
+    get sqlName() {
+        return this.getStringAttribute('sql_name');
+    }
+    set sqlName(value) {
+        this._sqlName = value;
+    }
+    resetSqlName() {
         this._sqlName = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "sqlNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sqlName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "unit", {
-        get: function () {
-            return this.getStringAttribute('unit');
-        },
-        set: function (value) {
-            this._unit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFieldsOutputReference.prototype.resetUnit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sqlNameInput() {
+        return this._sqlName;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // unit - computed: false, optional: true, required: false
+    _unit;
+    get unit() {
+        return this.getStringAttribute('unit');
+    }
+    set unit(value) {
+        this._unit = value;
+    }
+    resetUnit() {
         this._unit = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFieldsOutputReference.prototype, "unitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._unit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkSchemaFieldsOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkSchemaFieldsOutputReference = PipelineSinkSchemaFieldsOutputReference;
-var PipelineSinkSchemaFieldsList = /** @class */ (function (_super) {
-    __extends(PipelineSinkSchemaFieldsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get unitInput() {
+        return this._unit;
+    }
+}
+export class PipelineSinkSchemaFieldsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function PipelineSinkSchemaFieldsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    PipelineSinkSchemaFieldsList.prototype.get = function (index) {
+    get(index) {
         return new PipelineSinkSchemaFieldsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return PipelineSinkSchemaFieldsList;
-}(cdktf.ComplexList));
-exports.PipelineSinkSchemaFieldsList = PipelineSinkSchemaFieldsList;
-function pipelineSinkSchemaFormatToTerraform(struct) {
+    }
+}
+export function pipelineSinkSchemaFormatToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1612,14 +1305,14 @@ function pipelineSinkSchemaFormatToTerraform(struct) {
         unstructured: cdktf.booleanToTerraform(struct.unstructured),
     };
 }
-function pipelineSinkSchemaFormatToHclTerraform(struct) {
+export function pipelineSinkSchemaFormatToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         compression: {
             value: cdktf.stringToHclTerraform(struct.compression),
             isBlock: false,
@@ -1658,211 +1351,165 @@ function pipelineSinkSchemaFormatToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkSchemaFormatOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkSchemaFormatOutputReference, _super);
+export class PipelineSinkSchemaFormatOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkSchemaFormatOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._compression !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.compression = this._compression;
-            }
-            if (this._decimalEncoding !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.decimalEncoding = this._decimalEncoding;
-            }
-            if (this._rowGroupBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rowGroupBytes = this._rowGroupBytes;
-            }
-            if (this._timestampFormat !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timestampFormat = this._timestampFormat;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._unstructured !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.unstructured = this._unstructured;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._compression = undefined;
-                this._decimalEncoding = undefined;
-                this._rowGroupBytes = undefined;
-                this._timestampFormat = undefined;
-                this._type = undefined;
-                this._unstructured = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._compression = value.compression;
-                this._decimalEncoding = value.decimalEncoding;
-                this._rowGroupBytes = value.rowGroupBytes;
-                this._timestampFormat = value.timestampFormat;
-                this._type = value.type;
-                this._unstructured = value.unstructured;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "compression", {
-        get: function () {
-            return this.getStringAttribute('compression');
-        },
-        set: function (value) {
-            this._compression = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFormatOutputReference.prototype.resetCompression = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._compression !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.compression = this._compression;
+        }
+        if (this._decimalEncoding !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.decimalEncoding = this._decimalEncoding;
+        }
+        if (this._rowGroupBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rowGroupBytes = this._rowGroupBytes;
+        }
+        if (this._timestampFormat !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timestampFormat = this._timestampFormat;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._unstructured !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.unstructured = this._unstructured;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._compression = undefined;
+            this._decimalEncoding = undefined;
+            this._rowGroupBytes = undefined;
+            this._timestampFormat = undefined;
+            this._type = undefined;
+            this._unstructured = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._compression = value.compression;
+            this._decimalEncoding = value.decimalEncoding;
+            this._rowGroupBytes = value.rowGroupBytes;
+            this._timestampFormat = value.timestampFormat;
+            this._type = value.type;
+            this._unstructured = value.unstructured;
+        }
+    }
+    // compression - computed: false, optional: true, required: false
+    _compression;
+    get compression() {
+        return this.getStringAttribute('compression');
+    }
+    set compression(value) {
+        this._compression = value;
+    }
+    resetCompression() {
         this._compression = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "compressionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._compression;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "decimalEncoding", {
-        get: function () {
-            return this.getStringAttribute('decimal_encoding');
-        },
-        set: function (value) {
-            this._decimalEncoding = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFormatOutputReference.prototype.resetDecimalEncoding = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get compressionInput() {
+        return this._compression;
+    }
+    // decimal_encoding - computed: false, optional: true, required: false
+    _decimalEncoding;
+    get decimalEncoding() {
+        return this.getStringAttribute('decimal_encoding');
+    }
+    set decimalEncoding(value) {
+        this._decimalEncoding = value;
+    }
+    resetDecimalEncoding() {
         this._decimalEncoding = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "decimalEncodingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._decimalEncoding;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "rowGroupBytes", {
-        get: function () {
-            return this.getNumberAttribute('row_group_bytes');
-        },
-        set: function (value) {
-            this._rowGroupBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFormatOutputReference.prototype.resetRowGroupBytes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get decimalEncodingInput() {
+        return this._decimalEncoding;
+    }
+    // row_group_bytes - computed: false, optional: true, required: false
+    _rowGroupBytes;
+    get rowGroupBytes() {
+        return this.getNumberAttribute('row_group_bytes');
+    }
+    set rowGroupBytes(value) {
+        this._rowGroupBytes = value;
+    }
+    resetRowGroupBytes() {
         this._rowGroupBytes = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "rowGroupBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rowGroupBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "timestampFormat", {
-        get: function () {
-            return this.getStringAttribute('timestamp_format');
-        },
-        set: function (value) {
-            this._timestampFormat = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFormatOutputReference.prototype.resetTimestampFormat = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rowGroupBytesInput() {
+        return this._rowGroupBytes;
+    }
+    // timestamp_format - computed: false, optional: true, required: false
+    _timestampFormat;
+    get timestampFormat() {
+        return this.getStringAttribute('timestamp_format');
+    }
+    set timestampFormat(value) {
+        this._timestampFormat = value;
+    }
+    resetTimestampFormat() {
         this._timestampFormat = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "timestampFormatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timestampFormat;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "unstructured", {
-        get: function () {
-            return this.getBooleanAttribute('unstructured');
-        },
-        set: function (value) {
-            this._unstructured = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaFormatOutputReference.prototype.resetUnstructured = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timestampFormatInput() {
+        return this._timestampFormat;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // unstructured - computed: false, optional: true, required: false
+    _unstructured;
+    get unstructured() {
+        return this.getBooleanAttribute('unstructured');
+    }
+    set unstructured(value) {
+        this._unstructured = value;
+    }
+    resetUnstructured() {
         this._unstructured = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaFormatOutputReference.prototype, "unstructuredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._unstructured;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkSchemaFormatOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkSchemaFormatOutputReference = PipelineSinkSchemaFormatOutputReference;
-function pipelineSinkSchemaToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get unstructuredInput() {
+        return this._unstructured;
+    }
+}
+export function pipelineSinkSchemaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1875,14 +1522,14 @@ function pipelineSinkSchemaToTerraform(struct) {
         inferred: cdktf.booleanToTerraform(struct.inferred),
     };
 }
-function pipelineSinkSchemaToHclTerraform(struct) {
+export function pipelineSinkSchemaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         fields: {
             value: cdktf.listMapperHcl(pipelineSinkSchemaFieldsToHclTerraform, false)(struct.fields),
             isBlock: true,
@@ -1903,142 +1550,125 @@ function pipelineSinkSchemaToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PipelineSinkSchemaOutputReference = /** @class */ (function (_super) {
-    __extends(PipelineSinkSchemaOutputReference, _super);
+export class PipelineSinkSchemaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PipelineSinkSchemaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // fields - computed: false, optional: true, required: false
-        _this._fields = new PipelineSinkSchemaFieldsList(_this, "fields", false);
-        // format - computed: false, optional: true, required: false
-        _this._format = new PipelineSinkSchemaFormatOutputReference(_this, "format");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._fields) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fields = (_b = this._fields) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._format) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.format = (_d = this._format) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._inferred !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.inferred = this._inferred;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._fields.internalValue = undefined;
-                this._format.internalValue = undefined;
-                this._inferred = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._fields.internalValue = value.fields;
-                this._format.internalValue = value.format;
-                this._inferred = value.inferred;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "fields", {
-        get: function () {
-            return this._fields;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaOutputReference.prototype.putFields = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._fields?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fields = this._fields?.internalValue;
+        }
+        if (this._format?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.format = this._format?.internalValue;
+        }
+        if (this._inferred !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.inferred = this._inferred;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._fields.internalValue = undefined;
+            this._format.internalValue = undefined;
+            this._inferred = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._fields.internalValue = value.fields;
+            this._format.internalValue = value.format;
+            this._inferred = value.inferred;
+        }
+    }
+    // fields - computed: false, optional: true, required: false
+    _fields = new PipelineSinkSchemaFieldsList(this, "fields", false);
+    get fields() {
+        return this._fields;
+    }
+    putFields(value) {
         this._fields.internalValue = value;
-    };
-    PipelineSinkSchemaOutputReference.prototype.resetFields = function () {
+    }
+    resetFields() {
         this._fields.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "fieldsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fields.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "format", {
-        get: function () {
-            return this._format;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaOutputReference.prototype.putFormat = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fieldsInput() {
+        return this._fields.internalValue;
+    }
+    // format - computed: false, optional: true, required: false
+    _format = new PipelineSinkSchemaFormatOutputReference(this, "format");
+    get format() {
+        return this._format;
+    }
+    putFormat(value) {
         this._format.internalValue = value;
-    };
-    PipelineSinkSchemaOutputReference.prototype.resetFormat = function () {
+    }
+    resetFormat() {
         this._format.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "formatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._format.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "inferred", {
-        get: function () {
-            return this.getBooleanAttribute('inferred');
-        },
-        set: function (value) {
-            this._inferred = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSinkSchemaOutputReference.prototype.resetInferred = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get formatInput() {
+        return this._format.internalValue;
+    }
+    // inferred - computed: false, optional: true, required: false
+    _inferred;
+    get inferred() {
+        return this.getBooleanAttribute('inferred');
+    }
+    set inferred(value) {
+        this._inferred = value;
+    }
+    resetInferred() {
         this._inferred = undefined;
-    };
-    Object.defineProperty(PipelineSinkSchemaOutputReference.prototype, "inferredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._inferred;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PipelineSinkSchemaOutputReference;
-}(cdktf.ComplexObject));
-exports.PipelineSinkSchemaOutputReference = PipelineSinkSchemaOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get inferredInput() {
+        return this._inferred;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pipeline_sink cloudflare_pipeline_sink}
 */
-var PipelineSink = /** @class */ (function (_super) {
-    __extends(PipelineSink, _super);
+export class PipelineSink extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_pipeline_sink";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a PipelineSink resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the PipelineSink to import
+    * @param importFromId The id of the existing PipelineSink that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pipeline_sink#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the PipelineSink to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pipeline_sink", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -2049,8 +1679,8 @@ var PipelineSink = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options PipelineSinkConfig
     */
-    function PipelineSink(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_pipeline_sink',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -2063,182 +1693,117 @@ var PipelineSink = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // config - computed: false, optional: true, required: false
-        _this._config = new PipelineSinkConfigAOutputReference(_this, "config");
-        // format - computed: false, optional: true, required: false
-        _this._format = new PipelineSinkFormatOutputReference(_this, "format");
-        // schema - computed: false, optional: true, required: false
-        _this._schema = new PipelineSinkSchemaOutputReference(_this, "schema");
-        _this._accountId = config.accountId;
-        _this._config.internalValue = config.config;
-        _this._format.internalValue = config.format;
-        _this._name = config.name;
-        _this._schema.internalValue = config.schema;
-        _this._type = config.type;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._config.internalValue = config.config;
+        this._format.internalValue = config.format;
+        this._name = config.name;
+        this._schema.internalValue = config.schema;
+        this._type = config.type;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a PipelineSink resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the PipelineSink to import
-    * @param importFromId The id of the existing PipelineSink that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pipeline_sink#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the PipelineSink to import is found
-    */
-    PipelineSink.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pipeline_sink", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(PipelineSink.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSink.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(PipelineSink.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "config", {
-        get: function () {
-            return this._config;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSink.prototype.putConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // config - computed: false, optional: true, required: false
+    _config = new PipelineSinkConfigAOutputReference(this, "config");
+    get config() {
+        return this._config;
+    }
+    putConfig(value) {
         this._config.internalValue = value;
-    };
-    PipelineSink.prototype.resetConfig = function () {
+    }
+    resetConfig() {
         this._config.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSink.prototype, "configInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._config.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "format", {
-        get: function () {
-            return this._format;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSink.prototype.putFormat = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configInput() {
+        return this._config.internalValue;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // format - computed: false, optional: true, required: false
+    _format = new PipelineSinkFormatOutputReference(this, "format");
+    get format() {
+        return this._format;
+    }
+    putFormat(value) {
         this._format.internalValue = value;
-    };
-    PipelineSink.prototype.resetFormat = function () {
+    }
+    resetFormat() {
         this._format.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSink.prototype, "formatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._format.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "schema", {
-        get: function () {
-            return this._schema;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PipelineSink.prototype.putSchema = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get formatInput() {
+        return this._format.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // schema - computed: false, optional: true, required: false
+    _schema = new PipelineSinkSchemaOutputReference(this, "schema");
+    get schema() {
+        return this._schema;
+    }
+    putSchema(value) {
         this._schema.internalValue = value;
-    };
-    PipelineSink.prototype.resetSchema = function () {
+    }
+    resetSchema() {
         this._schema.internalValue = undefined;
-    };
-    Object.defineProperty(PipelineSink.prototype, "schemaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._schema.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PipelineSink.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get schemaInput() {
+        return this._schema.internalValue;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
     // =========
     // SYNTHESIS
     // =========
-    PipelineSink.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             config: pipelineSinkConfigAToTerraform(this._config.internalValue),
@@ -2247,9 +1812,9 @@ var PipelineSink = /** @class */ (function (_super) {
             schema: pipelineSinkSchemaToTerraform(this._schema.internalValue),
             type: cdktf.stringToTerraform(this._type),
         };
-    };
-    PipelineSink.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -2288,15 +1853,6 @@ var PipelineSink = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    PipelineSink.tfResourceType = "cloudflare_pipeline_sink";
-    return PipelineSink;
-}(cdktf.TerraformResource));
-exports.PipelineSink = PipelineSink;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

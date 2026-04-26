@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_settings github_organization_settings}
 */
-var OrganizationSettings = /** @class */ (function (_super) {
-    __extends(OrganizationSettings, _super);
+export class OrganizationSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a OrganizationSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the OrganizationSettings to import
+    * @param importFromId The id of the existing OrganizationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the OrganizationSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var OrganizationSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationSettingsConfig
     */
-    function OrganizationSettings(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_settings',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,617 +46,444 @@ var OrganizationSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._advancedSecurityEnabledForNewRepositories = config.advancedSecurityEnabledForNewRepositories;
-        _this._billingEmail = config.billingEmail;
-        _this._blog = config.blog;
-        _this._company = config.company;
-        _this._defaultRepositoryPermission = config.defaultRepositoryPermission;
-        _this._dependabotAlertsEnabledForNewRepositories = config.dependabotAlertsEnabledForNewRepositories;
-        _this._dependabotSecurityUpdatesEnabledForNewRepositories = config.dependabotSecurityUpdatesEnabledForNewRepositories;
-        _this._dependencyGraphEnabledForNewRepositories = config.dependencyGraphEnabledForNewRepositories;
-        _this._description = config.description;
-        _this._email = config.email;
-        _this._hasOrganizationProjects = config.hasOrganizationProjects;
-        _this._hasRepositoryProjects = config.hasRepositoryProjects;
-        _this._id = config.id;
-        _this._location = config.location;
-        _this._membersCanCreateInternalRepositories = config.membersCanCreateInternalRepositories;
-        _this._membersCanCreatePages = config.membersCanCreatePages;
-        _this._membersCanCreatePrivatePages = config.membersCanCreatePrivatePages;
-        _this._membersCanCreatePrivateRepositories = config.membersCanCreatePrivateRepositories;
-        _this._membersCanCreatePublicPages = config.membersCanCreatePublicPages;
-        _this._membersCanCreatePublicRepositories = config.membersCanCreatePublicRepositories;
-        _this._membersCanCreateRepositories = config.membersCanCreateRepositories;
-        _this._membersCanForkPrivateRepositories = config.membersCanForkPrivateRepositories;
-        _this._name = config.name;
-        _this._secretScanningEnabledForNewRepositories = config.secretScanningEnabledForNewRepositories;
-        _this._secretScanningPushProtectionEnabledForNewRepositories = config.secretScanningPushProtectionEnabledForNewRepositories;
-        _this._twitterUsername = config.twitterUsername;
-        _this._webCommitSignoffRequired = config.webCommitSignoffRequired;
-        return _this;
+        });
+        this._advancedSecurityEnabledForNewRepositories = config.advancedSecurityEnabledForNewRepositories;
+        this._billingEmail = config.billingEmail;
+        this._blog = config.blog;
+        this._company = config.company;
+        this._defaultRepositoryPermission = config.defaultRepositoryPermission;
+        this._dependabotAlertsEnabledForNewRepositories = config.dependabotAlertsEnabledForNewRepositories;
+        this._dependabotSecurityUpdatesEnabledForNewRepositories = config.dependabotSecurityUpdatesEnabledForNewRepositories;
+        this._dependencyGraphEnabledForNewRepositories = config.dependencyGraphEnabledForNewRepositories;
+        this._description = config.description;
+        this._email = config.email;
+        this._hasOrganizationProjects = config.hasOrganizationProjects;
+        this._hasRepositoryProjects = config.hasRepositoryProjects;
+        this._id = config.id;
+        this._location = config.location;
+        this._membersCanCreateInternalRepositories = config.membersCanCreateInternalRepositories;
+        this._membersCanCreatePages = config.membersCanCreatePages;
+        this._membersCanCreatePrivatePages = config.membersCanCreatePrivatePages;
+        this._membersCanCreatePrivateRepositories = config.membersCanCreatePrivateRepositories;
+        this._membersCanCreatePublicPages = config.membersCanCreatePublicPages;
+        this._membersCanCreatePublicRepositories = config.membersCanCreatePublicRepositories;
+        this._membersCanCreateRepositories = config.membersCanCreateRepositories;
+        this._membersCanForkPrivateRepositories = config.membersCanForkPrivateRepositories;
+        this._name = config.name;
+        this._secretScanningEnabledForNewRepositories = config.secretScanningEnabledForNewRepositories;
+        this._secretScanningPushProtectionEnabledForNewRepositories = config.secretScanningPushProtectionEnabledForNewRepositories;
+        this._twitterUsername = config.twitterUsername;
+        this._webCommitSignoffRequired = config.webCommitSignoffRequired;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a OrganizationSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the OrganizationSettings to import
-    * @param importFromId The id of the existing OrganizationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the OrganizationSettings to import is found
-    */
-    OrganizationSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "advancedSecurityEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('advanced_security_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._advancedSecurityEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetAdvancedSecurityEnabledForNewRepositories = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // advanced_security_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _advancedSecurityEnabledForNewRepositories;
+    get advancedSecurityEnabledForNewRepositories() {
+        return this.getBooleanAttribute('advanced_security_enabled_for_new_repositories');
+    }
+    set advancedSecurityEnabledForNewRepositories(value) {
+        this._advancedSecurityEnabledForNewRepositories = value;
+    }
+    resetAdvancedSecurityEnabledForNewRepositories() {
         this._advancedSecurityEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "advancedSecurityEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._advancedSecurityEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "billingEmail", {
-        get: function () {
-            return this.getStringAttribute('billing_email');
-        },
-        set: function (value) {
-            this._billingEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "billingEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._billingEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "blog", {
-        get: function () {
-            return this.getStringAttribute('blog');
-        },
-        set: function (value) {
-            this._blog = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetBlog = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get advancedSecurityEnabledForNewRepositoriesInput() {
+        return this._advancedSecurityEnabledForNewRepositories;
+    }
+    // billing_email - computed: false, optional: false, required: true
+    _billingEmail;
+    get billingEmail() {
+        return this.getStringAttribute('billing_email');
+    }
+    set billingEmail(value) {
+        this._billingEmail = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get billingEmailInput() {
+        return this._billingEmail;
+    }
+    // blog - computed: false, optional: true, required: false
+    _blog;
+    get blog() {
+        return this.getStringAttribute('blog');
+    }
+    set blog(value) {
+        this._blog = value;
+    }
+    resetBlog() {
         this._blog = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "blogInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._blog;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "company", {
-        get: function () {
-            return this.getStringAttribute('company');
-        },
-        set: function (value) {
-            this._company = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetCompany = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get blogInput() {
+        return this._blog;
+    }
+    // company - computed: false, optional: true, required: false
+    _company;
+    get company() {
+        return this.getStringAttribute('company');
+    }
+    set company(value) {
+        this._company = value;
+    }
+    resetCompany() {
         this._company = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "companyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._company;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "defaultRepositoryPermission", {
-        get: function () {
-            return this.getStringAttribute('default_repository_permission');
-        },
-        set: function (value) {
-            this._defaultRepositoryPermission = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetDefaultRepositoryPermission = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get companyInput() {
+        return this._company;
+    }
+    // default_repository_permission - computed: false, optional: true, required: false
+    _defaultRepositoryPermission;
+    get defaultRepositoryPermission() {
+        return this.getStringAttribute('default_repository_permission');
+    }
+    set defaultRepositoryPermission(value) {
+        this._defaultRepositoryPermission = value;
+    }
+    resetDefaultRepositoryPermission() {
         this._defaultRepositoryPermission = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "defaultRepositoryPermissionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultRepositoryPermission;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "dependabotAlertsEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('dependabot_alerts_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._dependabotAlertsEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetDependabotAlertsEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultRepositoryPermissionInput() {
+        return this._defaultRepositoryPermission;
+    }
+    // dependabot_alerts_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _dependabotAlertsEnabledForNewRepositories;
+    get dependabotAlertsEnabledForNewRepositories() {
+        return this.getBooleanAttribute('dependabot_alerts_enabled_for_new_repositories');
+    }
+    set dependabotAlertsEnabledForNewRepositories(value) {
+        this._dependabotAlertsEnabledForNewRepositories = value;
+    }
+    resetDependabotAlertsEnabledForNewRepositories() {
         this._dependabotAlertsEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "dependabotAlertsEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dependabotAlertsEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "dependabotSecurityUpdatesEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('dependabot_security_updates_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._dependabotSecurityUpdatesEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetDependabotSecurityUpdatesEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dependabotAlertsEnabledForNewRepositoriesInput() {
+        return this._dependabotAlertsEnabledForNewRepositories;
+    }
+    // dependabot_security_updates_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _dependabotSecurityUpdatesEnabledForNewRepositories;
+    get dependabotSecurityUpdatesEnabledForNewRepositories() {
+        return this.getBooleanAttribute('dependabot_security_updates_enabled_for_new_repositories');
+    }
+    set dependabotSecurityUpdatesEnabledForNewRepositories(value) {
+        this._dependabotSecurityUpdatesEnabledForNewRepositories = value;
+    }
+    resetDependabotSecurityUpdatesEnabledForNewRepositories() {
         this._dependabotSecurityUpdatesEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "dependabotSecurityUpdatesEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dependabotSecurityUpdatesEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "dependencyGraphEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('dependency_graph_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._dependencyGraphEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetDependencyGraphEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dependabotSecurityUpdatesEnabledForNewRepositoriesInput() {
+        return this._dependabotSecurityUpdatesEnabledForNewRepositories;
+    }
+    // dependency_graph_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _dependencyGraphEnabledForNewRepositories;
+    get dependencyGraphEnabledForNewRepositories() {
+        return this.getBooleanAttribute('dependency_graph_enabled_for_new_repositories');
+    }
+    set dependencyGraphEnabledForNewRepositories(value) {
+        this._dependencyGraphEnabledForNewRepositories = value;
+    }
+    resetDependencyGraphEnabledForNewRepositories() {
         this._dependencyGraphEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "dependencyGraphEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dependencyGraphEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dependencyGraphEnabledForNewRepositoriesInput() {
+        return this._dependencyGraphEnabledForNewRepositories;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "email", {
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetEmail = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // email - computed: false, optional: true, required: false
+    _email;
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    set email(value) {
+        this._email = value;
+    }
+    resetEmail() {
         this._email = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "hasOrganizationProjects", {
-        get: function () {
-            return this.getBooleanAttribute('has_organization_projects');
-        },
-        set: function (value) {
-            this._hasOrganizationProjects = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetHasOrganizationProjects = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+    // has_organization_projects - computed: false, optional: true, required: false
+    _hasOrganizationProjects;
+    get hasOrganizationProjects() {
+        return this.getBooleanAttribute('has_organization_projects');
+    }
+    set hasOrganizationProjects(value) {
+        this._hasOrganizationProjects = value;
+    }
+    resetHasOrganizationProjects() {
         this._hasOrganizationProjects = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "hasOrganizationProjectsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasOrganizationProjects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "hasRepositoryProjects", {
-        get: function () {
-            return this.getBooleanAttribute('has_repository_projects');
-        },
-        set: function (value) {
-            this._hasRepositoryProjects = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetHasRepositoryProjects = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasOrganizationProjectsInput() {
+        return this._hasOrganizationProjects;
+    }
+    // has_repository_projects - computed: false, optional: true, required: false
+    _hasRepositoryProjects;
+    get hasRepositoryProjects() {
+        return this.getBooleanAttribute('has_repository_projects');
+    }
+    set hasRepositoryProjects(value) {
+        this._hasRepositoryProjects = value;
+    }
+    resetHasRepositoryProjects() {
         this._hasRepositoryProjects = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "hasRepositoryProjectsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasRepositoryProjects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasRepositoryProjectsInput() {
+        return this._hasRepositoryProjects;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "location", {
-        get: function () {
-            return this.getStringAttribute('location');
-        },
-        set: function (value) {
-            this._location = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetLocation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // location - computed: false, optional: true, required: false
+    _location;
+    get location() {
+        return this.getStringAttribute('location');
+    }
+    set location(value) {
+        this._location = value;
+    }
+    resetLocation() {
         this._location = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "locationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._location;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreateInternalRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_internal_repositories');
-        },
-        set: function (value) {
-            this._membersCanCreateInternalRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreateInternalRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get locationInput() {
+        return this._location;
+    }
+    // members_can_create_internal_repositories - computed: false, optional: true, required: false
+    _membersCanCreateInternalRepositories;
+    get membersCanCreateInternalRepositories() {
+        return this.getBooleanAttribute('members_can_create_internal_repositories');
+    }
+    set membersCanCreateInternalRepositories(value) {
+        this._membersCanCreateInternalRepositories = value;
+    }
+    resetMembersCanCreateInternalRepositories() {
         this._membersCanCreateInternalRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreateInternalRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreateInternalRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePages", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_pages');
-        },
-        set: function (value) {
-            this._membersCanCreatePages = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreatePages = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreateInternalRepositoriesInput() {
+        return this._membersCanCreateInternalRepositories;
+    }
+    // members_can_create_pages - computed: false, optional: true, required: false
+    _membersCanCreatePages;
+    get membersCanCreatePages() {
+        return this.getBooleanAttribute('members_can_create_pages');
+    }
+    set membersCanCreatePages(value) {
+        this._membersCanCreatePages = value;
+    }
+    resetMembersCanCreatePages() {
         this._membersCanCreatePages = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreatePages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePrivatePages", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_private_pages');
-        },
-        set: function (value) {
-            this._membersCanCreatePrivatePages = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreatePrivatePages = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreatePagesInput() {
+        return this._membersCanCreatePages;
+    }
+    // members_can_create_private_pages - computed: false, optional: true, required: false
+    _membersCanCreatePrivatePages;
+    get membersCanCreatePrivatePages() {
+        return this.getBooleanAttribute('members_can_create_private_pages');
+    }
+    set membersCanCreatePrivatePages(value) {
+        this._membersCanCreatePrivatePages = value;
+    }
+    resetMembersCanCreatePrivatePages() {
         this._membersCanCreatePrivatePages = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePrivatePagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreatePrivatePages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePrivateRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_private_repositories');
-        },
-        set: function (value) {
-            this._membersCanCreatePrivateRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreatePrivateRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreatePrivatePagesInput() {
+        return this._membersCanCreatePrivatePages;
+    }
+    // members_can_create_private_repositories - computed: false, optional: true, required: false
+    _membersCanCreatePrivateRepositories;
+    get membersCanCreatePrivateRepositories() {
+        return this.getBooleanAttribute('members_can_create_private_repositories');
+    }
+    set membersCanCreatePrivateRepositories(value) {
+        this._membersCanCreatePrivateRepositories = value;
+    }
+    resetMembersCanCreatePrivateRepositories() {
         this._membersCanCreatePrivateRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePrivateRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreatePrivateRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePublicPages", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_public_pages');
-        },
-        set: function (value) {
-            this._membersCanCreatePublicPages = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreatePublicPages = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreatePrivateRepositoriesInput() {
+        return this._membersCanCreatePrivateRepositories;
+    }
+    // members_can_create_public_pages - computed: false, optional: true, required: false
+    _membersCanCreatePublicPages;
+    get membersCanCreatePublicPages() {
+        return this.getBooleanAttribute('members_can_create_public_pages');
+    }
+    set membersCanCreatePublicPages(value) {
+        this._membersCanCreatePublicPages = value;
+    }
+    resetMembersCanCreatePublicPages() {
         this._membersCanCreatePublicPages = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePublicPagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreatePublicPages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePublicRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_public_repositories');
-        },
-        set: function (value) {
-            this._membersCanCreatePublicRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreatePublicRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreatePublicPagesInput() {
+        return this._membersCanCreatePublicPages;
+    }
+    // members_can_create_public_repositories - computed: false, optional: true, required: false
+    _membersCanCreatePublicRepositories;
+    get membersCanCreatePublicRepositories() {
+        return this.getBooleanAttribute('members_can_create_public_repositories');
+    }
+    set membersCanCreatePublicRepositories(value) {
+        this._membersCanCreatePublicRepositories = value;
+    }
+    resetMembersCanCreatePublicRepositories() {
         this._membersCanCreatePublicRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreatePublicRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreatePublicRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreateRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_create_repositories');
-        },
-        set: function (value) {
-            this._membersCanCreateRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanCreateRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreatePublicRepositoriesInput() {
+        return this._membersCanCreatePublicRepositories;
+    }
+    // members_can_create_repositories - computed: false, optional: true, required: false
+    _membersCanCreateRepositories;
+    get membersCanCreateRepositories() {
+        return this.getBooleanAttribute('members_can_create_repositories');
+    }
+    set membersCanCreateRepositories(value) {
+        this._membersCanCreateRepositories = value;
+    }
+    resetMembersCanCreateRepositories() {
         this._membersCanCreateRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanCreateRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanCreateRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanForkPrivateRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('members_can_fork_private_repositories');
-        },
-        set: function (value) {
-            this._membersCanForkPrivateRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetMembersCanForkPrivateRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanCreateRepositoriesInput() {
+        return this._membersCanCreateRepositories;
+    }
+    // members_can_fork_private_repositories - computed: false, optional: true, required: false
+    _membersCanForkPrivateRepositories;
+    get membersCanForkPrivateRepositories() {
+        return this.getBooleanAttribute('members_can_fork_private_repositories');
+    }
+    set membersCanForkPrivateRepositories(value) {
+        this._membersCanForkPrivateRepositories = value;
+    }
+    resetMembersCanForkPrivateRepositories() {
         this._membersCanForkPrivateRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "membersCanForkPrivateRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membersCanForkPrivateRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membersCanForkPrivateRepositoriesInput() {
+        return this._membersCanForkPrivateRepositories;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "secretScanningEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('secret_scanning_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._secretScanningEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetSecretScanningEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // secret_scanning_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _secretScanningEnabledForNewRepositories;
+    get secretScanningEnabledForNewRepositories() {
+        return this.getBooleanAttribute('secret_scanning_enabled_for_new_repositories');
+    }
+    set secretScanningEnabledForNewRepositories(value) {
+        this._secretScanningEnabledForNewRepositories = value;
+    }
+    resetSecretScanningEnabledForNewRepositories() {
         this._secretScanningEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "secretScanningEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "secretScanningPushProtectionEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('secret_scanning_push_protection_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._secretScanningPushProtectionEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetSecretScanningPushProtectionEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningEnabledForNewRepositoriesInput() {
+        return this._secretScanningEnabledForNewRepositories;
+    }
+    // secret_scanning_push_protection_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _secretScanningPushProtectionEnabledForNewRepositories;
+    get secretScanningPushProtectionEnabledForNewRepositories() {
+        return this.getBooleanAttribute('secret_scanning_push_protection_enabled_for_new_repositories');
+    }
+    set secretScanningPushProtectionEnabledForNewRepositories(value) {
+        this._secretScanningPushProtectionEnabledForNewRepositories = value;
+    }
+    resetSecretScanningPushProtectionEnabledForNewRepositories() {
         this._secretScanningPushProtectionEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "secretScanningPushProtectionEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningPushProtectionEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "twitterUsername", {
-        get: function () {
-            return this.getStringAttribute('twitter_username');
-        },
-        set: function (value) {
-            this._twitterUsername = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetTwitterUsername = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningPushProtectionEnabledForNewRepositoriesInput() {
+        return this._secretScanningPushProtectionEnabledForNewRepositories;
+    }
+    // twitter_username - computed: false, optional: true, required: false
+    _twitterUsername;
+    get twitterUsername() {
+        return this.getStringAttribute('twitter_username');
+    }
+    set twitterUsername(value) {
+        this._twitterUsername = value;
+    }
+    resetTwitterUsername() {
         this._twitterUsername = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "twitterUsernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._twitterUsername;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationSettings.prototype, "webCommitSignoffRequired", {
-        get: function () {
-            return this.getBooleanAttribute('web_commit_signoff_required');
-        },
-        set: function (value) {
-            this._webCommitSignoffRequired = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationSettings.prototype.resetWebCommitSignoffRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get twitterUsernameInput() {
+        return this._twitterUsername;
+    }
+    // web_commit_signoff_required - computed: false, optional: true, required: false
+    _webCommitSignoffRequired;
+    get webCommitSignoffRequired() {
+        return this.getBooleanAttribute('web_commit_signoff_required');
+    }
+    set webCommitSignoffRequired(value) {
+        this._webCommitSignoffRequired = value;
+    }
+    resetWebCommitSignoffRequired() {
         this._webCommitSignoffRequired = undefined;
-    };
-    Object.defineProperty(OrganizationSettings.prototype, "webCommitSignoffRequiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._webCommitSignoffRequired;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get webCommitSignoffRequiredInput() {
+        return this._webCommitSignoffRequired;
+    }
     // =========
     // SYNTHESIS
     // =========
-    OrganizationSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             advanced_security_enabled_for_new_repositories: cdktf.booleanToTerraform(this._advancedSecurityEnabledForNewRepositories),
             billing_email: cdktf.stringToTerraform(this._billingEmail),
@@ -688,9 +513,9 @@ var OrganizationSettings = /** @class */ (function (_super) {
             twitter_username: cdktf.stringToTerraform(this._twitterUsername),
             web_commit_signoff_required: cdktf.booleanToTerraform(this._webCommitSignoffRequired),
         };
-    };
-    OrganizationSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             advanced_security_enabled_for_new_repositories: {
                 value: cdktf.booleanToHclTerraform(this._advancedSecurityEnabledForNewRepositories),
                 isBlock: false,
@@ -855,15 +680,6 @@ var OrganizationSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    OrganizationSettings.tfResourceType = "github_organization_settings";
-    return OrganizationSettings;
-}(cdktf.TerraformResource));
-exports.OrganizationSettings = OrganizationSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

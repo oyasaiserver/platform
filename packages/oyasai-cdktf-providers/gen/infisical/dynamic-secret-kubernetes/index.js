@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_kubernetes
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DynamicSecretKubernetes = exports.DynamicSecretKubernetesMetadataList = exports.DynamicSecretKubernetesMetadataOutputReference = exports.DynamicSecretKubernetesConfigurationOutputReference = exports.DynamicSecretKubernetesConfigurationStaticConfigOutputReference = exports.DynamicSecretKubernetesConfigurationDynamicConfigOutputReference = exports.DynamicSecretKubernetesConfigurationApiConfigOutputReference = void 0;
-exports.dynamicSecretKubernetesConfigurationApiConfigToTerraform = dynamicSecretKubernetesConfigurationApiConfigToTerraform;
-exports.dynamicSecretKubernetesConfigurationApiConfigToHclTerraform = dynamicSecretKubernetesConfigurationApiConfigToHclTerraform;
-exports.dynamicSecretKubernetesConfigurationDynamicConfigToTerraform = dynamicSecretKubernetesConfigurationDynamicConfigToTerraform;
-exports.dynamicSecretKubernetesConfigurationDynamicConfigToHclTerraform = dynamicSecretKubernetesConfigurationDynamicConfigToHclTerraform;
-exports.dynamicSecretKubernetesConfigurationStaticConfigToTerraform = dynamicSecretKubernetesConfigurationStaticConfigToTerraform;
-exports.dynamicSecretKubernetesConfigurationStaticConfigToHclTerraform = dynamicSecretKubernetesConfigurationStaticConfigToHclTerraform;
-exports.dynamicSecretKubernetesConfigurationToTerraform = dynamicSecretKubernetesConfigurationToTerraform;
-exports.dynamicSecretKubernetesConfigurationToHclTerraform = dynamicSecretKubernetesConfigurationToHclTerraform;
-exports.dynamicSecretKubernetesMetadataToTerraform = dynamicSecretKubernetesMetadataToTerraform;
-exports.dynamicSecretKubernetesMetadataToHclTerraform = dynamicSecretKubernetesMetadataToHclTerraform;
-var cdktf = require("cdktf");
-function dynamicSecretKubernetesConfigurationApiConfigToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dynamicSecretKubernetesConfigurationApiConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -43,14 +15,14 @@ function dynamicSecretKubernetesConfigurationApiConfigToTerraform(struct) {
         enable_ssl: cdktf.booleanToTerraform(struct.enableSsl),
     };
 }
-function dynamicSecretKubernetesConfigurationApiConfigToHclTerraform(struct) {
+export function dynamicSecretKubernetesConfigurationApiConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ca: {
             value: cdktf.stringToHclTerraform(struct.ca),
             isBlock: false,
@@ -77,154 +49,120 @@ function dynamicSecretKubernetesConfigurationApiConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretKubernetesConfigurationApiConfigOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesConfigurationApiConfigOutputReference, _super);
+export class DynamicSecretKubernetesConfigurationApiConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretKubernetesConfigurationApiConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ca !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ca = this._ca;
-            }
-            if (this._clusterToken !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.clusterToken = this._clusterToken;
-            }
-            if (this._clusterUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.clusterUrl = this._clusterUrl;
-            }
-            if (this._enableSsl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enableSsl = this._enableSsl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ca = undefined;
-                this._clusterToken = undefined;
-                this._clusterUrl = undefined;
-                this._enableSsl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ca = value.ca;
-                this._clusterToken = value.clusterToken;
-                this._clusterUrl = value.clusterUrl;
-                this._enableSsl = value.enableSsl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "ca", {
-        get: function () {
-            return this.getStringAttribute('ca');
-        },
-        set: function (value) {
-            this._ca = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype.resetCa = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ca !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ca = this._ca;
+        }
+        if (this._clusterToken !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.clusterToken = this._clusterToken;
+        }
+        if (this._clusterUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.clusterUrl = this._clusterUrl;
+        }
+        if (this._enableSsl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enableSsl = this._enableSsl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ca = undefined;
+            this._clusterToken = undefined;
+            this._clusterUrl = undefined;
+            this._enableSsl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ca = value.ca;
+            this._clusterToken = value.clusterToken;
+            this._clusterUrl = value.clusterUrl;
+            this._enableSsl = value.enableSsl;
+        }
+    }
+    // ca - computed: false, optional: true, required: false
+    _ca;
+    get ca() {
+        return this.getStringAttribute('ca');
+    }
+    set ca(value) {
+        this._ca = value;
+    }
+    resetCa() {
         this._ca = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "caInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ca;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "clusterToken", {
-        get: function () {
-            return this.getStringAttribute('cluster_token');
-        },
-        set: function (value) {
-            this._clusterToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "clusterTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clusterToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "clusterUrl", {
-        get: function () {
-            return this.getStringAttribute('cluster_url');
-        },
-        set: function (value) {
-            this._clusterUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "clusterUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clusterUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "enableSsl", {
-        get: function () {
-            return this.getBooleanAttribute('enable_ssl');
-        },
-        set: function (value) {
-            this._enableSsl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype.resetEnableSsl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caInput() {
+        return this._ca;
+    }
+    // cluster_token - computed: false, optional: false, required: true
+    _clusterToken;
+    get clusterToken() {
+        return this.getStringAttribute('cluster_token');
+    }
+    set clusterToken(value) {
+        this._clusterToken = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get clusterTokenInput() {
+        return this._clusterToken;
+    }
+    // cluster_url - computed: false, optional: false, required: true
+    _clusterUrl;
+    get clusterUrl() {
+        return this.getStringAttribute('cluster_url');
+    }
+    set clusterUrl(value) {
+        this._clusterUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get clusterUrlInput() {
+        return this._clusterUrl;
+    }
+    // enable_ssl - computed: false, optional: true, required: false
+    _enableSsl;
+    get enableSsl() {
+        return this.getBooleanAttribute('enable_ssl');
+    }
+    set enableSsl(value) {
+        this._enableSsl = value;
+    }
+    resetEnableSsl() {
         this._enableSsl = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationApiConfigOutputReference.prototype, "enableSslInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enableSsl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretKubernetesConfigurationApiConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretKubernetesConfigurationApiConfigOutputReference = DynamicSecretKubernetesConfigurationApiConfigOutputReference;
-function dynamicSecretKubernetesConfigurationDynamicConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enableSslInput() {
+        return this._enableSsl;
+    }
+}
+export function dynamicSecretKubernetesConfigurationDynamicConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -237,14 +175,14 @@ function dynamicSecretKubernetesConfigurationDynamicConfigToTerraform(struct) {
         role_type: cdktf.stringToTerraform(struct.roleType),
     };
 }
-function dynamicSecretKubernetesConfigurationDynamicConfigToHclTerraform(struct) {
+export function dynamicSecretKubernetesConfigurationDynamicConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed_namespaces: {
             value: cdktf.stringToHclTerraform(struct.allowedNamespaces),
             isBlock: false,
@@ -265,124 +203,96 @@ function dynamicSecretKubernetesConfigurationDynamicConfigToHclTerraform(struct)
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretKubernetesConfigurationDynamicConfigOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference, _super);
+export class DynamicSecretKubernetesConfigurationDynamicConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretKubernetesConfigurationDynamicConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowedNamespaces !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedNamespaces = this._allowedNamespaces;
-            }
-            if (this._role !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.role = this._role;
-            }
-            if (this._roleType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.roleType = this._roleType;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowedNamespaces = undefined;
-                this._role = undefined;
-                this._roleType = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowedNamespaces = value.allowedNamespaces;
-                this._role = value.role;
-                this._roleType = value.roleType;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "allowedNamespaces", {
-        get: function () {
-            return this.getStringAttribute('allowed_namespaces');
-        },
-        set: function (value) {
-            this._allowedNamespaces = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "allowedNamespacesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedNamespaces;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "role", {
-        get: function () {
-            return this.getStringAttribute('role');
-        },
-        set: function (value) {
-            this._role = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "roleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._role;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "roleType", {
-        get: function () {
-            return this.getStringAttribute('role_type');
-        },
-        set: function (value) {
-            this._roleType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationDynamicConfigOutputReference.prototype, "roleTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._roleType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretKubernetesConfigurationDynamicConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretKubernetesConfigurationDynamicConfigOutputReference = DynamicSecretKubernetesConfigurationDynamicConfigOutputReference;
-function dynamicSecretKubernetesConfigurationStaticConfigToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowedNamespaces !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedNamespaces = this._allowedNamespaces;
+        }
+        if (this._role !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.role = this._role;
+        }
+        if (this._roleType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.roleType = this._roleType;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowedNamespaces = undefined;
+            this._role = undefined;
+            this._roleType = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowedNamespaces = value.allowedNamespaces;
+            this._role = value.role;
+            this._roleType = value.roleType;
+        }
+    }
+    // allowed_namespaces - computed: false, optional: false, required: true
+    _allowedNamespaces;
+    get allowedNamespaces() {
+        return this.getStringAttribute('allowed_namespaces');
+    }
+    set allowedNamespaces(value) {
+        this._allowedNamespaces = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedNamespacesInput() {
+        return this._allowedNamespaces;
+    }
+    // role - computed: false, optional: false, required: true
+    _role;
+    get role() {
+        return this.getStringAttribute('role');
+    }
+    set role(value) {
+        this._role = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get roleInput() {
+        return this._role;
+    }
+    // role_type - computed: false, optional: false, required: true
+    _roleType;
+    get roleType() {
+        return this.getStringAttribute('role_type');
+    }
+    set roleType(value) {
+        this._roleType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get roleTypeInput() {
+        return this._roleType;
+    }
+}
+export function dynamicSecretKubernetesConfigurationStaticConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -394,14 +304,14 @@ function dynamicSecretKubernetesConfigurationStaticConfigToTerraform(struct) {
         service_account_name: cdktf.stringToTerraform(struct.serviceAccountName),
     };
 }
-function dynamicSecretKubernetesConfigurationStaticConfigToHclTerraform(struct) {
+export function dynamicSecretKubernetesConfigurationStaticConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         namespace: {
             value: cdktf.stringToHclTerraform(struct.namespace),
             isBlock: false,
@@ -416,100 +326,78 @@ function dynamicSecretKubernetesConfigurationStaticConfigToHclTerraform(struct) 
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretKubernetesConfigurationStaticConfigOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesConfigurationStaticConfigOutputReference, _super);
+export class DynamicSecretKubernetesConfigurationStaticConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretKubernetesConfigurationStaticConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretKubernetesConfigurationStaticConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._namespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespace = this._namespace;
-            }
-            if (this._serviceAccountName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceAccountName = this._serviceAccountName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._namespace = undefined;
-                this._serviceAccountName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._namespace = value.namespace;
-                this._serviceAccountName = value.serviceAccountName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationStaticConfigOutputReference.prototype, "namespace", {
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        set: function (value) {
-            this._namespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationStaticConfigOutputReference.prototype, "namespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationStaticConfigOutputReference.prototype, "serviceAccountName", {
-        get: function () {
-            return this.getStringAttribute('service_account_name');
-        },
-        set: function (value) {
-            this._serviceAccountName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationStaticConfigOutputReference.prototype, "serviceAccountNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceAccountName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretKubernetesConfigurationStaticConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretKubernetesConfigurationStaticConfigOutputReference = DynamicSecretKubernetesConfigurationStaticConfigOutputReference;
-function dynamicSecretKubernetesConfigurationToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._namespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespace = this._namespace;
+        }
+        if (this._serviceAccountName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceAccountName = this._serviceAccountName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._namespace = undefined;
+            this._serviceAccountName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._namespace = value.namespace;
+            this._serviceAccountName = value.serviceAccountName;
+        }
+    }
+    // namespace - computed: false, optional: false, required: true
+    _namespace;
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    set namespace(value) {
+        this._namespace = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceInput() {
+        return this._namespace;
+    }
+    // service_account_name - computed: false, optional: false, required: true
+    _serviceAccountName;
+    get serviceAccountName() {
+        return this.getStringAttribute('service_account_name');
+    }
+    set serviceAccountName(value) {
+        this._serviceAccountName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceAccountNameInput() {
+        return this._serviceAccountName;
+    }
+}
+export function dynamicSecretKubernetesConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -526,14 +414,14 @@ function dynamicSecretKubernetesConfigurationToTerraform(struct) {
         static_config: dynamicSecretKubernetesConfigurationStaticConfigToTerraform(struct.staticConfig),
     };
 }
-function dynamicSecretKubernetesConfigurationToHclTerraform(struct) {
+export function dynamicSecretKubernetesConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         api_config: {
             value: dynamicSecretKubernetesConfigurationApiConfigToHclTerraform(struct.apiConfig),
             isBlock: true,
@@ -578,242 +466,183 @@ function dynamicSecretKubernetesConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretKubernetesConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesConfigurationOutputReference, _super);
+export class DynamicSecretKubernetesConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretKubernetesConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // api_config - computed: false, optional: true, required: false
-        _this._apiConfig = new DynamicSecretKubernetesConfigurationApiConfigOutputReference(_this, "api_config");
-        // dynamic_config - computed: false, optional: true, required: false
-        _this._dynamicConfig = new DynamicSecretKubernetesConfigurationDynamicConfigOutputReference(_this, "dynamic_config");
-        // static_config - computed: false, optional: true, required: false
-        _this._staticConfig = new DynamicSecretKubernetesConfigurationStaticConfigOutputReference(_this, "static_config");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._apiConfig) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.apiConfig = (_b = this._apiConfig) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._audiences !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.audiences = this._audiences;
-            }
-            if (this._authMethod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authMethod = this._authMethod;
-            }
-            if (this._credentialType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.credentialType = this._credentialType;
-            }
-            if (((_c = this._dynamicConfig) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dynamicConfig = (_d = this._dynamicConfig) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._gatewayId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gatewayId = this._gatewayId;
-            }
-            if (((_e = this._staticConfig) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.staticConfig = (_f = this._staticConfig) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._apiConfig.internalValue = undefined;
-                this._audiences = undefined;
-                this._authMethod = undefined;
-                this._credentialType = undefined;
-                this._dynamicConfig.internalValue = undefined;
-                this._gatewayId = undefined;
-                this._staticConfig.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._apiConfig.internalValue = value.apiConfig;
-                this._audiences = value.audiences;
-                this._authMethod = value.authMethod;
-                this._credentialType = value.credentialType;
-                this._dynamicConfig.internalValue = value.dynamicConfig;
-                this._gatewayId = value.gatewayId;
-                this._staticConfig.internalValue = value.staticConfig;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "apiConfig", {
-        get: function () {
-            return this._apiConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.putApiConfig = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._apiConfig?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.apiConfig = this._apiConfig?.internalValue;
+        }
+        if (this._audiences !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.audiences = this._audiences;
+        }
+        if (this._authMethod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authMethod = this._authMethod;
+        }
+        if (this._credentialType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.credentialType = this._credentialType;
+        }
+        if (this._dynamicConfig?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dynamicConfig = this._dynamicConfig?.internalValue;
+        }
+        if (this._gatewayId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gatewayId = this._gatewayId;
+        }
+        if (this._staticConfig?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.staticConfig = this._staticConfig?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._apiConfig.internalValue = undefined;
+            this._audiences = undefined;
+            this._authMethod = undefined;
+            this._credentialType = undefined;
+            this._dynamicConfig.internalValue = undefined;
+            this._gatewayId = undefined;
+            this._staticConfig.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._apiConfig.internalValue = value.apiConfig;
+            this._audiences = value.audiences;
+            this._authMethod = value.authMethod;
+            this._credentialType = value.credentialType;
+            this._dynamicConfig.internalValue = value.dynamicConfig;
+            this._gatewayId = value.gatewayId;
+            this._staticConfig.internalValue = value.staticConfig;
+        }
+    }
+    // api_config - computed: false, optional: true, required: false
+    _apiConfig = new DynamicSecretKubernetesConfigurationApiConfigOutputReference(this, "api_config");
+    get apiConfig() {
+        return this._apiConfig;
+    }
+    putApiConfig(value) {
         this._apiConfig.internalValue = value;
-    };
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.resetApiConfig = function () {
+    }
+    resetApiConfig() {
         this._apiConfig.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "apiConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apiConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "audiences", {
-        get: function () {
-            return this.getListAttribute('audiences');
-        },
-        set: function (value) {
-            this._audiences = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.resetAudiences = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get apiConfigInput() {
+        return this._apiConfig.internalValue;
+    }
+    // audiences - computed: false, optional: true, required: false
+    _audiences;
+    get audiences() {
+        return this.getListAttribute('audiences');
+    }
+    set audiences(value) {
+        this._audiences = value;
+    }
+    resetAudiences() {
         this._audiences = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "audiencesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._audiences;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "authMethod", {
-        get: function () {
-            return this.getStringAttribute('auth_method');
-        },
-        set: function (value) {
-            this._authMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "authMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "credentialType", {
-        get: function () {
-            return this.getStringAttribute('credential_type');
-        },
-        set: function (value) {
-            this._credentialType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "credentialTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._credentialType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "dynamicConfig", {
-        get: function () {
-            return this._dynamicConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.putDynamicConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get audiencesInput() {
+        return this._audiences;
+    }
+    // auth_method - computed: false, optional: false, required: true
+    _authMethod;
+    get authMethod() {
+        return this.getStringAttribute('auth_method');
+    }
+    set authMethod(value) {
+        this._authMethod = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authMethodInput() {
+        return this._authMethod;
+    }
+    // credential_type - computed: false, optional: false, required: true
+    _credentialType;
+    get credentialType() {
+        return this.getStringAttribute('credential_type');
+    }
+    set credentialType(value) {
+        this._credentialType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get credentialTypeInput() {
+        return this._credentialType;
+    }
+    // dynamic_config - computed: false, optional: true, required: false
+    _dynamicConfig = new DynamicSecretKubernetesConfigurationDynamicConfigOutputReference(this, "dynamic_config");
+    get dynamicConfig() {
+        return this._dynamicConfig;
+    }
+    putDynamicConfig(value) {
         this._dynamicConfig.internalValue = value;
-    };
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.resetDynamicConfig = function () {
+    }
+    resetDynamicConfig() {
         this._dynamicConfig.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "dynamicConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dynamicConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "gatewayId", {
-        get: function () {
-            return this.getStringAttribute('gateway_id');
-        },
-        set: function (value) {
-            this._gatewayId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.resetGatewayId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dynamicConfigInput() {
+        return this._dynamicConfig.internalValue;
+    }
+    // gateway_id - computed: false, optional: true, required: false
+    _gatewayId;
+    get gatewayId() {
+        return this.getStringAttribute('gateway_id');
+    }
+    set gatewayId(value) {
+        this._gatewayId = value;
+    }
+    resetGatewayId() {
         this._gatewayId = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "gatewayIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gatewayId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "staticConfig", {
-        get: function () {
-            return this._staticConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.putStaticConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayIdInput() {
+        return this._gatewayId;
+    }
+    // static_config - computed: false, optional: true, required: false
+    _staticConfig = new DynamicSecretKubernetesConfigurationStaticConfigOutputReference(this, "static_config");
+    get staticConfig() {
+        return this._staticConfig;
+    }
+    putStaticConfig(value) {
         this._staticConfig.internalValue = value;
-    };
-    DynamicSecretKubernetesConfigurationOutputReference.prototype.resetStaticConfig = function () {
+    }
+    resetStaticConfig() {
         this._staticConfig.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetesConfigurationOutputReference.prototype, "staticConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._staticConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretKubernetesConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretKubernetesConfigurationOutputReference = DynamicSecretKubernetesConfigurationOutputReference;
-function dynamicSecretKubernetesMetadataToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get staticConfigInput() {
+        return this._staticConfig.internalValue;
+    }
+}
+export function dynamicSecretKubernetesMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -825,14 +654,14 @@ function dynamicSecretKubernetesMetadataToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function dynamicSecretKubernetesMetadataToHclTerraform(struct) {
+export function dynamicSecretKubernetesMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key: {
             value: cdktf.stringToHclTerraform(struct.key),
             isBlock: false,
@@ -847,129 +676,123 @@ function dynamicSecretKubernetesMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretKubernetesMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesMetadataOutputReference, _super);
+export class DynamicSecretKubernetesMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretKubernetesMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretKubernetesMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.key = this._key;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._key = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._key = value.key;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesMetadataOutputReference.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesMetadataOutputReference.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesMetadataOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetesMetadataOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretKubernetesMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretKubernetesMetadataOutputReference = DynamicSecretKubernetesMetadataOutputReference;
-var DynamicSecretKubernetesMetadataList = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetesMetadataList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.key = this._key;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._key = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._key = value.key;
+            this._value = value.value;
+        }
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class DynamicSecretKubernetesMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretKubernetesMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretKubernetesMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretKubernetesMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretKubernetesMetadataList;
-}(cdktf.ComplexList));
-exports.DynamicSecretKubernetesMetadataList = DynamicSecretKubernetesMetadataList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_kubernetes infisical_dynamic_secret_kubernetes}
 */
-var DynamicSecretKubernetes = /** @class */ (function (_super) {
-    __extends(DynamicSecretKubernetes, _super);
+export class DynamicSecretKubernetes extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_dynamic_secret_kubernetes";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DynamicSecretKubernetes resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DynamicSecretKubernetes to import
+    * @param importFromId The id of the existing DynamicSecretKubernetes that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_kubernetes#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DynamicSecretKubernetes to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_kubernetes", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -980,8 +803,8 @@ var DynamicSecretKubernetes = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DynamicSecretKubernetesConfig
     */
-    function DynamicSecretKubernetes(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_dynamic_secret_kubernetes',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -994,221 +817,145 @@ var DynamicSecretKubernetes = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configuration - computed: false, optional: false, required: true
-        _this._configuration = new DynamicSecretKubernetesConfigurationOutputReference(_this, "configuration");
-        // metadata - computed: false, optional: true, required: false
-        _this._metadata = new DynamicSecretKubernetesMetadataList(_this, "metadata", true);
-        _this._configuration.internalValue = config.configuration;
-        _this._defaultTtl = config.defaultTtl;
-        _this._environmentSlug = config.environmentSlug;
-        _this._maxTtl = config.maxTtl;
-        _this._metadata.internalValue = config.metadata;
-        _this._name = config.name;
-        _this._path = config.path;
-        _this._projectSlug = config.projectSlug;
-        _this._usernameTemplate = config.usernameTemplate;
-        return _this;
+        });
+        this._configuration.internalValue = config.configuration;
+        this._defaultTtl = config.defaultTtl;
+        this._environmentSlug = config.environmentSlug;
+        this._maxTtl = config.maxTtl;
+        this._metadata.internalValue = config.metadata;
+        this._name = config.name;
+        this._path = config.path;
+        this._projectSlug = config.projectSlug;
+        this._usernameTemplate = config.usernameTemplate;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DynamicSecretKubernetes resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DynamicSecretKubernetes to import
-    * @param importFromId The id of the existing DynamicSecretKubernetes that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_kubernetes#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DynamicSecretKubernetes to import is found
-    */
-    DynamicSecretKubernetes.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_kubernetes", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetes.prototype.putConfiguration = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configuration - computed: false, optional: false, required: true
+    _configuration = new DynamicSecretKubernetesConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "defaultTtl", {
-        get: function () {
-            return this.getStringAttribute('default_ttl');
-        },
-        set: function (value) {
-            this._defaultTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "defaultTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "maxTtl", {
-        get: function () {
-            return this.getStringAttribute('max_ttl');
-        },
-        set: function (value) {
-            this._maxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetes.prototype.resetMaxTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
+    // default_ttl - computed: false, optional: false, required: true
+    _defaultTtl;
+    get defaultTtl() {
+        return this.getStringAttribute('default_ttl');
+    }
+    set defaultTtl(value) {
+        this._defaultTtl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultTtlInput() {
+        return this._defaultTtl;
+    }
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_ttl - computed: false, optional: true, required: false
+    _maxTtl;
+    get maxTtl() {
+        return this.getStringAttribute('max_ttl');
+    }
+    set maxTtl(value) {
+        this._maxTtl = value;
+    }
+    resetMaxTtl() {
         this._maxTtl = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "maxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetes.prototype.putMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxTtlInput() {
+        return this._maxTtl;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata = new DynamicSecretKubernetesMetadataList(this, "metadata", true);
+    get metadata() {
+        return this._metadata;
+    }
+    putMetadata(value) {
         this._metadata.internalValue = value;
-    };
-    DynamicSecretKubernetes.prototype.resetMetadata = function () {
+    }
+    resetMetadata() {
         this._metadata.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "usernameTemplate", {
-        get: function () {
-            return this.getStringAttribute('username_template');
-        },
-        set: function (value) {
-            this._usernameTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretKubernetes.prototype.resetUsernameTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // username_template - computed: false, optional: true, required: false
+    _usernameTemplate;
+    get usernameTemplate() {
+        return this.getStringAttribute('username_template');
+    }
+    set usernameTemplate(value) {
+        this._usernameTemplate = value;
+    }
+    resetUsernameTemplate() {
         this._usernameTemplate = undefined;
-    };
-    Object.defineProperty(DynamicSecretKubernetes.prototype, "usernameTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usernameTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameTemplateInput() {
+        return this._usernameTemplate;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DynamicSecretKubernetes.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             configuration: dynamicSecretKubernetesConfigurationToTerraform(this._configuration.internalValue),
             default_ttl: cdktf.stringToTerraform(this._defaultTtl),
@@ -1220,9 +967,9 @@ var DynamicSecretKubernetes = /** @class */ (function (_super) {
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             username_template: cdktf.stringToTerraform(this._usernameTemplate),
         };
-    };
-    DynamicSecretKubernetes.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             configuration: {
                 value: dynamicSecretKubernetesConfigurationToHclTerraform(this._configuration.internalValue),
                 isBlock: true,
@@ -1279,15 +1026,6 @@ var DynamicSecretKubernetes = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DynamicSecretKubernetes.tfResourceType = "infisical_dynamic_secret_kubernetes";
-    return DynamicSecretKubernetes;
-}(cdktf.TerraformResource));
-exports.DynamicSecretKubernetes = DynamicSecretKubernetes;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

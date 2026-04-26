@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_organization
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustOrganization = exports.ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference = exports.ZeroTrustOrganizationMfaConfigOutputReference = exports.ZeroTrustOrganizationLoginDesignOutputReference = exports.ZeroTrustOrganizationCustomPagesOutputReference = void 0;
-exports.zeroTrustOrganizationCustomPagesToTerraform = zeroTrustOrganizationCustomPagesToTerraform;
-exports.zeroTrustOrganizationCustomPagesToHclTerraform = zeroTrustOrganizationCustomPagesToHclTerraform;
-exports.zeroTrustOrganizationLoginDesignToTerraform = zeroTrustOrganizationLoginDesignToTerraform;
-exports.zeroTrustOrganizationLoginDesignToHclTerraform = zeroTrustOrganizationLoginDesignToHclTerraform;
-exports.zeroTrustOrganizationMfaConfigToTerraform = zeroTrustOrganizationMfaConfigToTerraform;
-exports.zeroTrustOrganizationMfaConfigToHclTerraform = zeroTrustOrganizationMfaConfigToHclTerraform;
-exports.zeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform = zeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform;
-exports.zeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform = zeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustOrganizationCustomPagesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustOrganizationCustomPagesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -39,14 +13,14 @@ function zeroTrustOrganizationCustomPagesToTerraform(struct) {
         identity_denied: cdktf.stringToTerraform(struct.identityDenied),
     };
 }
-function zeroTrustOrganizationCustomPagesToHclTerraform(struct) {
+export function zeroTrustOrganizationCustomPagesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         forbidden: {
             value: cdktf.stringToHclTerraform(struct.forbidden),
             isBlock: false,
@@ -61,106 +35,84 @@ function zeroTrustOrganizationCustomPagesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustOrganizationCustomPagesOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustOrganizationCustomPagesOutputReference, _super);
+export class ZeroTrustOrganizationCustomPagesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustOrganizationCustomPagesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustOrganizationCustomPagesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._forbidden !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.forbidden = this._forbidden;
-            }
-            if (this._identityDenied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.identityDenied = this._identityDenied;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._forbidden = undefined;
-                this._identityDenied = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._forbidden = value.forbidden;
-                this._identityDenied = value.identityDenied;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationCustomPagesOutputReference.prototype, "forbidden", {
-        get: function () {
-            return this.getStringAttribute('forbidden');
-        },
-        set: function (value) {
-            this._forbidden = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationCustomPagesOutputReference.prototype.resetForbidden = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._forbidden !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.forbidden = this._forbidden;
+        }
+        if (this._identityDenied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.identityDenied = this._identityDenied;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._forbidden = undefined;
+            this._identityDenied = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._forbidden = value.forbidden;
+            this._identityDenied = value.identityDenied;
+        }
+    }
+    // forbidden - computed: false, optional: true, required: false
+    _forbidden;
+    get forbidden() {
+        return this.getStringAttribute('forbidden');
+    }
+    set forbidden(value) {
+        this._forbidden = value;
+    }
+    resetForbidden() {
         this._forbidden = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationCustomPagesOutputReference.prototype, "forbiddenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forbidden;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationCustomPagesOutputReference.prototype, "identityDenied", {
-        get: function () {
-            return this.getStringAttribute('identity_denied');
-        },
-        set: function (value) {
-            this._identityDenied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationCustomPagesOutputReference.prototype.resetIdentityDenied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forbiddenInput() {
+        return this._forbidden;
+    }
+    // identity_denied - computed: false, optional: true, required: false
+    _identityDenied;
+    get identityDenied() {
+        return this.getStringAttribute('identity_denied');
+    }
+    set identityDenied(value) {
+        this._identityDenied = value;
+    }
+    resetIdentityDenied() {
         this._identityDenied = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationCustomPagesOutputReference.prototype, "identityDeniedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityDenied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustOrganizationCustomPagesOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustOrganizationCustomPagesOutputReference = ZeroTrustOrganizationCustomPagesOutputReference;
-function zeroTrustOrganizationLoginDesignToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityDeniedInput() {
+        return this._identityDenied;
+    }
+}
+export function zeroTrustOrganizationLoginDesignToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -175,14 +127,14 @@ function zeroTrustOrganizationLoginDesignToTerraform(struct) {
         text_color: cdktf.stringToTerraform(struct.textColor),
     };
 }
-function zeroTrustOrganizationLoginDesignToHclTerraform(struct) {
+export function zeroTrustOrganizationLoginDesignToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         background_color: {
             value: cdktf.stringToHclTerraform(struct.backgroundColor),
             isBlock: false,
@@ -215,187 +167,147 @@ function zeroTrustOrganizationLoginDesignToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustOrganizationLoginDesignOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustOrganizationLoginDesignOutputReference, _super);
+export class ZeroTrustOrganizationLoginDesignOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustOrganizationLoginDesignOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._backgroundColor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.backgroundColor = this._backgroundColor;
-            }
-            if (this._footerText !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.footerText = this._footerText;
-            }
-            if (this._headerText !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headerText = this._headerText;
-            }
-            if (this._logoPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.logoPath = this._logoPath;
-            }
-            if (this._textColor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.textColor = this._textColor;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._backgroundColor = undefined;
-                this._footerText = undefined;
-                this._headerText = undefined;
-                this._logoPath = undefined;
-                this._textColor = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._backgroundColor = value.backgroundColor;
-                this._footerText = value.footerText;
-                this._headerText = value.headerText;
-                this._logoPath = value.logoPath;
-                this._textColor = value.textColor;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "backgroundColor", {
-        get: function () {
-            return this.getStringAttribute('background_color');
-        },
-        set: function (value) {
-            this._backgroundColor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationLoginDesignOutputReference.prototype.resetBackgroundColor = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._backgroundColor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.backgroundColor = this._backgroundColor;
+        }
+        if (this._footerText !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.footerText = this._footerText;
+        }
+        if (this._headerText !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headerText = this._headerText;
+        }
+        if (this._logoPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.logoPath = this._logoPath;
+        }
+        if (this._textColor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.textColor = this._textColor;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._backgroundColor = undefined;
+            this._footerText = undefined;
+            this._headerText = undefined;
+            this._logoPath = undefined;
+            this._textColor = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._backgroundColor = value.backgroundColor;
+            this._footerText = value.footerText;
+            this._headerText = value.headerText;
+            this._logoPath = value.logoPath;
+            this._textColor = value.textColor;
+        }
+    }
+    // background_color - computed: false, optional: true, required: false
+    _backgroundColor;
+    get backgroundColor() {
+        return this.getStringAttribute('background_color');
+    }
+    set backgroundColor(value) {
+        this._backgroundColor = value;
+    }
+    resetBackgroundColor() {
         this._backgroundColor = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "backgroundColorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._backgroundColor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "footerText", {
-        get: function () {
-            return this.getStringAttribute('footer_text');
-        },
-        set: function (value) {
-            this._footerText = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationLoginDesignOutputReference.prototype.resetFooterText = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get backgroundColorInput() {
+        return this._backgroundColor;
+    }
+    // footer_text - computed: false, optional: true, required: false
+    _footerText;
+    get footerText() {
+        return this.getStringAttribute('footer_text');
+    }
+    set footerText(value) {
+        this._footerText = value;
+    }
+    resetFooterText() {
         this._footerText = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "footerTextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._footerText;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "headerText", {
-        get: function () {
-            return this.getStringAttribute('header_text');
-        },
-        set: function (value) {
-            this._headerText = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationLoginDesignOutputReference.prototype.resetHeaderText = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get footerTextInput() {
+        return this._footerText;
+    }
+    // header_text - computed: false, optional: true, required: false
+    _headerText;
+    get headerText() {
+        return this.getStringAttribute('header_text');
+    }
+    set headerText(value) {
+        this._headerText = value;
+    }
+    resetHeaderText() {
         this._headerText = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "headerTextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headerText;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "logoPath", {
-        get: function () {
-            return this.getStringAttribute('logo_path');
-        },
-        set: function (value) {
-            this._logoPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationLoginDesignOutputReference.prototype.resetLogoPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headerTextInput() {
+        return this._headerText;
+    }
+    // logo_path - computed: false, optional: true, required: false
+    _logoPath;
+    get logoPath() {
+        return this.getStringAttribute('logo_path');
+    }
+    set logoPath(value) {
+        this._logoPath = value;
+    }
+    resetLogoPath() {
         this._logoPath = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "logoPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logoPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "textColor", {
-        get: function () {
-            return this.getStringAttribute('text_color');
-        },
-        set: function (value) {
-            this._textColor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationLoginDesignOutputReference.prototype.resetTextColor = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logoPathInput() {
+        return this._logoPath;
+    }
+    // text_color - computed: false, optional: true, required: false
+    _textColor;
+    get textColor() {
+        return this.getStringAttribute('text_color');
+    }
+    set textColor(value) {
+        this._textColor = value;
+    }
+    resetTextColor() {
         this._textColor = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationLoginDesignOutputReference.prototype, "textColorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._textColor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustOrganizationLoginDesignOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustOrganizationLoginDesignOutputReference = ZeroTrustOrganizationLoginDesignOutputReference;
-function zeroTrustOrganizationMfaConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get textColorInput() {
+        return this._textColor;
+    }
+}
+export function zeroTrustOrganizationMfaConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -409,14 +321,14 @@ function zeroTrustOrganizationMfaConfigToTerraform(struct) {
         session_duration: cdktf.stringToTerraform(struct.sessionDuration),
     };
 }
-function zeroTrustOrganizationMfaConfigToHclTerraform(struct) {
+export function zeroTrustOrganizationMfaConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed_authenticators: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowedAuthenticators),
             isBlock: false,
@@ -443,160 +355,126 @@ function zeroTrustOrganizationMfaConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustOrganizationMfaConfigOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustOrganizationMfaConfigOutputReference, _super);
+export class ZeroTrustOrganizationMfaConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustOrganizationMfaConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowedAuthenticators !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedAuthenticators = this._allowedAuthenticators;
-            }
-            if (this._amrMatchingSessionDuration !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.amrMatchingSessionDuration = this._amrMatchingSessionDuration;
-            }
-            if (this._requiredAaguids !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredAaguids = this._requiredAaguids;
-            }
-            if (this._sessionDuration !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sessionDuration = this._sessionDuration;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowedAuthenticators = undefined;
-                this._amrMatchingSessionDuration = undefined;
-                this._requiredAaguids = undefined;
-                this._sessionDuration = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowedAuthenticators = value.allowedAuthenticators;
-                this._amrMatchingSessionDuration = value.amrMatchingSessionDuration;
-                this._requiredAaguids = value.requiredAaguids;
-                this._sessionDuration = value.sessionDuration;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "allowedAuthenticators", {
-        get: function () {
-            return this.getListAttribute('allowed_authenticators');
-        },
-        set: function (value) {
-            this._allowedAuthenticators = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaConfigOutputReference.prototype.resetAllowedAuthenticators = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowedAuthenticators !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedAuthenticators = this._allowedAuthenticators;
+        }
+        if (this._amrMatchingSessionDuration !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.amrMatchingSessionDuration = this._amrMatchingSessionDuration;
+        }
+        if (this._requiredAaguids !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredAaguids = this._requiredAaguids;
+        }
+        if (this._sessionDuration !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sessionDuration = this._sessionDuration;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowedAuthenticators = undefined;
+            this._amrMatchingSessionDuration = undefined;
+            this._requiredAaguids = undefined;
+            this._sessionDuration = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowedAuthenticators = value.allowedAuthenticators;
+            this._amrMatchingSessionDuration = value.amrMatchingSessionDuration;
+            this._requiredAaguids = value.requiredAaguids;
+            this._sessionDuration = value.sessionDuration;
+        }
+    }
+    // allowed_authenticators - computed: false, optional: true, required: false
+    _allowedAuthenticators;
+    get allowedAuthenticators() {
+        return this.getListAttribute('allowed_authenticators');
+    }
+    set allowedAuthenticators(value) {
+        this._allowedAuthenticators = value;
+    }
+    resetAllowedAuthenticators() {
         this._allowedAuthenticators = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "allowedAuthenticatorsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedAuthenticators;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "amrMatchingSessionDuration", {
-        get: function () {
-            return this.getStringAttribute('amr_matching_session_duration');
-        },
-        set: function (value) {
-            this._amrMatchingSessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaConfigOutputReference.prototype.resetAmrMatchingSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedAuthenticatorsInput() {
+        return this._allowedAuthenticators;
+    }
+    // amr_matching_session_duration - computed: false, optional: true, required: false
+    _amrMatchingSessionDuration;
+    get amrMatchingSessionDuration() {
+        return this.getStringAttribute('amr_matching_session_duration');
+    }
+    set amrMatchingSessionDuration(value) {
+        this._amrMatchingSessionDuration = value;
+    }
+    resetAmrMatchingSessionDuration() {
         this._amrMatchingSessionDuration = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "amrMatchingSessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._amrMatchingSessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "requiredAaguids", {
-        get: function () {
-            return this.getStringAttribute('required_aaguids');
-        },
-        set: function (value) {
-            this._requiredAaguids = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaConfigOutputReference.prototype.resetRequiredAaguids = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get amrMatchingSessionDurationInput() {
+        return this._amrMatchingSessionDuration;
+    }
+    // required_aaguids - computed: false, optional: true, required: false
+    _requiredAaguids;
+    get requiredAaguids() {
+        return this.getStringAttribute('required_aaguids');
+    }
+    set requiredAaguids(value) {
+        this._requiredAaguids = value;
+    }
+    resetRequiredAaguids() {
         this._requiredAaguids = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "requiredAaguidsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredAaguids;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "sessionDuration", {
-        get: function () {
-            return this.getStringAttribute('session_duration');
-        },
-        set: function (value) {
-            this._sessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaConfigOutputReference.prototype.resetSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredAaguidsInput() {
+        return this._requiredAaguids;
+    }
+    // session_duration - computed: false, optional: true, required: false
+    _sessionDuration;
+    get sessionDuration() {
+        return this.getStringAttribute('session_duration');
+    }
+    set sessionDuration(value) {
+        this._sessionDuration = value;
+    }
+    resetSessionDuration() {
         this._sessionDuration = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaConfigOutputReference.prototype, "sessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustOrganizationMfaConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustOrganizationMfaConfigOutputReference = ZeroTrustOrganizationMfaConfigOutputReference;
-function zeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sessionDurationInput() {
+        return this._sessionDuration;
+    }
+}
+export function zeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -611,14 +489,14 @@ function zeroTrustOrganizationMfaSshPivKeyRequirementsToTerraform(struct) {
         touch_policy: cdktf.stringToTerraform(struct.touchPolicy),
     };
 }
-function zeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform(struct) {
+export function zeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         pin_policy: {
             value: cdktf.stringToHclTerraform(struct.pinPolicy),
             isBlock: false,
@@ -651,191 +529,167 @@ function zeroTrustOrganizationMfaSshPivKeyRequirementsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference, _super);
+export class ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._pinPolicy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pinPolicy = this._pinPolicy;
-            }
-            if (this._requireFipsDevice !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireFipsDevice = this._requireFipsDevice;
-            }
-            if (this._sshKeySize !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sshKeySize = this._sshKeySize;
-            }
-            if (this._sshKeyType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sshKeyType = this._sshKeyType;
-            }
-            if (this._touchPolicy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.touchPolicy = this._touchPolicy;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._pinPolicy = undefined;
-                this._requireFipsDevice = undefined;
-                this._sshKeySize = undefined;
-                this._sshKeyType = undefined;
-                this._touchPolicy = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._pinPolicy = value.pinPolicy;
-                this._requireFipsDevice = value.requireFipsDevice;
-                this._sshKeySize = value.sshKeySize;
-                this._sshKeyType = value.sshKeyType;
-                this._touchPolicy = value.touchPolicy;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "pinPolicy", {
-        get: function () {
-            return this.getStringAttribute('pin_policy');
-        },
-        set: function (value) {
-            this._pinPolicy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype.resetPinPolicy = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._pinPolicy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pinPolicy = this._pinPolicy;
+        }
+        if (this._requireFipsDevice !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireFipsDevice = this._requireFipsDevice;
+        }
+        if (this._sshKeySize !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sshKeySize = this._sshKeySize;
+        }
+        if (this._sshKeyType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sshKeyType = this._sshKeyType;
+        }
+        if (this._touchPolicy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.touchPolicy = this._touchPolicy;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._pinPolicy = undefined;
+            this._requireFipsDevice = undefined;
+            this._sshKeySize = undefined;
+            this._sshKeyType = undefined;
+            this._touchPolicy = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._pinPolicy = value.pinPolicy;
+            this._requireFipsDevice = value.requireFipsDevice;
+            this._sshKeySize = value.sshKeySize;
+            this._sshKeyType = value.sshKeyType;
+            this._touchPolicy = value.touchPolicy;
+        }
+    }
+    // pin_policy - computed: false, optional: true, required: false
+    _pinPolicy;
+    get pinPolicy() {
+        return this.getStringAttribute('pin_policy');
+    }
+    set pinPolicy(value) {
+        this._pinPolicy = value;
+    }
+    resetPinPolicy() {
         this._pinPolicy = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "pinPolicyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pinPolicy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "requireFipsDevice", {
-        get: function () {
-            return this.getBooleanAttribute('require_fips_device');
-        },
-        set: function (value) {
-            this._requireFipsDevice = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype.resetRequireFipsDevice = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pinPolicyInput() {
+        return this._pinPolicy;
+    }
+    // require_fips_device - computed: false, optional: true, required: false
+    _requireFipsDevice;
+    get requireFipsDevice() {
+        return this.getBooleanAttribute('require_fips_device');
+    }
+    set requireFipsDevice(value) {
+        this._requireFipsDevice = value;
+    }
+    resetRequireFipsDevice() {
         this._requireFipsDevice = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "requireFipsDeviceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireFipsDevice;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "sshKeySize", {
-        get: function () {
-            return this.getNumberListAttribute('ssh_key_size');
-        },
-        set: function (value) {
-            this._sshKeySize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype.resetSshKeySize = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireFipsDeviceInput() {
+        return this._requireFipsDevice;
+    }
+    // ssh_key_size - computed: false, optional: true, required: false
+    _sshKeySize;
+    get sshKeySize() {
+        return this.getNumberListAttribute('ssh_key_size');
+    }
+    set sshKeySize(value) {
+        this._sshKeySize = value;
+    }
+    resetSshKeySize() {
         this._sshKeySize = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "sshKeySizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sshKeySize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "sshKeyType", {
-        get: function () {
-            return this.getListAttribute('ssh_key_type');
-        },
-        set: function (value) {
-            this._sshKeyType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype.resetSshKeyType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sshKeySizeInput() {
+        return this._sshKeySize;
+    }
+    // ssh_key_type - computed: false, optional: true, required: false
+    _sshKeyType;
+    get sshKeyType() {
+        return this.getListAttribute('ssh_key_type');
+    }
+    set sshKeyType(value) {
+        this._sshKeyType = value;
+    }
+    resetSshKeyType() {
         this._sshKeyType = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "sshKeyTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sshKeyType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "touchPolicy", {
-        get: function () {
-            return this.getStringAttribute('touch_policy');
-        },
-        set: function (value) {
-            this._touchPolicy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype.resetTouchPolicy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sshKeyTypeInput() {
+        return this._sshKeyType;
+    }
+    // touch_policy - computed: false, optional: true, required: false
+    _touchPolicy;
+    get touchPolicy() {
+        return this.getStringAttribute('touch_policy');
+    }
+    set touchPolicy(value) {
+        this._touchPolicy = value;
+    }
+    resetTouchPolicy() {
         this._touchPolicy = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference.prototype, "touchPolicyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._touchPolicy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference = ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get touchPolicyInput() {
+        return this._touchPolicy;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_organization cloudflare_zero_trust_organization}
 */
-var ZeroTrustOrganization = /** @class */ (function (_super) {
-    __extends(ZeroTrustOrganization, _super);
+export class ZeroTrustOrganization extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_organization";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustOrganization resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustOrganization to import
+    * @param importFromId The id of the existing ZeroTrustOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_organization#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustOrganization to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_organization", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -846,9 +700,8 @@ var ZeroTrustOrganization = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustOrganizationConfig = {}
     */
-    function ZeroTrustOrganization(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_organization',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -861,452 +714,319 @@ var ZeroTrustOrganization = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // custom_pages - computed: false, optional: true, required: false
-        _this._customPages = new ZeroTrustOrganizationCustomPagesOutputReference(_this, "custom_pages");
-        // login_design - computed: false, optional: true, required: false
-        _this._loginDesign = new ZeroTrustOrganizationLoginDesignOutputReference(_this, "login_design");
-        // mfa_config - computed: false, optional: true, required: false
-        _this._mfaConfig = new ZeroTrustOrganizationMfaConfigOutputReference(_this, "mfa_config");
-        // mfa_ssh_piv_key_requirements - computed: false, optional: true, required: false
-        _this._mfaSshPivKeyRequirements = new ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference(_this, "mfa_ssh_piv_key_requirements");
-        _this._accountId = config.accountId;
-        _this._allowAuthenticateViaWarp = config.allowAuthenticateViaWarp;
-        _this._authDomain = config.authDomain;
-        _this._autoRedirectToIdentity = config.autoRedirectToIdentity;
-        _this._customPages.internalValue = config.customPages;
-        _this._denyUnmatchedRequests = config.denyUnmatchedRequests;
-        _this._denyUnmatchedRequestsExemptedZoneNames = config.denyUnmatchedRequestsExemptedZoneNames;
-        _this._isUiReadOnly = config.isUiReadOnly;
-        _this._loginDesign.internalValue = config.loginDesign;
-        _this._mfaConfig.internalValue = config.mfaConfig;
-        _this._mfaConfigurationAllowed = config.mfaConfigurationAllowed;
-        _this._mfaRequiredForAllApps = config.mfaRequiredForAllApps;
-        _this._mfaSshPivKeyRequirements.internalValue = config.mfaSshPivKeyRequirements;
-        _this._name = config.name;
-        _this._sessionDuration = config.sessionDuration;
-        _this._uiReadOnlyToggleReason = config.uiReadOnlyToggleReason;
-        _this._userSeatExpirationInactiveTime = config.userSeatExpirationInactiveTime;
-        _this._warpAuthSessionDuration = config.warpAuthSessionDuration;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._allowAuthenticateViaWarp = config.allowAuthenticateViaWarp;
+        this._authDomain = config.authDomain;
+        this._autoRedirectToIdentity = config.autoRedirectToIdentity;
+        this._customPages.internalValue = config.customPages;
+        this._denyUnmatchedRequests = config.denyUnmatchedRequests;
+        this._denyUnmatchedRequestsExemptedZoneNames = config.denyUnmatchedRequestsExemptedZoneNames;
+        this._isUiReadOnly = config.isUiReadOnly;
+        this._loginDesign.internalValue = config.loginDesign;
+        this._mfaConfig.internalValue = config.mfaConfig;
+        this._mfaConfigurationAllowed = config.mfaConfigurationAllowed;
+        this._mfaRequiredForAllApps = config.mfaRequiredForAllApps;
+        this._mfaSshPivKeyRequirements.internalValue = config.mfaSshPivKeyRequirements;
+        this._name = config.name;
+        this._sessionDuration = config.sessionDuration;
+        this._uiReadOnlyToggleReason = config.uiReadOnlyToggleReason;
+        this._userSeatExpirationInactiveTime = config.userSeatExpirationInactiveTime;
+        this._warpAuthSessionDuration = config.warpAuthSessionDuration;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustOrganization resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustOrganization to import
-    * @param importFromId The id of the existing ZeroTrustOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_organization#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustOrganization to import is found
-    */
-    ZeroTrustOrganization.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_organization", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "allowAuthenticateViaWarp", {
-        get: function () {
-            return this.getBooleanAttribute('allow_authenticate_via_warp');
-        },
-        set: function (value) {
-            this._allowAuthenticateViaWarp = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetAllowAuthenticateViaWarp = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // allow_authenticate_via_warp - computed: true, optional: true, required: false
+    _allowAuthenticateViaWarp;
+    get allowAuthenticateViaWarp() {
+        return this.getBooleanAttribute('allow_authenticate_via_warp');
+    }
+    set allowAuthenticateViaWarp(value) {
+        this._allowAuthenticateViaWarp = value;
+    }
+    resetAllowAuthenticateViaWarp() {
         this._allowAuthenticateViaWarp = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "allowAuthenticateViaWarpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowAuthenticateViaWarp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "authDomain", {
-        get: function () {
-            return this.getStringAttribute('auth_domain');
-        },
-        set: function (value) {
-            this._authDomain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetAuthDomain = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowAuthenticateViaWarpInput() {
+        return this._allowAuthenticateViaWarp;
+    }
+    // auth_domain - computed: false, optional: true, required: false
+    _authDomain;
+    get authDomain() {
+        return this.getStringAttribute('auth_domain');
+    }
+    set authDomain(value) {
+        this._authDomain = value;
+    }
+    resetAuthDomain() {
         this._authDomain = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "authDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "autoRedirectToIdentity", {
-        get: function () {
-            return this.getBooleanAttribute('auto_redirect_to_identity');
-        },
-        set: function (value) {
-            this._autoRedirectToIdentity = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetAutoRedirectToIdentity = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authDomainInput() {
+        return this._authDomain;
+    }
+    // auto_redirect_to_identity - computed: true, optional: true, required: false
+    _autoRedirectToIdentity;
+    get autoRedirectToIdentity() {
+        return this.getBooleanAttribute('auto_redirect_to_identity');
+    }
+    set autoRedirectToIdentity(value) {
+        this._autoRedirectToIdentity = value;
+    }
+    resetAutoRedirectToIdentity() {
         this._autoRedirectToIdentity = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "autoRedirectToIdentityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._autoRedirectToIdentity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "customPages", {
-        get: function () {
-            return this._customPages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.putCustomPages = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get autoRedirectToIdentityInput() {
+        return this._autoRedirectToIdentity;
+    }
+    // custom_pages - computed: false, optional: true, required: false
+    _customPages = new ZeroTrustOrganizationCustomPagesOutputReference(this, "custom_pages");
+    get customPages() {
+        return this._customPages;
+    }
+    putCustomPages(value) {
         this._customPages.internalValue = value;
-    };
-    ZeroTrustOrganization.prototype.resetCustomPages = function () {
+    }
+    resetCustomPages() {
         this._customPages.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "customPagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customPages.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "denyUnmatchedRequests", {
-        get: function () {
-            return this.getBooleanAttribute('deny_unmatched_requests');
-        },
-        set: function (value) {
-            this._denyUnmatchedRequests = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetDenyUnmatchedRequests = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customPagesInput() {
+        return this._customPages.internalValue;
+    }
+    // deny_unmatched_requests - computed: false, optional: true, required: false
+    _denyUnmatchedRequests;
+    get denyUnmatchedRequests() {
+        return this.getBooleanAttribute('deny_unmatched_requests');
+    }
+    set denyUnmatchedRequests(value) {
+        this._denyUnmatchedRequests = value;
+    }
+    resetDenyUnmatchedRequests() {
         this._denyUnmatchedRequests = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "denyUnmatchedRequestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denyUnmatchedRequests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "denyUnmatchedRequestsExemptedZoneNames", {
-        get: function () {
-            return this.getListAttribute('deny_unmatched_requests_exempted_zone_names');
-        },
-        set: function (value) {
-            this._denyUnmatchedRequestsExemptedZoneNames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetDenyUnmatchedRequestsExemptedZoneNames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get denyUnmatchedRequestsInput() {
+        return this._denyUnmatchedRequests;
+    }
+    // deny_unmatched_requests_exempted_zone_names - computed: false, optional: true, required: false
+    _denyUnmatchedRequestsExemptedZoneNames;
+    get denyUnmatchedRequestsExemptedZoneNames() {
+        return this.getListAttribute('deny_unmatched_requests_exempted_zone_names');
+    }
+    set denyUnmatchedRequestsExemptedZoneNames(value) {
+        this._denyUnmatchedRequestsExemptedZoneNames = value;
+    }
+    resetDenyUnmatchedRequestsExemptedZoneNames() {
         this._denyUnmatchedRequestsExemptedZoneNames = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "denyUnmatchedRequestsExemptedZoneNamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denyUnmatchedRequestsExemptedZoneNames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "isUiReadOnly", {
-        get: function () {
-            return this.getBooleanAttribute('is_ui_read_only');
-        },
-        set: function (value) {
-            this._isUiReadOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetIsUiReadOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get denyUnmatchedRequestsExemptedZoneNamesInput() {
+        return this._denyUnmatchedRequestsExemptedZoneNames;
+    }
+    // is_ui_read_only - computed: true, optional: true, required: false
+    _isUiReadOnly;
+    get isUiReadOnly() {
+        return this.getBooleanAttribute('is_ui_read_only');
+    }
+    set isUiReadOnly(value) {
+        this._isUiReadOnly = value;
+    }
+    resetIsUiReadOnly() {
         this._isUiReadOnly = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "isUiReadOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isUiReadOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "loginDesign", {
-        get: function () {
-            return this._loginDesign;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.putLoginDesign = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isUiReadOnlyInput() {
+        return this._isUiReadOnly;
+    }
+    // login_design - computed: false, optional: true, required: false
+    _loginDesign = new ZeroTrustOrganizationLoginDesignOutputReference(this, "login_design");
+    get loginDesign() {
+        return this._loginDesign;
+    }
+    putLoginDesign(value) {
         this._loginDesign.internalValue = value;
-    };
-    ZeroTrustOrganization.prototype.resetLoginDesign = function () {
+    }
+    resetLoginDesign() {
         this._loginDesign.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "loginDesignInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._loginDesign.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaConfig", {
-        get: function () {
-            return this._mfaConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.putMfaConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get loginDesignInput() {
+        return this._loginDesign.internalValue;
+    }
+    // mfa_config - computed: false, optional: true, required: false
+    _mfaConfig = new ZeroTrustOrganizationMfaConfigOutputReference(this, "mfa_config");
+    get mfaConfig() {
+        return this._mfaConfig;
+    }
+    putMfaConfig(value) {
         this._mfaConfig.internalValue = value;
-    };
-    ZeroTrustOrganization.prototype.resetMfaConfig = function () {
+    }
+    resetMfaConfig() {
         this._mfaConfig.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mfaConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaConfigurationAllowed", {
-        get: function () {
-            return this.getBooleanAttribute('mfa_configuration_allowed');
-        },
-        set: function (value) {
-            this._mfaConfigurationAllowed = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetMfaConfigurationAllowed = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mfaConfigInput() {
+        return this._mfaConfig.internalValue;
+    }
+    // mfa_configuration_allowed - computed: true, optional: true, required: false
+    _mfaConfigurationAllowed;
+    get mfaConfigurationAllowed() {
+        return this.getBooleanAttribute('mfa_configuration_allowed');
+    }
+    set mfaConfigurationAllowed(value) {
+        this._mfaConfigurationAllowed = value;
+    }
+    resetMfaConfigurationAllowed() {
         this._mfaConfigurationAllowed = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaConfigurationAllowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mfaConfigurationAllowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaRequiredForAllApps", {
-        get: function () {
-            return this.getBooleanAttribute('mfa_required_for_all_apps');
-        },
-        set: function (value) {
-            this._mfaRequiredForAllApps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetMfaRequiredForAllApps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mfaConfigurationAllowedInput() {
+        return this._mfaConfigurationAllowed;
+    }
+    // mfa_required_for_all_apps - computed: true, optional: true, required: false
+    _mfaRequiredForAllApps;
+    get mfaRequiredForAllApps() {
+        return this.getBooleanAttribute('mfa_required_for_all_apps');
+    }
+    set mfaRequiredForAllApps(value) {
+        this._mfaRequiredForAllApps = value;
+    }
+    resetMfaRequiredForAllApps() {
         this._mfaRequiredForAllApps = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaRequiredForAllAppsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mfaRequiredForAllApps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaSshPivKeyRequirements", {
-        get: function () {
-            return this._mfaSshPivKeyRequirements;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.putMfaSshPivKeyRequirements = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mfaRequiredForAllAppsInput() {
+        return this._mfaRequiredForAllApps;
+    }
+    // mfa_ssh_piv_key_requirements - computed: false, optional: true, required: false
+    _mfaSshPivKeyRequirements = new ZeroTrustOrganizationMfaSshPivKeyRequirementsOutputReference(this, "mfa_ssh_piv_key_requirements");
+    get mfaSshPivKeyRequirements() {
+        return this._mfaSshPivKeyRequirements;
+    }
+    putMfaSshPivKeyRequirements(value) {
         this._mfaSshPivKeyRequirements.internalValue = value;
-    };
-    ZeroTrustOrganization.prototype.resetMfaSshPivKeyRequirements = function () {
+    }
+    resetMfaSshPivKeyRequirements() {
         this._mfaSshPivKeyRequirements.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "mfaSshPivKeyRequirementsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mfaSshPivKeyRequirements.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mfaSshPivKeyRequirementsInput() {
+        return this._mfaSshPivKeyRequirements.internalValue;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "sessionDuration", {
-        get: function () {
-            return this.getStringAttribute('session_duration');
-        },
-        set: function (value) {
-            this._sessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // session_duration - computed: false, optional: true, required: false
+    _sessionDuration;
+    get sessionDuration() {
+        return this.getStringAttribute('session_duration');
+    }
+    set sessionDuration(value) {
+        this._sessionDuration = value;
+    }
+    resetSessionDuration() {
         this._sessionDuration = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "sessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "uiReadOnlyToggleReason", {
-        get: function () {
-            return this.getStringAttribute('ui_read_only_toggle_reason');
-        },
-        set: function (value) {
-            this._uiReadOnlyToggleReason = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetUiReadOnlyToggleReason = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sessionDurationInput() {
+        return this._sessionDuration;
+    }
+    // ui_read_only_toggle_reason - computed: true, optional: true, required: false
+    _uiReadOnlyToggleReason;
+    get uiReadOnlyToggleReason() {
+        return this.getStringAttribute('ui_read_only_toggle_reason');
+    }
+    set uiReadOnlyToggleReason(value) {
+        this._uiReadOnlyToggleReason = value;
+    }
+    resetUiReadOnlyToggleReason() {
         this._uiReadOnlyToggleReason = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "uiReadOnlyToggleReasonInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uiReadOnlyToggleReason;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "userSeatExpirationInactiveTime", {
-        get: function () {
-            return this.getStringAttribute('user_seat_expiration_inactive_time');
-        },
-        set: function (value) {
-            this._userSeatExpirationInactiveTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetUserSeatExpirationInactiveTime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get uiReadOnlyToggleReasonInput() {
+        return this._uiReadOnlyToggleReason;
+    }
+    // user_seat_expiration_inactive_time - computed: false, optional: true, required: false
+    _userSeatExpirationInactiveTime;
+    get userSeatExpirationInactiveTime() {
+        return this.getStringAttribute('user_seat_expiration_inactive_time');
+    }
+    set userSeatExpirationInactiveTime(value) {
+        this._userSeatExpirationInactiveTime = value;
+    }
+    resetUserSeatExpirationInactiveTime() {
         this._userSeatExpirationInactiveTime = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "userSeatExpirationInactiveTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userSeatExpirationInactiveTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "warpAuthSessionDuration", {
-        get: function () {
-            return this.getStringAttribute('warp_auth_session_duration');
-        },
-        set: function (value) {
-            this._warpAuthSessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetWarpAuthSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userSeatExpirationInactiveTimeInput() {
+        return this._userSeatExpirationInactiveTime;
+    }
+    // warp_auth_session_duration - computed: false, optional: true, required: false
+    _warpAuthSessionDuration;
+    get warpAuthSessionDuration() {
+        return this.getStringAttribute('warp_auth_session_duration');
+    }
+    set warpAuthSessionDuration(value) {
+        this._warpAuthSessionDuration = value;
+    }
+    resetWarpAuthSessionDuration() {
         this._warpAuthSessionDuration = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "warpAuthSessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._warpAuthSessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustOrganization.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustOrganization.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get warpAuthSessionDurationInput() {
+        return this._warpAuthSessionDuration;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZeroTrustOrganization.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustOrganization.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             allow_authenticate_via_warp: cdktf.booleanToTerraform(this._allowAuthenticateViaWarp),
@@ -1328,9 +1048,9 @@ var ZeroTrustOrganization = /** @class */ (function (_super) {
             warp_auth_session_duration: cdktf.stringToTerraform(this._warpAuthSessionDuration),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZeroTrustOrganization.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1447,15 +1167,6 @@ var ZeroTrustOrganization = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustOrganization.tfResourceType = "cloudflare_zero_trust_organization";
-    return ZeroTrustOrganization;
-}(cdktf.TerraformResource));
-exports.ZeroTrustOrganization = ZeroTrustOrganization;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

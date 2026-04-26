@@ -1,43 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dns_location
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDnsLocation = exports.ZeroTrustDnsLocationNetworksList = exports.ZeroTrustDnsLocationNetworksOutputReference = exports.ZeroTrustDnsLocationEndpointsOutputReference = exports.ZeroTrustDnsLocationEndpointsIpv6OutputReference = exports.ZeroTrustDnsLocationEndpointsIpv6NetworksList = exports.ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference = exports.ZeroTrustDnsLocationEndpointsIpv4OutputReference = exports.ZeroTrustDnsLocationEndpointsDotOutputReference = exports.ZeroTrustDnsLocationEndpointsDotNetworksList = exports.ZeroTrustDnsLocationEndpointsDotNetworksOutputReference = exports.ZeroTrustDnsLocationEndpointsDohOutputReference = exports.ZeroTrustDnsLocationEndpointsDohNetworksList = exports.ZeroTrustDnsLocationEndpointsDohNetworksOutputReference = void 0;
-exports.zeroTrustDnsLocationEndpointsDohNetworksToTerraform = zeroTrustDnsLocationEndpointsDohNetworksToTerraform;
-exports.zeroTrustDnsLocationEndpointsDohNetworksToHclTerraform = zeroTrustDnsLocationEndpointsDohNetworksToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsDohToTerraform = zeroTrustDnsLocationEndpointsDohToTerraform;
-exports.zeroTrustDnsLocationEndpointsDohToHclTerraform = zeroTrustDnsLocationEndpointsDohToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsDotNetworksToTerraform = zeroTrustDnsLocationEndpointsDotNetworksToTerraform;
-exports.zeroTrustDnsLocationEndpointsDotNetworksToHclTerraform = zeroTrustDnsLocationEndpointsDotNetworksToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsDotToTerraform = zeroTrustDnsLocationEndpointsDotToTerraform;
-exports.zeroTrustDnsLocationEndpointsDotToHclTerraform = zeroTrustDnsLocationEndpointsDotToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv4ToTerraform = zeroTrustDnsLocationEndpointsIpv4ToTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv4ToHclTerraform = zeroTrustDnsLocationEndpointsIpv4ToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform = zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv6NetworksToHclTerraform = zeroTrustDnsLocationEndpointsIpv6NetworksToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv6ToTerraform = zeroTrustDnsLocationEndpointsIpv6ToTerraform;
-exports.zeroTrustDnsLocationEndpointsIpv6ToHclTerraform = zeroTrustDnsLocationEndpointsIpv6ToHclTerraform;
-exports.zeroTrustDnsLocationEndpointsToTerraform = zeroTrustDnsLocationEndpointsToTerraform;
-exports.zeroTrustDnsLocationEndpointsToHclTerraform = zeroTrustDnsLocationEndpointsToHclTerraform;
-exports.zeroTrustDnsLocationNetworksToTerraform = zeroTrustDnsLocationNetworksToTerraform;
-exports.zeroTrustDnsLocationNetworksToHclTerraform = zeroTrustDnsLocationNetworksToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDnsLocationEndpointsDohNetworksToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDnsLocationEndpointsDohNetworksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -48,14 +12,14 @@ function zeroTrustDnsLocationEndpointsDohNetworksToTerraform(struct) {
         network: cdktf.stringToTerraform(struct.network),
     };
 }
-function zeroTrustDnsLocationEndpointsDohNetworksToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsDohNetworksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         network: {
             value: cdktf.stringToHclTerraform(struct.network),
             isBlock: false,
@@ -64,101 +28,85 @@ function zeroTrustDnsLocationEndpointsDohNetworksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsDohNetworksOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDohNetworksOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsDohNetworksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsDohNetworksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohNetworksOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._network !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.network = this._network;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._network = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._network = value.network;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohNetworksOutputReference.prototype, "network", {
-        get: function () {
-            return this.getStringAttribute('network');
-        },
-        set: function (value) {
-            this._network = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohNetworksOutputReference.prototype, "networkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._network;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsDohNetworksOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsDohNetworksOutputReference = ZeroTrustDnsLocationEndpointsDohNetworksOutputReference;
-var ZeroTrustDnsLocationEndpointsDohNetworksList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDohNetworksList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._network !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.network = this._network;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._network = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._network = value.network;
+        }
+    }
+    // network - computed: true, optional: false, required: true
+    _network;
+    get network() {
+        return this.getStringAttribute('network');
+    }
+    set network(value) {
+        this._network = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkInput() {
+        return this._network;
+    }
+}
+export class ZeroTrustDnsLocationEndpointsDohNetworksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsDohNetworksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDnsLocationEndpointsDohNetworksList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDnsLocationEndpointsDohNetworksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDnsLocationEndpointsDohNetworksList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDnsLocationEndpointsDohNetworksList = ZeroTrustDnsLocationEndpointsDohNetworksList;
-function zeroTrustDnsLocationEndpointsDohToTerraform(struct) {
+    }
+}
+export function zeroTrustDnsLocationEndpointsDohToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -171,14 +119,14 @@ function zeroTrustDnsLocationEndpointsDohToTerraform(struct) {
         require_token: cdktf.booleanToTerraform(struct.requireToken),
     };
 }
-function zeroTrustDnsLocationEndpointsDohToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsDohToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -199,136 +147,105 @@ function zeroTrustDnsLocationEndpointsDohToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsDohOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDohOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsDohOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDnsLocationEndpointsDohOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // networks - computed: true, optional: true, required: false
-        _this._networks = new ZeroTrustDnsLocationEndpointsDohNetworksList(_this, "networks", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_a = this._networks) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networks = (_b = this._networks) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._requireToken !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireToken = this._requireToken;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._networks.internalValue = undefined;
-                this._requireToken = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._networks.internalValue = value.networks;
-                this._requireToken = value.requireToken;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsDohOutputReference.prototype.resetEnabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._networks?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networks = this._networks?.internalValue;
+        }
+        if (this._requireToken !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireToken = this._requireToken;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._networks.internalValue = undefined;
+            this._requireToken = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._networks.internalValue = value.networks;
+            this._requireToken = value.requireToken;
+        }
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "networks", {
-        get: function () {
-            return this._networks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsDohOutputReference.prototype.putNetworks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // networks - computed: true, optional: true, required: false
+    _networks = new ZeroTrustDnsLocationEndpointsDohNetworksList(this, "networks", false);
+    get networks() {
+        return this._networks;
+    }
+    putNetworks(value) {
         this._networks.internalValue = value;
-    };
-    ZeroTrustDnsLocationEndpointsDohOutputReference.prototype.resetNetworks = function () {
+    }
+    resetNetworks() {
         this._networks.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "networksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "requireToken", {
-        get: function () {
-            return this.getBooleanAttribute('require_token');
-        },
-        set: function (value) {
-            this._requireToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsDohOutputReference.prototype.resetRequireToken = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksInput() {
+        return this._networks.internalValue;
+    }
+    // require_token - computed: true, optional: true, required: false
+    _requireToken;
+    get requireToken() {
+        return this.getBooleanAttribute('require_token');
+    }
+    set requireToken(value) {
+        this._requireToken = value;
+    }
+    resetRequireToken() {
         this._requireToken = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDohOutputReference.prototype, "requireTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsDohOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsDohOutputReference = ZeroTrustDnsLocationEndpointsDohOutputReference;
-function zeroTrustDnsLocationEndpointsDotNetworksToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireTokenInput() {
+        return this._requireToken;
+    }
+}
+export function zeroTrustDnsLocationEndpointsDotNetworksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -339,14 +256,14 @@ function zeroTrustDnsLocationEndpointsDotNetworksToTerraform(struct) {
         network: cdktf.stringToTerraform(struct.network),
     };
 }
-function zeroTrustDnsLocationEndpointsDotNetworksToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsDotNetworksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         network: {
             value: cdktf.stringToHclTerraform(struct.network),
             isBlock: false,
@@ -355,101 +272,85 @@ function zeroTrustDnsLocationEndpointsDotNetworksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsDotNetworksOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDotNetworksOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsDotNetworksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsDotNetworksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotNetworksOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._network !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.network = this._network;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._network = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._network = value.network;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotNetworksOutputReference.prototype, "network", {
-        get: function () {
-            return this.getStringAttribute('network');
-        },
-        set: function (value) {
-            this._network = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotNetworksOutputReference.prototype, "networkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._network;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsDotNetworksOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsDotNetworksOutputReference = ZeroTrustDnsLocationEndpointsDotNetworksOutputReference;
-var ZeroTrustDnsLocationEndpointsDotNetworksList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDotNetworksList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._network !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.network = this._network;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._network = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._network = value.network;
+        }
+    }
+    // network - computed: true, optional: false, required: true
+    _network;
+    get network() {
+        return this.getStringAttribute('network');
+    }
+    set network(value) {
+        this._network = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkInput() {
+        return this._network;
+    }
+}
+export class ZeroTrustDnsLocationEndpointsDotNetworksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsDotNetworksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDnsLocationEndpointsDotNetworksList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDnsLocationEndpointsDotNetworksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDnsLocationEndpointsDotNetworksList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDnsLocationEndpointsDotNetworksList = ZeroTrustDnsLocationEndpointsDotNetworksList;
-function zeroTrustDnsLocationEndpointsDotToTerraform(struct) {
+    }
+}
+export function zeroTrustDnsLocationEndpointsDotToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -461,14 +362,14 @@ function zeroTrustDnsLocationEndpointsDotToTerraform(struct) {
         networks: cdktf.listMapper(zeroTrustDnsLocationEndpointsDotNetworksToTerraform, false)(struct.networks),
     };
 }
-function zeroTrustDnsLocationEndpointsDotToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsDotToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -483,109 +384,84 @@ function zeroTrustDnsLocationEndpointsDotToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsDotOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsDotOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsDotOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDnsLocationEndpointsDotOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // networks - computed: true, optional: true, required: false
-        _this._networks = new ZeroTrustDnsLocationEndpointsDotNetworksList(_this, "networks", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_a = this._networks) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networks = (_b = this._networks) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._networks.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._networks.internalValue = value.networks;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsDotOutputReference.prototype.resetEnabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._networks?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networks = this._networks?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._networks.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._networks.internalValue = value.networks;
+        }
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotOutputReference.prototype, "networks", {
-        get: function () {
-            return this._networks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsDotOutputReference.prototype.putNetworks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // networks - computed: true, optional: true, required: false
+    _networks = new ZeroTrustDnsLocationEndpointsDotNetworksList(this, "networks", false);
+    get networks() {
+        return this._networks;
+    }
+    putNetworks(value) {
         this._networks.internalValue = value;
-    };
-    ZeroTrustDnsLocationEndpointsDotOutputReference.prototype.resetNetworks = function () {
+    }
+    resetNetworks() {
         this._networks.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsDotOutputReference.prototype, "networksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsDotOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsDotOutputReference = ZeroTrustDnsLocationEndpointsDotOutputReference;
-function zeroTrustDnsLocationEndpointsIpv4ToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksInput() {
+        return this._networks.internalValue;
+    }
+}
+export function zeroTrustDnsLocationEndpointsIpv4ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -596,14 +472,14 @@ function zeroTrustDnsLocationEndpointsIpv4ToTerraform(struct) {
         enabled: cdktf.booleanToTerraform(struct.enabled),
     };
 }
-function zeroTrustDnsLocationEndpointsIpv4ToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsIpv4ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -612,79 +488,63 @@ function zeroTrustDnsLocationEndpointsIpv4ToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsIpv4OutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsIpv4OutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsIpv4OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDnsLocationEndpointsIpv4OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv4OutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv4OutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsIpv4OutputReference.prototype.resetEnabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+        }
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv4OutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsIpv4OutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsIpv4OutputReference = ZeroTrustDnsLocationEndpointsIpv4OutputReference;
-function zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+}
+export function zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -695,14 +555,14 @@ function zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform(struct) {
         network: cdktf.stringToTerraform(struct.network),
     };
 }
-function zeroTrustDnsLocationEndpointsIpv6NetworksToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsIpv6NetworksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         network: {
             value: cdktf.stringToHclTerraform(struct.network),
             isBlock: false,
@@ -711,101 +571,85 @@ function zeroTrustDnsLocationEndpointsIpv6NetworksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._network !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.network = this._network;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._network = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._network = value.network;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference.prototype, "network", {
-        get: function () {
-            return this.getStringAttribute('network');
-        },
-        set: function (value) {
-            this._network = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference.prototype, "networkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._network;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference = ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference;
-var ZeroTrustDnsLocationEndpointsIpv6NetworksList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsIpv6NetworksList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._network !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.network = this._network;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._network = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._network = value.network;
+        }
+    }
+    // network - computed: true, optional: false, required: true
+    _network;
+    get network() {
+        return this.getStringAttribute('network');
+    }
+    set network(value) {
+        this._network = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkInput() {
+        return this._network;
+    }
+}
+export class ZeroTrustDnsLocationEndpointsIpv6NetworksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationEndpointsIpv6NetworksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDnsLocationEndpointsIpv6NetworksList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDnsLocationEndpointsIpv6NetworksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDnsLocationEndpointsIpv6NetworksList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDnsLocationEndpointsIpv6NetworksList = ZeroTrustDnsLocationEndpointsIpv6NetworksList;
-function zeroTrustDnsLocationEndpointsIpv6ToTerraform(struct) {
+    }
+}
+export function zeroTrustDnsLocationEndpointsIpv6ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -817,14 +661,14 @@ function zeroTrustDnsLocationEndpointsIpv6ToTerraform(struct) {
         networks: cdktf.listMapper(zeroTrustDnsLocationEndpointsIpv6NetworksToTerraform, false)(struct.networks),
     };
 }
-function zeroTrustDnsLocationEndpointsIpv6ToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsIpv6ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -839,109 +683,84 @@ function zeroTrustDnsLocationEndpointsIpv6ToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsIpv6OutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsIpv6OutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsIpv6OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDnsLocationEndpointsIpv6OutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // networks - computed: true, optional: true, required: false
-        _this._networks = new ZeroTrustDnsLocationEndpointsIpv6NetworksList(_this, "networks", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_a = this._networks) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networks = (_b = this._networks) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._networks.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._networks.internalValue = value.networks;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype.resetEnabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._networks?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networks = this._networks?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._networks.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._networks.internalValue = value.networks;
+        }
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype, "networks", {
-        get: function () {
-            return this._networks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype.putNetworks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // networks - computed: true, optional: true, required: false
+    _networks = new ZeroTrustDnsLocationEndpointsIpv6NetworksList(this, "networks", false);
+    get networks() {
+        return this._networks;
+    }
+    putNetworks(value) {
         this._networks.internalValue = value;
-    };
-    ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype.resetNetworks = function () {
+    }
+    resetNetworks() {
         this._networks.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsIpv6OutputReference.prototype, "networksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsIpv6OutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsIpv6OutputReference = ZeroTrustDnsLocationEndpointsIpv6OutputReference;
-function zeroTrustDnsLocationEndpointsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksInput() {
+        return this._networks.internalValue;
+    }
+}
+export function zeroTrustDnsLocationEndpointsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -955,14 +774,14 @@ function zeroTrustDnsLocationEndpointsToTerraform(struct) {
         ipv6: zeroTrustDnsLocationEndpointsIpv6ToTerraform(struct.ipv6),
     };
 }
-function zeroTrustDnsLocationEndpointsToHclTerraform(struct) {
+export function zeroTrustDnsLocationEndpointsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         doh: {
             value: zeroTrustDnsLocationEndpointsDohToHclTerraform(struct.doh),
             isBlock: true,
@@ -989,157 +808,114 @@ function zeroTrustDnsLocationEndpointsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationEndpointsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationEndpointsOutputReference, _super);
+export class ZeroTrustDnsLocationEndpointsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDnsLocationEndpointsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // doh - computed: false, optional: false, required: true
-        _this._doh = new ZeroTrustDnsLocationEndpointsDohOutputReference(_this, "doh");
-        // dot - computed: false, optional: false, required: true
-        _this._dot = new ZeroTrustDnsLocationEndpointsDotOutputReference(_this, "dot");
-        // ipv4 - computed: false, optional: false, required: true
-        _this._ipv4 = new ZeroTrustDnsLocationEndpointsIpv4OutputReference(_this, "ipv4");
-        // ipv6 - computed: false, optional: false, required: true
-        _this._ipv6 = new ZeroTrustDnsLocationEndpointsIpv6OutputReference(_this, "ipv6");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._doh) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.doh = (_b = this._doh) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._dot) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dot = (_d = this._dot) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._ipv4) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipv4 = (_f = this._ipv4) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._ipv6) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipv6 = (_h = this._ipv6) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._doh.internalValue = undefined;
-                this._dot.internalValue = undefined;
-                this._ipv4.internalValue = undefined;
-                this._ipv6.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._doh.internalValue = value.doh;
-                this._dot.internalValue = value.dot;
-                this._ipv4.internalValue = value.ipv4;
-                this._ipv6.internalValue = value.ipv6;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "doh", {
-        get: function () {
-            return this._doh;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsOutputReference.prototype.putDoh = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._doh?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.doh = this._doh?.internalValue;
+        }
+        if (this._dot?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dot = this._dot?.internalValue;
+        }
+        if (this._ipv4?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipv4 = this._ipv4?.internalValue;
+        }
+        if (this._ipv6?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipv6 = this._ipv6?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._doh.internalValue = undefined;
+            this._dot.internalValue = undefined;
+            this._ipv4.internalValue = undefined;
+            this._ipv6.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._doh.internalValue = value.doh;
+            this._dot.internalValue = value.dot;
+            this._ipv4.internalValue = value.ipv4;
+            this._ipv6.internalValue = value.ipv6;
+        }
+    }
+    // doh - computed: false, optional: false, required: true
+    _doh = new ZeroTrustDnsLocationEndpointsDohOutputReference(this, "doh");
+    get doh() {
+        return this._doh;
+    }
+    putDoh(value) {
         this._doh.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "dohInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._doh.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "dot", {
-        get: function () {
-            return this._dot;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsOutputReference.prototype.putDot = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dohInput() {
+        return this._doh.internalValue;
+    }
+    // dot - computed: false, optional: false, required: true
+    _dot = new ZeroTrustDnsLocationEndpointsDotOutputReference(this, "dot");
+    get dot() {
+        return this._dot;
+    }
+    putDot(value) {
         this._dot.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "dotInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dot.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "ipv4", {
-        get: function () {
-            return this._ipv4;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsOutputReference.prototype.putIpv4 = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dotInput() {
+        return this._dot.internalValue;
+    }
+    // ipv4 - computed: false, optional: false, required: true
+    _ipv4 = new ZeroTrustDnsLocationEndpointsIpv4OutputReference(this, "ipv4");
+    get ipv4() {
+        return this._ipv4;
+    }
+    putIpv4(value) {
         this._ipv4.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "ipv4Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv4.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "ipv6", {
-        get: function () {
-            return this._ipv6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocationEndpointsOutputReference.prototype.putIpv6 = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv4Input() {
+        return this._ipv4.internalValue;
+    }
+    // ipv6 - computed: false, optional: false, required: true
+    _ipv6 = new ZeroTrustDnsLocationEndpointsIpv6OutputReference(this, "ipv6");
+    get ipv6() {
+        return this._ipv6;
+    }
+    putIpv6(value) {
         this._ipv6.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDnsLocationEndpointsOutputReference.prototype, "ipv6Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv6.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationEndpointsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationEndpointsOutputReference = ZeroTrustDnsLocationEndpointsOutputReference;
-function zeroTrustDnsLocationNetworksToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv6Input() {
+        return this._ipv6.internalValue;
+    }
+}
+export function zeroTrustDnsLocationNetworksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1150,14 +926,14 @@ function zeroTrustDnsLocationNetworksToTerraform(struct) {
         network: cdktf.stringToTerraform(struct.network),
     };
 }
-function zeroTrustDnsLocationNetworksToHclTerraform(struct) {
+export function zeroTrustDnsLocationNetworksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         network: {
             value: cdktf.stringToHclTerraform(struct.network),
             isBlock: false,
@@ -1166,105 +942,105 @@ function zeroTrustDnsLocationNetworksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDnsLocationNetworksOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationNetworksOutputReference, _super);
+export class ZeroTrustDnsLocationNetworksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationNetworksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDnsLocationNetworksOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._network !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.network = this._network;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._network = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._network = value.network;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationNetworksOutputReference.prototype, "network", {
-        get: function () {
-            return this.getStringAttribute('network');
-        },
-        set: function (value) {
-            this._network = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocationNetworksOutputReference.prototype, "networkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._network;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDnsLocationNetworksOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDnsLocationNetworksOutputReference = ZeroTrustDnsLocationNetworksOutputReference;
-var ZeroTrustDnsLocationNetworksList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocationNetworksList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._network !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.network = this._network;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._network = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._network = value.network;
+        }
+    }
+    // network - computed: true, optional: false, required: true
+    _network;
+    get network() {
+        return this.getStringAttribute('network');
+    }
+    set network(value) {
+        this._network = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkInput() {
+        return this._network;
+    }
+}
+export class ZeroTrustDnsLocationNetworksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDnsLocationNetworksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDnsLocationNetworksList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDnsLocationNetworksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDnsLocationNetworksList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDnsLocationNetworksList = ZeroTrustDnsLocationNetworksList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dns_location cloudflare_zero_trust_dns_location}
 */
-var ZeroTrustDnsLocation = /** @class */ (function (_super) {
-    __extends(ZeroTrustDnsLocation, _super);
+export class ZeroTrustDnsLocation extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dns_location";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDnsLocation resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDnsLocation to import
+    * @param importFromId The id of the existing ZeroTrustDnsLocation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dns_location#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDnsLocation to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dns_location", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1275,8 +1051,8 @@ var ZeroTrustDnsLocation = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDnsLocationConfig
     */
-    function ZeroTrustDnsLocation(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dns_location',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1289,245 +1065,156 @@ var ZeroTrustDnsLocation = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // endpoints - computed: false, optional: true, required: false
-        _this._endpoints = new ZeroTrustDnsLocationEndpointsOutputReference(_this, "endpoints");
-        // networks - computed: true, optional: true, required: false
-        _this._networks = new ZeroTrustDnsLocationNetworksList(_this, "networks", false);
-        _this._accountId = config.accountId;
-        _this._clientDefault = config.clientDefault;
-        _this._dnsDestinationIpsId = config.dnsDestinationIpsId;
-        _this._ecsSupport = config.ecsSupport;
-        _this._endpoints.internalValue = config.endpoints;
-        _this._name = config.name;
-        _this._networks.internalValue = config.networks;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._clientDefault = config.clientDefault;
+        this._dnsDestinationIpsId = config.dnsDestinationIpsId;
+        this._ecsSupport = config.ecsSupport;
+        this._endpoints.internalValue = config.endpoints;
+        this._name = config.name;
+        this._networks.internalValue = config.networks;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDnsLocation resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDnsLocation to import
-    * @param importFromId The id of the existing ZeroTrustDnsLocation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dns_location#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDnsLocation to import is found
-    */
-    ZeroTrustDnsLocation.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dns_location", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "clientDefault", {
-        get: function () {
-            return this.getBooleanAttribute('client_default');
-        },
-        set: function (value) {
-            this._clientDefault = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.resetClientDefault = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // client_default - computed: true, optional: true, required: false
+    _clientDefault;
+    get clientDefault() {
+        return this.getBooleanAttribute('client_default');
+    }
+    set clientDefault(value) {
+        this._clientDefault = value;
+    }
+    resetClientDefault() {
         this._clientDefault = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "clientDefaultInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientDefault;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "dnsDestinationIpsId", {
-        get: function () {
-            return this.getStringAttribute('dns_destination_ips_id');
-        },
-        set: function (value) {
-            this._dnsDestinationIpsId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.resetDnsDestinationIpsId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientDefaultInput() {
+        return this._clientDefault;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // dns_destination_ips_id - computed: true, optional: true, required: false
+    _dnsDestinationIpsId;
+    get dnsDestinationIpsId() {
+        return this.getStringAttribute('dns_destination_ips_id');
+    }
+    set dnsDestinationIpsId(value) {
+        this._dnsDestinationIpsId = value;
+    }
+    resetDnsDestinationIpsId() {
         this._dnsDestinationIpsId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "dnsDestinationIpsIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsDestinationIpsId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "dnsDestinationIpv6BlockId", {
-        // dns_destination_ipv6_block_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('dns_destination_ipv6_block_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "dohSubdomain", {
-        // doh_subdomain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('doh_subdomain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "ecsSupport", {
-        get: function () {
-            return this.getBooleanAttribute('ecs_support');
-        },
-        set: function (value) {
-            this._ecsSupport = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.resetEcsSupport = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsDestinationIpsIdInput() {
+        return this._dnsDestinationIpsId;
+    }
+    // dns_destination_ipv6_block_id - computed: true, optional: false, required: false
+    get dnsDestinationIpv6BlockId() {
+        return this.getStringAttribute('dns_destination_ipv6_block_id');
+    }
+    // doh_subdomain - computed: true, optional: false, required: false
+    get dohSubdomain() {
+        return this.getStringAttribute('doh_subdomain');
+    }
+    // ecs_support - computed: true, optional: true, required: false
+    _ecsSupport;
+    get ecsSupport() {
+        return this.getBooleanAttribute('ecs_support');
+    }
+    set ecsSupport(value) {
+        this._ecsSupport = value;
+    }
+    resetEcsSupport() {
         this._ecsSupport = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "ecsSupportInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ecsSupport;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "endpoints", {
-        get: function () {
-            return this._endpoints;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.putEndpoints = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ecsSupportInput() {
+        return this._ecsSupport;
+    }
+    // endpoints - computed: false, optional: true, required: false
+    _endpoints = new ZeroTrustDnsLocationEndpointsOutputReference(this, "endpoints");
+    get endpoints() {
+        return this._endpoints;
+    }
+    putEndpoints(value) {
         this._endpoints.internalValue = value;
-    };
-    ZeroTrustDnsLocation.prototype.resetEndpoints = function () {
+    }
+    resetEndpoints() {
         this._endpoints.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "endpointsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endpoints.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "ip", {
-        // ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "ipv4Destination", {
-        // ipv4_destination - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ipv4_destination');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "ipv4DestinationBackup", {
-        // ipv4_destination_backup - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ipv4_destination_backup');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "networks", {
-        get: function () {
-            return this._networks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDnsLocation.prototype.putNetworks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endpointsInput() {
+        return this._endpoints.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ip - computed: true, optional: false, required: false
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    // ipv4_destination - computed: true, optional: false, required: false
+    get ipv4Destination() {
+        return this.getStringAttribute('ipv4_destination');
+    }
+    // ipv4_destination_backup - computed: true, optional: false, required: false
+    get ipv4DestinationBackup() {
+        return this.getStringAttribute('ipv4_destination_backup');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // networks - computed: true, optional: true, required: false
+    _networks = new ZeroTrustDnsLocationNetworksList(this, "networks", false);
+    get networks() {
+        return this._networks;
+    }
+    putNetworks(value) {
         this._networks.internalValue = value;
-    };
-    ZeroTrustDnsLocation.prototype.resetNetworks = function () {
+    }
+    resetNetworks() {
         this._networks.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "networksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDnsLocation.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksInput() {
+        return this._networks.internalValue;
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDnsLocation.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             client_default: cdktf.booleanToTerraform(this._clientDefault),
@@ -1537,9 +1224,9 @@ var ZeroTrustDnsLocation = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             networks: cdktf.listMapper(zeroTrustDnsLocationNetworksToTerraform, false)(this._networks.internalValue),
         };
-    };
-    ZeroTrustDnsLocation.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1584,15 +1271,6 @@ var ZeroTrustDnsLocation = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDnsLocation.tfResourceType = "cloudflare_zero_trust_dns_location";
-    return ZeroTrustDnsLocation;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDnsLocation = ZeroTrustDnsLocation;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

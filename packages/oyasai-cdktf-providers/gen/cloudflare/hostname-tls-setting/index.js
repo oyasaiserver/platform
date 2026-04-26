@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hostname_tls_setting
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.HostnameTlsSetting = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hostname_tls_setting cloudflare_hostname_tls_setting}
 */
-var HostnameTlsSetting = /** @class */ (function (_super) {
-    __extends(HostnameTlsSetting, _super);
+export class HostnameTlsSetting extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_hostname_tls_setting";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a HostnameTlsSetting resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the HostnameTlsSetting to import
+    * @param importFromId The id of the existing HostnameTlsSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hostname_tls_setting#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the HostnameTlsSetting to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_hostname_tls_setting", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var HostnameTlsSetting = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options HostnameTlsSettingConfig
     */
-    function HostnameTlsSetting(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_hostname_tls_setting',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,149 +46,95 @@ var HostnameTlsSetting = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._hostname = config.hostname;
-        _this._settingId = config.settingId;
-        _this._value = config.value;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._hostname = config.hostname;
+        this._settingId = config.settingId;
+        this._value = config.value;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a HostnameTlsSetting resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the HostnameTlsSetting to import
-    * @param importFromId The id of the existing HostnameTlsSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hostname_tls_setting#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the HostnameTlsSetting to import is found
-    */
-    HostnameTlsSetting.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_hostname_tls_setting", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(HostnameTlsSetting.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "settingId", {
-        get: function () {
-            return this.getStringAttribute('setting_id');
-        },
-        set: function (value) {
-            this._settingId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "settingIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._settingId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "value", {
-        get: function () {
-            return this.getAnyMapAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HostnameTlsSetting.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HostnameTlsSetting.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // hostname - computed: false, optional: false, required: true
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // setting_id - computed: false, optional: false, required: true
+    _settingId;
+    get settingId() {
+        return this.getStringAttribute('setting_id');
+    }
+    set settingId(value) {
+        this._settingId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get settingIdInput() {
+        return this._settingId;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getAnyMapAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(HostnameTlsSetting.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    HostnameTlsSetting.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             hostname: cdktf.stringToTerraform(this._hostname),
             setting_id: cdktf.stringToTerraform(this._settingId),
             value: cdktf.hashMapper(cdktf.anyToTerraform)(this._value),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    HostnameTlsSetting.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             hostname: {
                 value: cdktf.stringToHclTerraform(this._hostname),
                 isBlock: false,
@@ -217,15 +161,6 @@ var HostnameTlsSetting = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    HostnameTlsSetting.tfResourceType = "cloudflare_hostname_tls_setting";
-    return HostnameTlsSetting;
-}(cdktf.TerraformResource));
-exports.HostnameTlsSetting = HostnameTlsSetting;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

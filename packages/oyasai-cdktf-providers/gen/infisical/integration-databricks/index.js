@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_databricks
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IntegrationDatabricks = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_databricks infisical_integration_databricks}
 */
-var IntegrationDatabricks = /** @class */ (function (_super) {
-    __extends(IntegrationDatabricks, _super);
+export class IntegrationDatabricks extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_integration_databricks";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IntegrationDatabricks resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IntegrationDatabricks to import
+    * @param importFromId The id of the existing IntegrationDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_databricks#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IntegrationDatabricks to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_integration_databricks", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var IntegrationDatabricks = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IntegrationDatabricksConfig
     */
-    function IntegrationDatabricks(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_integration_databricks',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,156 +46,101 @@ var IntegrationDatabricks = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._databricksHost = config.databricksHost;
-        _this._databricksSecretScope = config.databricksSecretScope;
-        _this._databricksToken = config.databricksToken;
-        _this._environment = config.environment;
-        _this._projectId = config.projectId;
-        _this._secretPath = config.secretPath;
-        return _this;
+        });
+        this._databricksHost = config.databricksHost;
+        this._databricksSecretScope = config.databricksSecretScope;
+        this._databricksToken = config.databricksToken;
+        this._environment = config.environment;
+        this._projectId = config.projectId;
+        this._secretPath = config.secretPath;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IntegrationDatabricks resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IntegrationDatabricks to import
-    * @param importFromId The id of the existing IntegrationDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_databricks#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IntegrationDatabricks to import is found
-    */
-    IntegrationDatabricks.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_integration_databricks", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksHost", {
-        get: function () {
-            return this.getStringAttribute('databricks_host');
-        },
-        set: function (value) {
-            this._databricksHost = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksHostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._databricksHost;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksSecretScope", {
-        get: function () {
-            return this.getStringAttribute('databricks_secret_scope');
-        },
-        set: function (value) {
-            this._databricksSecretScope = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksSecretScopeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._databricksSecretScope;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksToken", {
-        get: function () {
-            return this.getStringAttribute('databricks_token');
-        },
-        set: function (value) {
-            this._databricksToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "databricksTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._databricksToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "integrationAuthId", {
-        // integration_auth_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('integration_auth_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "integrationId", {
-        // integration_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('integration_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "secretPath", {
-        get: function () {
-            return this.getStringAttribute('secret_path');
-        },
-        set: function (value) {
-            this._secretPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationDatabricks.prototype, "secretPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // databricks_host - computed: false, optional: false, required: true
+    _databricksHost;
+    get databricksHost() {
+        return this.getStringAttribute('databricks_host');
+    }
+    set databricksHost(value) {
+        this._databricksHost = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databricksHostInput() {
+        return this._databricksHost;
+    }
+    // databricks_secret_scope - computed: false, optional: false, required: true
+    _databricksSecretScope;
+    get databricksSecretScope() {
+        return this.getStringAttribute('databricks_secret_scope');
+    }
+    set databricksSecretScope(value) {
+        this._databricksSecretScope = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databricksSecretScopeInput() {
+        return this._databricksSecretScope;
+    }
+    // databricks_token - computed: false, optional: false, required: true
+    _databricksToken;
+    get databricksToken() {
+        return this.getStringAttribute('databricks_token');
+    }
+    set databricksToken(value) {
+        this._databricksToken = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databricksTokenInput() {
+        return this._databricksToken;
+    }
+    // environment - computed: false, optional: false, required: true
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // integration_auth_id - computed: true, optional: false, required: false
+    get integrationAuthId() {
+        return this.getStringAttribute('integration_auth_id');
+    }
+    // integration_id - computed: true, optional: false, required: false
+    get integrationId() {
+        return this.getStringAttribute('integration_id');
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // secret_path - computed: false, optional: false, required: true
+    _secretPath;
+    get secretPath() {
+        return this.getStringAttribute('secret_path');
+    }
+    set secretPath(value) {
+        this._secretPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretPathInput() {
+        return this._secretPath;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IntegrationDatabricks.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             databricks_host: cdktf.stringToTerraform(this._databricksHost),
             databricks_secret_scope: cdktf.stringToTerraform(this._databricksSecretScope),
@@ -206,9 +149,9 @@ var IntegrationDatabricks = /** @class */ (function (_super) {
             project_id: cdktf.stringToTerraform(this._projectId),
             secret_path: cdktf.stringToTerraform(this._secretPath),
         };
-    };
-    IntegrationDatabricks.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             databricks_host: {
                 value: cdktf.stringToHclTerraform(this._databricksHost),
                 isBlock: false,
@@ -247,15 +190,6 @@ var IntegrationDatabricks = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IntegrationDatabricks.tfResourceType = "infisical_integration_databricks";
-    return IntegrationDatabricks;
-}(cdktf.TerraformResource));
-exports.IntegrationDatabricks = IntegrationDatabricks;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

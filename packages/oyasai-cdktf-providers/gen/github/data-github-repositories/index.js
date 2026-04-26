@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repositories
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubRepositories = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repositories github_repositories}
 */
-var DataGithubRepositories = /** @class */ (function (_super) {
-    __extends(DataGithubRepositories, _super);
+export class DataGithubRepositories extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repositories";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubRepositories resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubRepositories to import
+    * @param importFromId The id of the existing DataGithubRepositories that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repositories#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubRepositories to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repositories", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataGithubRepositories = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubRepositoriesConfig
     */
-    function DataGithubRepositories(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repositories',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,160 +46,104 @@ var DataGithubRepositories = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._includeRepoId = config.includeRepoId;
-        _this._query = config.query;
-        _this._resultsPerPage = config.resultsPerPage;
-        _this._sort = config.sort;
-        return _this;
+        });
+        this._id = config.id;
+        this._includeRepoId = config.includeRepoId;
+        this._query = config.query;
+        this._resultsPerPage = config.resultsPerPage;
+        this._sort = config.sort;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubRepositories resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubRepositories to import
-    * @param importFromId The id of the existing DataGithubRepositories that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repositories#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubRepositories to import is found
-    */
-    DataGithubRepositories.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repositories", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubRepositories.prototype, "fullNames", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // full_names - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('full_names');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositories.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // full_names - computed: true, optional: false, required: false
+    get fullNames() {
+        return this.getListAttribute('full_names');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubRepositories.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "includeRepoId", {
-        get: function () {
-            return this.getBooleanAttribute('include_repo_id');
-        },
-        set: function (value) {
-            this._includeRepoId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositories.prototype.resetIncludeRepoId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // include_repo_id - computed: false, optional: true, required: false
+    _includeRepoId;
+    get includeRepoId() {
+        return this.getBooleanAttribute('include_repo_id');
+    }
+    set includeRepoId(value) {
+        this._includeRepoId = value;
+    }
+    resetIncludeRepoId() {
         this._includeRepoId = undefined;
-    };
-    Object.defineProperty(DataGithubRepositories.prototype, "includeRepoIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeRepoId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "names", {
-        // names - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('names');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "query", {
-        get: function () {
-            return this.getStringAttribute('query');
-        },
-        set: function (value) {
-            this._query = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "queryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._query;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "repoIds", {
-        // repo_ids - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberListAttribute('repo_ids');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "resultsPerPage", {
-        get: function () {
-            return this.getNumberAttribute('results_per_page');
-        },
-        set: function (value) {
-            this._resultsPerPage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositories.prototype.resetResultsPerPage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeRepoIdInput() {
+        return this._includeRepoId;
+    }
+    // names - computed: true, optional: false, required: false
+    get names() {
+        return this.getListAttribute('names');
+    }
+    // query - computed: false, optional: false, required: true
+    _query;
+    get query() {
+        return this.getStringAttribute('query');
+    }
+    set query(value) {
+        this._query = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get queryInput() {
+        return this._query;
+    }
+    // repo_ids - computed: true, optional: false, required: false
+    get repoIds() {
+        return this.getNumberListAttribute('repo_ids');
+    }
+    // results_per_page - computed: false, optional: true, required: false
+    _resultsPerPage;
+    get resultsPerPage() {
+        return this.getNumberAttribute('results_per_page');
+    }
+    set resultsPerPage(value) {
+        this._resultsPerPage = value;
+    }
+    resetResultsPerPage() {
         this._resultsPerPage = undefined;
-    };
-    Object.defineProperty(DataGithubRepositories.prototype, "resultsPerPageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resultsPerPage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositories.prototype, "sort", {
-        get: function () {
-            return this.getStringAttribute('sort');
-        },
-        set: function (value) {
-            this._sort = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositories.prototype.resetSort = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get resultsPerPageInput() {
+        return this._resultsPerPage;
+    }
+    // sort - computed: false, optional: true, required: false
+    _sort;
+    get sort() {
+        return this.getStringAttribute('sort');
+    }
+    set sort(value) {
+        this._sort = value;
+    }
+    resetSort() {
         this._sort = undefined;
-    };
-    Object.defineProperty(DataGithubRepositories.prototype, "sortInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sort;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get sortInput() {
+        return this._sort;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubRepositories.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             include_repo_id: cdktf.booleanToTerraform(this._includeRepoId),
@@ -209,9 +151,9 @@ var DataGithubRepositories = /** @class */ (function (_super) {
             results_per_page: cdktf.numberToTerraform(this._resultsPerPage),
             sort: cdktf.stringToTerraform(this._sort),
         };
-    };
-    DataGithubRepositories.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -244,15 +186,6 @@ var DataGithubRepositories = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubRepositories.tfResourceType = "github_repositories";
-    return DataGithubRepositories;
-}(cdktf.TerraformDataSource));
-exports.DataGithubRepositories = DataGithubRepositories;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

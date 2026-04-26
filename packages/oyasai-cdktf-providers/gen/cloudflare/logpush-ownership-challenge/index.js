@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_ownership_challenge
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogpushOwnershipChallenge = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_ownership_challenge cloudflare_logpush_ownership_challenge}
 */
-var LogpushOwnershipChallenge = /** @class */ (function (_super) {
-    __extends(LogpushOwnershipChallenge, _super);
+export class LogpushOwnershipChallenge extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_logpush_ownership_challenge";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a LogpushOwnershipChallenge resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the LogpushOwnershipChallenge to import
+    * @param importFromId The id of the existing LogpushOwnershipChallenge that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_ownership_challenge#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the LogpushOwnershipChallenge to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_logpush_ownership_challenge", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var LogpushOwnershipChallenge = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options LogpushOwnershipChallengeConfig
     */
-    function LogpushOwnershipChallenge(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_logpush_ownership_challenge',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,121 +46,80 @@ var LogpushOwnershipChallenge = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._destinationConf = config.destinationConf;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._destinationConf = config.destinationConf;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a LogpushOwnershipChallenge resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the LogpushOwnershipChallenge to import
-    * @param importFromId The id of the existing LogpushOwnershipChallenge that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_ownership_challenge#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the LogpushOwnershipChallenge to import is found
-    */
-    LogpushOwnershipChallenge.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_logpush_ownership_challenge", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushOwnershipChallenge.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "destinationConf", {
-        get: function () {
-            return this.getStringAttribute('destination_conf');
-        },
-        set: function (value) {
-            this._destinationConf = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "destinationConfInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinationConf;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "filename", {
-        // filename - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('filename');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "message", {
-        // message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "valid", {
-        // valid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('valid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushOwnershipChallenge.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // destination_conf - computed: false, optional: false, required: true
+    _destinationConf;
+    get destinationConf() {
+        return this.getStringAttribute('destination_conf');
+    }
+    set destinationConf(value) {
+        this._destinationConf = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationConfInput() {
+        return this._destinationConf;
+    }
+    // filename - computed: true, optional: false, required: false
+    get filename() {
+        return this.getStringAttribute('filename');
+    }
+    // message - computed: true, optional: false, required: false
+    get message() {
+        return this.getStringAttribute('message');
+    }
+    // valid - computed: true, optional: false, required: false
+    get valid() {
+        return this.getBooleanAttribute('valid');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(LogpushOwnershipChallenge.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    LogpushOwnershipChallenge.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             destination_conf: cdktf.stringToTerraform(this._destinationConf),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    LogpushOwnershipChallenge.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -183,15 +140,6 @@ var LogpushOwnershipChallenge = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    LogpushOwnershipChallenge.tfResourceType = "cloudflare_logpush_ownership_challenge";
-    return LogpushOwnershipChallenge;
-}(cdktf.TerraformResource));
-exports.LogpushOwnershipChallenge = LogpushOwnershipChallenge;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

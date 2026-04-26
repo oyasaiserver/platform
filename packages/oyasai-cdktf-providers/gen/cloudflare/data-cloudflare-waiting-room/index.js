@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/waiting_room
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareWaitingRoom = exports.DataCloudflareWaitingRoomCookieAttributesOutputReference = exports.DataCloudflareWaitingRoomAdditionalRoutesList = exports.DataCloudflareWaitingRoomAdditionalRoutesOutputReference = void 0;
-exports.dataCloudflareWaitingRoomAdditionalRoutesToTerraform = dataCloudflareWaitingRoomAdditionalRoutesToTerraform;
-exports.dataCloudflareWaitingRoomAdditionalRoutesToHclTerraform = dataCloudflareWaitingRoomAdditionalRoutesToHclTerraform;
-exports.dataCloudflareWaitingRoomCookieAttributesToTerraform = dataCloudflareWaitingRoomCookieAttributesToTerraform;
-exports.dataCloudflareWaitingRoomCookieAttributesToHclTerraform = dataCloudflareWaitingRoomCookieAttributesToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareWaitingRoomAdditionalRoutesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareWaitingRoomAdditionalRoutesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,89 +10,72 @@ function dataCloudflareWaitingRoomAdditionalRoutesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareWaitingRoomAdditionalRoutesToHclTerraform(struct) {
+export function dataCloudflareWaitingRoomAdditionalRoutesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareWaitingRoomAdditionalRoutesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareWaitingRoomAdditionalRoutesOutputReference, _super);
+export class DataCloudflareWaitingRoomAdditionalRoutesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareWaitingRoomAdditionalRoutesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareWaitingRoomAdditionalRoutesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoomAdditionalRoutesOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoomAdditionalRoutesOutputReference.prototype, "path", {
-        // path - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareWaitingRoomAdditionalRoutesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareWaitingRoomAdditionalRoutesOutputReference = DataCloudflareWaitingRoomAdditionalRoutesOutputReference;
-var DataCloudflareWaitingRoomAdditionalRoutesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareWaitingRoomAdditionalRoutesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // path - computed: true, optional: false, required: false
+    get path() {
+        return this.getStringAttribute('path');
+    }
+}
+export class DataCloudflareWaitingRoomAdditionalRoutesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareWaitingRoomAdditionalRoutesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareWaitingRoomAdditionalRoutesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareWaitingRoomAdditionalRoutesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareWaitingRoomAdditionalRoutesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareWaitingRoomAdditionalRoutesList = DataCloudflareWaitingRoomAdditionalRoutesList;
-function dataCloudflareWaitingRoomCookieAttributesToTerraform(struct) {
+    }
+}
+export function dataCloudflareWaitingRoomCookieAttributesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -123,68 +84,68 @@ function dataCloudflareWaitingRoomCookieAttributesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareWaitingRoomCookieAttributesToHclTerraform(struct) {
+export function dataCloudflareWaitingRoomCookieAttributesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareWaitingRoomCookieAttributesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareWaitingRoomCookieAttributesOutputReference, _super);
+export class DataCloudflareWaitingRoomCookieAttributesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareWaitingRoomCookieAttributesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareWaitingRoomCookieAttributesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoomCookieAttributesOutputReference.prototype, "samesite", {
-        // samesite - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('samesite');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoomCookieAttributesOutputReference.prototype, "secure", {
-        // secure - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('secure');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareWaitingRoomCookieAttributesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareWaitingRoomCookieAttributesOutputReference = DataCloudflareWaitingRoomCookieAttributesOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // samesite - computed: true, optional: false, required: false
+    get samesite() {
+        return this.getStringAttribute('samesite');
+    }
+    // secure - computed: true, optional: false, required: false
+    get secure() {
+        return this.getStringAttribute('secure');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/waiting_room cloudflare_waiting_room}
 */
-var DataCloudflareWaitingRoom = /** @class */ (function (_super) {
-    __extends(DataCloudflareWaitingRoom, _super);
+export class DataCloudflareWaitingRoom extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_waiting_room";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareWaitingRoom resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareWaitingRoom to import
+    * @param importFromId The id of the existing DataCloudflareWaitingRoom that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/waiting_room#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareWaitingRoom to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -195,8 +156,8 @@ var DataCloudflareWaitingRoom = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareWaitingRoomConfig
     */
-    function DataCloudflareWaitingRoom(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_waiting_room',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -209,287 +170,157 @@ var DataCloudflareWaitingRoom = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // additional_routes - computed: true, optional: false, required: false
-        _this._additionalRoutes = new DataCloudflareWaitingRoomAdditionalRoutesList(_this, "additional_routes", false);
-        // cookie_attributes - computed: true, optional: false, required: false
-        _this._cookieAttributes = new DataCloudflareWaitingRoomCookieAttributesOutputReference(_this, "cookie_attributes");
-        _this._waitingRoomId = config.waitingRoomId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._waitingRoomId = config.waitingRoomId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareWaitingRoom resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareWaitingRoom to import
-    * @param importFromId The id of the existing DataCloudflareWaitingRoom that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/waiting_room#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareWaitingRoom to import is found
-    */
-    DataCloudflareWaitingRoom.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "additionalRoutes", {
-        get: function () {
-            return this._additionalRoutes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "cookieAttributes", {
-        get: function () {
-            return this._cookieAttributes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "cookieSuffix", {
-        // cookie_suffix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cookie_suffix');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "customPageHtml", {
-        // custom_page_html - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_page_html');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "defaultTemplateLanguage", {
-        // default_template_language - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('default_template_language');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "disableSessionRenewal", {
-        // disable_session_renewal - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('disable_session_renewal');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "enabledOriginCommands", {
-        // enabled_origin_commands - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('enabled_origin_commands');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "jsonResponseEnabled", {
-        // json_response_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('json_response_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "newUsersPerMinute", {
-        // new_users_per_minute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('new_users_per_minute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "nextEventPrequeueStartTime", {
-        // next_event_prequeue_start_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('next_event_prequeue_start_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "nextEventStartTime", {
-        // next_event_start_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('next_event_start_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "path", {
-        // path - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "queueAll", {
-        // queue_all - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('queue_all');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "queueingMethod", {
-        // queueing_method - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('queueing_method');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "queueingStatusCode", {
-        // queueing_status_code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('queueing_status_code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "sessionDuration", {
-        // session_duration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('session_duration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "suspended", {
-        // suspended - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('suspended');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "totalActiveUsers", {
-        // total_active_users - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('total_active_users');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "turnstileAction", {
-        // turnstile_action - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('turnstile_action');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "turnstileMode", {
-        // turnstile_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('turnstile_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "waitingRoomId", {
-        get: function () {
-            return this.getStringAttribute('waiting_room_id');
-        },
-        set: function (value) {
-            this._waitingRoomId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "waitingRoomIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._waitingRoomId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWaitingRoom.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // additional_routes - computed: true, optional: false, required: false
+    _additionalRoutes = new DataCloudflareWaitingRoomAdditionalRoutesList(this, "additional_routes", false);
+    get additionalRoutes() {
+        return this._additionalRoutes;
+    }
+    // cookie_attributes - computed: true, optional: false, required: false
+    _cookieAttributes = new DataCloudflareWaitingRoomCookieAttributesOutputReference(this, "cookie_attributes");
+    get cookieAttributes() {
+        return this._cookieAttributes;
+    }
+    // cookie_suffix - computed: true, optional: false, required: false
+    get cookieSuffix() {
+        return this.getStringAttribute('cookie_suffix');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // custom_page_html - computed: true, optional: false, required: false
+    get customPageHtml() {
+        return this.getStringAttribute('custom_page_html');
+    }
+    // default_template_language - computed: true, optional: false, required: false
+    get defaultTemplateLanguage() {
+        return this.getStringAttribute('default_template_language');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // disable_session_renewal - computed: true, optional: false, required: false
+    get disableSessionRenewal() {
+        return this.getBooleanAttribute('disable_session_renewal');
+    }
+    // enabled_origin_commands - computed: true, optional: false, required: false
+    get enabledOriginCommands() {
+        return this.getListAttribute('enabled_origin_commands');
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // json_response_enabled - computed: true, optional: false, required: false
+    get jsonResponseEnabled() {
+        return this.getBooleanAttribute('json_response_enabled');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // new_users_per_minute - computed: true, optional: false, required: false
+    get newUsersPerMinute() {
+        return this.getNumberAttribute('new_users_per_minute');
+    }
+    // next_event_prequeue_start_time - computed: true, optional: false, required: false
+    get nextEventPrequeueStartTime() {
+        return this.getStringAttribute('next_event_prequeue_start_time');
+    }
+    // next_event_start_time - computed: true, optional: false, required: false
+    get nextEventStartTime() {
+        return this.getStringAttribute('next_event_start_time');
+    }
+    // path - computed: true, optional: false, required: false
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    // queue_all - computed: true, optional: false, required: false
+    get queueAll() {
+        return this.getBooleanAttribute('queue_all');
+    }
+    // queueing_method - computed: true, optional: false, required: false
+    get queueingMethod() {
+        return this.getStringAttribute('queueing_method');
+    }
+    // queueing_status_code - computed: true, optional: false, required: false
+    get queueingStatusCode() {
+        return this.getNumberAttribute('queueing_status_code');
+    }
+    // session_duration - computed: true, optional: false, required: false
+    get sessionDuration() {
+        return this.getNumberAttribute('session_duration');
+    }
+    // suspended - computed: true, optional: false, required: false
+    get suspended() {
+        return this.getBooleanAttribute('suspended');
+    }
+    // total_active_users - computed: true, optional: false, required: false
+    get totalActiveUsers() {
+        return this.getNumberAttribute('total_active_users');
+    }
+    // turnstile_action - computed: true, optional: false, required: false
+    get turnstileAction() {
+        return this.getStringAttribute('turnstile_action');
+    }
+    // turnstile_mode - computed: true, optional: false, required: false
+    get turnstileMode() {
+        return this.getStringAttribute('turnstile_mode');
+    }
+    // waiting_room_id - computed: false, optional: false, required: true
+    _waitingRoomId;
+    get waitingRoomId() {
+        return this.getStringAttribute('waiting_room_id');
+    }
+    set waitingRoomId(value) {
+        this._waitingRoomId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get waitingRoomIdInput() {
+        return this._waitingRoomId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareWaitingRoom.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareWaitingRoom.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             waiting_room_id: cdktf.stringToTerraform(this._waitingRoomId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareWaitingRoom.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             waiting_room_id: {
                 value: cdktf.stringToHclTerraform(this._waitingRoomId),
                 isBlock: false,
@@ -504,15 +335,6 @@ var DataCloudflareWaitingRoom = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareWaitingRoom.tfResourceType = "cloudflare_waiting_room";
-    return DataCloudflareWaitingRoom;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareWaitingRoom = DataCloudflareWaitingRoom;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

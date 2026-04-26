@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_lockdown
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoneLockdown = exports.ZoneLockdownConfigurationsList = exports.ZoneLockdownConfigurationsOutputReference = void 0;
-exports.zoneLockdownConfigurationsToTerraform = zoneLockdownConfigurationsToTerraform;
-exports.zoneLockdownConfigurationsToHclTerraform = zoneLockdownConfigurationsToHclTerraform;
-var cdktf = require("cdktf");
-function zoneLockdownConfigurationsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zoneLockdownConfigurationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -33,14 +13,14 @@ function zoneLockdownConfigurationsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function zoneLockdownConfigurationsToHclTerraform(struct) {
+export function zoneLockdownConfigurationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         target: {
             value: cdktf.stringToHclTerraform(struct.target),
             isBlock: false,
@@ -55,135 +35,129 @@ function zoneLockdownConfigurationsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZoneLockdownConfigurationsOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneLockdownConfigurationsOutputReference, _super);
+export class ZoneLockdownConfigurationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZoneLockdownConfigurationsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZoneLockdownConfigurationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._target !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = this._target;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._target = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._target = value.target;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdownConfigurationsOutputReference.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdownConfigurationsOutputReference.prototype.resetTarget = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._target !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._target = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._target = value.target;
+            this._value = value.value;
+        }
+    }
+    // target - computed: false, optional: true, required: false
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    resetTarget() {
         this._target = undefined;
-    };
-    Object.defineProperty(ZoneLockdownConfigurationsOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdownConfigurationsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdownConfigurationsOutputReference.prototype.resetValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // value - computed: false, optional: true, required: false
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    resetValue() {
         this._value = undefined;
-    };
-    Object.defineProperty(ZoneLockdownConfigurationsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneLockdownConfigurationsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneLockdownConfigurationsOutputReference = ZoneLockdownConfigurationsOutputReference;
-var ZoneLockdownConfigurationsList = /** @class */ (function (_super) {
-    __extends(ZoneLockdownConfigurationsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ZoneLockdownConfigurationsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZoneLockdownConfigurationsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZoneLockdownConfigurationsList.prototype.get = function (index) {
+    get(index) {
         return new ZoneLockdownConfigurationsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZoneLockdownConfigurationsList;
-}(cdktf.ComplexList));
-exports.ZoneLockdownConfigurationsList = ZoneLockdownConfigurationsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_lockdown cloudflare_zone_lockdown}
 */
-var ZoneLockdown = /** @class */ (function (_super) {
-    __extends(ZoneLockdown, _super);
+export class ZoneLockdown extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zone_lockdown";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZoneLockdown resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZoneLockdown to import
+    * @param importFromId The id of the existing ZoneLockdown that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_lockdown#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZoneLockdown to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_lockdown", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -194,8 +168,8 @@ var ZoneLockdown = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZoneLockdownConfig
     */
-    function ZoneLockdown(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zone_lockdown',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -208,181 +182,117 @@ var ZoneLockdown = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configurations - computed: false, optional: false, required: true
-        _this._configurations = new ZoneLockdownConfigurationsList(_this, "configurations", false);
-        _this._configurations.internalValue = config.configurations;
-        _this._description = config.description;
-        _this._paused = config.paused;
-        _this._priority = config.priority;
-        _this._urls = config.urls;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._configurations.internalValue = config.configurations;
+        this._description = config.description;
+        this._paused = config.paused;
+        this._priority = config.priority;
+        this._urls = config.urls;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZoneLockdown resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZoneLockdown to import
-    * @param importFromId The id of the existing ZoneLockdown that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_lockdown#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZoneLockdown to import is found
-    */
-    ZoneLockdown.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_lockdown", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "configurations", {
-        get: function () {
-            return this._configurations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdown.prototype.putConfigurations = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configurations - computed: false, optional: false, required: true
+    _configurations = new ZoneLockdownConfigurationsList(this, "configurations", false);
+    get configurations() {
+        return this._configurations;
+    }
+    putConfigurations(value) {
         this._configurations.internalValue = value;
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "configurationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configurations.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdown.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationsInput() {
+        return this._configurations.internalValue;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "paused", {
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        set: function (value) {
-            this._paused = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdown.prototype.resetPaused = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // paused - computed: true, optional: true, required: false
+    _paused;
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    set paused(value) {
+        this._paused = value;
+    }
+    resetPaused() {
         this._paused = undefined;
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "pausedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paused;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "priority", {
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        set: function (value) {
-            this._priority = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdown.prototype.resetPriority = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pausedInput() {
+        return this._paused;
+    }
+    // priority - computed: false, optional: true, required: false
+    _priority;
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    set priority(value) {
+        this._priority = value;
+    }
+    resetPriority() {
         this._priority = undefined;
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "priorityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._priority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "urls", {
-        get: function () {
-            return this.getListAttribute('urls');
-        },
-        set: function (value) {
-            this._urls = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "urlsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._urls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneLockdown.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneLockdown.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get priorityInput() {
+        return this._priority;
+    }
+    // urls - computed: false, optional: false, required: true
+    _urls;
+    get urls() {
+        return this.getListAttribute('urls');
+    }
+    set urls(value) {
+        this._urls = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlsInput() {
+        return this._urls;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZoneLockdown.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZoneLockdown.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             configurations: cdktf.listMapper(zoneLockdownConfigurationsToTerraform, false)(this._configurations.internalValue),
             description: cdktf.stringToTerraform(this._description),
@@ -391,9 +301,9 @@ var ZoneLockdown = /** @class */ (function (_super) {
             urls: cdktf.listMapper(cdktf.stringToTerraform, false)(this._urls),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZoneLockdown.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             configurations: {
                 value: cdktf.listMapperHcl(zoneLockdownConfigurationsToHclTerraform, false)(this._configurations.internalValue),
                 isBlock: true,
@@ -432,15 +342,6 @@ var ZoneLockdown = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZoneLockdown.tfResourceType = "cloudflare_zone_lockdown";
-    return ZoneLockdown;
-}(cdktf.TerraformResource));
-exports.ZoneLockdown = ZoneLockdown;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

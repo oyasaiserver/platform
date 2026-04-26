@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_posture_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDevicePostureRule = exports.ZeroTrustDevicePostureRuleMatchList = exports.ZeroTrustDevicePostureRuleMatchOutputReference = exports.ZeroTrustDevicePostureRuleInputOutputReference = exports.ZeroTrustDevicePostureRuleInputLocationsOutputReference = void 0;
-exports.zeroTrustDevicePostureRuleInputLocationsToTerraform = zeroTrustDevicePostureRuleInputLocationsToTerraform;
-exports.zeroTrustDevicePostureRuleInputLocationsToHclTerraform = zeroTrustDevicePostureRuleInputLocationsToHclTerraform;
-exports.zeroTrustDevicePostureRuleInputToTerraform = zeroTrustDevicePostureRuleInputToTerraform;
-exports.zeroTrustDevicePostureRuleInputToHclTerraform = zeroTrustDevicePostureRuleInputToHclTerraform;
-exports.zeroTrustDevicePostureRuleMatchToTerraform = zeroTrustDevicePostureRuleMatchToTerraform;
-exports.zeroTrustDevicePostureRuleMatchToHclTerraform = zeroTrustDevicePostureRuleMatchToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDevicePostureRuleInputLocationsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDevicePostureRuleInputLocationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +13,14 @@ function zeroTrustDevicePostureRuleInputLocationsToTerraform(struct) {
         trust_stores: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.trustStores),
     };
 }
-function zeroTrustDevicePostureRuleInputLocationsToHclTerraform(struct) {
+export function zeroTrustDevicePostureRuleInputLocationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         paths: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.paths),
             isBlock: false,
@@ -59,106 +35,84 @@ function zeroTrustDevicePostureRuleInputLocationsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDevicePostureRuleInputLocationsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDevicePostureRuleInputLocationsOutputReference, _super);
+export class ZeroTrustDevicePostureRuleInputLocationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDevicePostureRuleInputLocationsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._paths !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.paths = this._paths;
-            }
-            if (this._trustStores !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.trustStores = this._trustStores;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._paths = undefined;
-                this._trustStores = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._paths = value.paths;
-                this._trustStores = value.trustStores;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype, "paths", {
-        get: function () {
-            return this.getListAttribute('paths');
-        },
-        set: function (value) {
-            this._paths = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype.resetPaths = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._paths !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.paths = this._paths;
+        }
+        if (this._trustStores !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.trustStores = this._trustStores;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._paths = undefined;
+            this._trustStores = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._paths = value.paths;
+            this._trustStores = value.trustStores;
+        }
+    }
+    // paths - computed: false, optional: true, required: false
+    _paths;
+    get paths() {
+        return this.getListAttribute('paths');
+    }
+    set paths(value) {
+        this._paths = value;
+    }
+    resetPaths() {
         this._paths = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype, "pathsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paths;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype, "trustStores", {
-        get: function () {
-            return this.getListAttribute('trust_stores');
-        },
-        set: function (value) {
-            this._trustStores = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype.resetTrustStores = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathsInput() {
+        return this._paths;
+    }
+    // trust_stores - computed: false, optional: true, required: false
+    _trustStores;
+    get trustStores() {
+        return this.getListAttribute('trust_stores');
+    }
+    set trustStores(value) {
+        this._trustStores = value;
+    }
+    resetTrustStores() {
         this._trustStores = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputLocationsOutputReference.prototype, "trustStoresInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._trustStores;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDevicePostureRuleInputLocationsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDevicePostureRuleInputLocationsOutputReference = ZeroTrustDevicePostureRuleInputLocationsOutputReference;
-function zeroTrustDevicePostureRuleInputToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get trustStoresInput() {
+        return this._trustStores;
+    }
+}
+export function zeroTrustDevicePostureRuleInputToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -211,14 +165,14 @@ function zeroTrustDevicePostureRuleInputToTerraform(struct) {
         version_operator: cdktf.stringToTerraform(struct.versionOperator),
     };
 }
-function zeroTrustDevicePostureRuleInputToHclTerraform(struct) {
+export function zeroTrustDevicePostureRuleInputToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         active_threats: {
             value: cdktf.numberToHclTerraform(struct.activeThreats),
             isBlock: false,
@@ -479,1216 +433,945 @@ function zeroTrustDevicePostureRuleInputToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDevicePostureRuleInputOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDevicePostureRuleInputOutputReference, _super);
+export class ZeroTrustDevicePostureRuleInputOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDevicePostureRuleInputOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // locations - computed: false, optional: true, required: false
-        _this._locations = new ZeroTrustDevicePostureRuleInputLocationsOutputReference(_this, "locations");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._activeThreats !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.activeThreats = this._activeThreats;
-            }
-            if (this._authState !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authState = this._authState;
-            }
-            if (this._certificateId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificateId = this._certificateId;
-            }
-            if (this._checkDisks !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.checkDisks = this._checkDisks;
-            }
-            if (this._checkPrivateKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.checkPrivateKey = this._checkPrivateKey;
-            }
-            if (this._cn !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cn = this._cn;
-            }
-            if (this._complianceStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.complianceStatus = this._complianceStatus;
-            }
-            if (this._connectionId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.connectionId = this._connectionId;
-            }
-            if (this._countOperator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.countOperator = this._countOperator;
-            }
-            if (this._domain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.domain = this._domain;
-            }
-            if (this._eidLastSeen !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.eidLastSeen = this._eidLastSeen;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._exists !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exists = this._exists;
-            }
-            if (this._extendedKeyUsage !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.extendedKeyUsage = this._extendedKeyUsage;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._infected !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.infected = this._infected;
-            }
-            if (this._isActive !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.isActive = this._isActive;
-            }
-            if (this._issueCount !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.issueCount = this._issueCount;
-            }
-            if (this._lastSeen !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.lastSeen = this._lastSeen;
-            }
-            if (((_a = this._locations) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.locations = (_b = this._locations) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._networkStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networkStatus = this._networkStatus;
-            }
-            if (this._operatingSystem !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operatingSystem = this._operatingSystem;
-            }
-            if (this._operationalState !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operationalState = this._operationalState;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._os !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.os = this._os;
-            }
-            if (this._osDistroName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.osDistroName = this._osDistroName;
-            }
-            if (this._osDistroRevision !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.osDistroRevision = this._osDistroRevision;
-            }
-            if (this._osVersionExtra !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.osVersionExtra = this._osVersionExtra;
-            }
-            if (this._overall !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.overall = this._overall;
-            }
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._requireAll !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireAll = this._requireAll;
-            }
-            if (this._riskLevel !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.riskLevel = this._riskLevel;
-            }
-            if (this._score !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.score = this._score;
-            }
-            if (this._scoreOperator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.scoreOperator = this._scoreOperator;
-            }
-            if (this._sensorConfig !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sensorConfig = this._sensorConfig;
-            }
-            if (this._sha256 !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sha256 = this._sha256;
-            }
-            if (this._state !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.state = this._state;
-            }
-            if (this._subjectAlternativeNames !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subjectAlternativeNames = this._subjectAlternativeNames;
-            }
-            if (this._thumbprint !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.thumbprint = this._thumbprint;
-            }
-            if (this._totalScore !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.totalScore = this._totalScore;
-            }
-            if (this._updateWindowDays !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.updateWindowDays = this._updateWindowDays;
-            }
-            if (this._version !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.version = this._version;
-            }
-            if (this._versionOperator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.versionOperator = this._versionOperator;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._activeThreats = undefined;
-                this._authState = undefined;
-                this._certificateId = undefined;
-                this._checkDisks = undefined;
-                this._checkPrivateKey = undefined;
-                this._cn = undefined;
-                this._complianceStatus = undefined;
-                this._connectionId = undefined;
-                this._countOperator = undefined;
-                this._domain = undefined;
-                this._eidLastSeen = undefined;
-                this._enabled = undefined;
-                this._exists = undefined;
-                this._extendedKeyUsage = undefined;
-                this._id = undefined;
-                this._infected = undefined;
-                this._isActive = undefined;
-                this._issueCount = undefined;
-                this._lastSeen = undefined;
-                this._locations.internalValue = undefined;
-                this._networkStatus = undefined;
-                this._operatingSystem = undefined;
-                this._operationalState = undefined;
-                this._operator = undefined;
-                this._os = undefined;
-                this._osDistroName = undefined;
-                this._osDistroRevision = undefined;
-                this._osVersionExtra = undefined;
-                this._overall = undefined;
-                this._path = undefined;
-                this._requireAll = undefined;
-                this._riskLevel = undefined;
-                this._score = undefined;
-                this._scoreOperator = undefined;
-                this._sensorConfig = undefined;
-                this._sha256 = undefined;
-                this._state = undefined;
-                this._subjectAlternativeNames = undefined;
-                this._thumbprint = undefined;
-                this._totalScore = undefined;
-                this._updateWindowDays = undefined;
-                this._version = undefined;
-                this._versionOperator = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._activeThreats = value.activeThreats;
-                this._authState = value.authState;
-                this._certificateId = value.certificateId;
-                this._checkDisks = value.checkDisks;
-                this._checkPrivateKey = value.checkPrivateKey;
-                this._cn = value.cn;
-                this._complianceStatus = value.complianceStatus;
-                this._connectionId = value.connectionId;
-                this._countOperator = value.countOperator;
-                this._domain = value.domain;
-                this._eidLastSeen = value.eidLastSeen;
-                this._enabled = value.enabled;
-                this._exists = value.exists;
-                this._extendedKeyUsage = value.extendedKeyUsage;
-                this._id = value.id;
-                this._infected = value.infected;
-                this._isActive = value.isActive;
-                this._issueCount = value.issueCount;
-                this._lastSeen = value.lastSeen;
-                this._locations.internalValue = value.locations;
-                this._networkStatus = value.networkStatus;
-                this._operatingSystem = value.operatingSystem;
-                this._operationalState = value.operationalState;
-                this._operator = value.operator;
-                this._os = value.os;
-                this._osDistroName = value.osDistroName;
-                this._osDistroRevision = value.osDistroRevision;
-                this._osVersionExtra = value.osVersionExtra;
-                this._overall = value.overall;
-                this._path = value.path;
-                this._requireAll = value.requireAll;
-                this._riskLevel = value.riskLevel;
-                this._score = value.score;
-                this._scoreOperator = value.scoreOperator;
-                this._sensorConfig = value.sensorConfig;
-                this._sha256 = value.sha256;
-                this._state = value.state;
-                this._subjectAlternativeNames = value.subjectAlternativeNames;
-                this._thumbprint = value.thumbprint;
-                this._totalScore = value.totalScore;
-                this._updateWindowDays = value.updateWindowDays;
-                this._version = value.version;
-                this._versionOperator = value.versionOperator;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "activeThreats", {
-        get: function () {
-            return this.getNumberAttribute('active_threats');
-        },
-        set: function (value) {
-            this._activeThreats = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetActiveThreats = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._activeThreats !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.activeThreats = this._activeThreats;
+        }
+        if (this._authState !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authState = this._authState;
+        }
+        if (this._certificateId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificateId = this._certificateId;
+        }
+        if (this._checkDisks !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.checkDisks = this._checkDisks;
+        }
+        if (this._checkPrivateKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.checkPrivateKey = this._checkPrivateKey;
+        }
+        if (this._cn !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cn = this._cn;
+        }
+        if (this._complianceStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.complianceStatus = this._complianceStatus;
+        }
+        if (this._connectionId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.connectionId = this._connectionId;
+        }
+        if (this._countOperator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.countOperator = this._countOperator;
+        }
+        if (this._domain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.domain = this._domain;
+        }
+        if (this._eidLastSeen !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.eidLastSeen = this._eidLastSeen;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._exists !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exists = this._exists;
+        }
+        if (this._extendedKeyUsage !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.extendedKeyUsage = this._extendedKeyUsage;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._infected !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.infected = this._infected;
+        }
+        if (this._isActive !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.isActive = this._isActive;
+        }
+        if (this._issueCount !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.issueCount = this._issueCount;
+        }
+        if (this._lastSeen !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.lastSeen = this._lastSeen;
+        }
+        if (this._locations?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.locations = this._locations?.internalValue;
+        }
+        if (this._networkStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networkStatus = this._networkStatus;
+        }
+        if (this._operatingSystem !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operatingSystem = this._operatingSystem;
+        }
+        if (this._operationalState !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operationalState = this._operationalState;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._os !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.os = this._os;
+        }
+        if (this._osDistroName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.osDistroName = this._osDistroName;
+        }
+        if (this._osDistroRevision !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.osDistroRevision = this._osDistroRevision;
+        }
+        if (this._osVersionExtra !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.osVersionExtra = this._osVersionExtra;
+        }
+        if (this._overall !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.overall = this._overall;
+        }
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._requireAll !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireAll = this._requireAll;
+        }
+        if (this._riskLevel !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.riskLevel = this._riskLevel;
+        }
+        if (this._score !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.score = this._score;
+        }
+        if (this._scoreOperator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.scoreOperator = this._scoreOperator;
+        }
+        if (this._sensorConfig !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sensorConfig = this._sensorConfig;
+        }
+        if (this._sha256 !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sha256 = this._sha256;
+        }
+        if (this._state !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.state = this._state;
+        }
+        if (this._subjectAlternativeNames !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subjectAlternativeNames = this._subjectAlternativeNames;
+        }
+        if (this._thumbprint !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.thumbprint = this._thumbprint;
+        }
+        if (this._totalScore !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.totalScore = this._totalScore;
+        }
+        if (this._updateWindowDays !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.updateWindowDays = this._updateWindowDays;
+        }
+        if (this._version !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.version = this._version;
+        }
+        if (this._versionOperator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.versionOperator = this._versionOperator;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._activeThreats = undefined;
+            this._authState = undefined;
+            this._certificateId = undefined;
+            this._checkDisks = undefined;
+            this._checkPrivateKey = undefined;
+            this._cn = undefined;
+            this._complianceStatus = undefined;
+            this._connectionId = undefined;
+            this._countOperator = undefined;
+            this._domain = undefined;
+            this._eidLastSeen = undefined;
+            this._enabled = undefined;
+            this._exists = undefined;
+            this._extendedKeyUsage = undefined;
+            this._id = undefined;
+            this._infected = undefined;
+            this._isActive = undefined;
+            this._issueCount = undefined;
+            this._lastSeen = undefined;
+            this._locations.internalValue = undefined;
+            this._networkStatus = undefined;
+            this._operatingSystem = undefined;
+            this._operationalState = undefined;
+            this._operator = undefined;
+            this._os = undefined;
+            this._osDistroName = undefined;
+            this._osDistroRevision = undefined;
+            this._osVersionExtra = undefined;
+            this._overall = undefined;
+            this._path = undefined;
+            this._requireAll = undefined;
+            this._riskLevel = undefined;
+            this._score = undefined;
+            this._scoreOperator = undefined;
+            this._sensorConfig = undefined;
+            this._sha256 = undefined;
+            this._state = undefined;
+            this._subjectAlternativeNames = undefined;
+            this._thumbprint = undefined;
+            this._totalScore = undefined;
+            this._updateWindowDays = undefined;
+            this._version = undefined;
+            this._versionOperator = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._activeThreats = value.activeThreats;
+            this._authState = value.authState;
+            this._certificateId = value.certificateId;
+            this._checkDisks = value.checkDisks;
+            this._checkPrivateKey = value.checkPrivateKey;
+            this._cn = value.cn;
+            this._complianceStatus = value.complianceStatus;
+            this._connectionId = value.connectionId;
+            this._countOperator = value.countOperator;
+            this._domain = value.domain;
+            this._eidLastSeen = value.eidLastSeen;
+            this._enabled = value.enabled;
+            this._exists = value.exists;
+            this._extendedKeyUsage = value.extendedKeyUsage;
+            this._id = value.id;
+            this._infected = value.infected;
+            this._isActive = value.isActive;
+            this._issueCount = value.issueCount;
+            this._lastSeen = value.lastSeen;
+            this._locations.internalValue = value.locations;
+            this._networkStatus = value.networkStatus;
+            this._operatingSystem = value.operatingSystem;
+            this._operationalState = value.operationalState;
+            this._operator = value.operator;
+            this._os = value.os;
+            this._osDistroName = value.osDistroName;
+            this._osDistroRevision = value.osDistroRevision;
+            this._osVersionExtra = value.osVersionExtra;
+            this._overall = value.overall;
+            this._path = value.path;
+            this._requireAll = value.requireAll;
+            this._riskLevel = value.riskLevel;
+            this._score = value.score;
+            this._scoreOperator = value.scoreOperator;
+            this._sensorConfig = value.sensorConfig;
+            this._sha256 = value.sha256;
+            this._state = value.state;
+            this._subjectAlternativeNames = value.subjectAlternativeNames;
+            this._thumbprint = value.thumbprint;
+            this._totalScore = value.totalScore;
+            this._updateWindowDays = value.updateWindowDays;
+            this._version = value.version;
+            this._versionOperator = value.versionOperator;
+        }
+    }
+    // active_threats - computed: false, optional: true, required: false
+    _activeThreats;
+    get activeThreats() {
+        return this.getNumberAttribute('active_threats');
+    }
+    set activeThreats(value) {
+        this._activeThreats = value;
+    }
+    resetActiveThreats() {
         this._activeThreats = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "activeThreatsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._activeThreats;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "authState", {
-        get: function () {
-            return this.getListAttribute('auth_state');
-        },
-        set: function (value) {
-            this._authState = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetAuthState = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get activeThreatsInput() {
+        return this._activeThreats;
+    }
+    // auth_state - computed: false, optional: true, required: false
+    _authState;
+    get authState() {
+        return this.getListAttribute('auth_state');
+    }
+    set authState(value) {
+        this._authState = value;
+    }
+    resetAuthState() {
         this._authState = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "authStateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authState;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "certificateId", {
-        get: function () {
-            return this.getStringAttribute('certificate_id');
-        },
-        set: function (value) {
-            this._certificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetCertificateId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authStateInput() {
+        return this._authState;
+    }
+    // certificate_id - computed: false, optional: true, required: false
+    _certificateId;
+    get certificateId() {
+        return this.getStringAttribute('certificate_id');
+    }
+    set certificateId(value) {
+        this._certificateId = value;
+    }
+    resetCertificateId() {
         this._certificateId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "certificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "checkDisks", {
-        get: function () {
-            return this.getListAttribute('check_disks');
-        },
-        set: function (value) {
-            this._checkDisks = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetCheckDisks = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateIdInput() {
+        return this._certificateId;
+    }
+    // check_disks - computed: false, optional: true, required: false
+    _checkDisks;
+    get checkDisks() {
+        return this.getListAttribute('check_disks');
+    }
+    set checkDisks(value) {
+        this._checkDisks = value;
+    }
+    resetCheckDisks() {
         this._checkDisks = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "checkDisksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._checkDisks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "checkPrivateKey", {
-        get: function () {
-            return this.getBooleanAttribute('check_private_key');
-        },
-        set: function (value) {
-            this._checkPrivateKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetCheckPrivateKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get checkDisksInput() {
+        return this._checkDisks;
+    }
+    // check_private_key - computed: false, optional: true, required: false
+    _checkPrivateKey;
+    get checkPrivateKey() {
+        return this.getBooleanAttribute('check_private_key');
+    }
+    set checkPrivateKey(value) {
+        this._checkPrivateKey = value;
+    }
+    resetCheckPrivateKey() {
         this._checkPrivateKey = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "checkPrivateKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._checkPrivateKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "cn", {
-        get: function () {
-            return this.getStringAttribute('cn');
-        },
-        set: function (value) {
-            this._cn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetCn = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get checkPrivateKeyInput() {
+        return this._checkPrivateKey;
+    }
+    // cn - computed: false, optional: true, required: false
+    _cn;
+    get cn() {
+        return this.getStringAttribute('cn');
+    }
+    set cn(value) {
+        this._cn = value;
+    }
+    resetCn() {
         this._cn = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "cnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "complianceStatus", {
-        get: function () {
-            return this.getStringAttribute('compliance_status');
-        },
-        set: function (value) {
-            this._complianceStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetComplianceStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cnInput() {
+        return this._cn;
+    }
+    // compliance_status - computed: false, optional: true, required: false
+    _complianceStatus;
+    get complianceStatus() {
+        return this.getStringAttribute('compliance_status');
+    }
+    set complianceStatus(value) {
+        this._complianceStatus = value;
+    }
+    resetComplianceStatus() {
         this._complianceStatus = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "complianceStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._complianceStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "connectionId", {
-        get: function () {
-            return this.getStringAttribute('connection_id');
-        },
-        set: function (value) {
-            this._connectionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetConnectionId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get complianceStatusInput() {
+        return this._complianceStatus;
+    }
+    // connection_id - computed: false, optional: true, required: false
+    _connectionId;
+    get connectionId() {
+        return this.getStringAttribute('connection_id');
+    }
+    set connectionId(value) {
+        this._connectionId = value;
+    }
+    resetConnectionId() {
         this._connectionId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "connectionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._connectionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "countOperator", {
-        get: function () {
-            return this.getStringAttribute('count_operator');
-        },
-        set: function (value) {
-            this._countOperator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetCountOperator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get connectionIdInput() {
+        return this._connectionId;
+    }
+    // count_operator - computed: false, optional: true, required: false
+    _countOperator;
+    get countOperator() {
+        return this.getStringAttribute('count_operator');
+    }
+    set countOperator(value) {
+        this._countOperator = value;
+    }
+    resetCountOperator() {
         this._countOperator = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "countOperatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._countOperator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "domain", {
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        set: function (value) {
-            this._domain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetDomain = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get countOperatorInput() {
+        return this._countOperator;
+    }
+    // domain - computed: false, optional: true, required: false
+    _domain;
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    set domain(value) {
+        this._domain = value;
+    }
+    resetDomain() {
         this._domain = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "domainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "eidLastSeen", {
-        get: function () {
-            return this.getStringAttribute('eid_last_seen');
-        },
-        set: function (value) {
-            this._eidLastSeen = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetEidLastSeen = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainInput() {
+        return this._domain;
+    }
+    // eid_last_seen - computed: false, optional: true, required: false
+    _eidLastSeen;
+    get eidLastSeen() {
+        return this.getStringAttribute('eid_last_seen');
+    }
+    set eidLastSeen(value) {
+        this._eidLastSeen = value;
+    }
+    resetEidLastSeen() {
         this._eidLastSeen = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "eidLastSeenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eidLastSeen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get eidLastSeenInput() {
+        return this._eidLastSeen;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "exists", {
-        get: function () {
-            return this.getBooleanAttribute('exists');
-        },
-        set: function (value) {
-            this._exists = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetExists = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // exists - computed: false, optional: true, required: false
+    _exists;
+    get exists() {
+        return this.getBooleanAttribute('exists');
+    }
+    set exists(value) {
+        this._exists = value;
+    }
+    resetExists() {
         this._exists = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "existsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exists;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "extendedKeyUsage", {
-        get: function () {
-            return this.getListAttribute('extended_key_usage');
-        },
-        set: function (value) {
-            this._extendedKeyUsage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetExtendedKeyUsage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get existsInput() {
+        return this._exists;
+    }
+    // extended_key_usage - computed: false, optional: true, required: false
+    _extendedKeyUsage;
+    get extendedKeyUsage() {
+        return this.getListAttribute('extended_key_usage');
+    }
+    set extendedKeyUsage(value) {
+        this._extendedKeyUsage = value;
+    }
+    resetExtendedKeyUsage() {
         this._extendedKeyUsage = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "extendedKeyUsageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._extendedKeyUsage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get extendedKeyUsageInput() {
+        return this._extendedKeyUsage;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "infected", {
-        get: function () {
-            return this.getBooleanAttribute('infected');
-        },
-        set: function (value) {
-            this._infected = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetInfected = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // infected - computed: false, optional: true, required: false
+    _infected;
+    get infected() {
+        return this.getBooleanAttribute('infected');
+    }
+    set infected(value) {
+        this._infected = value;
+    }
+    resetInfected() {
         this._infected = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "infectedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._infected;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "isActive", {
-        get: function () {
-            return this.getBooleanAttribute('is_active');
-        },
-        set: function (value) {
-            this._isActive = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetIsActive = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get infectedInput() {
+        return this._infected;
+    }
+    // is_active - computed: false, optional: true, required: false
+    _isActive;
+    get isActive() {
+        return this.getBooleanAttribute('is_active');
+    }
+    set isActive(value) {
+        this._isActive = value;
+    }
+    resetIsActive() {
         this._isActive = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "isActiveInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isActive;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "issueCount", {
-        get: function () {
-            return this.getStringAttribute('issue_count');
-        },
-        set: function (value) {
-            this._issueCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetIssueCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isActiveInput() {
+        return this._isActive;
+    }
+    // issue_count - computed: false, optional: true, required: false
+    _issueCount;
+    get issueCount() {
+        return this.getStringAttribute('issue_count');
+    }
+    set issueCount(value) {
+        this._issueCount = value;
+    }
+    resetIssueCount() {
         this._issueCount = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "issueCountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._issueCount;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "lastSeen", {
-        get: function () {
-            return this.getStringAttribute('last_seen');
-        },
-        set: function (value) {
-            this._lastSeen = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetLastSeen = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get issueCountInput() {
+        return this._issueCount;
+    }
+    // last_seen - computed: false, optional: true, required: false
+    _lastSeen;
+    get lastSeen() {
+        return this.getStringAttribute('last_seen');
+    }
+    set lastSeen(value) {
+        this._lastSeen = value;
+    }
+    resetLastSeen() {
         this._lastSeen = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "lastSeenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._lastSeen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "locations", {
-        get: function () {
-            return this._locations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.putLocations = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get lastSeenInput() {
+        return this._lastSeen;
+    }
+    // locations - computed: false, optional: true, required: false
+    _locations = new ZeroTrustDevicePostureRuleInputLocationsOutputReference(this, "locations");
+    get locations() {
+        return this._locations;
+    }
+    putLocations(value) {
         this._locations.internalValue = value;
-    };
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetLocations = function () {
+    }
+    resetLocations() {
         this._locations.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "locationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._locations.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "networkStatus", {
-        get: function () {
-            return this.getStringAttribute('network_status');
-        },
-        set: function (value) {
-            this._networkStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetNetworkStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get locationsInput() {
+        return this._locations.internalValue;
+    }
+    // network_status - computed: false, optional: true, required: false
+    _networkStatus;
+    get networkStatus() {
+        return this.getStringAttribute('network_status');
+    }
+    set networkStatus(value) {
+        this._networkStatus = value;
+    }
+    resetNetworkStatus() {
         this._networkStatus = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "networkStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networkStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operatingSystem", {
-        get: function () {
-            return this.getStringAttribute('operating_system');
-        },
-        set: function (value) {
-            this._operatingSystem = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOperatingSystem = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkStatusInput() {
+        return this._networkStatus;
+    }
+    // operating_system - computed: false, optional: true, required: false
+    _operatingSystem;
+    get operatingSystem() {
+        return this.getStringAttribute('operating_system');
+    }
+    set operatingSystem(value) {
+        this._operatingSystem = value;
+    }
+    resetOperatingSystem() {
         this._operatingSystem = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operatingSystemInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operatingSystem;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operationalState", {
-        get: function () {
-            return this.getStringAttribute('operational_state');
-        },
-        set: function (value) {
-            this._operationalState = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOperationalState = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatingSystemInput() {
+        return this._operatingSystem;
+    }
+    // operational_state - computed: false, optional: true, required: false
+    _operationalState;
+    get operationalState() {
+        return this.getStringAttribute('operational_state');
+    }
+    set operationalState(value) {
+        this._operationalState = value;
+    }
+    resetOperationalState() {
         this._operationalState = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operationalStateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operationalState;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOperator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get operationalStateInput() {
+        return this._operationalState;
+    }
+    // operator - computed: false, optional: true, required: false
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    resetOperator() {
         this._operator = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "os", {
-        get: function () {
-            return this.getStringAttribute('os');
-        },
-        set: function (value) {
-            this._os = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOs = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // os - computed: false, optional: true, required: false
+    _os;
+    get os() {
+        return this.getStringAttribute('os');
+    }
+    set os(value) {
+        this._os = value;
+    }
+    resetOs() {
         this._os = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._os;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osDistroName", {
-        get: function () {
-            return this.getStringAttribute('os_distro_name');
-        },
-        set: function (value) {
-            this._osDistroName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOsDistroName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get osInput() {
+        return this._os;
+    }
+    // os_distro_name - computed: false, optional: true, required: false
+    _osDistroName;
+    get osDistroName() {
+        return this.getStringAttribute('os_distro_name');
+    }
+    set osDistroName(value) {
+        this._osDistroName = value;
+    }
+    resetOsDistroName() {
         this._osDistroName = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osDistroNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._osDistroName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osDistroRevision", {
-        get: function () {
-            return this.getStringAttribute('os_distro_revision');
-        },
-        set: function (value) {
-            this._osDistroRevision = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOsDistroRevision = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get osDistroNameInput() {
+        return this._osDistroName;
+    }
+    // os_distro_revision - computed: false, optional: true, required: false
+    _osDistroRevision;
+    get osDistroRevision() {
+        return this.getStringAttribute('os_distro_revision');
+    }
+    set osDistroRevision(value) {
+        this._osDistroRevision = value;
+    }
+    resetOsDistroRevision() {
         this._osDistroRevision = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osDistroRevisionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._osDistroRevision;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osVersionExtra", {
-        get: function () {
-            return this.getStringAttribute('os_version_extra');
-        },
-        set: function (value) {
-            this._osVersionExtra = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOsVersionExtra = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get osDistroRevisionInput() {
+        return this._osDistroRevision;
+    }
+    // os_version_extra - computed: false, optional: true, required: false
+    _osVersionExtra;
+    get osVersionExtra() {
+        return this.getStringAttribute('os_version_extra');
+    }
+    set osVersionExtra(value) {
+        this._osVersionExtra = value;
+    }
+    resetOsVersionExtra() {
         this._osVersionExtra = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "osVersionExtraInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._osVersionExtra;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "overall", {
-        get: function () {
-            return this.getStringAttribute('overall');
-        },
-        set: function (value) {
-            this._overall = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetOverall = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get osVersionExtraInput() {
+        return this._osVersionExtra;
+    }
+    // overall - computed: false, optional: true, required: false
+    _overall;
+    get overall() {
+        return this.getStringAttribute('overall');
+    }
+    set overall(value) {
+        this._overall = value;
+    }
+    resetOverall() {
         this._overall = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "overallInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._overall;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get overallInput() {
+        return this._overall;
+    }
+    // path - computed: false, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "requireAll", {
-        get: function () {
-            return this.getBooleanAttribute('require_all');
-        },
-        set: function (value) {
-            this._requireAll = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetRequireAll = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // require_all - computed: false, optional: true, required: false
+    _requireAll;
+    get requireAll() {
+        return this.getBooleanAttribute('require_all');
+    }
+    set requireAll(value) {
+        this._requireAll = value;
+    }
+    resetRequireAll() {
         this._requireAll = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "requireAllInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireAll;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "riskLevel", {
-        get: function () {
-            return this.getStringAttribute('risk_level');
-        },
-        set: function (value) {
-            this._riskLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetRiskLevel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireAllInput() {
+        return this._requireAll;
+    }
+    // risk_level - computed: false, optional: true, required: false
+    _riskLevel;
+    get riskLevel() {
+        return this.getStringAttribute('risk_level');
+    }
+    set riskLevel(value) {
+        this._riskLevel = value;
+    }
+    resetRiskLevel() {
         this._riskLevel = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "riskLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._riskLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "score", {
-        get: function () {
-            return this.getNumberAttribute('score');
-        },
-        set: function (value) {
-            this._score = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetScore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get riskLevelInput() {
+        return this._riskLevel;
+    }
+    // score - computed: false, optional: true, required: false
+    _score;
+    get score() {
+        return this.getNumberAttribute('score');
+    }
+    set score(value) {
+        this._score = value;
+    }
+    resetScore() {
         this._score = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "scoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._score;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "scoreOperator", {
-        get: function () {
-            return this.getStringAttribute('score_operator');
-        },
-        set: function (value) {
-            this._scoreOperator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetScoreOperator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scoreInput() {
+        return this._score;
+    }
+    // score_operator - computed: false, optional: true, required: false
+    _scoreOperator;
+    get scoreOperator() {
+        return this.getStringAttribute('score_operator');
+    }
+    set scoreOperator(value) {
+        this._scoreOperator = value;
+    }
+    resetScoreOperator() {
         this._scoreOperator = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "scoreOperatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scoreOperator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "sensorConfig", {
-        get: function () {
-            return this.getStringAttribute('sensor_config');
-        },
-        set: function (value) {
-            this._sensorConfig = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetSensorConfig = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scoreOperatorInput() {
+        return this._scoreOperator;
+    }
+    // sensor_config - computed: false, optional: true, required: false
+    _sensorConfig;
+    get sensorConfig() {
+        return this.getStringAttribute('sensor_config');
+    }
+    set sensorConfig(value) {
+        this._sensorConfig = value;
+    }
+    resetSensorConfig() {
         this._sensorConfig = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "sensorConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sensorConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "sha256", {
-        get: function () {
-            return this.getStringAttribute('sha256');
-        },
-        set: function (value) {
-            this._sha256 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetSha256 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sensorConfigInput() {
+        return this._sensorConfig;
+    }
+    // sha256 - computed: false, optional: true, required: false
+    _sha256;
+    get sha256() {
+        return this.getStringAttribute('sha256');
+    }
+    set sha256(value) {
+        this._sha256 = value;
+    }
+    resetSha256() {
         this._sha256 = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "sha256Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sha256;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "state", {
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        set: function (value) {
-            this._state = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetState = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sha256Input() {
+        return this._sha256;
+    }
+    // state - computed: false, optional: true, required: false
+    _state;
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    set state(value) {
+        this._state = value;
+    }
+    resetState() {
         this._state = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "stateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._state;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "subjectAlternativeNames", {
-        get: function () {
-            return this.getListAttribute('subject_alternative_names');
-        },
-        set: function (value) {
-            this._subjectAlternativeNames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetSubjectAlternativeNames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stateInput() {
+        return this._state;
+    }
+    // subject_alternative_names - computed: false, optional: true, required: false
+    _subjectAlternativeNames;
+    get subjectAlternativeNames() {
+        return this.getListAttribute('subject_alternative_names');
+    }
+    set subjectAlternativeNames(value) {
+        this._subjectAlternativeNames = value;
+    }
+    resetSubjectAlternativeNames() {
         this._subjectAlternativeNames = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "subjectAlternativeNamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subjectAlternativeNames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "thumbprint", {
-        get: function () {
-            return this.getStringAttribute('thumbprint');
-        },
-        set: function (value) {
-            this._thumbprint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetThumbprint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get subjectAlternativeNamesInput() {
+        return this._subjectAlternativeNames;
+    }
+    // thumbprint - computed: false, optional: true, required: false
+    _thumbprint;
+    get thumbprint() {
+        return this.getStringAttribute('thumbprint');
+    }
+    set thumbprint(value) {
+        this._thumbprint = value;
+    }
+    resetThumbprint() {
         this._thumbprint = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "thumbprintInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._thumbprint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "totalScore", {
-        get: function () {
-            return this.getNumberAttribute('total_score');
-        },
-        set: function (value) {
-            this._totalScore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetTotalScore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get thumbprintInput() {
+        return this._thumbprint;
+    }
+    // total_score - computed: false, optional: true, required: false
+    _totalScore;
+    get totalScore() {
+        return this.getNumberAttribute('total_score');
+    }
+    set totalScore(value) {
+        this._totalScore = value;
+    }
+    resetTotalScore() {
         this._totalScore = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "totalScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._totalScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "updateWindowDays", {
-        get: function () {
-            return this.getNumberAttribute('update_window_days');
-        },
-        set: function (value) {
-            this._updateWindowDays = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetUpdateWindowDays = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get totalScoreInput() {
+        return this._totalScore;
+    }
+    // update_window_days - computed: false, optional: true, required: false
+    _updateWindowDays;
+    get updateWindowDays() {
+        return this.getNumberAttribute('update_window_days');
+    }
+    set updateWindowDays(value) {
+        this._updateWindowDays = value;
+    }
+    resetUpdateWindowDays() {
         this._updateWindowDays = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "updateWindowDaysInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._updateWindowDays;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "version", {
-        get: function () {
-            return this.getStringAttribute('version');
-        },
-        set: function (value) {
-            this._version = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetVersion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get updateWindowDaysInput() {
+        return this._updateWindowDays;
+    }
+    // version - computed: false, optional: true, required: false
+    _version;
+    get version() {
+        return this.getStringAttribute('version');
+    }
+    set version(value) {
+        this._version = value;
+    }
+    resetVersion() {
         this._version = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "versionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._version;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "versionOperator", {
-        get: function () {
-            return this.getStringAttribute('version_operator');
-        },
-        set: function (value) {
-            this._versionOperator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleInputOutputReference.prototype.resetVersionOperator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get versionInput() {
+        return this._version;
+    }
+    // version_operator - computed: false, optional: true, required: false
+    _versionOperator;
+    get versionOperator() {
+        return this.getStringAttribute('version_operator');
+    }
+    set versionOperator(value) {
+        this._versionOperator = value;
+    }
+    resetVersionOperator() {
         this._versionOperator = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleInputOutputReference.prototype, "versionOperatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._versionOperator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDevicePostureRuleInputOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDevicePostureRuleInputOutputReference = ZeroTrustDevicePostureRuleInputOutputReference;
-function zeroTrustDevicePostureRuleMatchToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get versionOperatorInput() {
+        return this._versionOperator;
+    }
+}
+export function zeroTrustDevicePostureRuleMatchToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1699,14 +1382,14 @@ function zeroTrustDevicePostureRuleMatchToTerraform(struct) {
         platform: cdktf.stringToTerraform(struct.platform),
     };
 }
-function zeroTrustDevicePostureRuleMatchToHclTerraform(struct) {
+export function zeroTrustDevicePostureRuleMatchToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         platform: {
             value: cdktf.stringToHclTerraform(struct.platform),
             isBlock: false,
@@ -1715,108 +1398,108 @@ function zeroTrustDevicePostureRuleMatchToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDevicePostureRuleMatchOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDevicePostureRuleMatchOutputReference, _super);
+export class ZeroTrustDevicePostureRuleMatchOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDevicePostureRuleMatchOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDevicePostureRuleMatchOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._platform !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.platform = this._platform;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._platform = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._platform = value.platform;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRuleMatchOutputReference.prototype, "platform", {
-        get: function () {
-            return this.getStringAttribute('platform');
-        },
-        set: function (value) {
-            this._platform = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRuleMatchOutputReference.prototype.resetPlatform = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._platform !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.platform = this._platform;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._platform = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._platform = value.platform;
+        }
+    }
+    // platform - computed: false, optional: true, required: false
+    _platform;
+    get platform() {
+        return this.getStringAttribute('platform');
+    }
+    set platform(value) {
+        this._platform = value;
+    }
+    resetPlatform() {
         this._platform = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRuleMatchOutputReference.prototype, "platformInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._platform;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDevicePostureRuleMatchOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDevicePostureRuleMatchOutputReference = ZeroTrustDevicePostureRuleMatchOutputReference;
-var ZeroTrustDevicePostureRuleMatchList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDevicePostureRuleMatchList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get platformInput() {
+        return this._platform;
+    }
+}
+export class ZeroTrustDevicePostureRuleMatchList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDevicePostureRuleMatchList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDevicePostureRuleMatchList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDevicePostureRuleMatchOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDevicePostureRuleMatchList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDevicePostureRuleMatchList = ZeroTrustDevicePostureRuleMatchList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_posture_rule cloudflare_zero_trust_device_posture_rule}
 */
-var ZeroTrustDevicePostureRule = /** @class */ (function (_super) {
-    __extends(ZeroTrustDevicePostureRule, _super);
+export class ZeroTrustDevicePostureRule extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_device_posture_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDevicePostureRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDevicePostureRule to import
+    * @param importFromId The id of the existing ZeroTrustDevicePostureRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_posture_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDevicePostureRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_posture_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1827,8 +1510,8 @@ var ZeroTrustDevicePostureRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDevicePostureRuleConfig
     */
-    function ZeroTrustDevicePostureRule(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_device_posture_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1841,211 +1524,144 @@ var ZeroTrustDevicePostureRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // input - computed: false, optional: true, required: false
-        _this._input = new ZeroTrustDevicePostureRuleInputOutputReference(_this, "input");
-        // match - computed: false, optional: true, required: false
-        _this._match = new ZeroTrustDevicePostureRuleMatchList(_this, "match", false);
-        _this._accountId = config.accountId;
-        _this._description = config.description;
-        _this._expiration = config.expiration;
-        _this._input.internalValue = config.input;
-        _this._match.internalValue = config.match;
-        _this._name = config.name;
-        _this._schedule = config.schedule;
-        _this._type = config.type;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._description = config.description;
+        this._expiration = config.expiration;
+        this._input.internalValue = config.input;
+        this._match.internalValue = config.match;
+        this._name = config.name;
+        this._schedule = config.schedule;
+        this._type = config.type;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDevicePostureRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDevicePostureRule to import
-    * @param importFromId The id of the existing ZeroTrustDevicePostureRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_posture_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDevicePostureRule to import is found
-    */
-    ZeroTrustDevicePostureRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_posture_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "expiration", {
-        get: function () {
-            return this.getStringAttribute('expiration');
-        },
-        set: function (value) {
-            this._expiration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.resetExpiration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // expiration - computed: false, optional: true, required: false
+    _expiration;
+    get expiration() {
+        return this.getStringAttribute('expiration');
+    }
+    set expiration(value) {
+        this._expiration = value;
+    }
+    resetExpiration() {
         this._expiration = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "expirationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._expiration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "input", {
-        get: function () {
-            return this._input;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.putInput = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get expirationInput() {
+        return this._expiration;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // input - computed: false, optional: true, required: false
+    _input = new ZeroTrustDevicePostureRuleInputOutputReference(this, "input");
+    get input() {
+        return this._input;
+    }
+    putInput(value) {
         this._input.internalValue = value;
-    };
-    ZeroTrustDevicePostureRule.prototype.resetInput = function () {
+    }
+    resetInput() {
         this._input.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "inputInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._input.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "match", {
-        get: function () {
-            return this._match;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.putMatch = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get inputInput() {
+        return this._input.internalValue;
+    }
+    // match - computed: false, optional: true, required: false
+    _match = new ZeroTrustDevicePostureRuleMatchList(this, "match", false);
+    get match() {
+        return this._match;
+    }
+    putMatch(value) {
         this._match.internalValue = value;
-    };
-    ZeroTrustDevicePostureRule.prototype.resetMatch = function () {
+    }
+    resetMatch() {
         this._match.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "matchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._match.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get matchInput() {
+        return this._match.internalValue;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "schedule", {
-        get: function () {
-            return this.getStringAttribute('schedule');
-        },
-        set: function (value) {
-            this._schedule = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDevicePostureRule.prototype.resetSchedule = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // schedule - computed: false, optional: true, required: false
+    _schedule;
+    get schedule() {
+        return this.getStringAttribute('schedule');
+    }
+    set schedule(value) {
+        this._schedule = value;
+    }
+    resetSchedule() {
         this._schedule = undefined;
-    };
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "scheduleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._schedule;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDevicePostureRule.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get scheduleInput() {
+        return this._schedule;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDevicePostureRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             description: cdktf.stringToTerraform(this._description),
@@ -2056,9 +1672,9 @@ var ZeroTrustDevicePostureRule = /** @class */ (function (_super) {
             schedule: cdktf.stringToTerraform(this._schedule),
             type: cdktf.stringToTerraform(this._type),
         };
-    };
-    ZeroTrustDevicePostureRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -2109,15 +1725,6 @@ var ZeroTrustDevicePostureRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDevicePostureRule.tfResourceType = "cloudflare_zero_trust_device_posture_rule";
-    return ZeroTrustDevicePostureRule;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDevicePostureRule = ZeroTrustDevicePostureRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -49,6 +49,7 @@ let
 
       shopt -s globstar
       tsc \
+        --target es2022 \
         --noCheck \
         --noEmit false \
         --declaration \

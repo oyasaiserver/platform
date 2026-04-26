@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_organization
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnterpriseOrganization = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_organization github_enterprise_organization}
 */
-var EnterpriseOrganization = /** @class */ (function (_super) {
-    __extends(EnterpriseOrganization, _super);
+export class EnterpriseOrganization extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_enterprise_organization";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a EnterpriseOrganization resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the EnterpriseOrganization to import
+    * @param importFromId The id of the existing EnterpriseOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_organization#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the EnterpriseOrganization to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_enterprise_organization", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var EnterpriseOrganization = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options EnterpriseOrganizationConfig
     */
-    function EnterpriseOrganization(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_enterprise_organization',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,162 +46,107 @@ var EnterpriseOrganization = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._adminLogins = config.adminLogins;
-        _this._billingEmail = config.billingEmail;
-        _this._description = config.description;
-        _this._displayName = config.displayName;
-        _this._enterpriseId = config.enterpriseId;
-        _this._name = config.name;
-        return _this;
+        });
+        this._adminLogins = config.adminLogins;
+        this._billingEmail = config.billingEmail;
+        this._description = config.description;
+        this._displayName = config.displayName;
+        this._enterpriseId = config.enterpriseId;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a EnterpriseOrganization resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the EnterpriseOrganization to import
-    * @param importFromId The id of the existing EnterpriseOrganization that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_organization#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the EnterpriseOrganization to import is found
-    */
-    EnterpriseOrganization.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_enterprise_organization", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(EnterpriseOrganization.prototype, "adminLogins", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('admin_logins'));
-        },
-        set: function (value) {
-            this._adminLogins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "adminLoginsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._adminLogins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "billingEmail", {
-        get: function () {
-            return this.getStringAttribute('billing_email');
-        },
-        set: function (value) {
-            this._billingEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "billingEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._billingEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "databaseId", {
-        // database_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('database_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseOrganization.prototype.resetDescription = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // admin_logins - computed: false, optional: false, required: true
+    _adminLogins;
+    get adminLogins() {
+        return cdktf.Fn.tolist(this.getListAttribute('admin_logins'));
+    }
+    set adminLogins(value) {
+        this._adminLogins = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get adminLoginsInput() {
+        return this._adminLogins;
+    }
+    // billing_email - computed: false, optional: false, required: true
+    _billingEmail;
+    get billingEmail() {
+        return this.getStringAttribute('billing_email');
+    }
+    set billingEmail(value) {
+        this._billingEmail = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get billingEmailInput() {
+        return this._billingEmail;
+    }
+    // database_id - computed: true, optional: false, required: false
+    get databaseId() {
+        return this.getNumberAttribute('database_id');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(EnterpriseOrganization.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "displayName", {
-        get: function () {
-            return this.getStringAttribute('display_name');
-        },
-        set: function (value) {
-            this._displayName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseOrganization.prototype.resetDisplayName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // display_name - computed: false, optional: true, required: false
+    _displayName;
+    get displayName() {
+        return this.getStringAttribute('display_name');
+    }
+    set displayName(value) {
+        this._displayName = value;
+    }
+    resetDisplayName() {
         this._displayName = undefined;
-    };
-    Object.defineProperty(EnterpriseOrganization.prototype, "displayNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._displayName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "enterpriseId", {
-        get: function () {
-            return this.getStringAttribute('enterprise_id');
-        },
-        set: function (value) {
-            this._enterpriseId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "enterpriseIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enterpriseId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseOrganization.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get displayNameInput() {
+        return this._displayName;
+    }
+    // enterprise_id - computed: false, optional: false, required: true
+    _enterpriseId;
+    get enterpriseId() {
+        return this.getStringAttribute('enterprise_id');
+    }
+    set enterpriseId(value) {
+        this._enterpriseId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enterpriseIdInput() {
+        return this._enterpriseId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
     // =========
     // SYNTHESIS
     // =========
-    EnterpriseOrganization.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             admin_logins: cdktf.listMapper(cdktf.stringToTerraform, false)(this._adminLogins),
             billing_email: cdktf.stringToTerraform(this._billingEmail),
@@ -212,9 +155,9 @@ var EnterpriseOrganization = /** @class */ (function (_super) {
             enterprise_id: cdktf.stringToTerraform(this._enterpriseId),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    EnterpriseOrganization.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             admin_logins: {
                 value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(this._adminLogins),
                 isBlock: false,
@@ -253,15 +196,6 @@ var EnterpriseOrganization = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    EnterpriseOrganization.tfResourceType = "github_enterprise_organization";
-    return EnterpriseOrganization;
-}(cdktf.TerraformResource));
-exports.EnterpriseOrganization = EnterpriseOrganization;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

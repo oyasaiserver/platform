@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/schema_validation_schemas
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SchemaValidationSchemas = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/schema_validation_schemas cloudflare_schema_validation_schemas}
 */
-var SchemaValidationSchemas = /** @class */ (function (_super) {
-    __extends(SchemaValidationSchemas, _super);
+export class SchemaValidationSchemas extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_schema_validation_schemas";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a SchemaValidationSchemas resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the SchemaValidationSchemas to import
+    * @param importFromId The id of the existing SchemaValidationSchemas that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/schema_validation_schemas#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the SchemaValidationSchemas to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_schema_validation_schemas", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var SchemaValidationSchemas = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options SchemaValidationSchemasConfig
     */
-    function SchemaValidationSchemas(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_schema_validation_schemas',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,151 +46,95 @@ var SchemaValidationSchemas = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._kind = config.kind;
-        _this._name = config.name;
-        _this._source = config.source;
-        _this._validationEnabled = config.validationEnabled;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._kind = config.kind;
+        this._name = config.name;
+        this._source = config.source;
+        this._validationEnabled = config.validationEnabled;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a SchemaValidationSchemas resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the SchemaValidationSchemas to import
-    * @param importFromId The id of the existing SchemaValidationSchemas that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/schema_validation_schemas#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the SchemaValidationSchemas to import is found
-    */
-    SchemaValidationSchemas.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_schema_validation_schemas", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(SchemaValidationSchemas.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "kind", {
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        set: function (value) {
-            this._kind = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "kindInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kind;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "schemaId", {
-        // schema_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('schema_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "validationEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('validation_enabled');
-        },
-        set: function (value) {
-            this._validationEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "validationEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._validationEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SchemaValidationSchemas.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SchemaValidationSchemas.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // kind - computed: false, optional: false, required: true
+    _kind;
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    set kind(value) {
+        this._kind = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get kindInput() {
+        return this._kind;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // schema_id - computed: true, optional: false, required: false
+    get schemaId() {
+        return this.getStringAttribute('schema_id');
+    }
+    // source - computed: false, optional: false, required: true
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+    // validation_enabled - computed: false, optional: false, required: true
+    _validationEnabled;
+    get validationEnabled() {
+        return this.getBooleanAttribute('validation_enabled');
+    }
+    set validationEnabled(value) {
+        this._validationEnabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get validationEnabledInput() {
+        return this._validationEnabled;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(SchemaValidationSchemas.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    SchemaValidationSchemas.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             kind: cdktf.stringToTerraform(this._kind),
             name: cdktf.stringToTerraform(this._name),
@@ -200,9 +142,9 @@ var SchemaValidationSchemas = /** @class */ (function (_super) {
             validation_enabled: cdktf.booleanToTerraform(this._validationEnabled),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    SchemaValidationSchemas.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             kind: {
                 value: cdktf.stringToHclTerraform(this._kind),
                 isBlock: false,
@@ -235,15 +177,6 @@ var SchemaValidationSchemas = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    SchemaValidationSchemas.tfResourceType = "cloudflare_schema_validation_schemas";
-    return SchemaValidationSchemas;
-}(cdktf.TerraformResource));
-exports.SchemaValidationSchemas = SchemaValidationSchemas;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

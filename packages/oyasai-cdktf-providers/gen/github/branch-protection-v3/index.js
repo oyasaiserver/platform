@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_protection_v3
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BranchProtectionV3 = exports.BranchProtectionV3RestrictionsOutputReference = exports.BranchProtectionV3RequiredStatusChecksOutputReference = exports.BranchProtectionV3RequiredPullRequestReviewsOutputReference = exports.BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference = void 0;
-exports.branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToTerraform = branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToTerraform;
-exports.branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToHclTerraform = branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToHclTerraform;
-exports.branchProtectionV3RequiredPullRequestReviewsToTerraform = branchProtectionV3RequiredPullRequestReviewsToTerraform;
-exports.branchProtectionV3RequiredPullRequestReviewsToHclTerraform = branchProtectionV3RequiredPullRequestReviewsToHclTerraform;
-exports.branchProtectionV3RequiredStatusChecksToTerraform = branchProtectionV3RequiredStatusChecksToTerraform;
-exports.branchProtectionV3RequiredStatusChecksToHclTerraform = branchProtectionV3RequiredStatusChecksToHclTerraform;
-exports.branchProtectionV3RestrictionsToTerraform = branchProtectionV3RestrictionsToTerraform;
-exports.branchProtectionV3RestrictionsToHclTerraform = branchProtectionV3RestrictionsToHclTerraform;
-var cdktf = require("cdktf");
-function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +14,14 @@ function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowances
         users: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.users),
     };
 }
-function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToHclTerraform(struct) {
+export function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         apps: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.apps),
             isBlock: false,
@@ -68,124 +42,95 @@ function branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowances
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference = /** @class */ (function (_super) {
-    __extends(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference, _super);
+export class BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._apps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.apps = this._apps;
-            }
-            if (this._teams !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.teams = this._teams;
-            }
-            if (this._users !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.users = this._users;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._apps = undefined;
-                this._teams = undefined;
-                this._users = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._apps = value.apps;
-                this._teams = value.teams;
-                this._users = value.users;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "apps", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('apps'));
-        },
-        set: function (value) {
-            this._apps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype.resetApps = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._apps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.apps = this._apps;
+        }
+        if (this._teams !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.teams = this._teams;
+        }
+        if (this._users !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.users = this._users;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._apps = undefined;
+            this._teams = undefined;
+            this._users = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._apps = value.apps;
+            this._teams = value.teams;
+            this._users = value.users;
+        }
+    }
+    // apps - computed: false, optional: true, required: false
+    _apps;
+    get apps() {
+        return cdktf.Fn.tolist(this.getListAttribute('apps'));
+    }
+    set apps(value) {
+        this._apps = value;
+    }
+    resetApps() {
         this._apps = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "appsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "teams", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('teams'));
-        },
-        set: function (value) {
-            this._teams = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype.resetTeams = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get appsInput() {
+        return this._apps;
+    }
+    // teams - computed: false, optional: true, required: false
+    _teams;
+    get teams() {
+        return cdktf.Fn.tolist(this.getListAttribute('teams'));
+    }
+    set teams(value) {
+        this._teams = value;
+    }
+    resetTeams() {
         this._teams = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "teamsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._teams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "users", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('users'));
-        },
-        set: function (value) {
-            this._users = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype.resetUsers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamsInput() {
+        return this._teams;
+    }
+    // users - computed: false, optional: true, required: false
+    _users;
+    get users() {
+        return cdktf.Fn.tolist(this.getListAttribute('users'));
+    }
+    set users(value) {
+        this._users = value;
+    }
+    resetUsers() {
         this._users = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference.prototype, "usersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._users;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference;
-}(cdktf.ComplexObject));
-exports.BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference = BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference;
-function branchProtectionV3RequiredPullRequestReviewsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get usersInput() {
+        return this._users;
+    }
+}
+export function branchProtectionV3RequiredPullRequestReviewsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -204,14 +149,14 @@ function branchProtectionV3RequiredPullRequestReviewsToTerraform(struct) {
         bypass_pull_request_allowances: branchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesToTerraform(struct.bypassPullRequestAllowances),
     };
 }
-function branchProtectionV3RequiredPullRequestReviewsToHclTerraform(struct) {
+export function branchProtectionV3RequiredPullRequestReviewsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         dismiss_stale_reviews: {
             value: cdktf.booleanToHclTerraform(struct.dismissStaleReviews),
             isBlock: false,
@@ -268,289 +213,221 @@ function branchProtectionV3RequiredPullRequestReviewsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var BranchProtectionV3RequiredPullRequestReviewsOutputReference = /** @class */ (function (_super) {
-    __extends(BranchProtectionV3RequiredPullRequestReviewsOutputReference, _super);
+export class BranchProtectionV3RequiredPullRequestReviewsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function BranchProtectionV3RequiredPullRequestReviewsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // bypass_pull_request_allowances - computed: false, optional: true, required: false
-        _this._bypassPullRequestAllowances = new BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference(_this, "bypass_pull_request_allowances");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._dismissStaleReviews !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dismissStaleReviews = this._dismissStaleReviews;
-            }
-            if (this._dismissalApps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dismissalApps = this._dismissalApps;
-            }
-            if (this._dismissalTeams !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dismissalTeams = this._dismissalTeams;
-            }
-            if (this._dismissalUsers !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dismissalUsers = this._dismissalUsers;
-            }
-            if (this._includeAdmins !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeAdmins = this._includeAdmins;
-            }
-            if (this._requireCodeOwnerReviews !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireCodeOwnerReviews = this._requireCodeOwnerReviews;
-            }
-            if (this._requireLastPushApproval !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireLastPushApproval = this._requireLastPushApproval;
-            }
-            if (this._requiredApprovingReviewCount !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredApprovingReviewCount = this._requiredApprovingReviewCount;
-            }
-            if (((_a = this._bypassPullRequestAllowances) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bypassPullRequestAllowances = (_b = this._bypassPullRequestAllowances) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._dismissStaleReviews = undefined;
-                this._dismissalApps = undefined;
-                this._dismissalTeams = undefined;
-                this._dismissalUsers = undefined;
-                this._includeAdmins = undefined;
-                this._requireCodeOwnerReviews = undefined;
-                this._requireLastPushApproval = undefined;
-                this._requiredApprovingReviewCount = undefined;
-                this._bypassPullRequestAllowances.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._dismissStaleReviews = value.dismissStaleReviews;
-                this._dismissalApps = value.dismissalApps;
-                this._dismissalTeams = value.dismissalTeams;
-                this._dismissalUsers = value.dismissalUsers;
-                this._includeAdmins = value.includeAdmins;
-                this._requireCodeOwnerReviews = value.requireCodeOwnerReviews;
-                this._requireLastPushApproval = value.requireLastPushApproval;
-                this._requiredApprovingReviewCount = value.requiredApprovingReviewCount;
-                this._bypassPullRequestAllowances.internalValue = value.bypassPullRequestAllowances;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissStaleReviews", {
-        get: function () {
-            return this.getBooleanAttribute('dismiss_stale_reviews');
-        },
-        set: function (value) {
-            this._dismissStaleReviews = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetDismissStaleReviews = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._dismissStaleReviews !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dismissStaleReviews = this._dismissStaleReviews;
+        }
+        if (this._dismissalApps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dismissalApps = this._dismissalApps;
+        }
+        if (this._dismissalTeams !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dismissalTeams = this._dismissalTeams;
+        }
+        if (this._dismissalUsers !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dismissalUsers = this._dismissalUsers;
+        }
+        if (this._includeAdmins !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeAdmins = this._includeAdmins;
+        }
+        if (this._requireCodeOwnerReviews !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireCodeOwnerReviews = this._requireCodeOwnerReviews;
+        }
+        if (this._requireLastPushApproval !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireLastPushApproval = this._requireLastPushApproval;
+        }
+        if (this._requiredApprovingReviewCount !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredApprovingReviewCount = this._requiredApprovingReviewCount;
+        }
+        if (this._bypassPullRequestAllowances?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bypassPullRequestAllowances = this._bypassPullRequestAllowances?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._dismissStaleReviews = undefined;
+            this._dismissalApps = undefined;
+            this._dismissalTeams = undefined;
+            this._dismissalUsers = undefined;
+            this._includeAdmins = undefined;
+            this._requireCodeOwnerReviews = undefined;
+            this._requireLastPushApproval = undefined;
+            this._requiredApprovingReviewCount = undefined;
+            this._bypassPullRequestAllowances.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._dismissStaleReviews = value.dismissStaleReviews;
+            this._dismissalApps = value.dismissalApps;
+            this._dismissalTeams = value.dismissalTeams;
+            this._dismissalUsers = value.dismissalUsers;
+            this._includeAdmins = value.includeAdmins;
+            this._requireCodeOwnerReviews = value.requireCodeOwnerReviews;
+            this._requireLastPushApproval = value.requireLastPushApproval;
+            this._requiredApprovingReviewCount = value.requiredApprovingReviewCount;
+            this._bypassPullRequestAllowances.internalValue = value.bypassPullRequestAllowances;
+        }
+    }
+    // dismiss_stale_reviews - computed: false, optional: true, required: false
+    _dismissStaleReviews;
+    get dismissStaleReviews() {
+        return this.getBooleanAttribute('dismiss_stale_reviews');
+    }
+    set dismissStaleReviews(value) {
+        this._dismissStaleReviews = value;
+    }
+    resetDismissStaleReviews() {
         this._dismissStaleReviews = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissStaleReviewsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dismissStaleReviews;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalApps", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dismissal_apps'));
-        },
-        set: function (value) {
-            this._dismissalApps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetDismissalApps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dismissStaleReviewsInput() {
+        return this._dismissStaleReviews;
+    }
+    // dismissal_apps - computed: false, optional: true, required: false
+    _dismissalApps;
+    get dismissalApps() {
+        return cdktf.Fn.tolist(this.getListAttribute('dismissal_apps'));
+    }
+    set dismissalApps(value) {
+        this._dismissalApps = value;
+    }
+    resetDismissalApps() {
         this._dismissalApps = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalAppsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dismissalApps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalTeams", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dismissal_teams'));
-        },
-        set: function (value) {
-            this._dismissalTeams = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetDismissalTeams = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dismissalAppsInput() {
+        return this._dismissalApps;
+    }
+    // dismissal_teams - computed: false, optional: true, required: false
+    _dismissalTeams;
+    get dismissalTeams() {
+        return cdktf.Fn.tolist(this.getListAttribute('dismissal_teams'));
+    }
+    set dismissalTeams(value) {
+        this._dismissalTeams = value;
+    }
+    resetDismissalTeams() {
         this._dismissalTeams = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalTeamsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dismissalTeams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalUsers", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dismissal_users'));
-        },
-        set: function (value) {
-            this._dismissalUsers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetDismissalUsers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dismissalTeamsInput() {
+        return this._dismissalTeams;
+    }
+    // dismissal_users - computed: false, optional: true, required: false
+    _dismissalUsers;
+    get dismissalUsers() {
+        return cdktf.Fn.tolist(this.getListAttribute('dismissal_users'));
+    }
+    set dismissalUsers(value) {
+        this._dismissalUsers = value;
+    }
+    resetDismissalUsers() {
         this._dismissalUsers = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "dismissalUsersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dismissalUsers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "includeAdmins", {
-        get: function () {
-            return this.getBooleanAttribute('include_admins');
-        },
-        set: function (value) {
-            this._includeAdmins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetIncludeAdmins = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dismissalUsersInput() {
+        return this._dismissalUsers;
+    }
+    // include_admins - computed: false, optional: true, required: false
+    _includeAdmins;
+    get includeAdmins() {
+        return this.getBooleanAttribute('include_admins');
+    }
+    set includeAdmins(value) {
+        this._includeAdmins = value;
+    }
+    resetIncludeAdmins() {
         this._includeAdmins = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "includeAdminsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeAdmins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requireCodeOwnerReviews", {
-        get: function () {
-            return this.getBooleanAttribute('require_code_owner_reviews');
-        },
-        set: function (value) {
-            this._requireCodeOwnerReviews = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetRequireCodeOwnerReviews = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeAdminsInput() {
+        return this._includeAdmins;
+    }
+    // require_code_owner_reviews - computed: false, optional: true, required: false
+    _requireCodeOwnerReviews;
+    get requireCodeOwnerReviews() {
+        return this.getBooleanAttribute('require_code_owner_reviews');
+    }
+    set requireCodeOwnerReviews(value) {
+        this._requireCodeOwnerReviews = value;
+    }
+    resetRequireCodeOwnerReviews() {
         this._requireCodeOwnerReviews = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requireCodeOwnerReviewsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireCodeOwnerReviews;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requireLastPushApproval", {
-        get: function () {
-            return this.getBooleanAttribute('require_last_push_approval');
-        },
-        set: function (value) {
-            this._requireLastPushApproval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetRequireLastPushApproval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireCodeOwnerReviewsInput() {
+        return this._requireCodeOwnerReviews;
+    }
+    // require_last_push_approval - computed: false, optional: true, required: false
+    _requireLastPushApproval;
+    get requireLastPushApproval() {
+        return this.getBooleanAttribute('require_last_push_approval');
+    }
+    set requireLastPushApproval(value) {
+        this._requireLastPushApproval = value;
+    }
+    resetRequireLastPushApproval() {
         this._requireLastPushApproval = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requireLastPushApprovalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireLastPushApproval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requiredApprovingReviewCount", {
-        get: function () {
-            return this.getNumberAttribute('required_approving_review_count');
-        },
-        set: function (value) {
-            this._requiredApprovingReviewCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetRequiredApprovingReviewCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireLastPushApprovalInput() {
+        return this._requireLastPushApproval;
+    }
+    // required_approving_review_count - computed: false, optional: true, required: false
+    _requiredApprovingReviewCount;
+    get requiredApprovingReviewCount() {
+        return this.getNumberAttribute('required_approving_review_count');
+    }
+    set requiredApprovingReviewCount(value) {
+        this._requiredApprovingReviewCount = value;
+    }
+    resetRequiredApprovingReviewCount() {
         this._requiredApprovingReviewCount = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "requiredApprovingReviewCountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredApprovingReviewCount;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "bypassPullRequestAllowances", {
-        get: function () {
-            return this._bypassPullRequestAllowances;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.putBypassPullRequestAllowances = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredApprovingReviewCountInput() {
+        return this._requiredApprovingReviewCount;
+    }
+    // bypass_pull_request_allowances - computed: false, optional: true, required: false
+    _bypassPullRequestAllowances = new BranchProtectionV3RequiredPullRequestReviewsBypassPullRequestAllowancesOutputReference(this, "bypass_pull_request_allowances");
+    get bypassPullRequestAllowances() {
+        return this._bypassPullRequestAllowances;
+    }
+    putBypassPullRequestAllowances(value) {
         this._bypassPullRequestAllowances.internalValue = value;
-    };
-    BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype.resetBypassPullRequestAllowances = function () {
+    }
+    resetBypassPullRequestAllowances() {
         this._bypassPullRequestAllowances.internalValue = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredPullRequestReviewsOutputReference.prototype, "bypassPullRequestAllowancesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bypassPullRequestAllowances.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BranchProtectionV3RequiredPullRequestReviewsOutputReference;
-}(cdktf.ComplexObject));
-exports.BranchProtectionV3RequiredPullRequestReviewsOutputReference = BranchProtectionV3RequiredPullRequestReviewsOutputReference;
-function branchProtectionV3RequiredStatusChecksToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bypassPullRequestAllowancesInput() {
+        return this._bypassPullRequestAllowances.internalValue;
+    }
+}
+export function branchProtectionV3RequiredStatusChecksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -564,14 +441,14 @@ function branchProtectionV3RequiredStatusChecksToTerraform(struct) {
         strict: cdktf.booleanToTerraform(struct.strict),
     };
 }
-function branchProtectionV3RequiredStatusChecksToHclTerraform(struct) {
+export function branchProtectionV3RequiredStatusChecksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         checks: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.checks),
             isBlock: false,
@@ -598,151 +475,116 @@ function branchProtectionV3RequiredStatusChecksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var BranchProtectionV3RequiredStatusChecksOutputReference = /** @class */ (function (_super) {
-    __extends(BranchProtectionV3RequiredStatusChecksOutputReference, _super);
+export class BranchProtectionV3RequiredStatusChecksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function BranchProtectionV3RequiredStatusChecksOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._checks !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.checks = this._checks;
-            }
-            if (this._contexts !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contexts = this._contexts;
-            }
-            if (this._includeAdmins !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeAdmins = this._includeAdmins;
-            }
-            if (this._strict !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.strict = this._strict;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._checks = undefined;
-                this._contexts = undefined;
-                this._includeAdmins = undefined;
-                this._strict = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._checks = value.checks;
-                this._contexts = value.contexts;
-                this._includeAdmins = value.includeAdmins;
-                this._strict = value.strict;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "checks", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('checks'));
-        },
-        set: function (value) {
-            this._checks = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredStatusChecksOutputReference.prototype.resetChecks = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._checks !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.checks = this._checks;
+        }
+        if (this._contexts !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contexts = this._contexts;
+        }
+        if (this._includeAdmins !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeAdmins = this._includeAdmins;
+        }
+        if (this._strict !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.strict = this._strict;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._checks = undefined;
+            this._contexts = undefined;
+            this._includeAdmins = undefined;
+            this._strict = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._checks = value.checks;
+            this._contexts = value.contexts;
+            this._includeAdmins = value.includeAdmins;
+            this._strict = value.strict;
+        }
+    }
+    // checks - computed: true, optional: true, required: false
+    _checks;
+    get checks() {
+        return cdktf.Fn.tolist(this.getListAttribute('checks'));
+    }
+    set checks(value) {
+        this._checks = value;
+    }
+    resetChecks() {
         this._checks = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "checksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._checks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "contexts", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('contexts'));
-        },
-        set: function (value) {
-            this._contexts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredStatusChecksOutputReference.prototype.resetContexts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get checksInput() {
+        return this._checks;
+    }
+    // contexts - computed: true, optional: true, required: false
+    _contexts;
+    get contexts() {
+        return cdktf.Fn.tolist(this.getListAttribute('contexts'));
+    }
+    set contexts(value) {
+        this._contexts = value;
+    }
+    resetContexts() {
         this._contexts = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "contextsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contexts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "includeAdmins", {
-        get: function () {
-            return this.getBooleanAttribute('include_admins');
-        },
-        set: function (value) {
-            this._includeAdmins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredStatusChecksOutputReference.prototype.resetIncludeAdmins = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contextsInput() {
+        return this._contexts;
+    }
+    // include_admins - computed: false, optional: true, required: false
+    _includeAdmins;
+    get includeAdmins() {
+        return this.getBooleanAttribute('include_admins');
+    }
+    set includeAdmins(value) {
+        this._includeAdmins = value;
+    }
+    resetIncludeAdmins() {
         this._includeAdmins = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "includeAdminsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeAdmins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "strict", {
-        get: function () {
-            return this.getBooleanAttribute('strict');
-        },
-        set: function (value) {
-            this._strict = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RequiredStatusChecksOutputReference.prototype.resetStrict = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeAdminsInput() {
+        return this._includeAdmins;
+    }
+    // strict - computed: false, optional: true, required: false
+    _strict;
+    get strict() {
+        return this.getBooleanAttribute('strict');
+    }
+    set strict(value) {
+        this._strict = value;
+    }
+    resetStrict() {
         this._strict = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RequiredStatusChecksOutputReference.prototype, "strictInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._strict;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BranchProtectionV3RequiredStatusChecksOutputReference;
-}(cdktf.ComplexObject));
-exports.BranchProtectionV3RequiredStatusChecksOutputReference = BranchProtectionV3RequiredStatusChecksOutputReference;
-function branchProtectionV3RestrictionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get strictInput() {
+        return this._strict;
+    }
+}
+export function branchProtectionV3RestrictionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -755,14 +597,14 @@ function branchProtectionV3RestrictionsToTerraform(struct) {
         users: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.users),
     };
 }
-function branchProtectionV3RestrictionsToHclTerraform(struct) {
+export function branchProtectionV3RestrictionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         apps: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.apps),
             isBlock: false,
@@ -783,128 +625,115 @@ function branchProtectionV3RestrictionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var BranchProtectionV3RestrictionsOutputReference = /** @class */ (function (_super) {
-    __extends(BranchProtectionV3RestrictionsOutputReference, _super);
+export class BranchProtectionV3RestrictionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function BranchProtectionV3RestrictionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._apps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.apps = this._apps;
-            }
-            if (this._teams !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.teams = this._teams;
-            }
-            if (this._users !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.users = this._users;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._apps = undefined;
-                this._teams = undefined;
-                this._users = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._apps = value.apps;
-                this._teams = value.teams;
-                this._users = value.users;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "apps", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('apps'));
-        },
-        set: function (value) {
-            this._apps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RestrictionsOutputReference.prototype.resetApps = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._apps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.apps = this._apps;
+        }
+        if (this._teams !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.teams = this._teams;
+        }
+        if (this._users !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.users = this._users;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._apps = undefined;
+            this._teams = undefined;
+            this._users = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._apps = value.apps;
+            this._teams = value.teams;
+            this._users = value.users;
+        }
+    }
+    // apps - computed: false, optional: true, required: false
+    _apps;
+    get apps() {
+        return cdktf.Fn.tolist(this.getListAttribute('apps'));
+    }
+    set apps(value) {
+        this._apps = value;
+    }
+    resetApps() {
         this._apps = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "appsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "teams", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('teams'));
-        },
-        set: function (value) {
-            this._teams = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RestrictionsOutputReference.prototype.resetTeams = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get appsInput() {
+        return this._apps;
+    }
+    // teams - computed: false, optional: true, required: false
+    _teams;
+    get teams() {
+        return cdktf.Fn.tolist(this.getListAttribute('teams'));
+    }
+    set teams(value) {
+        this._teams = value;
+    }
+    resetTeams() {
         this._teams = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "teamsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._teams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "users", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('users'));
-        },
-        set: function (value) {
-            this._users = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3RestrictionsOutputReference.prototype.resetUsers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamsInput() {
+        return this._teams;
+    }
+    // users - computed: false, optional: true, required: false
+    _users;
+    get users() {
+        return cdktf.Fn.tolist(this.getListAttribute('users'));
+    }
+    set users(value) {
+        this._users = value;
+    }
+    resetUsers() {
         this._users = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3RestrictionsOutputReference.prototype, "usersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._users;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BranchProtectionV3RestrictionsOutputReference;
-}(cdktf.ComplexObject));
-exports.BranchProtectionV3RestrictionsOutputReference = BranchProtectionV3RestrictionsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usersInput() {
+        return this._users;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_protection_v3 github_branch_protection_v3}
 */
-var BranchProtectionV3 = /** @class */ (function (_super) {
-    __extends(BranchProtectionV3, _super);
+export class BranchProtectionV3 extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_branch_protection_v3";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a BranchProtectionV3 resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the BranchProtectionV3 to import
+    * @param importFromId The id of the existing BranchProtectionV3 that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_protection_v3#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the BranchProtectionV3 to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_branch_protection_v3", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -915,8 +744,8 @@ var BranchProtectionV3 = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options BranchProtectionV3Config
     */
-    function BranchProtectionV3(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_branch_protection_v3',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -929,232 +758,157 @@ var BranchProtectionV3 = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // required_pull_request_reviews - computed: false, optional: true, required: false
-        _this._requiredPullRequestReviews = new BranchProtectionV3RequiredPullRequestReviewsOutputReference(_this, "required_pull_request_reviews");
-        // required_status_checks - computed: false, optional: true, required: false
-        _this._requiredStatusChecks = new BranchProtectionV3RequiredStatusChecksOutputReference(_this, "required_status_checks");
-        // restrictions - computed: false, optional: true, required: false
-        _this._restrictions = new BranchProtectionV3RestrictionsOutputReference(_this, "restrictions");
-        _this._branch = config.branch;
-        _this._enforceAdmins = config.enforceAdmins;
-        _this._id = config.id;
-        _this._repository = config.repository;
-        _this._requireConversationResolution = config.requireConversationResolution;
-        _this._requireSignedCommits = config.requireSignedCommits;
-        _this._requiredPullRequestReviews.internalValue = config.requiredPullRequestReviews;
-        _this._requiredStatusChecks.internalValue = config.requiredStatusChecks;
-        _this._restrictions.internalValue = config.restrictions;
-        return _this;
+        });
+        this._branch = config.branch;
+        this._enforceAdmins = config.enforceAdmins;
+        this._id = config.id;
+        this._repository = config.repository;
+        this._requireConversationResolution = config.requireConversationResolution;
+        this._requireSignedCommits = config.requireSignedCommits;
+        this._requiredPullRequestReviews.internalValue = config.requiredPullRequestReviews;
+        this._requiredStatusChecks.internalValue = config.requiredStatusChecks;
+        this._restrictions.internalValue = config.restrictions;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a BranchProtectionV3 resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the BranchProtectionV3 to import
-    * @param importFromId The id of the existing BranchProtectionV3 that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_protection_v3#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the BranchProtectionV3 to import is found
-    */
-    BranchProtectionV3.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_branch_protection_v3", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "branch", {
-        get: function () {
-            return this.getStringAttribute('branch');
-        },
-        set: function (value) {
-            this._branch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "branchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._branch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "enforceAdmins", {
-        get: function () {
-            return this.getBooleanAttribute('enforce_admins');
-        },
-        set: function (value) {
-            this._enforceAdmins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.resetEnforceAdmins = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // branch - computed: false, optional: false, required: true
+    _branch;
+    get branch() {
+        return this.getStringAttribute('branch');
+    }
+    set branch(value) {
+        this._branch = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get branchInput() {
+        return this._branch;
+    }
+    // enforce_admins - computed: false, optional: true, required: false
+    _enforceAdmins;
+    get enforceAdmins() {
+        return this.getBooleanAttribute('enforce_admins');
+    }
+    set enforceAdmins(value) {
+        this._enforceAdmins = value;
+    }
+    resetEnforceAdmins() {
         this._enforceAdmins = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "enforceAdminsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enforceAdmins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enforceAdminsInput() {
+        return this._enforceAdmins;
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "requireConversationResolution", {
-        get: function () {
-            return this.getBooleanAttribute('require_conversation_resolution');
-        },
-        set: function (value) {
-            this._requireConversationResolution = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.resetRequireConversationResolution = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // require_conversation_resolution - computed: false, optional: true, required: false
+    _requireConversationResolution;
+    get requireConversationResolution() {
+        return this.getBooleanAttribute('require_conversation_resolution');
+    }
+    set requireConversationResolution(value) {
+        this._requireConversationResolution = value;
+    }
+    resetRequireConversationResolution() {
         this._requireConversationResolution = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "requireConversationResolutionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireConversationResolution;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "requireSignedCommits", {
-        get: function () {
-            return this.getBooleanAttribute('require_signed_commits');
-        },
-        set: function (value) {
-            this._requireSignedCommits = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.resetRequireSignedCommits = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireConversationResolutionInput() {
+        return this._requireConversationResolution;
+    }
+    // require_signed_commits - computed: false, optional: true, required: false
+    _requireSignedCommits;
+    get requireSignedCommits() {
+        return this.getBooleanAttribute('require_signed_commits');
+    }
+    set requireSignedCommits(value) {
+        this._requireSignedCommits = value;
+    }
+    resetRequireSignedCommits() {
         this._requireSignedCommits = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "requireSignedCommitsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireSignedCommits;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "requiredPullRequestReviews", {
-        get: function () {
-            return this._requiredPullRequestReviews;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.putRequiredPullRequestReviews = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireSignedCommitsInput() {
+        return this._requireSignedCommits;
+    }
+    // required_pull_request_reviews - computed: false, optional: true, required: false
+    _requiredPullRequestReviews = new BranchProtectionV3RequiredPullRequestReviewsOutputReference(this, "required_pull_request_reviews");
+    get requiredPullRequestReviews() {
+        return this._requiredPullRequestReviews;
+    }
+    putRequiredPullRequestReviews(value) {
         this._requiredPullRequestReviews.internalValue = value;
-    };
-    BranchProtectionV3.prototype.resetRequiredPullRequestReviews = function () {
+    }
+    resetRequiredPullRequestReviews() {
         this._requiredPullRequestReviews.internalValue = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "requiredPullRequestReviewsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredPullRequestReviews.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "requiredStatusChecks", {
-        get: function () {
-            return this._requiredStatusChecks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.putRequiredStatusChecks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredPullRequestReviewsInput() {
+        return this._requiredPullRequestReviews.internalValue;
+    }
+    // required_status_checks - computed: false, optional: true, required: false
+    _requiredStatusChecks = new BranchProtectionV3RequiredStatusChecksOutputReference(this, "required_status_checks");
+    get requiredStatusChecks() {
+        return this._requiredStatusChecks;
+    }
+    putRequiredStatusChecks(value) {
         this._requiredStatusChecks.internalValue = value;
-    };
-    BranchProtectionV3.prototype.resetRequiredStatusChecks = function () {
+    }
+    resetRequiredStatusChecks() {
         this._requiredStatusChecks.internalValue = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "requiredStatusChecksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredStatusChecks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchProtectionV3.prototype, "restrictions", {
-        get: function () {
-            return this._restrictions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchProtectionV3.prototype.putRestrictions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredStatusChecksInput() {
+        return this._requiredStatusChecks.internalValue;
+    }
+    // restrictions - computed: false, optional: true, required: false
+    _restrictions = new BranchProtectionV3RestrictionsOutputReference(this, "restrictions");
+    get restrictions() {
+        return this._restrictions;
+    }
+    putRestrictions(value) {
         this._restrictions.internalValue = value;
-    };
-    BranchProtectionV3.prototype.resetRestrictions = function () {
+    }
+    resetRestrictions() {
         this._restrictions.internalValue = undefined;
-    };
-    Object.defineProperty(BranchProtectionV3.prototype, "restrictionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._restrictions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get restrictionsInput() {
+        return this._restrictions.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    BranchProtectionV3.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             branch: cdktf.stringToTerraform(this._branch),
             enforce_admins: cdktf.booleanToTerraform(this._enforceAdmins),
@@ -1166,9 +920,9 @@ var BranchProtectionV3 = /** @class */ (function (_super) {
             required_status_checks: branchProtectionV3RequiredStatusChecksToTerraform(this._requiredStatusChecks.internalValue),
             restrictions: branchProtectionV3RestrictionsToTerraform(this._restrictions.internalValue),
         };
-    };
-    BranchProtectionV3.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             branch: {
                 value: cdktf.stringToHclTerraform(this._branch),
                 isBlock: false,
@@ -1225,15 +979,6 @@ var BranchProtectionV3 = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    BranchProtectionV3.tfResourceType = "github_branch_protection_v3";
-    return BranchProtectionV3;
-}(cdktf.TerraformResource));
-exports.BranchProtectionV3 = BranchProtectionV3;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

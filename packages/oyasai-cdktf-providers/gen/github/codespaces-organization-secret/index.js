@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/codespaces_organization_secret
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CodespacesOrganizationSecret = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/codespaces_organization_secret github_codespaces_organization_secret}
 */
-var CodespacesOrganizationSecret = /** @class */ (function (_super) {
-    __extends(CodespacesOrganizationSecret, _super);
+export class CodespacesOrganizationSecret extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_codespaces_organization_secret";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CodespacesOrganizationSecret resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CodespacesOrganizationSecret to import
+    * @param importFromId The id of the existing CodespacesOrganizationSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/codespaces_organization_secret#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CodespacesOrganizationSecret to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_codespaces_organization_secret", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var CodespacesOrganizationSecret = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CodespacesOrganizationSecretConfig
     */
-    function CodespacesOrganizationSecret(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_codespaces_organization_secret',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,171 +46,113 @@ var CodespacesOrganizationSecret = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._encryptedValue = config.encryptedValue;
-        _this._id = config.id;
-        _this._plaintextValue = config.plaintextValue;
-        _this._secretName = config.secretName;
-        _this._selectedRepositoryIds = config.selectedRepositoryIds;
-        _this._visibility = config.visibility;
-        return _this;
+        });
+        this._encryptedValue = config.encryptedValue;
+        this._id = config.id;
+        this._plaintextValue = config.plaintextValue;
+        this._secretName = config.secretName;
+        this._selectedRepositoryIds = config.selectedRepositoryIds;
+        this._visibility = config.visibility;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CodespacesOrganizationSecret resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CodespacesOrganizationSecret to import
-    * @param importFromId The id of the existing CodespacesOrganizationSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/codespaces_organization_secret#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CodespacesOrganizationSecret to import is found
-    */
-    CodespacesOrganizationSecret.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_codespaces_organization_secret", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "encryptedValue", {
-        get: function () {
-            return this.getStringAttribute('encrypted_value');
-        },
-        set: function (value) {
-            this._encryptedValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CodespacesOrganizationSecret.prototype.resetEncryptedValue = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // encrypted_value - computed: false, optional: true, required: false
+    _encryptedValue;
+    get encryptedValue() {
+        return this.getStringAttribute('encrypted_value');
+    }
+    set encryptedValue(value) {
+        this._encryptedValue = value;
+    }
+    resetEncryptedValue() {
         this._encryptedValue = undefined;
-    };
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "encryptedValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._encryptedValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CodespacesOrganizationSecret.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get encryptedValueInput() {
+        return this._encryptedValue;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "plaintextValue", {
-        get: function () {
-            return this.getStringAttribute('plaintext_value');
-        },
-        set: function (value) {
-            this._plaintextValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CodespacesOrganizationSecret.prototype.resetPlaintextValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // plaintext_value - computed: false, optional: true, required: false
+    _plaintextValue;
+    get plaintextValue() {
+        return this.getStringAttribute('plaintext_value');
+    }
+    set plaintextValue(value) {
+        this._plaintextValue = value;
+    }
+    resetPlaintextValue() {
         this._plaintextValue = undefined;
-    };
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "plaintextValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._plaintextValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "secretName", {
-        get: function () {
-            return this.getStringAttribute('secret_name');
-        },
-        set: function (value) {
-            this._secretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "secretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "selectedRepositoryIds", {
-        get: function () {
-            return cdktf.Token.asNumberList(cdktf.Fn.tolist(this.getNumberListAttribute('selected_repository_ids')));
-        },
-        set: function (value) {
-            this._selectedRepositoryIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CodespacesOrganizationSecret.prototype.resetSelectedRepositoryIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get plaintextValueInput() {
+        return this._plaintextValue;
+    }
+    // secret_name - computed: false, optional: false, required: true
+    _secretName;
+    get secretName() {
+        return this.getStringAttribute('secret_name');
+    }
+    set secretName(value) {
+        this._secretName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretNameInput() {
+        return this._secretName;
+    }
+    // selected_repository_ids - computed: false, optional: true, required: false
+    _selectedRepositoryIds;
+    get selectedRepositoryIds() {
+        return cdktf.Token.asNumberList(cdktf.Fn.tolist(this.getNumberListAttribute('selected_repository_ids')));
+    }
+    set selectedRepositoryIds(value) {
+        this._selectedRepositoryIds = value;
+    }
+    resetSelectedRepositoryIds() {
         this._selectedRepositoryIds = undefined;
-    };
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "selectedRepositoryIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selectedRepositoryIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "visibility", {
-        get: function () {
-            return this.getStringAttribute('visibility');
-        },
-        set: function (value) {
-            this._visibility = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CodespacesOrganizationSecret.prototype, "visibilityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._visibility;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get selectedRepositoryIdsInput() {
+        return this._selectedRepositoryIds;
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // visibility - computed: false, optional: false, required: true
+    _visibility;
+    get visibility() {
+        return this.getStringAttribute('visibility');
+    }
+    set visibility(value) {
+        this._visibility = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get visibilityInput() {
+        return this._visibility;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CodespacesOrganizationSecret.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             encrypted_value: cdktf.stringToTerraform(this._encryptedValue),
             id: cdktf.stringToTerraform(this._id),
@@ -221,9 +161,9 @@ var CodespacesOrganizationSecret = /** @class */ (function (_super) {
             selected_repository_ids: cdktf.listMapper(cdktf.numberToTerraform, false)(this._selectedRepositoryIds),
             visibility: cdktf.stringToTerraform(this._visibility),
         };
-    };
-    CodespacesOrganizationSecret.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             encrypted_value: {
                 value: cdktf.stringToHclTerraform(this._encryptedValue),
                 isBlock: false,
@@ -262,15 +202,6 @@ var CodespacesOrganizationSecret = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CodespacesOrganizationSecret.tfResourceType = "github_codespaces_organization_secret";
-    return CodespacesOrganizationSecret;
-}(cdktf.TerraformResource));
-exports.CodespacesOrganizationSecret = CodespacesOrganizationSecret;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

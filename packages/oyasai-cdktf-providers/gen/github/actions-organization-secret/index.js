@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_secret
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActionsOrganizationSecret = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_secret github_actions_organization_secret}
 */
-var ActionsOrganizationSecret = /** @class */ (function (_super) {
-    __extends(ActionsOrganizationSecret, _super);
+export class ActionsOrganizationSecret extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_actions_organization_secret";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ActionsOrganizationSecret resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ActionsOrganizationSecret to import
+    * @param importFromId The id of the existing ActionsOrganizationSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_secret#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ActionsOrganizationSecret to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_organization_secret", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ActionsOrganizationSecret = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ActionsOrganizationSecretConfig
     */
-    function ActionsOrganizationSecret(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_actions_organization_secret',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,267 +46,181 @@ var ActionsOrganizationSecret = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._destroyOnDrift = config.destroyOnDrift;
-        _this._encryptedValue = config.encryptedValue;
-        _this._id = config.id;
-        _this._keyId = config.keyId;
-        _this._plaintextValue = config.plaintextValue;
-        _this._secretName = config.secretName;
-        _this._selectedRepositoryIds = config.selectedRepositoryIds;
-        _this._value = config.value;
-        _this._valueEncrypted = config.valueEncrypted;
-        _this._visibility = config.visibility;
-        return _this;
+        });
+        this._destroyOnDrift = config.destroyOnDrift;
+        this._encryptedValue = config.encryptedValue;
+        this._id = config.id;
+        this._keyId = config.keyId;
+        this._plaintextValue = config.plaintextValue;
+        this._secretName = config.secretName;
+        this._selectedRepositoryIds = config.selectedRepositoryIds;
+        this._value = config.value;
+        this._valueEncrypted = config.valueEncrypted;
+        this._visibility = config.visibility;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ActionsOrganizationSecret resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ActionsOrganizationSecret to import
-    * @param importFromId The id of the existing ActionsOrganizationSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_secret#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ActionsOrganizationSecret to import is found
-    */
-    ActionsOrganizationSecret.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_organization_secret", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "destroyOnDrift", {
-        get: function () {
-            return this.getBooleanAttribute('destroy_on_drift');
-        },
-        set: function (value) {
-            this._destroyOnDrift = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetDestroyOnDrift = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // destroy_on_drift - computed: false, optional: true, required: false
+    _destroyOnDrift;
+    get destroyOnDrift() {
+        return this.getBooleanAttribute('destroy_on_drift');
+    }
+    set destroyOnDrift(value) {
+        this._destroyOnDrift = value;
+    }
+    resetDestroyOnDrift() {
         this._destroyOnDrift = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "destroyOnDriftInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destroyOnDrift;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "encryptedValue", {
-        get: function () {
-            return this.getStringAttribute('encrypted_value');
-        },
-        set: function (value) {
-            this._encryptedValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetEncryptedValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destroyOnDriftInput() {
+        return this._destroyOnDrift;
+    }
+    // encrypted_value - computed: false, optional: true, required: false
+    _encryptedValue;
+    get encryptedValue() {
+        return this.getStringAttribute('encrypted_value');
+    }
+    set encryptedValue(value) {
+        this._encryptedValue = value;
+    }
+    resetEncryptedValue() {
         this._encryptedValue = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "encryptedValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._encryptedValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get encryptedValueInput() {
+        return this._encryptedValue;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "keyId", {
-        get: function () {
-            return this.getStringAttribute('key_id');
-        },
-        set: function (value) {
-            this._keyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetKeyId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // key_id - computed: true, optional: true, required: false
+    _keyId;
+    get keyId() {
+        return this.getStringAttribute('key_id');
+    }
+    set keyId(value) {
+        this._keyId = value;
+    }
+    resetKeyId() {
         this._keyId = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "keyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "plaintextValue", {
-        get: function () {
-            return this.getStringAttribute('plaintext_value');
-        },
-        set: function (value) {
-            this._plaintextValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetPlaintextValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyIdInput() {
+        return this._keyId;
+    }
+    // plaintext_value - computed: false, optional: true, required: false
+    _plaintextValue;
+    get plaintextValue() {
+        return this.getStringAttribute('plaintext_value');
+    }
+    set plaintextValue(value) {
+        this._plaintextValue = value;
+    }
+    resetPlaintextValue() {
         this._plaintextValue = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "plaintextValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._plaintextValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "remoteUpdatedAt", {
-        // remote_updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('remote_updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "secretName", {
-        get: function () {
-            return this.getStringAttribute('secret_name');
-        },
-        set: function (value) {
-            this._secretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "secretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "selectedRepositoryIds", {
-        get: function () {
-            return cdktf.Token.asNumberList(cdktf.Fn.tolist(this.getNumberListAttribute('selected_repository_ids')));
-        },
-        set: function (value) {
-            this._selectedRepositoryIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetSelectedRepositoryIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get plaintextValueInput() {
+        return this._plaintextValue;
+    }
+    // remote_updated_at - computed: true, optional: false, required: false
+    get remoteUpdatedAt() {
+        return this.getStringAttribute('remote_updated_at');
+    }
+    // secret_name - computed: false, optional: false, required: true
+    _secretName;
+    get secretName() {
+        return this.getStringAttribute('secret_name');
+    }
+    set secretName(value) {
+        this._secretName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretNameInput() {
+        return this._secretName;
+    }
+    // selected_repository_ids - computed: false, optional: true, required: false
+    _selectedRepositoryIds;
+    get selectedRepositoryIds() {
+        return cdktf.Token.asNumberList(cdktf.Fn.tolist(this.getNumberListAttribute('selected_repository_ids')));
+    }
+    set selectedRepositoryIds(value) {
+        this._selectedRepositoryIds = value;
+    }
+    resetSelectedRepositoryIds() {
         this._selectedRepositoryIds = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "selectedRepositoryIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selectedRepositoryIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get selectedRepositoryIdsInput() {
+        return this._selectedRepositoryIds;
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // value - computed: false, optional: true, required: false
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    resetValue() {
         this._value = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "valueEncrypted", {
-        get: function () {
-            return this.getStringAttribute('value_encrypted');
-        },
-        set: function (value) {
-            this._valueEncrypted = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationSecret.prototype.resetValueEncrypted = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+    // value_encrypted - computed: false, optional: true, required: false
+    _valueEncrypted;
+    get valueEncrypted() {
+        return this.getStringAttribute('value_encrypted');
+    }
+    set valueEncrypted(value) {
+        this._valueEncrypted = value;
+    }
+    resetValueEncrypted() {
         this._valueEncrypted = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "valueEncryptedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._valueEncrypted;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "visibility", {
-        get: function () {
-            return this.getStringAttribute('visibility');
-        },
-        set: function (value) {
-            this._visibility = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationSecret.prototype, "visibilityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._visibility;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueEncryptedInput() {
+        return this._valueEncrypted;
+    }
+    // visibility - computed: false, optional: false, required: true
+    _visibility;
+    get visibility() {
+        return this.getStringAttribute('visibility');
+    }
+    set visibility(value) {
+        this._visibility = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get visibilityInput() {
+        return this._visibility;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ActionsOrganizationSecret.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             destroy_on_drift: cdktf.booleanToTerraform(this._destroyOnDrift),
             encrypted_value: cdktf.stringToTerraform(this._encryptedValue),
@@ -321,9 +233,9 @@ var ActionsOrganizationSecret = /** @class */ (function (_super) {
             value_encrypted: cdktf.stringToTerraform(this._valueEncrypted),
             visibility: cdktf.stringToTerraform(this._visibility),
         };
-    };
-    ActionsOrganizationSecret.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             destroy_on_drift: {
                 value: cdktf.booleanToHclTerraform(this._destroyOnDrift),
                 isBlock: false,
@@ -386,15 +298,6 @@ var ActionsOrganizationSecret = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ActionsOrganizationSecret.tfResourceType = "github_actions_organization_secret";
-    return ActionsOrganizationSecret;
-}(cdktf.TerraformResource));
-exports.ActionsOrganizationSecret = ActionsOrganizationSecret;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

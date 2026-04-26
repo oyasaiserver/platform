@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/user
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.UserOrganizationsList = exports.UserOrganizationsOutputReference = void 0;
-exports.userOrganizationsToTerraform = userOrganizationsToTerraform;
-exports.userOrganizationsToHclTerraform = userOrganizationsToHclTerraform;
-var cdktf = require("cdktf");
-function userOrganizationsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function userOrganizationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,117 +10,104 @@ function userOrganizationsToTerraform(struct) {
     }
     return {};
 }
-function userOrganizationsToHclTerraform(struct) {
+export function userOrganizationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var UserOrganizationsOutputReference = /** @class */ (function (_super) {
-    __extends(UserOrganizationsOutputReference, _super);
+export class UserOrganizationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function UserOrganizationsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "permissions", {
-        // permissions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('permissions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "roles", {
-        // roles - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('roles');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserOrganizationsOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return UserOrganizationsOutputReference;
-}(cdktf.ComplexObject));
-exports.UserOrganizationsOutputReference = UserOrganizationsOutputReference;
-var UserOrganizationsList = /** @class */ (function (_super) {
-    __extends(UserOrganizationsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // permissions - computed: true, optional: false, required: false
+    get permissions() {
+        return this.getListAttribute('permissions');
+    }
+    // roles - computed: true, optional: false, required: false
+    get roles() {
+        return this.getListAttribute('roles');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+}
+export class UserOrganizationsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function UserOrganizationsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    UserOrganizationsList.prototype.get = function (index) {
+    get(index) {
         return new UserOrganizationsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return UserOrganizationsList;
-}(cdktf.ComplexList));
-exports.UserOrganizationsList = UserOrganizationsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/user cloudflare_user}
 */
-var User = /** @class */ (function (_super) {
-    __extends(User, _super);
+export class User extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_user";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a User resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the User to import
+    * @param importFromId The id of the existing User that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/user#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the User to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -151,9 +118,8 @@ var User = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options UserConfig = {}
     */
-    function User(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_user',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -166,212 +132,132 @@ var User = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // organizations - computed: true, optional: false, required: false
-        _this._organizations = new UserOrganizationsList(_this, "organizations", false);
-        _this._country = config.country;
-        _this._firstName = config.firstName;
-        _this._lastName = config.lastName;
-        _this._telephone = config.telephone;
-        _this._zipcode = config.zipcode;
-        return _this;
+        });
+        this._country = config.country;
+        this._firstName = config.firstName;
+        this._lastName = config.lastName;
+        this._telephone = config.telephone;
+        this._zipcode = config.zipcode;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a User resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the User to import
-    * @param importFromId The id of the existing User that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/user#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the User to import is found
-    */
-    User.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(User.prototype, "betas", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // betas - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('betas');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "country", {
-        get: function () {
-            return this.getStringAttribute('country');
-        },
-        set: function (value) {
-            this._country = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    User.prototype.resetCountry = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // betas - computed: true, optional: false, required: false
+    get betas() {
+        return this.getListAttribute('betas');
+    }
+    // country - computed: false, optional: true, required: false
+    _country;
+    get country() {
+        return this.getStringAttribute('country');
+    }
+    set country(value) {
+        this._country = value;
+    }
+    resetCountry() {
         this._country = undefined;
-    };
-    Object.defineProperty(User.prototype, "countryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._country;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "firstName", {
-        get: function () {
-            return this.getStringAttribute('first_name');
-        },
-        set: function (value) {
-            this._firstName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    User.prototype.resetFirstName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get countryInput() {
+        return this._country;
+    }
+    // first_name - computed: false, optional: true, required: false
+    _firstName;
+    get firstName() {
+        return this.getStringAttribute('first_name');
+    }
+    set firstName(value) {
+        this._firstName = value;
+    }
+    resetFirstName() {
         this._firstName = undefined;
-    };
-    Object.defineProperty(User.prototype, "firstNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._firstName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "hasBusinessZones", {
-        // has_business_zones - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('has_business_zones');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "hasEnterpriseZones", {
-        // has_enterprise_zones - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('has_enterprise_zones');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "hasProZones", {
-        // has_pro_zones - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('has_pro_zones');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "lastName", {
-        get: function () {
-            return this.getStringAttribute('last_name');
-        },
-        set: function (value) {
-            this._lastName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    User.prototype.resetLastName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get firstNameInput() {
+        return this._firstName;
+    }
+    // has_business_zones - computed: true, optional: false, required: false
+    get hasBusinessZones() {
+        return this.getBooleanAttribute('has_business_zones');
+    }
+    // has_enterprise_zones - computed: true, optional: false, required: false
+    get hasEnterpriseZones() {
+        return this.getBooleanAttribute('has_enterprise_zones');
+    }
+    // has_pro_zones - computed: true, optional: false, required: false
+    get hasProZones() {
+        return this.getBooleanAttribute('has_pro_zones');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_name - computed: false, optional: true, required: false
+    _lastName;
+    get lastName() {
+        return this.getStringAttribute('last_name');
+    }
+    set lastName(value) {
+        this._lastName = value;
+    }
+    resetLastName() {
         this._lastName = undefined;
-    };
-    Object.defineProperty(User.prototype, "lastNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._lastName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "organizations", {
-        get: function () {
-            return this._organizations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "suspended", {
-        // suspended - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('suspended');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "telephone", {
-        get: function () {
-            return this.getStringAttribute('telephone');
-        },
-        set: function (value) {
-            this._telephone = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    User.prototype.resetTelephone = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get lastNameInput() {
+        return this._lastName;
+    }
+    // organizations - computed: true, optional: false, required: false
+    _organizations = new UserOrganizationsList(this, "organizations", false);
+    get organizations() {
+        return this._organizations;
+    }
+    // suspended - computed: true, optional: false, required: false
+    get suspended() {
+        return this.getBooleanAttribute('suspended');
+    }
+    // telephone - computed: false, optional: true, required: false
+    _telephone;
+    get telephone() {
+        return this.getStringAttribute('telephone');
+    }
+    set telephone(value) {
+        this._telephone = value;
+    }
+    resetTelephone() {
         this._telephone = undefined;
-    };
-    Object.defineProperty(User.prototype, "telephoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._telephone;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "twoFactorAuthenticationEnabled", {
-        // two_factor_authentication_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('two_factor_authentication_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "twoFactorAuthenticationLocked", {
-        // two_factor_authentication_locked - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('two_factor_authentication_locked');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "zipcode", {
-        get: function () {
-            return this.getStringAttribute('zipcode');
-        },
-        set: function (value) {
-            this._zipcode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    User.prototype.resetZipcode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get telephoneInput() {
+        return this._telephone;
+    }
+    // two_factor_authentication_enabled - computed: true, optional: false, required: false
+    get twoFactorAuthenticationEnabled() {
+        return this.getBooleanAttribute('two_factor_authentication_enabled');
+    }
+    // two_factor_authentication_locked - computed: true, optional: false, required: false
+    get twoFactorAuthenticationLocked() {
+        return this.getBooleanAttribute('two_factor_authentication_locked');
+    }
+    // zipcode - computed: false, optional: true, required: false
+    _zipcode;
+    get zipcode() {
+        return this.getStringAttribute('zipcode');
+    }
+    set zipcode(value) {
+        this._zipcode = value;
+    }
+    resetZipcode() {
         this._zipcode = undefined;
-    };
-    Object.defineProperty(User.prototype, "zipcodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zipcode;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zipcodeInput() {
+        return this._zipcode;
+    }
     // =========
     // SYNTHESIS
     // =========
-    User.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             country: cdktf.stringToTerraform(this._country),
             first_name: cdktf.stringToTerraform(this._firstName),
@@ -379,9 +265,9 @@ var User = /** @class */ (function (_super) {
             telephone: cdktf.stringToTerraform(this._telephone),
             zipcode: cdktf.stringToTerraform(this._zipcode),
         };
-    };
-    User.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             country: {
                 value: cdktf.stringToHclTerraform(this._country),
                 isBlock: false,
@@ -414,15 +300,6 @@ var User = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    User.tfResourceType = "cloudflare_user";
-    return User;
-}(cdktf.TerraformResource));
-exports.User = User;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

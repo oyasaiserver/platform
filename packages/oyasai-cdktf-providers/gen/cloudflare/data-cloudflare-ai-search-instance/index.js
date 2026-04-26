@@ -1,63 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_instance
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareAiSearchInstance = exports.DataCloudflareAiSearchInstanceSourceParamsOutputReference = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = exports.DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference = exports.DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList = exports.DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference = exports.DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference = exports.DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = exports.DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference = exports.DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference = exports.DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = exports.DataCloudflareAiSearchInstanceMetadataOutputReference = exports.DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference = exports.DataCloudflareAiSearchInstanceIndexingOptionsOutputReference = exports.DataCloudflareAiSearchInstanceIndexMethodOutputReference = exports.DataCloudflareAiSearchInstanceFilterOutputReference = exports.DataCloudflareAiSearchInstanceCustomMetadataList = exports.DataCloudflareAiSearchInstanceCustomMetadataOutputReference = void 0;
-exports.dataCloudflareAiSearchInstanceCustomMetadataToTerraform = dataCloudflareAiSearchInstanceCustomMetadataToTerraform;
-exports.dataCloudflareAiSearchInstanceCustomMetadataToHclTerraform = dataCloudflareAiSearchInstanceCustomMetadataToHclTerraform;
-exports.dataCloudflareAiSearchInstanceFilterToTerraform = dataCloudflareAiSearchInstanceFilterToTerraform;
-exports.dataCloudflareAiSearchInstanceFilterToHclTerraform = dataCloudflareAiSearchInstanceFilterToHclTerraform;
-exports.dataCloudflareAiSearchInstanceIndexMethodToTerraform = dataCloudflareAiSearchInstanceIndexMethodToTerraform;
-exports.dataCloudflareAiSearchInstanceIndexMethodToHclTerraform = dataCloudflareAiSearchInstanceIndexMethodToHclTerraform;
-exports.dataCloudflareAiSearchInstanceIndexingOptionsToTerraform = dataCloudflareAiSearchInstanceIndexingOptionsToTerraform;
-exports.dataCloudflareAiSearchInstanceIndexingOptionsToHclTerraform = dataCloudflareAiSearchInstanceIndexingOptionsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceMetadataSearchForAgentsToTerraform = dataCloudflareAiSearchInstanceMetadataSearchForAgentsToTerraform;
-exports.dataCloudflareAiSearchInstanceMetadataSearchForAgentsToHclTerraform = dataCloudflareAiSearchInstanceMetadataSearchForAgentsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceMetadataToTerraform = dataCloudflareAiSearchInstanceMetadataToTerraform;
-exports.dataCloudflareAiSearchInstanceMetadataToHclTerraform = dataCloudflareAiSearchInstanceMetadataToHclTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsMcpToTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsMcpToTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsMcpToHclTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsMcpToHclTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToHclTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToHclTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsToTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsToTerraform;
-exports.dataCloudflareAiSearchInstancePublicEndpointParamsToHclTerraform = dataCloudflareAiSearchInstancePublicEndpointParamsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToTerraform = dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToTerraform;
-exports.dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToHclTerraform = dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToHclTerraform;
-exports.dataCloudflareAiSearchInstanceRetrievalOptionsToTerraform = dataCloudflareAiSearchInstanceRetrievalOptionsToTerraform;
-exports.dataCloudflareAiSearchInstanceRetrievalOptionsToHclTerraform = dataCloudflareAiSearchInstanceRetrievalOptionsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToHclTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsToTerraform = dataCloudflareAiSearchInstanceSourceParamsToTerraform;
-exports.dataCloudflareAiSearchInstanceSourceParamsToHclTerraform = dataCloudflareAiSearchInstanceSourceParamsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareAiSearchInstanceCustomMetadataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareAiSearchInstanceCustomMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -66,89 +10,72 @@ function dataCloudflareAiSearchInstanceCustomMetadataToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceCustomMetadataToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceCustomMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceCustomMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceCustomMetadataOutputReference, _super);
+export class DataCloudflareAiSearchInstanceCustomMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceCustomMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceCustomMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceCustomMetadataOutputReference.prototype, "dataType", {
-        // data_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('data_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceCustomMetadataOutputReference.prototype, "fieldName", {
-        // field_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('field_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceCustomMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceCustomMetadataOutputReference = DataCloudflareAiSearchInstanceCustomMetadataOutputReference;
-var DataCloudflareAiSearchInstanceCustomMetadataList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceCustomMetadataList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // data_type - computed: true, optional: false, required: false
+    get dataType() {
+        return this.getStringAttribute('data_type');
+    }
+    // field_name - computed: true, optional: false, required: false
+    get fieldName() {
+        return this.getStringAttribute('field_name');
+    }
+}
+export class DataCloudflareAiSearchInstanceCustomMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceCustomMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAiSearchInstanceCustomMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAiSearchInstanceCustomMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAiSearchInstanceCustomMetadataList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAiSearchInstanceCustomMetadataList = DataCloudflareAiSearchInstanceCustomMetadataList;
-function dataCloudflareAiSearchInstanceFilterToTerraform(struct) {
+    }
+}
+export function dataCloudflareAiSearchInstanceFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -162,14 +89,14 @@ function dataCloudflareAiSearchInstanceFilterToTerraform(struct) {
         search: cdktf.stringToTerraform(struct.search),
     };
 }
-function dataCloudflareAiSearchInstanceFilterToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         namespace: {
             value: cdktf.stringToHclTerraform(struct.namespace),
             isBlock: false,
@@ -196,160 +123,126 @@ function dataCloudflareAiSearchInstanceFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareAiSearchInstanceFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceFilterOutputReference, _super);
+export class DataCloudflareAiSearchInstanceFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._namespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespace = this._namespace;
-            }
-            if (this._orderBy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.orderBy = this._orderBy;
-            }
-            if (this._orderByDirection !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.orderByDirection = this._orderByDirection;
-            }
-            if (this._search !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.search = this._search;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._namespace = undefined;
-                this._orderBy = undefined;
-                this._orderByDirection = undefined;
-                this._search = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._namespace = value.namespace;
-                this._orderBy = value.orderBy;
-                this._orderByDirection = value.orderByDirection;
-                this._search = value.search;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "namespace", {
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        set: function (value) {
-            this._namespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstanceFilterOutputReference.prototype.resetNamespace = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._namespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespace = this._namespace;
+        }
+        if (this._orderBy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.orderBy = this._orderBy;
+        }
+        if (this._orderByDirection !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.orderByDirection = this._orderByDirection;
+        }
+        if (this._search !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.search = this._search;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._namespace = undefined;
+            this._orderBy = undefined;
+            this._orderByDirection = undefined;
+            this._search = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._namespace = value.namespace;
+            this._orderBy = value.orderBy;
+            this._orderByDirection = value.orderByDirection;
+            this._search = value.search;
+        }
+    }
+    // namespace - computed: false, optional: true, required: false
+    _namespace;
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    set namespace(value) {
+        this._namespace = value;
+    }
+    resetNamespace() {
         this._namespace = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "namespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "orderBy", {
-        get: function () {
-            return this.getStringAttribute('order_by');
-        },
-        set: function (value) {
-            this._orderBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstanceFilterOutputReference.prototype.resetOrderBy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceInput() {
+        return this._namespace;
+    }
+    // order_by - computed: true, optional: true, required: false
+    _orderBy;
+    get orderBy() {
+        return this.getStringAttribute('order_by');
+    }
+    set orderBy(value) {
+        this._orderBy = value;
+    }
+    resetOrderBy() {
         this._orderBy = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "orderByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._orderBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "orderByDirection", {
-        get: function () {
-            return this.getStringAttribute('order_by_direction');
-        },
-        set: function (value) {
-            this._orderByDirection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstanceFilterOutputReference.prototype.resetOrderByDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderByInput() {
+        return this._orderBy;
+    }
+    // order_by_direction - computed: true, optional: true, required: false
+    _orderByDirection;
+    get orderByDirection() {
+        return this.getStringAttribute('order_by_direction');
+    }
+    set orderByDirection(value) {
+        this._orderByDirection = value;
+    }
+    resetOrderByDirection() {
         this._orderByDirection = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "orderByDirectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._orderByDirection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "search", {
-        get: function () {
-            return this.getStringAttribute('search');
-        },
-        set: function (value) {
-            this._search = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstanceFilterOutputReference.prototype.resetSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderByDirectionInput() {
+        return this._orderByDirection;
+    }
+    // search - computed: false, optional: true, required: false
+    _search;
+    get search() {
+        return this.getStringAttribute('search');
+    }
+    set search(value) {
+        this._search = value;
+    }
+    resetSearch() {
         this._search = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstanceFilterOutputReference.prototype, "searchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._search;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceFilterOutputReference = DataCloudflareAiSearchInstanceFilterOutputReference;
-function dataCloudflareAiSearchInstanceIndexMethodToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchInput() {
+        return this._search;
+    }
+}
+export function dataCloudflareAiSearchInstanceIndexMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -358,64 +251,48 @@ function dataCloudflareAiSearchInstanceIndexMethodToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceIndexMethodToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceIndexMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceIndexMethodOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceIndexMethodOutputReference, _super);
+export class DataCloudflareAiSearchInstanceIndexMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceIndexMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceIndexMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceIndexMethodOutputReference.prototype, "keyword", {
-        // keyword - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('keyword');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceIndexMethodOutputReference.prototype, "vector", {
-        // vector - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('vector');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceIndexMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceIndexMethodOutputReference = DataCloudflareAiSearchInstanceIndexMethodOutputReference;
-function dataCloudflareAiSearchInstanceIndexingOptionsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // keyword - computed: true, optional: false, required: false
+    get keyword() {
+        return this.getBooleanAttribute('keyword');
+    }
+    // vector - computed: true, optional: false, required: false
+    get vector() {
+        return this.getBooleanAttribute('vector');
+    }
+}
+export function dataCloudflareAiSearchInstanceIndexingOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -424,56 +301,44 @@ function dataCloudflareAiSearchInstanceIndexingOptionsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceIndexingOptionsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceIndexingOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceIndexingOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceIndexingOptionsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceIndexingOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceIndexingOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceIndexingOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceIndexingOptionsOutputReference.prototype, "keywordTokenizer", {
-        // keyword_tokenizer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('keyword_tokenizer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceIndexingOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceIndexingOptionsOutputReference = DataCloudflareAiSearchInstanceIndexingOptionsOutputReference;
-function dataCloudflareAiSearchInstanceMetadataSearchForAgentsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // keyword_tokenizer - computed: true, optional: false, required: false
+    get keywordTokenizer() {
+        return this.getStringAttribute('keyword_tokenizer');
+    }
+}
+export function dataCloudflareAiSearchInstanceMetadataSearchForAgentsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -482,72 +347,52 @@ function dataCloudflareAiSearchInstanceMetadataSearchForAgentsToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceMetadataSearchForAgentsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceMetadataSearchForAgentsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "hostname", {
-        // hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneId", {
-        // zone_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneName", {
-        // zone_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zone_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference = DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference;
-function dataCloudflareAiSearchInstanceMetadataToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // hostname - computed: true, optional: false, required: false
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    // zone_id - computed: true, optional: false, required: false
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    // zone_name - computed: true, optional: false, required: false
+    get zoneName() {
+        return this.getStringAttribute('zone_name');
+    }
+}
+export function dataCloudflareAiSearchInstanceMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -556,73 +401,53 @@ function dataCloudflareAiSearchInstanceMetadataToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceMetadataToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceMetadataOutputReference, _super);
+export class DataCloudflareAiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceMetadataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // search_for_agents - computed: true, optional: false, required: false
-        _this._searchForAgents = new DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference(_this, "search_for_agents");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataOutputReference.prototype, "createdFromAisearchWizard", {
-        // created_from_aisearch_wizard - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('created_from_aisearch_wizard');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataOutputReference.prototype, "searchForAgents", {
-        get: function () {
-            return this._searchForAgents;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceMetadataOutputReference.prototype, "workerDomain", {
-        // worker_domain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('worker_domain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceMetadataOutputReference = DataCloudflareAiSearchInstanceMetadataOutputReference;
-function dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_from_aisearch_wizard - computed: true, optional: false, required: false
+    get createdFromAisearchWizard() {
+        return this.getBooleanAttribute('created_from_aisearch_wizard');
+    }
+    // search_for_agents - computed: true, optional: false, required: false
+    _searchForAgents = new DataCloudflareAiSearchInstanceMetadataSearchForAgentsOutputReference(this, "search_for_agents");
+    get searchForAgents() {
+        return this._searchForAgents;
+    }
+    // worker_domain - computed: true, optional: false, required: false
+    get workerDomain() {
+        return this.getStringAttribute('worker_domain');
+    }
+}
+export function dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -631,56 +456,44 @@ function dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpoi
     }
     return {};
 }
-function dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference, _super);
+export class DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype, "disabled", {
-        // disabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference;
-function dataCloudflareAiSearchInstancePublicEndpointParamsMcpToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // disabled - computed: true, optional: false, required: false
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+}
+export function dataCloudflareAiSearchInstancePublicEndpointParamsMcpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -689,64 +502,48 @@ function dataCloudflareAiSearchInstancePublicEndpointParamsMcpToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAiSearchInstancePublicEndpointParamsMcpToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstancePublicEndpointParamsMcpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference, _super);
+export class DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "disabled", {
-        // disabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference = DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference;
-function dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // disabled - computed: true, optional: false, required: false
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+}
+export function dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -755,72 +552,52 @@ function dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToTerraform(
     }
     return {};
 }
-function dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstancePublicEndpointParamsRateLimitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference, _super);
+export class DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "periodMs", {
-        // period_ms - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('period_ms');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "requests", {
-        // requests - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('requests');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "technique", {
-        // technique - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('technique');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference = DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference;
-function dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // period_ms - computed: true, optional: false, required: false
+    get periodMs() {
+        return this.getNumberAttribute('period_ms');
+    }
+    // requests - computed: true, optional: false, required: false
+    get requests() {
+        return this.getNumberAttribute('requests');
+    }
+    // technique - computed: true, optional: false, required: false
+    get technique() {
+        return this.getStringAttribute('technique');
+    }
+}
+export function dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -829,56 +606,44 @@ function dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToTerra
     }
     return {};
 }
-function dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference, _super);
+export class DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype, "disabled", {
-        // disabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference;
-function dataCloudflareAiSearchInstancePublicEndpointParamsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // disabled - computed: true, optional: false, required: false
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+}
+export function dataCloudflareAiSearchInstancePublicEndpointParamsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -887,100 +652,68 @@ function dataCloudflareAiSearchInstancePublicEndpointParamsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstancePublicEndpointParamsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstancePublicEndpointParamsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference, _super);
+export class DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // chat_completions_endpoint - computed: true, optional: false, required: false
-        _this._chatCompletionsEndpoint = new DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(_this, "chat_completions_endpoint");
-        // mcp - computed: true, optional: false, required: false
-        _this._mcp = new DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference(_this, "mcp");
-        // rate_limit - computed: true, optional: false, required: false
-        _this._rateLimit = new DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference(_this, "rate_limit");
-        // search_endpoint - computed: true, optional: false, required: false
-        _this._searchEndpoint = new DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(_this, "search_endpoint");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "authorizedHosts", {
-        // authorized_hosts - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('authorized_hosts');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "chatCompletionsEndpoint", {
-        get: function () {
-            return this._chatCompletionsEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "mcp", {
-        get: function () {
-            return this._mcp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "rateLimit", {
-        get: function () {
-            return this._rateLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference.prototype, "searchEndpoint", {
-        get: function () {
-            return this._searchEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference = DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference;
-function dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // authorized_hosts - computed: true, optional: false, required: false
+    get authorizedHosts() {
+        return this.getListAttribute('authorized_hosts');
+    }
+    // chat_completions_endpoint - computed: true, optional: false, required: false
+    _chatCompletionsEndpoint = new DataCloudflareAiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(this, "chat_completions_endpoint");
+    get chatCompletionsEndpoint() {
+        return this._chatCompletionsEndpoint;
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // mcp - computed: true, optional: false, required: false
+    _mcp = new DataCloudflareAiSearchInstancePublicEndpointParamsMcpOutputReference(this, "mcp");
+    get mcp() {
+        return this._mcp;
+    }
+    // rate_limit - computed: true, optional: false, required: false
+    _rateLimit = new DataCloudflareAiSearchInstancePublicEndpointParamsRateLimitOutputReference(this, "rate_limit");
+    get rateLimit() {
+        return this._rateLimit;
+    }
+    // search_endpoint - computed: true, optional: false, required: false
+    _searchEndpoint = new DataCloudflareAiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(this, "search_endpoint");
+    get searchEndpoint() {
+        return this._searchEndpoint;
+    }
+}
+export function dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -989,89 +722,72 @@ function dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceRetrievalOptionsBoostByToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference, _super);
+export class DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "direction", {
-        // direction - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "field", {
-        // field - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('field');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference = DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference;
-var DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // direction - computed: true, optional: false, required: false
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    // field - computed: true, optional: false, required: false
+    get field() {
+        return this.getStringAttribute('field');
+    }
+}
+export class DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAiSearchInstanceRetrievalOptionsBoostByOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList = DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList;
-function dataCloudflareAiSearchInstanceRetrievalOptionsToTerraform(struct) {
+    }
+}
+export function dataCloudflareAiSearchInstanceRetrievalOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1080,65 +796,49 @@ function dataCloudflareAiSearchInstanceRetrievalOptionsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceRetrievalOptionsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceRetrievalOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // boost_by - computed: true, optional: false, required: false
-        _this._boostBy = new DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList(_this, "boost_by", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference.prototype, "boostBy", {
-        get: function () {
-            return this._boostBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference.prototype, "keywordMatchMode", {
-        // keyword_match_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('keyword_match_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference = DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference;
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // boost_by - computed: true, optional: false, required: false
+    _boostBy = new DataCloudflareAiSearchInstanceRetrievalOptionsBoostByList(this, "boost_by", false);
+    get boostBy() {
+        return this._boostBy;
+    }
+    // keyword_match_mode - computed: true, optional: false, required: false
+    get keywordMatchMode() {
+        return this.getStringAttribute('keyword_match_mode');
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1147,88 +847,60 @@ function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerra
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "depth", {
-        // depth - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('depth');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeExternalLinks", {
-        // include_external_links - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('include_external_links');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeSubdomains", {
-        // include_subdomains - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('include_subdomains');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "maxAge", {
-        // max_age - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_age');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "source", {
-        // source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference;
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // depth - computed: true, optional: false, required: false
+    get depth() {
+        return this.getNumberAttribute('depth');
+    }
+    // include_external_links - computed: true, optional: false, required: false
+    get includeExternalLinks() {
+        return this.getBooleanAttribute('include_external_links');
+    }
+    // include_subdomains - computed: true, optional: false, required: false
+    get includeSubdomains() {
+        return this.getBooleanAttribute('include_subdomains');
+    }
+    // max_age - computed: true, optional: false, required: false
+    get maxAge() {
+        return this.getNumberAttribute('max_age');
+    }
+    // source - computed: true, optional: false, required: false
+    get source() {
+        return this.getStringAttribute('source');
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1237,89 +909,72 @@ function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContent
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "path", {
-        // path - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "selector", {
-        // selector - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('selector');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference;
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // path - computed: true, optional: false, required: false
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    // selector - computed: true, optional: false, required: false
+    get selector() {
+        return this.getStringAttribute('selector');
+    }
+}
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList;
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform(struct) {
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1328,90 +983,62 @@ function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerra
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // content_selector - computed: true, optional: false, required: false
-        _this._contentSelector = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(_this, "content_selector", false);
-        // include_headers - computed: true, optional: false, required: false
-        _this._includeHeaders = new cdktf.StringMap(_this, "include_headers");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "contentSelector", {
-        get: function () {
-            return this._contentSelector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeHeaders", {
-        get: function () {
-            return this._includeHeaders;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeImages", {
-        // include_images - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('include_images');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "specificSitemaps", {
-        // specific_sitemaps - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('specific_sitemaps');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "useBrowserRendering", {
-        // use_browser_rendering - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('use_browser_rendering');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference;
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // content_selector - computed: true, optional: false, required: false
+    _contentSelector = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(this, "content_selector", false);
+    get contentSelector() {
+        return this._contentSelector;
+    }
+    // include_headers - computed: true, optional: false, required: false
+    _includeHeaders = new cdktf.StringMap(this, "include_headers");
+    get includeHeaders() {
+        return this._includeHeaders;
+    }
+    // include_images - computed: true, optional: false, required: false
+    get includeImages() {
+        return this.getBooleanAttribute('include_images');
+    }
+    // specific_sitemaps - computed: true, optional: false, required: false
+    get specificSitemaps() {
+        return this.getListAttribute('specific_sitemaps');
+    }
+    // use_browser_rendering - computed: true, optional: false, required: false
+    get useBrowserRendering() {
+        return this.getBooleanAttribute('use_browser_rendering');
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1420,72 +1047,52 @@ function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerra
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "r2Jurisdiction", {
-        // r2_jurisdiction - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('r2_jurisdiction');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageId", {
-        // storage_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('storage_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageType", {
-        // storage_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('storage_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference;
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // r2_jurisdiction - computed: true, optional: false, required: false
+    get r2Jurisdiction() {
+        return this.getStringAttribute('r2_jurisdiction');
+    }
+    // storage_id - computed: true, optional: false, required: false
+    get storageId() {
+        return this.getStringAttribute('storage_id');
+    }
+    // storage_type - computed: true, optional: false, required: false
+    get storageType() {
+        return this.getStringAttribute('storage_type');
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1494,83 +1101,59 @@ function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToTerraform(struct)
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsWebCrawlerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // crawl_options - computed: true, optional: false, required: false
-        _this._crawlOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(_this, "crawl_options");
-        // parse_options - computed: true, optional: false, required: false
-        _this._parseOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(_this, "parse_options");
-        // store_options - computed: true, optional: false, required: false
-        _this._storeOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(_this, "store_options");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "crawlOptions", {
-        get: function () {
-            return this._crawlOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseOptions", {
-        get: function () {
-            return this._parseOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseType", {
-        // parse_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('parse_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "storeOptions", {
-        get: function () {
-            return this._storeOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference = DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference;
-function dataCloudflareAiSearchInstanceSourceParamsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // crawl_options - computed: true, optional: false, required: false
+    _crawlOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(this, "crawl_options");
+    get crawlOptions() {
+        return this._crawlOptions;
+    }
+    // parse_options - computed: true, optional: false, required: false
+    _parseOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(this, "parse_options");
+    get parseOptions() {
+        return this._parseOptions;
+    }
+    // parse_type - computed: true, optional: false, required: false
+    get parseType() {
+        return this.getStringAttribute('parse_type');
+    }
+    // store_options - computed: true, optional: false, required: false
+    _storeOptions = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(this, "store_options");
+    get storeOptions() {
+        return this._storeOptions;
+    }
+}
+export function dataCloudflareAiSearchInstanceSourceParamsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1579,93 +1162,81 @@ function dataCloudflareAiSearchInstanceSourceParamsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAiSearchInstanceSourceParamsToHclTerraform(struct) {
+export function dataCloudflareAiSearchInstanceSourceParamsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAiSearchInstanceSourceParamsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstanceSourceParamsOutputReference, _super);
+export class DataCloudflareAiSearchInstanceSourceParamsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAiSearchInstanceSourceParamsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // web_crawler - computed: true, optional: false, required: false
-        _this._webCrawler = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference(_this, "web_crawler");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "excludeItems", {
-        // exclude_items - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('exclude_items');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "includeItems", {
-        // include_items - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('include_items');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "prefix", {
-        // prefix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('prefix');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "r2Jurisdiction", {
-        // r2_jurisdiction - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('r2_jurisdiction');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstanceSourceParamsOutputReference.prototype, "webCrawler", {
-        get: function () {
-            return this._webCrawler;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAiSearchInstanceSourceParamsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAiSearchInstanceSourceParamsOutputReference = DataCloudflareAiSearchInstanceSourceParamsOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // exclude_items - computed: true, optional: false, required: false
+    get excludeItems() {
+        return this.getListAttribute('exclude_items');
+    }
+    // include_items - computed: true, optional: false, required: false
+    get includeItems() {
+        return this.getListAttribute('include_items');
+    }
+    // prefix - computed: true, optional: false, required: false
+    get prefix() {
+        return this.getStringAttribute('prefix');
+    }
+    // r2_jurisdiction - computed: true, optional: false, required: false
+    get r2Jurisdiction() {
+        return this.getStringAttribute('r2_jurisdiction');
+    }
+    // web_crawler - computed: true, optional: false, required: false
+    _webCrawler = new DataCloudflareAiSearchInstanceSourceParamsWebCrawlerOutputReference(this, "web_crawler");
+    get webCrawler() {
+        return this._webCrawler;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_instance cloudflare_ai_search_instance}
 */
-var DataCloudflareAiSearchInstance = /** @class */ (function (_super) {
-    __extends(DataCloudflareAiSearchInstance, _super);
+export class DataCloudflareAiSearchInstance extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_ai_search_instance";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareAiSearchInstance resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareAiSearchInstance to import
+    * @param importFromId The id of the existing DataCloudflareAiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_instance#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareAiSearchInstance to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_instance", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1676,9 +1247,8 @@ var DataCloudflareAiSearchInstance = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareAiSearchInstanceConfig = {}
     */
-    function DataCloudflareAiSearchInstance(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_ai_search_instance',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1691,405 +1261,226 @@ var DataCloudflareAiSearchInstance = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // custom_metadata - computed: true, optional: false, required: false
-        _this._customMetadata = new DataCloudflareAiSearchInstanceCustomMetadataList(_this, "custom_metadata", false);
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareAiSearchInstanceFilterOutputReference(_this, "filter");
-        // index_method - computed: true, optional: false, required: false
-        _this._indexMethod = new DataCloudflareAiSearchInstanceIndexMethodOutputReference(_this, "index_method");
-        // indexing_options - computed: true, optional: false, required: false
-        _this._indexingOptions = new DataCloudflareAiSearchInstanceIndexingOptionsOutputReference(_this, "indexing_options");
-        // metadata - computed: true, optional: false, required: false
-        _this._metadata = new DataCloudflareAiSearchInstanceMetadataOutputReference(_this, "metadata");
-        // public_endpoint_params - computed: true, optional: false, required: false
-        _this._publicEndpointParams = new DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference(_this, "public_endpoint_params");
-        // retrieval_options - computed: true, optional: false, required: false
-        _this._retrievalOptions = new DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference(_this, "retrieval_options");
-        // source_params - computed: true, optional: false, required: false
-        _this._sourceParams = new DataCloudflareAiSearchInstanceSourceParamsOutputReference(_this, "source_params");
-        _this._accountId = config.accountId;
-        _this._filter.internalValue = config.filter;
-        _this._id = config.id;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._filter.internalValue = config.filter;
+        this._id = config.id;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareAiSearchInstance resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareAiSearchInstance to import
-    * @param importFromId The id of the existing DataCloudflareAiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/ai_search_instance#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareAiSearchInstance to import is found
-    */
-    DataCloudflareAiSearchInstance.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_instance", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstance.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "aiGatewayId", {
-        // ai_gateway_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ai_gateway_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "aisearchModel", {
-        // aisearch_model - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('aisearch_model');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "cache", {
-        // cache - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('cache');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "cacheThreshold", {
-        // cache_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cache_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "chunkOverlap", {
-        // chunk_overlap - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('chunk_overlap');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "chunkSize", {
-        // chunk_size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('chunk_size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "createdBy", {
-        // created_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "customMetadata", {
-        get: function () {
-            return this._customMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "embeddingModel", {
-        // embedding_model - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('embedding_model');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "enable", {
-        // enable - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enable');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "engineVersion", {
-        // engine_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('engine_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstance.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ai_gateway_id - computed: true, optional: false, required: false
+    get aiGatewayId() {
+        return this.getStringAttribute('ai_gateway_id');
+    }
+    // aisearch_model - computed: true, optional: false, required: false
+    get aisearchModel() {
+        return this.getStringAttribute('aisearch_model');
+    }
+    // cache - computed: true, optional: false, required: false
+    get cache() {
+        return this.getBooleanAttribute('cache');
+    }
+    // cache_threshold - computed: true, optional: false, required: false
+    get cacheThreshold() {
+        return this.getStringAttribute('cache_threshold');
+    }
+    // chunk_overlap - computed: true, optional: false, required: false
+    get chunkOverlap() {
+        return this.getNumberAttribute('chunk_overlap');
+    }
+    // chunk_size - computed: true, optional: false, required: false
+    get chunkSize() {
+        return this.getNumberAttribute('chunk_size');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // created_by - computed: true, optional: false, required: false
+    get createdBy() {
+        return this.getStringAttribute('created_by');
+    }
+    // custom_metadata - computed: true, optional: false, required: false
+    _customMetadata = new DataCloudflareAiSearchInstanceCustomMetadataList(this, "custom_metadata", false);
+    get customMetadata() {
+        return this._customMetadata;
+    }
+    // embedding_model - computed: true, optional: false, required: false
+    get embeddingModel() {
+        return this.getStringAttribute('embedding_model');
+    }
+    // enable - computed: true, optional: false, required: false
+    get enable() {
+        return this.getBooleanAttribute('enable');
+    }
+    // engine_version - computed: true, optional: false, required: false
+    get engineVersion() {
+        return this.getNumberAttribute('engine_version');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareAiSearchInstanceFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareAiSearchInstance.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "fusionMethod", {
-        // fusion_method - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fusion_method');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "hybridSearchEnabled", {
-        // hybrid_search_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('hybrid_search_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAiSearchInstance.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // fusion_method - computed: true, optional: false, required: false
+    get fusionMethod() {
+        return this.getStringAttribute('fusion_method');
+    }
+    // hybrid_search_enabled - computed: true, optional: false, required: false
+    get hybridSearchEnabled() {
+        return this.getBooleanAttribute('hybrid_search_enabled');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "indexMethod", {
-        get: function () {
-            return this._indexMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "indexingOptions", {
-        get: function () {
-            return this._indexingOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "lastActivity", {
-        // last_activity - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_activity');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "maxNumResults", {
-        // max_num_results - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_num_results');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "modifiedBy", {
-        // modified_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "namespace", {
-        // namespace - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "paused", {
-        // paused - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "publicEndpointId", {
-        // public_endpoint_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('public_endpoint_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "publicEndpointParams", {
-        get: function () {
-            return this._publicEndpointParams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "reranking", {
-        // reranking - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('reranking');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "rerankingModel", {
-        // reranking_model - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('reranking_model');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "retrievalOptions", {
-        get: function () {
-            return this._retrievalOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "rewriteModel", {
-        // rewrite_model - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('rewrite_model');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "rewriteQuery", {
-        // rewrite_query - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('rewrite_query');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "scoreThreshold", {
-        // score_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('score_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "source", {
-        // source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "sourceParams", {
-        get: function () {
-            return this._sourceParams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "syncInterval", {
-        // sync_interval - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('sync_interval');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "tokenId", {
-        // token_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('token_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAiSearchInstance.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // index_method - computed: true, optional: false, required: false
+    _indexMethod = new DataCloudflareAiSearchInstanceIndexMethodOutputReference(this, "index_method");
+    get indexMethod() {
+        return this._indexMethod;
+    }
+    // indexing_options - computed: true, optional: false, required: false
+    _indexingOptions = new DataCloudflareAiSearchInstanceIndexingOptionsOutputReference(this, "indexing_options");
+    get indexingOptions() {
+        return this._indexingOptions;
+    }
+    // last_activity - computed: true, optional: false, required: false
+    get lastActivity() {
+        return this.getStringAttribute('last_activity');
+    }
+    // max_num_results - computed: true, optional: false, required: false
+    get maxNumResults() {
+        return this.getNumberAttribute('max_num_results');
+    }
+    // metadata - computed: true, optional: false, required: false
+    _metadata = new DataCloudflareAiSearchInstanceMetadataOutputReference(this, "metadata");
+    get metadata() {
+        return this._metadata;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // modified_by - computed: true, optional: false, required: false
+    get modifiedBy() {
+        return this.getStringAttribute('modified_by');
+    }
+    // namespace - computed: true, optional: false, required: false
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    // paused - computed: true, optional: false, required: false
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    // public_endpoint_id - computed: true, optional: false, required: false
+    get publicEndpointId() {
+        return this.getStringAttribute('public_endpoint_id');
+    }
+    // public_endpoint_params - computed: true, optional: false, required: false
+    _publicEndpointParams = new DataCloudflareAiSearchInstancePublicEndpointParamsOutputReference(this, "public_endpoint_params");
+    get publicEndpointParams() {
+        return this._publicEndpointParams;
+    }
+    // reranking - computed: true, optional: false, required: false
+    get reranking() {
+        return this.getBooleanAttribute('reranking');
+    }
+    // reranking_model - computed: true, optional: false, required: false
+    get rerankingModel() {
+        return this.getStringAttribute('reranking_model');
+    }
+    // retrieval_options - computed: true, optional: false, required: false
+    _retrievalOptions = new DataCloudflareAiSearchInstanceRetrievalOptionsOutputReference(this, "retrieval_options");
+    get retrievalOptions() {
+        return this._retrievalOptions;
+    }
+    // rewrite_model - computed: true, optional: false, required: false
+    get rewriteModel() {
+        return this.getStringAttribute('rewrite_model');
+    }
+    // rewrite_query - computed: true, optional: false, required: false
+    get rewriteQuery() {
+        return this.getBooleanAttribute('rewrite_query');
+    }
+    // score_threshold - computed: true, optional: false, required: false
+    get scoreThreshold() {
+        return this.getNumberAttribute('score_threshold');
+    }
+    // source - computed: true, optional: false, required: false
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    // source_params - computed: true, optional: false, required: false
+    _sourceParams = new DataCloudflareAiSearchInstanceSourceParamsOutputReference(this, "source_params");
+    get sourceParams() {
+        return this._sourceParams;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // sync_interval - computed: true, optional: false, required: false
+    get syncInterval() {
+        return this.getNumberAttribute('sync_interval');
+    }
+    // token_id - computed: true, optional: false, required: false
+    get tokenId() {
+        return this.getStringAttribute('token_id');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareAiSearchInstance.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             filter: dataCloudflareAiSearchInstanceFilterToTerraform(this._filter.internalValue),
             id: cdktf.stringToTerraform(this._id),
         };
-    };
-    DataCloudflareAiSearchInstance.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -2110,15 +1501,6 @@ var DataCloudflareAiSearchInstance = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareAiSearchInstance.tfResourceType = "cloudflare_ai_search_instance";
-    return DataCloudflareAiSearchInstance;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareAiSearchInstance = DataCloudflareAiSearchInstance;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

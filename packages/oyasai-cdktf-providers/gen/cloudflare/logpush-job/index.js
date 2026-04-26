@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_job
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogpushJob = exports.LogpushJobOutputOptionsOutputReference = void 0;
-exports.logpushJobOutputOptionsToTerraform = logpushJobOutputOptionsToTerraform;
-exports.logpushJobOutputOptionsToHclTerraform = logpushJobOutputOptionsToHclTerraform;
-var cdktf = require("cdktf");
-function logpushJobOutputOptionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function logpushJobOutputOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -44,14 +24,14 @@ function logpushJobOutputOptionsToTerraform(struct) {
         timestamp_format: cdktf.stringToTerraform(struct.timestampFormat),
     };
 }
-function logpushJobOutputOptionsToHclTerraform(struct) {
+export function logpushJobOutputOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         batch_prefix: {
             value: cdktf.stringToHclTerraform(struct.batchPrefix),
             isBlock: false,
@@ -132,407 +112,335 @@ function logpushJobOutputOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var LogpushJobOutputOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(LogpushJobOutputOptionsOutputReference, _super);
+export class LogpushJobOutputOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function LogpushJobOutputOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._batchPrefix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.batchPrefix = this._batchPrefix;
-            }
-            if (this._batchSuffix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.batchSuffix = this._batchSuffix;
-            }
-            if (this._cve202144228 !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cve202144228 = this._cve202144228;
-            }
-            if (this._fieldDelimiter !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fieldDelimiter = this._fieldDelimiter;
-            }
-            if (this._fieldNames !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fieldNames = this._fieldNames;
-            }
-            if (this._mergeSubrequests !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mergeSubrequests = this._mergeSubrequests;
-            }
-            if (this._outputType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.outputType = this._outputType;
-            }
-            if (this._recordDelimiter !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.recordDelimiter = this._recordDelimiter;
-            }
-            if (this._recordPrefix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.recordPrefix = this._recordPrefix;
-            }
-            if (this._recordSuffix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.recordSuffix = this._recordSuffix;
-            }
-            if (this._recordTemplate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.recordTemplate = this._recordTemplate;
-            }
-            if (this._sampleRate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sampleRate = this._sampleRate;
-            }
-            if (this._timestampFormat !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timestampFormat = this._timestampFormat;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._batchPrefix = undefined;
-                this._batchSuffix = undefined;
-                this._cve202144228 = undefined;
-                this._fieldDelimiter = undefined;
-                this._fieldNames = undefined;
-                this._mergeSubrequests = undefined;
-                this._outputType = undefined;
-                this._recordDelimiter = undefined;
-                this._recordPrefix = undefined;
-                this._recordSuffix = undefined;
-                this._recordTemplate = undefined;
-                this._sampleRate = undefined;
-                this._timestampFormat = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._batchPrefix = value.batchPrefix;
-                this._batchSuffix = value.batchSuffix;
-                this._cve202144228 = value.cve202144228;
-                this._fieldDelimiter = value.fieldDelimiter;
-                this._fieldNames = value.fieldNames;
-                this._mergeSubrequests = value.mergeSubrequests;
-                this._outputType = value.outputType;
-                this._recordDelimiter = value.recordDelimiter;
-                this._recordPrefix = value.recordPrefix;
-                this._recordSuffix = value.recordSuffix;
-                this._recordTemplate = value.recordTemplate;
-                this._sampleRate = value.sampleRate;
-                this._timestampFormat = value.timestampFormat;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "batchPrefix", {
-        get: function () {
-            return this.getStringAttribute('batch_prefix');
-        },
-        set: function (value) {
-            this._batchPrefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetBatchPrefix = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._batchPrefix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.batchPrefix = this._batchPrefix;
+        }
+        if (this._batchSuffix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.batchSuffix = this._batchSuffix;
+        }
+        if (this._cve202144228 !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cve202144228 = this._cve202144228;
+        }
+        if (this._fieldDelimiter !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fieldDelimiter = this._fieldDelimiter;
+        }
+        if (this._fieldNames !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fieldNames = this._fieldNames;
+        }
+        if (this._mergeSubrequests !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mergeSubrequests = this._mergeSubrequests;
+        }
+        if (this._outputType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.outputType = this._outputType;
+        }
+        if (this._recordDelimiter !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.recordDelimiter = this._recordDelimiter;
+        }
+        if (this._recordPrefix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.recordPrefix = this._recordPrefix;
+        }
+        if (this._recordSuffix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.recordSuffix = this._recordSuffix;
+        }
+        if (this._recordTemplate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.recordTemplate = this._recordTemplate;
+        }
+        if (this._sampleRate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sampleRate = this._sampleRate;
+        }
+        if (this._timestampFormat !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timestampFormat = this._timestampFormat;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._batchPrefix = undefined;
+            this._batchSuffix = undefined;
+            this._cve202144228 = undefined;
+            this._fieldDelimiter = undefined;
+            this._fieldNames = undefined;
+            this._mergeSubrequests = undefined;
+            this._outputType = undefined;
+            this._recordDelimiter = undefined;
+            this._recordPrefix = undefined;
+            this._recordSuffix = undefined;
+            this._recordTemplate = undefined;
+            this._sampleRate = undefined;
+            this._timestampFormat = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._batchPrefix = value.batchPrefix;
+            this._batchSuffix = value.batchSuffix;
+            this._cve202144228 = value.cve202144228;
+            this._fieldDelimiter = value.fieldDelimiter;
+            this._fieldNames = value.fieldNames;
+            this._mergeSubrequests = value.mergeSubrequests;
+            this._outputType = value.outputType;
+            this._recordDelimiter = value.recordDelimiter;
+            this._recordPrefix = value.recordPrefix;
+            this._recordSuffix = value.recordSuffix;
+            this._recordTemplate = value.recordTemplate;
+            this._sampleRate = value.sampleRate;
+            this._timestampFormat = value.timestampFormat;
+        }
+    }
+    // batch_prefix - computed: false, optional: true, required: false
+    _batchPrefix;
+    get batchPrefix() {
+        return this.getStringAttribute('batch_prefix');
+    }
+    set batchPrefix(value) {
+        this._batchPrefix = value;
+    }
+    resetBatchPrefix() {
         this._batchPrefix = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "batchPrefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._batchPrefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "batchSuffix", {
-        get: function () {
-            return this.getStringAttribute('batch_suffix');
-        },
-        set: function (value) {
-            this._batchSuffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetBatchSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get batchPrefixInput() {
+        return this._batchPrefix;
+    }
+    // batch_suffix - computed: false, optional: true, required: false
+    _batchSuffix;
+    get batchSuffix() {
+        return this.getStringAttribute('batch_suffix');
+    }
+    set batchSuffix(value) {
+        this._batchSuffix = value;
+    }
+    resetBatchSuffix() {
         this._batchSuffix = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "batchSuffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._batchSuffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "cve202144228", {
-        get: function () {
-            return this.getBooleanAttribute('cve_2021_44228');
-        },
-        set: function (value) {
-            this._cve202144228 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetCve202144228 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get batchSuffixInput() {
+        return this._batchSuffix;
+    }
+    // cve_2021_44228 - computed: true, optional: true, required: false
+    _cve202144228;
+    get cve202144228() {
+        return this.getBooleanAttribute('cve_2021_44228');
+    }
+    set cve202144228(value) {
+        this._cve202144228 = value;
+    }
+    resetCve202144228() {
         this._cve202144228 = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "cve202144228Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cve202144228;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "fieldDelimiter", {
-        get: function () {
-            return this.getStringAttribute('field_delimiter');
-        },
-        set: function (value) {
-            this._fieldDelimiter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetFieldDelimiter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cve202144228Input() {
+        return this._cve202144228;
+    }
+    // field_delimiter - computed: false, optional: true, required: false
+    _fieldDelimiter;
+    get fieldDelimiter() {
+        return this.getStringAttribute('field_delimiter');
+    }
+    set fieldDelimiter(value) {
+        this._fieldDelimiter = value;
+    }
+    resetFieldDelimiter() {
         this._fieldDelimiter = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "fieldDelimiterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fieldDelimiter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "fieldNames", {
-        get: function () {
-            return this.getListAttribute('field_names');
-        },
-        set: function (value) {
-            this._fieldNames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetFieldNames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fieldDelimiterInput() {
+        return this._fieldDelimiter;
+    }
+    // field_names - computed: false, optional: true, required: false
+    _fieldNames;
+    get fieldNames() {
+        return this.getListAttribute('field_names');
+    }
+    set fieldNames(value) {
+        this._fieldNames = value;
+    }
+    resetFieldNames() {
         this._fieldNames = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "fieldNamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fieldNames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "mergeSubrequests", {
-        get: function () {
-            return this.getBooleanAttribute('merge_subrequests');
-        },
-        set: function (value) {
-            this._mergeSubrequests = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetMergeSubrequests = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fieldNamesInput() {
+        return this._fieldNames;
+    }
+    // merge_subrequests - computed: false, optional: true, required: false
+    _mergeSubrequests;
+    get mergeSubrequests() {
+        return this.getBooleanAttribute('merge_subrequests');
+    }
+    set mergeSubrequests(value) {
+        this._mergeSubrequests = value;
+    }
+    resetMergeSubrequests() {
         this._mergeSubrequests = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "mergeSubrequestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mergeSubrequests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "outputType", {
-        get: function () {
-            return this.getStringAttribute('output_type');
-        },
-        set: function (value) {
-            this._outputType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetOutputType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mergeSubrequestsInput() {
+        return this._mergeSubrequests;
+    }
+    // output_type - computed: false, optional: true, required: false
+    _outputType;
+    get outputType() {
+        return this.getStringAttribute('output_type');
+    }
+    set outputType(value) {
+        this._outputType = value;
+    }
+    resetOutputType() {
         this._outputType = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "outputTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._outputType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordDelimiter", {
-        get: function () {
-            return this.getStringAttribute('record_delimiter');
-        },
-        set: function (value) {
-            this._recordDelimiter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetRecordDelimiter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get outputTypeInput() {
+        return this._outputType;
+    }
+    // record_delimiter - computed: false, optional: true, required: false
+    _recordDelimiter;
+    get recordDelimiter() {
+        return this.getStringAttribute('record_delimiter');
+    }
+    set recordDelimiter(value) {
+        this._recordDelimiter = value;
+    }
+    resetRecordDelimiter() {
         this._recordDelimiter = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordDelimiterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._recordDelimiter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordPrefix", {
-        get: function () {
-            return this.getStringAttribute('record_prefix');
-        },
-        set: function (value) {
-            this._recordPrefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetRecordPrefix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get recordDelimiterInput() {
+        return this._recordDelimiter;
+    }
+    // record_prefix - computed: false, optional: true, required: false
+    _recordPrefix;
+    get recordPrefix() {
+        return this.getStringAttribute('record_prefix');
+    }
+    set recordPrefix(value) {
+        this._recordPrefix = value;
+    }
+    resetRecordPrefix() {
         this._recordPrefix = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordPrefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._recordPrefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordSuffix", {
-        get: function () {
-            return this.getStringAttribute('record_suffix');
-        },
-        set: function (value) {
-            this._recordSuffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetRecordSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get recordPrefixInput() {
+        return this._recordPrefix;
+    }
+    // record_suffix - computed: false, optional: true, required: false
+    _recordSuffix;
+    get recordSuffix() {
+        return this.getStringAttribute('record_suffix');
+    }
+    set recordSuffix(value) {
+        this._recordSuffix = value;
+    }
+    resetRecordSuffix() {
         this._recordSuffix = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordSuffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._recordSuffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordTemplate", {
-        get: function () {
-            return this.getStringAttribute('record_template');
-        },
-        set: function (value) {
-            this._recordTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetRecordTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get recordSuffixInput() {
+        return this._recordSuffix;
+    }
+    // record_template - computed: false, optional: true, required: false
+    _recordTemplate;
+    get recordTemplate() {
+        return this.getStringAttribute('record_template');
+    }
+    set recordTemplate(value) {
+        this._recordTemplate = value;
+    }
+    resetRecordTemplate() {
         this._recordTemplate = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "recordTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._recordTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "sampleRate", {
-        get: function () {
-            return this.getNumberAttribute('sample_rate');
-        },
-        set: function (value) {
-            this._sampleRate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetSampleRate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get recordTemplateInput() {
+        return this._recordTemplate;
+    }
+    // sample_rate - computed: false, optional: true, required: false
+    _sampleRate;
+    get sampleRate() {
+        return this.getNumberAttribute('sample_rate');
+    }
+    set sampleRate(value) {
+        this._sampleRate = value;
+    }
+    resetSampleRate() {
         this._sampleRate = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "sampleRateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sampleRate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "timestampFormat", {
-        get: function () {
-            return this.getStringAttribute('timestamp_format');
-        },
-        set: function (value) {
-            this._timestampFormat = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJobOutputOptionsOutputReference.prototype.resetTimestampFormat = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sampleRateInput() {
+        return this._sampleRate;
+    }
+    // timestamp_format - computed: false, optional: true, required: false
+    _timestampFormat;
+    get timestampFormat() {
+        return this.getStringAttribute('timestamp_format');
+    }
+    set timestampFormat(value) {
+        this._timestampFormat = value;
+    }
+    resetTimestampFormat() {
         this._timestampFormat = undefined;
-    };
-    Object.defineProperty(LogpushJobOutputOptionsOutputReference.prototype, "timestampFormatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timestampFormat;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return LogpushJobOutputOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.LogpushJobOutputOptionsOutputReference = LogpushJobOutputOptionsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get timestampFormatInput() {
+        return this._timestampFormat;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_job cloudflare_logpush_job}
 */
-var LogpushJob = /** @class */ (function (_super) {
-    __extends(LogpushJob, _super);
+export class LogpushJob extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_logpush_job";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a LogpushJob resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the LogpushJob to import
+    * @param importFromId The id of the existing LogpushJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_job#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the LogpushJob to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_logpush_job", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -543,8 +451,8 @@ var LogpushJob = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options LogpushJobConfig
     */
-    function LogpushJob(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_logpush_job',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -557,387 +465,268 @@ var LogpushJob = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // output_options - computed: false, optional: true, required: false
-        _this._outputOptions = new LogpushJobOutputOptionsOutputReference(_this, "output_options");
-        _this._accountId = config.accountId;
-        _this._dataset = config.dataset;
-        _this._destinationConf = config.destinationConf;
-        _this._enabled = config.enabled;
-        _this._filter = config.filter;
-        _this._frequency = config.frequency;
-        _this._kind = config.kind;
-        _this._logpullOptions = config.logpullOptions;
-        _this._maxUploadBytes = config.maxUploadBytes;
-        _this._maxUploadIntervalSeconds = config.maxUploadIntervalSeconds;
-        _this._maxUploadRecords = config.maxUploadRecords;
-        _this._name = config.name;
-        _this._outputOptions.internalValue = config.outputOptions;
-        _this._ownershipChallenge = config.ownershipChallenge;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._dataset = config.dataset;
+        this._destinationConf = config.destinationConf;
+        this._enabled = config.enabled;
+        this._filter = config.filter;
+        this._frequency = config.frequency;
+        this._kind = config.kind;
+        this._logpullOptions = config.logpullOptions;
+        this._maxUploadBytes = config.maxUploadBytes;
+        this._maxUploadIntervalSeconds = config.maxUploadIntervalSeconds;
+        this._maxUploadRecords = config.maxUploadRecords;
+        this._name = config.name;
+        this._outputOptions.internalValue = config.outputOptions;
+        this._ownershipChallenge = config.ownershipChallenge;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a LogpushJob resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the LogpushJob to import
-    * @param importFromId The id of the existing LogpushJob that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/logpush_job#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the LogpushJob to import is found
-    */
-    LogpushJob.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_logpush_job", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(LogpushJob.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "dataset", {
-        get: function () {
-            return this.getStringAttribute('dataset');
-        },
-        set: function (value) {
-            this._dataset = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetDataset = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // dataset - computed: true, optional: true, required: false
+    _dataset;
+    get dataset() {
+        return this.getStringAttribute('dataset');
+    }
+    set dataset(value) {
+        this._dataset = value;
+    }
+    resetDataset() {
         this._dataset = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "datasetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dataset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "destinationConf", {
-        get: function () {
-            return this.getStringAttribute('destination_conf');
-        },
-        set: function (value) {
-            this._destinationConf = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "destinationConfInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinationConf;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get datasetInput() {
+        return this._dataset;
+    }
+    // destination_conf - computed: false, optional: false, required: true
+    _destinationConf;
+    get destinationConf() {
+        return this.getStringAttribute('destination_conf');
+    }
+    set destinationConf(value) {
+        this._destinationConf = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationConfInput() {
+        return this._destinationConf;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "errorMessage", {
-        // error_message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('error_message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "filter", {
-        get: function () {
-            return this.getStringAttribute('filter');
-        },
-        set: function (value) {
-            this._filter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetFilter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // error_message - computed: true, optional: false, required: false
+    get errorMessage() {
+        return this.getStringAttribute('error_message');
+    }
+    // filter - computed: true, optional: true, required: false
+    _filter;
+    get filter() {
+        return this.getStringAttribute('filter');
+    }
+    set filter(value) {
+        this._filter = value;
+    }
+    resetFilter() {
         this._filter = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "frequency", {
-        get: function () {
-            return this.getStringAttribute('frequency');
-        },
-        set: function (value) {
-            this._frequency = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetFrequency = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter;
+    }
+    // frequency - computed: true, optional: true, required: false
+    _frequency;
+    get frequency() {
+        return this.getStringAttribute('frequency');
+    }
+    set frequency(value) {
+        this._frequency = value;
+    }
+    resetFrequency() {
         this._frequency = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "frequencyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._frequency;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "kind", {
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        set: function (value) {
-            this._kind = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetKind = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get frequencyInput() {
+        return this._frequency;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getNumberAttribute('id');
+    }
+    // kind - computed: true, optional: true, required: false
+    _kind;
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    set kind(value) {
+        this._kind = value;
+    }
+    resetKind() {
         this._kind = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "kindInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kind;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "lastComplete", {
-        // last_complete - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_complete');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "lastError", {
-        // last_error - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_error');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "logpullOptions", {
-        get: function () {
-            return this.getStringAttribute('logpull_options');
-        },
-        set: function (value) {
-            this._logpullOptions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetLogpullOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get kindInput() {
+        return this._kind;
+    }
+    // last_complete - computed: true, optional: false, required: false
+    get lastComplete() {
+        return this.getStringAttribute('last_complete');
+    }
+    // last_error - computed: true, optional: false, required: false
+    get lastError() {
+        return this.getStringAttribute('last_error');
+    }
+    // logpull_options - computed: true, optional: true, required: false
+    _logpullOptions;
+    get logpullOptions() {
+        return this.getStringAttribute('logpull_options');
+    }
+    set logpullOptions(value) {
+        this._logpullOptions = value;
+    }
+    resetLogpullOptions() {
         this._logpullOptions = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "logpullOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logpullOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "maxUploadBytes", {
-        get: function () {
-            return this.getNumberAttribute('max_upload_bytes');
-        },
-        set: function (value) {
-            this._maxUploadBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetMaxUploadBytes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logpullOptionsInput() {
+        return this._logpullOptions;
+    }
+    // max_upload_bytes - computed: true, optional: true, required: false
+    _maxUploadBytes;
+    get maxUploadBytes() {
+        return this.getNumberAttribute('max_upload_bytes');
+    }
+    set maxUploadBytes(value) {
+        this._maxUploadBytes = value;
+    }
+    resetMaxUploadBytes() {
         this._maxUploadBytes = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "maxUploadBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxUploadBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "maxUploadIntervalSeconds", {
-        get: function () {
-            return this.getNumberAttribute('max_upload_interval_seconds');
-        },
-        set: function (value) {
-            this._maxUploadIntervalSeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetMaxUploadIntervalSeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxUploadBytesInput() {
+        return this._maxUploadBytes;
+    }
+    // max_upload_interval_seconds - computed: true, optional: true, required: false
+    _maxUploadIntervalSeconds;
+    get maxUploadIntervalSeconds() {
+        return this.getNumberAttribute('max_upload_interval_seconds');
+    }
+    set maxUploadIntervalSeconds(value) {
+        this._maxUploadIntervalSeconds = value;
+    }
+    resetMaxUploadIntervalSeconds() {
         this._maxUploadIntervalSeconds = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "maxUploadIntervalSecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxUploadIntervalSeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "maxUploadRecords", {
-        get: function () {
-            return this.getNumberAttribute('max_upload_records');
-        },
-        set: function (value) {
-            this._maxUploadRecords = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetMaxUploadRecords = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxUploadIntervalSecondsInput() {
+        return this._maxUploadIntervalSeconds;
+    }
+    // max_upload_records - computed: true, optional: true, required: false
+    _maxUploadRecords;
+    get maxUploadRecords() {
+        return this.getNumberAttribute('max_upload_records');
+    }
+    set maxUploadRecords(value) {
+        this._maxUploadRecords = value;
+    }
+    resetMaxUploadRecords() {
         this._maxUploadRecords = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "maxUploadRecordsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxUploadRecords;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxUploadRecordsInput() {
+        return this._maxUploadRecords;
+    }
+    // name - computed: true, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "outputOptions", {
-        get: function () {
-            return this._outputOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.putOutputOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // output_options - computed: false, optional: true, required: false
+    _outputOptions = new LogpushJobOutputOptionsOutputReference(this, "output_options");
+    get outputOptions() {
+        return this._outputOptions;
+    }
+    putOutputOptions(value) {
         this._outputOptions.internalValue = value;
-    };
-    LogpushJob.prototype.resetOutputOptions = function () {
+    }
+    resetOutputOptions() {
         this._outputOptions.internalValue = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "outputOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._outputOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "ownershipChallenge", {
-        get: function () {
-            return this.getStringAttribute('ownership_challenge');
-        },
-        set: function (value) {
-            this._ownershipChallenge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetOwnershipChallenge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get outputOptionsInput() {
+        return this._outputOptions.internalValue;
+    }
+    // ownership_challenge - computed: false, optional: true, required: false
+    _ownershipChallenge;
+    get ownershipChallenge() {
+        return this.getStringAttribute('ownership_challenge');
+    }
+    set ownershipChallenge(value) {
+        this._ownershipChallenge = value;
+    }
+    resetOwnershipChallenge() {
         this._ownershipChallenge = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "ownershipChallengeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ownershipChallenge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(LogpushJob.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    LogpushJob.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ownershipChallengeInput() {
+        return this._ownershipChallenge;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(LogpushJob.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    LogpushJob.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             dataset: cdktf.stringToTerraform(this._dataset),
@@ -955,9 +744,9 @@ var LogpushJob = /** @class */ (function (_super) {
             ownership_challenge: cdktf.stringToTerraform(this._ownershipChallenge),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    LogpushJob.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1050,15 +839,6 @@ var LogpushJob = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    LogpushJob.tfResourceType = "cloudflare_logpush_job";
-    return LogpushJob;
-}(cdktf.TerraformResource));
-exports.LogpushJob = LogpushJob;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

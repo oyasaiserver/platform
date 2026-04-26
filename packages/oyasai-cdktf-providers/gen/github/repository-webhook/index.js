@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_webhook
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepositoryWebhook = exports.RepositoryWebhookConfigurationOutputReference = void 0;
-exports.repositoryWebhookConfigurationToTerraform = repositoryWebhookConfigurationToTerraform;
-exports.repositoryWebhookConfigurationToHclTerraform = repositoryWebhookConfigurationToHclTerraform;
-var cdktf = require("cdktf");
-function repositoryWebhookConfigurationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function repositoryWebhookConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -35,14 +15,14 @@ function repositoryWebhookConfigurationToTerraform(struct) {
         url: cdktf.stringToTerraform(struct.url),
     };
 }
-function repositoryWebhookConfigurationToHclTerraform(struct) {
+export function repositoryWebhookConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         content_type: {
             value: cdktf.stringToHclTerraform(struct.contentType),
             isBlock: false,
@@ -69,152 +49,133 @@ function repositoryWebhookConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositoryWebhookConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(RepositoryWebhookConfigurationOutputReference, _super);
+export class RepositoryWebhookConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositoryWebhookConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contentType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contentType = this._contentType;
-            }
-            if (this._insecureSsl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.insecureSsl = this._insecureSsl;
-            }
-            if (this._secret !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secret = this._secret;
-            }
-            if (this._url !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.url = this._url;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._contentType = undefined;
-                this._insecureSsl = undefined;
-                this._secret = undefined;
-                this._url = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._contentType = value.contentType;
-                this._insecureSsl = value.insecureSsl;
-                this._secret = value.secret;
-                this._url = value.url;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "contentType", {
-        get: function () {
-            return this.getStringAttribute('content_type');
-        },
-        set: function (value) {
-            this._contentType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhookConfigurationOutputReference.prototype.resetContentType = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contentType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contentType = this._contentType;
+        }
+        if (this._insecureSsl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.insecureSsl = this._insecureSsl;
+        }
+        if (this._secret !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secret = this._secret;
+        }
+        if (this._url !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.url = this._url;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._contentType = undefined;
+            this._insecureSsl = undefined;
+            this._secret = undefined;
+            this._url = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._contentType = value.contentType;
+            this._insecureSsl = value.insecureSsl;
+            this._secret = value.secret;
+            this._url = value.url;
+        }
+    }
+    // content_type - computed: false, optional: true, required: false
+    _contentType;
+    get contentType() {
+        return this.getStringAttribute('content_type');
+    }
+    set contentType(value) {
+        this._contentType = value;
+    }
+    resetContentType() {
         this._contentType = undefined;
-    };
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "contentTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "insecureSsl", {
-        get: function () {
-            return this.getBooleanAttribute('insecure_ssl');
-        },
-        set: function (value) {
-            this._insecureSsl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhookConfigurationOutputReference.prototype.resetInsecureSsl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentTypeInput() {
+        return this._contentType;
+    }
+    // insecure_ssl - computed: false, optional: true, required: false
+    _insecureSsl;
+    get insecureSsl() {
+        return this.getBooleanAttribute('insecure_ssl');
+    }
+    set insecureSsl(value) {
+        this._insecureSsl = value;
+    }
+    resetInsecureSsl() {
         this._insecureSsl = undefined;
-    };
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "insecureSslInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._insecureSsl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "secret", {
-        get: function () {
-            return this.getStringAttribute('secret');
-        },
-        set: function (value) {
-            this._secret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhookConfigurationOutputReference.prototype.resetSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get insecureSslInput() {
+        return this._insecureSsl;
+    }
+    // secret - computed: false, optional: true, required: false
+    _secret;
+    get secret() {
+        return this.getStringAttribute('secret');
+    }
+    set secret(value) {
+        this._secret = value;
+    }
+    resetSecret() {
         this._secret = undefined;
-    };
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "secretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secret;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhookConfigurationOutputReference.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositoryWebhookConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositoryWebhookConfigurationOutputReference = RepositoryWebhookConfigurationOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretInput() {
+        return this._secret;
+    }
+    // url - computed: false, optional: false, required: true
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_webhook github_repository_webhook}
 */
-var RepositoryWebhook = /** @class */ (function (_super) {
-    __extends(RepositoryWebhook, _super);
+export class RepositoryWebhook extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_webhook";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RepositoryWebhook resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RepositoryWebhook to import
+    * @param importFromId The id of the existing RepositoryWebhook that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_webhook#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RepositoryWebhook to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_webhook", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -225,8 +186,8 @@ var RepositoryWebhook = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryWebhookConfig
     */
-    function RepositoryWebhook(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_webhook',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -239,162 +200,109 @@ var RepositoryWebhook = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // configuration - computed: false, optional: true, required: false
-        _this._configuration = new RepositoryWebhookConfigurationOutputReference(_this, "configuration");
-        _this._active = config.active;
-        _this._etag = config.etag;
-        _this._events = config.events;
-        _this._id = config.id;
-        _this._repository = config.repository;
-        _this._configuration.internalValue = config.configuration;
-        return _this;
+        });
+        this._active = config.active;
+        this._etag = config.etag;
+        this._events = config.events;
+        this._id = config.id;
+        this._repository = config.repository;
+        this._configuration.internalValue = config.configuration;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RepositoryWebhook resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RepositoryWebhook to import
-    * @param importFromId The id of the existing RepositoryWebhook that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_webhook#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RepositoryWebhook to import is found
-    */
-    RepositoryWebhook.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_webhook", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RepositoryWebhook.prototype, "active", {
-        get: function () {
-            return this.getBooleanAttribute('active');
-        },
-        set: function (value) {
-            this._active = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhook.prototype.resetActive = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // active - computed: false, optional: true, required: false
+    _active;
+    get active() {
+        return this.getBooleanAttribute('active');
+    }
+    set active(value) {
+        this._active = value;
+    }
+    resetActive() {
         this._active = undefined;
-    };
-    Object.defineProperty(RepositoryWebhook.prototype, "activeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._active;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "etag", {
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        set: function (value) {
-            this._etag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhook.prototype.resetEtag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get activeInput() {
+        return this._active;
+    }
+    // etag - computed: true, optional: true, required: false
+    _etag;
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    set etag(value) {
+        this._etag = value;
+    }
+    resetEtag() {
         this._etag = undefined;
-    };
-    Object.defineProperty(RepositoryWebhook.prototype, "etagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._etag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "events", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('events'));
-        },
-        set: function (value) {
-            this._events = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "eventsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._events;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhook.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get etagInput() {
+        return this._etag;
+    }
+    // events - computed: false, optional: false, required: true
+    _events;
+    get events() {
+        return cdktf.Fn.tolist(this.getListAttribute('events'));
+    }
+    set events(value) {
+        this._events = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventsInput() {
+        return this._events;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(RepositoryWebhook.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryWebhook.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryWebhook.prototype.putConfiguration = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    // configuration - computed: false, optional: true, required: false
+    _configuration = new RepositoryWebhookConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    RepositoryWebhook.prototype.resetConfiguration = function () {
+    }
+    resetConfiguration() {
         this._configuration.internalValue = undefined;
-    };
-    Object.defineProperty(RepositoryWebhook.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RepositoryWebhook.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             active: cdktf.booleanToTerraform(this._active),
             etag: cdktf.stringToTerraform(this._etag),
@@ -403,9 +311,9 @@ var RepositoryWebhook = /** @class */ (function (_super) {
             repository: cdktf.stringToTerraform(this._repository),
             configuration: repositoryWebhookConfigurationToTerraform(this._configuration.internalValue),
         };
-    };
-    RepositoryWebhook.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             active: {
                 value: cdktf.booleanToHclTerraform(this._active),
                 isBlock: false,
@@ -444,15 +352,6 @@ var RepositoryWebhook = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RepositoryWebhook.tfResourceType = "github_repository_webhook";
-    return RepositoryWebhook;
-}(cdktf.TerraformResource));
-exports.RepositoryWebhook = RepositoryWebhook;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

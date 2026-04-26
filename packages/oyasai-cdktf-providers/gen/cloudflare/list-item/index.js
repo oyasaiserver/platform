@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/list_item
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListItem = exports.ListItemRedirectOutputReference = exports.ListItemHostnameOutputReference = void 0;
-exports.listItemHostnameToTerraform = listItemHostnameToTerraform;
-exports.listItemHostnameToHclTerraform = listItemHostnameToHclTerraform;
-exports.listItemRedirectToTerraform = listItemRedirectToTerraform;
-exports.listItemRedirectToHclTerraform = listItemRedirectToHclTerraform;
-var cdktf = require("cdktf");
-function listItemHostnameToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function listItemHostnameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -35,14 +13,14 @@ function listItemHostnameToTerraform(struct) {
         url_hostname: cdktf.stringToTerraform(struct.urlHostname),
     };
 }
-function listItemHostnameToHclTerraform(struct) {
+export function listItemHostnameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude_exact_hostname: {
             value: cdktf.booleanToHclTerraform(struct.excludeExactHostname),
             isBlock: false,
@@ -57,103 +35,81 @@ function listItemHostnameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ListItemHostnameOutputReference = /** @class */ (function (_super) {
-    __extends(ListItemHostnameOutputReference, _super);
+export class ListItemHostnameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ListItemHostnameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ListItemHostnameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._excludeExactHostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.excludeExactHostname = this._excludeExactHostname;
-            }
-            if (this._urlHostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.urlHostname = this._urlHostname;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._excludeExactHostname = undefined;
-                this._urlHostname = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._excludeExactHostname = value.excludeExactHostname;
-                this._urlHostname = value.urlHostname;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemHostnameOutputReference.prototype, "excludeExactHostname", {
-        get: function () {
-            return this.getBooleanAttribute('exclude_exact_hostname');
-        },
-        set: function (value) {
-            this._excludeExactHostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemHostnameOutputReference.prototype.resetExcludeExactHostname = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._excludeExactHostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.excludeExactHostname = this._excludeExactHostname;
+        }
+        if (this._urlHostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.urlHostname = this._urlHostname;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._excludeExactHostname = undefined;
+            this._urlHostname = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._excludeExactHostname = value.excludeExactHostname;
+            this._urlHostname = value.urlHostname;
+        }
+    }
+    // exclude_exact_hostname - computed: false, optional: true, required: false
+    _excludeExactHostname;
+    get excludeExactHostname() {
+        return this.getBooleanAttribute('exclude_exact_hostname');
+    }
+    set excludeExactHostname(value) {
+        this._excludeExactHostname = value;
+    }
+    resetExcludeExactHostname() {
         this._excludeExactHostname = undefined;
-    };
-    Object.defineProperty(ListItemHostnameOutputReference.prototype, "excludeExactHostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._excludeExactHostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemHostnameOutputReference.prototype, "urlHostname", {
-        get: function () {
-            return this.getStringAttribute('url_hostname');
-        },
-        set: function (value) {
-            this._urlHostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemHostnameOutputReference.prototype, "urlHostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._urlHostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ListItemHostnameOutputReference;
-}(cdktf.ComplexObject));
-exports.ListItemHostnameOutputReference = ListItemHostnameOutputReference;
-function listItemRedirectToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeExactHostnameInput() {
+        return this._excludeExactHostname;
+    }
+    // url_hostname - computed: false, optional: false, required: true
+    _urlHostname;
+    get urlHostname() {
+        return this.getStringAttribute('url_hostname');
+    }
+    set urlHostname(value) {
+        this._urlHostname = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlHostnameInput() {
+        return this._urlHostname;
+    }
+}
+export function listItemRedirectToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -170,14 +126,14 @@ function listItemRedirectToTerraform(struct) {
         target_url: cdktf.stringToTerraform(struct.targetUrl),
     };
 }
-function listItemRedirectToHclTerraform(struct) {
+export function listItemRedirectToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         include_subdomains: {
             value: cdktf.booleanToHclTerraform(struct.includeSubdomains),
             isBlock: false,
@@ -222,239 +178,203 @@ function listItemRedirectToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ListItemRedirectOutputReference = /** @class */ (function (_super) {
-    __extends(ListItemRedirectOutputReference, _super);
+export class ListItemRedirectOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ListItemRedirectOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._includeSubdomains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeSubdomains = this._includeSubdomains;
-            }
-            if (this._preservePathSuffix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.preservePathSuffix = this._preservePathSuffix;
-            }
-            if (this._preserveQueryString !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.preserveQueryString = this._preserveQueryString;
-            }
-            if (this._sourceUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sourceUrl = this._sourceUrl;
-            }
-            if (this._statusCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.statusCode = this._statusCode;
-            }
-            if (this._subpathMatching !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subpathMatching = this._subpathMatching;
-            }
-            if (this._targetUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.targetUrl = this._targetUrl;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._includeSubdomains = undefined;
-                this._preservePathSuffix = undefined;
-                this._preserveQueryString = undefined;
-                this._sourceUrl = undefined;
-                this._statusCode = undefined;
-                this._subpathMatching = undefined;
-                this._targetUrl = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._includeSubdomains = value.includeSubdomains;
-                this._preservePathSuffix = value.preservePathSuffix;
-                this._preserveQueryString = value.preserveQueryString;
-                this._sourceUrl = value.sourceUrl;
-                this._statusCode = value.statusCode;
-                this._subpathMatching = value.subpathMatching;
-                this._targetUrl = value.targetUrl;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "includeSubdomains", {
-        get: function () {
-            return this.getBooleanAttribute('include_subdomains');
-        },
-        set: function (value) {
-            this._includeSubdomains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemRedirectOutputReference.prototype.resetIncludeSubdomains = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._includeSubdomains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeSubdomains = this._includeSubdomains;
+        }
+        if (this._preservePathSuffix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.preservePathSuffix = this._preservePathSuffix;
+        }
+        if (this._preserveQueryString !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.preserveQueryString = this._preserveQueryString;
+        }
+        if (this._sourceUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sourceUrl = this._sourceUrl;
+        }
+        if (this._statusCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.statusCode = this._statusCode;
+        }
+        if (this._subpathMatching !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subpathMatching = this._subpathMatching;
+        }
+        if (this._targetUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.targetUrl = this._targetUrl;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._includeSubdomains = undefined;
+            this._preservePathSuffix = undefined;
+            this._preserveQueryString = undefined;
+            this._sourceUrl = undefined;
+            this._statusCode = undefined;
+            this._subpathMatching = undefined;
+            this._targetUrl = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._includeSubdomains = value.includeSubdomains;
+            this._preservePathSuffix = value.preservePathSuffix;
+            this._preserveQueryString = value.preserveQueryString;
+            this._sourceUrl = value.sourceUrl;
+            this._statusCode = value.statusCode;
+            this._subpathMatching = value.subpathMatching;
+            this._targetUrl = value.targetUrl;
+        }
+    }
+    // include_subdomains - computed: true, optional: true, required: false
+    _includeSubdomains;
+    get includeSubdomains() {
+        return this.getBooleanAttribute('include_subdomains');
+    }
+    set includeSubdomains(value) {
+        this._includeSubdomains = value;
+    }
+    resetIncludeSubdomains() {
         this._includeSubdomains = undefined;
-    };
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "includeSubdomainsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeSubdomains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "preservePathSuffix", {
-        get: function () {
-            return this.getBooleanAttribute('preserve_path_suffix');
-        },
-        set: function (value) {
-            this._preservePathSuffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemRedirectOutputReference.prototype.resetPreservePathSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeSubdomainsInput() {
+        return this._includeSubdomains;
+    }
+    // preserve_path_suffix - computed: true, optional: true, required: false
+    _preservePathSuffix;
+    get preservePathSuffix() {
+        return this.getBooleanAttribute('preserve_path_suffix');
+    }
+    set preservePathSuffix(value) {
+        this._preservePathSuffix = value;
+    }
+    resetPreservePathSuffix() {
         this._preservePathSuffix = undefined;
-    };
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "preservePathSuffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._preservePathSuffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "preserveQueryString", {
-        get: function () {
-            return this.getBooleanAttribute('preserve_query_string');
-        },
-        set: function (value) {
-            this._preserveQueryString = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemRedirectOutputReference.prototype.resetPreserveQueryString = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get preservePathSuffixInput() {
+        return this._preservePathSuffix;
+    }
+    // preserve_query_string - computed: true, optional: true, required: false
+    _preserveQueryString;
+    get preserveQueryString() {
+        return this.getBooleanAttribute('preserve_query_string');
+    }
+    set preserveQueryString(value) {
+        this._preserveQueryString = value;
+    }
+    resetPreserveQueryString() {
         this._preserveQueryString = undefined;
-    };
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "preserveQueryStringInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._preserveQueryString;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "sourceUrl", {
-        get: function () {
-            return this.getStringAttribute('source_url');
-        },
-        set: function (value) {
-            this._sourceUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "sourceUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "statusCode", {
-        get: function () {
-            return this.getNumberAttribute('status_code');
-        },
-        set: function (value) {
-            this._statusCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemRedirectOutputReference.prototype.resetStatusCode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get preserveQueryStringInput() {
+        return this._preserveQueryString;
+    }
+    // source_url - computed: false, optional: false, required: true
+    _sourceUrl;
+    get sourceUrl() {
+        return this.getStringAttribute('source_url');
+    }
+    set sourceUrl(value) {
+        this._sourceUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceUrlInput() {
+        return this._sourceUrl;
+    }
+    // status_code - computed: true, optional: true, required: false
+    _statusCode;
+    get statusCode() {
+        return this.getNumberAttribute('status_code');
+    }
+    set statusCode(value) {
+        this._statusCode = value;
+    }
+    resetStatusCode() {
         this._statusCode = undefined;
-    };
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "statusCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._statusCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "subpathMatching", {
-        get: function () {
-            return this.getBooleanAttribute('subpath_matching');
-        },
-        set: function (value) {
-            this._subpathMatching = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItemRedirectOutputReference.prototype.resetSubpathMatching = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusCodeInput() {
+        return this._statusCode;
+    }
+    // subpath_matching - computed: true, optional: true, required: false
+    _subpathMatching;
+    get subpathMatching() {
+        return this.getBooleanAttribute('subpath_matching');
+    }
+    set subpathMatching(value) {
+        this._subpathMatching = value;
+    }
+    resetSubpathMatching() {
         this._subpathMatching = undefined;
-    };
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "subpathMatchingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subpathMatching;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "targetUrl", {
-        get: function () {
-            return this.getStringAttribute('target_url');
-        },
-        set: function (value) {
-            this._targetUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItemRedirectOutputReference.prototype, "targetUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ListItemRedirectOutputReference;
-}(cdktf.ComplexObject));
-exports.ListItemRedirectOutputReference = ListItemRedirectOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get subpathMatchingInput() {
+        return this._subpathMatching;
+    }
+    // target_url - computed: false, optional: false, required: true
+    _targetUrl;
+    get targetUrl() {
+        return this.getStringAttribute('target_url');
+    }
+    set targetUrl(value) {
+        this._targetUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetUrlInput() {
+        return this._targetUrl;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/list_item cloudflare_list_item}
 */
-var ListItem = /** @class */ (function (_super) {
-    __extends(ListItem, _super);
+export class ListItem extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_list_item";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ListItem resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ListItem to import
+    * @param importFromId The id of the existing ListItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/list_item#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ListItem to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_list_item", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -465,8 +385,8 @@ var ListItem = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ListItemConfig
     */
-    function ListItem(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_list_item',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -479,213 +399,140 @@ var ListItem = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // hostname - computed: false, optional: true, required: false
-        _this._hostname = new ListItemHostnameOutputReference(_this, "hostname");
-        // redirect - computed: false, optional: true, required: false
-        _this._redirect = new ListItemRedirectOutputReference(_this, "redirect");
-        _this._accountId = config.accountId;
-        _this._asn = config.asn;
-        _this._comment = config.comment;
-        _this._hostname.internalValue = config.hostname;
-        _this._ip = config.ip;
-        _this._listId = config.listId;
-        _this._redirect.internalValue = config.redirect;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._asn = config.asn;
+        this._comment = config.comment;
+        this._hostname.internalValue = config.hostname;
+        this._ip = config.ip;
+        this._listId = config.listId;
+        this._redirect.internalValue = config.redirect;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ListItem resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ListItem to import
-    * @param importFromId The id of the existing ListItem that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/list_item#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ListItem to import is found
-    */
-    ListItem.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_list_item", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ListItem.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "asn", {
-        get: function () {
-            return this.getNumberAttribute('asn');
-        },
-        set: function (value) {
-            this._asn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.resetAsn = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // asn - computed: false, optional: true, required: false
+    _asn;
+    get asn() {
+        return this.getNumberAttribute('asn');
+    }
+    set asn(value) {
+        this._asn = value;
+    }
+    resetAsn() {
         this._asn = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "asnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._asn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "comment", {
-        get: function () {
-            return this.getStringAttribute('comment');
-        },
-        set: function (value) {
-            this._comment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.resetComment = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get asnInput() {
+        return this._asn;
+    }
+    // comment - computed: false, optional: true, required: false
+    _comment;
+    get comment() {
+        return this.getStringAttribute('comment');
+    }
+    set comment(value) {
+        this._comment = value;
+    }
+    resetComment() {
         this._comment = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "commentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._comment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "hostname", {
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.putHostname = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commentInput() {
+        return this._comment;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // hostname - computed: false, optional: true, required: false
+    _hostname = new ListItemHostnameOutputReference(this, "hostname");
+    get hostname() {
+        return this._hostname;
+    }
+    putHostname(value) {
         this._hostname.internalValue = value;
-    };
-    ListItem.prototype.resetHostname = function () {
+    }
+    resetHostname() {
         this._hostname.internalValue = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.resetIp = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ip - computed: false, optional: true, required: false
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    resetIp() {
         this._ip = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "listId", {
-        get: function () {
-            return this.getStringAttribute('list_id');
-        },
-        set: function (value) {
-            this._listId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "listIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._listId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "operationId", {
-        // operation_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('operation_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ListItem.prototype, "redirect", {
-        get: function () {
-            return this._redirect;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ListItem.prototype.putRedirect = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+    // list_id - computed: false, optional: false, required: true
+    _listId;
+    get listId() {
+        return this.getStringAttribute('list_id');
+    }
+    set listId(value) {
+        this._listId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get listIdInput() {
+        return this._listId;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // operation_id - computed: true, optional: false, required: false
+    get operationId() {
+        return this.getStringAttribute('operation_id');
+    }
+    // redirect - computed: false, optional: true, required: false
+    _redirect = new ListItemRedirectOutputReference(this, "redirect");
+    get redirect() {
+        return this._redirect;
+    }
+    putRedirect(value) {
         this._redirect.internalValue = value;
-    };
-    ListItem.prototype.resetRedirect = function () {
+    }
+    resetRedirect() {
         this._redirect.internalValue = undefined;
-    };
-    Object.defineProperty(ListItem.prototype, "redirectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._redirect.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get redirectInput() {
+        return this._redirect.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ListItem.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             asn: cdktf.numberToTerraform(this._asn),
@@ -695,9 +542,9 @@ var ListItem = /** @class */ (function (_super) {
             list_id: cdktf.stringToTerraform(this._listId),
             redirect: listItemRedirectToTerraform(this._redirect.internalValue),
         };
-    };
-    ListItem.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -742,15 +589,6 @@ var ListItem = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ListItem.tfResourceType = "cloudflare_list_item";
-    return ListItem;
-}(cdktf.TerraformResource));
-exports.ListItem = ListItem;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

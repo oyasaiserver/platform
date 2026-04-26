@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hyperdrive_config
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.HyperdriveConfig = exports.HyperdriveConfigOriginOutputReference = exports.HyperdriveConfigMtlsOutputReference = exports.HyperdriveConfigCachingOutputReference = void 0;
-exports.hyperdriveConfigCachingToTerraform = hyperdriveConfigCachingToTerraform;
-exports.hyperdriveConfigCachingToHclTerraform = hyperdriveConfigCachingToHclTerraform;
-exports.hyperdriveConfigMtlsToTerraform = hyperdriveConfigMtlsToTerraform;
-exports.hyperdriveConfigMtlsToHclTerraform = hyperdriveConfigMtlsToHclTerraform;
-exports.hyperdriveConfigOriginToTerraform = hyperdriveConfigOriginToTerraform;
-exports.hyperdriveConfigOriginToHclTerraform = hyperdriveConfigOriginToHclTerraform;
-var cdktf = require("cdktf");
-function hyperdriveConfigCachingToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function hyperdriveConfigCachingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -38,14 +14,14 @@ function hyperdriveConfigCachingToTerraform(struct) {
         stale_while_revalidate: cdktf.numberToTerraform(struct.staleWhileRevalidate),
     };
 }
-function hyperdriveConfigCachingToHclTerraform(struct) {
+export function hyperdriveConfigCachingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         disabled: {
             value: cdktf.booleanToHclTerraform(struct.disabled),
             isBlock: false,
@@ -66,133 +42,105 @@ function hyperdriveConfigCachingToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var HyperdriveConfigCachingOutputReference = /** @class */ (function (_super) {
-    __extends(HyperdriveConfigCachingOutputReference, _super);
+export class HyperdriveConfigCachingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function HyperdriveConfigCachingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._disabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disabled = this._disabled;
-            }
-            if (this._maxAge !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxAge = this._maxAge;
-            }
-            if (this._staleWhileRevalidate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.staleWhileRevalidate = this._staleWhileRevalidate;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._disabled = undefined;
-                this._maxAge = undefined;
-                this._staleWhileRevalidate = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._disabled = value.disabled;
-                this._maxAge = value.maxAge;
-                this._staleWhileRevalidate = value.staleWhileRevalidate;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "disabled", {
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        set: function (value) {
-            this._disabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigCachingOutputReference.prototype.resetDisabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._disabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disabled = this._disabled;
+        }
+        if (this._maxAge !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxAge = this._maxAge;
+        }
+        if (this._staleWhileRevalidate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.staleWhileRevalidate = this._staleWhileRevalidate;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._disabled = undefined;
+            this._maxAge = undefined;
+            this._staleWhileRevalidate = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._disabled = value.disabled;
+            this._maxAge = value.maxAge;
+            this._staleWhileRevalidate = value.staleWhileRevalidate;
+        }
+    }
+    // disabled - computed: true, optional: true, required: false
+    _disabled;
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+    set disabled(value) {
+        this._disabled = value;
+    }
+    resetDisabled() {
         this._disabled = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "disabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "maxAge", {
-        get: function () {
-            return this.getNumberAttribute('max_age');
-        },
-        set: function (value) {
-            this._maxAge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigCachingOutputReference.prototype.resetMaxAge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disabledInput() {
+        return this._disabled;
+    }
+    // max_age - computed: false, optional: true, required: false
+    _maxAge;
+    get maxAge() {
+        return this.getNumberAttribute('max_age');
+    }
+    set maxAge(value) {
+        this._maxAge = value;
+    }
+    resetMaxAge() {
         this._maxAge = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "maxAgeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxAge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "staleWhileRevalidate", {
-        get: function () {
-            return this.getNumberAttribute('stale_while_revalidate');
-        },
-        set: function (value) {
-            this._staleWhileRevalidate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigCachingOutputReference.prototype.resetStaleWhileRevalidate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxAgeInput() {
+        return this._maxAge;
+    }
+    // stale_while_revalidate - computed: false, optional: true, required: false
+    _staleWhileRevalidate;
+    get staleWhileRevalidate() {
+        return this.getNumberAttribute('stale_while_revalidate');
+    }
+    set staleWhileRevalidate(value) {
+        this._staleWhileRevalidate = value;
+    }
+    resetStaleWhileRevalidate() {
         this._staleWhileRevalidate = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigCachingOutputReference.prototype, "staleWhileRevalidateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._staleWhileRevalidate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return HyperdriveConfigCachingOutputReference;
-}(cdktf.ComplexObject));
-exports.HyperdriveConfigCachingOutputReference = HyperdriveConfigCachingOutputReference;
-function hyperdriveConfigMtlsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get staleWhileRevalidateInput() {
+        return this._staleWhileRevalidate;
+    }
+}
+export function hyperdriveConfigMtlsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -205,14 +153,14 @@ function hyperdriveConfigMtlsToTerraform(struct) {
         sslmode: cdktf.stringToTerraform(struct.sslmode),
     };
 }
-function hyperdriveConfigMtlsToHclTerraform(struct) {
+export function hyperdriveConfigMtlsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ca_certificate_id: {
             value: cdktf.stringToHclTerraform(struct.caCertificateId),
             isBlock: false,
@@ -233,133 +181,105 @@ function hyperdriveConfigMtlsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var HyperdriveConfigMtlsOutputReference = /** @class */ (function (_super) {
-    __extends(HyperdriveConfigMtlsOutputReference, _super);
+export class HyperdriveConfigMtlsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function HyperdriveConfigMtlsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._caCertificateId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.caCertificateId = this._caCertificateId;
-            }
-            if (this._mtlsCertificateId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mtlsCertificateId = this._mtlsCertificateId;
-            }
-            if (this._sslmode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sslmode = this._sslmode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._caCertificateId = undefined;
-                this._mtlsCertificateId = undefined;
-                this._sslmode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._caCertificateId = value.caCertificateId;
-                this._mtlsCertificateId = value.mtlsCertificateId;
-                this._sslmode = value.sslmode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "caCertificateId", {
-        get: function () {
-            return this.getStringAttribute('ca_certificate_id');
-        },
-        set: function (value) {
-            this._caCertificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigMtlsOutputReference.prototype.resetCaCertificateId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._caCertificateId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.caCertificateId = this._caCertificateId;
+        }
+        if (this._mtlsCertificateId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mtlsCertificateId = this._mtlsCertificateId;
+        }
+        if (this._sslmode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sslmode = this._sslmode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._caCertificateId = undefined;
+            this._mtlsCertificateId = undefined;
+            this._sslmode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._caCertificateId = value.caCertificateId;
+            this._mtlsCertificateId = value.mtlsCertificateId;
+            this._sslmode = value.sslmode;
+        }
+    }
+    // ca_certificate_id - computed: false, optional: true, required: false
+    _caCertificateId;
+    get caCertificateId() {
+        return this.getStringAttribute('ca_certificate_id');
+    }
+    set caCertificateId(value) {
+        this._caCertificateId = value;
+    }
+    resetCaCertificateId() {
         this._caCertificateId = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "caCertificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caCertificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "mtlsCertificateId", {
-        get: function () {
-            return this.getStringAttribute('mtls_certificate_id');
-        },
-        set: function (value) {
-            this._mtlsCertificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigMtlsOutputReference.prototype.resetMtlsCertificateId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caCertificateIdInput() {
+        return this._caCertificateId;
+    }
+    // mtls_certificate_id - computed: false, optional: true, required: false
+    _mtlsCertificateId;
+    get mtlsCertificateId() {
+        return this.getStringAttribute('mtls_certificate_id');
+    }
+    set mtlsCertificateId(value) {
+        this._mtlsCertificateId = value;
+    }
+    resetMtlsCertificateId() {
         this._mtlsCertificateId = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "mtlsCertificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mtlsCertificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "sslmode", {
-        get: function () {
-            return this.getStringAttribute('sslmode');
-        },
-        set: function (value) {
-            this._sslmode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigMtlsOutputReference.prototype.resetSslmode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mtlsCertificateIdInput() {
+        return this._mtlsCertificateId;
+    }
+    // sslmode - computed: false, optional: true, required: false
+    _sslmode;
+    get sslmode() {
+        return this.getStringAttribute('sslmode');
+    }
+    set sslmode(value) {
+        this._sslmode = value;
+    }
+    resetSslmode() {
         this._sslmode = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigMtlsOutputReference.prototype, "sslmodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sslmode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return HyperdriveConfigMtlsOutputReference;
-}(cdktf.ComplexObject));
-exports.HyperdriveConfigMtlsOutputReference = HyperdriveConfigMtlsOutputReference;
-function hyperdriveConfigOriginToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslmodeInput() {
+        return this._sslmode;
+    }
+}
+export function hyperdriveConfigOriginToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -378,14 +298,14 @@ function hyperdriveConfigOriginToTerraform(struct) {
         user: cdktf.stringToTerraform(struct.user),
     };
 }
-function hyperdriveConfigOriginToHclTerraform(struct) {
+export function hyperdriveConfigOriginToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         access_client_id: {
             value: cdktf.stringToHclTerraform(struct.accessClientId),
             isBlock: false,
@@ -442,287 +362,239 @@ function hyperdriveConfigOriginToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var HyperdriveConfigOriginOutputReference = /** @class */ (function (_super) {
-    __extends(HyperdriveConfigOriginOutputReference, _super);
+export class HyperdriveConfigOriginOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function HyperdriveConfigOriginOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._accessClientId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accessClientId = this._accessClientId;
-            }
-            if (this._accessClientSecret !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accessClientSecret = this._accessClientSecret;
-            }
-            if (this._database !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.database = this._database;
-            }
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._password !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.password = this._password;
-            }
-            if (this._port !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.port = this._port;
-            }
-            if (this._scheme !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.scheme = this._scheme;
-            }
-            if (this._serviceId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceId = this._serviceId;
-            }
-            if (this._user !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.user = this._user;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._accessClientId = undefined;
-                this._accessClientSecret = undefined;
-                this._database = undefined;
-                this._host = undefined;
-                this._password = undefined;
-                this._port = undefined;
-                this._scheme = undefined;
-                this._serviceId = undefined;
-                this._user = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._accessClientId = value.accessClientId;
-                this._accessClientSecret = value.accessClientSecret;
-                this._database = value.database;
-                this._host = value.host;
-                this._password = value.password;
-                this._port = value.port;
-                this._scheme = value.scheme;
-                this._serviceId = value.serviceId;
-                this._user = value.user;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "accessClientId", {
-        get: function () {
-            return this.getStringAttribute('access_client_id');
-        },
-        set: function (value) {
-            this._accessClientId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigOriginOutputReference.prototype.resetAccessClientId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._accessClientId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accessClientId = this._accessClientId;
+        }
+        if (this._accessClientSecret !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accessClientSecret = this._accessClientSecret;
+        }
+        if (this._database !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.database = this._database;
+        }
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._password !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.password = this._password;
+        }
+        if (this._port !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.port = this._port;
+        }
+        if (this._scheme !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.scheme = this._scheme;
+        }
+        if (this._serviceId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceId = this._serviceId;
+        }
+        if (this._user !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.user = this._user;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._accessClientId = undefined;
+            this._accessClientSecret = undefined;
+            this._database = undefined;
+            this._host = undefined;
+            this._password = undefined;
+            this._port = undefined;
+            this._scheme = undefined;
+            this._serviceId = undefined;
+            this._user = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._accessClientId = value.accessClientId;
+            this._accessClientSecret = value.accessClientSecret;
+            this._database = value.database;
+            this._host = value.host;
+            this._password = value.password;
+            this._port = value.port;
+            this._scheme = value.scheme;
+            this._serviceId = value.serviceId;
+            this._user = value.user;
+        }
+    }
+    // access_client_id - computed: false, optional: true, required: false
+    _accessClientId;
+    get accessClientId() {
+        return this.getStringAttribute('access_client_id');
+    }
+    set accessClientId(value) {
+        this._accessClientId = value;
+    }
+    resetAccessClientId() {
         this._accessClientId = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "accessClientIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessClientId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "accessClientSecret", {
-        get: function () {
-            return this.getStringAttribute('access_client_secret');
-        },
-        set: function (value) {
-            this._accessClientSecret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigOriginOutputReference.prototype.resetAccessClientSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessClientIdInput() {
+        return this._accessClientId;
+    }
+    // access_client_secret - computed: false, optional: true, required: false
+    _accessClientSecret;
+    get accessClientSecret() {
+        return this.getStringAttribute('access_client_secret');
+    }
+    set accessClientSecret(value) {
+        this._accessClientSecret = value;
+    }
+    resetAccessClientSecret() {
         this._accessClientSecret = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "accessClientSecretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessClientSecret;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "database", {
-        get: function () {
-            return this.getStringAttribute('database');
-        },
-        set: function (value) {
-            this._database = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "databaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._database;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigOriginOutputReference.prototype.resetHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessClientSecretInput() {
+        return this._accessClientSecret;
+    }
+    // database - computed: false, optional: false, required: true
+    _database;
+    get database() {
+        return this.getStringAttribute('database');
+    }
+    set database(value) {
+        this._database = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseInput() {
+        return this._database;
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "password", {
-        get: function () {
-            return this.getStringAttribute('password');
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "passwordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._password;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "port", {
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        set: function (value) {
-            this._port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigOriginOutputReference.prototype.resetPort = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // password - computed: false, optional: false, required: true
+    _password;
+    get password() {
+        return this.getStringAttribute('password');
+    }
+    set password(value) {
+        this._password = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordInput() {
+        return this._password;
+    }
+    // port - computed: false, optional: true, required: false
+    _port;
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    set port(value) {
+        this._port = value;
+    }
+    resetPort() {
         this._port = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "portInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._port;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "scheme", {
-        get: function () {
-            return this.getStringAttribute('scheme');
-        },
-        set: function (value) {
-            this._scheme = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "schemeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scheme;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "serviceId", {
-        get: function () {
-            return this.getStringAttribute('service_id');
-        },
-        set: function (value) {
-            this._serviceId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfigOriginOutputReference.prototype.resetServiceId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portInput() {
+        return this._port;
+    }
+    // scheme - computed: false, optional: false, required: true
+    _scheme;
+    get scheme() {
+        return this.getStringAttribute('scheme');
+    }
+    set scheme(value) {
+        this._scheme = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get schemeInput() {
+        return this._scheme;
+    }
+    // service_id - computed: false, optional: true, required: false
+    _serviceId;
+    get serviceId() {
+        return this.getStringAttribute('service_id');
+    }
+    set serviceId(value) {
+        this._serviceId = value;
+    }
+    resetServiceId() {
         this._serviceId = undefined;
-    };
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "serviceIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "user", {
-        get: function () {
-            return this.getStringAttribute('user');
-        },
-        set: function (value) {
-            this._user = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfigOriginOutputReference.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return HyperdriveConfigOriginOutputReference;
-}(cdktf.ComplexObject));
-exports.HyperdriveConfigOriginOutputReference = HyperdriveConfigOriginOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceIdInput() {
+        return this._serviceId;
+    }
+    // user - computed: false, optional: false, required: true
+    _user;
+    get user() {
+        return this.getStringAttribute('user');
+    }
+    set user(value) {
+        this._user = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hyperdrive_config cloudflare_hyperdrive_config}
 */
-var HyperdriveConfig = /** @class */ (function (_super) {
-    __extends(HyperdriveConfig, _super);
+export class HyperdriveConfig extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_hyperdrive_config";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a HyperdriveConfig resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the HyperdriveConfig to import
+    * @param importFromId The id of the existing HyperdriveConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hyperdrive_config#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the HyperdriveConfig to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_hyperdrive_config", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -733,8 +605,8 @@ var HyperdriveConfig = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options HyperdriveConfigConfig
     */
-    function HyperdriveConfig(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_hyperdrive_config',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -747,182 +619,117 @@ var HyperdriveConfig = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // caching - computed: false, optional: true, required: false
-        _this._caching = new HyperdriveConfigCachingOutputReference(_this, "caching");
-        // mtls - computed: false, optional: true, required: false
-        _this._mtls = new HyperdriveConfigMtlsOutputReference(_this, "mtls");
-        // origin - computed: false, optional: false, required: true
-        _this._origin = new HyperdriveConfigOriginOutputReference(_this, "origin");
-        _this._accountId = config.accountId;
-        _this._caching.internalValue = config.caching;
-        _this._mtls.internalValue = config.mtls;
-        _this._name = config.name;
-        _this._origin.internalValue = config.origin;
-        _this._originConnectionLimit = config.originConnectionLimit;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._caching.internalValue = config.caching;
+        this._mtls.internalValue = config.mtls;
+        this._name = config.name;
+        this._origin.internalValue = config.origin;
+        this._originConnectionLimit = config.originConnectionLimit;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a HyperdriveConfig resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the HyperdriveConfig to import
-    * @param importFromId The id of the existing HyperdriveConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/hyperdrive_config#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the HyperdriveConfig to import is found
-    */
-    HyperdriveConfig.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_hyperdrive_config", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfig.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "caching", {
-        get: function () {
-            return this._caching;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfig.prototype.putCaching = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // caching - computed: false, optional: true, required: false
+    _caching = new HyperdriveConfigCachingOutputReference(this, "caching");
+    get caching() {
+        return this._caching;
+    }
+    putCaching(value) {
         this._caching.internalValue = value;
-    };
-    HyperdriveConfig.prototype.resetCaching = function () {
+    }
+    resetCaching() {
         this._caching.internalValue = undefined;
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "cachingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caching.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "mtls", {
-        get: function () {
-            return this._mtls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfig.prototype.putMtls = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cachingInput() {
+        return this._caching.internalValue;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // mtls - computed: false, optional: true, required: false
+    _mtls = new HyperdriveConfigMtlsOutputReference(this, "mtls");
+    get mtls() {
+        return this._mtls;
+    }
+    putMtls(value) {
         this._mtls.internalValue = value;
-    };
-    HyperdriveConfig.prototype.resetMtls = function () {
+    }
+    resetMtls() {
         this._mtls.internalValue = undefined;
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "mtlsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mtls.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "origin", {
-        get: function () {
-            return this._origin;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfig.prototype.putOrigin = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mtlsInput() {
+        return this._mtls.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // origin - computed: false, optional: false, required: true
+    _origin = new HyperdriveConfigOriginOutputReference(this, "origin");
+    get origin() {
+        return this._origin;
+    }
+    putOrigin(value) {
         this._origin.internalValue = value;
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "originInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._origin.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(HyperdriveConfig.prototype, "originConnectionLimit", {
-        get: function () {
-            return this.getNumberAttribute('origin_connection_limit');
-        },
-        set: function (value) {
-            this._originConnectionLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    HyperdriveConfig.prototype.resetOriginConnectionLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get originInput() {
+        return this._origin.internalValue;
+    }
+    // origin_connection_limit - computed: false, optional: true, required: false
+    _originConnectionLimit;
+    get originConnectionLimit() {
+        return this.getNumberAttribute('origin_connection_limit');
+    }
+    set originConnectionLimit(value) {
+        this._originConnectionLimit = value;
+    }
+    resetOriginConnectionLimit() {
         this._originConnectionLimit = undefined;
-    };
-    Object.defineProperty(HyperdriveConfig.prototype, "originConnectionLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._originConnectionLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get originConnectionLimitInput() {
+        return this._originConnectionLimit;
+    }
     // =========
     // SYNTHESIS
     // =========
-    HyperdriveConfig.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             caching: hyperdriveConfigCachingToTerraform(this._caching.internalValue),
@@ -931,9 +738,9 @@ var HyperdriveConfig = /** @class */ (function (_super) {
             origin: hyperdriveConfigOriginToTerraform(this._origin.internalValue),
             origin_connection_limit: cdktf.numberToTerraform(this._originConnectionLimit),
         };
-    };
-    HyperdriveConfig.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -972,15 +779,6 @@ var HyperdriveConfig = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    HyperdriveConfig.tfResourceType = "cloudflare_hyperdrive_config";
-    return HyperdriveConfig;
-}(cdktf.TerraformResource));
-exports.HyperdriveConfig = HyperdriveConfig;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

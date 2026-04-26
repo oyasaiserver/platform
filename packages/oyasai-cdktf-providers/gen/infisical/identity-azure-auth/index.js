@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_azure_auth
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityAzureAuth = exports.IdentityAzureAuthAccessTokenTrustedIpsList = exports.IdentityAzureAuthAccessTokenTrustedIpsOutputReference = void 0;
-exports.identityAzureAuthAccessTokenTrustedIpsToTerraform = identityAzureAuthAccessTokenTrustedIpsToTerraform;
-exports.identityAzureAuthAccessTokenTrustedIpsToHclTerraform = identityAzureAuthAccessTokenTrustedIpsToHclTerraform;
-var cdktf = require("cdktf");
-function identityAzureAuthAccessTokenTrustedIpsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function identityAzureAuthAccessTokenTrustedIpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function identityAzureAuthAccessTokenTrustedIpsToTerraform(struct) {
         ip_address: cdktf.stringToTerraform(struct.ipAddress),
     };
 }
-function identityAzureAuthAccessTokenTrustedIpsToHclTerraform(struct) {
+export function identityAzureAuthAccessTokenTrustedIpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip_address: {
             value: cdktf.stringToHclTerraform(struct.ipAddress),
             isBlock: false,
@@ -48,108 +28,108 @@ function identityAzureAuthAccessTokenTrustedIpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var IdentityAzureAuthAccessTokenTrustedIpsOutputReference = /** @class */ (function (_super) {
-    __extends(IdentityAzureAuthAccessTokenTrustedIpsOutputReference, _super);
+export class IdentityAzureAuthAccessTokenTrustedIpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityAzureAuthAccessTokenTrustedIpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(IdentityAzureAuthAccessTokenTrustedIpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ipAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipAddress = this._ipAddress;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ipAddress = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ipAddress = value.ipAddress;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddress", {
-        get: function () {
-            return this.getStringAttribute('ip_address');
-        },
-        set: function (value) {
-            this._ipAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuthAccessTokenTrustedIpsOutputReference.prototype.resetIpAddress = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ipAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipAddress = this._ipAddress;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ipAddress = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ipAddress = value.ipAddress;
+        }
+    }
+    // ip_address - computed: true, optional: true, required: false
+    _ipAddress;
+    get ipAddress() {
+        return this.getStringAttribute('ip_address');
+    }
+    set ipAddress(value) {
+        this._ipAddress = value;
+    }
+    resetIpAddress() {
         this._ipAddress = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return IdentityAzureAuthAccessTokenTrustedIpsOutputReference;
-}(cdktf.ComplexObject));
-exports.IdentityAzureAuthAccessTokenTrustedIpsOutputReference = IdentityAzureAuthAccessTokenTrustedIpsOutputReference;
-var IdentityAzureAuthAccessTokenTrustedIpsList = /** @class */ (function (_super) {
-    __extends(IdentityAzureAuthAccessTokenTrustedIpsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipAddressInput() {
+        return this._ipAddress;
+    }
+}
+export class IdentityAzureAuthAccessTokenTrustedIpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityAzureAuthAccessTokenTrustedIpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    IdentityAzureAuthAccessTokenTrustedIpsList.prototype.get = function (index) {
+    get(index) {
         return new IdentityAzureAuthAccessTokenTrustedIpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return IdentityAzureAuthAccessTokenTrustedIpsList;
-}(cdktf.ComplexList));
-exports.IdentityAzureAuthAccessTokenTrustedIpsList = IdentityAzureAuthAccessTokenTrustedIpsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_azure_auth infisical_identity_azure_auth}
 */
-var IdentityAzureAuth = /** @class */ (function (_super) {
-    __extends(IdentityAzureAuth, _super);
+export class IdentityAzureAuth extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_identity_azure_auth";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IdentityAzureAuth resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IdentityAzureAuth to import
+    * @param importFromId The id of the existing IdentityAzureAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_azure_auth#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IdentityAzureAuth to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_azure_auth", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -160,8 +140,8 @@ var IdentityAzureAuth = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IdentityAzureAuthConfig
     */
-    function IdentityAzureAuth(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_identity_azure_auth',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -174,206 +154,141 @@ var IdentityAzureAuth = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // access_token_trusted_ips - computed: true, optional: true, required: false
-        _this._accessTokenTrustedIps = new IdentityAzureAuthAccessTokenTrustedIpsList(_this, "access_token_trusted_ips", false);
-        _this._accessTokenMaxTtl = config.accessTokenMaxTtl;
-        _this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
-        _this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
-        _this._accessTokenTtl = config.accessTokenTtl;
-        _this._allowedServicePrincipalIds = config.allowedServicePrincipalIds;
-        _this._identityId = config.identityId;
-        _this._resourceUrl = config.resourceUrl;
-        _this._tenantId = config.tenantId;
-        return _this;
+        });
+        this._accessTokenMaxTtl = config.accessTokenMaxTtl;
+        this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
+        this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
+        this._accessTokenTtl = config.accessTokenTtl;
+        this._allowedServicePrincipalIds = config.allowedServicePrincipalIds;
+        this._identityId = config.identityId;
+        this._resourceUrl = config.resourceUrl;
+        this._tenantId = config.tenantId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IdentityAzureAuth resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IdentityAzureAuth to import
-    * @param importFromId The id of the existing IdentityAzureAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_azure_auth#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IdentityAzureAuth to import is found
-    */
-    IdentityAzureAuth.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_azure_auth", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenMaxTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_max_ttl');
-        },
-        set: function (value) {
-            this._accessTokenMaxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.resetAccessTokenMaxTtl = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // access_token_max_ttl - computed: true, optional: true, required: false
+    _accessTokenMaxTtl;
+    get accessTokenMaxTtl() {
+        return this.getNumberAttribute('access_token_max_ttl');
+    }
+    set accessTokenMaxTtl(value) {
+        this._accessTokenMaxTtl = value;
+    }
+    resetAccessTokenMaxTtl() {
         this._accessTokenMaxTtl = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenMaxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenMaxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenNumUsesLimit", {
-        get: function () {
-            return this.getNumberAttribute('access_token_num_uses_limit');
-        },
-        set: function (value) {
-            this._accessTokenNumUsesLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.resetAccessTokenNumUsesLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenMaxTtlInput() {
+        return this._accessTokenMaxTtl;
+    }
+    // access_token_num_uses_limit - computed: true, optional: true, required: false
+    _accessTokenNumUsesLimit;
+    get accessTokenNumUsesLimit() {
+        return this.getNumberAttribute('access_token_num_uses_limit');
+    }
+    set accessTokenNumUsesLimit(value) {
+        this._accessTokenNumUsesLimit = value;
+    }
+    resetAccessTokenNumUsesLimit() {
         this._accessTokenNumUsesLimit = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenNumUsesLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenNumUsesLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenTrustedIps", {
-        get: function () {
-            return this._accessTokenTrustedIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.putAccessTokenTrustedIps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenNumUsesLimitInput() {
+        return this._accessTokenNumUsesLimit;
+    }
+    // access_token_trusted_ips - computed: true, optional: true, required: false
+    _accessTokenTrustedIps = new IdentityAzureAuthAccessTokenTrustedIpsList(this, "access_token_trusted_ips", false);
+    get accessTokenTrustedIps() {
+        return this._accessTokenTrustedIps;
+    }
+    putAccessTokenTrustedIps(value) {
         this._accessTokenTrustedIps.internalValue = value;
-    };
-    IdentityAzureAuth.prototype.resetAccessTokenTrustedIps = function () {
+    }
+    resetAccessTokenTrustedIps() {
         this._accessTokenTrustedIps.internalValue = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenTrustedIpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTrustedIps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_ttl');
-        },
-        set: function (value) {
-            this._accessTokenTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.resetAccessTokenTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTrustedIpsInput() {
+        return this._accessTokenTrustedIps.internalValue;
+    }
+    // access_token_ttl - computed: true, optional: true, required: false
+    _accessTokenTtl;
+    get accessTokenTtl() {
+        return this.getNumberAttribute('access_token_ttl');
+    }
+    set accessTokenTtl(value) {
+        this._accessTokenTtl = value;
+    }
+    resetAccessTokenTtl() {
         this._accessTokenTtl = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "accessTokenTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "allowedServicePrincipalIds", {
-        get: function () {
-            return this.getListAttribute('allowed_service_principal_ids');
-        },
-        set: function (value) {
-            this._allowedServicePrincipalIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.resetAllowedServicePrincipalIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTtlInput() {
+        return this._accessTokenTtl;
+    }
+    // allowed_service_principal_ids - computed: true, optional: true, required: false
+    _allowedServicePrincipalIds;
+    get allowedServicePrincipalIds() {
+        return this.getListAttribute('allowed_service_principal_ids');
+    }
+    set allowedServicePrincipalIds(value) {
+        this._allowedServicePrincipalIds = value;
+    }
+    resetAllowedServicePrincipalIds() {
         this._allowedServicePrincipalIds = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "allowedServicePrincipalIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedServicePrincipalIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "resourceUrl", {
-        get: function () {
-            return this.getStringAttribute('resource_url');
-        },
-        set: function (value) {
-            this._resourceUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAzureAuth.prototype.resetResourceUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedServicePrincipalIdsInput() {
+        return this._allowedServicePrincipalIds;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // resource_url - computed: true, optional: true, required: false
+    _resourceUrl;
+    get resourceUrl() {
+        return this.getStringAttribute('resource_url');
+    }
+    set resourceUrl(value) {
+        this._resourceUrl = value;
+    }
+    resetResourceUrl() {
         this._resourceUrl = undefined;
-    };
-    Object.defineProperty(IdentityAzureAuth.prototype, "resourceUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resourceUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "tenantId", {
-        get: function () {
-            return this.getStringAttribute('tenant_id');
-        },
-        set: function (value) {
-            this._tenantId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAzureAuth.prototype, "tenantIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tenantId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get resourceUrlInput() {
+        return this._resourceUrl;
+    }
+    // tenant_id - computed: false, optional: false, required: true
+    _tenantId;
+    get tenantId() {
+        return this.getStringAttribute('tenant_id');
+    }
+    set tenantId(value) {
+        this._tenantId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tenantIdInput() {
+        return this._tenantId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IdentityAzureAuth.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             access_token_max_ttl: cdktf.numberToTerraform(this._accessTokenMaxTtl),
             access_token_num_uses_limit: cdktf.numberToTerraform(this._accessTokenNumUsesLimit),
@@ -384,9 +299,9 @@ var IdentityAzureAuth = /** @class */ (function (_super) {
             resource_url: cdktf.stringToTerraform(this._resourceUrl),
             tenant_id: cdktf.stringToTerraform(this._tenantId),
         };
-    };
-    IdentityAzureAuth.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             access_token_max_ttl: {
                 value: cdktf.numberToHclTerraform(this._accessTokenMaxTtl),
                 isBlock: false,
@@ -437,15 +352,6 @@ var IdentityAzureAuth = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IdentityAzureAuth.tfResourceType = "infisical_identity_azure_auth";
-    return IdentityAzureAuth;
-}(cdktf.TerraformResource));
-exports.IdentityAzureAuth = IdentityAzureAuth;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

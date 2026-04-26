@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/authenticated_origin_pulls_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthenticatedOriginPullsCertificate = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/authenticated_origin_pulls_certificate cloudflare_authenticated_origin_pulls_certificate}
 */
-var AuthenticatedOriginPullsCertificate = /** @class */ (function (_super) {
-    __extends(AuthenticatedOriginPullsCertificate, _super);
+export class AuthenticatedOriginPullsCertificate extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_authenticated_origin_pulls_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AuthenticatedOriginPullsCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AuthenticatedOriginPullsCertificate to import
+    * @param importFromId The id of the existing AuthenticatedOriginPullsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/authenticated_origin_pulls_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AuthenticatedOriginPullsCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_authenticated_origin_pulls_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var AuthenticatedOriginPullsCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AuthenticatedOriginPullsCertificateConfig
     */
-    function AuthenticatedOriginPullsCertificate(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_authenticated_origin_pulls_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,163 +46,98 @@ var AuthenticatedOriginPullsCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._certificate = config.certificate;
-        _this._privateKey = config.privateKey;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._certificate = config.certificate;
+        this._privateKey = config.privateKey;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AuthenticatedOriginPullsCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AuthenticatedOriginPullsCertificate to import
-    * @param importFromId The id of the existing AuthenticatedOriginPullsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/authenticated_origin_pulls_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AuthenticatedOriginPullsCertificate to import is found
-    */
-    AuthenticatedOriginPullsCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_authenticated_origin_pulls_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "certificate", {
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        set: function (value) {
-            this._certificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "certificateId", {
-        // certificate_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "issuer", {
-        // issuer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "privateKey", {
-        get: function () {
-            return this.getStringAttribute('private_key');
-        },
-        set: function (value) {
-            this._privateKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "privateKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privateKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AuthenticatedOriginPullsCertificate.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // certificate - computed: false, optional: false, required: true
+    _certificate;
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    set certificate(value) {
+        this._certificate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate;
+    }
+    // certificate_id - computed: true, optional: false, required: false
+    get certificateId() {
+        return this.getStringAttribute('certificate_id');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer - computed: true, optional: false, required: false
+    get issuer() {
+        return this.getStringAttribute('issuer');
+    }
+    // private_key - computed: false, optional: false, required: true
+    _privateKey;
+    get privateKey() {
+        return this.getStringAttribute('private_key');
+    }
+    set privateKey(value) {
+        this._privateKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get privateKeyInput() {
+        return this._privateKey;
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AuthenticatedOriginPullsCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             certificate: cdktf.stringToTerraform(this._certificate),
             private_key: cdktf.stringToTerraform(this._privateKey),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    AuthenticatedOriginPullsCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             certificate: {
                 value: cdktf.stringToHclTerraform(this._certificate),
                 isBlock: false,
@@ -225,15 +158,6 @@ var AuthenticatedOriginPullsCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AuthenticatedOriginPullsCertificate.tfResourceType = "cloudflare_authenticated_origin_pulls_certificate";
-    return AuthenticatedOriginPullsCertificate;
-}(cdktf.TerraformResource));
-exports.AuthenticatedOriginPullsCertificate = AuthenticatedOriginPullsCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_deployment
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkersDeployment = exports.WorkersDeploymentVersionsList = exports.WorkersDeploymentVersionsOutputReference = exports.WorkersDeploymentAnnotationsOutputReference = void 0;
-exports.workersDeploymentAnnotationsToTerraform = workersDeploymentAnnotationsToTerraform;
-exports.workersDeploymentAnnotationsToHclTerraform = workersDeploymentAnnotationsToHclTerraform;
-exports.workersDeploymentVersionsToTerraform = workersDeploymentVersionsToTerraform;
-exports.workersDeploymentVersionsToHclTerraform = workersDeploymentVersionsToHclTerraform;
-var cdktf = require("cdktf");
-function workersDeploymentAnnotationsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function workersDeploymentAnnotationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,14 +12,14 @@ function workersDeploymentAnnotationsToTerraform(struct) {
         workers_message: cdktf.stringToTerraform(struct.workersMessage),
     };
 }
-function workersDeploymentAnnotationsToHclTerraform(struct) {
+export function workersDeploymentAnnotationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         workers_message: {
             value: cdktf.stringToHclTerraform(struct.workersMessage),
             isBlock: false,
@@ -50,87 +28,67 @@ function workersDeploymentAnnotationsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersDeploymentAnnotationsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersDeploymentAnnotationsOutputReference, _super);
+export class WorkersDeploymentAnnotationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersDeploymentAnnotationsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersDeploymentAnnotationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._workersMessage !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.workersMessage = this._workersMessage;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._workersMessage = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._workersMessage = value.workersMessage;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentAnnotationsOutputReference.prototype, "workersMessage", {
-        get: function () {
-            return this.getStringAttribute('workers_message');
-        },
-        set: function (value) {
-            this._workersMessage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersDeploymentAnnotationsOutputReference.prototype.resetWorkersMessage = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._workersMessage !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.workersMessage = this._workersMessage;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._workersMessage = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._workersMessage = value.workersMessage;
+        }
+    }
+    // workers_message - computed: true, optional: true, required: false
+    _workersMessage;
+    get workersMessage() {
+        return this.getStringAttribute('workers_message');
+    }
+    set workersMessage(value) {
+        this._workersMessage = value;
+    }
+    resetWorkersMessage() {
         this._workersMessage = undefined;
-    };
-    Object.defineProperty(WorkersDeploymentAnnotationsOutputReference.prototype, "workersMessageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workersMessage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentAnnotationsOutputReference.prototype, "workersTriggeredBy", {
-        // workers_triggered_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('workers_triggered_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersDeploymentAnnotationsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersDeploymentAnnotationsOutputReference = WorkersDeploymentAnnotationsOutputReference;
-function workersDeploymentVersionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workersMessageInput() {
+        return this._workersMessage;
+    }
+    // workers_triggered_by - computed: true, optional: false, required: false
+    get workersTriggeredBy() {
+        return this.getStringAttribute('workers_triggered_by');
+    }
+}
+export function workersDeploymentVersionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -142,14 +100,14 @@ function workersDeploymentVersionsToTerraform(struct) {
         version_id: cdktf.stringToTerraform(struct.versionId),
     };
 }
-function workersDeploymentVersionsToHclTerraform(struct) {
+export function workersDeploymentVersionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         percentage: {
             value: cdktf.numberToHclTerraform(struct.percentage),
             isBlock: false,
@@ -164,129 +122,123 @@ function workersDeploymentVersionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersDeploymentVersionsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersDeploymentVersionsOutputReference, _super);
+export class WorkersDeploymentVersionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersDeploymentVersionsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersDeploymentVersionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._percentage !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.percentage = this._percentage;
-            }
-            if (this._versionId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.versionId = this._versionId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._percentage = undefined;
-                this._versionId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._percentage = value.percentage;
-                this._versionId = value.versionId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentVersionsOutputReference.prototype, "percentage", {
-        get: function () {
-            return this.getNumberAttribute('percentage');
-        },
-        set: function (value) {
-            this._percentage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentVersionsOutputReference.prototype, "percentageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._percentage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentVersionsOutputReference.prototype, "versionId", {
-        get: function () {
-            return this.getStringAttribute('version_id');
-        },
-        set: function (value) {
-            this._versionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeploymentVersionsOutputReference.prototype, "versionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._versionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersDeploymentVersionsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersDeploymentVersionsOutputReference = WorkersDeploymentVersionsOutputReference;
-var WorkersDeploymentVersionsList = /** @class */ (function (_super) {
-    __extends(WorkersDeploymentVersionsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._percentage !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.percentage = this._percentage;
+        }
+        if (this._versionId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.versionId = this._versionId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._percentage = undefined;
+            this._versionId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._percentage = value.percentage;
+            this._versionId = value.versionId;
+        }
+    }
+    // percentage - computed: false, optional: false, required: true
+    _percentage;
+    get percentage() {
+        return this.getNumberAttribute('percentage');
+    }
+    set percentage(value) {
+        this._percentage = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get percentageInput() {
+        return this._percentage;
+    }
+    // version_id - computed: false, optional: false, required: true
+    _versionId;
+    get versionId() {
+        return this.getStringAttribute('version_id');
+    }
+    set versionId(value) {
+        this._versionId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get versionIdInput() {
+        return this._versionId;
+    }
+}
+export class WorkersDeploymentVersionsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersDeploymentVersionsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersDeploymentVersionsList.prototype.get = function (index) {
+    get(index) {
         return new WorkersDeploymentVersionsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersDeploymentVersionsList;
-}(cdktf.ComplexList));
-exports.WorkersDeploymentVersionsList = WorkersDeploymentVersionsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_deployment cloudflare_workers_deployment}
 */
-var WorkersDeployment = /** @class */ (function (_super) {
-    __extends(WorkersDeployment, _super);
+export class WorkersDeployment extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_deployment";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WorkersDeployment resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WorkersDeployment to import
+    * @param importFromId The id of the existing WorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_deployment#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WorkersDeployment to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_deployment", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -297,8 +249,8 @@ var WorkersDeployment = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WorkersDeploymentConfig
     */
-    function WorkersDeployment(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_deployment',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -311,163 +263,102 @@ var WorkersDeployment = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // annotations - computed: true, optional: true, required: false
-        _this._annotations = new WorkersDeploymentAnnotationsOutputReference(_this, "annotations");
-        // versions - computed: false, optional: false, required: true
-        _this._versions = new WorkersDeploymentVersionsList(_this, "versions", false);
-        _this._accountId = config.accountId;
-        _this._annotations.internalValue = config.annotations;
-        _this._scriptName = config.scriptName;
-        _this._strategy = config.strategy;
-        _this._versions.internalValue = config.versions;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._annotations.internalValue = config.annotations;
+        this._scriptName = config.scriptName;
+        this._strategy = config.strategy;
+        this._versions.internalValue = config.versions;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WorkersDeployment resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WorkersDeployment to import
-    * @param importFromId The id of the existing WorkersDeployment that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_deployment#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WorkersDeployment to import is found
-    */
-    WorkersDeployment.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_deployment", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WorkersDeployment.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersDeployment.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(WorkersDeployment.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "annotations", {
-        get: function () {
-            return this._annotations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersDeployment.prototype.putAnnotations = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // annotations - computed: true, optional: true, required: false
+    _annotations = new WorkersDeploymentAnnotationsOutputReference(this, "annotations");
+    get annotations() {
+        return this._annotations;
+    }
+    putAnnotations(value) {
         this._annotations.internalValue = value;
-    };
-    WorkersDeployment.prototype.resetAnnotations = function () {
+    }
+    resetAnnotations() {
         this._annotations.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersDeployment.prototype, "annotationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._annotations.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "authorEmail", {
-        // author_email - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('author_email');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "scriptName", {
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        set: function (value) {
-            this._scriptName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "scriptNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scriptName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "source", {
-        // source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "strategy", {
-        get: function () {
-            return this.getStringAttribute('strategy');
-        },
-        set: function (value) {
-            this._strategy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "strategyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._strategy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersDeployment.prototype, "versions", {
-        get: function () {
-            return this._versions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersDeployment.prototype.putVersions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get annotationsInput() {
+        return this._annotations.internalValue;
+    }
+    // author_email - computed: true, optional: false, required: false
+    get authorEmail() {
+        return this.getStringAttribute('author_email');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // script_name - computed: false, optional: false, required: true
+    _scriptName;
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    set scriptName(value) {
+        this._scriptName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get scriptNameInput() {
+        return this._scriptName;
+    }
+    // source - computed: true, optional: false, required: false
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    // strategy - computed: false, optional: false, required: true
+    _strategy;
+    get strategy() {
+        return this.getStringAttribute('strategy');
+    }
+    set strategy(value) {
+        this._strategy = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get strategyInput() {
+        return this._strategy;
+    }
+    // versions - computed: false, optional: false, required: true
+    _versions = new WorkersDeploymentVersionsList(this, "versions", false);
+    get versions() {
+        return this._versions;
+    }
+    putVersions(value) {
         this._versions.internalValue = value;
-    };
-    Object.defineProperty(WorkersDeployment.prototype, "versionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._versions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get versionsInput() {
+        return this._versions.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WorkersDeployment.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             annotations: workersDeploymentAnnotationsToTerraform(this._annotations.internalValue),
@@ -475,9 +366,9 @@ var WorkersDeployment = /** @class */ (function (_super) {
             strategy: cdktf.stringToTerraform(this._strategy),
             versions: cdktf.listMapper(workersDeploymentVersionsToTerraform, false)(this._versions.internalValue),
         };
-    };
-    WorkersDeployment.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -510,15 +401,6 @@ var WorkersDeployment = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WorkersDeployment.tfResourceType = "cloudflare_workers_deployment";
-    return WorkersDeployment;
-}(cdktf.TerraformResource));
-exports.WorkersDeployment = WorkersDeployment;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

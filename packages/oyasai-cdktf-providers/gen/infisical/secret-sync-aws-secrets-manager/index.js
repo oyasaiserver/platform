@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_aws_secrets_manager
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SecretSyncAwsSecretsManager = exports.SecretSyncAwsSecretsManagerSyncOptionsOutputReference = exports.SecretSyncAwsSecretsManagerSyncOptionsTagsList = exports.SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference = exports.SecretSyncAwsSecretsManagerDestinationConfigOutputReference = void 0;
-exports.secretSyncAwsSecretsManagerDestinationConfigToTerraform = secretSyncAwsSecretsManagerDestinationConfigToTerraform;
-exports.secretSyncAwsSecretsManagerDestinationConfigToHclTerraform = secretSyncAwsSecretsManagerDestinationConfigToHclTerraform;
-exports.secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform = secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform;
-exports.secretSyncAwsSecretsManagerSyncOptionsTagsToHclTerraform = secretSyncAwsSecretsManagerSyncOptionsTagsToHclTerraform;
-exports.secretSyncAwsSecretsManagerSyncOptionsToTerraform = secretSyncAwsSecretsManagerSyncOptionsToTerraform;
-exports.secretSyncAwsSecretsManagerSyncOptionsToHclTerraform = secretSyncAwsSecretsManagerSyncOptionsToHclTerraform;
-var cdktf = require("cdktf");
-function secretSyncAwsSecretsManagerDestinationConfigToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function secretSyncAwsSecretsManagerDestinationConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -38,14 +14,14 @@ function secretSyncAwsSecretsManagerDestinationConfigToTerraform(struct) {
         mapping_behavior: cdktf.stringToTerraform(struct.mappingBehavior),
     };
 }
-function secretSyncAwsSecretsManagerDestinationConfigToHclTerraform(struct) {
+export function secretSyncAwsSecretsManagerDestinationConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aws_region: {
             value: cdktf.stringToHclTerraform(struct.awsRegion),
             isBlock: false,
@@ -66,130 +42,102 @@ function secretSyncAwsSecretsManagerDestinationConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var SecretSyncAwsSecretsManagerDestinationConfigOutputReference = /** @class */ (function (_super) {
-    __extends(SecretSyncAwsSecretsManagerDestinationConfigOutputReference, _super);
+export class SecretSyncAwsSecretsManagerDestinationConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function SecretSyncAwsSecretsManagerDestinationConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._awsRegion !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.awsRegion = this._awsRegion;
-            }
-            if (this._awsSecretsManagerSecretName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.awsSecretsManagerSecretName = this._awsSecretsManagerSecretName;
-            }
-            if (this._mappingBehavior !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mappingBehavior = this._mappingBehavior;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._awsRegion = undefined;
-                this._awsSecretsManagerSecretName = undefined;
-                this._mappingBehavior = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._awsRegion = value.awsRegion;
-                this._awsSecretsManagerSecretName = value.awsSecretsManagerSecretName;
-                this._mappingBehavior = value.mappingBehavior;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "awsRegion", {
-        get: function () {
-            return this.getStringAttribute('aws_region');
-        },
-        set: function (value) {
-            this._awsRegion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "awsRegionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._awsRegion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "awsSecretsManagerSecretName", {
-        get: function () {
-            return this.getStringAttribute('aws_secrets_manager_secret_name');
-        },
-        set: function (value) {
-            this._awsSecretsManagerSecretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype.resetAwsSecretsManagerSecretName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._awsRegion !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.awsRegion = this._awsRegion;
+        }
+        if (this._awsSecretsManagerSecretName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.awsSecretsManagerSecretName = this._awsSecretsManagerSecretName;
+        }
+        if (this._mappingBehavior !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mappingBehavior = this._mappingBehavior;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._awsRegion = undefined;
+            this._awsSecretsManagerSecretName = undefined;
+            this._mappingBehavior = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._awsRegion = value.awsRegion;
+            this._awsSecretsManagerSecretName = value.awsSecretsManagerSecretName;
+            this._mappingBehavior = value.mappingBehavior;
+        }
+    }
+    // aws_region - computed: false, optional: false, required: true
+    _awsRegion;
+    get awsRegion() {
+        return this.getStringAttribute('aws_region');
+    }
+    set awsRegion(value) {
+        this._awsRegion = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get awsRegionInput() {
+        return this._awsRegion;
+    }
+    // aws_secrets_manager_secret_name - computed: false, optional: true, required: false
+    _awsSecretsManagerSecretName;
+    get awsSecretsManagerSecretName() {
+        return this.getStringAttribute('aws_secrets_manager_secret_name');
+    }
+    set awsSecretsManagerSecretName(value) {
+        this._awsSecretsManagerSecretName = value;
+    }
+    resetAwsSecretsManagerSecretName() {
         this._awsSecretsManagerSecretName = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "awsSecretsManagerSecretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._awsSecretsManagerSecretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "mappingBehavior", {
-        get: function () {
-            return this.getStringAttribute('mapping_behavior');
-        },
-        set: function (value) {
-            this._mappingBehavior = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype.resetMappingBehavior = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get awsSecretsManagerSecretNameInput() {
+        return this._awsSecretsManagerSecretName;
+    }
+    // mapping_behavior - computed: true, optional: true, required: false
+    _mappingBehavior;
+    get mappingBehavior() {
+        return this.getStringAttribute('mapping_behavior');
+    }
+    set mappingBehavior(value) {
+        this._mappingBehavior = value;
+    }
+    resetMappingBehavior() {
         this._mappingBehavior = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerDestinationConfigOutputReference.prototype, "mappingBehaviorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mappingBehavior;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return SecretSyncAwsSecretsManagerDestinationConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.SecretSyncAwsSecretsManagerDestinationConfigOutputReference = SecretSyncAwsSecretsManagerDestinationConfigOutputReference;
-function secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mappingBehaviorInput() {
+        return this._mappingBehavior;
+    }
+}
+export function secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -201,14 +149,14 @@ function secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function secretSyncAwsSecretsManagerSyncOptionsTagsToHclTerraform(struct) {
+export function secretSyncAwsSecretsManagerSyncOptionsTagsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key: {
             value: cdktf.stringToHclTerraform(struct.key),
             isBlock: false,
@@ -223,125 +171,103 @@ function secretSyncAwsSecretsManagerSyncOptionsTagsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference = /** @class */ (function (_super) {
-    __extends(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference, _super);
+export class SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.key = this._key;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._key = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._key = value.key;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference;
-}(cdktf.ComplexObject));
-exports.SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference = SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference;
-var SecretSyncAwsSecretsManagerSyncOptionsTagsList = /** @class */ (function (_super) {
-    __extends(SecretSyncAwsSecretsManagerSyncOptionsTagsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.key = this._key;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._key = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._key = value.key;
+            this._value = value.value;
+        }
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class SecretSyncAwsSecretsManagerSyncOptionsTagsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function SecretSyncAwsSecretsManagerSyncOptionsTagsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    SecretSyncAwsSecretsManagerSyncOptionsTagsList.prototype.get = function (index) {
+    get(index) {
         return new SecretSyncAwsSecretsManagerSyncOptionsTagsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return SecretSyncAwsSecretsManagerSyncOptionsTagsList;
-}(cdktf.ComplexList));
-exports.SecretSyncAwsSecretsManagerSyncOptionsTagsList = SecretSyncAwsSecretsManagerSyncOptionsTagsList;
-function secretSyncAwsSecretsManagerSyncOptionsToTerraform(struct) {
+    }
+}
+export function secretSyncAwsSecretsManagerSyncOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -357,14 +283,14 @@ function secretSyncAwsSecretsManagerSyncOptionsToTerraform(struct) {
         tags: cdktf.listMapper(secretSyncAwsSecretsManagerSyncOptionsTagsToTerraform, false)(struct.tags),
     };
 }
-function secretSyncAwsSecretsManagerSyncOptionsToHclTerraform(struct) {
+export function secretSyncAwsSecretsManagerSyncOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aws_kms_key_id: {
             value: cdktf.stringToHclTerraform(struct.awsKmsKeyId),
             isBlock: false,
@@ -403,218 +329,185 @@ function secretSyncAwsSecretsManagerSyncOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var SecretSyncAwsSecretsManagerSyncOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(SecretSyncAwsSecretsManagerSyncOptionsOutputReference, _super);
+export class SecretSyncAwsSecretsManagerSyncOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function SecretSyncAwsSecretsManagerSyncOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // tags - computed: false, optional: true, required: false
-        _this._tags = new SecretSyncAwsSecretsManagerSyncOptionsTagsList(_this, "tags", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._awsKmsKeyId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.awsKmsKeyId = this._awsKmsKeyId;
-            }
-            if (this._disableSecretDeletion !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disableSecretDeletion = this._disableSecretDeletion;
-            }
-            if (this._initialSyncBehavior !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.initialSyncBehavior = this._initialSyncBehavior;
-            }
-            if (this._keySchema !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keySchema = this._keySchema;
-            }
-            if (this._syncSecretMetadataAsTags !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.syncSecretMetadataAsTags = this._syncSecretMetadataAsTags;
-            }
-            if (((_a = this._tags) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tags = (_b = this._tags) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._awsKmsKeyId = undefined;
-                this._disableSecretDeletion = undefined;
-                this._initialSyncBehavior = undefined;
-                this._keySchema = undefined;
-                this._syncSecretMetadataAsTags = undefined;
-                this._tags.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._awsKmsKeyId = value.awsKmsKeyId;
-                this._disableSecretDeletion = value.disableSecretDeletion;
-                this._initialSyncBehavior = value.initialSyncBehavior;
-                this._keySchema = value.keySchema;
-                this._syncSecretMetadataAsTags = value.syncSecretMetadataAsTags;
-                this._tags.internalValue = value.tags;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "awsKmsKeyId", {
-        get: function () {
-            return this.getStringAttribute('aws_kms_key_id');
-        },
-        set: function (value) {
-            this._awsKmsKeyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.resetAwsKmsKeyId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._awsKmsKeyId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.awsKmsKeyId = this._awsKmsKeyId;
+        }
+        if (this._disableSecretDeletion !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disableSecretDeletion = this._disableSecretDeletion;
+        }
+        if (this._initialSyncBehavior !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.initialSyncBehavior = this._initialSyncBehavior;
+        }
+        if (this._keySchema !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keySchema = this._keySchema;
+        }
+        if (this._syncSecretMetadataAsTags !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.syncSecretMetadataAsTags = this._syncSecretMetadataAsTags;
+        }
+        if (this._tags?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tags = this._tags?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._awsKmsKeyId = undefined;
+            this._disableSecretDeletion = undefined;
+            this._initialSyncBehavior = undefined;
+            this._keySchema = undefined;
+            this._syncSecretMetadataAsTags = undefined;
+            this._tags.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._awsKmsKeyId = value.awsKmsKeyId;
+            this._disableSecretDeletion = value.disableSecretDeletion;
+            this._initialSyncBehavior = value.initialSyncBehavior;
+            this._keySchema = value.keySchema;
+            this._syncSecretMetadataAsTags = value.syncSecretMetadataAsTags;
+            this._tags.internalValue = value.tags;
+        }
+    }
+    // aws_kms_key_id - computed: false, optional: true, required: false
+    _awsKmsKeyId;
+    get awsKmsKeyId() {
+        return this.getStringAttribute('aws_kms_key_id');
+    }
+    set awsKmsKeyId(value) {
+        this._awsKmsKeyId = value;
+    }
+    resetAwsKmsKeyId() {
         this._awsKmsKeyId = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "awsKmsKeyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._awsKmsKeyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "disableSecretDeletion", {
-        get: function () {
-            return this.getBooleanAttribute('disable_secret_deletion');
-        },
-        set: function (value) {
-            this._disableSecretDeletion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.resetDisableSecretDeletion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get awsKmsKeyIdInput() {
+        return this._awsKmsKeyId;
+    }
+    // disable_secret_deletion - computed: true, optional: true, required: false
+    _disableSecretDeletion;
+    get disableSecretDeletion() {
+        return this.getBooleanAttribute('disable_secret_deletion');
+    }
+    set disableSecretDeletion(value) {
+        this._disableSecretDeletion = value;
+    }
+    resetDisableSecretDeletion() {
         this._disableSecretDeletion = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "disableSecretDeletionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableSecretDeletion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "initialSyncBehavior", {
-        get: function () {
-            return this.getStringAttribute('initial_sync_behavior');
-        },
-        set: function (value) {
-            this._initialSyncBehavior = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "initialSyncBehaviorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._initialSyncBehavior;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "keySchema", {
-        get: function () {
-            return this.getStringAttribute('key_schema');
-        },
-        set: function (value) {
-            this._keySchema = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.resetKeySchema = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableSecretDeletionInput() {
+        return this._disableSecretDeletion;
+    }
+    // initial_sync_behavior - computed: false, optional: false, required: true
+    _initialSyncBehavior;
+    get initialSyncBehavior() {
+        return this.getStringAttribute('initial_sync_behavior');
+    }
+    set initialSyncBehavior(value) {
+        this._initialSyncBehavior = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get initialSyncBehaviorInput() {
+        return this._initialSyncBehavior;
+    }
+    // key_schema - computed: false, optional: true, required: false
+    _keySchema;
+    get keySchema() {
+        return this.getStringAttribute('key_schema');
+    }
+    set keySchema(value) {
+        this._keySchema = value;
+    }
+    resetKeySchema() {
         this._keySchema = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "keySchemaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keySchema;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "syncSecretMetadataAsTags", {
-        get: function () {
-            return this.getBooleanAttribute('sync_secret_metadata_as_tags');
-        },
-        set: function (value) {
-            this._syncSecretMetadataAsTags = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.resetSyncSecretMetadataAsTags = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keySchemaInput() {
+        return this._keySchema;
+    }
+    // sync_secret_metadata_as_tags - computed: true, optional: true, required: false
+    _syncSecretMetadataAsTags;
+    get syncSecretMetadataAsTags() {
+        return this.getBooleanAttribute('sync_secret_metadata_as_tags');
+    }
+    set syncSecretMetadataAsTags(value) {
+        this._syncSecretMetadataAsTags = value;
+    }
+    resetSyncSecretMetadataAsTags() {
         this._syncSecretMetadataAsTags = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "syncSecretMetadataAsTagsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._syncSecretMetadataAsTags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "tags", {
-        get: function () {
-            return this._tags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.putTags = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get syncSecretMetadataAsTagsInput() {
+        return this._syncSecretMetadataAsTags;
+    }
+    // tags - computed: false, optional: true, required: false
+    _tags = new SecretSyncAwsSecretsManagerSyncOptionsTagsList(this, "tags", true);
+    get tags() {
+        return this._tags;
+    }
+    putTags(value) {
         this._tags.internalValue = value;
-    };
-    SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype.resetTags = function () {
+    }
+    resetTags() {
         this._tags.internalValue = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManagerSyncOptionsOutputReference.prototype, "tagsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tags.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return SecretSyncAwsSecretsManagerSyncOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.SecretSyncAwsSecretsManagerSyncOptionsOutputReference = SecretSyncAwsSecretsManagerSyncOptionsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagsInput() {
+        return this._tags.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_aws_secrets_manager infisical_secret_sync_aws_secrets_manager}
 */
-var SecretSyncAwsSecretsManager = /** @class */ (function (_super) {
-    __extends(SecretSyncAwsSecretsManager, _super);
+export class SecretSyncAwsSecretsManager extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_secret_sync_aws_secrets_manager";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a SecretSyncAwsSecretsManager resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the SecretSyncAwsSecretsManager to import
+    * @param importFromId The id of the existing SecretSyncAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the SecretSyncAwsSecretsManager to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_sync_aws_secrets_manager", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -625,8 +518,8 @@ var SecretSyncAwsSecretsManager = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options SecretSyncAwsSecretsManagerConfig
     */
-    function SecretSyncAwsSecretsManager(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_secret_sync_aws_secrets_manager',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -639,215 +532,142 @@ var SecretSyncAwsSecretsManager = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // destination_config - computed: false, optional: false, required: true
-        _this._destinationConfig = new SecretSyncAwsSecretsManagerDestinationConfigOutputReference(_this, "destination_config");
-        // sync_options - computed: false, optional: false, required: true
-        _this._syncOptions = new SecretSyncAwsSecretsManagerSyncOptionsOutputReference(_this, "sync_options");
-        _this._autoSyncEnabled = config.autoSyncEnabled;
-        _this._connectionId = config.connectionId;
-        _this._description = config.description;
-        _this._destinationConfig.internalValue = config.destinationConfig;
-        _this._environment = config.environment;
-        _this._name = config.name;
-        _this._projectId = config.projectId;
-        _this._secretPath = config.secretPath;
-        _this._syncOptions.internalValue = config.syncOptions;
-        return _this;
+        });
+        this._autoSyncEnabled = config.autoSyncEnabled;
+        this._connectionId = config.connectionId;
+        this._description = config.description;
+        this._destinationConfig.internalValue = config.destinationConfig;
+        this._environment = config.environment;
+        this._name = config.name;
+        this._projectId = config.projectId;
+        this._secretPath = config.secretPath;
+        this._syncOptions.internalValue = config.syncOptions;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a SecretSyncAwsSecretsManager resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the SecretSyncAwsSecretsManager to import
-    * @param importFromId The id of the existing SecretSyncAwsSecretsManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_sync_aws_secrets_manager#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the SecretSyncAwsSecretsManager to import is found
-    */
-    SecretSyncAwsSecretsManager.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_sync_aws_secrets_manager", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "autoSyncEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('auto_sync_enabled');
-        },
-        set: function (value) {
-            this._autoSyncEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManager.prototype.resetAutoSyncEnabled = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // auto_sync_enabled - computed: true, optional: true, required: false
+    _autoSyncEnabled;
+    get autoSyncEnabled() {
+        return this.getBooleanAttribute('auto_sync_enabled');
+    }
+    set autoSyncEnabled(value) {
+        this._autoSyncEnabled = value;
+    }
+    resetAutoSyncEnabled() {
         this._autoSyncEnabled = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "autoSyncEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._autoSyncEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "connectionId", {
-        get: function () {
-            return this.getStringAttribute('connection_id');
-        },
-        set: function (value) {
-            this._connectionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "connectionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._connectionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManager.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get autoSyncEnabledInput() {
+        return this._autoSyncEnabled;
+    }
+    // connection_id - computed: false, optional: false, required: true
+    _connectionId;
+    get connectionId() {
+        return this.getStringAttribute('connection_id');
+    }
+    set connectionId(value) {
+        this._connectionId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get connectionIdInput() {
+        return this._connectionId;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "destinationConfig", {
-        get: function () {
-            return this._destinationConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManager.prototype.putDestinationConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // destination_config - computed: false, optional: false, required: true
+    _destinationConfig = new SecretSyncAwsSecretsManagerDestinationConfigOutputReference(this, "destination_config");
+    get destinationConfig() {
+        return this._destinationConfig;
+    }
+    putDestinationConfig(value) {
         this._destinationConfig.internalValue = value;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "destinationConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinationConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "secretPath", {
-        get: function () {
-            return this.getStringAttribute('secret_path');
-        },
-        set: function (value) {
-            this._secretPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "secretPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "syncOptions", {
-        get: function () {
-            return this._syncOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretSyncAwsSecretsManager.prototype.putSyncOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationConfigInput() {
+        return this._destinationConfig.internalValue;
+    }
+    // environment - computed: false, optional: false, required: true
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // secret_path - computed: false, optional: false, required: true
+    _secretPath;
+    get secretPath() {
+        return this.getStringAttribute('secret_path');
+    }
+    set secretPath(value) {
+        this._secretPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretPathInput() {
+        return this._secretPath;
+    }
+    // sync_options - computed: false, optional: false, required: true
+    _syncOptions = new SecretSyncAwsSecretsManagerSyncOptionsOutputReference(this, "sync_options");
+    get syncOptions() {
+        return this._syncOptions;
+    }
+    putSyncOptions(value) {
         this._syncOptions.internalValue = value;
-    };
-    Object.defineProperty(SecretSyncAwsSecretsManager.prototype, "syncOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._syncOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get syncOptionsInput() {
+        return this._syncOptions.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    SecretSyncAwsSecretsManager.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             auto_sync_enabled: cdktf.booleanToTerraform(this._autoSyncEnabled),
             connection_id: cdktf.stringToTerraform(this._connectionId),
@@ -859,9 +679,9 @@ var SecretSyncAwsSecretsManager = /** @class */ (function (_super) {
             secret_path: cdktf.stringToTerraform(this._secretPath),
             sync_options: secretSyncAwsSecretsManagerSyncOptionsToTerraform(this._syncOptions.internalValue),
         };
-    };
-    SecretSyncAwsSecretsManager.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             auto_sync_enabled: {
                 value: cdktf.booleanToHclTerraform(this._autoSyncEnabled),
                 isBlock: false,
@@ -918,15 +738,6 @@ var SecretSyncAwsSecretsManager = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    SecretSyncAwsSecretsManager.tfResourceType = "infisical_secret_sync_aws_secrets_manager";
-    return SecretSyncAwsSecretsManager;
-}(cdktf.TerraformResource));
-exports.SecretSyncAwsSecretsManager = SecretSyncAwsSecretsManager;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

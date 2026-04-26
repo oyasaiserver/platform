@@ -1,37 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_custom_profile
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDlpCustomProfile = exports.ZeroTrustDlpCustomProfileSharedEntriesList = exports.ZeroTrustDlpCustomProfileSharedEntriesOutputReference = exports.ZeroTrustDlpCustomProfileSensitivityLevelsList = exports.ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = exports.ZeroTrustDlpCustomProfileEntriesList = exports.ZeroTrustDlpCustomProfileEntriesOutputReference = exports.ZeroTrustDlpCustomProfileEntriesPatternOutputReference = exports.ZeroTrustDlpCustomProfileContextAwarenessOutputReference = exports.ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = void 0;
-exports.zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform = zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform;
-exports.zeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform = zeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform;
-exports.zeroTrustDlpCustomProfileContextAwarenessToTerraform = zeroTrustDlpCustomProfileContextAwarenessToTerraform;
-exports.zeroTrustDlpCustomProfileContextAwarenessToHclTerraform = zeroTrustDlpCustomProfileContextAwarenessToHclTerraform;
-exports.zeroTrustDlpCustomProfileEntriesPatternToTerraform = zeroTrustDlpCustomProfileEntriesPatternToTerraform;
-exports.zeroTrustDlpCustomProfileEntriesPatternToHclTerraform = zeroTrustDlpCustomProfileEntriesPatternToHclTerraform;
-exports.zeroTrustDlpCustomProfileEntriesToTerraform = zeroTrustDlpCustomProfileEntriesToTerraform;
-exports.zeroTrustDlpCustomProfileEntriesToHclTerraform = zeroTrustDlpCustomProfileEntriesToHclTerraform;
-exports.zeroTrustDlpCustomProfileSensitivityLevelsToTerraform = zeroTrustDlpCustomProfileSensitivityLevelsToTerraform;
-exports.zeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform = zeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform;
-exports.zeroTrustDlpCustomProfileSharedEntriesToTerraform = zeroTrustDlpCustomProfileSharedEntriesToTerraform;
-exports.zeroTrustDlpCustomProfileSharedEntriesToHclTerraform = zeroTrustDlpCustomProfileSharedEntriesToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -42,14 +12,14 @@ function zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct) {
         files: cdktf.booleanToTerraform(struct.files),
     };
 }
-function zeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         files: {
             value: cdktf.booleanToHclTerraform(struct.files),
             isBlock: false,
@@ -58,79 +28,63 @@ function zeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference, _super);
+export class ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._files !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.files = this._files;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._files = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._files = value.files;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype, "files", {
-        get: function () {
-            return this.getBooleanAttribute('files');
-        },
-        set: function (value) {
-            this._files = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype.resetFiles = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._files !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.files = this._files;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._files = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._files = value.files;
+        }
+    }
+    // files - computed: true, optional: true, required: false
+    _files;
+    get files() {
+        return this.getBooleanAttribute('files');
+    }
+    set files(value) {
+        this._files = value;
+    }
+    resetFiles() {
         this._files = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype, "filesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._files;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference;
-function zeroTrustDlpCustomProfileContextAwarenessToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filesInput() {
+        return this._files;
+    }
+}
+export function zeroTrustDlpCustomProfileContextAwarenessToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -142,14 +96,14 @@ function zeroTrustDlpCustomProfileContextAwarenessToTerraform(struct) {
         skip: zeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct.skip),
     };
 }
-function zeroTrustDlpCustomProfileContextAwarenessToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileContextAwarenessToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -164,109 +118,84 @@ function zeroTrustDlpCustomProfileContextAwarenessToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileContextAwarenessOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileContextAwarenessOutputReference, _super);
+export class ZeroTrustDlpCustomProfileContextAwarenessOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDlpCustomProfileContextAwarenessOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // skip - computed: true, optional: true, required: false
-        _this._skip = new ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(_this, "skip");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_a = this._skip) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.skip = (_b = this._skip) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._skip.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._skip.internalValue = value.skip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype.resetEnabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._skip?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.skip = this._skip?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._skip.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._skip.internalValue = value.skip;
+        }
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "skip", {
-        get: function () {
-            return this._skip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype.putSkip = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // skip - computed: true, optional: true, required: false
+    _skip = new ZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(this, "skip");
+    get skip() {
+        return this._skip;
+    }
+    putSkip(value) {
         this._skip.internalValue = value;
-    };
-    ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype.resetSkip = function () {
+    }
+    resetSkip() {
         this._skip.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "skipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._skip.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileContextAwarenessOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileContextAwarenessOutputReference = ZeroTrustDlpCustomProfileContextAwarenessOutputReference;
-function zeroTrustDlpCustomProfileEntriesPatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get skipInput() {
+        return this._skip.internalValue;
+    }
+}
+export function zeroTrustDlpCustomProfileEntriesPatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -278,14 +207,14 @@ function zeroTrustDlpCustomProfileEntriesPatternToTerraform(struct) {
         validation: cdktf.stringToTerraform(struct.validation),
     };
 }
-function zeroTrustDlpCustomProfileEntriesPatternToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileEntriesPatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         regex: {
             value: cdktf.stringToHclTerraform(struct.regex),
             isBlock: false,
@@ -300,103 +229,81 @@ function zeroTrustDlpCustomProfileEntriesPatternToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileEntriesPatternOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileEntriesPatternOutputReference, _super);
+export class ZeroTrustDlpCustomProfileEntriesPatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDlpCustomProfileEntriesPatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._regex !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.regex = this._regex;
-            }
-            if (this._validation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.validation = this._validation;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._regex = undefined;
-                this._validation = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._regex = value.regex;
-                this._validation = value.validation;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "regex", {
-        get: function () {
-            return this.getStringAttribute('regex');
-        },
-        set: function (value) {
-            this._regex = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "regexInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._regex;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "validation", {
-        get: function () {
-            return this.getStringAttribute('validation');
-        },
-        set: function (value) {
-            this._validation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype.resetValidation = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._regex !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.regex = this._regex;
+        }
+        if (this._validation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.validation = this._validation;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._regex = undefined;
+            this._validation = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._regex = value.regex;
+            this._validation = value.validation;
+        }
+    }
+    // regex - computed: false, optional: false, required: true
+    _regex;
+    get regex() {
+        return this.getStringAttribute('regex');
+    }
+    set regex(value) {
+        this._regex = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get regexInput() {
+        return this._regex;
+    }
+    // validation - computed: false, optional: true, required: false
+    _validation;
+    get validation() {
+        return this.getStringAttribute('validation');
+    }
+    set validation(value) {
+        this._validation = value;
+    }
+    resetValidation() {
         this._validation = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "validationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._validation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileEntriesPatternOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileEntriesPatternOutputReference = ZeroTrustDlpCustomProfileEntriesPatternOutputReference;
-function zeroTrustDlpCustomProfileEntriesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get validationInput() {
+        return this._validation;
+    }
+}
+export function zeroTrustDlpCustomProfileEntriesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -411,14 +318,14 @@ function zeroTrustDlpCustomProfileEntriesToTerraform(struct) {
         pattern: zeroTrustDlpCustomProfileEntriesPatternToTerraform(struct.pattern),
     };
 }
-function zeroTrustDlpCustomProfileEntriesToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileEntriesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         description: {
             value: cdktf.stringToHclTerraform(struct.description),
             isBlock: false,
@@ -451,206 +358,163 @@ function zeroTrustDlpCustomProfileEntriesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileEntriesOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileEntriesOutputReference, _super);
+export class ZeroTrustDlpCustomProfileEntriesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileEntriesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // pattern - computed: false, optional: false, required: true
-        _this._pattern = new ZeroTrustDlpCustomProfileEntriesPatternOutputReference(_this, "pattern");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._description !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.description = this._description;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._entryId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.entryId = this._entryId;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (((_a = this._pattern) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = (_b = this._pattern) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._description = undefined;
-                this._enabled = undefined;
-                this._entryId = undefined;
-                this._name = undefined;
-                this._pattern.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._description = value.description;
-                this._enabled = value.enabled;
-                this._entryId = value.entryId;
-                this._name = value.name;
-                this._pattern.internalValue = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileEntriesOutputReference.prototype.resetDescription = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._description !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.description = this._description;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._entryId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.entryId = this._entryId;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._pattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._description = undefined;
+            this._enabled = undefined;
+            this._entryId = undefined;
+            this._name = undefined;
+            this._pattern.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._description = value.description;
+            this._enabled = value.enabled;
+            this._entryId = value.entryId;
+            this._name = value.name;
+            this._pattern.internalValue = value.pattern;
+        }
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "entryId", {
-        get: function () {
-            return this.getStringAttribute('entry_id');
-        },
-        set: function (value) {
-            this._entryId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileEntriesOutputReference.prototype.resetEntryId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // entry_id - computed: false, optional: true, required: false
+    _entryId;
+    get entryId() {
+        return this.getStringAttribute('entry_id');
+    }
+    set entryId(value) {
+        this._entryId = value;
+    }
+    resetEntryId() {
         this._entryId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "entryIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entryId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "pattern", {
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfileEntriesOutputReference.prototype.putPattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get entryIdInput() {
+        return this._entryId;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern = new ZeroTrustDlpCustomProfileEntriesPatternOutputReference(this, "pattern");
+    get pattern() {
+        return this._pattern;
+    }
+    putPattern(value) {
         this._pattern.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileEntriesOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileEntriesOutputReference = ZeroTrustDlpCustomProfileEntriesOutputReference;
-var ZeroTrustDlpCustomProfileEntriesList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileEntriesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern.internalValue;
+    }
+}
+export class ZeroTrustDlpCustomProfileEntriesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileEntriesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpCustomProfileEntriesList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpCustomProfileEntriesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpCustomProfileEntriesList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpCustomProfileEntriesList = ZeroTrustDlpCustomProfileEntriesList;
-function zeroTrustDlpCustomProfileSensitivityLevelsToTerraform(struct) {
+    }
+}
+export function zeroTrustDlpCustomProfileSensitivityLevelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -662,14 +526,14 @@ function zeroTrustDlpCustomProfileSensitivityLevelsToTerraform(struct) {
         level_id: cdktf.stringToTerraform(struct.levelId),
     };
 }
-function zeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         group_id: {
             value: cdktf.stringToHclTerraform(struct.groupId),
             isBlock: false,
@@ -684,125 +548,103 @@ function zeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference, _super);
+export class ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._groupId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupId = this._groupId;
-            }
-            if (this._levelId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.levelId = this._levelId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._groupId = undefined;
-                this._levelId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._groupId = value.groupId;
-                this._levelId = value.levelId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "groupId", {
-        get: function () {
-            return this.getStringAttribute('group_id');
-        },
-        set: function (value) {
-            this._groupId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "groupIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "levelId", {
-        get: function () {
-            return this.getStringAttribute('level_id');
-        },
-        set: function (value) {
-            this._levelId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "levelIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._levelId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference;
-var ZeroTrustDlpCustomProfileSensitivityLevelsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileSensitivityLevelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._groupId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupId = this._groupId;
+        }
+        if (this._levelId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.levelId = this._levelId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._groupId = undefined;
+            this._levelId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._groupId = value.groupId;
+            this._levelId = value.levelId;
+        }
+    }
+    // group_id - computed: false, optional: false, required: true
+    _groupId;
+    get groupId() {
+        return this.getStringAttribute('group_id');
+    }
+    set groupId(value) {
+        this._groupId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupIdInput() {
+        return this._groupId;
+    }
+    // level_id - computed: false, optional: false, required: true
+    _levelId;
+    get levelId() {
+        return this.getStringAttribute('level_id');
+    }
+    set levelId(value) {
+        this._levelId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get levelIdInput() {
+        return this._levelId;
+    }
+}
+export class ZeroTrustDlpCustomProfileSensitivityLevelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileSensitivityLevelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpCustomProfileSensitivityLevelsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpCustomProfileSensitivityLevelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpCustomProfileSensitivityLevelsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpCustomProfileSensitivityLevelsList = ZeroTrustDlpCustomProfileSensitivityLevelsList;
-function zeroTrustDlpCustomProfileSharedEntriesToTerraform(struct) {
+    }
+}
+export function zeroTrustDlpCustomProfileSharedEntriesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -815,14 +657,14 @@ function zeroTrustDlpCustomProfileSharedEntriesToTerraform(struct) {
         entry_type: cdktf.stringToTerraform(struct.entryType),
     };
 }
-function zeroTrustDlpCustomProfileSharedEntriesToHclTerraform(struct) {
+export function zeroTrustDlpCustomProfileSharedEntriesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -843,153 +685,141 @@ function zeroTrustDlpCustomProfileSharedEntriesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpCustomProfileSharedEntriesOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileSharedEntriesOutputReference, _super);
+export class ZeroTrustDlpCustomProfileSharedEntriesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileSharedEntriesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._entryId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.entryId = this._entryId;
-            }
-            if (this._entryType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.entryType = this._entryType;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._entryId = undefined;
-                this._entryType = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._entryId = value.entryId;
-                this._entryType = value.entryType;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "entryId", {
-        get: function () {
-            return this.getStringAttribute('entry_id');
-        },
-        set: function (value) {
-            this._entryId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "entryIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entryId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "entryType", {
-        get: function () {
-            return this.getStringAttribute('entry_type');
-        },
-        set: function (value) {
-            this._entryType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "entryTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entryType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpCustomProfileSharedEntriesOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpCustomProfileSharedEntriesOutputReference = ZeroTrustDlpCustomProfileSharedEntriesOutputReference;
-var ZeroTrustDlpCustomProfileSharedEntriesList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfileSharedEntriesList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._entryId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.entryId = this._entryId;
+        }
+        if (this._entryType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.entryType = this._entryType;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._entryId = undefined;
+            this._entryType = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._entryId = value.entryId;
+            this._entryType = value.entryType;
+        }
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // entry_id - computed: false, optional: false, required: true
+    _entryId;
+    get entryId() {
+        return this.getStringAttribute('entry_id');
+    }
+    set entryId(value) {
+        this._entryId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get entryIdInput() {
+        return this._entryId;
+    }
+    // entry_type - computed: false, optional: false, required: true
+    _entryType;
+    get entryType() {
+        return this.getStringAttribute('entry_type');
+    }
+    set entryType(value) {
+        this._entryType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get entryTypeInput() {
+        return this._entryType;
+    }
+}
+export class ZeroTrustDlpCustomProfileSharedEntriesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpCustomProfileSharedEntriesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpCustomProfileSharedEntriesList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpCustomProfileSharedEntriesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpCustomProfileSharedEntriesList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpCustomProfileSharedEntriesList = ZeroTrustDlpCustomProfileSharedEntriesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_custom_profile cloudflare_zero_trust_dlp_custom_profile}
 */
-var ZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpCustomProfile, _super);
+export class ZeroTrustDlpCustomProfile extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dlp_custom_profile";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDlpCustomProfile resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDlpCustomProfile to import
+    * @param importFromId The id of the existing ZeroTrustDlpCustomProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_custom_profile#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDlpCustomProfile to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_custom_profile", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1000,8 +830,8 @@ var ZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDlpCustomProfileConfig
     */
-    function ZeroTrustDlpCustomProfile(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dlp_custom_profile',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1014,357 +844,240 @@ var ZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // context_awareness - computed: true, optional: true, required: false
-        _this._contextAwareness = new ZeroTrustDlpCustomProfileContextAwarenessOutputReference(_this, "context_awareness");
-        // entries - computed: false, optional: true, required: false
-        _this._entries = new ZeroTrustDlpCustomProfileEntriesList(_this, "entries", true);
-        // sensitivity_levels - computed: false, optional: true, required: false
-        _this._sensitivityLevels = new ZeroTrustDlpCustomProfileSensitivityLevelsList(_this, "sensitivity_levels", false);
-        // shared_entries - computed: false, optional: true, required: false
-        _this._sharedEntries = new ZeroTrustDlpCustomProfileSharedEntriesList(_this, "shared_entries", true);
-        _this._accountId = config.accountId;
-        _this._aiContextEnabled = config.aiContextEnabled;
-        _this._allowedMatchCount = config.allowedMatchCount;
-        _this._confidenceThreshold = config.confidenceThreshold;
-        _this._contextAwareness.internalValue = config.contextAwareness;
-        _this._dataClasses = config.dataClasses;
-        _this._dataTags = config.dataTags;
-        _this._description = config.description;
-        _this._entries.internalValue = config.entries;
-        _this._name = config.name;
-        _this._ocrEnabled = config.ocrEnabled;
-        _this._sensitivityLevels.internalValue = config.sensitivityLevels;
-        _this._sharedEntries.internalValue = config.sharedEntries;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._aiContextEnabled = config.aiContextEnabled;
+        this._allowedMatchCount = config.allowedMatchCount;
+        this._confidenceThreshold = config.confidenceThreshold;
+        this._contextAwareness.internalValue = config.contextAwareness;
+        this._dataClasses = config.dataClasses;
+        this._dataTags = config.dataTags;
+        this._description = config.description;
+        this._entries.internalValue = config.entries;
+        this._name = config.name;
+        this._ocrEnabled = config.ocrEnabled;
+        this._sensitivityLevels.internalValue = config.sensitivityLevels;
+        this._sharedEntries.internalValue = config.sharedEntries;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDlpCustomProfile resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDlpCustomProfile to import
-    * @param importFromId The id of the existing ZeroTrustDlpCustomProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_custom_profile#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDlpCustomProfile to import is found
-    */
-    ZeroTrustDlpCustomProfile.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_custom_profile", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "aiContextEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('ai_context_enabled');
-        },
-        set: function (value) {
-            this._aiContextEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetAiContextEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ai_context_enabled - computed: true, optional: true, required: false
+    _aiContextEnabled;
+    get aiContextEnabled() {
+        return this.getBooleanAttribute('ai_context_enabled');
+    }
+    set aiContextEnabled(value) {
+        this._aiContextEnabled = value;
+    }
+    resetAiContextEnabled() {
         this._aiContextEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "aiContextEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aiContextEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "allowedMatchCount", {
-        get: function () {
-            return this.getNumberAttribute('allowed_match_count');
-        },
-        set: function (value) {
-            this._allowedMatchCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetAllowedMatchCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aiContextEnabledInput() {
+        return this._aiContextEnabled;
+    }
+    // allowed_match_count - computed: true, optional: true, required: false
+    _allowedMatchCount;
+    get allowedMatchCount() {
+        return this.getNumberAttribute('allowed_match_count');
+    }
+    set allowedMatchCount(value) {
+        this._allowedMatchCount = value;
+    }
+    resetAllowedMatchCount() {
         this._allowedMatchCount = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "allowedMatchCountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedMatchCount;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "confidenceThreshold", {
-        get: function () {
-            return this.getStringAttribute('confidence_threshold');
-        },
-        set: function (value) {
-            this._confidenceThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetConfidenceThreshold = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedMatchCountInput() {
+        return this._allowedMatchCount;
+    }
+    // confidence_threshold - computed: true, optional: true, required: false
+    _confidenceThreshold;
+    get confidenceThreshold() {
+        return this.getStringAttribute('confidence_threshold');
+    }
+    set confidenceThreshold(value) {
+        this._confidenceThreshold = value;
+    }
+    resetConfidenceThreshold() {
         this._confidenceThreshold = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "confidenceThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._confidenceThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "contextAwareness", {
-        get: function () {
-            return this._contextAwareness;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.putContextAwareness = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get confidenceThresholdInput() {
+        return this._confidenceThreshold;
+    }
+    // context_awareness - computed: true, optional: true, required: false
+    _contextAwareness = new ZeroTrustDlpCustomProfileContextAwarenessOutputReference(this, "context_awareness");
+    get contextAwareness() {
+        return this._contextAwareness;
+    }
+    putContextAwareness(value) {
         this._contextAwareness.internalValue = value;
-    };
-    ZeroTrustDlpCustomProfile.prototype.resetContextAwareness = function () {
+    }
+    resetContextAwareness() {
         this._contextAwareness.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "contextAwarenessInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contextAwareness.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "dataClasses", {
-        get: function () {
-            return this.getListAttribute('data_classes');
-        },
-        set: function (value) {
-            this._dataClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetDataClasses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contextAwarenessInput() {
+        return this._contextAwareness.internalValue;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // data_classes - computed: false, optional: true, required: false
+    _dataClasses;
+    get dataClasses() {
+        return this.getListAttribute('data_classes');
+    }
+    set dataClasses(value) {
+        this._dataClasses = value;
+    }
+    resetDataClasses() {
         this._dataClasses = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "dataClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dataClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "dataTags", {
-        get: function () {
-            return this.getListAttribute('data_tags');
-        },
-        set: function (value) {
-            this._dataTags = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetDataTags = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dataClassesInput() {
+        return this._dataClasses;
+    }
+    // data_tags - computed: false, optional: true, required: false
+    _dataTags;
+    get dataTags() {
+        return this.getListAttribute('data_tags');
+    }
+    set dataTags(value) {
+        this._dataTags = value;
+    }
+    resetDataTags() {
         this._dataTags = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "dataTagsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dataTags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dataTagsInput() {
+        return this._dataTags;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "entries", {
-        get: function () {
-            return this._entries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.putEntries = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // entries - computed: false, optional: true, required: false
+    _entries = new ZeroTrustDlpCustomProfileEntriesList(this, "entries", true);
+    get entries() {
+        return this._entries;
+    }
+    putEntries(value) {
         this._entries.internalValue = value;
-    };
-    ZeroTrustDlpCustomProfile.prototype.resetEntries = function () {
+    }
+    resetEntries() {
         this._entries.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "entriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entries.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "ocrEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('ocr_enabled');
-        },
-        set: function (value) {
-            this._ocrEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.resetOcrEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get entriesInput() {
+        return this._entries.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // ocr_enabled - computed: true, optional: true, required: false
+    _ocrEnabled;
+    get ocrEnabled() {
+        return this.getBooleanAttribute('ocr_enabled');
+    }
+    set ocrEnabled(value) {
+        this._ocrEnabled = value;
+    }
+    resetOcrEnabled() {
         this._ocrEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "ocrEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ocrEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "openAccess", {
-        // open_access - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('open_access');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "sensitivityLevels", {
-        get: function () {
-            return this._sensitivityLevels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.putSensitivityLevels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ocrEnabledInput() {
+        return this._ocrEnabled;
+    }
+    // open_access - computed: true, optional: false, required: false
+    get openAccess() {
+        return this.getBooleanAttribute('open_access');
+    }
+    // sensitivity_levels - computed: false, optional: true, required: false
+    _sensitivityLevels = new ZeroTrustDlpCustomProfileSensitivityLevelsList(this, "sensitivity_levels", false);
+    get sensitivityLevels() {
+        return this._sensitivityLevels;
+    }
+    putSensitivityLevels(value) {
         this._sensitivityLevels.internalValue = value;
-    };
-    ZeroTrustDlpCustomProfile.prototype.resetSensitivityLevels = function () {
+    }
+    resetSensitivityLevels() {
         this._sensitivityLevels.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "sensitivityLevelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sensitivityLevels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "sharedEntries", {
-        get: function () {
-            return this._sharedEntries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpCustomProfile.prototype.putSharedEntries = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sensitivityLevelsInput() {
+        return this._sensitivityLevels.internalValue;
+    }
+    // shared_entries - computed: false, optional: true, required: false
+    _sharedEntries = new ZeroTrustDlpCustomProfileSharedEntriesList(this, "shared_entries", true);
+    get sharedEntries() {
+        return this._sharedEntries;
+    }
+    putSharedEntries(value) {
         this._sharedEntries.internalValue = value;
-    };
-    ZeroTrustDlpCustomProfile.prototype.resetSharedEntries = function () {
+    }
+    resetSharedEntries() {
         this._sharedEntries.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "sharedEntriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sharedEntries.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpCustomProfile.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get sharedEntriesInput() {
+        return this._sharedEntries.internalValue;
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDlpCustomProfile.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             ai_context_enabled: cdktf.booleanToTerraform(this._aiContextEnabled),
@@ -1380,9 +1093,9 @@ var ZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
             sensitivity_levels: cdktf.listMapper(zeroTrustDlpCustomProfileSensitivityLevelsToTerraform, false)(this._sensitivityLevels.internalValue),
             shared_entries: cdktf.listMapper(zeroTrustDlpCustomProfileSharedEntriesToTerraform, false)(this._sharedEntries.internalValue),
         };
-    };
-    ZeroTrustDlpCustomProfile.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1463,15 +1176,6 @@ var ZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDlpCustomProfile.tfResourceType = "cloudflare_zero_trust_dlp_custom_profile";
-    return ZeroTrustDlpCustomProfile;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDlpCustomProfile = ZeroTrustDlpCustomProfile;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

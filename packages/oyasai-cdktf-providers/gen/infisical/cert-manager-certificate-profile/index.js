@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_profile
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerCertificateProfile = exports.CertManagerCertificateProfileExternalConfigsOutputReference = exports.CertManagerCertificateProfileEstConfigOutputReference = exports.CertManagerCertificateProfileApiConfigOutputReference = void 0;
-exports.certManagerCertificateProfileApiConfigToTerraform = certManagerCertificateProfileApiConfigToTerraform;
-exports.certManagerCertificateProfileApiConfigToHclTerraform = certManagerCertificateProfileApiConfigToHclTerraform;
-exports.certManagerCertificateProfileEstConfigToTerraform = certManagerCertificateProfileEstConfigToTerraform;
-exports.certManagerCertificateProfileEstConfigToHclTerraform = certManagerCertificateProfileEstConfigToHclTerraform;
-exports.certManagerCertificateProfileExternalConfigsToTerraform = certManagerCertificateProfileExternalConfigsToTerraform;
-exports.certManagerCertificateProfileExternalConfigsToHclTerraform = certManagerCertificateProfileExternalConfigsToHclTerraform;
-var cdktf = require("cdktf");
-function certManagerCertificateProfileApiConfigToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function certManagerCertificateProfileApiConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +13,14 @@ function certManagerCertificateProfileApiConfigToTerraform(struct) {
         renew_before_days: cdktf.numberToTerraform(struct.renewBeforeDays),
     };
 }
-function certManagerCertificateProfileApiConfigToHclTerraform(struct) {
+export function certManagerCertificateProfileApiConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         auto_renew: {
             value: cdktf.booleanToHclTerraform(struct.autoRenew),
             isBlock: false,
@@ -59,106 +35,84 @@ function certManagerCertificateProfileApiConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificateProfileApiConfigOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificateProfileApiConfigOutputReference, _super);
+export class CertManagerCertificateProfileApiConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificateProfileApiConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificateProfileApiConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._autoRenew !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.autoRenew = this._autoRenew;
-            }
-            if (this._renewBeforeDays !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.renewBeforeDays = this._renewBeforeDays;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._autoRenew = undefined;
-                this._renewBeforeDays = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._autoRenew = value.autoRenew;
-                this._renewBeforeDays = value.renewBeforeDays;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileApiConfigOutputReference.prototype, "autoRenew", {
-        get: function () {
-            return this.getBooleanAttribute('auto_renew');
-        },
-        set: function (value) {
-            this._autoRenew = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileApiConfigOutputReference.prototype.resetAutoRenew = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._autoRenew !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.autoRenew = this._autoRenew;
+        }
+        if (this._renewBeforeDays !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.renewBeforeDays = this._renewBeforeDays;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._autoRenew = undefined;
+            this._renewBeforeDays = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._autoRenew = value.autoRenew;
+            this._renewBeforeDays = value.renewBeforeDays;
+        }
+    }
+    // auto_renew - computed: true, optional: true, required: false
+    _autoRenew;
+    get autoRenew() {
+        return this.getBooleanAttribute('auto_renew');
+    }
+    set autoRenew(value) {
+        this._autoRenew = value;
+    }
+    resetAutoRenew() {
         this._autoRenew = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileApiConfigOutputReference.prototype, "autoRenewInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._autoRenew;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileApiConfigOutputReference.prototype, "renewBeforeDays", {
-        get: function () {
-            return this.getNumberAttribute('renew_before_days');
-        },
-        set: function (value) {
-            this._renewBeforeDays = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileApiConfigOutputReference.prototype.resetRenewBeforeDays = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get autoRenewInput() {
+        return this._autoRenew;
+    }
+    // renew_before_days - computed: true, optional: true, required: false
+    _renewBeforeDays;
+    get renewBeforeDays() {
+        return this.getNumberAttribute('renew_before_days');
+    }
+    set renewBeforeDays(value) {
+        this._renewBeforeDays = value;
+    }
+    resetRenewBeforeDays() {
         this._renewBeforeDays = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileApiConfigOutputReference.prototype, "renewBeforeDaysInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._renewBeforeDays;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificateProfileApiConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificateProfileApiConfigOutputReference = CertManagerCertificateProfileApiConfigOutputReference;
-function certManagerCertificateProfileEstConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get renewBeforeDaysInput() {
+        return this._renewBeforeDays;
+    }
+}
+export function certManagerCertificateProfileEstConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -171,14 +125,14 @@ function certManagerCertificateProfileEstConfigToTerraform(struct) {
         passphrase: cdktf.stringToTerraform(struct.passphrase),
     };
 }
-function certManagerCertificateProfileEstConfigToHclTerraform(struct) {
+export function certManagerCertificateProfileEstConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ca_chain: {
             value: cdktf.stringToHclTerraform(struct.caChain),
             isBlock: false,
@@ -199,133 +153,105 @@ function certManagerCertificateProfileEstConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificateProfileEstConfigOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificateProfileEstConfigOutputReference, _super);
+export class CertManagerCertificateProfileEstConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificateProfileEstConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._caChain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.caChain = this._caChain;
-            }
-            if (this._disableBootstrapCaValidation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disableBootstrapCaValidation = this._disableBootstrapCaValidation;
-            }
-            if (this._passphrase !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.passphrase = this._passphrase;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._caChain = undefined;
-                this._disableBootstrapCaValidation = undefined;
-                this._passphrase = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._caChain = value.caChain;
-                this._disableBootstrapCaValidation = value.disableBootstrapCaValidation;
-                this._passphrase = value.passphrase;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "caChain", {
-        get: function () {
-            return this.getStringAttribute('ca_chain');
-        },
-        set: function (value) {
-            this._caChain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileEstConfigOutputReference.prototype.resetCaChain = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._caChain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.caChain = this._caChain;
+        }
+        if (this._disableBootstrapCaValidation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disableBootstrapCaValidation = this._disableBootstrapCaValidation;
+        }
+        if (this._passphrase !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.passphrase = this._passphrase;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._caChain = undefined;
+            this._disableBootstrapCaValidation = undefined;
+            this._passphrase = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._caChain = value.caChain;
+            this._disableBootstrapCaValidation = value.disableBootstrapCaValidation;
+            this._passphrase = value.passphrase;
+        }
+    }
+    // ca_chain - computed: false, optional: true, required: false
+    _caChain;
+    get caChain() {
+        return this.getStringAttribute('ca_chain');
+    }
+    set caChain(value) {
+        this._caChain = value;
+    }
+    resetCaChain() {
         this._caChain = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "caChainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caChain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "disableBootstrapCaValidation", {
-        get: function () {
-            return this.getBooleanAttribute('disable_bootstrap_ca_validation');
-        },
-        set: function (value) {
-            this._disableBootstrapCaValidation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileEstConfigOutputReference.prototype.resetDisableBootstrapCaValidation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caChainInput() {
+        return this._caChain;
+    }
+    // disable_bootstrap_ca_validation - computed: true, optional: true, required: false
+    _disableBootstrapCaValidation;
+    get disableBootstrapCaValidation() {
+        return this.getBooleanAttribute('disable_bootstrap_ca_validation');
+    }
+    set disableBootstrapCaValidation(value) {
+        this._disableBootstrapCaValidation = value;
+    }
+    resetDisableBootstrapCaValidation() {
         this._disableBootstrapCaValidation = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "disableBootstrapCaValidationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableBootstrapCaValidation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "passphrase", {
-        get: function () {
-            return this.getStringAttribute('passphrase');
-        },
-        set: function (value) {
-            this._passphrase = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileEstConfigOutputReference.prototype.resetPassphrase = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableBootstrapCaValidationInput() {
+        return this._disableBootstrapCaValidation;
+    }
+    // passphrase - computed: false, optional: true, required: false
+    _passphrase;
+    get passphrase() {
+        return this.getStringAttribute('passphrase');
+    }
+    set passphrase(value) {
+        this._passphrase = value;
+    }
+    resetPassphrase() {
         this._passphrase = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileEstConfigOutputReference.prototype, "passphraseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._passphrase;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificateProfileEstConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificateProfileEstConfigOutputReference = CertManagerCertificateProfileEstConfigOutputReference;
-function certManagerCertificateProfileExternalConfigsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get passphraseInput() {
+        return this._passphrase;
+    }
+}
+export function certManagerCertificateProfileExternalConfigsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -336,14 +262,14 @@ function certManagerCertificateProfileExternalConfigsToTerraform(struct) {
         template: cdktf.stringToTerraform(struct.template),
     };
 }
-function certManagerCertificateProfileExternalConfigsToHclTerraform(struct) {
+export function certManagerCertificateProfileExternalConfigsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         template: {
             value: cdktf.stringToHclTerraform(struct.template),
             isBlock: false,
@@ -352,83 +278,83 @@ function certManagerCertificateProfileExternalConfigsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificateProfileExternalConfigsOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificateProfileExternalConfigsOutputReference, _super);
+export class CertManagerCertificateProfileExternalConfigsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificateProfileExternalConfigsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificateProfileExternalConfigsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._template !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.template = this._template;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._template = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._template = value.template;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfileExternalConfigsOutputReference.prototype, "template", {
-        get: function () {
-            return this.getStringAttribute('template');
-        },
-        set: function (value) {
-            this._template = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfileExternalConfigsOutputReference.prototype.resetTemplate = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._template !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.template = this._template;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._template = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._template = value.template;
+        }
+    }
+    // template - computed: false, optional: true, required: false
+    _template;
+    get template() {
+        return this.getStringAttribute('template');
+    }
+    set template(value) {
+        this._template = value;
+    }
+    resetTemplate() {
         this._template = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfileExternalConfigsOutputReference.prototype, "templateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._template;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificateProfileExternalConfigsOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificateProfileExternalConfigsOutputReference = CertManagerCertificateProfileExternalConfigsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get templateInput() {
+        return this._template;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile}
 */
-var CertManagerCertificateProfile = /** @class */ (function (_super) {
-    __extends(CertManagerCertificateProfile, _super);
+export class CertManagerCertificateProfile extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_certificate_profile";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerCertificateProfile resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerCertificateProfile to import
+    * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerCertificateProfile to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_certificate_profile", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -439,8 +365,8 @@ var CertManagerCertificateProfile = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerCertificateProfileConfig
     */
-    function CertManagerCertificateProfile(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_certificate_profile',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -453,248 +379,167 @@ var CertManagerCertificateProfile = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // api_config - computed: false, optional: true, required: false
-        _this._apiConfig = new CertManagerCertificateProfileApiConfigOutputReference(_this, "api_config");
-        // est_config - computed: false, optional: true, required: false
-        _this._estConfig = new CertManagerCertificateProfileEstConfigOutputReference(_this, "est_config");
-        // external_configs - computed: false, optional: true, required: false
-        _this._externalConfigs = new CertManagerCertificateProfileExternalConfigsOutputReference(_this, "external_configs");
-        _this._caId = config.caId;
-        _this._certificatePolicyId = config.certificatePolicyId;
-        _this._description = config.description;
-        _this._enrollmentType = config.enrollmentType;
-        _this._issuerType = config.issuerType;
-        _this._name = config.name;
-        _this._projectSlug = config.projectSlug;
-        _this._apiConfig.internalValue = config.apiConfig;
-        _this._estConfig.internalValue = config.estConfig;
-        _this._externalConfigs.internalValue = config.externalConfigs;
-        return _this;
+        });
+        this._caId = config.caId;
+        this._certificatePolicyId = config.certificatePolicyId;
+        this._description = config.description;
+        this._enrollmentType = config.enrollmentType;
+        this._issuerType = config.issuerType;
+        this._name = config.name;
+        this._projectSlug = config.projectSlug;
+        this._apiConfig.internalValue = config.apiConfig;
+        this._estConfig.internalValue = config.estConfig;
+        this._externalConfigs.internalValue = config.externalConfigs;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerCertificateProfile resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerCertificateProfile to import
-    * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerCertificateProfile to import is found
-    */
-    CertManagerCertificateProfile.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_certificate_profile", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "caId", {
-        get: function () {
-            return this.getStringAttribute('ca_id');
-        },
-        set: function (value) {
-            this._caId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.resetCaId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // ca_id - computed: false, optional: true, required: false
+    _caId;
+    get caId() {
+        return this.getStringAttribute('ca_id');
+    }
+    set caId(value) {
+        this._caId = value;
+    }
+    resetCaId() {
         this._caId = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "caIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "certificatePolicyId", {
-        get: function () {
-            return this.getStringAttribute('certificate_policy_id');
-        },
-        set: function (value) {
-            this._certificatePolicyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "certificatePolicyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificatePolicyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caIdInput() {
+        return this._caId;
+    }
+    // certificate_policy_id - computed: false, optional: false, required: true
+    _certificatePolicyId;
+    get certificatePolicyId() {
+        return this.getStringAttribute('certificate_policy_id');
+    }
+    set certificatePolicyId(value) {
+        this._certificatePolicyId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificatePolicyIdInput() {
+        return this._certificatePolicyId;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "enrollmentType", {
-        get: function () {
-            return this.getStringAttribute('enrollment_type');
-        },
-        set: function (value) {
-            this._enrollmentType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "enrollmentTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enrollmentType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "issuerType", {
-        get: function () {
-            return this.getStringAttribute('issuer_type');
-        },
-        set: function (value) {
-            this._issuerType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.resetIssuerType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enrollment_type - computed: false, optional: false, required: true
+    _enrollmentType;
+    get enrollmentType() {
+        return this.getStringAttribute('enrollment_type');
+    }
+    set enrollmentType(value) {
+        this._enrollmentType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enrollmentTypeInput() {
+        return this._enrollmentType;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer_type - computed: true, optional: true, required: false
+    _issuerType;
+    get issuerType() {
+        return this.getStringAttribute('issuer_type');
+    }
+    set issuerType(value) {
+        this._issuerType = value;
+    }
+    resetIssuerType() {
         this._issuerType = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "issuerTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._issuerType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "apiConfig", {
-        get: function () {
-            return this._apiConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.putApiConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get issuerTypeInput() {
+        return this._issuerType;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // api_config - computed: false, optional: true, required: false
+    _apiConfig = new CertManagerCertificateProfileApiConfigOutputReference(this, "api_config");
+    get apiConfig() {
+        return this._apiConfig;
+    }
+    putApiConfig(value) {
         this._apiConfig.internalValue = value;
-    };
-    CertManagerCertificateProfile.prototype.resetApiConfig = function () {
+    }
+    resetApiConfig() {
         this._apiConfig.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "apiConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apiConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "estConfig", {
-        get: function () {
-            return this._estConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.putEstConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get apiConfigInput() {
+        return this._apiConfig.internalValue;
+    }
+    // est_config - computed: false, optional: true, required: false
+    _estConfig = new CertManagerCertificateProfileEstConfigOutputReference(this, "est_config");
+    get estConfig() {
+        return this._estConfig;
+    }
+    putEstConfig(value) {
         this._estConfig.internalValue = value;
-    };
-    CertManagerCertificateProfile.prototype.resetEstConfig = function () {
+    }
+    resetEstConfig() {
         this._estConfig.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "estConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._estConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "externalConfigs", {
-        get: function () {
-            return this._externalConfigs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificateProfile.prototype.putExternalConfigs = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get estConfigInput() {
+        return this._estConfig.internalValue;
+    }
+    // external_configs - computed: false, optional: true, required: false
+    _externalConfigs = new CertManagerCertificateProfileExternalConfigsOutputReference(this, "external_configs");
+    get externalConfigs() {
+        return this._externalConfigs;
+    }
+    putExternalConfigs(value) {
         this._externalConfigs.internalValue = value;
-    };
-    CertManagerCertificateProfile.prototype.resetExternalConfigs = function () {
+    }
+    resetExternalConfigs() {
         this._externalConfigs.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificateProfile.prototype, "externalConfigsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalConfigs.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalConfigsInput() {
+        return this._externalConfigs.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerCertificateProfile.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             ca_id: cdktf.stringToTerraform(this._caId),
             certificate_policy_id: cdktf.stringToTerraform(this._certificatePolicyId),
@@ -707,9 +552,9 @@ var CertManagerCertificateProfile = /** @class */ (function (_super) {
             est_config: certManagerCertificateProfileEstConfigToTerraform(this._estConfig.internalValue),
             external_configs: certManagerCertificateProfileExternalConfigsToTerraform(this._externalConfigs.internalValue),
         };
-    };
-    CertManagerCertificateProfile.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             ca_id: {
                 value: cdktf.stringToHclTerraform(this._caId),
                 isBlock: false,
@@ -772,15 +617,6 @@ var CertManagerCertificateProfile = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerCertificateProfile.tfResourceType = "infisical_cert_manager_certificate_profile";
-    return CertManagerCertificateProfile;
-}(cdktf.TerraformResource));
-exports.CertManagerCertificateProfile = CertManagerCertificateProfile;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

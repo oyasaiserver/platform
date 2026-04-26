@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_service_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustAccessServiceToken = exports.DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference = void 0;
-exports.dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform = dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform;
-exports.dataCloudflareZeroTrustAccessServiceTokenFilterToHclTerraform = dataCloudflareZeroTrustAccessServiceTokenFilterToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -33,14 +13,14 @@ function dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform(struct) {
         search: cdktf.stringToTerraform(struct.search),
     };
 }
-function dataCloudflareZeroTrustAccessServiceTokenFilterToHclTerraform(struct) {
+export function dataCloudflareZeroTrustAccessServiceTokenFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -55,110 +35,104 @@ function dataCloudflareZeroTrustAccessServiceTokenFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference, _super);
+export class DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._search !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.search = this._search;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._search = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._search = value.search;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._search !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.search = this._search;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._search = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._search = value.search;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype, "search", {
-        get: function () {
-            return this.getStringAttribute('search');
-        },
-        set: function (value) {
-            this._search = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype.resetSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // search - computed: false, optional: true, required: false
+    _search;
+    get search() {
+        return this.getStringAttribute('search');
+    }
+    set search(value) {
+        this._search = value;
+    }
+    resetSearch() {
         this._search = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference.prototype, "searchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._search;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference = DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchInput() {
+        return this._search;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_service_token cloudflare_zero_trust_access_service_token}
 */
-var DataCloudflareZeroTrustAccessServiceToken = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustAccessServiceToken, _super);
+export class DataCloudflareZeroTrustAccessServiceToken extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_service_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessServiceToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessServiceToken to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustAccessServiceToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_service_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessServiceToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_service_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -169,9 +143,8 @@ var DataCloudflareZeroTrustAccessServiceToken = /** @class */ (function (_super)
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustAccessServiceTokenConfig = {}
     */
-    function DataCloudflareZeroTrustAccessServiceToken(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_service_token',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -184,165 +157,108 @@ var DataCloudflareZeroTrustAccessServiceToken = /** @class */ (function (_super)
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference(_this, "filter");
-        _this._accountId = config.accountId;
-        _this._filter.internalValue = config.filter;
-        _this._serviceTokenId = config.serviceTokenId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._filter.internalValue = config.filter;
+        this._serviceTokenId = config.serviceTokenId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessServiceToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessServiceToken to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustAccessServiceToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_service_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessServiceToken to import is found
-    */
-    DataCloudflareZeroTrustAccessServiceToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_service_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceToken.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "clientId", {
-        // client_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "duration", {
-        // duration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('duration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "expiresAt", {
-        // expires_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceToken.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // client_id - computed: true, optional: false, required: false
+    get clientId() {
+        return this.getStringAttribute('client_id');
+    }
+    // duration - computed: true, optional: false, required: false
+    get duration() {
+        return this.getStringAttribute('duration');
+    }
+    // expires_at - computed: true, optional: false, required: false
+    get expiresAt() {
+        return this.getStringAttribute('expires_at');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareZeroTrustAccessServiceTokenFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareZeroTrustAccessServiceToken.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "serviceTokenId", {
-        get: function () {
-            return this.getStringAttribute('service_token_id');
-        },
-        set: function (value) {
-            this._serviceTokenId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceToken.prototype.resetServiceTokenId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // service_token_id - computed: false, optional: true, required: false
+    _serviceTokenId;
+    get serviceTokenId() {
+        return this.getStringAttribute('service_token_id');
+    }
+    set serviceTokenId(value) {
+        this._serviceTokenId = value;
+    }
+    resetServiceTokenId() {
         this._serviceTokenId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "serviceTokenIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceTokenId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustAccessServiceToken.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceTokenIdInput() {
+        return this._serviceTokenId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustAccessServiceToken.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustAccessServiceToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             filter: dataCloudflareZeroTrustAccessServiceTokenFilterToTerraform(this._filter.internalValue),
             service_token_id: cdktf.stringToTerraform(this._serviceTokenId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareZeroTrustAccessServiceToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -369,15 +285,6 @@ var DataCloudflareZeroTrustAccessServiceToken = /** @class */ (function (_super)
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustAccessServiceToken.tfResourceType = "cloudflare_zero_trust_access_service_token";
-    return DataCloudflareZeroTrustAccessServiceToken;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustAccessServiceToken = DataCloudflareZeroTrustAccessServiceToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

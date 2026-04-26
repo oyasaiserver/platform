@@ -1,67 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkersScript = exports.WorkersScriptTailConsumersList = exports.WorkersScriptTailConsumersOutputReference = exports.WorkersScriptPlacementOutputReference = exports.WorkersScriptPlacementTargetList = exports.WorkersScriptPlacementTargetOutputReference = exports.WorkersScriptObservabilityOutputReference = exports.WorkersScriptObservabilityTracesOutputReference = exports.WorkersScriptObservabilityLogsOutputReference = exports.WorkersScriptNamedHandlersList = exports.WorkersScriptNamedHandlersOutputReference = exports.WorkersScriptMigrationsOutputReference = exports.WorkersScriptMigrationsTransferredClassesList = exports.WorkersScriptMigrationsTransferredClassesOutputReference = exports.WorkersScriptMigrationsStepsList = exports.WorkersScriptMigrationsStepsOutputReference = exports.WorkersScriptMigrationsStepsTransferredClassesList = exports.WorkersScriptMigrationsStepsTransferredClassesOutputReference = exports.WorkersScriptMigrationsStepsRenamedClassesList = exports.WorkersScriptMigrationsStepsRenamedClassesOutputReference = exports.WorkersScriptMigrationsRenamedClassesList = exports.WorkersScriptMigrationsRenamedClassesOutputReference = exports.WorkersScriptLimitsOutputReference = exports.WorkersScriptBindingsList = exports.WorkersScriptBindingsOutputReference = exports.WorkersScriptBindingsSimpleOutputReference = exports.WorkersScriptBindingsOutboundOutputReference = exports.WorkersScriptBindingsOutboundWorkerOutputReference = exports.WorkersScriptAssetsOutputReference = exports.WorkersScriptAssetsConfigOutputReference = exports.WorkersScriptAnnotationsOutputReference = void 0;
-exports.workersScriptAnnotationsToTerraform = workersScriptAnnotationsToTerraform;
-exports.workersScriptAnnotationsToHclTerraform = workersScriptAnnotationsToHclTerraform;
-exports.workersScriptAssetsConfigToTerraform = workersScriptAssetsConfigToTerraform;
-exports.workersScriptAssetsConfigToHclTerraform = workersScriptAssetsConfigToHclTerraform;
-exports.workersScriptAssetsToTerraform = workersScriptAssetsToTerraform;
-exports.workersScriptAssetsToHclTerraform = workersScriptAssetsToHclTerraform;
-exports.workersScriptBindingsOutboundWorkerToTerraform = workersScriptBindingsOutboundWorkerToTerraform;
-exports.workersScriptBindingsOutboundWorkerToHclTerraform = workersScriptBindingsOutboundWorkerToHclTerraform;
-exports.workersScriptBindingsOutboundToTerraform = workersScriptBindingsOutboundToTerraform;
-exports.workersScriptBindingsOutboundToHclTerraform = workersScriptBindingsOutboundToHclTerraform;
-exports.workersScriptBindingsSimpleToTerraform = workersScriptBindingsSimpleToTerraform;
-exports.workersScriptBindingsSimpleToHclTerraform = workersScriptBindingsSimpleToHclTerraform;
-exports.workersScriptBindingsToTerraform = workersScriptBindingsToTerraform;
-exports.workersScriptBindingsToHclTerraform = workersScriptBindingsToHclTerraform;
-exports.workersScriptLimitsToTerraform = workersScriptLimitsToTerraform;
-exports.workersScriptLimitsToHclTerraform = workersScriptLimitsToHclTerraform;
-exports.workersScriptMigrationsRenamedClassesToTerraform = workersScriptMigrationsRenamedClassesToTerraform;
-exports.workersScriptMigrationsRenamedClassesToHclTerraform = workersScriptMigrationsRenamedClassesToHclTerraform;
-exports.workersScriptMigrationsStepsRenamedClassesToTerraform = workersScriptMigrationsStepsRenamedClassesToTerraform;
-exports.workersScriptMigrationsStepsRenamedClassesToHclTerraform = workersScriptMigrationsStepsRenamedClassesToHclTerraform;
-exports.workersScriptMigrationsStepsTransferredClassesToTerraform = workersScriptMigrationsStepsTransferredClassesToTerraform;
-exports.workersScriptMigrationsStepsTransferredClassesToHclTerraform = workersScriptMigrationsStepsTransferredClassesToHclTerraform;
-exports.workersScriptMigrationsStepsToTerraform = workersScriptMigrationsStepsToTerraform;
-exports.workersScriptMigrationsStepsToHclTerraform = workersScriptMigrationsStepsToHclTerraform;
-exports.workersScriptMigrationsTransferredClassesToTerraform = workersScriptMigrationsTransferredClassesToTerraform;
-exports.workersScriptMigrationsTransferredClassesToHclTerraform = workersScriptMigrationsTransferredClassesToHclTerraform;
-exports.workersScriptMigrationsToTerraform = workersScriptMigrationsToTerraform;
-exports.workersScriptMigrationsToHclTerraform = workersScriptMigrationsToHclTerraform;
-exports.workersScriptNamedHandlersToTerraform = workersScriptNamedHandlersToTerraform;
-exports.workersScriptNamedHandlersToHclTerraform = workersScriptNamedHandlersToHclTerraform;
-exports.workersScriptObservabilityLogsToTerraform = workersScriptObservabilityLogsToTerraform;
-exports.workersScriptObservabilityLogsToHclTerraform = workersScriptObservabilityLogsToHclTerraform;
-exports.workersScriptObservabilityTracesToTerraform = workersScriptObservabilityTracesToTerraform;
-exports.workersScriptObservabilityTracesToHclTerraform = workersScriptObservabilityTracesToHclTerraform;
-exports.workersScriptObservabilityToTerraform = workersScriptObservabilityToTerraform;
-exports.workersScriptObservabilityToHclTerraform = workersScriptObservabilityToHclTerraform;
-exports.workersScriptPlacementTargetToTerraform = workersScriptPlacementTargetToTerraform;
-exports.workersScriptPlacementTargetToHclTerraform = workersScriptPlacementTargetToHclTerraform;
-exports.workersScriptPlacementToTerraform = workersScriptPlacementToTerraform;
-exports.workersScriptPlacementToHclTerraform = workersScriptPlacementToHclTerraform;
-exports.workersScriptTailConsumersToTerraform = workersScriptTailConsumersToTerraform;
-exports.workersScriptTailConsumersToHclTerraform = workersScriptTailConsumersToHclTerraform;
-var cdktf = require("cdktf");
-function workersScriptAnnotationsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function workersScriptAnnotationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -73,14 +13,14 @@ function workersScriptAnnotationsToTerraform(struct) {
         workers_tag: cdktf.stringToTerraform(struct.workersTag),
     };
 }
-function workersScriptAnnotationsToHclTerraform(struct) {
+export function workersScriptAnnotationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         workers_message: {
             value: cdktf.stringToHclTerraform(struct.workersMessage),
             isBlock: false,
@@ -95,114 +35,88 @@ function workersScriptAnnotationsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptAnnotationsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptAnnotationsOutputReference, _super);
+export class WorkersScriptAnnotationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptAnnotationsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._workersMessage !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.workersMessage = this._workersMessage;
-            }
-            if (this._workersTag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.workersTag = this._workersTag;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._workersMessage = undefined;
-                this._workersTag = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._workersMessage = value.workersMessage;
-                this._workersTag = value.workersTag;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "workersMessage", {
-        get: function () {
-            return this.getStringAttribute('workers_message');
-        },
-        set: function (value) {
-            this._workersMessage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAnnotationsOutputReference.prototype.resetWorkersMessage = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._workersMessage !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.workersMessage = this._workersMessage;
+        }
+        if (this._workersTag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.workersTag = this._workersTag;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._workersMessage = undefined;
+            this._workersTag = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._workersMessage = value.workersMessage;
+            this._workersTag = value.workersTag;
+        }
+    }
+    // workers_message - computed: true, optional: true, required: false
+    _workersMessage;
+    get workersMessage() {
+        return this.getStringAttribute('workers_message');
+    }
+    set workersMessage(value) {
+        this._workersMessage = value;
+    }
+    resetWorkersMessage() {
         this._workersMessage = undefined;
-    };
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "workersMessageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workersMessage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "workersTag", {
-        get: function () {
-            return this.getStringAttribute('workers_tag');
-        },
-        set: function (value) {
-            this._workersTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAnnotationsOutputReference.prototype.resetWorkersTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workersMessageInput() {
+        return this._workersMessage;
+    }
+    // workers_tag - computed: true, optional: true, required: false
+    _workersTag;
+    get workersTag() {
+        return this.getStringAttribute('workers_tag');
+    }
+    set workersTag(value) {
+        this._workersTag = value;
+    }
+    resetWorkersTag() {
         this._workersTag = undefined;
-    };
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "workersTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workersTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAnnotationsOutputReference.prototype, "workersTriggeredBy", {
-        // workers_triggered_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('workers_triggered_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptAnnotationsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptAnnotationsOutputReference = WorkersScriptAnnotationsOutputReference;
-function workersScriptAssetsConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workersTagInput() {
+        return this._workersTag;
+    }
+    // workers_triggered_by - computed: true, optional: false, required: false
+    get workersTriggeredBy() {
+        return this.getStringAttribute('workers_triggered_by');
+    }
+}
+export function workersScriptAssetsConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -218,14 +132,14 @@ function workersScriptAssetsConfigToTerraform(struct) {
         serve_directly: cdktf.booleanToTerraform(struct.serveDirectly),
     };
 }
-function workersScriptAssetsConfigToHclTerraform(struct) {
+export function workersScriptAssetsConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         headers: {
             value: cdktf.stringToHclTerraform(struct.headers),
             isBlock: false,
@@ -264,214 +178,168 @@ function workersScriptAssetsConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptAssetsConfigOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptAssetsConfigOutputReference, _super);
+export class WorkersScriptAssetsConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptAssetsConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._headers !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headers = this._headers;
-            }
-            if (this._htmlHandling !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.htmlHandling = this._htmlHandling;
-            }
-            if (this._notFoundHandling !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.notFoundHandling = this._notFoundHandling;
-            }
-            if (this._redirects !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.redirects = this._redirects;
-            }
-            if (this._runWorkerFirst !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.runWorkerFirst = this._runWorkerFirst;
-            }
-            if (this._serveDirectly !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serveDirectly = this._serveDirectly;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._headers = undefined;
-                this._htmlHandling = undefined;
-                this._notFoundHandling = undefined;
-                this._redirects = undefined;
-                this._runWorkerFirst = undefined;
-                this._serveDirectly = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._headers = value.headers;
-                this._htmlHandling = value.htmlHandling;
-                this._notFoundHandling = value.notFoundHandling;
-                this._redirects = value.redirects;
-                this._runWorkerFirst = value.runWorkerFirst;
-                this._serveDirectly = value.serveDirectly;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "headers", {
-        get: function () {
-            return this.getStringAttribute('headers');
-        },
-        set: function (value) {
-            this._headers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetHeaders = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._headers !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headers = this._headers;
+        }
+        if (this._htmlHandling !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.htmlHandling = this._htmlHandling;
+        }
+        if (this._notFoundHandling !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.notFoundHandling = this._notFoundHandling;
+        }
+        if (this._redirects !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.redirects = this._redirects;
+        }
+        if (this._runWorkerFirst !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.runWorkerFirst = this._runWorkerFirst;
+        }
+        if (this._serveDirectly !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serveDirectly = this._serveDirectly;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._headers = undefined;
+            this._htmlHandling = undefined;
+            this._notFoundHandling = undefined;
+            this._redirects = undefined;
+            this._runWorkerFirst = undefined;
+            this._serveDirectly = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._headers = value.headers;
+            this._htmlHandling = value.htmlHandling;
+            this._notFoundHandling = value.notFoundHandling;
+            this._redirects = value.redirects;
+            this._runWorkerFirst = value.runWorkerFirst;
+            this._serveDirectly = value.serveDirectly;
+        }
+    }
+    // headers - computed: false, optional: true, required: false
+    _headers;
+    get headers() {
+        return this.getStringAttribute('headers');
+    }
+    set headers(value) {
+        this._headers = value;
+    }
+    resetHeaders() {
         this._headers = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "headersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "htmlHandling", {
-        get: function () {
-            return this.getStringAttribute('html_handling');
-        },
-        set: function (value) {
-            this._htmlHandling = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetHtmlHandling = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headersInput() {
+        return this._headers;
+    }
+    // html_handling - computed: false, optional: true, required: false
+    _htmlHandling;
+    get htmlHandling() {
+        return this.getStringAttribute('html_handling');
+    }
+    set htmlHandling(value) {
+        this._htmlHandling = value;
+    }
+    resetHtmlHandling() {
         this._htmlHandling = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "htmlHandlingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._htmlHandling;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "notFoundHandling", {
-        get: function () {
-            return this.getStringAttribute('not_found_handling');
-        },
-        set: function (value) {
-            this._notFoundHandling = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetNotFoundHandling = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get htmlHandlingInput() {
+        return this._htmlHandling;
+    }
+    // not_found_handling - computed: false, optional: true, required: false
+    _notFoundHandling;
+    get notFoundHandling() {
+        return this.getStringAttribute('not_found_handling');
+    }
+    set notFoundHandling(value) {
+        this._notFoundHandling = value;
+    }
+    resetNotFoundHandling() {
         this._notFoundHandling = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "notFoundHandlingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notFoundHandling;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "redirects", {
-        get: function () {
-            return this.getStringAttribute('redirects');
-        },
-        set: function (value) {
-            this._redirects = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetRedirects = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notFoundHandlingInput() {
+        return this._notFoundHandling;
+    }
+    // redirects - computed: false, optional: true, required: false
+    _redirects;
+    get redirects() {
+        return this.getStringAttribute('redirects');
+    }
+    set redirects(value) {
+        this._redirects = value;
+    }
+    resetRedirects() {
         this._redirects = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "redirectsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._redirects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "runWorkerFirst", {
-        get: function () {
-            return this.getAnyMapAttribute('run_worker_first');
-        },
-        set: function (value) {
-            this._runWorkerFirst = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetRunWorkerFirst = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get redirectsInput() {
+        return this._redirects;
+    }
+    // run_worker_first - computed: false, optional: true, required: false
+    _runWorkerFirst;
+    get runWorkerFirst() {
+        return this.getAnyMapAttribute('run_worker_first');
+    }
+    set runWorkerFirst(value) {
+        this._runWorkerFirst = value;
+    }
+    resetRunWorkerFirst() {
         this._runWorkerFirst = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "runWorkerFirstInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._runWorkerFirst;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "serveDirectly", {
-        get: function () {
-            return this.getBooleanAttribute('serve_directly');
-        },
-        set: function (value) {
-            this._serveDirectly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsConfigOutputReference.prototype.resetServeDirectly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get runWorkerFirstInput() {
+        return this._runWorkerFirst;
+    }
+    // serve_directly - computed: false, optional: true, required: false
+    _serveDirectly;
+    get serveDirectly() {
+        return this.getBooleanAttribute('serve_directly');
+    }
+    set serveDirectly(value) {
+        this._serveDirectly = value;
+    }
+    resetServeDirectly() {
         this._serveDirectly = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsConfigOutputReference.prototype, "serveDirectlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serveDirectly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptAssetsConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptAssetsConfigOutputReference = WorkersScriptAssetsConfigOutputReference;
-function workersScriptAssetsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serveDirectlyInput() {
+        return this._serveDirectly;
+    }
+}
+export function workersScriptAssetsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -484,14 +352,14 @@ function workersScriptAssetsToTerraform(struct) {
         jwt: cdktf.stringToTerraform(struct.jwt),
     };
 }
-function workersScriptAssetsToHclTerraform(struct) {
+export function workersScriptAssetsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         config: {
             value: workersScriptAssetsConfigToHclTerraform(struct.config),
             isBlock: true,
@@ -512,144 +380,109 @@ function workersScriptAssetsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptAssetsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptAssetsOutputReference, _super);
+export class WorkersScriptAssetsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptAssetsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // config - computed: false, optional: true, required: false
-        _this._config = new WorkersScriptAssetsConfigOutputReference(_this, "config");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._config) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.config = (_b = this._config) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._directory !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.directory = this._directory;
-            }
-            if (this._jwt !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.jwt = this._jwt;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._config.internalValue = undefined;
-                this._directory = undefined;
-                this._jwt = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._config.internalValue = value.config;
-                this._directory = value.directory;
-                this._jwt = value.jwt;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "assetManifestSha256", {
-        // asset_manifest_sha256 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('asset_manifest_sha256');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "config", {
-        get: function () {
-            return this._config;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsOutputReference.prototype.putConfig = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._config?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.config = this._config?.internalValue;
+        }
+        if (this._directory !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.directory = this._directory;
+        }
+        if (this._jwt !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.jwt = this._jwt;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._config.internalValue = undefined;
+            this._directory = undefined;
+            this._jwt = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._config.internalValue = value.config;
+            this._directory = value.directory;
+            this._jwt = value.jwt;
+        }
+    }
+    // asset_manifest_sha256 - computed: true, optional: false, required: false
+    get assetManifestSha256() {
+        return this.getStringAttribute('asset_manifest_sha256');
+    }
+    // config - computed: false, optional: true, required: false
+    _config = new WorkersScriptAssetsConfigOutputReference(this, "config");
+    get config() {
+        return this._config;
+    }
+    putConfig(value) {
         this._config.internalValue = value;
-    };
-    WorkersScriptAssetsOutputReference.prototype.resetConfig = function () {
+    }
+    resetConfig() {
         this._config.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "configInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._config.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "directory", {
-        get: function () {
-            return this.getStringAttribute('directory');
-        },
-        set: function (value) {
-            this._directory = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsOutputReference.prototype.resetDirectory = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configInput() {
+        return this._config.internalValue;
+    }
+    // directory - computed: false, optional: true, required: false
+    _directory;
+    get directory() {
+        return this.getStringAttribute('directory');
+    }
+    set directory(value) {
+        this._directory = value;
+    }
+    resetDirectory() {
         this._directory = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "directoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._directory;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "jwt", {
-        get: function () {
-            return this.getStringAttribute('jwt');
-        },
-        set: function (value) {
-            this._jwt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptAssetsOutputReference.prototype.resetJwt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directoryInput() {
+        return this._directory;
+    }
+    // jwt - computed: false, optional: true, required: false
+    _jwt;
+    get jwt() {
+        return this.getStringAttribute('jwt');
+    }
+    set jwt(value) {
+        this._jwt = value;
+    }
+    resetJwt() {
         this._jwt = undefined;
-    };
-    Object.defineProperty(WorkersScriptAssetsOutputReference.prototype, "jwtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jwt;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptAssetsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptAssetsOutputReference = WorkersScriptAssetsOutputReference;
-function workersScriptBindingsOutboundWorkerToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jwtInput() {
+        return this._jwt;
+    }
+}
+export function workersScriptBindingsOutboundWorkerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -661,14 +494,14 @@ function workersScriptBindingsOutboundWorkerToTerraform(struct) {
         service: cdktf.stringToTerraform(struct.service),
     };
 }
-function workersScriptBindingsOutboundWorkerToHclTerraform(struct) {
+export function workersScriptBindingsOutboundWorkerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         environment: {
             value: cdktf.stringToHclTerraform(struct.environment),
             isBlock: false,
@@ -683,106 +516,84 @@ function workersScriptBindingsOutboundWorkerToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptBindingsOutboundWorkerOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptBindingsOutboundWorkerOutputReference, _super);
+export class WorkersScriptBindingsOutboundWorkerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptBindingsOutboundWorkerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptBindingsOutboundWorkerOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._environment !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.environment = this._environment;
-            }
-            if (this._service !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.service = this._service;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._environment = undefined;
-                this._service = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._environment = value.environment;
-                this._service = value.service;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutboundWorkerOutputReference.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutboundWorkerOutputReference.prototype.resetEnvironment = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._environment !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.environment = this._environment;
+        }
+        if (this._service !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.service = this._service;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._environment = undefined;
+            this._service = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._environment = value.environment;
+            this._service = value.service;
+        }
+    }
+    // environment - computed: true, optional: true, required: false
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    resetEnvironment() {
         this._environment = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutboundWorkerOutputReference.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutboundWorkerOutputReference.prototype, "service", {
-        get: function () {
-            return this.getStringAttribute('service');
-        },
-        set: function (value) {
-            this._service = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutboundWorkerOutputReference.prototype.resetService = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // service - computed: true, optional: true, required: false
+    _service;
+    get service() {
+        return this.getStringAttribute('service');
+    }
+    set service(value) {
+        this._service = value;
+    }
+    resetService() {
         this._service = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutboundWorkerOutputReference.prototype, "serviceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._service;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptBindingsOutboundWorkerOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptBindingsOutboundWorkerOutputReference = WorkersScriptBindingsOutboundWorkerOutputReference;
-function workersScriptBindingsOutboundToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceInput() {
+        return this._service;
+    }
+}
+export function workersScriptBindingsOutboundToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -794,14 +605,14 @@ function workersScriptBindingsOutboundToTerraform(struct) {
         worker: workersScriptBindingsOutboundWorkerToTerraform(struct.worker),
     };
 }
-function workersScriptBindingsOutboundToHclTerraform(struct) {
+export function workersScriptBindingsOutboundToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         params: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.params),
             isBlock: false,
@@ -816,109 +627,84 @@ function workersScriptBindingsOutboundToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptBindingsOutboundOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptBindingsOutboundOutputReference, _super);
+export class WorkersScriptBindingsOutboundOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptBindingsOutboundOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // worker - computed: true, optional: true, required: false
-        _this._worker = new WorkersScriptBindingsOutboundWorkerOutputReference(_this, "worker");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptBindingsOutboundOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._params !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.params = this._params;
-            }
-            if (((_a = this._worker) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.worker = (_b = this._worker) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._params = undefined;
-                this._worker.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._params = value.params;
-                this._worker.internalValue = value.worker;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutboundOutputReference.prototype, "params", {
-        get: function () {
-            return this.getListAttribute('params');
-        },
-        set: function (value) {
-            this._params = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutboundOutputReference.prototype.resetParams = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._params !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.params = this._params;
+        }
+        if (this._worker?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.worker = this._worker?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._params = undefined;
+            this._worker.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._params = value.params;
+            this._worker.internalValue = value.worker;
+        }
+    }
+    // params - computed: true, optional: true, required: false
+    _params;
+    get params() {
+        return this.getListAttribute('params');
+    }
+    set params(value) {
+        this._params = value;
+    }
+    resetParams() {
         this._params = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutboundOutputReference.prototype, "paramsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._params;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutboundOutputReference.prototype, "worker", {
-        get: function () {
-            return this._worker;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutboundOutputReference.prototype.putWorker = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get paramsInput() {
+        return this._params;
+    }
+    // worker - computed: true, optional: true, required: false
+    _worker = new WorkersScriptBindingsOutboundWorkerOutputReference(this, "worker");
+    get worker() {
+        return this._worker;
+    }
+    putWorker(value) {
         this._worker.internalValue = value;
-    };
-    WorkersScriptBindingsOutboundOutputReference.prototype.resetWorker = function () {
+    }
+    resetWorker() {
         this._worker.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutboundOutputReference.prototype, "workerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._worker.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptBindingsOutboundOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptBindingsOutboundOutputReference = WorkersScriptBindingsOutboundOutputReference;
-function workersScriptBindingsSimpleToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workerInput() {
+        return this._worker.internalValue;
+    }
+}
+export function workersScriptBindingsSimpleToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -930,14 +716,14 @@ function workersScriptBindingsSimpleToTerraform(struct) {
         period: cdktf.numberToTerraform(struct.period),
     };
 }
-function workersScriptBindingsSimpleToHclTerraform(struct) {
+export function workersScriptBindingsSimpleToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         limit: {
             value: cdktf.numberToHclTerraform(struct.limit),
             isBlock: false,
@@ -952,100 +738,78 @@ function workersScriptBindingsSimpleToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptBindingsSimpleOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptBindingsSimpleOutputReference, _super);
+export class WorkersScriptBindingsSimpleOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptBindingsSimpleOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptBindingsSimpleOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._limit !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.limit = this._limit;
-            }
-            if (this._period !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.period = this._period;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._limit = undefined;
-                this._period = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._limit = value.limit;
-                this._period = value.period;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsSimpleOutputReference.prototype, "limit", {
-        get: function () {
-            return this.getNumberAttribute('limit');
-        },
-        set: function (value) {
-            this._limit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsSimpleOutputReference.prototype, "limitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._limit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsSimpleOutputReference.prototype, "period", {
-        get: function () {
-            return this.getNumberAttribute('period');
-        },
-        set: function (value) {
-            this._period = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsSimpleOutputReference.prototype, "periodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._period;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptBindingsSimpleOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptBindingsSimpleOutputReference = WorkersScriptBindingsSimpleOutputReference;
-function workersScriptBindingsToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._limit !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.limit = this._limit;
+        }
+        if (this._period !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.period = this._period;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._limit = undefined;
+            this._period = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._limit = value.limit;
+            this._period = value.period;
+        }
+    }
+    // limit - computed: true, optional: false, required: true
+    _limit;
+    get limit() {
+        return this.getNumberAttribute('limit');
+    }
+    set limit(value) {
+        this._limit = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get limitInput() {
+        return this._limit;
+    }
+    // period - computed: true, optional: false, required: true
+    _period;
+    get period() {
+        return this.getNumberAttribute('period');
+    }
+    set period(value) {
+        this._period = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get periodInput() {
+        return this._period;
+    }
+}
+export function workersScriptBindingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1097,14 +861,14 @@ function workersScriptBindingsToTerraform(struct) {
         workflow_name: cdktf.stringToTerraform(struct.workflowName),
     };
 }
-function workersScriptBindingsToHclTerraform(struct) {
+export function workersScriptBindingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         algorithm: {
             value: cdktf.stringToHclTerraform(struct.algorithm),
             isBlock: false,
@@ -1359,1210 +1123,943 @@ function workersScriptBindingsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptBindingsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptBindingsOutputReference, _super);
+export class WorkersScriptBindingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptBindingsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // outbound - computed: true, optional: true, required: false
-        _this._outbound = new WorkersScriptBindingsOutboundOutputReference(_this, "outbound");
-        // simple - computed: true, optional: true, required: false
-        _this._simple = new WorkersScriptBindingsSimpleOutputReference(_this, "simple");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._algorithm !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.algorithm = this._algorithm;
-            }
-            if (this._allowedDestinationAddresses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedDestinationAddresses = this._allowedDestinationAddresses;
-            }
-            if (this._allowedSenderAddresses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedSenderAddresses = this._allowedSenderAddresses;
-            }
-            if (this._appId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.appId = this._appId;
-            }
-            if (this._bucketName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bucketName = this._bucketName;
-            }
-            if (this._certificateId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificateId = this._certificateId;
-            }
-            if (this._className !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.className = this._className;
-            }
-            if (this._databaseId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.databaseId = this._databaseId;
-            }
-            if (this._dataset !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dataset = this._dataset;
-            }
-            if (this._destinationAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.destinationAddress = this._destinationAddress;
-            }
-            if (this._dispatchNamespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dispatchNamespace = this._dispatchNamespace;
-            }
-            if (this._entrypoint !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.entrypoint = this._entrypoint;
-            }
-            if (this._environment !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.environment = this._environment;
-            }
-            if (this._format !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.format = this._format;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._indexName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.indexName = this._indexName;
-            }
-            if (this._instanceName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.instanceName = this._instanceName;
-            }
-            if (this._json !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.json = this._json;
-            }
-            if (this._jurisdiction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.jurisdiction = this._jurisdiction;
-            }
-            if (this._keyBase64 !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keyBase64 = this._keyBase64;
-            }
-            if (this._keyJwk !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keyJwk = this._keyJwk;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._namespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespace = this._namespace;
-            }
-            if (this._namespaceId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespaceId = this._namespaceId;
-            }
-            if (this._networkId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networkId = this._networkId;
-            }
-            if (this._oldName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.oldName = this._oldName;
-            }
-            if (((_a = this._outbound) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.outbound = (_b = this._outbound) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._part !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.part = this._part;
-            }
-            if (this._pipeline !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pipeline = this._pipeline;
-            }
-            if (this._queueName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.queueName = this._queueName;
-            }
-            if (this._scriptName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.scriptName = this._scriptName;
-            }
-            if (this._secretName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretName = this._secretName;
-            }
-            if (this._service !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.service = this._service;
-            }
-            if (this._serviceId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serviceId = this._serviceId;
-            }
-            if (((_c = this._simple) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.simple = (_d = this._simple) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._storeId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.storeId = this._storeId;
-            }
-            if (this._text !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.text = this._text;
-            }
-            if (this._tunnelId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tunnelId = this._tunnelId;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._usages !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.usages = this._usages;
-            }
-            if (this._versionId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.versionId = this._versionId;
-            }
-            if (this._workflowName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.workflowName = this._workflowName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._algorithm = undefined;
-                this._allowedDestinationAddresses = undefined;
-                this._allowedSenderAddresses = undefined;
-                this._appId = undefined;
-                this._bucketName = undefined;
-                this._certificateId = undefined;
-                this._className = undefined;
-                this._databaseId = undefined;
-                this._dataset = undefined;
-                this._destinationAddress = undefined;
-                this._dispatchNamespace = undefined;
-                this._entrypoint = undefined;
-                this._environment = undefined;
-                this._format = undefined;
-                this._id = undefined;
-                this._indexName = undefined;
-                this._instanceName = undefined;
-                this._json = undefined;
-                this._jurisdiction = undefined;
-                this._keyBase64 = undefined;
-                this._keyJwk = undefined;
-                this._name = undefined;
-                this._namespace = undefined;
-                this._namespaceId = undefined;
-                this._networkId = undefined;
-                this._oldName = undefined;
-                this._outbound.internalValue = undefined;
-                this._part = undefined;
-                this._pipeline = undefined;
-                this._queueName = undefined;
-                this._scriptName = undefined;
-                this._secretName = undefined;
-                this._service = undefined;
-                this._serviceId = undefined;
-                this._simple.internalValue = undefined;
-                this._storeId = undefined;
-                this._text = undefined;
-                this._tunnelId = undefined;
-                this._type = undefined;
-                this._usages = undefined;
-                this._versionId = undefined;
-                this._workflowName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._algorithm = value.algorithm;
-                this._allowedDestinationAddresses = value.allowedDestinationAddresses;
-                this._allowedSenderAddresses = value.allowedSenderAddresses;
-                this._appId = value.appId;
-                this._bucketName = value.bucketName;
-                this._certificateId = value.certificateId;
-                this._className = value.className;
-                this._databaseId = value.databaseId;
-                this._dataset = value.dataset;
-                this._destinationAddress = value.destinationAddress;
-                this._dispatchNamespace = value.dispatchNamespace;
-                this._entrypoint = value.entrypoint;
-                this._environment = value.environment;
-                this._format = value.format;
-                this._id = value.id;
-                this._indexName = value.indexName;
-                this._instanceName = value.instanceName;
-                this._json = value.json;
-                this._jurisdiction = value.jurisdiction;
-                this._keyBase64 = value.keyBase64;
-                this._keyJwk = value.keyJwk;
-                this._name = value.name;
-                this._namespace = value.namespace;
-                this._namespaceId = value.namespaceId;
-                this._networkId = value.networkId;
-                this._oldName = value.oldName;
-                this._outbound.internalValue = value.outbound;
-                this._part = value.part;
-                this._pipeline = value.pipeline;
-                this._queueName = value.queueName;
-                this._scriptName = value.scriptName;
-                this._secretName = value.secretName;
-                this._service = value.service;
-                this._serviceId = value.serviceId;
-                this._simple.internalValue = value.simple;
-                this._storeId = value.storeId;
-                this._text = value.text;
-                this._tunnelId = value.tunnelId;
-                this._type = value.type;
-                this._usages = value.usages;
-                this._versionId = value.versionId;
-                this._workflowName = value.workflowName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "algorithm", {
-        get: function () {
-            return this.getStringAttribute('algorithm');
-        },
-        set: function (value) {
-            this._algorithm = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetAlgorithm = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._algorithm !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.algorithm = this._algorithm;
+        }
+        if (this._allowedDestinationAddresses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedDestinationAddresses = this._allowedDestinationAddresses;
+        }
+        if (this._allowedSenderAddresses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedSenderAddresses = this._allowedSenderAddresses;
+        }
+        if (this._appId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.appId = this._appId;
+        }
+        if (this._bucketName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bucketName = this._bucketName;
+        }
+        if (this._certificateId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificateId = this._certificateId;
+        }
+        if (this._className !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.className = this._className;
+        }
+        if (this._databaseId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.databaseId = this._databaseId;
+        }
+        if (this._dataset !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dataset = this._dataset;
+        }
+        if (this._destinationAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.destinationAddress = this._destinationAddress;
+        }
+        if (this._dispatchNamespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dispatchNamespace = this._dispatchNamespace;
+        }
+        if (this._entrypoint !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.entrypoint = this._entrypoint;
+        }
+        if (this._environment !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.environment = this._environment;
+        }
+        if (this._format !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.format = this._format;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._indexName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.indexName = this._indexName;
+        }
+        if (this._instanceName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.instanceName = this._instanceName;
+        }
+        if (this._json !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.json = this._json;
+        }
+        if (this._jurisdiction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.jurisdiction = this._jurisdiction;
+        }
+        if (this._keyBase64 !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keyBase64 = this._keyBase64;
+        }
+        if (this._keyJwk !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keyJwk = this._keyJwk;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._namespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespace = this._namespace;
+        }
+        if (this._namespaceId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespaceId = this._namespaceId;
+        }
+        if (this._networkId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networkId = this._networkId;
+        }
+        if (this._oldName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.oldName = this._oldName;
+        }
+        if (this._outbound?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.outbound = this._outbound?.internalValue;
+        }
+        if (this._part !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.part = this._part;
+        }
+        if (this._pipeline !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pipeline = this._pipeline;
+        }
+        if (this._queueName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.queueName = this._queueName;
+        }
+        if (this._scriptName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.scriptName = this._scriptName;
+        }
+        if (this._secretName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretName = this._secretName;
+        }
+        if (this._service !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.service = this._service;
+        }
+        if (this._serviceId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serviceId = this._serviceId;
+        }
+        if (this._simple?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.simple = this._simple?.internalValue;
+        }
+        if (this._storeId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.storeId = this._storeId;
+        }
+        if (this._text !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.text = this._text;
+        }
+        if (this._tunnelId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tunnelId = this._tunnelId;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._usages !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.usages = this._usages;
+        }
+        if (this._versionId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.versionId = this._versionId;
+        }
+        if (this._workflowName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.workflowName = this._workflowName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._algorithm = undefined;
+            this._allowedDestinationAddresses = undefined;
+            this._allowedSenderAddresses = undefined;
+            this._appId = undefined;
+            this._bucketName = undefined;
+            this._certificateId = undefined;
+            this._className = undefined;
+            this._databaseId = undefined;
+            this._dataset = undefined;
+            this._destinationAddress = undefined;
+            this._dispatchNamespace = undefined;
+            this._entrypoint = undefined;
+            this._environment = undefined;
+            this._format = undefined;
+            this._id = undefined;
+            this._indexName = undefined;
+            this._instanceName = undefined;
+            this._json = undefined;
+            this._jurisdiction = undefined;
+            this._keyBase64 = undefined;
+            this._keyJwk = undefined;
+            this._name = undefined;
+            this._namespace = undefined;
+            this._namespaceId = undefined;
+            this._networkId = undefined;
+            this._oldName = undefined;
+            this._outbound.internalValue = undefined;
+            this._part = undefined;
+            this._pipeline = undefined;
+            this._queueName = undefined;
+            this._scriptName = undefined;
+            this._secretName = undefined;
+            this._service = undefined;
+            this._serviceId = undefined;
+            this._simple.internalValue = undefined;
+            this._storeId = undefined;
+            this._text = undefined;
+            this._tunnelId = undefined;
+            this._type = undefined;
+            this._usages = undefined;
+            this._versionId = undefined;
+            this._workflowName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._algorithm = value.algorithm;
+            this._allowedDestinationAddresses = value.allowedDestinationAddresses;
+            this._allowedSenderAddresses = value.allowedSenderAddresses;
+            this._appId = value.appId;
+            this._bucketName = value.bucketName;
+            this._certificateId = value.certificateId;
+            this._className = value.className;
+            this._databaseId = value.databaseId;
+            this._dataset = value.dataset;
+            this._destinationAddress = value.destinationAddress;
+            this._dispatchNamespace = value.dispatchNamespace;
+            this._entrypoint = value.entrypoint;
+            this._environment = value.environment;
+            this._format = value.format;
+            this._id = value.id;
+            this._indexName = value.indexName;
+            this._instanceName = value.instanceName;
+            this._json = value.json;
+            this._jurisdiction = value.jurisdiction;
+            this._keyBase64 = value.keyBase64;
+            this._keyJwk = value.keyJwk;
+            this._name = value.name;
+            this._namespace = value.namespace;
+            this._namespaceId = value.namespaceId;
+            this._networkId = value.networkId;
+            this._oldName = value.oldName;
+            this._outbound.internalValue = value.outbound;
+            this._part = value.part;
+            this._pipeline = value.pipeline;
+            this._queueName = value.queueName;
+            this._scriptName = value.scriptName;
+            this._secretName = value.secretName;
+            this._service = value.service;
+            this._serviceId = value.serviceId;
+            this._simple.internalValue = value.simple;
+            this._storeId = value.storeId;
+            this._text = value.text;
+            this._tunnelId = value.tunnelId;
+            this._type = value.type;
+            this._usages = value.usages;
+            this._versionId = value.versionId;
+            this._workflowName = value.workflowName;
+        }
+    }
+    // algorithm - computed: true, optional: true, required: false
+    _algorithm;
+    get algorithm() {
+        return this.getStringAttribute('algorithm');
+    }
+    set algorithm(value) {
+        this._algorithm = value;
+    }
+    resetAlgorithm() {
         this._algorithm = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "algorithmInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._algorithm;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "allowedDestinationAddresses", {
-        get: function () {
-            return this.getListAttribute('allowed_destination_addresses');
-        },
-        set: function (value) {
-            this._allowedDestinationAddresses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetAllowedDestinationAddresses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get algorithmInput() {
+        return this._algorithm;
+    }
+    // allowed_destination_addresses - computed: true, optional: true, required: false
+    _allowedDestinationAddresses;
+    get allowedDestinationAddresses() {
+        return this.getListAttribute('allowed_destination_addresses');
+    }
+    set allowedDestinationAddresses(value) {
+        this._allowedDestinationAddresses = value;
+    }
+    resetAllowedDestinationAddresses() {
         this._allowedDestinationAddresses = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "allowedDestinationAddressesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedDestinationAddresses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "allowedSenderAddresses", {
-        get: function () {
-            return this.getListAttribute('allowed_sender_addresses');
-        },
-        set: function (value) {
-            this._allowedSenderAddresses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetAllowedSenderAddresses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedDestinationAddressesInput() {
+        return this._allowedDestinationAddresses;
+    }
+    // allowed_sender_addresses - computed: true, optional: true, required: false
+    _allowedSenderAddresses;
+    get allowedSenderAddresses() {
+        return this.getListAttribute('allowed_sender_addresses');
+    }
+    set allowedSenderAddresses(value) {
+        this._allowedSenderAddresses = value;
+    }
+    resetAllowedSenderAddresses() {
         this._allowedSenderAddresses = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "allowedSenderAddressesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedSenderAddresses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "appId", {
-        get: function () {
-            return this.getStringAttribute('app_id');
-        },
-        set: function (value) {
-            this._appId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetAppId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedSenderAddressesInput() {
+        return this._allowedSenderAddresses;
+    }
+    // app_id - computed: true, optional: true, required: false
+    _appId;
+    get appId() {
+        return this.getStringAttribute('app_id');
+    }
+    set appId(value) {
+        this._appId = value;
+    }
+    resetAppId() {
         this._appId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "appIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._appId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetBucketName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get appIdInput() {
+        return this._appId;
+    }
+    // bucket_name - computed: true, optional: true, required: false
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    resetBucketName() {
         this._bucketName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "certificateId", {
-        get: function () {
-            return this.getStringAttribute('certificate_id');
-        },
-        set: function (value) {
-            this._certificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetCertificateId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // certificate_id - computed: true, optional: true, required: false
+    _certificateId;
+    get certificateId() {
+        return this.getStringAttribute('certificate_id');
+    }
+    set certificateId(value) {
+        this._certificateId = value;
+    }
+    resetCertificateId() {
         this._certificateId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "certificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "className", {
-        get: function () {
-            return this.getStringAttribute('class_name');
-        },
-        set: function (value) {
-            this._className = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetClassName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateIdInput() {
+        return this._certificateId;
+    }
+    // class_name - computed: true, optional: true, required: false
+    _className;
+    get className() {
+        return this.getStringAttribute('class_name');
+    }
+    set className(value) {
+        this._className = value;
+    }
+    resetClassName() {
         this._className = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "classNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._className;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "databaseId", {
-        get: function () {
-            return this.getStringAttribute('database_id');
-        },
-        set: function (value) {
-            this._databaseId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetDatabaseId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get classNameInput() {
+        return this._className;
+    }
+    // database_id - computed: true, optional: true, required: false
+    _databaseId;
+    get databaseId() {
+        return this.getStringAttribute('database_id');
+    }
+    set databaseId(value) {
+        this._databaseId = value;
+    }
+    resetDatabaseId() {
         this._databaseId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "databaseIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._databaseId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "dataset", {
-        get: function () {
-            return this.getStringAttribute('dataset');
-        },
-        set: function (value) {
-            this._dataset = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetDataset = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseIdInput() {
+        return this._databaseId;
+    }
+    // dataset - computed: true, optional: true, required: false
+    _dataset;
+    get dataset() {
+        return this.getStringAttribute('dataset');
+    }
+    set dataset(value) {
+        this._dataset = value;
+    }
+    resetDataset() {
         this._dataset = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "datasetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dataset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "destinationAddress", {
-        get: function () {
-            return this.getStringAttribute('destination_address');
-        },
-        set: function (value) {
-            this._destinationAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetDestinationAddress = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get datasetInput() {
+        return this._dataset;
+    }
+    // destination_address - computed: true, optional: true, required: false
+    _destinationAddress;
+    get destinationAddress() {
+        return this.getStringAttribute('destination_address');
+    }
+    set destinationAddress(value) {
+        this._destinationAddress = value;
+    }
+    resetDestinationAddress() {
         this._destinationAddress = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "destinationAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinationAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "dispatchNamespace", {
-        get: function () {
-            return this.getStringAttribute('dispatch_namespace');
-        },
-        set: function (value) {
-            this._dispatchNamespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetDispatchNamespace = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationAddressInput() {
+        return this._destinationAddress;
+    }
+    // dispatch_namespace - computed: true, optional: true, required: false
+    _dispatchNamespace;
+    get dispatchNamespace() {
+        return this.getStringAttribute('dispatch_namespace');
+    }
+    set dispatchNamespace(value) {
+        this._dispatchNamespace = value;
+    }
+    resetDispatchNamespace() {
         this._dispatchNamespace = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "dispatchNamespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dispatchNamespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "entrypoint", {
-        get: function () {
-            return this.getStringAttribute('entrypoint');
-        },
-        set: function (value) {
-            this._entrypoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetEntrypoint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dispatchNamespaceInput() {
+        return this._dispatchNamespace;
+    }
+    // entrypoint - computed: true, optional: true, required: false
+    _entrypoint;
+    get entrypoint() {
+        return this.getStringAttribute('entrypoint');
+    }
+    set entrypoint(value) {
+        this._entrypoint = value;
+    }
+    resetEntrypoint() {
         this._entrypoint = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "entrypointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entrypoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetEnvironment = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get entrypointInput() {
+        return this._entrypoint;
+    }
+    // environment - computed: true, optional: true, required: false
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    resetEnvironment() {
         this._environment = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "format", {
-        get: function () {
-            return this.getStringAttribute('format');
-        },
-        set: function (value) {
-            this._format = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetFormat = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // format - computed: true, optional: true, required: false
+    _format;
+    get format() {
+        return this.getStringAttribute('format');
+    }
+    set format(value) {
+        this._format = value;
+    }
+    resetFormat() {
         this._format = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "formatInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._format;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get formatInput() {
+        return this._format;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "indexName", {
-        get: function () {
-            return this.getStringAttribute('index_name');
-        },
-        set: function (value) {
-            this._indexName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetIndexName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // index_name - computed: true, optional: true, required: false
+    _indexName;
+    get indexName() {
+        return this.getStringAttribute('index_name');
+    }
+    set indexName(value) {
+        this._indexName = value;
+    }
+    resetIndexName() {
         this._indexName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "indexNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._indexName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "instanceName", {
-        get: function () {
-            return this.getStringAttribute('instance_name');
-        },
-        set: function (value) {
-            this._instanceName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetInstanceName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get indexNameInput() {
+        return this._indexName;
+    }
+    // instance_name - computed: true, optional: true, required: false
+    _instanceName;
+    get instanceName() {
+        return this.getStringAttribute('instance_name');
+    }
+    set instanceName(value) {
+        this._instanceName = value;
+    }
+    resetInstanceName() {
         this._instanceName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "instanceNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._instanceName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "json", {
-        get: function () {
-            return this.getStringAttribute('json');
-        },
-        set: function (value) {
-            this._json = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetJson = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get instanceNameInput() {
+        return this._instanceName;
+    }
+    // json - computed: true, optional: true, required: false
+    _json;
+    get json() {
+        return this.getStringAttribute('json');
+    }
+    set json(value) {
+        this._json = value;
+    }
+    resetJson() {
         this._json = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "jsonInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._json;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jsonInput() {
+        return this._json;
+    }
+    // jurisdiction - computed: true, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "keyBase64", {
-        get: function () {
-            return this.getStringAttribute('key_base64');
-        },
-        set: function (value) {
-            this._keyBase64 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetKeyBase64 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
+    // key_base64 - computed: true, optional: true, required: false
+    _keyBase64;
+    get keyBase64() {
+        return this.getStringAttribute('key_base64');
+    }
+    set keyBase64(value) {
+        this._keyBase64 = value;
+    }
+    resetKeyBase64() {
         this._keyBase64 = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "keyBase64Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyBase64;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "keyJwk", {
-        get: function () {
-            return this.getStringAttribute('key_jwk');
-        },
-        set: function (value) {
-            this._keyJwk = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetKeyJwk = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyBase64Input() {
+        return this._keyBase64;
+    }
+    // key_jwk - computed: true, optional: true, required: false
+    _keyJwk;
+    get keyJwk() {
+        return this.getStringAttribute('key_jwk');
+    }
+    set keyJwk(value) {
+        this._keyJwk = value;
+    }
+    resetKeyJwk() {
         this._keyJwk = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "keyJwkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyJwk;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "namespace", {
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        set: function (value) {
-            this._namespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetNamespace = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyJwkInput() {
+        return this._keyJwk;
+    }
+    // name - computed: true, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // namespace - computed: true, optional: true, required: false
+    _namespace;
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    set namespace(value) {
+        this._namespace = value;
+    }
+    resetNamespace() {
         this._namespace = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "namespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "namespaceId", {
-        get: function () {
-            return this.getStringAttribute('namespace_id');
-        },
-        set: function (value) {
-            this._namespaceId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetNamespaceId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceInput() {
+        return this._namespace;
+    }
+    // namespace_id - computed: true, optional: true, required: false
+    _namespaceId;
+    get namespaceId() {
+        return this.getStringAttribute('namespace_id');
+    }
+    set namespaceId(value) {
+        this._namespaceId = value;
+    }
+    resetNamespaceId() {
         this._namespaceId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "namespaceIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespaceId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "networkId", {
-        get: function () {
-            return this.getStringAttribute('network_id');
-        },
-        set: function (value) {
-            this._networkId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetNetworkId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceIdInput() {
+        return this._namespaceId;
+    }
+    // network_id - computed: true, optional: true, required: false
+    _networkId;
+    get networkId() {
+        return this.getStringAttribute('network_id');
+    }
+    set networkId(value) {
+        this._networkId = value;
+    }
+    resetNetworkId() {
         this._networkId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "networkIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networkId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "oldName", {
-        get: function () {
-            return this.getStringAttribute('old_name');
-        },
-        set: function (value) {
-            this._oldName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetOldName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkIdInput() {
+        return this._networkId;
+    }
+    // old_name - computed: true, optional: true, required: false
+    _oldName;
+    get oldName() {
+        return this.getStringAttribute('old_name');
+    }
+    set oldName(value) {
+        this._oldName = value;
+    }
+    resetOldName() {
         this._oldName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "oldNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oldName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "outbound", {
-        get: function () {
-            return this._outbound;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.putOutbound = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oldNameInput() {
+        return this._oldName;
+    }
+    // outbound - computed: true, optional: true, required: false
+    _outbound = new WorkersScriptBindingsOutboundOutputReference(this, "outbound");
+    get outbound() {
+        return this._outbound;
+    }
+    putOutbound(value) {
         this._outbound.internalValue = value;
-    };
-    WorkersScriptBindingsOutputReference.prototype.resetOutbound = function () {
+    }
+    resetOutbound() {
         this._outbound.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "outboundInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._outbound.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "part", {
-        get: function () {
-            return this.getStringAttribute('part');
-        },
-        set: function (value) {
-            this._part = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetPart = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get outboundInput() {
+        return this._outbound.internalValue;
+    }
+    // part - computed: true, optional: true, required: false
+    _part;
+    get part() {
+        return this.getStringAttribute('part');
+    }
+    set part(value) {
+        this._part = value;
+    }
+    resetPart() {
         this._part = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "partInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._part;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "pipeline", {
-        get: function () {
-            return this.getStringAttribute('pipeline');
-        },
-        set: function (value) {
-            this._pipeline = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetPipeline = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get partInput() {
+        return this._part;
+    }
+    // pipeline - computed: true, optional: true, required: false
+    _pipeline;
+    get pipeline() {
+        return this.getStringAttribute('pipeline');
+    }
+    set pipeline(value) {
+        this._pipeline = value;
+    }
+    resetPipeline() {
         this._pipeline = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "pipelineInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pipeline;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "queueName", {
-        get: function () {
-            return this.getStringAttribute('queue_name');
-        },
-        set: function (value) {
-            this._queueName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetQueueName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pipelineInput() {
+        return this._pipeline;
+    }
+    // queue_name - computed: true, optional: true, required: false
+    _queueName;
+    get queueName() {
+        return this.getStringAttribute('queue_name');
+    }
+    set queueName(value) {
+        this._queueName = value;
+    }
+    resetQueueName() {
         this._queueName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "queueNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "scriptName", {
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        set: function (value) {
-            this._scriptName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetScriptName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueNameInput() {
+        return this._queueName;
+    }
+    // script_name - computed: true, optional: true, required: false
+    _scriptName;
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    set scriptName(value) {
+        this._scriptName = value;
+    }
+    resetScriptName() {
         this._scriptName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "scriptNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scriptName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "secretName", {
-        get: function () {
-            return this.getStringAttribute('secret_name');
-        },
-        set: function (value) {
-            this._secretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetSecretName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scriptNameInput() {
+        return this._scriptName;
+    }
+    // secret_name - computed: true, optional: true, required: false
+    _secretName;
+    get secretName() {
+        return this.getStringAttribute('secret_name');
+    }
+    set secretName(value) {
+        this._secretName = value;
+    }
+    resetSecretName() {
         this._secretName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "secretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "service", {
-        get: function () {
-            return this.getStringAttribute('service');
-        },
-        set: function (value) {
-            this._service = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetService = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretNameInput() {
+        return this._secretName;
+    }
+    // service - computed: true, optional: true, required: false
+    _service;
+    get service() {
+        return this.getStringAttribute('service');
+    }
+    set service(value) {
+        this._service = value;
+    }
+    resetService() {
         this._service = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "serviceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._service;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "serviceId", {
-        get: function () {
-            return this.getStringAttribute('service_id');
-        },
-        set: function (value) {
-            this._serviceId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetServiceId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceInput() {
+        return this._service;
+    }
+    // service_id - computed: true, optional: true, required: false
+    _serviceId;
+    get serviceId() {
+        return this.getStringAttribute('service_id');
+    }
+    set serviceId(value) {
+        this._serviceId = value;
+    }
+    resetServiceId() {
         this._serviceId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "serviceIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "simple", {
-        get: function () {
-            return this._simple;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.putSimple = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceIdInput() {
+        return this._serviceId;
+    }
+    // simple - computed: true, optional: true, required: false
+    _simple = new WorkersScriptBindingsSimpleOutputReference(this, "simple");
+    get simple() {
+        return this._simple;
+    }
+    putSimple(value) {
         this._simple.internalValue = value;
-    };
-    WorkersScriptBindingsOutputReference.prototype.resetSimple = function () {
+    }
+    resetSimple() {
         this._simple.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "simpleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._simple.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "storeId", {
-        get: function () {
-            return this.getStringAttribute('store_id');
-        },
-        set: function (value) {
-            this._storeId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetStoreId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get simpleInput() {
+        return this._simple.internalValue;
+    }
+    // store_id - computed: true, optional: true, required: false
+    _storeId;
+    get storeId() {
+        return this.getStringAttribute('store_id');
+    }
+    set storeId(value) {
+        this._storeId = value;
+    }
+    resetStoreId() {
         this._storeId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "storeIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storeId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "text", {
-        get: function () {
-            return this.getStringAttribute('text');
-        },
-        set: function (value) {
-            this._text = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetText = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get storeIdInput() {
+        return this._storeId;
+    }
+    // text - computed: true, optional: true, required: false
+    _text;
+    get text() {
+        return this.getStringAttribute('text');
+    }
+    set text(value) {
+        this._text = value;
+    }
+    resetText() {
         this._text = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "textInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._text;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "tunnelId", {
-        get: function () {
-            return this.getStringAttribute('tunnel_id');
-        },
-        set: function (value) {
-            this._tunnelId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetTunnelId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get textInput() {
+        return this._text;
+    }
+    // tunnel_id - computed: true, optional: true, required: false
+    _tunnelId;
+    get tunnelId() {
+        return this.getStringAttribute('tunnel_id');
+    }
+    set tunnelId(value) {
+        this._tunnelId = value;
+    }
+    resetTunnelId() {
         this._tunnelId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "tunnelIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tunnelId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "usages", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('usages'));
-        },
-        set: function (value) {
-            this._usages = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetUsages = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tunnelIdInput() {
+        return this._tunnelId;
+    }
+    // type - computed: true, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // usages - computed: true, optional: true, required: false
+    _usages;
+    get usages() {
+        return cdktf.Fn.tolist(this.getListAttribute('usages'));
+    }
+    set usages(value) {
+        this._usages = value;
+    }
+    resetUsages() {
         this._usages = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "usagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "versionId", {
-        get: function () {
-            return this.getStringAttribute('version_id');
-        },
-        set: function (value) {
-            this._versionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetVersionId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get usagesInput() {
+        return this._usages;
+    }
+    // version_id - computed: true, optional: true, required: false
+    _versionId;
+    get versionId() {
+        return this.getStringAttribute('version_id');
+    }
+    set versionId(value) {
+        this._versionId = value;
+    }
+    resetVersionId() {
         this._versionId = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "versionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._versionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "workflowName", {
-        get: function () {
-            return this.getStringAttribute('workflow_name');
-        },
-        set: function (value) {
-            this._workflowName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptBindingsOutputReference.prototype.resetWorkflowName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get versionIdInput() {
+        return this._versionId;
+    }
+    // workflow_name - computed: true, optional: true, required: false
+    _workflowName;
+    get workflowName() {
+        return this.getStringAttribute('workflow_name');
+    }
+    set workflowName(value) {
+        this._workflowName = value;
+    }
+    resetWorkflowName() {
         this._workflowName = undefined;
-    };
-    Object.defineProperty(WorkersScriptBindingsOutputReference.prototype, "workflowNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workflowName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptBindingsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptBindingsOutputReference = WorkersScriptBindingsOutputReference;
-var WorkersScriptBindingsList = /** @class */ (function (_super) {
-    __extends(WorkersScriptBindingsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get workflowNameInput() {
+        return this._workflowName;
+    }
+}
+export class WorkersScriptBindingsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptBindingsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptBindingsList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptBindingsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptBindingsList;
-}(cdktf.ComplexList));
-exports.WorkersScriptBindingsList = WorkersScriptBindingsList;
-function workersScriptLimitsToTerraform(struct) {
+    }
+}
+export function workersScriptLimitsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2574,14 +2071,14 @@ function workersScriptLimitsToTerraform(struct) {
         subrequests: cdktf.numberToTerraform(struct.subrequests),
     };
 }
-function workersScriptLimitsToHclTerraform(struct) {
+export function workersScriptLimitsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         cpu_ms: {
             value: cdktf.numberToHclTerraform(struct.cpuMs),
             isBlock: false,
@@ -2596,106 +2093,84 @@ function workersScriptLimitsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptLimitsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptLimitsOutputReference, _super);
+export class WorkersScriptLimitsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptLimitsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptLimitsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._cpuMs !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cpuMs = this._cpuMs;
-            }
-            if (this._subrequests !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subrequests = this._subrequests;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._cpuMs = undefined;
-                this._subrequests = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._cpuMs = value.cpuMs;
-                this._subrequests = value.subrequests;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptLimitsOutputReference.prototype, "cpuMs", {
-        get: function () {
-            return this.getNumberAttribute('cpu_ms');
-        },
-        set: function (value) {
-            this._cpuMs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptLimitsOutputReference.prototype.resetCpuMs = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._cpuMs !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cpuMs = this._cpuMs;
+        }
+        if (this._subrequests !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subrequests = this._subrequests;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._cpuMs = undefined;
+            this._subrequests = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._cpuMs = value.cpuMs;
+            this._subrequests = value.subrequests;
+        }
+    }
+    // cpu_ms - computed: false, optional: true, required: false
+    _cpuMs;
+    get cpuMs() {
+        return this.getNumberAttribute('cpu_ms');
+    }
+    set cpuMs(value) {
+        this._cpuMs = value;
+    }
+    resetCpuMs() {
         this._cpuMs = undefined;
-    };
-    Object.defineProperty(WorkersScriptLimitsOutputReference.prototype, "cpuMsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpuMs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptLimitsOutputReference.prototype, "subrequests", {
-        get: function () {
-            return this.getNumberAttribute('subrequests');
-        },
-        set: function (value) {
-            this._subrequests = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptLimitsOutputReference.prototype.resetSubrequests = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpuMsInput() {
+        return this._cpuMs;
+    }
+    // subrequests - computed: false, optional: true, required: false
+    _subrequests;
+    get subrequests() {
+        return this.getNumberAttribute('subrequests');
+    }
+    set subrequests(value) {
+        this._subrequests = value;
+    }
+    resetSubrequests() {
         this._subrequests = undefined;
-    };
-    Object.defineProperty(WorkersScriptLimitsOutputReference.prototype, "subrequestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subrequests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptLimitsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptLimitsOutputReference = WorkersScriptLimitsOutputReference;
-function workersScriptMigrationsRenamedClassesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get subrequestsInput() {
+        return this._subrequests;
+    }
+}
+export function workersScriptMigrationsRenamedClassesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2707,14 +2182,14 @@ function workersScriptMigrationsRenamedClassesToTerraform(struct) {
         to: cdktf.stringToTerraform(struct.to),
     };
 }
-function workersScriptMigrationsRenamedClassesToHclTerraform(struct) {
+export function workersScriptMigrationsRenamedClassesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         from: {
             value: cdktf.stringToHclTerraform(struct.from),
             isBlock: false,
@@ -2729,131 +2204,109 @@ function workersScriptMigrationsRenamedClassesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsRenamedClassesOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsRenamedClassesOutputReference, _super);
+export class WorkersScriptMigrationsRenamedClassesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsRenamedClassesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptMigrationsRenamedClassesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._from !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.from = this._from;
-            }
-            if (this._to !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.to = this._to;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._from = undefined;
-                this._to = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._from = value.from;
-                this._to = value.to;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsRenamedClassesOutputReference.prototype, "from", {
-        get: function () {
-            return this.getStringAttribute('from');
-        },
-        set: function (value) {
-            this._from = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsRenamedClassesOutputReference.prototype.resetFrom = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._from !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.from = this._from;
+        }
+        if (this._to !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.to = this._to;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._from = undefined;
+            this._to = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._from = value.from;
+            this._to = value.to;
+        }
+    }
+    // from - computed: false, optional: true, required: false
+    _from;
+    get from() {
+        return this.getStringAttribute('from');
+    }
+    set from(value) {
+        this._from = value;
+    }
+    resetFrom() {
         this._from = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsRenamedClassesOutputReference.prototype, "fromInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._from;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsRenamedClassesOutputReference.prototype, "to", {
-        get: function () {
-            return this.getStringAttribute('to');
-        },
-        set: function (value) {
-            this._to = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsRenamedClassesOutputReference.prototype.resetTo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromInput() {
+        return this._from;
+    }
+    // to - computed: false, optional: true, required: false
+    _to;
+    get to() {
+        return this.getStringAttribute('to');
+    }
+    set to(value) {
+        this._to = value;
+    }
+    resetTo() {
         this._to = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsRenamedClassesOutputReference.prototype, "toInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._to;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsRenamedClassesOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsRenamedClassesOutputReference = WorkersScriptMigrationsRenamedClassesOutputReference;
-var WorkersScriptMigrationsRenamedClassesList = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsRenamedClassesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get toInput() {
+        return this._to;
+    }
+}
+export class WorkersScriptMigrationsRenamedClassesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsRenamedClassesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptMigrationsRenamedClassesList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptMigrationsRenamedClassesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptMigrationsRenamedClassesList;
-}(cdktf.ComplexList));
-exports.WorkersScriptMigrationsRenamedClassesList = WorkersScriptMigrationsRenamedClassesList;
-function workersScriptMigrationsStepsRenamedClassesToTerraform(struct) {
+    }
+}
+export function workersScriptMigrationsStepsRenamedClassesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2865,14 +2318,14 @@ function workersScriptMigrationsStepsRenamedClassesToTerraform(struct) {
         to: cdktf.stringToTerraform(struct.to),
     };
 }
-function workersScriptMigrationsStepsRenamedClassesToHclTerraform(struct) {
+export function workersScriptMigrationsStepsRenamedClassesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         from: {
             value: cdktf.stringToHclTerraform(struct.from),
             isBlock: false,
@@ -2887,131 +2340,109 @@ function workersScriptMigrationsStepsRenamedClassesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsStepsRenamedClassesOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsRenamedClassesOutputReference, _super);
+export class WorkersScriptMigrationsStepsRenamedClassesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsRenamedClassesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._from !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.from = this._from;
-            }
-            if (this._to !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.to = this._to;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._from = undefined;
-                this._to = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._from = value.from;
-                this._to = value.to;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype, "from", {
-        get: function () {
-            return this.getStringAttribute('from');
-        },
-        set: function (value) {
-            this._from = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype.resetFrom = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._from !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.from = this._from;
+        }
+        if (this._to !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.to = this._to;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._from = undefined;
+            this._to = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._from = value.from;
+            this._to = value.to;
+        }
+    }
+    // from - computed: false, optional: true, required: false
+    _from;
+    get from() {
+        return this.getStringAttribute('from');
+    }
+    set from(value) {
+        this._from = value;
+    }
+    resetFrom() {
         this._from = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype, "fromInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._from;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype, "to", {
-        get: function () {
-            return this.getStringAttribute('to');
-        },
-        set: function (value) {
-            this._to = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype.resetTo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromInput() {
+        return this._from;
+    }
+    // to - computed: false, optional: true, required: false
+    _to;
+    get to() {
+        return this.getStringAttribute('to');
+    }
+    set to(value) {
+        this._to = value;
+    }
+    resetTo() {
         this._to = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsRenamedClassesOutputReference.prototype, "toInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._to;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsStepsRenamedClassesOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsStepsRenamedClassesOutputReference = WorkersScriptMigrationsStepsRenamedClassesOutputReference;
-var WorkersScriptMigrationsStepsRenamedClassesList = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsRenamedClassesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get toInput() {
+        return this._to;
+    }
+}
+export class WorkersScriptMigrationsStepsRenamedClassesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsRenamedClassesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptMigrationsStepsRenamedClassesList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptMigrationsStepsRenamedClassesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptMigrationsStepsRenamedClassesList;
-}(cdktf.ComplexList));
-exports.WorkersScriptMigrationsStepsRenamedClassesList = WorkersScriptMigrationsStepsRenamedClassesList;
-function workersScriptMigrationsStepsTransferredClassesToTerraform(struct) {
+    }
+}
+export function workersScriptMigrationsStepsTransferredClassesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3024,14 +2455,14 @@ function workersScriptMigrationsStepsTransferredClassesToTerraform(struct) {
         to: cdktf.stringToTerraform(struct.to),
     };
 }
-function workersScriptMigrationsStepsTransferredClassesToHclTerraform(struct) {
+export function workersScriptMigrationsStepsTransferredClassesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         from: {
             value: cdktf.stringToHclTerraform(struct.from),
             isBlock: false,
@@ -3052,158 +2483,130 @@ function workersScriptMigrationsStepsTransferredClassesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsStepsTransferredClassesOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsTransferredClassesOutputReference, _super);
+export class WorkersScriptMigrationsStepsTransferredClassesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsTransferredClassesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._from !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.from = this._from;
-            }
-            if (this._fromScript !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fromScript = this._fromScript;
-            }
-            if (this._to !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.to = this._to;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._from = undefined;
-                this._fromScript = undefined;
-                this._to = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._from = value.from;
-                this._fromScript = value.fromScript;
-                this._to = value.to;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "from", {
-        get: function () {
-            return this.getStringAttribute('from');
-        },
-        set: function (value) {
-            this._from = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype.resetFrom = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._from !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.from = this._from;
+        }
+        if (this._fromScript !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fromScript = this._fromScript;
+        }
+        if (this._to !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.to = this._to;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._from = undefined;
+            this._fromScript = undefined;
+            this._to = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._from = value.from;
+            this._fromScript = value.fromScript;
+            this._to = value.to;
+        }
+    }
+    // from - computed: false, optional: true, required: false
+    _from;
+    get from() {
+        return this.getStringAttribute('from');
+    }
+    set from(value) {
+        this._from = value;
+    }
+    resetFrom() {
         this._from = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "fromInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._from;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "fromScript", {
-        get: function () {
-            return this.getStringAttribute('from_script');
-        },
-        set: function (value) {
-            this._fromScript = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype.resetFromScript = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromInput() {
+        return this._from;
+    }
+    // from_script - computed: false, optional: true, required: false
+    _fromScript;
+    get fromScript() {
+        return this.getStringAttribute('from_script');
+    }
+    set fromScript(value) {
+        this._fromScript = value;
+    }
+    resetFromScript() {
         this._fromScript = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "fromScriptInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fromScript;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "to", {
-        get: function () {
-            return this.getStringAttribute('to');
-        },
-        set: function (value) {
-            this._to = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype.resetTo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromScriptInput() {
+        return this._fromScript;
+    }
+    // to - computed: false, optional: true, required: false
+    _to;
+    get to() {
+        return this.getStringAttribute('to');
+    }
+    set to(value) {
+        this._to = value;
+    }
+    resetTo() {
         this._to = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsTransferredClassesOutputReference.prototype, "toInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._to;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsStepsTransferredClassesOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsStepsTransferredClassesOutputReference = WorkersScriptMigrationsStepsTransferredClassesOutputReference;
-var WorkersScriptMigrationsStepsTransferredClassesList = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsTransferredClassesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get toInput() {
+        return this._to;
+    }
+}
+export class WorkersScriptMigrationsStepsTransferredClassesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsTransferredClassesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptMigrationsStepsTransferredClassesList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptMigrationsStepsTransferredClassesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptMigrationsStepsTransferredClassesList;
-}(cdktf.ComplexList));
-exports.WorkersScriptMigrationsStepsTransferredClassesList = WorkersScriptMigrationsStepsTransferredClassesList;
-function workersScriptMigrationsStepsToTerraform(struct) {
+    }
+}
+export function workersScriptMigrationsStepsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3218,14 +2621,14 @@ function workersScriptMigrationsStepsToTerraform(struct) {
         transferred_classes: cdktf.listMapper(workersScriptMigrationsStepsTransferredClassesToTerraform, false)(struct.transferredClasses),
     };
 }
-function workersScriptMigrationsStepsToHclTerraform(struct) {
+export function workersScriptMigrationsStepsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         deleted_classes: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.deletedClasses),
             isBlock: false,
@@ -3258,217 +2661,172 @@ function workersScriptMigrationsStepsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsStepsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsOutputReference, _super);
+export class WorkersScriptMigrationsStepsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // renamed_classes - computed: false, optional: true, required: false
-        _this._renamedClasses = new WorkersScriptMigrationsStepsRenamedClassesList(_this, "renamed_classes", false);
-        // transferred_classes - computed: false, optional: true, required: false
-        _this._transferredClasses = new WorkersScriptMigrationsStepsTransferredClassesList(_this, "transferred_classes", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._deletedClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.deletedClasses = this._deletedClasses;
-            }
-            if (this._newClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newClasses = this._newClasses;
-            }
-            if (this._newSqliteClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newSqliteClasses = this._newSqliteClasses;
-            }
-            if (((_a = this._renamedClasses) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.renamedClasses = (_b = this._renamedClasses) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._transferredClasses) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.transferredClasses = (_d = this._transferredClasses) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._deletedClasses = undefined;
-                this._newClasses = undefined;
-                this._newSqliteClasses = undefined;
-                this._renamedClasses.internalValue = undefined;
-                this._transferredClasses.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._deletedClasses = value.deletedClasses;
-                this._newClasses = value.newClasses;
-                this._newSqliteClasses = value.newSqliteClasses;
-                this._renamedClasses.internalValue = value.renamedClasses;
-                this._transferredClasses.internalValue = value.transferredClasses;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "deletedClasses", {
-        get: function () {
-            return this.getListAttribute('deleted_classes');
-        },
-        set: function (value) {
-            this._deletedClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsOutputReference.prototype.resetDeletedClasses = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._deletedClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.deletedClasses = this._deletedClasses;
+        }
+        if (this._newClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newClasses = this._newClasses;
+        }
+        if (this._newSqliteClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newSqliteClasses = this._newSqliteClasses;
+        }
+        if (this._renamedClasses?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.renamedClasses = this._renamedClasses?.internalValue;
+        }
+        if (this._transferredClasses?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.transferredClasses = this._transferredClasses?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._deletedClasses = undefined;
+            this._newClasses = undefined;
+            this._newSqliteClasses = undefined;
+            this._renamedClasses.internalValue = undefined;
+            this._transferredClasses.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._deletedClasses = value.deletedClasses;
+            this._newClasses = value.newClasses;
+            this._newSqliteClasses = value.newSqliteClasses;
+            this._renamedClasses.internalValue = value.renamedClasses;
+            this._transferredClasses.internalValue = value.transferredClasses;
+        }
+    }
+    // deleted_classes - computed: false, optional: true, required: false
+    _deletedClasses;
+    get deletedClasses() {
+        return this.getListAttribute('deleted_classes');
+    }
+    set deletedClasses(value) {
+        this._deletedClasses = value;
+    }
+    resetDeletedClasses() {
         this._deletedClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "deletedClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deletedClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "newClasses", {
-        get: function () {
-            return this.getListAttribute('new_classes');
-        },
-        set: function (value) {
-            this._newClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsOutputReference.prototype.resetNewClasses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deletedClassesInput() {
+        return this._deletedClasses;
+    }
+    // new_classes - computed: false, optional: true, required: false
+    _newClasses;
+    get newClasses() {
+        return this.getListAttribute('new_classes');
+    }
+    set newClasses(value) {
+        this._newClasses = value;
+    }
+    resetNewClasses() {
         this._newClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "newClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "newSqliteClasses", {
-        get: function () {
-            return this.getListAttribute('new_sqlite_classes');
-        },
-        set: function (value) {
-            this._newSqliteClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsOutputReference.prototype.resetNewSqliteClasses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newClassesInput() {
+        return this._newClasses;
+    }
+    // new_sqlite_classes - computed: false, optional: true, required: false
+    _newSqliteClasses;
+    get newSqliteClasses() {
+        return this.getListAttribute('new_sqlite_classes');
+    }
+    set newSqliteClasses(value) {
+        this._newSqliteClasses = value;
+    }
+    resetNewSqliteClasses() {
         this._newSqliteClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "newSqliteClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newSqliteClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "renamedClasses", {
-        get: function () {
-            return this._renamedClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsOutputReference.prototype.putRenamedClasses = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newSqliteClassesInput() {
+        return this._newSqliteClasses;
+    }
+    // renamed_classes - computed: false, optional: true, required: false
+    _renamedClasses = new WorkersScriptMigrationsStepsRenamedClassesList(this, "renamed_classes", false);
+    get renamedClasses() {
+        return this._renamedClasses;
+    }
+    putRenamedClasses(value) {
         this._renamedClasses.internalValue = value;
-    };
-    WorkersScriptMigrationsStepsOutputReference.prototype.resetRenamedClasses = function () {
+    }
+    resetRenamedClasses() {
         this._renamedClasses.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "renamedClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._renamedClasses.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "transferredClasses", {
-        get: function () {
-            return this._transferredClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsStepsOutputReference.prototype.putTransferredClasses = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get renamedClassesInput() {
+        return this._renamedClasses.internalValue;
+    }
+    // transferred_classes - computed: false, optional: true, required: false
+    _transferredClasses = new WorkersScriptMigrationsStepsTransferredClassesList(this, "transferred_classes", false);
+    get transferredClasses() {
+        return this._transferredClasses;
+    }
+    putTransferredClasses(value) {
         this._transferredClasses.internalValue = value;
-    };
-    WorkersScriptMigrationsStepsOutputReference.prototype.resetTransferredClasses = function () {
+    }
+    resetTransferredClasses() {
         this._transferredClasses.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsStepsOutputReference.prototype, "transferredClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._transferredClasses.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsStepsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsStepsOutputReference = WorkersScriptMigrationsStepsOutputReference;
-var WorkersScriptMigrationsStepsList = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsStepsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get transferredClassesInput() {
+        return this._transferredClasses.internalValue;
+    }
+}
+export class WorkersScriptMigrationsStepsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsStepsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptMigrationsStepsList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptMigrationsStepsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptMigrationsStepsList;
-}(cdktf.ComplexList));
-exports.WorkersScriptMigrationsStepsList = WorkersScriptMigrationsStepsList;
-function workersScriptMigrationsTransferredClassesToTerraform(struct) {
+    }
+}
+export function workersScriptMigrationsTransferredClassesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3481,14 +2839,14 @@ function workersScriptMigrationsTransferredClassesToTerraform(struct) {
         to: cdktf.stringToTerraform(struct.to),
     };
 }
-function workersScriptMigrationsTransferredClassesToHclTerraform(struct) {
+export function workersScriptMigrationsTransferredClassesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         from: {
             value: cdktf.stringToHclTerraform(struct.from),
             isBlock: false,
@@ -3509,158 +2867,130 @@ function workersScriptMigrationsTransferredClassesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsTransferredClassesOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsTransferredClassesOutputReference, _super);
+export class WorkersScriptMigrationsTransferredClassesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsTransferredClassesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._from !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.from = this._from;
-            }
-            if (this._fromScript !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fromScript = this._fromScript;
-            }
-            if (this._to !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.to = this._to;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._from = undefined;
-                this._fromScript = undefined;
-                this._to = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._from = value.from;
-                this._fromScript = value.fromScript;
-                this._to = value.to;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "from", {
-        get: function () {
-            return this.getStringAttribute('from');
-        },
-        set: function (value) {
-            this._from = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsTransferredClassesOutputReference.prototype.resetFrom = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._from !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.from = this._from;
+        }
+        if (this._fromScript !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fromScript = this._fromScript;
+        }
+        if (this._to !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.to = this._to;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._from = undefined;
+            this._fromScript = undefined;
+            this._to = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._from = value.from;
+            this._fromScript = value.fromScript;
+            this._to = value.to;
+        }
+    }
+    // from - computed: false, optional: true, required: false
+    _from;
+    get from() {
+        return this.getStringAttribute('from');
+    }
+    set from(value) {
+        this._from = value;
+    }
+    resetFrom() {
         this._from = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "fromInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._from;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "fromScript", {
-        get: function () {
-            return this.getStringAttribute('from_script');
-        },
-        set: function (value) {
-            this._fromScript = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsTransferredClassesOutputReference.prototype.resetFromScript = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromInput() {
+        return this._from;
+    }
+    // from_script - computed: false, optional: true, required: false
+    _fromScript;
+    get fromScript() {
+        return this.getStringAttribute('from_script');
+    }
+    set fromScript(value) {
+        this._fromScript = value;
+    }
+    resetFromScript() {
         this._fromScript = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "fromScriptInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fromScript;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "to", {
-        get: function () {
-            return this.getStringAttribute('to');
-        },
-        set: function (value) {
-            this._to = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsTransferredClassesOutputReference.prototype.resetTo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromScriptInput() {
+        return this._fromScript;
+    }
+    // to - computed: false, optional: true, required: false
+    _to;
+    get to() {
+        return this.getStringAttribute('to');
+    }
+    set to(value) {
+        this._to = value;
+    }
+    resetTo() {
         this._to = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsTransferredClassesOutputReference.prototype, "toInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._to;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsTransferredClassesOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsTransferredClassesOutputReference = WorkersScriptMigrationsTransferredClassesOutputReference;
-var WorkersScriptMigrationsTransferredClassesList = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsTransferredClassesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get toInput() {
+        return this._to;
+    }
+}
+export class WorkersScriptMigrationsTransferredClassesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptMigrationsTransferredClassesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptMigrationsTransferredClassesList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptMigrationsTransferredClassesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptMigrationsTransferredClassesList;
-}(cdktf.ComplexList));
-exports.WorkersScriptMigrationsTransferredClassesList = WorkersScriptMigrationsTransferredClassesList;
-function workersScriptMigrationsToTerraform(struct) {
+    }
+}
+export function workersScriptMigrationsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3678,14 +3008,14 @@ function workersScriptMigrationsToTerraform(struct) {
         transferred_classes: cdktf.listMapper(workersScriptMigrationsTransferredClassesToTerraform, false)(struct.transferredClasses),
     };
 }
-function workersScriptMigrationsToHclTerraform(struct) {
+export function workersScriptMigrationsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         deleted_classes: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.deletedClasses),
             isBlock: false,
@@ -3736,275 +3066,210 @@ function workersScriptMigrationsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptMigrationsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptMigrationsOutputReference, _super);
+export class WorkersScriptMigrationsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptMigrationsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // renamed_classes - computed: false, optional: true, required: false
-        _this._renamedClasses = new WorkersScriptMigrationsRenamedClassesList(_this, "renamed_classes", false);
-        // steps - computed: false, optional: true, required: false
-        _this._steps = new WorkersScriptMigrationsStepsList(_this, "steps", false);
-        // transferred_classes - computed: false, optional: true, required: false
-        _this._transferredClasses = new WorkersScriptMigrationsTransferredClassesList(_this, "transferred_classes", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._deletedClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.deletedClasses = this._deletedClasses;
-            }
-            if (this._newClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newClasses = this._newClasses;
-            }
-            if (this._newSqliteClasses !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newSqliteClasses = this._newSqliteClasses;
-            }
-            if (this._newTag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.newTag = this._newTag;
-            }
-            if (this._oldTag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.oldTag = this._oldTag;
-            }
-            if (((_a = this._renamedClasses) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.renamedClasses = (_b = this._renamedClasses) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._steps) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.steps = (_d = this._steps) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._transferredClasses) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.transferredClasses = (_f = this._transferredClasses) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._deletedClasses = undefined;
-                this._newClasses = undefined;
-                this._newSqliteClasses = undefined;
-                this._newTag = undefined;
-                this._oldTag = undefined;
-                this._renamedClasses.internalValue = undefined;
-                this._steps.internalValue = undefined;
-                this._transferredClasses.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._deletedClasses = value.deletedClasses;
-                this._newClasses = value.newClasses;
-                this._newSqliteClasses = value.newSqliteClasses;
-                this._newTag = value.newTag;
-                this._oldTag = value.oldTag;
-                this._renamedClasses.internalValue = value.renamedClasses;
-                this._steps.internalValue = value.steps;
-                this._transferredClasses.internalValue = value.transferredClasses;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "deletedClasses", {
-        get: function () {
-            return this.getListAttribute('deleted_classes');
-        },
-        set: function (value) {
-            this._deletedClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.resetDeletedClasses = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._deletedClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.deletedClasses = this._deletedClasses;
+        }
+        if (this._newClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newClasses = this._newClasses;
+        }
+        if (this._newSqliteClasses !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newSqliteClasses = this._newSqliteClasses;
+        }
+        if (this._newTag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.newTag = this._newTag;
+        }
+        if (this._oldTag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.oldTag = this._oldTag;
+        }
+        if (this._renamedClasses?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.renamedClasses = this._renamedClasses?.internalValue;
+        }
+        if (this._steps?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.steps = this._steps?.internalValue;
+        }
+        if (this._transferredClasses?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.transferredClasses = this._transferredClasses?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._deletedClasses = undefined;
+            this._newClasses = undefined;
+            this._newSqliteClasses = undefined;
+            this._newTag = undefined;
+            this._oldTag = undefined;
+            this._renamedClasses.internalValue = undefined;
+            this._steps.internalValue = undefined;
+            this._transferredClasses.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._deletedClasses = value.deletedClasses;
+            this._newClasses = value.newClasses;
+            this._newSqliteClasses = value.newSqliteClasses;
+            this._newTag = value.newTag;
+            this._oldTag = value.oldTag;
+            this._renamedClasses.internalValue = value.renamedClasses;
+            this._steps.internalValue = value.steps;
+            this._transferredClasses.internalValue = value.transferredClasses;
+        }
+    }
+    // deleted_classes - computed: false, optional: true, required: false
+    _deletedClasses;
+    get deletedClasses() {
+        return this.getListAttribute('deleted_classes');
+    }
+    set deletedClasses(value) {
+        this._deletedClasses = value;
+    }
+    resetDeletedClasses() {
         this._deletedClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "deletedClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deletedClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newClasses", {
-        get: function () {
-            return this.getListAttribute('new_classes');
-        },
-        set: function (value) {
-            this._newClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.resetNewClasses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deletedClassesInput() {
+        return this._deletedClasses;
+    }
+    // new_classes - computed: false, optional: true, required: false
+    _newClasses;
+    get newClasses() {
+        return this.getListAttribute('new_classes');
+    }
+    set newClasses(value) {
+        this._newClasses = value;
+    }
+    resetNewClasses() {
         this._newClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newSqliteClasses", {
-        get: function () {
-            return this.getListAttribute('new_sqlite_classes');
-        },
-        set: function (value) {
-            this._newSqliteClasses = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.resetNewSqliteClasses = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newClassesInput() {
+        return this._newClasses;
+    }
+    // new_sqlite_classes - computed: false, optional: true, required: false
+    _newSqliteClasses;
+    get newSqliteClasses() {
+        return this.getListAttribute('new_sqlite_classes');
+    }
+    set newSqliteClasses(value) {
+        this._newSqliteClasses = value;
+    }
+    resetNewSqliteClasses() {
         this._newSqliteClasses = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newSqliteClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newSqliteClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newTag", {
-        get: function () {
-            return this.getStringAttribute('new_tag');
-        },
-        set: function (value) {
-            this._newTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.resetNewTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newSqliteClassesInput() {
+        return this._newSqliteClasses;
+    }
+    // new_tag - computed: false, optional: true, required: false
+    _newTag;
+    get newTag() {
+        return this.getStringAttribute('new_tag');
+    }
+    set newTag(value) {
+        this._newTag = value;
+    }
+    resetNewTag() {
         this._newTag = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "newTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "oldTag", {
-        get: function () {
-            return this.getStringAttribute('old_tag');
-        },
-        set: function (value) {
-            this._oldTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.resetOldTag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newTagInput() {
+        return this._newTag;
+    }
+    // old_tag - computed: false, optional: true, required: false
+    _oldTag;
+    get oldTag() {
+        return this.getStringAttribute('old_tag');
+    }
+    set oldTag(value) {
+        this._oldTag = value;
+    }
+    resetOldTag() {
         this._oldTag = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "oldTagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._oldTag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "renamedClasses", {
-        get: function () {
-            return this._renamedClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.putRenamedClasses = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get oldTagInput() {
+        return this._oldTag;
+    }
+    // renamed_classes - computed: false, optional: true, required: false
+    _renamedClasses = new WorkersScriptMigrationsRenamedClassesList(this, "renamed_classes", false);
+    get renamedClasses() {
+        return this._renamedClasses;
+    }
+    putRenamedClasses(value) {
         this._renamedClasses.internalValue = value;
-    };
-    WorkersScriptMigrationsOutputReference.prototype.resetRenamedClasses = function () {
+    }
+    resetRenamedClasses() {
         this._renamedClasses.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "renamedClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._renamedClasses.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "steps", {
-        get: function () {
-            return this._steps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.putSteps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get renamedClassesInput() {
+        return this._renamedClasses.internalValue;
+    }
+    // steps - computed: false, optional: true, required: false
+    _steps = new WorkersScriptMigrationsStepsList(this, "steps", false);
+    get steps() {
+        return this._steps;
+    }
+    putSteps(value) {
         this._steps.internalValue = value;
-    };
-    WorkersScriptMigrationsOutputReference.prototype.resetSteps = function () {
+    }
+    resetSteps() {
         this._steps.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "stepsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._steps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "transferredClasses", {
-        get: function () {
-            return this._transferredClasses;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptMigrationsOutputReference.prototype.putTransferredClasses = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stepsInput() {
+        return this._steps.internalValue;
+    }
+    // transferred_classes - computed: false, optional: true, required: false
+    _transferredClasses = new WorkersScriptMigrationsTransferredClassesList(this, "transferred_classes", false);
+    get transferredClasses() {
+        return this._transferredClasses;
+    }
+    putTransferredClasses(value) {
         this._transferredClasses.internalValue = value;
-    };
-    WorkersScriptMigrationsOutputReference.prototype.resetTransferredClasses = function () {
+    }
+    resetTransferredClasses() {
         this._transferredClasses.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptMigrationsOutputReference.prototype, "transferredClassesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._transferredClasses.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptMigrationsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptMigrationsOutputReference = WorkersScriptMigrationsOutputReference;
-function workersScriptNamedHandlersToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get transferredClassesInput() {
+        return this._transferredClasses.internalValue;
+    }
+}
+export function workersScriptNamedHandlersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4013,89 +3278,72 @@ function workersScriptNamedHandlersToTerraform(struct) {
     }
     return {};
 }
-function workersScriptNamedHandlersToHclTerraform(struct) {
+export function workersScriptNamedHandlersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var WorkersScriptNamedHandlersOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptNamedHandlersOutputReference, _super);
+export class WorkersScriptNamedHandlersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptNamedHandlersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptNamedHandlersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptNamedHandlersOutputReference.prototype, "handlers", {
-        // handlers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('handlers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptNamedHandlersOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptNamedHandlersOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptNamedHandlersOutputReference = WorkersScriptNamedHandlersOutputReference;
-var WorkersScriptNamedHandlersList = /** @class */ (function (_super) {
-    __extends(WorkersScriptNamedHandlersList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // handlers - computed: true, optional: false, required: false
+    get handlers() {
+        return this.getListAttribute('handlers');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class WorkersScriptNamedHandlersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptNamedHandlersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptNamedHandlersList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptNamedHandlersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptNamedHandlersList;
-}(cdktf.ComplexList));
-exports.WorkersScriptNamedHandlersList = WorkersScriptNamedHandlersList;
-function workersScriptObservabilityLogsToTerraform(struct) {
+    }
+}
+export function workersScriptObservabilityLogsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4110,14 +3358,14 @@ function workersScriptObservabilityLogsToTerraform(struct) {
         persist: cdktf.booleanToTerraform(struct.persist),
     };
 }
-function workersScriptObservabilityLogsToHclTerraform(struct) {
+export function workersScriptObservabilityLogsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         destinations: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.destinations),
             isBlock: false,
@@ -4150,181 +3398,141 @@ function workersScriptObservabilityLogsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptObservabilityLogsOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptObservabilityLogsOutputReference, _super);
+export class WorkersScriptObservabilityLogsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptObservabilityLogsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._destinations !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.destinations = this._destinations;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._headSamplingRate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headSamplingRate = this._headSamplingRate;
-            }
-            if (this._invocationLogs !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.invocationLogs = this._invocationLogs;
-            }
-            if (this._persist !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.persist = this._persist;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._destinations = undefined;
-                this._enabled = undefined;
-                this._headSamplingRate = undefined;
-                this._invocationLogs = undefined;
-                this._persist = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._destinations = value.destinations;
-                this._enabled = value.enabled;
-                this._headSamplingRate = value.headSamplingRate;
-                this._invocationLogs = value.invocationLogs;
-                this._persist = value.persist;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "destinations", {
-        get: function () {
-            return this.getListAttribute('destinations');
-        },
-        set: function (value) {
-            this._destinations = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityLogsOutputReference.prototype.resetDestinations = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._destinations !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.destinations = this._destinations;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._headSamplingRate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headSamplingRate = this._headSamplingRate;
+        }
+        if (this._invocationLogs !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.invocationLogs = this._invocationLogs;
+        }
+        if (this._persist !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.persist = this._persist;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._destinations = undefined;
+            this._enabled = undefined;
+            this._headSamplingRate = undefined;
+            this._invocationLogs = undefined;
+            this._persist = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._destinations = value.destinations;
+            this._enabled = value.enabled;
+            this._headSamplingRate = value.headSamplingRate;
+            this._invocationLogs = value.invocationLogs;
+            this._persist = value.persist;
+        }
+    }
+    // destinations - computed: false, optional: true, required: false
+    _destinations;
+    get destinations() {
+        return this.getListAttribute('destinations');
+    }
+    set destinations(value) {
+        this._destinations = value;
+    }
+    resetDestinations() {
         this._destinations = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "destinationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "headSamplingRate", {
-        get: function () {
-            return this.getNumberAttribute('head_sampling_rate');
-        },
-        set: function (value) {
-            this._headSamplingRate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityLogsOutputReference.prototype.resetHeadSamplingRate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationsInput() {
+        return this._destinations;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // head_sampling_rate - computed: false, optional: true, required: false
+    _headSamplingRate;
+    get headSamplingRate() {
+        return this.getNumberAttribute('head_sampling_rate');
+    }
+    set headSamplingRate(value) {
+        this._headSamplingRate = value;
+    }
+    resetHeadSamplingRate() {
         this._headSamplingRate = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "headSamplingRateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headSamplingRate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "invocationLogs", {
-        get: function () {
-            return this.getBooleanAttribute('invocation_logs');
-        },
-        set: function (value) {
-            this._invocationLogs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "invocationLogsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._invocationLogs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "persist", {
-        get: function () {
-            return this.getBooleanAttribute('persist');
-        },
-        set: function (value) {
-            this._persist = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityLogsOutputReference.prototype.resetPersist = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headSamplingRateInput() {
+        return this._headSamplingRate;
+    }
+    // invocation_logs - computed: false, optional: false, required: true
+    _invocationLogs;
+    get invocationLogs() {
+        return this.getBooleanAttribute('invocation_logs');
+    }
+    set invocationLogs(value) {
+        this._invocationLogs = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get invocationLogsInput() {
+        return this._invocationLogs;
+    }
+    // persist - computed: true, optional: true, required: false
+    _persist;
+    get persist() {
+        return this.getBooleanAttribute('persist');
+    }
+    set persist(value) {
+        this._persist = value;
+    }
+    resetPersist() {
         this._persist = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityLogsOutputReference.prototype, "persistInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._persist;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptObservabilityLogsOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptObservabilityLogsOutputReference = WorkersScriptObservabilityLogsOutputReference;
-function workersScriptObservabilityTracesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get persistInput() {
+        return this._persist;
+    }
+}
+export function workersScriptObservabilityTracesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4338,14 +3546,14 @@ function workersScriptObservabilityTracesToTerraform(struct) {
         persist: cdktf.booleanToTerraform(struct.persist),
     };
 }
-function workersScriptObservabilityTracesToHclTerraform(struct) {
+export function workersScriptObservabilityTracesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         destinations: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.destinations),
             isBlock: false,
@@ -4372,160 +3580,126 @@ function workersScriptObservabilityTracesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptObservabilityTracesOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptObservabilityTracesOutputReference, _super);
+export class WorkersScriptObservabilityTracesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptObservabilityTracesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._destinations !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.destinations = this._destinations;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._headSamplingRate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headSamplingRate = this._headSamplingRate;
-            }
-            if (this._persist !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.persist = this._persist;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._destinations = undefined;
-                this._enabled = undefined;
-                this._headSamplingRate = undefined;
-                this._persist = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._destinations = value.destinations;
-                this._enabled = value.enabled;
-                this._headSamplingRate = value.headSamplingRate;
-                this._persist = value.persist;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "destinations", {
-        get: function () {
-            return this.getListAttribute('destinations');
-        },
-        set: function (value) {
-            this._destinations = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityTracesOutputReference.prototype.resetDestinations = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._destinations !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.destinations = this._destinations;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._headSamplingRate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headSamplingRate = this._headSamplingRate;
+        }
+        if (this._persist !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.persist = this._persist;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._destinations = undefined;
+            this._enabled = undefined;
+            this._headSamplingRate = undefined;
+            this._persist = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._destinations = value.destinations;
+            this._enabled = value.enabled;
+            this._headSamplingRate = value.headSamplingRate;
+            this._persist = value.persist;
+        }
+    }
+    // destinations - computed: false, optional: true, required: false
+    _destinations;
+    get destinations() {
+        return this.getListAttribute('destinations');
+    }
+    set destinations(value) {
+        this._destinations = value;
+    }
+    resetDestinations() {
         this._destinations = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "destinationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destinations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityTracesOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationsInput() {
+        return this._destinations;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "headSamplingRate", {
-        get: function () {
-            return this.getNumberAttribute('head_sampling_rate');
-        },
-        set: function (value) {
-            this._headSamplingRate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityTracesOutputReference.prototype.resetHeadSamplingRate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // head_sampling_rate - computed: false, optional: true, required: false
+    _headSamplingRate;
+    get headSamplingRate() {
+        return this.getNumberAttribute('head_sampling_rate');
+    }
+    set headSamplingRate(value) {
+        this._headSamplingRate = value;
+    }
+    resetHeadSamplingRate() {
         this._headSamplingRate = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "headSamplingRateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headSamplingRate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "persist", {
-        get: function () {
-            return this.getBooleanAttribute('persist');
-        },
-        set: function (value) {
-            this._persist = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityTracesOutputReference.prototype.resetPersist = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headSamplingRateInput() {
+        return this._headSamplingRate;
+    }
+    // persist - computed: true, optional: true, required: false
+    _persist;
+    get persist() {
+        return this.getBooleanAttribute('persist');
+    }
+    set persist(value) {
+        this._persist = value;
+    }
+    resetPersist() {
         this._persist = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityTracesOutputReference.prototype, "persistInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._persist;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptObservabilityTracesOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptObservabilityTracesOutputReference = WorkersScriptObservabilityTracesOutputReference;
-function workersScriptObservabilityToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get persistInput() {
+        return this._persist;
+    }
+}
+export function workersScriptObservabilityToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4539,14 +3713,14 @@ function workersScriptObservabilityToTerraform(struct) {
         traces: workersScriptObservabilityTracesToTerraform(struct.traces),
     };
 }
-function workersScriptObservabilityToHclTerraform(struct) {
+export function workersScriptObservabilityToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         enabled: {
             value: cdktf.booleanToHclTerraform(struct.enabled),
             isBlock: false,
@@ -4573,162 +3747,123 @@ function workersScriptObservabilityToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptObservabilityOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptObservabilityOutputReference, _super);
+export class WorkersScriptObservabilityOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptObservabilityOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // logs - computed: false, optional: true, required: false
-        _this._logs = new WorkersScriptObservabilityLogsOutputReference(_this, "logs");
-        // traces - computed: false, optional: true, required: false
-        _this._traces = new WorkersScriptObservabilityTracesOutputReference(_this, "traces");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._headSamplingRate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headSamplingRate = this._headSamplingRate;
-            }
-            if (((_a = this._logs) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.logs = (_b = this._logs) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._traces) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.traces = (_d = this._traces) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._enabled = undefined;
-                this._headSamplingRate = undefined;
-                this._logs.internalValue = undefined;
-                this._traces.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._enabled = value.enabled;
-                this._headSamplingRate = value.headSamplingRate;
-                this._logs.internalValue = value.logs;
-                this._traces.internalValue = value.traces;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "headSamplingRate", {
-        get: function () {
-            return this.getNumberAttribute('head_sampling_rate');
-        },
-        set: function (value) {
-            this._headSamplingRate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityOutputReference.prototype.resetHeadSamplingRate = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._headSamplingRate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headSamplingRate = this._headSamplingRate;
+        }
+        if (this._logs?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.logs = this._logs?.internalValue;
+        }
+        if (this._traces?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.traces = this._traces?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._enabled = undefined;
+            this._headSamplingRate = undefined;
+            this._logs.internalValue = undefined;
+            this._traces.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._enabled = value.enabled;
+            this._headSamplingRate = value.headSamplingRate;
+            this._logs.internalValue = value.logs;
+            this._traces.internalValue = value.traces;
+        }
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // head_sampling_rate - computed: false, optional: true, required: false
+    _headSamplingRate;
+    get headSamplingRate() {
+        return this.getNumberAttribute('head_sampling_rate');
+    }
+    set headSamplingRate(value) {
+        this._headSamplingRate = value;
+    }
+    resetHeadSamplingRate() {
         this._headSamplingRate = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "headSamplingRateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headSamplingRate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "logs", {
-        get: function () {
-            return this._logs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityOutputReference.prototype.putLogs = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headSamplingRateInput() {
+        return this._headSamplingRate;
+    }
+    // logs - computed: false, optional: true, required: false
+    _logs = new WorkersScriptObservabilityLogsOutputReference(this, "logs");
+    get logs() {
+        return this._logs;
+    }
+    putLogs(value) {
         this._logs.internalValue = value;
-    };
-    WorkersScriptObservabilityOutputReference.prototype.resetLogs = function () {
+    }
+    resetLogs() {
         this._logs.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "logsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logs.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "traces", {
-        get: function () {
-            return this._traces;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptObservabilityOutputReference.prototype.putTraces = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logsInput() {
+        return this._logs.internalValue;
+    }
+    // traces - computed: false, optional: true, required: false
+    _traces = new WorkersScriptObservabilityTracesOutputReference(this, "traces");
+    get traces() {
+        return this._traces;
+    }
+    putTraces(value) {
         this._traces.internalValue = value;
-    };
-    WorkersScriptObservabilityOutputReference.prototype.resetTraces = function () {
+    }
+    resetTraces() {
         this._traces.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScriptObservabilityOutputReference.prototype, "tracesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._traces.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptObservabilityOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptObservabilityOutputReference = WorkersScriptObservabilityOutputReference;
-function workersScriptPlacementTargetToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tracesInput() {
+        return this._traces.internalValue;
+    }
+}
+export function workersScriptPlacementTargetToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4737,97 +3872,76 @@ function workersScriptPlacementTargetToTerraform(struct) {
     }
     return {};
 }
-function workersScriptPlacementTargetToHclTerraform(struct) {
+export function workersScriptPlacementTargetToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var WorkersScriptPlacementTargetOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptPlacementTargetOutputReference, _super);
+export class WorkersScriptPlacementTargetOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptPlacementTargetOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptPlacementTargetOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementTargetOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementTargetOutputReference.prototype, "hostname", {
-        // hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementTargetOutputReference.prototype, "region", {
-        // region - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptPlacementTargetOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptPlacementTargetOutputReference = WorkersScriptPlacementTargetOutputReference;
-var WorkersScriptPlacementTargetList = /** @class */ (function (_super) {
-    __extends(WorkersScriptPlacementTargetList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // hostname - computed: true, optional: false, required: false
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    // region - computed: true, optional: false, required: false
+    get region() {
+        return this.getStringAttribute('region');
+    }
+}
+export class WorkersScriptPlacementTargetList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptPlacementTargetList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptPlacementTargetList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptPlacementTargetOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptPlacementTargetList;
-}(cdktf.ComplexList));
-exports.WorkersScriptPlacementTargetList = WorkersScriptPlacementTargetList;
-function workersScriptPlacementToTerraform(struct) {
+    }
+}
+export function workersScriptPlacementToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4838,14 +3952,14 @@ function workersScriptPlacementToTerraform(struct) {
         mode: cdktf.stringToTerraform(struct.mode),
     };
 }
-function workersScriptPlacementToHclTerraform(struct) {
+export function workersScriptPlacementToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         mode: {
             value: cdktf.stringToHclTerraform(struct.mode),
             isBlock: false,
@@ -4854,128 +3968,88 @@ function workersScriptPlacementToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptPlacementOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptPlacementOutputReference, _super);
+export class WorkersScriptPlacementOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WorkersScriptPlacementOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // target - computed: true, optional: false, required: false
-        _this._target = new WorkersScriptPlacementTargetList(_this, "target", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._mode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._mode = value.mode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "hostname", {
-        // hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "lastAnalyzedAt", {
-        // last_analyzed_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_analyzed_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptPlacementOutputReference.prototype.resetMode = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._mode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._mode = value.mode;
+        }
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // hostname - computed: true, optional: false, required: false
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    // last_analyzed_at - computed: true, optional: false, required: false
+    get lastAnalyzedAt() {
+        return this.getStringAttribute('last_analyzed_at');
+    }
+    // mode - computed: true, optional: true, required: false
+    _mode;
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    resetMode() {
         this._mode = undefined;
-    };
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "region", {
-        // region - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptPlacementOutputReference.prototype, "target", {
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptPlacementOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptPlacementOutputReference = WorkersScriptPlacementOutputReference;
-function workersScriptTailConsumersToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // region - computed: true, optional: false, required: false
+    get region() {
+        return this.getStringAttribute('region');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // target - computed: true, optional: false, required: false
+    _target = new WorkersScriptPlacementTargetList(this, "target", false);
+    get target() {
+        return this._target;
+    }
+}
+export function workersScriptTailConsumersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4988,14 +4062,14 @@ function workersScriptTailConsumersToTerraform(struct) {
         service: cdktf.stringToTerraform(struct.service),
     };
 }
-function workersScriptTailConsumersToHclTerraform(struct) {
+export function workersScriptTailConsumersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         environment: {
             value: cdktf.stringToHclTerraform(struct.environment),
             isBlock: false,
@@ -5016,159 +4090,147 @@ function workersScriptTailConsumersToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WorkersScriptTailConsumersOutputReference = /** @class */ (function (_super) {
-    __extends(WorkersScriptTailConsumersOutputReference, _super);
+export class WorkersScriptTailConsumersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptTailConsumersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._environment !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.environment = this._environment;
-            }
-            if (this._namespace !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namespace = this._namespace;
-            }
-            if (this._service !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.service = this._service;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._environment = undefined;
-                this._namespace = undefined;
-                this._service = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._environment = value.environment;
-                this._namespace = value.namespace;
-                this._service = value.service;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptTailConsumersOutputReference.prototype.resetEnvironment = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._environment !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.environment = this._environment;
+        }
+        if (this._namespace !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namespace = this._namespace;
+        }
+        if (this._service !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.service = this._service;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._environment = undefined;
+            this._namespace = undefined;
+            this._service = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._environment = value.environment;
+            this._namespace = value.namespace;
+            this._service = value.service;
+        }
+    }
+    // environment - computed: true, optional: true, required: false
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    resetEnvironment() {
         this._environment = undefined;
-    };
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "namespace", {
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        set: function (value) {
-            this._namespace = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptTailConsumersOutputReference.prototype.resetNamespace = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // namespace - computed: true, optional: true, required: false
+    _namespace;
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    set namespace(value) {
+        this._namespace = value;
+    }
+    resetNamespace() {
         this._namespace = undefined;
-    };
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "namespaceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespace;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "service", {
-        get: function () {
-            return this.getStringAttribute('service');
-        },
-        set: function (value) {
-            this._service = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptTailConsumersOutputReference.prototype, "serviceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._service;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WorkersScriptTailConsumersOutputReference;
-}(cdktf.ComplexObject));
-exports.WorkersScriptTailConsumersOutputReference = WorkersScriptTailConsumersOutputReference;
-var WorkersScriptTailConsumersList = /** @class */ (function (_super) {
-    __extends(WorkersScriptTailConsumersList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceInput() {
+        return this._namespace;
+    }
+    // service - computed: true, optional: false, required: true
+    _service;
+    get service() {
+        return this.getStringAttribute('service');
+    }
+    set service(value) {
+        this._service = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceInput() {
+        return this._service;
+    }
+}
+export class WorkersScriptTailConsumersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WorkersScriptTailConsumersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WorkersScriptTailConsumersList.prototype.get = function (index) {
+    get(index) {
         return new WorkersScriptTailConsumersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WorkersScriptTailConsumersList;
-}(cdktf.ComplexList));
-exports.WorkersScriptTailConsumersList = WorkersScriptTailConsumersList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script cloudflare_workers_script}
 */
-var WorkersScript = /** @class */ (function (_super) {
-    __extends(WorkersScript, _super);
+export class WorkersScript extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_script";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WorkersScript resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WorkersScript to import
+    * @param importFromId The id of the existing WorkersScript that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WorkersScript to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -5179,8 +4241,8 @@ var WorkersScript = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WorkersScriptConfig
     */
-    function WorkersScript(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_script',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -5193,628 +4255,417 @@ var WorkersScript = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // annotations - computed: true, optional: true, required: false
-        _this._annotations = new WorkersScriptAnnotationsOutputReference(_this, "annotations");
-        // assets - computed: false, optional: true, required: false
-        _this._assets = new WorkersScriptAssetsOutputReference(_this, "assets");
-        // bindings - computed: true, optional: true, required: false
-        _this._bindings = new WorkersScriptBindingsList(_this, "bindings", false);
-        // limits - computed: false, optional: true, required: false
-        _this._limits = new WorkersScriptLimitsOutputReference(_this, "limits");
-        // migrations - computed: false, optional: true, required: false
-        _this._migrations = new WorkersScriptMigrationsOutputReference(_this, "migrations");
-        // named_handlers - computed: true, optional: false, required: false
-        _this._namedHandlers = new WorkersScriptNamedHandlersList(_this, "named_handlers", false);
-        // observability - computed: false, optional: true, required: false
-        _this._observability = new WorkersScriptObservabilityOutputReference(_this, "observability");
-        // placement - computed: true, optional: true, required: false
-        _this._placement = new WorkersScriptPlacementOutputReference(_this, "placement");
-        // tail_consumers - computed: true, optional: true, required: false
-        _this._tailConsumers = new WorkersScriptTailConsumersList(_this, "tail_consumers", true);
-        _this._accountId = config.accountId;
-        _this._annotations.internalValue = config.annotations;
-        _this._assets.internalValue = config.assets;
-        _this._bindings.internalValue = config.bindings;
-        _this._bodyPart = config.bodyPart;
-        _this._compatibilityDate = config.compatibilityDate;
-        _this._compatibilityFlags = config.compatibilityFlags;
-        _this._content = config.content;
-        _this._contentFile = config.contentFile;
-        _this._contentSha256 = config.contentSha256;
-        _this._contentType = config.contentType;
-        _this._keepAssets = config.keepAssets;
-        _this._keepBindings = config.keepBindings;
-        _this._limits.internalValue = config.limits;
-        _this._logpush = config.logpush;
-        _this._mainModule = config.mainModule;
-        _this._migrations.internalValue = config.migrations;
-        _this._observability.internalValue = config.observability;
-        _this._placement.internalValue = config.placement;
-        _this._scriptName = config.scriptName;
-        _this._tailConsumers.internalValue = config.tailConsumers;
-        _this._usageModel = config.usageModel;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._annotations.internalValue = config.annotations;
+        this._assets.internalValue = config.assets;
+        this._bindings.internalValue = config.bindings;
+        this._bodyPart = config.bodyPart;
+        this._compatibilityDate = config.compatibilityDate;
+        this._compatibilityFlags = config.compatibilityFlags;
+        this._content = config.content;
+        this._contentFile = config.contentFile;
+        this._contentSha256 = config.contentSha256;
+        this._contentType = config.contentType;
+        this._keepAssets = config.keepAssets;
+        this._keepBindings = config.keepBindings;
+        this._limits.internalValue = config.limits;
+        this._logpush = config.logpush;
+        this._mainModule = config.mainModule;
+        this._migrations.internalValue = config.migrations;
+        this._observability.internalValue = config.observability;
+        this._placement.internalValue = config.placement;
+        this._scriptName = config.scriptName;
+        this._tailConsumers.internalValue = config.tailConsumers;
+        this._usageModel = config.usageModel;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WorkersScript resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WorkersScript to import
-    * @param importFromId The id of the existing WorkersScript that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WorkersScript to import is found
-    */
-    WorkersScript.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WorkersScript.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "annotations", {
-        get: function () {
-            return this._annotations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putAnnotations = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // annotations - computed: true, optional: true, required: false
+    _annotations = new WorkersScriptAnnotationsOutputReference(this, "annotations");
+    get annotations() {
+        return this._annotations;
+    }
+    putAnnotations(value) {
         this._annotations.internalValue = value;
-    };
-    WorkersScript.prototype.resetAnnotations = function () {
+    }
+    resetAnnotations() {
         this._annotations.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "annotationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._annotations.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "assets", {
-        get: function () {
-            return this._assets;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putAssets = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get annotationsInput() {
+        return this._annotations.internalValue;
+    }
+    // assets - computed: false, optional: true, required: false
+    _assets = new WorkersScriptAssetsOutputReference(this, "assets");
+    get assets() {
+        return this._assets;
+    }
+    putAssets(value) {
         this._assets.internalValue = value;
-    };
-    WorkersScript.prototype.resetAssets = function () {
+    }
+    resetAssets() {
         this._assets.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "assetsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._assets.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "bindings", {
-        get: function () {
-            return this._bindings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putBindings = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get assetsInput() {
+        return this._assets.internalValue;
+    }
+    // bindings - computed: true, optional: true, required: false
+    _bindings = new WorkersScriptBindingsList(this, "bindings", false);
+    get bindings() {
+        return this._bindings;
+    }
+    putBindings(value) {
         this._bindings.internalValue = value;
-    };
-    WorkersScript.prototype.resetBindings = function () {
+    }
+    resetBindings() {
         this._bindings.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "bindingsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bindings.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "bodyPart", {
-        get: function () {
-            return this.getStringAttribute('body_part');
-        },
-        set: function (value) {
-            this._bodyPart = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetBodyPart = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bindingsInput() {
+        return this._bindings.internalValue;
+    }
+    // body_part - computed: false, optional: true, required: false
+    _bodyPart;
+    get bodyPart() {
+        return this.getStringAttribute('body_part');
+    }
+    set bodyPart(value) {
+        this._bodyPart = value;
+    }
+    resetBodyPart() {
         this._bodyPart = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "bodyPartInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bodyPart;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "compatibilityDate", {
-        get: function () {
-            return this.getStringAttribute('compatibility_date');
-        },
-        set: function (value) {
-            this._compatibilityDate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetCompatibilityDate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bodyPartInput() {
+        return this._bodyPart;
+    }
+    // compatibility_date - computed: true, optional: true, required: false
+    _compatibilityDate;
+    get compatibilityDate() {
+        return this.getStringAttribute('compatibility_date');
+    }
+    set compatibilityDate(value) {
+        this._compatibilityDate = value;
+    }
+    resetCompatibilityDate() {
         this._compatibilityDate = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "compatibilityDateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._compatibilityDate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "compatibilityFlags", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('compatibility_flags'));
-        },
-        set: function (value) {
-            this._compatibilityFlags = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetCompatibilityFlags = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get compatibilityDateInput() {
+        return this._compatibilityDate;
+    }
+    // compatibility_flags - computed: true, optional: true, required: false
+    _compatibilityFlags;
+    get compatibilityFlags() {
+        return cdktf.Fn.tolist(this.getListAttribute('compatibility_flags'));
+    }
+    set compatibilityFlags(value) {
+        this._compatibilityFlags = value;
+    }
+    resetCompatibilityFlags() {
         this._compatibilityFlags = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "compatibilityFlagsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._compatibilityFlags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "content", {
-        get: function () {
-            return this.getStringAttribute('content');
-        },
-        set: function (value) {
-            this._content = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetContent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get compatibilityFlagsInput() {
+        return this._compatibilityFlags;
+    }
+    // content - computed: false, optional: true, required: false
+    _content;
+    get content() {
+        return this.getStringAttribute('content');
+    }
+    set content(value) {
+        this._content = value;
+    }
+    resetContent() {
         this._content = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "contentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._content;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "contentFile", {
-        get: function () {
-            return this.getStringAttribute('content_file');
-        },
-        set: function (value) {
-            this._contentFile = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetContentFile = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentInput() {
+        return this._content;
+    }
+    // content_file - computed: false, optional: true, required: false
+    _contentFile;
+    get contentFile() {
+        return this.getStringAttribute('content_file');
+    }
+    set contentFile(value) {
+        this._contentFile = value;
+    }
+    resetContentFile() {
         this._contentFile = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "contentFileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentFile;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "contentSha256", {
-        get: function () {
-            return this.getStringAttribute('content_sha256');
-        },
-        set: function (value) {
-            this._contentSha256 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetContentSha256 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentFileInput() {
+        return this._contentFile;
+    }
+    // content_sha256 - computed: false, optional: true, required: false
+    _contentSha256;
+    get contentSha256() {
+        return this.getStringAttribute('content_sha256');
+    }
+    set contentSha256(value) {
+        this._contentSha256 = value;
+    }
+    resetContentSha256() {
         this._contentSha256 = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "contentSha256Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentSha256;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "contentType", {
-        get: function () {
-            return this.getStringAttribute('content_type');
-        },
-        set: function (value) {
-            this._contentType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetContentType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentSha256Input() {
+        return this._contentSha256;
+    }
+    // content_type - computed: false, optional: true, required: false
+    _contentType;
+    get contentType() {
+        return this.getStringAttribute('content_type');
+    }
+    set contentType(value) {
+        this._contentType = value;
+    }
+    resetContentType() {
         this._contentType = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "contentTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "handlers", {
-        // handlers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('handlers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "hasAssets", {
-        // has_assets - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('has_assets');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "hasModules", {
-        // has_modules - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('has_modules');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "keepAssets", {
-        get: function () {
-            return this.getBooleanAttribute('keep_assets');
-        },
-        set: function (value) {
-            this._keepAssets = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetKeepAssets = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentTypeInput() {
+        return this._contentType;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // handlers - computed: true, optional: false, required: false
+    get handlers() {
+        return this.getListAttribute('handlers');
+    }
+    // has_assets - computed: true, optional: false, required: false
+    get hasAssets() {
+        return this.getBooleanAttribute('has_assets');
+    }
+    // has_modules - computed: true, optional: false, required: false
+    get hasModules() {
+        return this.getBooleanAttribute('has_modules');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // keep_assets - computed: false, optional: true, required: false
+    _keepAssets;
+    get keepAssets() {
+        return this.getBooleanAttribute('keep_assets');
+    }
+    set keepAssets(value) {
+        this._keepAssets = value;
+    }
+    resetKeepAssets() {
         this._keepAssets = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "keepAssetsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keepAssets;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "keepBindings", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('keep_bindings'));
-        },
-        set: function (value) {
-            this._keepBindings = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetKeepBindings = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keepAssetsInput() {
+        return this._keepAssets;
+    }
+    // keep_bindings - computed: false, optional: true, required: false
+    _keepBindings;
+    get keepBindings() {
+        return cdktf.Fn.tolist(this.getListAttribute('keep_bindings'));
+    }
+    set keepBindings(value) {
+        this._keepBindings = value;
+    }
+    resetKeepBindings() {
         this._keepBindings = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "keepBindingsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keepBindings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "lastDeployedFrom", {
-        // last_deployed_from - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_deployed_from');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "limits", {
-        get: function () {
-            return this._limits;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putLimits = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keepBindingsInput() {
+        return this._keepBindings;
+    }
+    // last_deployed_from - computed: true, optional: false, required: false
+    get lastDeployedFrom() {
+        return this.getStringAttribute('last_deployed_from');
+    }
+    // limits - computed: false, optional: true, required: false
+    _limits = new WorkersScriptLimitsOutputReference(this, "limits");
+    get limits() {
+        return this._limits;
+    }
+    putLimits(value) {
         this._limits.internalValue = value;
-    };
-    WorkersScript.prototype.resetLimits = function () {
+    }
+    resetLimits() {
         this._limits.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "limitsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._limits.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "logpush", {
-        get: function () {
-            return this.getBooleanAttribute('logpush');
-        },
-        set: function (value) {
-            this._logpush = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetLogpush = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get limitsInput() {
+        return this._limits.internalValue;
+    }
+    // logpush - computed: true, optional: true, required: false
+    _logpush;
+    get logpush() {
+        return this.getBooleanAttribute('logpush');
+    }
+    set logpush(value) {
+        this._logpush = value;
+    }
+    resetLogpush() {
         this._logpush = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "logpushInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logpush;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "mainModule", {
-        get: function () {
-            return this.getStringAttribute('main_module');
-        },
-        set: function (value) {
-            this._mainModule = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetMainModule = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logpushInput() {
+        return this._logpush;
+    }
+    // main_module - computed: false, optional: true, required: false
+    _mainModule;
+    get mainModule() {
+        return this.getStringAttribute('main_module');
+    }
+    set mainModule(value) {
+        this._mainModule = value;
+    }
+    resetMainModule() {
         this._mainModule = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "mainModuleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mainModule;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "migrationTag", {
-        // migration_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('migration_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "migrations", {
-        get: function () {
-            return this._migrations;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putMigrations = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mainModuleInput() {
+        return this._mainModule;
+    }
+    // migration_tag - computed: true, optional: false, required: false
+    get migrationTag() {
+        return this.getStringAttribute('migration_tag');
+    }
+    // migrations - computed: false, optional: true, required: false
+    _migrations = new WorkersScriptMigrationsOutputReference(this, "migrations");
+    get migrations() {
+        return this._migrations;
+    }
+    putMigrations(value) {
         this._migrations.internalValue = value;
-    };
-    WorkersScript.prototype.resetMigrations = function () {
+    }
+    resetMigrations() {
         this._migrations.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "migrationsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._migrations.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "namedHandlers", {
-        get: function () {
-            return this._namedHandlers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "observability", {
-        get: function () {
-            return this._observability;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putObservability = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get migrationsInput() {
+        return this._migrations.internalValue;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // named_handlers - computed: true, optional: false, required: false
+    _namedHandlers = new WorkersScriptNamedHandlersList(this, "named_handlers", false);
+    get namedHandlers() {
+        return this._namedHandlers;
+    }
+    // observability - computed: false, optional: true, required: false
+    _observability = new WorkersScriptObservabilityOutputReference(this, "observability");
+    get observability() {
+        return this._observability;
+    }
+    putObservability(value) {
         this._observability.internalValue = value;
-    };
-    WorkersScript.prototype.resetObservability = function () {
+    }
+    resetObservability() {
         this._observability.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "observabilityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._observability.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "placement", {
-        get: function () {
-            return this._placement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putPlacement = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get observabilityInput() {
+        return this._observability.internalValue;
+    }
+    // placement - computed: true, optional: true, required: false
+    _placement = new WorkersScriptPlacementOutputReference(this, "placement");
+    get placement() {
+        return this._placement;
+    }
+    putPlacement(value) {
         this._placement.internalValue = value;
-    };
-    WorkersScript.prototype.resetPlacement = function () {
+    }
+    resetPlacement() {
         this._placement.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "placementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._placement.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "placementMode", {
-        // placement_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('placement_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "placementStatus", {
-        // placement_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('placement_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "scriptName", {
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        set: function (value) {
-            this._scriptName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "scriptNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scriptName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "startupTimeMs", {
-        // startup_time_ms - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('startup_time_ms');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "tailConsumers", {
-        get: function () {
-            return this._tailConsumers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.putTailConsumers = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get placementInput() {
+        return this._placement.internalValue;
+    }
+    // placement_mode - computed: true, optional: false, required: false
+    get placementMode() {
+        return this.getStringAttribute('placement_mode');
+    }
+    // placement_status - computed: true, optional: false, required: false
+    get placementStatus() {
+        return this.getStringAttribute('placement_status');
+    }
+    // script_name - computed: false, optional: false, required: true
+    _scriptName;
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    set scriptName(value) {
+        this._scriptName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get scriptNameInput() {
+        return this._scriptName;
+    }
+    // startup_time_ms - computed: true, optional: false, required: false
+    get startupTimeMs() {
+        return this.getNumberAttribute('startup_time_ms');
+    }
+    // tail_consumers - computed: true, optional: true, required: false
+    _tailConsumers = new WorkersScriptTailConsumersList(this, "tail_consumers", true);
+    get tailConsumers() {
+        return this._tailConsumers;
+    }
+    putTailConsumers(value) {
         this._tailConsumers.internalValue = value;
-    };
-    WorkersScript.prototype.resetTailConsumers = function () {
+    }
+    resetTailConsumers() {
         this._tailConsumers.internalValue = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "tailConsumersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tailConsumers.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScript.prototype, "usageModel", {
-        get: function () {
-            return this.getStringAttribute('usage_model');
-        },
-        set: function (value) {
-            this._usageModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScript.prototype.resetUsageModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tailConsumersInput() {
+        return this._tailConsumers.internalValue;
+    }
+    // usage_model - computed: true, optional: true, required: false
+    _usageModel;
+    get usageModel() {
+        return this.getStringAttribute('usage_model');
+    }
+    set usageModel(value) {
+        this._usageModel = value;
+    }
+    resetUsageModel() {
         this._usageModel = undefined;
-    };
-    Object.defineProperty(WorkersScript.prototype, "usageModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usageModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get usageModelInput() {
+        return this._usageModel;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WorkersScript.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             annotations: workersScriptAnnotationsToTerraform(this._annotations.internalValue),
@@ -5839,9 +4690,9 @@ var WorkersScript = /** @class */ (function (_super) {
             tail_consumers: cdktf.listMapper(workersScriptTailConsumersToTerraform, false)(this._tailConsumers.internalValue),
             usage_model: cdktf.stringToTerraform(this._usageModel),
         };
-    };
-    WorkersScript.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -5976,15 +4827,6 @@ var WorkersScript = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WorkersScript.tfResourceType = "cloudflare_workers_script";
-    return WorkersScript;
-}(cdktf.TerraformResource));
-exports.WorkersScript = WorkersScript;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_branches
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubRepositoryBranches = exports.DataGithubRepositoryBranchesBranchesList = exports.DataGithubRepositoryBranchesBranchesOutputReference = void 0;
-exports.dataGithubRepositoryBranchesBranchesToTerraform = dataGithubRepositoryBranchesBranchesToTerraform;
-exports.dataGithubRepositoryBranchesBranchesToHclTerraform = dataGithubRepositoryBranchesBranchesToHclTerraform;
-var cdktf = require("cdktf");
-function dataGithubRepositoryBranchesBranchesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataGithubRepositoryBranchesBranchesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,93 +10,92 @@ function dataGithubRepositoryBranchesBranchesToTerraform(struct) {
     }
     return {};
 }
-function dataGithubRepositoryBranchesBranchesToHclTerraform(struct) {
+export function dataGithubRepositoryBranchesBranchesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataGithubRepositoryBranchesBranchesOutputReference = /** @class */ (function (_super) {
-    __extends(DataGithubRepositoryBranchesBranchesOutputReference, _super);
+export class DataGithubRepositoryBranchesBranchesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubRepositoryBranchesBranchesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataGithubRepositoryBranchesBranchesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranchesBranchesOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranchesBranchesOutputReference.prototype, "protected", {
-        // protected - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('protected');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataGithubRepositoryBranchesBranchesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataGithubRepositoryBranchesBranchesOutputReference = DataGithubRepositoryBranchesBranchesOutputReference;
-var DataGithubRepositoryBranchesBranchesList = /** @class */ (function (_super) {
-    __extends(DataGithubRepositoryBranchesBranchesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // protected - computed: true, optional: false, required: false
+    get protected() {
+        return this.getBooleanAttribute('protected');
+    }
+}
+export class DataGithubRepositoryBranchesBranchesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubRepositoryBranchesBranchesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataGithubRepositoryBranchesBranchesList.prototype.get = function (index) {
+    get(index) {
         return new DataGithubRepositoryBranchesBranchesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataGithubRepositoryBranchesBranchesList;
-}(cdktf.ComplexList));
-exports.DataGithubRepositoryBranchesBranchesList = DataGithubRepositoryBranchesBranchesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_branches github_repository_branches}
 */
-var DataGithubRepositoryBranches = /** @class */ (function (_super) {
-    __extends(DataGithubRepositoryBranches, _super);
+export class DataGithubRepositoryBranches extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_branches";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubRepositoryBranches resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubRepositoryBranches to import
+    * @param importFromId The id of the existing DataGithubRepositoryBranches that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_branches#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubRepositoryBranches to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_branches", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -127,8 +106,8 @@ var DataGithubRepositoryBranches = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubRepositoryBranchesConfig
     */
-    function DataGithubRepositoryBranches(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_branches',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -141,132 +120,90 @@ var DataGithubRepositoryBranches = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // branches - computed: true, optional: false, required: false
-        _this._branches = new DataGithubRepositoryBranchesBranchesList(_this, "branches", false);
-        _this._id = config.id;
-        _this._onlyNonProtectedBranches = config.onlyNonProtectedBranches;
-        _this._onlyProtectedBranches = config.onlyProtectedBranches;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._id = config.id;
+        this._onlyNonProtectedBranches = config.onlyNonProtectedBranches;
+        this._onlyProtectedBranches = config.onlyProtectedBranches;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubRepositoryBranches resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubRepositoryBranches to import
-    * @param importFromId The id of the existing DataGithubRepositoryBranches that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_branches#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubRepositoryBranches to import is found
-    */
-    DataGithubRepositoryBranches.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_branches", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "branches", {
-        get: function () {
-            return this._branches;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositoryBranches.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // branches - computed: true, optional: false, required: false
+    _branches = new DataGithubRepositoryBranchesBranchesList(this, "branches", false);
+    get branches() {
+        return this._branches;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "onlyNonProtectedBranches", {
-        get: function () {
-            return this.getBooleanAttribute('only_non_protected_branches');
-        },
-        set: function (value) {
-            this._onlyNonProtectedBranches = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositoryBranches.prototype.resetOnlyNonProtectedBranches = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // only_non_protected_branches - computed: false, optional: true, required: false
+    _onlyNonProtectedBranches;
+    get onlyNonProtectedBranches() {
+        return this.getBooleanAttribute('only_non_protected_branches');
+    }
+    set onlyNonProtectedBranches(value) {
+        this._onlyNonProtectedBranches = value;
+    }
+    resetOnlyNonProtectedBranches() {
         this._onlyNonProtectedBranches = undefined;
-    };
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "onlyNonProtectedBranchesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._onlyNonProtectedBranches;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "onlyProtectedBranches", {
-        get: function () {
-            return this.getBooleanAttribute('only_protected_branches');
-        },
-        set: function (value) {
-            this._onlyProtectedBranches = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositoryBranches.prototype.resetOnlyProtectedBranches = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get onlyNonProtectedBranchesInput() {
+        return this._onlyNonProtectedBranches;
+    }
+    // only_protected_branches - computed: false, optional: true, required: false
+    _onlyProtectedBranches;
+    get onlyProtectedBranches() {
+        return this.getBooleanAttribute('only_protected_branches');
+    }
+    set onlyProtectedBranches(value) {
+        this._onlyProtectedBranches = value;
+    }
+    resetOnlyProtectedBranches() {
         this._onlyProtectedBranches = undefined;
-    };
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "onlyProtectedBranchesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._onlyProtectedBranches;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryBranches.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get onlyProtectedBranchesInput() {
+        return this._onlyProtectedBranches;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubRepositoryBranches.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             only_non_protected_branches: cdktf.booleanToTerraform(this._onlyNonProtectedBranches),
             only_protected_branches: cdktf.booleanToTerraform(this._onlyProtectedBranches),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    DataGithubRepositoryBranches.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -293,15 +230,6 @@ var DataGithubRepositoryBranches = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubRepositoryBranches.tfResourceType = "github_repository_branches";
-    return DataGithubRepositoryBranches;
-}(cdktf.TerraformDataSource));
-exports.DataGithubRepositoryBranches = DataGithubRepositoryBranches;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

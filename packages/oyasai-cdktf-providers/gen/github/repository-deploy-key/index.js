@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deploy_key
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepositoryDeployKey = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deploy_key github_repository_deploy_key}
 */
-var RepositoryDeployKey = /** @class */ (function (_super) {
-    __extends(RepositoryDeployKey, _super);
+export class RepositoryDeployKey extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_deploy_key";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RepositoryDeployKey resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RepositoryDeployKey to import
+    * @param importFromId The id of the existing RepositoryDeployKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deploy_key#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RepositoryDeployKey to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_deploy_key", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var RepositoryDeployKey = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryDeployKeyConfig
     */
-    function RepositoryDeployKey(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_deploy_key',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,138 +46,90 @@ var RepositoryDeployKey = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._key = config.key;
-        _this._readOnly = config.readOnly;
-        _this._repository = config.repository;
-        _this._title = config.title;
-        return _this;
+        });
+        this._id = config.id;
+        this._key = config.key;
+        this._readOnly = config.readOnly;
+        this._repository = config.repository;
+        this._title = config.title;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RepositoryDeployKey resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RepositoryDeployKey to import
-    * @param importFromId The id of the existing RepositoryDeployKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_deploy_key#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RepositoryDeployKey to import is found
-    */
-    RepositoryDeployKey.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_deploy_key", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RepositoryDeployKey.prototype, "etag", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryDeployKey.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(RepositoryDeployKey.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryDeployKey.prototype.resetReadOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(RepositoryDeployKey.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "title", {
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        set: function (value) {
-            this._title = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryDeployKey.prototype, "titleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._title;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // title - computed: false, optional: false, required: true
+    _title;
+    get title() {
+        return this.getStringAttribute('title');
+    }
+    set title(value) {
+        this._title = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get titleInput() {
+        return this._title;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RepositoryDeployKey.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             key: cdktf.stringToTerraform(this._key),
@@ -187,9 +137,9 @@ var RepositoryDeployKey = /** @class */ (function (_super) {
             repository: cdktf.stringToTerraform(this._repository),
             title: cdktf.stringToTerraform(this._title),
         };
-    };
-    RepositoryDeployKey.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -222,15 +172,6 @@ var RepositoryDeployKey = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RepositoryDeployKey.tfResourceType = "github_repository_deploy_key";
-    return RepositoryDeployKey;
-}(cdktf.TerraformResource));
-exports.RepositoryDeployKey = RepositoryDeployKey;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

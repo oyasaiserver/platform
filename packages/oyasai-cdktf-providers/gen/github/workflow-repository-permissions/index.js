@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/workflow_repository_permissions
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkflowRepositoryPermissions = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/workflow_repository_permissions github_workflow_repository_permissions}
 */
-var WorkflowRepositoryPermissions = /** @class */ (function (_super) {
-    __extends(WorkflowRepositoryPermissions, _super);
+export class WorkflowRepositoryPermissions extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_workflow_repository_permissions";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WorkflowRepositoryPermissions resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WorkflowRepositoryPermissions to import
+    * @param importFromId The id of the existing WorkflowRepositoryPermissions that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/workflow_repository_permissions#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WorkflowRepositoryPermissions to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_workflow_repository_permissions", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var WorkflowRepositoryPermissions = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WorkflowRepositoryPermissionsConfig
     */
-    function WorkflowRepositoryPermissions(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_workflow_repository_permissions',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,120 +46,85 @@ var WorkflowRepositoryPermissions = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._canApprovePullRequestReviews = config.canApprovePullRequestReviews;
-        _this._defaultWorkflowPermissions = config.defaultWorkflowPermissions;
-        _this._id = config.id;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._canApprovePullRequestReviews = config.canApprovePullRequestReviews;
+        this._defaultWorkflowPermissions = config.defaultWorkflowPermissions;
+        this._id = config.id;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WorkflowRepositoryPermissions resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WorkflowRepositoryPermissions to import
-    * @param importFromId The id of the existing WorkflowRepositoryPermissions that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/workflow_repository_permissions#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WorkflowRepositoryPermissions to import is found
-    */
-    WorkflowRepositoryPermissions.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_workflow_repository_permissions", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "canApprovePullRequestReviews", {
-        get: function () {
-            return this.getBooleanAttribute('can_approve_pull_request_reviews');
-        },
-        set: function (value) {
-            this._canApprovePullRequestReviews = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkflowRepositoryPermissions.prototype.resetCanApprovePullRequestReviews = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // can_approve_pull_request_reviews - computed: false, optional: true, required: false
+    _canApprovePullRequestReviews;
+    get canApprovePullRequestReviews() {
+        return this.getBooleanAttribute('can_approve_pull_request_reviews');
+    }
+    set canApprovePullRequestReviews(value) {
+        this._canApprovePullRequestReviews = value;
+    }
+    resetCanApprovePullRequestReviews() {
         this._canApprovePullRequestReviews = undefined;
-    };
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "canApprovePullRequestReviewsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._canApprovePullRequestReviews;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "defaultWorkflowPermissions", {
-        get: function () {
-            return this.getStringAttribute('default_workflow_permissions');
-        },
-        set: function (value) {
-            this._defaultWorkflowPermissions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkflowRepositoryPermissions.prototype.resetDefaultWorkflowPermissions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get canApprovePullRequestReviewsInput() {
+        return this._canApprovePullRequestReviews;
+    }
+    // default_workflow_permissions - computed: false, optional: true, required: false
+    _defaultWorkflowPermissions;
+    get defaultWorkflowPermissions() {
+        return this.getStringAttribute('default_workflow_permissions');
+    }
+    set defaultWorkflowPermissions(value) {
+        this._defaultWorkflowPermissions = value;
+    }
+    resetDefaultWorkflowPermissions() {
         this._defaultWorkflowPermissions = undefined;
-    };
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "defaultWorkflowPermissionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultWorkflowPermissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkflowRepositoryPermissions.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultWorkflowPermissionsInput() {
+        return this._defaultWorkflowPermissions;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkflowRepositoryPermissions.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WorkflowRepositoryPermissions.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             can_approve_pull_request_reviews: cdktf.booleanToTerraform(this._canApprovePullRequestReviews),
             default_workflow_permissions: cdktf.stringToTerraform(this._defaultWorkflowPermissions),
             id: cdktf.stringToTerraform(this._id),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    WorkflowRepositoryPermissions.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             can_approve_pull_request_reviews: {
                 value: cdktf.booleanToHclTerraform(this._canApprovePullRequestReviews),
                 isBlock: false,
@@ -188,15 +151,6 @@ var WorkflowRepositoryPermissions = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WorkflowRepositoryPermissions.tfResourceType = "github_workflow_repository_permissions";
-    return WorkflowRepositoryPermissions;
-}(cdktf.TerraformResource));
-exports.WorkflowRepositoryPermissions = WorkflowRepositoryPermissions;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

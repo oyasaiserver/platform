@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/dns_zone_transfers_acl
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DnsZoneTransfersAcl = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/dns_zone_transfers_acl cloudflare_dns_zone_transfers_acl}
 */
-var DnsZoneTransfersAcl = /** @class */ (function (_super) {
-    __extends(DnsZoneTransfersAcl, _super);
+export class DnsZoneTransfersAcl extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_dns_zone_transfers_acl";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DnsZoneTransfersAcl resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DnsZoneTransfersAcl to import
+    * @param importFromId The id of the existing DnsZoneTransfersAcl that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/dns_zone_transfers_acl#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DnsZoneTransfersAcl to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_dns_zone_transfers_acl", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DnsZoneTransfersAcl = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DnsZoneTransfersAclConfig
     */
-    function DnsZoneTransfersAcl(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_dns_zone_transfers_acl',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,102 +46,69 @@ var DnsZoneTransfersAcl = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._ipRange = config.ipRange;
-        _this._name = config.name;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._ipRange = config.ipRange;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DnsZoneTransfersAcl resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DnsZoneTransfersAcl to import
-    * @param importFromId The id of the existing DnsZoneTransfersAcl that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/dns_zone_transfers_acl#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DnsZoneTransfersAcl to import is found
-    */
-    DnsZoneTransfersAcl.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_dns_zone_transfers_acl", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DnsZoneTransfersAcl.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "ipRange", {
-        get: function () {
-            return this.getStringAttribute('ip_range');
-        },
-        set: function (value) {
-            this._ipRange = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "ipRangeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipRange;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DnsZoneTransfersAcl.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ip_range - computed: false, optional: false, required: true
+    _ipRange;
+    get ipRange() {
+        return this.getStringAttribute('ip_range');
+    }
+    set ipRange(value) {
+        this._ipRange = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipRangeInput() {
+        return this._ipRange;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DnsZoneTransfersAcl.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             ip_range: cdktf.stringToTerraform(this._ipRange),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    DnsZoneTransfersAcl.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -164,15 +129,6 @@ var DnsZoneTransfersAcl = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DnsZoneTransfersAcl.tfResourceType = "cloudflare_dns_zone_transfers_acl";
-    return DnsZoneTransfersAcl;
-}(cdktf.TerraformResource));
-exports.DnsZoneTransfersAcl = DnsZoneTransfersAcl;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

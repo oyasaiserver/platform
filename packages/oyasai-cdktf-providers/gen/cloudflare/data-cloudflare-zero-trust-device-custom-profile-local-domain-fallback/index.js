@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_custom_profile_local_domain_fallback
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_custom_profile_local_domain_fallback cloudflare_zero_trust_device_custom_profile_local_domain_fallback}
 */
-var DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback, _super);
+export class DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_device_custom_profile_local_domain_fallback";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_custom_profile_local_domain_fallback#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_custom_profile_local_domain_fallback", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = /** @class *
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallbackConfig
     */
-    function DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_device_custom_profile_local_domain_fallback',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,106 +46,67 @@ var DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = /** @class *
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._policyId = config.policyId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._policyId = config.policyId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_custom_profile_local_domain_fallback#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback to import is found
-    */
-    DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_custom_profile_local_domain_fallback", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "dnsServer", {
-        // dns_server - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('dns_server');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "policyId", {
-        get: function () {
-            return this.getStringAttribute('policy_id');
-        },
-        set: function (value) {
-            this._policyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "policyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._policyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype, "suffix", {
-        // suffix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('suffix');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // dns_server - computed: true, optional: false, required: false
+    get dnsServer() {
+        return this.getListAttribute('dns_server');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // policy_id - computed: false, optional: false, required: true
+    _policyId;
+    get policyId() {
+        return this.getStringAttribute('policy_id');
+    }
+    set policyId(value) {
+        this._policyId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get policyIdInput() {
+        return this._policyId;
+    }
+    // suffix - computed: true, optional: false, required: false
+    get suffix() {
+        return this.getStringAttribute('suffix');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             policy_id: cdktf.stringToTerraform(this._policyId),
         };
-    };
-    DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -162,15 +121,6 @@ var DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = /** @class *
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback.tfResourceType = "cloudflare_zero_trust_device_custom_profile_local_domain_fallback";
-    return DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback = DataCloudflareZeroTrustDeviceCustomProfileLocalDomainFallback;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

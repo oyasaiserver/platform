@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_data_catalog
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareR2DataCatalog = exports.DataCloudflareR2DataCatalogMaintenanceConfigOutputReference = exports.DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference = exports.DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference = void 0;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigCompactionToTerraform = dataCloudflareR2DataCatalogMaintenanceConfigCompactionToTerraform;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigCompactionToHclTerraform = dataCloudflareR2DataCatalogMaintenanceConfigCompactionToHclTerraform;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToTerraform = dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToTerraform;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToHclTerraform = dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToHclTerraform;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigToTerraform = dataCloudflareR2DataCatalogMaintenanceConfigToTerraform;
-exports.dataCloudflareR2DataCatalogMaintenanceConfigToHclTerraform = dataCloudflareR2DataCatalogMaintenanceConfigToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareR2DataCatalogMaintenanceConfigCompactionToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareR2DataCatalogMaintenanceConfigCompactionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,64 +10,48 @@ function dataCloudflareR2DataCatalogMaintenanceConfigCompactionToTerraform(struc
     }
     return {};
 }
-function dataCloudflareR2DataCatalogMaintenanceConfigCompactionToHclTerraform(struct) {
+export function dataCloudflareR2DataCatalogMaintenanceConfigCompactionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference, _super);
+export class DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference.prototype, "targetSizeMb", {
-        // target_size_mb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('target_size_mb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference = DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference;
-function dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // target_size_mb - computed: true, optional: false, required: false
+    get targetSizeMb() {
+        return this.getStringAttribute('target_size_mb');
+    }
+}
+export function dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -100,72 +60,52 @@ function dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToTerrafo
     }
     return {};
 }
-function dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToHclTerraform(struct) {
+export function dataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference, _super);
+export class DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference.prototype, "maxSnapshotAge", {
-        // max_snapshot_age - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('max_snapshot_age');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference.prototype, "minSnapshotsToKeep", {
-        // min_snapshots_to_keep - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('min_snapshots_to_keep');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference = DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference;
-function dataCloudflareR2DataCatalogMaintenanceConfigToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // max_snapshot_age - computed: true, optional: false, required: false
+    get maxSnapshotAge() {
+        return this.getStringAttribute('max_snapshot_age');
+    }
+    // min_snapshots_to_keep - computed: true, optional: false, required: false
+    get minSnapshotsToKeep() {
+        return this.getNumberAttribute('min_snapshots_to_keep');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+}
+export function dataCloudflareR2DataCatalogMaintenanceConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -174,70 +114,70 @@ function dataCloudflareR2DataCatalogMaintenanceConfigToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareR2DataCatalogMaintenanceConfigToHclTerraform(struct) {
+export function dataCloudflareR2DataCatalogMaintenanceConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareR2DataCatalogMaintenanceConfigOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2DataCatalogMaintenanceConfigOutputReference, _super);
+export class DataCloudflareR2DataCatalogMaintenanceConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareR2DataCatalogMaintenanceConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // compaction - computed: true, optional: false, required: false
-        _this._compaction = new DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference(_this, "compaction");
-        // snapshot_expiration - computed: true, optional: false, required: false
-        _this._snapshotExpiration = new DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference(_this, "snapshot_expiration");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigOutputReference.prototype, "compaction", {
-        get: function () {
-            return this._compaction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalogMaintenanceConfigOutputReference.prototype, "snapshotExpiration", {
-        get: function () {
-            return this._snapshotExpiration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareR2DataCatalogMaintenanceConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareR2DataCatalogMaintenanceConfigOutputReference = DataCloudflareR2DataCatalogMaintenanceConfigOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // compaction - computed: true, optional: false, required: false
+    _compaction = new DataCloudflareR2DataCatalogMaintenanceConfigCompactionOutputReference(this, "compaction");
+    get compaction() {
+        return this._compaction;
+    }
+    // snapshot_expiration - computed: true, optional: false, required: false
+    _snapshotExpiration = new DataCloudflareR2DataCatalogMaintenanceConfigSnapshotExpirationOutputReference(this, "snapshot_expiration");
+    get snapshotExpiration() {
+        return this._snapshotExpiration;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_data_catalog cloudflare_r2_data_catalog}
 */
-var DataCloudflareR2DataCatalog = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2DataCatalog, _super);
+export class DataCloudflareR2DataCatalog extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_r2_data_catalog";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareR2DataCatalog resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareR2DataCatalog to import
+    * @param importFromId The id of the existing DataCloudflareR2DataCatalog that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_data_catalog#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareR2DataCatalog to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_data_catalog", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -248,8 +188,8 @@ var DataCloudflareR2DataCatalog = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareR2DataCatalogConfig
     */
-    function DataCloudflareR2DataCatalog(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_r2_data_catalog',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -262,123 +202,76 @@ var DataCloudflareR2DataCatalog = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // maintenance_config - computed: true, optional: false, required: false
-        _this._maintenanceConfig = new DataCloudflareR2DataCatalogMaintenanceConfigOutputReference(_this, "maintenance_config");
-        _this._accountId = config.accountId;
-        _this._bucketName = config.bucketName;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._bucketName = config.bucketName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareR2DataCatalog resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareR2DataCatalog to import
-    * @param importFromId The id of the existing DataCloudflareR2DataCatalog that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_data_catalog#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareR2DataCatalog to import is found
-    */
-    DataCloudflareR2DataCatalog.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_data_catalog", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareR2DataCatalog.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "bucket", {
-        // bucket - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bucket');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "credentialStatus", {
-        // credential_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('credential_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "maintenanceConfig", {
-        get: function () {
-            return this._maintenanceConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2DataCatalog.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket - computed: true, optional: false, required: false
+    get bucket() {
+        return this.getStringAttribute('bucket');
+    }
+    // bucket_name - computed: false, optional: false, required: true
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // credential_status - computed: true, optional: false, required: false
+    get credentialStatus() {
+        return this.getStringAttribute('credential_status');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // maintenance_config - computed: true, optional: false, required: false
+    _maintenanceConfig = new DataCloudflareR2DataCatalogMaintenanceConfigOutputReference(this, "maintenance_config");
+    get maintenanceConfig() {
+        return this._maintenanceConfig;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareR2DataCatalog.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bucket_name: cdktf.stringToTerraform(this._bucketName),
         };
-    };
-    DataCloudflareR2DataCatalog.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -393,15 +286,6 @@ var DataCloudflareR2DataCatalog = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareR2DataCatalog.tfResourceType = "cloudflare_r2_data_catalog";
-    return DataCloudflareR2DataCatalog;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareR2DataCatalog = DataCloudflareR2DataCatalog;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

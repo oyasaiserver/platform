@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script_subdomain
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkersScriptSubdomain = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script_subdomain cloudflare_workers_script_subdomain}
 */
-var WorkersScriptSubdomain = /** @class */ (function (_super) {
-    __extends(WorkersScriptSubdomain, _super);
+export class WorkersScriptSubdomain extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_script_subdomain";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WorkersScriptSubdomain resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WorkersScriptSubdomain to import
+    * @param importFromId The id of the existing WorkersScriptSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script_subdomain#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WorkersScriptSubdomain to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script_subdomain", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var WorkersScriptSubdomain = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WorkersScriptSubdomainConfig
     */
-    function WorkersScriptSubdomain(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_script_subdomain',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,125 +46,86 @@ var WorkersScriptSubdomain = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._enabled = config.enabled;
-        _this._previewsEnabled = config.previewsEnabled;
-        _this._scriptName = config.scriptName;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._enabled = config.enabled;
+        this._previewsEnabled = config.previewsEnabled;
+        this._scriptName = config.scriptName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WorkersScriptSubdomain resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WorkersScriptSubdomain to import
-    * @param importFromId The id of the existing WorkersScriptSubdomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_script_subdomain#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WorkersScriptSubdomain to import is found
-    */
-    WorkersScriptSubdomain.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script_subdomain", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptSubdomain.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "previewsEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('previews_enabled');
-        },
-        set: function (value) {
-            this._previewsEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersScriptSubdomain.prototype.resetPreviewsEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // previews_enabled - computed: true, optional: true, required: false
+    _previewsEnabled;
+    get previewsEnabled() {
+        return this.getBooleanAttribute('previews_enabled');
+    }
+    set previewsEnabled(value) {
+        this._previewsEnabled = value;
+    }
+    resetPreviewsEnabled() {
         this._previewsEnabled = undefined;
-    };
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "previewsEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._previewsEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "scriptName", {
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        set: function (value) {
-            this._scriptName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersScriptSubdomain.prototype, "scriptNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scriptName;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get previewsEnabledInput() {
+        return this._previewsEnabled;
+    }
+    // script_name - computed: false, optional: false, required: true
+    _scriptName;
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    set scriptName(value) {
+        this._scriptName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get scriptNameInput() {
+        return this._scriptName;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WorkersScriptSubdomain.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             enabled: cdktf.booleanToTerraform(this._enabled),
             previews_enabled: cdktf.booleanToTerraform(this._previewsEnabled),
             script_name: cdktf.stringToTerraform(this._scriptName),
         };
-    };
-    WorkersScriptSubdomain.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -193,15 +152,6 @@ var WorkersScriptSubdomain = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WorkersScriptSubdomain.tfResourceType = "cloudflare_workers_script_subdomain";
-    return WorkersScriptSubdomain;
-}(cdktf.TerraformResource));
-exports.WorkersScriptSubdomain = WorkersScriptSubdomain;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

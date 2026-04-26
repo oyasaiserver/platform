@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/byo_ip_prefix
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ByoIpPrefix = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/byo_ip_prefix cloudflare_byo_ip_prefix}
 */
-var ByoIpPrefix = /** @class */ (function (_super) {
-    __extends(ByoIpPrefix, _super);
+export class ByoIpPrefix extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_byo_ip_prefix";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ByoIpPrefix resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ByoIpPrefix to import
+    * @param importFromId The id of the existing ByoIpPrefix that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/byo_ip_prefix#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ByoIpPrefix to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_byo_ip_prefix", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ByoIpPrefix = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ByoIpPrefixConfig
     */
-    function ByoIpPrefix(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_byo_ip_prefix',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,248 +46,153 @@ var ByoIpPrefix = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._asn = config.asn;
-        _this._cidr = config.cidr;
-        _this._delegateLoaCreation = config.delegateLoaCreation;
-        _this._description = config.description;
-        _this._loaDocumentId = config.loaDocumentId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._asn = config.asn;
+        this._cidr = config.cidr;
+        this._delegateLoaCreation = config.delegateLoaCreation;
+        this._description = config.description;
+        this._loaDocumentId = config.loaDocumentId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ByoIpPrefix resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ByoIpPrefix to import
-    * @param importFromId The id of the existing ByoIpPrefix that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/byo_ip_prefix#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ByoIpPrefix to import is found
-    */
-    ByoIpPrefix.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_byo_ip_prefix", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ByoIpPrefix.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ByoIpPrefix.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ByoIpPrefix.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "advertised", {
-        // advertised - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('advertised');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "advertisedModifiedAt", {
-        // advertised_modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('advertised_modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "approved", {
-        // approved - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('approved');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "asn", {
-        get: function () {
-            return this.getNumberAttribute('asn');
-        },
-        set: function (value) {
-            this._asn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "asnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._asn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "cidr", {
-        get: function () {
-            return this.getStringAttribute('cidr');
-        },
-        set: function (value) {
-            this._cidr = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "cidrInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cidr;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "delegateLoaCreation", {
-        get: function () {
-            return this.getBooleanAttribute('delegate_loa_creation');
-        },
-        set: function (value) {
-            this._delegateLoaCreation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ByoIpPrefix.prototype.resetDelegateLoaCreation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // advertised - computed: true, optional: false, required: false
+    get advertised() {
+        return this.getBooleanAttribute('advertised');
+    }
+    // advertised_modified_at - computed: true, optional: false, required: false
+    get advertisedModifiedAt() {
+        return this.getStringAttribute('advertised_modified_at');
+    }
+    // approved - computed: true, optional: false, required: false
+    get approved() {
+        return this.getStringAttribute('approved');
+    }
+    // asn - computed: false, optional: false, required: true
+    _asn;
+    get asn() {
+        return this.getNumberAttribute('asn');
+    }
+    set asn(value) {
+        this._asn = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get asnInput() {
+        return this._asn;
+    }
+    // cidr - computed: false, optional: false, required: true
+    _cidr;
+    get cidr() {
+        return this.getStringAttribute('cidr');
+    }
+    set cidr(value) {
+        this._cidr = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cidrInput() {
+        return this._cidr;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // delegate_loa_creation - computed: true, optional: true, required: false
+    _delegateLoaCreation;
+    get delegateLoaCreation() {
+        return this.getBooleanAttribute('delegate_loa_creation');
+    }
+    set delegateLoaCreation(value) {
+        this._delegateLoaCreation = value;
+    }
+    resetDelegateLoaCreation() {
         this._delegateLoaCreation = undefined;
-    };
-    Object.defineProperty(ByoIpPrefix.prototype, "delegateLoaCreationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delegateLoaCreation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ByoIpPrefix.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get delegateLoaCreationInput() {
+        return this._delegateLoaCreation;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ByoIpPrefix.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "irrValidationState", {
-        // irr_validation_state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('irr_validation_state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "loaDocumentId", {
-        get: function () {
-            return this.getStringAttribute('loa_document_id');
-        },
-        set: function (value) {
-            this._loaDocumentId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ByoIpPrefix.prototype.resetLoaDocumentId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // irr_validation_state - computed: true, optional: false, required: false
+    get irrValidationState() {
+        return this.getStringAttribute('irr_validation_state');
+    }
+    // loa_document_id - computed: false, optional: true, required: false
+    _loaDocumentId;
+    get loaDocumentId() {
+        return this.getStringAttribute('loa_document_id');
+    }
+    set loaDocumentId(value) {
+        this._loaDocumentId = value;
+    }
+    resetLoaDocumentId() {
         this._loaDocumentId = undefined;
-    };
-    Object.defineProperty(ByoIpPrefix.prototype, "loaDocumentIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._loaDocumentId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "onDemandEnabled", {
-        // on_demand_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('on_demand_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "onDemandLocked", {
-        // on_demand_locked - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('on_demand_locked');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "ownershipValidationState", {
-        // ownership_validation_state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ownership_validation_state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "ownershipValidationToken", {
-        // ownership_validation_token - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ownership_validation_token');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ByoIpPrefix.prototype, "rpkiValidationState", {
-        // rpki_validation_state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('rpki_validation_state');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get loaDocumentIdInput() {
+        return this._loaDocumentId;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // on_demand_enabled - computed: true, optional: false, required: false
+    get onDemandEnabled() {
+        return this.getBooleanAttribute('on_demand_enabled');
+    }
+    // on_demand_locked - computed: true, optional: false, required: false
+    get onDemandLocked() {
+        return this.getBooleanAttribute('on_demand_locked');
+    }
+    // ownership_validation_state - computed: true, optional: false, required: false
+    get ownershipValidationState() {
+        return this.getStringAttribute('ownership_validation_state');
+    }
+    // ownership_validation_token - computed: true, optional: false, required: false
+    get ownershipValidationToken() {
+        return this.getStringAttribute('ownership_validation_token');
+    }
+    // rpki_validation_state - computed: true, optional: false, required: false
+    get rpkiValidationState() {
+        return this.getStringAttribute('rpki_validation_state');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ByoIpPrefix.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             asn: cdktf.numberToTerraform(this._asn),
@@ -298,9 +201,9 @@ var ByoIpPrefix = /** @class */ (function (_super) {
             description: cdktf.stringToTerraform(this._description),
             loa_document_id: cdktf.stringToTerraform(this._loaDocumentId),
         };
-    };
-    ByoIpPrefix.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -339,15 +242,6 @@ var ByoIpPrefix = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ByoIpPrefix.tfResourceType = "cloudflare_byo_ip_prefix";
-    return ByoIpPrefix;
-}(cdktf.TerraformResource));
-exports.ByoIpPrefix = ByoIpPrefix;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

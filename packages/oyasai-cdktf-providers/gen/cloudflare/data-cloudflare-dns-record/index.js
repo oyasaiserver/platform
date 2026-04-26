@@ -1,39 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/dns_record
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareDnsRecord = exports.DataCloudflareDnsRecordSettingsOutputReference = exports.DataCloudflareDnsRecordFilterOutputReference = exports.DataCloudflareDnsRecordFilterTagOutputReference = exports.DataCloudflareDnsRecordFilterNameOutputReference = exports.DataCloudflareDnsRecordFilterContentOutputReference = exports.DataCloudflareDnsRecordFilterCommentOutputReference = exports.DataCloudflareDnsRecordDataOutputReference = void 0;
-exports.dataCloudflareDnsRecordDataToTerraform = dataCloudflareDnsRecordDataToTerraform;
-exports.dataCloudflareDnsRecordDataToHclTerraform = dataCloudflareDnsRecordDataToHclTerraform;
-exports.dataCloudflareDnsRecordFilterCommentToTerraform = dataCloudflareDnsRecordFilterCommentToTerraform;
-exports.dataCloudflareDnsRecordFilterCommentToHclTerraform = dataCloudflareDnsRecordFilterCommentToHclTerraform;
-exports.dataCloudflareDnsRecordFilterContentToTerraform = dataCloudflareDnsRecordFilterContentToTerraform;
-exports.dataCloudflareDnsRecordFilterContentToHclTerraform = dataCloudflareDnsRecordFilterContentToHclTerraform;
-exports.dataCloudflareDnsRecordFilterNameToTerraform = dataCloudflareDnsRecordFilterNameToTerraform;
-exports.dataCloudflareDnsRecordFilterNameToHclTerraform = dataCloudflareDnsRecordFilterNameToHclTerraform;
-exports.dataCloudflareDnsRecordFilterTagToTerraform = dataCloudflareDnsRecordFilterTagToTerraform;
-exports.dataCloudflareDnsRecordFilterTagToHclTerraform = dataCloudflareDnsRecordFilterTagToHclTerraform;
-exports.dataCloudflareDnsRecordFilterToTerraform = dataCloudflareDnsRecordFilterToTerraform;
-exports.dataCloudflareDnsRecordFilterToHclTerraform = dataCloudflareDnsRecordFilterToHclTerraform;
-exports.dataCloudflareDnsRecordSettingsToTerraform = dataCloudflareDnsRecordSettingsToTerraform;
-exports.dataCloudflareDnsRecordSettingsToHclTerraform = dataCloudflareDnsRecordSettingsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareDnsRecordDataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareDnsRecordDataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -42,337 +10,185 @@ function dataCloudflareDnsRecordDataToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareDnsRecordDataToHclTerraform(struct) {
+export function dataCloudflareDnsRecordDataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareDnsRecordDataOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordDataOutputReference, _super);
+export class DataCloudflareDnsRecordDataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordDataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // flags - computed: true, optional: false, required: false
-        _this._flags = new cdktf.AnyMap(_this, "flags");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "algorithm", {
-        // algorithm - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('algorithm');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "altitude", {
-        // altitude - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('altitude');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "certificate", {
-        // certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "digest", {
-        // digest - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('digest');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "digestType", {
-        // digest_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('digest_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "fingerprint", {
-        // fingerprint - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fingerprint');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "flags", {
-        get: function () {
-            return this._flags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "keyTag", {
-        // key_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('key_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "latDegrees", {
-        // lat_degrees - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lat_degrees');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "latDirection", {
-        // lat_direction - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('lat_direction');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "latMinutes", {
-        // lat_minutes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lat_minutes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "latSeconds", {
-        // lat_seconds - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lat_seconds');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "longDegrees", {
-        // long_degrees - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('long_degrees');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "longDirection", {
-        // long_direction - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('long_direction');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "longMinutes", {
-        // long_minutes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('long_minutes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "longSeconds", {
-        // long_seconds - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('long_seconds');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "matchingType", {
-        // matching_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('matching_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "order", {
-        // order - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('order');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "port", {
-        // port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "precisionHorz", {
-        // precision_horz - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('precision_horz');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "precisionVert", {
-        // precision_vert - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('precision_vert');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "preference", {
-        // preference - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('preference');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "protocol", {
-        // protocol - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('protocol');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "publicKey", {
-        // public_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('public_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "regex", {
-        // regex - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('regex');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "replacement", {
-        // replacement - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('replacement');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "selector", {
-        // selector - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('selector');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "service", {
-        // service - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('service');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "size", {
-        // size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "tag", {
-        // tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "target", {
-        // target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "usage", {
-        // usage - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('usage');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordDataOutputReference.prototype, "weight", {
-        // weight - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('weight');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordDataOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordDataOutputReference = DataCloudflareDnsRecordDataOutputReference;
-function dataCloudflareDnsRecordFilterCommentToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // algorithm - computed: true, optional: false, required: false
+    get algorithm() {
+        return this.getNumberAttribute('algorithm');
+    }
+    // altitude - computed: true, optional: false, required: false
+    get altitude() {
+        return this.getNumberAttribute('altitude');
+    }
+    // certificate - computed: true, optional: false, required: false
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    // digest - computed: true, optional: false, required: false
+    get digest() {
+        return this.getStringAttribute('digest');
+    }
+    // digest_type - computed: true, optional: false, required: false
+    get digestType() {
+        return this.getNumberAttribute('digest_type');
+    }
+    // fingerprint - computed: true, optional: false, required: false
+    get fingerprint() {
+        return this.getStringAttribute('fingerprint');
+    }
+    // flags - computed: true, optional: false, required: false
+    _flags = new cdktf.AnyMap(this, "flags");
+    get flags() {
+        return this._flags;
+    }
+    // key_tag - computed: true, optional: false, required: false
+    get keyTag() {
+        return this.getNumberAttribute('key_tag');
+    }
+    // lat_degrees - computed: true, optional: false, required: false
+    get latDegrees() {
+        return this.getNumberAttribute('lat_degrees');
+    }
+    // lat_direction - computed: true, optional: false, required: false
+    get latDirection() {
+        return this.getStringAttribute('lat_direction');
+    }
+    // lat_minutes - computed: true, optional: false, required: false
+    get latMinutes() {
+        return this.getNumberAttribute('lat_minutes');
+    }
+    // lat_seconds - computed: true, optional: false, required: false
+    get latSeconds() {
+        return this.getNumberAttribute('lat_seconds');
+    }
+    // long_degrees - computed: true, optional: false, required: false
+    get longDegrees() {
+        return this.getNumberAttribute('long_degrees');
+    }
+    // long_direction - computed: true, optional: false, required: false
+    get longDirection() {
+        return this.getStringAttribute('long_direction');
+    }
+    // long_minutes - computed: true, optional: false, required: false
+    get longMinutes() {
+        return this.getNumberAttribute('long_minutes');
+    }
+    // long_seconds - computed: true, optional: false, required: false
+    get longSeconds() {
+        return this.getNumberAttribute('long_seconds');
+    }
+    // matching_type - computed: true, optional: false, required: false
+    get matchingType() {
+        return this.getNumberAttribute('matching_type');
+    }
+    // order - computed: true, optional: false, required: false
+    get order() {
+        return this.getNumberAttribute('order');
+    }
+    // port - computed: true, optional: false, required: false
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    // precision_horz - computed: true, optional: false, required: false
+    get precisionHorz() {
+        return this.getNumberAttribute('precision_horz');
+    }
+    // precision_vert - computed: true, optional: false, required: false
+    get precisionVert() {
+        return this.getNumberAttribute('precision_vert');
+    }
+    // preference - computed: true, optional: false, required: false
+    get preference() {
+        return this.getNumberAttribute('preference');
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    // protocol - computed: true, optional: false, required: false
+    get protocol() {
+        return this.getNumberAttribute('protocol');
+    }
+    // public_key - computed: true, optional: false, required: false
+    get publicKey() {
+        return this.getStringAttribute('public_key');
+    }
+    // regex - computed: true, optional: false, required: false
+    get regex() {
+        return this.getStringAttribute('regex');
+    }
+    // replacement - computed: true, optional: false, required: false
+    get replacement() {
+        return this.getStringAttribute('replacement');
+    }
+    // selector - computed: true, optional: false, required: false
+    get selector() {
+        return this.getNumberAttribute('selector');
+    }
+    // service - computed: true, optional: false, required: false
+    get service() {
+        return this.getStringAttribute('service');
+    }
+    // size - computed: true, optional: false, required: false
+    get size() {
+        return this.getNumberAttribute('size');
+    }
+    // tag - computed: true, optional: false, required: false
+    get tag() {
+        return this.getStringAttribute('tag');
+    }
+    // target - computed: true, optional: false, required: false
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getNumberAttribute('type');
+    }
+    // usage - computed: true, optional: false, required: false
+    get usage() {
+        return this.getNumberAttribute('usage');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    // weight - computed: true, optional: false, required: false
+    get weight() {
+        return this.getNumberAttribute('weight');
+    }
+}
+export function dataCloudflareDnsRecordFilterCommentToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -388,14 +204,14 @@ function dataCloudflareDnsRecordFilterCommentToTerraform(struct) {
         startswith: cdktf.stringToTerraform(struct.startswith),
     };
 }
-function dataCloudflareDnsRecordFilterCommentToHclTerraform(struct) {
+export function dataCloudflareDnsRecordFilterCommentToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         absent: {
             value: cdktf.stringToHclTerraform(struct.absent),
             isBlock: false,
@@ -434,214 +250,168 @@ function dataCloudflareDnsRecordFilterCommentToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareDnsRecordFilterCommentOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordFilterCommentOutputReference, _super);
+export class DataCloudflareDnsRecordFilterCommentOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordFilterCommentOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._absent !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.absent = this._absent;
-            }
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endswith = this._endswith;
-            }
-            if (this._exact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exact = this._exact;
-            }
-            if (this._present !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.present = this._present;
-            }
-            if (this._startswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startswith = this._startswith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._absent = undefined;
-                this._contains = undefined;
-                this._endswith = undefined;
-                this._exact = undefined;
-                this._present = undefined;
-                this._startswith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._absent = value.absent;
-                this._contains = value.contains;
-                this._endswith = value.endswith;
-                this._exact = value.exact;
-                this._present = value.present;
-                this._startswith = value.startswith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "absent", {
-        get: function () {
-            return this.getStringAttribute('absent');
-        },
-        set: function (value) {
-            this._absent = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetAbsent = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._absent !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.absent = this._absent;
+        }
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endswith = this._endswith;
+        }
+        if (this._exact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exact = this._exact;
+        }
+        if (this._present !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.present = this._present;
+        }
+        if (this._startswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startswith = this._startswith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._absent = undefined;
+            this._contains = undefined;
+            this._endswith = undefined;
+            this._exact = undefined;
+            this._present = undefined;
+            this._startswith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._absent = value.absent;
+            this._contains = value.contains;
+            this._endswith = value.endswith;
+            this._exact = value.exact;
+            this._present = value.present;
+            this._startswith = value.startswith;
+        }
+    }
+    // absent - computed: false, optional: true, required: false
+    _absent;
+    get absent() {
+        return this.getStringAttribute('absent');
+    }
+    set absent(value) {
+        this._absent = value;
+    }
+    resetAbsent() {
         this._absent = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "absentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._absent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetContains = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get absentInput() {
+        return this._absent;
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "endswith", {
-        get: function () {
-            return this.getStringAttribute('endswith');
-        },
-        set: function (value) {
-            this._endswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetEndswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // endswith - computed: false, optional: true, required: false
+    _endswith;
+    get endswith() {
+        return this.getStringAttribute('endswith');
+    }
+    set endswith(value) {
+        this._endswith = value;
+    }
+    resetEndswith() {
         this._endswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "endswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "exact", {
-        get: function () {
-            return this.getStringAttribute('exact');
-        },
-        set: function (value) {
-            this._exact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetExact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endswithInput() {
+        return this._endswith;
+    }
+    // exact - computed: false, optional: true, required: false
+    _exact;
+    get exact() {
+        return this.getStringAttribute('exact');
+    }
+    set exact(value) {
+        this._exact = value;
+    }
+    resetExact() {
         this._exact = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "exactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "present", {
-        get: function () {
-            return this.getStringAttribute('present');
-        },
-        set: function (value) {
-            this._present = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetPresent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exactInput() {
+        return this._exact;
+    }
+    // present - computed: false, optional: true, required: false
+    _present;
+    get present() {
+        return this.getStringAttribute('present');
+    }
+    set present(value) {
+        this._present = value;
+    }
+    resetPresent() {
         this._present = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "presentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._present;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "startswith", {
-        get: function () {
-            return this.getStringAttribute('startswith');
-        },
-        set: function (value) {
-            this._startswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterCommentOutputReference.prototype.resetStartswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get presentInput() {
+        return this._present;
+    }
+    // startswith - computed: false, optional: true, required: false
+    _startswith;
+    get startswith() {
+        return this.getStringAttribute('startswith');
+    }
+    set startswith(value) {
+        this._startswith = value;
+    }
+    resetStartswith() {
         this._startswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterCommentOutputReference.prototype, "startswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordFilterCommentOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordFilterCommentOutputReference = DataCloudflareDnsRecordFilterCommentOutputReference;
-function dataCloudflareDnsRecordFilterContentToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startswithInput() {
+        return this._startswith;
+    }
+}
+export function dataCloudflareDnsRecordFilterContentToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -655,14 +425,14 @@ function dataCloudflareDnsRecordFilterContentToTerraform(struct) {
         startswith: cdktf.stringToTerraform(struct.startswith),
     };
 }
-function dataCloudflareDnsRecordFilterContentToHclTerraform(struct) {
+export function dataCloudflareDnsRecordFilterContentToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         contains: {
             value: cdktf.stringToHclTerraform(struct.contains),
             isBlock: false,
@@ -689,160 +459,126 @@ function dataCloudflareDnsRecordFilterContentToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareDnsRecordFilterContentOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordFilterContentOutputReference, _super);
+export class DataCloudflareDnsRecordFilterContentOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordFilterContentOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endswith = this._endswith;
-            }
-            if (this._exact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exact = this._exact;
-            }
-            if (this._startswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startswith = this._startswith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contains = undefined;
-                this._endswith = undefined;
-                this._exact = undefined;
-                this._startswith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contains = value.contains;
-                this._endswith = value.endswith;
-                this._exact = value.exact;
-                this._startswith = value.startswith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterContentOutputReference.prototype.resetContains = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endswith = this._endswith;
+        }
+        if (this._exact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exact = this._exact;
+        }
+        if (this._startswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startswith = this._startswith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contains = undefined;
+            this._endswith = undefined;
+            this._exact = undefined;
+            this._startswith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contains = value.contains;
+            this._endswith = value.endswith;
+            this._exact = value.exact;
+            this._startswith = value.startswith;
+        }
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "endswith", {
-        get: function () {
-            return this.getStringAttribute('endswith');
-        },
-        set: function (value) {
-            this._endswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterContentOutputReference.prototype.resetEndswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // endswith - computed: false, optional: true, required: false
+    _endswith;
+    get endswith() {
+        return this.getStringAttribute('endswith');
+    }
+    set endswith(value) {
+        this._endswith = value;
+    }
+    resetEndswith() {
         this._endswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "endswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "exact", {
-        get: function () {
-            return this.getStringAttribute('exact');
-        },
-        set: function (value) {
-            this._exact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterContentOutputReference.prototype.resetExact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endswithInput() {
+        return this._endswith;
+    }
+    // exact - computed: false, optional: true, required: false
+    _exact;
+    get exact() {
+        return this.getStringAttribute('exact');
+    }
+    set exact(value) {
+        this._exact = value;
+    }
+    resetExact() {
         this._exact = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "exactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "startswith", {
-        get: function () {
-            return this.getStringAttribute('startswith');
-        },
-        set: function (value) {
-            this._startswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterContentOutputReference.prototype.resetStartswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exactInput() {
+        return this._exact;
+    }
+    // startswith - computed: false, optional: true, required: false
+    _startswith;
+    get startswith() {
+        return this.getStringAttribute('startswith');
+    }
+    set startswith(value) {
+        this._startswith = value;
+    }
+    resetStartswith() {
         this._startswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterContentOutputReference.prototype, "startswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordFilterContentOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordFilterContentOutputReference = DataCloudflareDnsRecordFilterContentOutputReference;
-function dataCloudflareDnsRecordFilterNameToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startswithInput() {
+        return this._startswith;
+    }
+}
+export function dataCloudflareDnsRecordFilterNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -856,14 +592,14 @@ function dataCloudflareDnsRecordFilterNameToTerraform(struct) {
         startswith: cdktf.stringToTerraform(struct.startswith),
     };
 }
-function dataCloudflareDnsRecordFilterNameToHclTerraform(struct) {
+export function dataCloudflareDnsRecordFilterNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         contains: {
             value: cdktf.stringToHclTerraform(struct.contains),
             isBlock: false,
@@ -890,160 +626,126 @@ function dataCloudflareDnsRecordFilterNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareDnsRecordFilterNameOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordFilterNameOutputReference, _super);
+export class DataCloudflareDnsRecordFilterNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordFilterNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endswith = this._endswith;
-            }
-            if (this._exact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exact = this._exact;
-            }
-            if (this._startswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startswith = this._startswith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contains = undefined;
-                this._endswith = undefined;
-                this._exact = undefined;
-                this._startswith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contains = value.contains;
-                this._endswith = value.endswith;
-                this._exact = value.exact;
-                this._startswith = value.startswith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterNameOutputReference.prototype.resetContains = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endswith = this._endswith;
+        }
+        if (this._exact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exact = this._exact;
+        }
+        if (this._startswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startswith = this._startswith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contains = undefined;
+            this._endswith = undefined;
+            this._exact = undefined;
+            this._startswith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contains = value.contains;
+            this._endswith = value.endswith;
+            this._exact = value.exact;
+            this._startswith = value.startswith;
+        }
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "endswith", {
-        get: function () {
-            return this.getStringAttribute('endswith');
-        },
-        set: function (value) {
-            this._endswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterNameOutputReference.prototype.resetEndswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // endswith - computed: false, optional: true, required: false
+    _endswith;
+    get endswith() {
+        return this.getStringAttribute('endswith');
+    }
+    set endswith(value) {
+        this._endswith = value;
+    }
+    resetEndswith() {
         this._endswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "endswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "exact", {
-        get: function () {
-            return this.getStringAttribute('exact');
-        },
-        set: function (value) {
-            this._exact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterNameOutputReference.prototype.resetExact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endswithInput() {
+        return this._endswith;
+    }
+    // exact - computed: false, optional: true, required: false
+    _exact;
+    get exact() {
+        return this.getStringAttribute('exact');
+    }
+    set exact(value) {
+        this._exact = value;
+    }
+    resetExact() {
         this._exact = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "exactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "startswith", {
-        get: function () {
-            return this.getStringAttribute('startswith');
-        },
-        set: function (value) {
-            this._startswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterNameOutputReference.prototype.resetStartswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exactInput() {
+        return this._exact;
+    }
+    // startswith - computed: false, optional: true, required: false
+    _startswith;
+    get startswith() {
+        return this.getStringAttribute('startswith');
+    }
+    set startswith(value) {
+        this._startswith = value;
+    }
+    resetStartswith() {
         this._startswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterNameOutputReference.prototype, "startswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordFilterNameOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordFilterNameOutputReference = DataCloudflareDnsRecordFilterNameOutputReference;
-function dataCloudflareDnsRecordFilterTagToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startswithInput() {
+        return this._startswith;
+    }
+}
+export function dataCloudflareDnsRecordFilterTagToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1059,14 +761,14 @@ function dataCloudflareDnsRecordFilterTagToTerraform(struct) {
         startswith: cdktf.stringToTerraform(struct.startswith),
     };
 }
-function dataCloudflareDnsRecordFilterTagToHclTerraform(struct) {
+export function dataCloudflareDnsRecordFilterTagToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         absent: {
             value: cdktf.stringToHclTerraform(struct.absent),
             isBlock: false,
@@ -1105,214 +807,168 @@ function dataCloudflareDnsRecordFilterTagToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareDnsRecordFilterTagOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordFilterTagOutputReference, _super);
+export class DataCloudflareDnsRecordFilterTagOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordFilterTagOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._absent !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.absent = this._absent;
-            }
-            if (this._contains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contains = this._contains;
-            }
-            if (this._endswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.endswith = this._endswith;
-            }
-            if (this._exact !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exact = this._exact;
-            }
-            if (this._present !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.present = this._present;
-            }
-            if (this._startswith !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startswith = this._startswith;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._absent = undefined;
-                this._contains = undefined;
-                this._endswith = undefined;
-                this._exact = undefined;
-                this._present = undefined;
-                this._startswith = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._absent = value.absent;
-                this._contains = value.contains;
-                this._endswith = value.endswith;
-                this._exact = value.exact;
-                this._present = value.present;
-                this._startswith = value.startswith;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "absent", {
-        get: function () {
-            return this.getStringAttribute('absent');
-        },
-        set: function (value) {
-            this._absent = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetAbsent = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._absent !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.absent = this._absent;
+        }
+        if (this._contains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contains = this._contains;
+        }
+        if (this._endswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.endswith = this._endswith;
+        }
+        if (this._exact !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exact = this._exact;
+        }
+        if (this._present !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.present = this._present;
+        }
+        if (this._startswith !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startswith = this._startswith;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._absent = undefined;
+            this._contains = undefined;
+            this._endswith = undefined;
+            this._exact = undefined;
+            this._present = undefined;
+            this._startswith = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._absent = value.absent;
+            this._contains = value.contains;
+            this._endswith = value.endswith;
+            this._exact = value.exact;
+            this._present = value.present;
+            this._startswith = value.startswith;
+        }
+    }
+    // absent - computed: false, optional: true, required: false
+    _absent;
+    get absent() {
+        return this.getStringAttribute('absent');
+    }
+    set absent(value) {
+        this._absent = value;
+    }
+    resetAbsent() {
         this._absent = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "absentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._absent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "contains", {
-        get: function () {
-            return this.getStringAttribute('contains');
-        },
-        set: function (value) {
-            this._contains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetContains = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get absentInput() {
+        return this._absent;
+    }
+    // contains - computed: false, optional: true, required: false
+    _contains;
+    get contains() {
+        return this.getStringAttribute('contains');
+    }
+    set contains(value) {
+        this._contains = value;
+    }
+    resetContains() {
         this._contains = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "containsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "endswith", {
-        get: function () {
-            return this.getStringAttribute('endswith');
-        },
-        set: function (value) {
-            this._endswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetEndswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containsInput() {
+        return this._contains;
+    }
+    // endswith - computed: false, optional: true, required: false
+    _endswith;
+    get endswith() {
+        return this.getStringAttribute('endswith');
+    }
+    set endswith(value) {
+        this._endswith = value;
+    }
+    resetEndswith() {
         this._endswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "endswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "exact", {
-        get: function () {
-            return this.getStringAttribute('exact');
-        },
-        set: function (value) {
-            this._exact = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetExact = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endswithInput() {
+        return this._endswith;
+    }
+    // exact - computed: false, optional: true, required: false
+    _exact;
+    get exact() {
+        return this.getStringAttribute('exact');
+    }
+    set exact(value) {
+        this._exact = value;
+    }
+    resetExact() {
         this._exact = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "exactInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exact;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "present", {
-        get: function () {
-            return this.getStringAttribute('present');
-        },
-        set: function (value) {
-            this._present = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetPresent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exactInput() {
+        return this._exact;
+    }
+    // present - computed: false, optional: true, required: false
+    _present;
+    get present() {
+        return this.getStringAttribute('present');
+    }
+    set present(value) {
+        this._present = value;
+    }
+    resetPresent() {
         this._present = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "presentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._present;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "startswith", {
-        get: function () {
-            return this.getStringAttribute('startswith');
-        },
-        set: function (value) {
-            this._startswith = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterTagOutputReference.prototype.resetStartswith = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get presentInput() {
+        return this._present;
+    }
+    // startswith - computed: false, optional: true, required: false
+    _startswith;
+    get startswith() {
+        return this.getStringAttribute('startswith');
+    }
+    set startswith(value) {
+        this._startswith = value;
+    }
+    resetStartswith() {
         this._startswith = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterTagOutputReference.prototype, "startswithInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startswith;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordFilterTagOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordFilterTagOutputReference = DataCloudflareDnsRecordFilterTagOutputReference;
-function dataCloudflareDnsRecordFilterToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startswithInput() {
+        return this._startswith;
+    }
+}
+export function dataCloudflareDnsRecordFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1333,14 +989,14 @@ function dataCloudflareDnsRecordFilterToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function dataCloudflareDnsRecordFilterToHclTerraform(struct) {
+export function dataCloudflareDnsRecordFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         comment: {
             value: dataCloudflareDnsRecordFilterCommentToHclTerraform(struct.comment),
             isBlock: true,
@@ -1409,358 +1065,273 @@ function dataCloudflareDnsRecordFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareDnsRecordFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordFilterOutputReference, _super);
+export class DataCloudflareDnsRecordFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // comment - computed: false, optional: true, required: false
-        _this._comment = new DataCloudflareDnsRecordFilterCommentOutputReference(_this, "comment");
-        // content - computed: false, optional: true, required: false
-        _this._content = new DataCloudflareDnsRecordFilterContentOutputReference(_this, "content");
-        // name - computed: false, optional: true, required: false
-        _this._name = new DataCloudflareDnsRecordFilterNameOutputReference(_this, "name");
-        // tag - computed: false, optional: true, required: false
-        _this._tag = new DataCloudflareDnsRecordFilterTagOutputReference(_this, "tag");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._comment) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.comment = (_b = this._comment) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._content) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.content = (_d = this._content) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._match !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.match = this._match;
-            }
-            if (((_e = this._name) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = (_f = this._name) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            if (this._proxied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.proxied = this._proxied;
-            }
-            if (this._search !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.search = this._search;
-            }
-            if (((_g = this._tag) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tag = (_h = this._tag) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (this._tagMatch !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tagMatch = this._tagMatch;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._comment.internalValue = undefined;
-                this._content.internalValue = undefined;
-                this._direction = undefined;
-                this._match = undefined;
-                this._name.internalValue = undefined;
-                this._order = undefined;
-                this._proxied = undefined;
-                this._search = undefined;
-                this._tag.internalValue = undefined;
-                this._tagMatch = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._comment.internalValue = value.comment;
-                this._content.internalValue = value.content;
-                this._direction = value.direction;
-                this._match = value.match;
-                this._name.internalValue = value.name;
-                this._order = value.order;
-                this._proxied = value.proxied;
-                this._search = value.search;
-                this._tag.internalValue = value.tag;
-                this._tagMatch = value.tagMatch;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "comment", {
-        get: function () {
-            return this._comment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.putComment = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._comment?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.comment = this._comment?.internalValue;
+        }
+        if (this._content?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.content = this._content?.internalValue;
+        }
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._match !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.match = this._match;
+        }
+        if (this._name?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name?.internalValue;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        if (this._proxied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.proxied = this._proxied;
+        }
+        if (this._search !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.search = this._search;
+        }
+        if (this._tag?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tag = this._tag?.internalValue;
+        }
+        if (this._tagMatch !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tagMatch = this._tagMatch;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._comment.internalValue = undefined;
+            this._content.internalValue = undefined;
+            this._direction = undefined;
+            this._match = undefined;
+            this._name.internalValue = undefined;
+            this._order = undefined;
+            this._proxied = undefined;
+            this._search = undefined;
+            this._tag.internalValue = undefined;
+            this._tagMatch = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._comment.internalValue = value.comment;
+            this._content.internalValue = value.content;
+            this._direction = value.direction;
+            this._match = value.match;
+            this._name.internalValue = value.name;
+            this._order = value.order;
+            this._proxied = value.proxied;
+            this._search = value.search;
+            this._tag.internalValue = value.tag;
+            this._tagMatch = value.tagMatch;
+            this._type = value.type;
+        }
+    }
+    // comment - computed: false, optional: true, required: false
+    _comment = new DataCloudflareDnsRecordFilterCommentOutputReference(this, "comment");
+    get comment() {
+        return this._comment;
+    }
+    putComment(value) {
         this._comment.internalValue = value;
-    };
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetComment = function () {
+    }
+    resetComment() {
         this._comment.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "commentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._comment.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "content", {
-        get: function () {
-            return this._content;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.putContent = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commentInput() {
+        return this._comment.internalValue;
+    }
+    // content - computed: false, optional: true, required: false
+    _content = new DataCloudflareDnsRecordFilterContentOutputReference(this, "content");
+    get content() {
+        return this._content;
+    }
+    putContent(value) {
         this._content.internalValue = value;
-    };
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetContent = function () {
+    }
+    resetContent() {
         this._content.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "contentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._content.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentInput() {
+        return this._content.internalValue;
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "match", {
-        get: function () {
-            return this.getStringAttribute('match');
-        },
-        set: function (value) {
-            this._match = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // match - computed: true, optional: true, required: false
+    _match;
+    get match() {
+        return this.getStringAttribute('match');
+    }
+    set match(value) {
+        this._match = value;
+    }
+    resetMatch() {
         this._match = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "matchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._match;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.putName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get matchInput() {
+        return this._match;
+    }
+    // name - computed: false, optional: true, required: false
+    _name = new DataCloudflareDnsRecordFilterNameOutputReference(this, "name");
+    get name() {
+        return this._name;
+    }
+    putName(value) {
         this._name.internalValue = value;
-    };
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetName = function () {
+    }
+    resetName() {
         this._name.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name.internalValue;
+    }
+    // order - computed: true, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "proxied", {
-        get: function () {
-            return this.getBooleanAttribute('proxied');
-        },
-        set: function (value) {
-            this._proxied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetProxied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // proxied - computed: true, optional: true, required: false
+    _proxied;
+    get proxied() {
+        return this.getBooleanAttribute('proxied');
+    }
+    set proxied(value) {
+        this._proxied = value;
+    }
+    resetProxied() {
         this._proxied = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "proxiedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._proxied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "search", {
-        get: function () {
-            return this.getStringAttribute('search');
-        },
-        set: function (value) {
-            this._search = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get proxiedInput() {
+        return this._proxied;
+    }
+    // search - computed: false, optional: true, required: false
+    _search;
+    get search() {
+        return this.getStringAttribute('search');
+    }
+    set search(value) {
+        this._search = value;
+    }
+    resetSearch() {
         this._search = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "searchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._search;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "tag", {
-        get: function () {
-            return this._tag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.putTag = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchInput() {
+        return this._search;
+    }
+    // tag - computed: false, optional: true, required: false
+    _tag = new DataCloudflareDnsRecordFilterTagOutputReference(this, "tag");
+    get tag() {
+        return this._tag;
+    }
+    putTag(value) {
         this._tag.internalValue = value;
-    };
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetTag = function () {
+    }
+    resetTag() {
         this._tag.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "tagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tag.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "tagMatch", {
-        get: function () {
-            return this.getStringAttribute('tag_match');
-        },
-        set: function (value) {
-            this._tagMatch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetTagMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagInput() {
+        return this._tag.internalValue;
+    }
+    // tag_match - computed: true, optional: true, required: false
+    _tagMatch;
+    get tagMatch() {
+        return this.getStringAttribute('tag_match');
+    }
+    set tagMatch(value) {
+        this._tagMatch = value;
+    }
+    resetTagMatch() {
         this._tagMatch = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "tagMatchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tagMatch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecordFilterOutputReference.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagMatchInput() {
+        return this._tagMatch;
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecordFilterOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordFilterOutputReference = DataCloudflareDnsRecordFilterOutputReference;
-function dataCloudflareDnsRecordSettingsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export function dataCloudflareDnsRecordSettingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1769,76 +1340,72 @@ function dataCloudflareDnsRecordSettingsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareDnsRecordSettingsToHclTerraform(struct) {
+export function dataCloudflareDnsRecordSettingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareDnsRecordSettingsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecordSettingsOutputReference, _super);
+export class DataCloudflareDnsRecordSettingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareDnsRecordSettingsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareDnsRecordSettingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordSettingsOutputReference.prototype, "flattenCname", {
-        // flatten_cname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('flatten_cname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordSettingsOutputReference.prototype, "ipv4Only", {
-        // ipv4_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ipv4_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecordSettingsOutputReference.prototype, "ipv6Only", {
-        // ipv6_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ipv6_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareDnsRecordSettingsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareDnsRecordSettingsOutputReference = DataCloudflareDnsRecordSettingsOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // flatten_cname - computed: true, optional: false, required: false
+    get flattenCname() {
+        return this.getBooleanAttribute('flatten_cname');
+    }
+    // ipv4_only - computed: true, optional: false, required: false
+    get ipv4Only() {
+        return this.getBooleanAttribute('ipv4_only');
+    }
+    // ipv6_only - computed: true, optional: false, required: false
+    get ipv6Only() {
+        return this.getBooleanAttribute('ipv6_only');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/dns_record cloudflare_dns_record}
 */
-var DataCloudflareDnsRecord = /** @class */ (function (_super) {
-    __extends(DataCloudflareDnsRecord, _super);
+export class DataCloudflareDnsRecord extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_dns_record";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareDnsRecord resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareDnsRecord to import
+    * @param importFromId The id of the existing DataCloudflareDnsRecord that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/dns_record#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareDnsRecord to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_dns_record", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1849,9 +1416,8 @@ var DataCloudflareDnsRecord = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareDnsRecordConfig = {}
     */
-    function DataCloudflareDnsRecord(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_dns_record',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1864,251 +1430,145 @@ var DataCloudflareDnsRecord = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // data - computed: true, optional: false, required: false
-        _this._data = new DataCloudflareDnsRecordDataOutputReference(_this, "data");
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareDnsRecordFilterOutputReference(_this, "filter");
-        // settings - computed: true, optional: false, required: false
-        _this._settings = new DataCloudflareDnsRecordSettingsOutputReference(_this, "settings");
-        _this._dnsRecordId = config.dnsRecordId;
-        _this._filter.internalValue = config.filter;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._dnsRecordId = config.dnsRecordId;
+        this._filter.internalValue = config.filter;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareDnsRecord resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareDnsRecord to import
-    * @param importFromId The id of the existing DataCloudflareDnsRecord that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/dns_record#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareDnsRecord to import is found
-    */
-    DataCloudflareDnsRecord.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_dns_record", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "comment", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // comment - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('comment');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "commentModifiedOn", {
-        // comment_modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('comment_modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "content", {
-        // content - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('content');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "data", {
-        get: function () {
-            return this._data;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "dnsRecordId", {
-        get: function () {
-            return this.getStringAttribute('dns_record_id');
-        },
-        set: function (value) {
-            this._dnsRecordId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecord.prototype.resetDnsRecordId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // comment - computed: true, optional: false, required: false
+    get comment() {
+        return this.getStringAttribute('comment');
+    }
+    // comment_modified_on - computed: true, optional: false, required: false
+    get commentModifiedOn() {
+        return this.getStringAttribute('comment_modified_on');
+    }
+    // content - computed: true, optional: false, required: false
+    get content() {
+        return this.getStringAttribute('content');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // data - computed: true, optional: false, required: false
+    _data = new DataCloudflareDnsRecordDataOutputReference(this, "data");
+    get data() {
+        return this._data;
+    }
+    // dns_record_id - computed: false, optional: true, required: false
+    _dnsRecordId;
+    get dnsRecordId() {
+        return this.getStringAttribute('dns_record_id');
+    }
+    set dnsRecordId(value) {
+        this._dnsRecordId = value;
+    }
+    resetDnsRecordId() {
         this._dnsRecordId = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "dnsRecordIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsRecordId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecord.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsRecordIdInput() {
+        return this._dnsRecordId;
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareDnsRecordFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareDnsRecord.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "meta", {
-        // meta - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('meta');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "privateRouting", {
-        // private_routing - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('private_routing');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "proxiable", {
-        // proxiable - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('proxiable');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "proxied", {
-        // proxied - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('proxied');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "settings", {
-        get: function () {
-            return this._settings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "tags", {
-        // tags - computed: true, optional: false, required: false
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('tags'));
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "tagsModifiedOn", {
-        // tags_modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tags_modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "ttl", {
-        // ttl - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ttl');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareDnsRecord.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    get meta() {
+        return this.getStringAttribute('meta');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    // private_routing - computed: true, optional: false, required: false
+    get privateRouting() {
+        return this.getBooleanAttribute('private_routing');
+    }
+    // proxiable - computed: true, optional: false, required: false
+    get proxiable() {
+        return this.getBooleanAttribute('proxiable');
+    }
+    // proxied - computed: true, optional: false, required: false
+    get proxied() {
+        return this.getBooleanAttribute('proxied');
+    }
+    // settings - computed: true, optional: false, required: false
+    _settings = new DataCloudflareDnsRecordSettingsOutputReference(this, "settings");
+    get settings() {
+        return this._settings;
+    }
+    // tags - computed: true, optional: false, required: false
+    get tags() {
+        return cdktf.Fn.tolist(this.getListAttribute('tags'));
+    }
+    // tags_modified_on - computed: true, optional: false, required: false
+    get tagsModifiedOn() {
+        return this.getStringAttribute('tags_modified_on');
+    }
+    // ttl - computed: true, optional: false, required: false
+    get ttl() {
+        return this.getNumberAttribute('ttl');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareDnsRecord.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareDnsRecord.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             dns_record_id: cdktf.stringToTerraform(this._dnsRecordId),
             filter: dataCloudflareDnsRecordFilterToTerraform(this._filter.internalValue),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareDnsRecord.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             dns_record_id: {
                 value: cdktf.stringToHclTerraform(this._dnsRecordId),
                 isBlock: false,
@@ -2129,15 +1589,6 @@ var DataCloudflareDnsRecord = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareDnsRecord.tfResourceType = "cloudflare_dns_record";
-    return DataCloudflareDnsRecord;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareDnsRecord = DataCloudflareDnsRecord;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

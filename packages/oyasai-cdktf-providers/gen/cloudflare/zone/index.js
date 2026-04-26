@@ -1,37 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Zone = exports.ZoneTenantUnitOutputReference = exports.ZoneTenantOutputReference = exports.ZonePlanOutputReference = exports.ZoneOwnerOutputReference = exports.ZoneMetaOutputReference = exports.ZoneAccountOutputReference = void 0;
-exports.zoneAccountToTerraform = zoneAccountToTerraform;
-exports.zoneAccountToHclTerraform = zoneAccountToHclTerraform;
-exports.zoneMetaToTerraform = zoneMetaToTerraform;
-exports.zoneMetaToHclTerraform = zoneMetaToHclTerraform;
-exports.zoneOwnerToTerraform = zoneOwnerToTerraform;
-exports.zoneOwnerToHclTerraform = zoneOwnerToHclTerraform;
-exports.zonePlanToTerraform = zonePlanToTerraform;
-exports.zonePlanToHclTerraform = zonePlanToHclTerraform;
-exports.zoneTenantToTerraform = zoneTenantToTerraform;
-exports.zoneTenantToHclTerraform = zoneTenantToHclTerraform;
-exports.zoneTenantUnitToTerraform = zoneTenantUnitToTerraform;
-exports.zoneTenantUnitToHclTerraform = zoneTenantUnitToHclTerraform;
-var cdktf = require("cdktf");
-function zoneAccountToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zoneAccountToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -42,14 +12,14 @@ function zoneAccountToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zoneAccountToHclTerraform(struct) {
+export function zoneAccountToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -58,79 +28,63 @@ function zoneAccountToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZoneAccountOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneAccountOutputReference, _super);
+export class ZoneAccountOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZoneAccountOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZoneAccountOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneAccountOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneAccountOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ZoneAccountOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneAccountOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneAccountOutputReference = ZoneAccountOutputReference;
-function zoneMetaToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export function zoneMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -139,104 +93,68 @@ function zoneMetaToTerraform(struct) {
     }
     return {};
 }
-function zoneMetaToHclTerraform(struct) {
+export function zoneMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZoneMetaOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneMetaOutputReference, _super);
+export class ZoneMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZoneMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "cdnOnly", {
-        // cdn_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('cdn_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "customCertificateQuota", {
-        // custom_certificate_quota - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('custom_certificate_quota');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "dnsOnly", {
-        // dns_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('dns_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "foundationDns", {
-        // foundation_dns - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('foundation_dns');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "pageRuleQuota", {
-        // page_rule_quota - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('page_rule_quota');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "phishingDetected", {
-        // phishing_detected - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('phishing_detected');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneMetaOutputReference.prototype, "step", {
-        // step - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('step');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneMetaOutputReference = ZoneMetaOutputReference;
-function zoneOwnerToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cdn_only - computed: true, optional: false, required: false
+    get cdnOnly() {
+        return this.getBooleanAttribute('cdn_only');
+    }
+    // custom_certificate_quota - computed: true, optional: false, required: false
+    get customCertificateQuota() {
+        return this.getNumberAttribute('custom_certificate_quota');
+    }
+    // dns_only - computed: true, optional: false, required: false
+    get dnsOnly() {
+        return this.getBooleanAttribute('dns_only');
+    }
+    // foundation_dns - computed: true, optional: false, required: false
+    get foundationDns() {
+        return this.getBooleanAttribute('foundation_dns');
+    }
+    // page_rule_quota - computed: true, optional: false, required: false
+    get pageRuleQuota() {
+        return this.getNumberAttribute('page_rule_quota');
+    }
+    // phishing_detected - computed: true, optional: false, required: false
+    get phishingDetected() {
+        return this.getBooleanAttribute('phishing_detected');
+    }
+    // step - computed: true, optional: false, required: false
+    get step() {
+        return this.getNumberAttribute('step');
+    }
+}
+export function zoneOwnerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -245,72 +163,52 @@ function zoneOwnerToTerraform(struct) {
     }
     return {};
 }
-function zoneOwnerToHclTerraform(struct) {
+export function zoneOwnerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZoneOwnerOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneOwnerOutputReference, _super);
+export class ZoneOwnerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZoneOwnerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZoneOwnerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneOwnerOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneOwnerOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneOwnerOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneOwnerOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneOwnerOutputReference = ZoneOwnerOutputReference;
-function zonePlanToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export function zonePlanToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -319,128 +217,80 @@ function zonePlanToTerraform(struct) {
     }
     return {};
 }
-function zonePlanToHclTerraform(struct) {
+export function zonePlanToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZonePlanOutputReference = /** @class */ (function (_super) {
-    __extends(ZonePlanOutputReference, _super);
+export class ZonePlanOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZonePlanOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZonePlanOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "canSubscribe", {
-        // can_subscribe - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('can_subscribe');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "currency", {
-        // currency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('currency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "externallyManaged", {
-        // externally_managed - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('externally_managed');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "frequency", {
-        // frequency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('frequency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "isSubscribed", {
-        // is_subscribed - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_subscribed');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "legacyDiscount", {
-        // legacy_discount - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('legacy_discount');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "legacyId", {
-        // legacy_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('legacy_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZonePlanOutputReference.prototype, "price", {
-        // price - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('price');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZonePlanOutputReference;
-}(cdktf.ComplexObject));
-exports.ZonePlanOutputReference = ZonePlanOutputReference;
-function zoneTenantToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // can_subscribe - computed: true, optional: false, required: false
+    get canSubscribe() {
+        return this.getBooleanAttribute('can_subscribe');
+    }
+    // currency - computed: true, optional: false, required: false
+    get currency() {
+        return this.getStringAttribute('currency');
+    }
+    // externally_managed - computed: true, optional: false, required: false
+    get externallyManaged() {
+        return this.getBooleanAttribute('externally_managed');
+    }
+    // frequency - computed: true, optional: false, required: false
+    get frequency() {
+        return this.getStringAttribute('frequency');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_subscribed - computed: true, optional: false, required: false
+    get isSubscribed() {
+        return this.getBooleanAttribute('is_subscribed');
+    }
+    // legacy_discount - computed: true, optional: false, required: false
+    get legacyDiscount() {
+        return this.getBooleanAttribute('legacy_discount');
+    }
+    // legacy_id - computed: true, optional: false, required: false
+    get legacyId() {
+        return this.getStringAttribute('legacy_id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // price - computed: true, optional: false, required: false
+    get price() {
+        return this.getNumberAttribute('price');
+    }
+}
+export function zoneTenantToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -449,64 +299,48 @@ function zoneTenantToTerraform(struct) {
     }
     return {};
 }
-function zoneTenantToHclTerraform(struct) {
+export function zoneTenantToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZoneTenantOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneTenantOutputReference, _super);
+export class ZoneTenantOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZoneTenantOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZoneTenantOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneTenantOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneTenantOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneTenantOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneTenantOutputReference = ZoneTenantOutputReference;
-function zoneTenantUnitToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function zoneTenantUnitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -515,60 +349,64 @@ function zoneTenantUnitToTerraform(struct) {
     }
     return {};
 }
-function zoneTenantUnitToHclTerraform(struct) {
+export function zoneTenantUnitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZoneTenantUnitOutputReference = /** @class */ (function (_super) {
-    __extends(ZoneTenantUnitOutputReference, _super);
+export class ZoneTenantUnitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZoneTenantUnitOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZoneTenantUnitOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneTenantUnitOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZoneTenantUnitOutputReference;
-}(cdktf.ComplexObject));
-exports.ZoneTenantUnitOutputReference = ZoneTenantUnitOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone cloudflare_zone}
 */
-var Zone = /** @class */ (function (_super) {
-    __extends(Zone, _super);
+export class Zone extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zone";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Zone resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Zone to import
+    * @param importFromId The id of the existing Zone that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Zone to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -579,8 +417,8 @@ var Zone = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZoneConfig
     */
-    function Zone(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zone',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -593,284 +431,166 @@ var Zone = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // account - computed: false, optional: false, required: true
-        _this._account = new ZoneAccountOutputReference(_this, "account");
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new ZoneMetaOutputReference(_this, "meta");
-        // owner - computed: true, optional: false, required: false
-        _this._owner = new ZoneOwnerOutputReference(_this, "owner");
-        // plan - computed: true, optional: false, required: false
-        _this._plan = new ZonePlanOutputReference(_this, "plan");
-        // tenant - computed: true, optional: false, required: false
-        _this._tenant = new ZoneTenantOutputReference(_this, "tenant");
-        // tenant_unit - computed: true, optional: false, required: false
-        _this._tenantUnit = new ZoneTenantUnitOutputReference(_this, "tenant_unit");
-        _this._account.internalValue = config.account;
-        _this._name = config.name;
-        _this._paused = config.paused;
-        _this._type = config.type;
-        _this._vanityNameServers = config.vanityNameServers;
-        return _this;
+        });
+        this._account.internalValue = config.account;
+        this._name = config.name;
+        this._paused = config.paused;
+        this._type = config.type;
+        this._vanityNameServers = config.vanityNameServers;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Zone resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Zone to import
-    * @param importFromId The id of the existing Zone that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Zone to import is found
-    */
-    Zone.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Zone.prototype, "account", {
-        get: function () {
-            return this._account;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Zone.prototype.putAccount = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account - computed: false, optional: false, required: true
+    _account = new ZoneAccountOutputReference(this, "account");
+    get account() {
+        return this._account;
+    }
+    putAccount(value) {
         this._account.internalValue = value;
-    };
-    Object.defineProperty(Zone.prototype, "accountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._account.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "activatedOn", {
-        // activated_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('activated_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "cnameSuffix", {
-        // cname_suffix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname_suffix');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "developmentMode", {
-        // development_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('development_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "nameServers", {
-        // name_servers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('name_servers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "originalDnshost", {
-        // original_dnshost - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('original_dnshost');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "originalNameServers", {
-        // original_name_servers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('original_name_servers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "originalRegistrar", {
-        // original_registrar - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('original_registrar');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "owner", {
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "paused", {
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        set: function (value) {
-            this._paused = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Zone.prototype.resetPaused = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountInput() {
+        return this._account.internalValue;
+    }
+    // activated_on - computed: true, optional: false, required: false
+    get activatedOn() {
+        return this.getStringAttribute('activated_on');
+    }
+    // cname_suffix - computed: true, optional: false, required: false
+    get cnameSuffix() {
+        return this.getStringAttribute('cname_suffix');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // development_mode - computed: true, optional: false, required: false
+    get developmentMode() {
+        return this.getNumberAttribute('development_mode');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new ZoneMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // name_servers - computed: true, optional: false, required: false
+    get nameServers() {
+        return this.getListAttribute('name_servers');
+    }
+    // original_dnshost - computed: true, optional: false, required: false
+    get originalDnshost() {
+        return this.getStringAttribute('original_dnshost');
+    }
+    // original_name_servers - computed: true, optional: false, required: false
+    get originalNameServers() {
+        return this.getListAttribute('original_name_servers');
+    }
+    // original_registrar - computed: true, optional: false, required: false
+    get originalRegistrar() {
+        return this.getStringAttribute('original_registrar');
+    }
+    // owner - computed: true, optional: false, required: false
+    _owner = new ZoneOwnerOutputReference(this, "owner");
+    get owner() {
+        return this._owner;
+    }
+    // paused - computed: true, optional: true, required: false
+    _paused;
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    set paused(value) {
+        this._paused = value;
+    }
+    resetPaused() {
         this._paused = undefined;
-    };
-    Object.defineProperty(Zone.prototype, "pausedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paused;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "permissions", {
-        // permissions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('permissions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "plan", {
-        get: function () {
-            return this._plan;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "tenant", {
-        get: function () {
-            return this._tenant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "tenantUnit", {
-        get: function () {
-            return this._tenantUnit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Zone.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pausedInput() {
+        return this._paused;
+    }
+    // permissions - computed: true, optional: false, required: false
+    get permissions() {
+        return this.getListAttribute('permissions');
+    }
+    // plan - computed: true, optional: false, required: false
+    _plan = new ZonePlanOutputReference(this, "plan");
+    get plan() {
+        return this._plan;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tenant - computed: true, optional: false, required: false
+    _tenant = new ZoneTenantOutputReference(this, "tenant");
+    get tenant() {
+        return this._tenant;
+    }
+    // tenant_unit - computed: true, optional: false, required: false
+    _tenantUnit = new ZoneTenantUnitOutputReference(this, "tenant_unit");
+    get tenantUnit() {
+        return this._tenantUnit;
+    }
+    // type - computed: true, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(Zone.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "vanityNameServers", {
-        get: function () {
-            return this.getListAttribute('vanity_name_servers');
-        },
-        set: function (value) {
-            this._vanityNameServers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Zone.prototype.resetVanityNameServers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // vanity_name_servers - computed: true, optional: true, required: false
+    _vanityNameServers;
+    get vanityNameServers() {
+        return this.getListAttribute('vanity_name_servers');
+    }
+    set vanityNameServers(value) {
+        this._vanityNameServers = value;
+    }
+    resetVanityNameServers() {
         this._vanityNameServers = undefined;
-    };
-    Object.defineProperty(Zone.prototype, "vanityNameServersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._vanityNameServers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Zone.prototype, "verificationKey", {
-        // verification_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('verification_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get vanityNameServersInput() {
+        return this._vanityNameServers;
+    }
+    // verification_key - computed: true, optional: false, required: false
+    get verificationKey() {
+        return this.getStringAttribute('verification_key');
+    }
     // =========
     // SYNTHESIS
     // =========
-    Zone.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account: zoneAccountToTerraform(this._account.internalValue),
             name: cdktf.stringToTerraform(this._name),
@@ -878,9 +598,9 @@ var Zone = /** @class */ (function (_super) {
             type: cdktf.stringToTerraform(this._type),
             vanity_name_servers: cdktf.listMapper(cdktf.stringToTerraform, false)(this._vanityNameServers),
         };
-    };
-    Zone.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account: {
                 value: zoneAccountToHclTerraform(this._account.internalValue),
                 isBlock: true,
@@ -913,15 +633,6 @@ var Zone = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Zone.tfResourceType = "cloudflare_zone";
-    return Zone;
-}(cdktf.TerraformResource));
-exports.Zone = Zone;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

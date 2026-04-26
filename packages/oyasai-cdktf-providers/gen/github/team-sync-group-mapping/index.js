@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team_sync_group_mapping
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TeamSyncGroupMapping = exports.TeamSyncGroupMappingGroupList = exports.TeamSyncGroupMappingGroupOutputReference = void 0;
-exports.teamSyncGroupMappingGroupToTerraform = teamSyncGroupMappingGroupToTerraform;
-exports.teamSyncGroupMappingGroupToHclTerraform = teamSyncGroupMappingGroupToHclTerraform;
-var cdktf = require("cdktf");
-function teamSyncGroupMappingGroupToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function teamSyncGroupMappingGroupToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,14 +14,14 @@ function teamSyncGroupMappingGroupToTerraform(struct) {
         group_name: cdktf.stringToTerraform(struct.groupName),
     };
 }
-function teamSyncGroupMappingGroupToHclTerraform(struct) {
+export function teamSyncGroupMappingGroupToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         group_description: {
             value: cdktf.stringToHclTerraform(struct.groupDescription),
             isBlock: false,
@@ -62,153 +42,141 @@ function teamSyncGroupMappingGroupToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var TeamSyncGroupMappingGroupOutputReference = /** @class */ (function (_super) {
-    __extends(TeamSyncGroupMappingGroupOutputReference, _super);
+export class TeamSyncGroupMappingGroupOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TeamSyncGroupMappingGroupOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._groupDescription !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupDescription = this._groupDescription;
-            }
-            if (this._groupId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupId = this._groupId;
-            }
-            if (this._groupName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupName = this._groupName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._groupDescription = undefined;
-                this._groupId = undefined;
-                this._groupName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._groupDescription = value.groupDescription;
-                this._groupId = value.groupId;
-                this._groupName = value.groupName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupDescription", {
-        get: function () {
-            return this.getStringAttribute('group_description');
-        },
-        set: function (value) {
-            this._groupDescription = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupDescriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupDescription;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupId", {
-        get: function () {
-            return this.getStringAttribute('group_id');
-        },
-        set: function (value) {
-            this._groupId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupName", {
-        get: function () {
-            return this.getStringAttribute('group_name');
-        },
-        set: function (value) {
-            this._groupName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMappingGroupOutputReference.prototype, "groupNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TeamSyncGroupMappingGroupOutputReference;
-}(cdktf.ComplexObject));
-exports.TeamSyncGroupMappingGroupOutputReference = TeamSyncGroupMappingGroupOutputReference;
-var TeamSyncGroupMappingGroupList = /** @class */ (function (_super) {
-    __extends(TeamSyncGroupMappingGroupList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._groupDescription !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupDescription = this._groupDescription;
+        }
+        if (this._groupId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupId = this._groupId;
+        }
+        if (this._groupName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupName = this._groupName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._groupDescription = undefined;
+            this._groupId = undefined;
+            this._groupName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._groupDescription = value.groupDescription;
+            this._groupId = value.groupId;
+            this._groupName = value.groupName;
+        }
+    }
+    // group_description - computed: false, optional: false, required: true
+    _groupDescription;
+    get groupDescription() {
+        return this.getStringAttribute('group_description');
+    }
+    set groupDescription(value) {
+        this._groupDescription = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupDescriptionInput() {
+        return this._groupDescription;
+    }
+    // group_id - computed: false, optional: false, required: true
+    _groupId;
+    get groupId() {
+        return this.getStringAttribute('group_id');
+    }
+    set groupId(value) {
+        this._groupId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupIdInput() {
+        return this._groupId;
+    }
+    // group_name - computed: false, optional: false, required: true
+    _groupName;
+    get groupName() {
+        return this.getStringAttribute('group_name');
+    }
+    set groupName(value) {
+        this._groupName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupNameInput() {
+        return this._groupName;
+    }
+}
+export class TeamSyncGroupMappingGroupList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TeamSyncGroupMappingGroupList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    TeamSyncGroupMappingGroupList.prototype.get = function (index) {
+    get(index) {
         return new TeamSyncGroupMappingGroupOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return TeamSyncGroupMappingGroupList;
-}(cdktf.ComplexList));
-exports.TeamSyncGroupMappingGroupList = TeamSyncGroupMappingGroupList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team_sync_group_mapping github_team_sync_group_mapping}
 */
-var TeamSyncGroupMapping = /** @class */ (function (_super) {
-    __extends(TeamSyncGroupMapping, _super);
+export class TeamSyncGroupMapping extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_team_sync_group_mapping";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a TeamSyncGroupMapping resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the TeamSyncGroupMapping to import
+    * @param importFromId The id of the existing TeamSyncGroupMapping that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team_sync_group_mapping#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the TeamSyncGroupMapping to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team_sync_group_mapping", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -219,8 +187,8 @@ var TeamSyncGroupMapping = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TeamSyncGroupMappingConfig
     */
-    function TeamSyncGroupMapping(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_team_sync_group_mapping',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -233,110 +201,72 @@ var TeamSyncGroupMapping = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // group - computed: false, optional: true, required: false
-        _this._group = new TeamSyncGroupMappingGroupList(_this, "group", true);
-        _this._id = config.id;
-        _this._teamSlug = config.teamSlug;
-        _this._group.internalValue = config.group;
-        return _this;
+        });
+        this._id = config.id;
+        this._teamSlug = config.teamSlug;
+        this._group.internalValue = config.group;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a TeamSyncGroupMapping resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the TeamSyncGroupMapping to import
-    * @param importFromId The id of the existing TeamSyncGroupMapping that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team_sync_group_mapping#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the TeamSyncGroupMapping to import is found
-    */
-    TeamSyncGroupMapping.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team_sync_group_mapping", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "etag", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TeamSyncGroupMapping.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "teamSlug", {
-        get: function () {
-            return this.getStringAttribute('team_slug');
-        },
-        set: function (value) {
-            this._teamSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "teamSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._teamSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "group", {
-        get: function () {
-            return this._group;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TeamSyncGroupMapping.prototype.putGroup = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // team_slug - computed: false, optional: false, required: true
+    _teamSlug;
+    get teamSlug() {
+        return this.getStringAttribute('team_slug');
+    }
+    set teamSlug(value) {
+        this._teamSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get teamSlugInput() {
+        return this._teamSlug;
+    }
+    // group - computed: false, optional: true, required: false
+    _group = new TeamSyncGroupMappingGroupList(this, "group", true);
+    get group() {
+        return this._group;
+    }
+    putGroup(value) {
         this._group.internalValue = value;
-    };
-    TeamSyncGroupMapping.prototype.resetGroup = function () {
+    }
+    resetGroup() {
         this._group.internalValue = undefined;
-    };
-    Object.defineProperty(TeamSyncGroupMapping.prototype, "groupInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._group.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupInput() {
+        return this._group.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    TeamSyncGroupMapping.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             team_slug: cdktf.stringToTerraform(this._teamSlug),
             group: cdktf.listMapper(teamSyncGroupMappingGroupToTerraform, true)(this._group.internalValue),
         };
-    };
-    TeamSyncGroupMapping.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -357,15 +287,6 @@ var TeamSyncGroupMapping = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    TeamSyncGroupMapping.tfResourceType = "github_team_sync_group_mapping";
-    return TeamSyncGroupMapping;
-}(cdktf.TerraformResource));
-exports.TeamSyncGroupMapping = TeamSyncGroupMapping;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

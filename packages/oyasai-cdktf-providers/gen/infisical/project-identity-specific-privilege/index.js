@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProjectIdentitySpecificPrivilege = exports.ProjectIdentitySpecificPrivilegePermissionsV2List = exports.ProjectIdentitySpecificPrivilegePermissionsV2OutputReference = exports.ProjectIdentitySpecificPrivilegePermissionOutputReference = exports.ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference = void 0;
-exports.projectIdentitySpecificPrivilegePermissionConditionsToTerraform = projectIdentitySpecificPrivilegePermissionConditionsToTerraform;
-exports.projectIdentitySpecificPrivilegePermissionConditionsToHclTerraform = projectIdentitySpecificPrivilegePermissionConditionsToHclTerraform;
-exports.projectIdentitySpecificPrivilegePermissionToTerraform = projectIdentitySpecificPrivilegePermissionToTerraform;
-exports.projectIdentitySpecificPrivilegePermissionToHclTerraform = projectIdentitySpecificPrivilegePermissionToHclTerraform;
-exports.projectIdentitySpecificPrivilegePermissionsV2ToTerraform = projectIdentitySpecificPrivilegePermissionsV2ToTerraform;
-exports.projectIdentitySpecificPrivilegePermissionsV2ToHclTerraform = projectIdentitySpecificPrivilegePermissionsV2ToHclTerraform;
-var cdktf = require("cdktf");
-function projectIdentitySpecificPrivilegePermissionConditionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function projectIdentitySpecificPrivilegePermissionConditionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +13,14 @@ function projectIdentitySpecificPrivilegePermissionConditionsToTerraform(struct)
         secret_path: cdktf.stringToTerraform(struct.secretPath),
     };
 }
-function projectIdentitySpecificPrivilegePermissionConditionsToHclTerraform(struct) {
+export function projectIdentitySpecificPrivilegePermissionConditionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         environment: {
             value: cdktf.stringToHclTerraform(struct.environment),
             isBlock: false,
@@ -59,103 +35,81 @@ function projectIdentitySpecificPrivilegePermissionConditionsToHclTerraform(stru
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference = /** @class */ (function (_super) {
-    __extends(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference, _super);
+export class ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._environment !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.environment = this._environment;
-            }
-            if (this._secretPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretPath = this._secretPath;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._environment = undefined;
-                this._secretPath = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._environment = value.environment;
-                this._secretPath = value.secretPath;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype, "secretPath", {
-        get: function () {
-            return this.getStringAttribute('secret_path');
-        },
-        set: function (value) {
-            this._secretPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype.resetSecretPath = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._environment !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.environment = this._environment;
+        }
+        if (this._secretPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretPath = this._secretPath;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._environment = undefined;
+            this._secretPath = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._environment = value.environment;
+            this._secretPath = value.secretPath;
+        }
+    }
+    // environment - computed: false, optional: false, required: true
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // secret_path - computed: false, optional: true, required: false
+    _secretPath;
+    get secretPath() {
+        return this.getStringAttribute('secret_path');
+    }
+    set secretPath(value) {
+        this._secretPath = value;
+    }
+    resetSecretPath() {
         this._secretPath = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference.prototype, "secretPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference = ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference;
-function projectIdentitySpecificPrivilegePermissionToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretPathInput() {
+        return this._secretPath;
+    }
+}
+export function projectIdentitySpecificPrivilegePermissionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -168,14 +122,14 @@ function projectIdentitySpecificPrivilegePermissionToTerraform(struct) {
         subject: cdktf.stringToTerraform(struct.subject),
     };
 }
-function projectIdentitySpecificPrivilegePermissionToHclTerraform(struct) {
+export function projectIdentitySpecificPrivilegePermissionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         actions: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.actions),
             isBlock: false,
@@ -196,127 +150,96 @@ function projectIdentitySpecificPrivilegePermissionToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ProjectIdentitySpecificPrivilegePermissionOutputReference = /** @class */ (function (_super) {
-    __extends(ProjectIdentitySpecificPrivilegePermissionOutputReference, _super);
+export class ProjectIdentitySpecificPrivilegePermissionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ProjectIdentitySpecificPrivilegePermissionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // conditions - computed: false, optional: false, required: true
-        _this._conditions = new ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference(_this, "conditions");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._actions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.actions = this._actions;
-            }
-            if (((_a = this._conditions) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.conditions = (_b = this._conditions) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._subject !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subject = this._subject;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._actions = undefined;
-                this._conditions.internalValue = undefined;
-                this._subject = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._actions = value.actions;
-                this._conditions.internalValue = value.conditions;
-                this._subject = value.subject;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "actions", {
-        get: function () {
-            return this.getListAttribute('actions');
-        },
-        set: function (value) {
-            this._actions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "actionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._actions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "conditions", {
-        get: function () {
-            return this._conditions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype.putConditions = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._actions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.actions = this._actions;
+        }
+        if (this._conditions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.conditions = this._conditions?.internalValue;
+        }
+        if (this._subject !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subject = this._subject;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._actions = undefined;
+            this._conditions.internalValue = undefined;
+            this._subject = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._actions = value.actions;
+            this._conditions.internalValue = value.conditions;
+            this._subject = value.subject;
+        }
+    }
+    // actions - computed: false, optional: false, required: true
+    _actions;
+    get actions() {
+        return this.getListAttribute('actions');
+    }
+    set actions(value) {
+        this._actions = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionsInput() {
+        return this._actions;
+    }
+    // conditions - computed: false, optional: false, required: true
+    _conditions = new ProjectIdentitySpecificPrivilegePermissionConditionsOutputReference(this, "conditions");
+    get conditions() {
+        return this._conditions;
+    }
+    putConditions(value) {
         this._conditions.internalValue = value;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "conditionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._conditions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "subject", {
-        get: function () {
-            return this.getStringAttribute('subject');
-        },
-        set: function (value) {
-            this._subject = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionOutputReference.prototype, "subjectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subject;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ProjectIdentitySpecificPrivilegePermissionOutputReference;
-}(cdktf.ComplexObject));
-exports.ProjectIdentitySpecificPrivilegePermissionOutputReference = ProjectIdentitySpecificPrivilegePermissionOutputReference;
-function projectIdentitySpecificPrivilegePermissionsV2ToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get conditionsInput() {
+        return this._conditions.internalValue;
+    }
+    // subject - computed: false, optional: false, required: true
+    _subject;
+    get subject() {
+        return this.getStringAttribute('subject');
+    }
+    set subject(value) {
+        this._subject = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get subjectInput() {
+        return this._subject;
+    }
+}
+export function projectIdentitySpecificPrivilegePermissionsV2ToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -330,14 +253,14 @@ function projectIdentitySpecificPrivilegePermissionsV2ToTerraform(struct) {
         subject: cdktf.stringToTerraform(struct.subject),
     };
 }
-function projectIdentitySpecificPrivilegePermissionsV2ToHclTerraform(struct) {
+export function projectIdentitySpecificPrivilegePermissionsV2ToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         action: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.action),
             isBlock: false,
@@ -364,183 +287,165 @@ function projectIdentitySpecificPrivilegePermissionsV2ToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ProjectIdentitySpecificPrivilegePermissionsV2OutputReference = /** @class */ (function (_super) {
-    __extends(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference, _super);
+export class ProjectIdentitySpecificPrivilegePermissionsV2OutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ProjectIdentitySpecificPrivilegePermissionsV2OutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._action !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.action = this._action;
-            }
-            if (this._conditions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.conditions = this._conditions;
-            }
-            if (this._inverted !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.inverted = this._inverted;
-            }
-            if (this._subject !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subject = this._subject;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._action = undefined;
-                this._conditions = undefined;
-                this._inverted = undefined;
-                this._subject = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._action = value.action;
-                this._conditions = value.conditions;
-                this._inverted = value.inverted;
-                this._subject = value.subject;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "action", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('action'));
-        },
-        set: function (value) {
-            this._action = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "actionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._action;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "conditions", {
-        get: function () {
-            return this.getStringAttribute('conditions');
-        },
-        set: function (value) {
-            this._conditions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype.resetConditions = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._action !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.action = this._action;
+        }
+        if (this._conditions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.conditions = this._conditions;
+        }
+        if (this._inverted !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.inverted = this._inverted;
+        }
+        if (this._subject !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subject = this._subject;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._action = undefined;
+            this._conditions = undefined;
+            this._inverted = undefined;
+            this._subject = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._action = value.action;
+            this._conditions = value.conditions;
+            this._inverted = value.inverted;
+            this._subject = value.subject;
+        }
+    }
+    // action - computed: false, optional: false, required: true
+    _action;
+    get action() {
+        return cdktf.Fn.tolist(this.getListAttribute('action'));
+    }
+    set action(value) {
+        this._action = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionInput() {
+        return this._action;
+    }
+    // conditions - computed: false, optional: true, required: false
+    _conditions;
+    get conditions() {
+        return this.getStringAttribute('conditions');
+    }
+    set conditions(value) {
+        this._conditions = value;
+    }
+    resetConditions() {
         this._conditions = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "conditionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._conditions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "inverted", {
-        get: function () {
-            return this.getBooleanAttribute('inverted');
-        },
-        set: function (value) {
-            this._inverted = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype.resetInverted = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get conditionsInput() {
+        return this._conditions;
+    }
+    // inverted - computed: true, optional: true, required: false
+    _inverted;
+    get inverted() {
+        return this.getBooleanAttribute('inverted');
+    }
+    set inverted(value) {
+        this._inverted = value;
+    }
+    resetInverted() {
         this._inverted = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "invertedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._inverted;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "subject", {
-        get: function () {
-            return this.getStringAttribute('subject');
-        },
-        set: function (value) {
-            this._subject = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilegePermissionsV2OutputReference.prototype, "subjectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subject;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ProjectIdentitySpecificPrivilegePermissionsV2OutputReference;
-}(cdktf.ComplexObject));
-exports.ProjectIdentitySpecificPrivilegePermissionsV2OutputReference = ProjectIdentitySpecificPrivilegePermissionsV2OutputReference;
-var ProjectIdentitySpecificPrivilegePermissionsV2List = /** @class */ (function (_super) {
-    __extends(ProjectIdentitySpecificPrivilegePermissionsV2List, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get invertedInput() {
+        return this._inverted;
+    }
+    // subject - computed: false, optional: false, required: true
+    _subject;
+    get subject() {
+        return this.getStringAttribute('subject');
+    }
+    set subject(value) {
+        this._subject = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get subjectInput() {
+        return this._subject;
+    }
+}
+export class ProjectIdentitySpecificPrivilegePermissionsV2List extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ProjectIdentitySpecificPrivilegePermissionsV2List(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ProjectIdentitySpecificPrivilegePermissionsV2List.prototype.get = function (index) {
+    get(index) {
         return new ProjectIdentitySpecificPrivilegePermissionsV2OutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ProjectIdentitySpecificPrivilegePermissionsV2List;
-}(cdktf.ComplexList));
-exports.ProjectIdentitySpecificPrivilegePermissionsV2List = ProjectIdentitySpecificPrivilegePermissionsV2List;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege infisical_project_identity_specific_privilege}
 */
-var ProjectIdentitySpecificPrivilege = /** @class */ (function (_super) {
-    __extends(ProjectIdentitySpecificPrivilege, _super);
+export class ProjectIdentitySpecificPrivilege extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_project_identity_specific_privilege";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ProjectIdentitySpecificPrivilege resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ProjectIdentitySpecificPrivilege to import
+    * @param importFromId The id of the existing ProjectIdentitySpecificPrivilege that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ProjectIdentitySpecificPrivilege to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_project_identity_specific_privilege", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -551,8 +456,8 @@ var ProjectIdentitySpecificPrivilege = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ProjectIdentitySpecificPrivilegeConfig
     */
-    function ProjectIdentitySpecificPrivilege(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_project_identity_specific_privilege',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -565,255 +470,173 @@ var ProjectIdentitySpecificPrivilege = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // permission - computed: false, optional: true, required: false
-        _this._permission = new ProjectIdentitySpecificPrivilegePermissionOutputReference(_this, "permission");
-        // permissions_v2 - computed: false, optional: true, required: false
-        _this._permissionsV2 = new ProjectIdentitySpecificPrivilegePermissionsV2List(_this, "permissions_v2", false);
-        _this._identityId = config.identityId;
-        _this._isTemporary = config.isTemporary;
-        _this._permission.internalValue = config.permission;
-        _this._permissionsV2.internalValue = config.permissionsV2;
-        _this._projectSlug = config.projectSlug;
-        _this._slug = config.slug;
-        _this._temporaryAccessEndTime = config.temporaryAccessEndTime;
-        _this._temporaryAccessStartTime = config.temporaryAccessStartTime;
-        _this._temporaryMode = config.temporaryMode;
-        _this._temporaryRange = config.temporaryRange;
-        return _this;
+        });
+        this._identityId = config.identityId;
+        this._isTemporary = config.isTemporary;
+        this._permission.internalValue = config.permission;
+        this._permissionsV2.internalValue = config.permissionsV2;
+        this._projectSlug = config.projectSlug;
+        this._slug = config.slug;
+        this._temporaryAccessEndTime = config.temporaryAccessEndTime;
+        this._temporaryAccessStartTime = config.temporaryAccessStartTime;
+        this._temporaryMode = config.temporaryMode;
+        this._temporaryRange = config.temporaryRange;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ProjectIdentitySpecificPrivilege resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ProjectIdentitySpecificPrivilege to import
-    * @param importFromId The id of the existing ProjectIdentitySpecificPrivilege that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ProjectIdentitySpecificPrivilege to import is found
-    */
-    ProjectIdentitySpecificPrivilege.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_project_identity_specific_privilege", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "id", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "isTemporary", {
-        get: function () {
-            return this.getBooleanAttribute('is_temporary');
-        },
-        set: function (value) {
-            this._isTemporary = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetIsTemporary = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // is_temporary - computed: true, optional: true, required: false
+    _isTemporary;
+    get isTemporary() {
+        return this.getBooleanAttribute('is_temporary');
+    }
+    set isTemporary(value) {
+        this._isTemporary = value;
+    }
+    resetIsTemporary() {
         this._isTemporary = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "isTemporaryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isTemporary;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "permission", {
-        get: function () {
-            return this._permission;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.putPermission = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isTemporaryInput() {
+        return this._isTemporary;
+    }
+    // permission - computed: false, optional: true, required: false
+    _permission = new ProjectIdentitySpecificPrivilegePermissionOutputReference(this, "permission");
+    get permission() {
+        return this._permission;
+    }
+    putPermission(value) {
         this._permission.internalValue = value;
-    };
-    ProjectIdentitySpecificPrivilege.prototype.resetPermission = function () {
+    }
+    resetPermission() {
         this._permission.internalValue = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "permissionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permission.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "permissionsV2", {
-        get: function () {
-            return this._permissionsV2;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.putPermissionsV2 = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionInput() {
+        return this._permission.internalValue;
+    }
+    // permissions_v2 - computed: false, optional: true, required: false
+    _permissionsV2 = new ProjectIdentitySpecificPrivilegePermissionsV2List(this, "permissions_v2", false);
+    get permissionsV2() {
+        return this._permissionsV2;
+    }
+    putPermissionsV2(value) {
         this._permissionsV2.internalValue = value;
-    };
-    ProjectIdentitySpecificPrivilege.prototype.resetPermissionsV2 = function () {
+    }
+    resetPermissionsV2() {
         this._permissionsV2.internalValue = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "permissionsV2Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permissionsV2.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "slug", {
-        get: function () {
-            return this.getStringAttribute('slug');
-        },
-        set: function (value) {
-            this._slug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetSlug = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionsV2Input() {
+        return this._permissionsV2.internalValue;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // slug - computed: true, optional: true, required: false
+    _slug;
+    get slug() {
+        return this.getStringAttribute('slug');
+    }
+    set slug(value) {
+        this._slug = value;
+    }
+    resetSlug() {
         this._slug = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "slugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._slug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryAccessEndTime", {
-        get: function () {
-            return this.getStringAttribute('temporary_access_end_time');
-        },
-        set: function (value) {
-            this._temporaryAccessEndTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetTemporaryAccessEndTime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get slugInput() {
+        return this._slug;
+    }
+    // temporary_access_end_time - computed: true, optional: true, required: false
+    _temporaryAccessEndTime;
+    get temporaryAccessEndTime() {
+        return this.getStringAttribute('temporary_access_end_time');
+    }
+    set temporaryAccessEndTime(value) {
+        this._temporaryAccessEndTime = value;
+    }
+    resetTemporaryAccessEndTime() {
         this._temporaryAccessEndTime = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryAccessEndTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._temporaryAccessEndTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryAccessStartTime", {
-        get: function () {
-            return this.getStringAttribute('temporary_access_start_time');
-        },
-        set: function (value) {
-            this._temporaryAccessStartTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetTemporaryAccessStartTime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get temporaryAccessEndTimeInput() {
+        return this._temporaryAccessEndTime;
+    }
+    // temporary_access_start_time - computed: true, optional: true, required: false
+    _temporaryAccessStartTime;
+    get temporaryAccessStartTime() {
+        return this.getStringAttribute('temporary_access_start_time');
+    }
+    set temporaryAccessStartTime(value) {
+        this._temporaryAccessStartTime = value;
+    }
+    resetTemporaryAccessStartTime() {
         this._temporaryAccessStartTime = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryAccessStartTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._temporaryAccessStartTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryMode", {
-        get: function () {
-            return this.getStringAttribute('temporary_mode');
-        },
-        set: function (value) {
-            this._temporaryMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetTemporaryMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get temporaryAccessStartTimeInput() {
+        return this._temporaryAccessStartTime;
+    }
+    // temporary_mode - computed: true, optional: true, required: false
+    _temporaryMode;
+    get temporaryMode() {
+        return this.getStringAttribute('temporary_mode');
+    }
+    set temporaryMode(value) {
+        this._temporaryMode = value;
+    }
+    resetTemporaryMode() {
         this._temporaryMode = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._temporaryMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryRange", {
-        get: function () {
-            return this.getStringAttribute('temporary_range');
-        },
-        set: function (value) {
-            this._temporaryRange = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectIdentitySpecificPrivilege.prototype.resetTemporaryRange = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get temporaryModeInput() {
+        return this._temporaryMode;
+    }
+    // temporary_range - computed: true, optional: true, required: false
+    _temporaryRange;
+    get temporaryRange() {
+        return this.getStringAttribute('temporary_range');
+    }
+    set temporaryRange(value) {
+        this._temporaryRange = value;
+    }
+    resetTemporaryRange() {
         this._temporaryRange = undefined;
-    };
-    Object.defineProperty(ProjectIdentitySpecificPrivilege.prototype, "temporaryRangeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._temporaryRange;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get temporaryRangeInput() {
+        return this._temporaryRange;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ProjectIdentitySpecificPrivilege.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             identity_id: cdktf.stringToTerraform(this._identityId),
             is_temporary: cdktf.booleanToTerraform(this._isTemporary),
@@ -826,9 +649,9 @@ var ProjectIdentitySpecificPrivilege = /** @class */ (function (_super) {
             temporary_mode: cdktf.stringToTerraform(this._temporaryMode),
             temporary_range: cdktf.stringToTerraform(this._temporaryRange),
         };
-    };
-    ProjectIdentitySpecificPrivilege.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             identity_id: {
                 value: cdktf.stringToHclTerraform(this._identityId),
                 isBlock: false,
@@ -891,15 +714,6 @@ var ProjectIdentitySpecificPrivilege = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ProjectIdentitySpecificPrivilege.tfResourceType = "infisical_project_identity_specific_privilege";
-    return ProjectIdentitySpecificPrivilege;
-}(cdktf.TerraformResource));
-exports.ProjectIdentitySpecificPrivilege = ProjectIdentitySpecificPrivilege;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

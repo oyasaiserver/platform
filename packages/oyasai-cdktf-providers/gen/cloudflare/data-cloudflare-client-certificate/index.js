@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/client_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareClientCertificate = exports.DataCloudflareClientCertificateFilterOutputReference = exports.DataCloudflareClientCertificateCertificateAuthorityOutputReference = void 0;
-exports.dataCloudflareClientCertificateCertificateAuthorityToTerraform = dataCloudflareClientCertificateCertificateAuthorityToTerraform;
-exports.dataCloudflareClientCertificateCertificateAuthorityToHclTerraform = dataCloudflareClientCertificateCertificateAuthorityToHclTerraform;
-exports.dataCloudflareClientCertificateFilterToTerraform = dataCloudflareClientCertificateFilterToTerraform;
-exports.dataCloudflareClientCertificateFilterToHclTerraform = dataCloudflareClientCertificateFilterToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareClientCertificateCertificateAuthorityToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareClientCertificateCertificateAuthorityToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,64 +10,48 @@ function dataCloudflareClientCertificateCertificateAuthorityToTerraform(struct) 
     }
     return {};
 }
-function dataCloudflareClientCertificateCertificateAuthorityToHclTerraform(struct) {
+export function dataCloudflareClientCertificateCertificateAuthorityToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareClientCertificateCertificateAuthorityOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareClientCertificateCertificateAuthorityOutputReference, _super);
+export class DataCloudflareClientCertificateCertificateAuthorityOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareClientCertificateCertificateAuthorityOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareClientCertificateCertificateAuthorityOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificateCertificateAuthorityOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificateCertificateAuthorityOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareClientCertificateCertificateAuthorityOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareClientCertificateCertificateAuthorityOutputReference = DataCloudflareClientCertificateCertificateAuthorityOutputReference;
-function dataCloudflareClientCertificateFilterToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function dataCloudflareClientCertificateFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -102,14 +64,14 @@ function dataCloudflareClientCertificateFilterToTerraform(struct) {
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function dataCloudflareClientCertificateFilterToHclTerraform(struct) {
+export function dataCloudflareClientCertificateFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         limit: {
             value: cdktf.numberToHclTerraform(struct.limit),
             isBlock: false,
@@ -130,137 +92,125 @@ function dataCloudflareClientCertificateFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareClientCertificateFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareClientCertificateFilterOutputReference, _super);
+export class DataCloudflareClientCertificateFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareClientCertificateFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._limit !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.limit = this._limit;
-            }
-            if (this._offset !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.offset = this._offset;
-            }
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._limit = undefined;
-                this._offset = undefined;
-                this._status = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._limit = value.limit;
-                this._offset = value.offset;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "limit", {
-        get: function () {
-            return this.getNumberAttribute('limit');
-        },
-        set: function (value) {
-            this._limit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificateFilterOutputReference.prototype.resetLimit = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._limit !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.limit = this._limit;
+        }
+        if (this._offset !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.offset = this._offset;
+        }
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._limit = undefined;
+            this._offset = undefined;
+            this._status = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._limit = value.limit;
+            this._offset = value.offset;
+            this._status = value.status;
+        }
+    }
+    // limit - computed: false, optional: true, required: false
+    _limit;
+    get limit() {
+        return this.getNumberAttribute('limit');
+    }
+    set limit(value) {
+        this._limit = value;
+    }
+    resetLimit() {
         this._limit = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "limitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._limit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "offset", {
-        get: function () {
-            return this.getNumberAttribute('offset');
-        },
-        set: function (value) {
-            this._offset = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificateFilterOutputReference.prototype.resetOffset = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get limitInput() {
+        return this._limit;
+    }
+    // offset - computed: false, optional: true, required: false
+    _offset;
+    get offset() {
+        return this.getNumberAttribute('offset');
+    }
+    set offset(value) {
+        this._offset = value;
+    }
+    resetOffset() {
         this._offset = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "offsetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._offset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificateFilterOutputReference.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get offsetInput() {
+        return this._offset;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificateFilterOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareClientCertificateFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareClientCertificateFilterOutputReference = DataCloudflareClientCertificateFilterOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/client_certificate cloudflare_client_certificate}
 */
-var DataCloudflareClientCertificate = /** @class */ (function (_super) {
-    __extends(DataCloudflareClientCertificate, _super);
+export class DataCloudflareClientCertificate extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_client_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareClientCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareClientCertificate to import
+    * @param importFromId The id of the existing DataCloudflareClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/client_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareClientCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_client_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -271,9 +221,8 @@ var DataCloudflareClientCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareClientCertificateConfig = {}
     */
-    function DataCloudflareClientCertificate(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_client_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -286,250 +235,144 @@ var DataCloudflareClientCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // certificate_authority - computed: true, optional: false, required: false
-        _this._certificateAuthority = new DataCloudflareClientCertificateCertificateAuthorityOutputReference(_this, "certificate_authority");
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareClientCertificateFilterOutputReference(_this, "filter");
-        _this._clientCertificateId = config.clientCertificateId;
-        _this._filter.internalValue = config.filter;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._clientCertificateId = config.clientCertificateId;
+        this._filter.internalValue = config.filter;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareClientCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareClientCertificate to import
-    * @param importFromId The id of the existing DataCloudflareClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/client_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareClientCertificate to import is found
-    */
-    DataCloudflareClientCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_client_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "certificate", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "certificateAuthority", {
-        get: function () {
-            return this._certificateAuthority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "clientCertificateId", {
-        get: function () {
-            return this.getStringAttribute('client_certificate_id');
-        },
-        set: function (value) {
-            this._clientCertificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificate.prototype.resetClientCertificateId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // certificate - computed: true, optional: false, required: false
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    // certificate_authority - computed: true, optional: false, required: false
+    _certificateAuthority = new DataCloudflareClientCertificateCertificateAuthorityOutputReference(this, "certificate_authority");
+    get certificateAuthority() {
+        return this._certificateAuthority;
+    }
+    // client_certificate_id - computed: false, optional: true, required: false
+    _clientCertificateId;
+    get clientCertificateId() {
+        return this.getStringAttribute('client_certificate_id');
+    }
+    set clientCertificateId(value) {
+        this._clientCertificateId = value;
+    }
+    resetClientCertificateId() {
         this._clientCertificateId = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "clientCertificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientCertificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "commonName", {
-        // common_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('common_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "country", {
-        // country - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('country');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "csr", {
-        // csr - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('csr');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificate.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientCertificateIdInput() {
+        return this._clientCertificateId;
+    }
+    // common_name - computed: true, optional: false, required: false
+    get commonName() {
+        return this.getStringAttribute('common_name');
+    }
+    // country - computed: true, optional: false, required: false
+    get country() {
+        return this.getStringAttribute('country');
+    }
+    // csr - computed: true, optional: false, required: false
+    get csr() {
+        return this.getStringAttribute('csr');
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareClientCertificateFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareClientCertificate.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "fingerprintSha256", {
-        // fingerprint_sha256 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fingerprint_sha256');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "issuedOn", {
-        // issued_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issued_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "location", {
-        // location - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('location');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "organization", {
-        // organization - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('organization');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "organizationalUnit", {
-        // organizational_unit - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('organizational_unit');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "ski", {
-        // ski - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ski');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "validityDays", {
-        // validity_days - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('validity_days');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareClientCertificate.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // fingerprint_sha256 - computed: true, optional: false, required: false
+    get fingerprintSha256() {
+        return this.getStringAttribute('fingerprint_sha256');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issued_on - computed: true, optional: false, required: false
+    get issuedOn() {
+        return this.getStringAttribute('issued_on');
+    }
+    // location - computed: true, optional: false, required: false
+    get location() {
+        return this.getStringAttribute('location');
+    }
+    // organization - computed: true, optional: false, required: false
+    get organization() {
+        return this.getStringAttribute('organization');
+    }
+    // organizational_unit - computed: true, optional: false, required: false
+    get organizationalUnit() {
+        return this.getStringAttribute('organizational_unit');
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // ski - computed: true, optional: false, required: false
+    get ski() {
+        return this.getStringAttribute('ski');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // validity_days - computed: true, optional: false, required: false
+    get validityDays() {
+        return this.getNumberAttribute('validity_days');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareClientCertificate.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareClientCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             client_certificate_id: cdktf.stringToTerraform(this._clientCertificateId),
             filter: dataCloudflareClientCertificateFilterToTerraform(this._filter.internalValue),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareClientCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             client_certificate_id: {
                 value: cdktf.stringToHclTerraform(this._clientCertificateId),
                 isBlock: false,
@@ -550,15 +393,6 @@ var DataCloudflareClientCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareClientCertificate.tfResourceType = "cloudflare_client_certificate";
-    return DataCloudflareClientCertificate;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareClientCertificate = DataCloudflareClientCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

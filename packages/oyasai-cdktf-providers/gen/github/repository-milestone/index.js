@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_milestone
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepositoryMilestone = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_milestone github_repository_milestone}
 */
-var RepositoryMilestone = /** @class */ (function (_super) {
-    __extends(RepositoryMilestone, _super);
+export class RepositoryMilestone extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_milestone";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RepositoryMilestone resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RepositoryMilestone to import
+    * @param importFromId The id of the existing RepositoryMilestone that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_milestone#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RepositoryMilestone to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_milestone", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var RepositoryMilestone = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryMilestoneConfig
     */
-    function RepositoryMilestone(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_milestone',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,179 +46,122 @@ var RepositoryMilestone = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._description = config.description;
-        _this._dueDate = config.dueDate;
-        _this._id = config.id;
-        _this._owner = config.owner;
-        _this._repository = config.repository;
-        _this._state = config.state;
-        _this._title = config.title;
-        return _this;
+        });
+        this._description = config.description;
+        this._dueDate = config.dueDate;
+        this._id = config.id;
+        this._owner = config.owner;
+        this._repository = config.repository;
+        this._state = config.state;
+        this._title = config.title;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RepositoryMilestone resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RepositoryMilestone to import
-    * @param importFromId The id of the existing RepositoryMilestone that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_milestone#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RepositoryMilestone to import is found
-    */
-    RepositoryMilestone.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_milestone", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RepositoryMilestone.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryMilestone.prototype.resetDescription = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(RepositoryMilestone.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "dueDate", {
-        get: function () {
-            return this.getStringAttribute('due_date');
-        },
-        set: function (value) {
-            this._dueDate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryMilestone.prototype.resetDueDate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // due_date - computed: false, optional: true, required: false
+    _dueDate;
+    get dueDate() {
+        return this.getStringAttribute('due_date');
+    }
+    set dueDate(value) {
+        this._dueDate = value;
+    }
+    resetDueDate() {
         this._dueDate = undefined;
-    };
-    Object.defineProperty(RepositoryMilestone.prototype, "dueDateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dueDate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryMilestone.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dueDateInput() {
+        return this._dueDate;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(RepositoryMilestone.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "number", {
-        // number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "owner", {
-        get: function () {
-            return this.getStringAttribute('owner');
-        },
-        set: function (value) {
-            this._owner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "ownerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "state", {
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        set: function (value) {
-            this._state = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryMilestone.prototype.resetState = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // number - computed: true, optional: false, required: false
+    get number() {
+        return this.getNumberAttribute('number');
+    }
+    // owner - computed: false, optional: false, required: true
+    _owner;
+    get owner() {
+        return this.getStringAttribute('owner');
+    }
+    set owner(value) {
+        this._owner = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ownerInput() {
+        return this._owner;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // state - computed: false, optional: true, required: false
+    _state;
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    set state(value) {
+        this._state = value;
+    }
+    resetState() {
         this._state = undefined;
-    };
-    Object.defineProperty(RepositoryMilestone.prototype, "stateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._state;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "title", {
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        set: function (value) {
-            this._title = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryMilestone.prototype, "titleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._title;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get stateInput() {
+        return this._state;
+    }
+    // title - computed: false, optional: false, required: true
+    _title;
+    get title() {
+        return this.getStringAttribute('title');
+    }
+    set title(value) {
+        this._title = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get titleInput() {
+        return this._title;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RepositoryMilestone.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             description: cdktf.stringToTerraform(this._description),
             due_date: cdktf.stringToTerraform(this._dueDate),
@@ -230,9 +171,9 @@ var RepositoryMilestone = /** @class */ (function (_super) {
             state: cdktf.stringToTerraform(this._state),
             title: cdktf.stringToTerraform(this._title),
         };
-    };
-    RepositoryMilestone.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             description: {
                 value: cdktf.stringToHclTerraform(this._description),
                 isBlock: false,
@@ -277,15 +218,6 @@ var RepositoryMilestone = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RepositoryMilestone.tfResourceType = "github_repository_milestone";
-    return RepositoryMilestone;
-}(cdktf.TerraformResource));
-exports.RepositoryMilestone = RepositoryMilestone;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

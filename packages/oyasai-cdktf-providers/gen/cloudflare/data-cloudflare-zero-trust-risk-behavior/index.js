@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_risk_behavior
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustRiskBehavior = exports.DataCloudflareZeroTrustRiskBehaviorBehaviorsMap = exports.DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference = void 0;
-exports.dataCloudflareZeroTrustRiskBehaviorBehaviorsToTerraform = dataCloudflareZeroTrustRiskBehaviorBehaviorsToTerraform;
-exports.dataCloudflareZeroTrustRiskBehaviorBehaviorsToHclTerraform = dataCloudflareZeroTrustRiskBehaviorBehaviorsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZeroTrustRiskBehaviorBehaviorsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZeroTrustRiskBehaviorBehaviorsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,106 +10,96 @@ function dataCloudflareZeroTrustRiskBehaviorBehaviorsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZeroTrustRiskBehaviorBehaviorsToHclTerraform(struct) {
+export function dataCloudflareZeroTrustRiskBehaviorBehaviorsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference, _super);
+export class DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectKey the key of this item in the map
     */
-    function DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference(terraformResource, terraformAttribute, complexObjectKey) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, complexObjectKey) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectKey) {
+        super(terraformResource, terraformAttribute, false, complexObjectKey);
     }
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference.prototype, "riskLevel", {
-        // risk_level - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('risk_level');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference = DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference;
-var DataCloudflareZeroTrustRiskBehaviorBehaviorsMap = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustRiskBehaviorBehaviorsMap, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // risk_level - computed: true, optional: false, required: false
+    get riskLevel() {
+        return this.getStringAttribute('risk_level');
+    }
+}
+export class DataCloudflareZeroTrustRiskBehaviorBehaviorsMap extends cdktf.ComplexMap {
+    terraformResource;
+    terraformAttribute;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustRiskBehaviorBehaviorsMap(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
     }
     /**
     * @param key the key of the item to return
     */
-    DataCloudflareZeroTrustRiskBehaviorBehaviorsMap.prototype.get = function (key) {
+    get(key) {
         return new DataCloudflareZeroTrustRiskBehaviorBehaviorsOutputReference(this.terraformResource, this.terraformAttribute, key);
-    };
-    return DataCloudflareZeroTrustRiskBehaviorBehaviorsMap;
-}(cdktf.ComplexMap));
-exports.DataCloudflareZeroTrustRiskBehaviorBehaviorsMap = DataCloudflareZeroTrustRiskBehaviorBehaviorsMap;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_risk_behavior cloudflare_zero_trust_risk_behavior}
 */
-var DataCloudflareZeroTrustRiskBehavior = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustRiskBehavior, _super);
+export class DataCloudflareZeroTrustRiskBehavior extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_risk_behavior";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustRiskBehavior resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustRiskBehavior to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustRiskBehavior that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_risk_behavior#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustRiskBehavior to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_risk_behavior", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -140,9 +110,8 @@ var DataCloudflareZeroTrustRiskBehavior = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustRiskBehaviorConfig = {}
     */
-    function DataCloudflareZeroTrustRiskBehavior(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_risk_behavior',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -155,63 +124,42 @@ var DataCloudflareZeroTrustRiskBehavior = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // behaviors - computed: true, optional: false, required: false
-        _this._behaviors = new DataCloudflareZeroTrustRiskBehaviorBehaviorsMap(_this, "behaviors");
-        _this._accountId = config.accountId;
-        return _this;
+        });
+        this._accountId = config.accountId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustRiskBehavior resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustRiskBehavior to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustRiskBehavior that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_risk_behavior#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustRiskBehavior to import is found
-    */
-    DataCloudflareZeroTrustRiskBehavior.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_risk_behavior", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehavior.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustRiskBehavior.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehavior.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustRiskBehavior.prototype, "behaviors", {
-        get: function () {
-            return this._behaviors;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // behaviors - computed: true, optional: false, required: false
+    _behaviors = new DataCloudflareZeroTrustRiskBehaviorBehaviorsMap(this, "behaviors");
+    get behaviors() {
+        return this._behaviors;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustRiskBehavior.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
         };
-    };
-    DataCloudflareZeroTrustRiskBehavior.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -220,15 +168,6 @@ var DataCloudflareZeroTrustRiskBehavior = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustRiskBehavior.tfResourceType = "cloudflare_zero_trust_risk_behavior";
-    return DataCloudflareZeroTrustRiskBehavior;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustRiskBehavior = DataCloudflareZeroTrustRiskBehavior;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,69 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/container
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Container = exports.ContainerVolumesList = exports.ContainerVolumesOutputReference = exports.ContainerUploadList = exports.ContainerUploadOutputReference = exports.ContainerUlimitList = exports.ContainerUlimitOutputReference = exports.ContainerTimeoutsOutputReference = exports.ContainerPortsList = exports.ContainerPortsOutputReference = exports.ContainerNetworksAdvancedList = exports.ContainerNetworksAdvancedOutputReference = exports.ContainerMountsList = exports.ContainerMountsOutputReference = exports.ContainerMountsVolumeOptionsOutputReference = exports.ContainerMountsVolumeOptionsLabelsList = exports.ContainerMountsVolumeOptionsLabelsOutputReference = exports.ContainerMountsTmpfsOptionsOutputReference = exports.ContainerMountsBindOptionsOutputReference = exports.ContainerLabelsList = exports.ContainerLabelsOutputReference = exports.ContainerHostList = exports.ContainerHostOutputReference = exports.ContainerHealthcheckOutputReference = exports.ContainerDevicesList = exports.ContainerDevicesOutputReference = exports.ContainerDeviceWriteIopsList = exports.ContainerDeviceWriteIopsOutputReference = exports.ContainerDeviceWriteBpsList = exports.ContainerDeviceWriteBpsOutputReference = exports.ContainerDeviceRequestsList = exports.ContainerDeviceRequestsOutputReference = exports.ContainerDeviceReadIopsList = exports.ContainerDeviceReadIopsOutputReference = exports.ContainerDeviceReadBpsList = exports.ContainerDeviceReadBpsOutputReference = exports.ContainerCapabilitiesOutputReference = exports.ContainerNetworkDataList = exports.ContainerNetworkDataOutputReference = void 0;
-exports.containerNetworkDataToTerraform = containerNetworkDataToTerraform;
-exports.containerNetworkDataToHclTerraform = containerNetworkDataToHclTerraform;
-exports.containerCapabilitiesToTerraform = containerCapabilitiesToTerraform;
-exports.containerCapabilitiesToHclTerraform = containerCapabilitiesToHclTerraform;
-exports.containerDeviceReadBpsToTerraform = containerDeviceReadBpsToTerraform;
-exports.containerDeviceReadBpsToHclTerraform = containerDeviceReadBpsToHclTerraform;
-exports.containerDeviceReadIopsToTerraform = containerDeviceReadIopsToTerraform;
-exports.containerDeviceReadIopsToHclTerraform = containerDeviceReadIopsToHclTerraform;
-exports.containerDeviceRequestsToTerraform = containerDeviceRequestsToTerraform;
-exports.containerDeviceRequestsToHclTerraform = containerDeviceRequestsToHclTerraform;
-exports.containerDeviceWriteBpsToTerraform = containerDeviceWriteBpsToTerraform;
-exports.containerDeviceWriteBpsToHclTerraform = containerDeviceWriteBpsToHclTerraform;
-exports.containerDeviceWriteIopsToTerraform = containerDeviceWriteIopsToTerraform;
-exports.containerDeviceWriteIopsToHclTerraform = containerDeviceWriteIopsToHclTerraform;
-exports.containerDevicesToTerraform = containerDevicesToTerraform;
-exports.containerDevicesToHclTerraform = containerDevicesToHclTerraform;
-exports.containerHealthcheckToTerraform = containerHealthcheckToTerraform;
-exports.containerHealthcheckToHclTerraform = containerHealthcheckToHclTerraform;
-exports.containerHostToTerraform = containerHostToTerraform;
-exports.containerHostToHclTerraform = containerHostToHclTerraform;
-exports.containerLabelsToTerraform = containerLabelsToTerraform;
-exports.containerLabelsToHclTerraform = containerLabelsToHclTerraform;
-exports.containerMountsBindOptionsToTerraform = containerMountsBindOptionsToTerraform;
-exports.containerMountsBindOptionsToHclTerraform = containerMountsBindOptionsToHclTerraform;
-exports.containerMountsTmpfsOptionsToTerraform = containerMountsTmpfsOptionsToTerraform;
-exports.containerMountsTmpfsOptionsToHclTerraform = containerMountsTmpfsOptionsToHclTerraform;
-exports.containerMountsVolumeOptionsLabelsToTerraform = containerMountsVolumeOptionsLabelsToTerraform;
-exports.containerMountsVolumeOptionsLabelsToHclTerraform = containerMountsVolumeOptionsLabelsToHclTerraform;
-exports.containerMountsVolumeOptionsToTerraform = containerMountsVolumeOptionsToTerraform;
-exports.containerMountsVolumeOptionsToHclTerraform = containerMountsVolumeOptionsToHclTerraform;
-exports.containerMountsToTerraform = containerMountsToTerraform;
-exports.containerMountsToHclTerraform = containerMountsToHclTerraform;
-exports.containerNetworksAdvancedToTerraform = containerNetworksAdvancedToTerraform;
-exports.containerNetworksAdvancedToHclTerraform = containerNetworksAdvancedToHclTerraform;
-exports.containerPortsToTerraform = containerPortsToTerraform;
-exports.containerPortsToHclTerraform = containerPortsToHclTerraform;
-exports.containerTimeoutsToTerraform = containerTimeoutsToTerraform;
-exports.containerTimeoutsToHclTerraform = containerTimeoutsToHclTerraform;
-exports.containerUlimitToTerraform = containerUlimitToTerraform;
-exports.containerUlimitToHclTerraform = containerUlimitToHclTerraform;
-exports.containerUploadToTerraform = containerUploadToTerraform;
-exports.containerUploadToHclTerraform = containerUploadToHclTerraform;
-exports.containerVolumesToTerraform = containerVolumesToTerraform;
-exports.containerVolumesToHclTerraform = containerVolumesToHclTerraform;
-var cdktf = require("cdktf");
-function containerNetworkDataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function containerNetworkDataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -72,137 +10,96 @@ function containerNetworkDataToTerraform(struct) {
     }
     return {};
 }
-function containerNetworkDataToHclTerraform(struct) {
+export function containerNetworkDataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ContainerNetworkDataOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerNetworkDataOutputReference, _super);
+export class ContainerNetworkDataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerNetworkDataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "gateway", {
-        // gateway - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('gateway');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "globalIpv6Address", {
-        // global_ipv6_address - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('global_ipv6_address');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "globalIpv6PrefixLength", {
-        // global_ipv6_prefix_length - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('global_ipv6_prefix_length');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "ipAddress", {
-        // ip_address - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ip_address');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "ipPrefixLength", {
-        // ip_prefix_length - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ip_prefix_length');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "ipv6Gateway", {
-        // ipv6_gateway - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ipv6_gateway');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "macAddress", {
-        // mac_address - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('mac_address');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworkDataOutputReference.prototype, "networkName", {
-        // network_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('network_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerNetworkDataOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerNetworkDataOutputReference = ContainerNetworkDataOutputReference;
-var ContainerNetworkDataList = /** @class */ (function (_super) {
-    __extends(ContainerNetworkDataList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // gateway - computed: true, optional: false, required: false
+    get gateway() {
+        return this.getStringAttribute('gateway');
+    }
+    // global_ipv6_address - computed: true, optional: false, required: false
+    get globalIpv6Address() {
+        return this.getStringAttribute('global_ipv6_address');
+    }
+    // global_ipv6_prefix_length - computed: true, optional: false, required: false
+    get globalIpv6PrefixLength() {
+        return this.getNumberAttribute('global_ipv6_prefix_length');
+    }
+    // ip_address - computed: true, optional: false, required: false
+    get ipAddress() {
+        return this.getStringAttribute('ip_address');
+    }
+    // ip_prefix_length - computed: true, optional: false, required: false
+    get ipPrefixLength() {
+        return this.getNumberAttribute('ip_prefix_length');
+    }
+    // ipv6_gateway - computed: true, optional: false, required: false
+    get ipv6Gateway() {
+        return this.getStringAttribute('ipv6_gateway');
+    }
+    // mac_address - computed: true, optional: false, required: false
+    get macAddress() {
+        return this.getStringAttribute('mac_address');
+    }
+    // network_name - computed: true, optional: false, required: false
+    get networkName() {
+        return this.getStringAttribute('network_name');
+    }
+}
+export class ContainerNetworkDataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerNetworkDataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerNetworkDataList.prototype.get = function (index) {
+    get(index) {
         return new ContainerNetworkDataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerNetworkDataList;
-}(cdktf.ComplexList));
-exports.ContainerNetworkDataList = ContainerNetworkDataList;
-function containerCapabilitiesToTerraform(struct) {
+    }
+}
+export function containerCapabilitiesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -214,14 +111,14 @@ function containerCapabilitiesToTerraform(struct) {
         drop: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.drop),
     };
 }
-function containerCapabilitiesToHclTerraform(struct) {
+export function containerCapabilitiesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         add: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.add),
             isBlock: false,
@@ -236,97 +133,74 @@ function containerCapabilitiesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerCapabilitiesOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerCapabilitiesOutputReference, _super);
+export class ContainerCapabilitiesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerCapabilitiesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ContainerCapabilitiesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._add !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.add = this._add;
-            }
-            if (this._drop !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.drop = this._drop;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._add = undefined;
-                this._drop = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._add = value.add;
-                this._drop = value.drop;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerCapabilitiesOutputReference.prototype, "add", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('add'));
-        },
-        set: function (value) {
-            this._add = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerCapabilitiesOutputReference.prototype.resetAdd = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._add !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.add = this._add;
+        }
+        if (this._drop !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.drop = this._drop;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._add = undefined;
+            this._drop = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._add = value.add;
+            this._drop = value.drop;
+        }
+    }
+    // add - computed: false, optional: true, required: false
+    _add;
+    get add() {
+        return cdktf.Fn.tolist(this.getListAttribute('add'));
+    }
+    set add(value) {
+        this._add = value;
+    }
+    resetAdd() {
         this._add = undefined;
-    };
-    Object.defineProperty(ContainerCapabilitiesOutputReference.prototype, "addInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._add;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerCapabilitiesOutputReference.prototype, "drop", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('drop'));
-        },
-        set: function (value) {
-            this._drop = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerCapabilitiesOutputReference.prototype.resetDrop = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get addInput() {
+        return this._add;
+    }
+    // drop - computed: false, optional: true, required: false
+    _drop;
+    get drop() {
+        return cdktf.Fn.tolist(this.getListAttribute('drop'));
+    }
+    set drop(value) {
+        this._drop = value;
+    }
+    resetDrop() {
         this._drop = undefined;
-    };
-    Object.defineProperty(ContainerCapabilitiesOutputReference.prototype, "dropInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._drop;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerCapabilitiesOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerCapabilitiesOutputReference = ContainerCapabilitiesOutputReference;
-function containerDeviceReadBpsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dropInput() {
+        return this._drop;
+    }
+}
+export function containerDeviceReadBpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -338,14 +212,14 @@ function containerDeviceReadBpsToTerraform(struct) {
         rate: cdktf.numberToTerraform(struct.rate),
     };
 }
-function containerDeviceReadBpsToHclTerraform(struct) {
+export function containerDeviceReadBpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -360,125 +234,103 @@ function containerDeviceReadBpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDeviceReadBpsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDeviceReadBpsOutputReference, _super);
+export class ContainerDeviceReadBpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceReadBpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDeviceReadBpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._rate = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._rate = value.rate;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadBpsOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadBpsOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadBpsOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getNumberAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadBpsOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDeviceReadBpsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDeviceReadBpsOutputReference = ContainerDeviceReadBpsOutputReference;
-var ContainerDeviceReadBpsList = /** @class */ (function (_super) {
-    __extends(ContainerDeviceReadBpsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._rate = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._rate = value.rate;
+        }
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // rate - computed: false, optional: false, required: true
+    _rate;
+    get rate() {
+        return this.getNumberAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+}
+export class ContainerDeviceReadBpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceReadBpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDeviceReadBpsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDeviceReadBpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDeviceReadBpsList;
-}(cdktf.ComplexList));
-exports.ContainerDeviceReadBpsList = ContainerDeviceReadBpsList;
-function containerDeviceReadIopsToTerraform(struct) {
+    }
+}
+export function containerDeviceReadIopsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -490,14 +342,14 @@ function containerDeviceReadIopsToTerraform(struct) {
         rate: cdktf.numberToTerraform(struct.rate),
     };
 }
-function containerDeviceReadIopsToHclTerraform(struct) {
+export function containerDeviceReadIopsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -512,125 +364,103 @@ function containerDeviceReadIopsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDeviceReadIopsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDeviceReadIopsOutputReference, _super);
+export class ContainerDeviceReadIopsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceReadIopsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDeviceReadIopsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._rate = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._rate = value.rate;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadIopsOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadIopsOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadIopsOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getNumberAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceReadIopsOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDeviceReadIopsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDeviceReadIopsOutputReference = ContainerDeviceReadIopsOutputReference;
-var ContainerDeviceReadIopsList = /** @class */ (function (_super) {
-    __extends(ContainerDeviceReadIopsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._rate = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._rate = value.rate;
+        }
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // rate - computed: false, optional: false, required: true
+    _rate;
+    get rate() {
+        return this.getNumberAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+}
+export class ContainerDeviceReadIopsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceReadIopsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDeviceReadIopsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDeviceReadIopsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDeviceReadIopsList;
-}(cdktf.ComplexList));
-exports.ContainerDeviceReadIopsList = ContainerDeviceReadIopsList;
-function containerDeviceRequestsToTerraform(struct) {
+    }
+}
+export function containerDeviceRequestsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -645,14 +475,14 @@ function containerDeviceRequestsToTerraform(struct) {
         options: cdktf.hashMapper(cdktf.stringToTerraform)(struct.options),
     };
 }
-function containerDeviceRequestsToHclTerraform(struct) {
+export function containerDeviceRequestsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         capabilities: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.capabilities),
             isBlock: false,
@@ -685,212 +515,172 @@ function containerDeviceRequestsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDeviceRequestsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDeviceRequestsOutputReference, _super);
+export class ContainerDeviceRequestsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceRequestsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._capabilities !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.capabilities = this._capabilities;
-            }
-            if (this._count !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.count = this._count;
-            }
-            if (this._deviceIds !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.deviceIds = this._deviceIds;
-            }
-            if (this._driver !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driver = this._driver;
-            }
-            if (this._options !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.options = this._options;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._capabilities = undefined;
-                this._count = undefined;
-                this._deviceIds = undefined;
-                this._driver = undefined;
-                this._options = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._capabilities = value.capabilities;
-                this._count = value.count;
-                this._deviceIds = value.deviceIds;
-                this._driver = value.driver;
-                this._options = value.options;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "capabilities", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('capabilities'));
-        },
-        set: function (value) {
-            this._capabilities = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDeviceRequestsOutputReference.prototype.resetCapabilities = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._capabilities !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.capabilities = this._capabilities;
+        }
+        if (this._count !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.count = this._count;
+        }
+        if (this._deviceIds !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.deviceIds = this._deviceIds;
+        }
+        if (this._driver !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driver = this._driver;
+        }
+        if (this._options !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.options = this._options;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._capabilities = undefined;
+            this._count = undefined;
+            this._deviceIds = undefined;
+            this._driver = undefined;
+            this._options = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._capabilities = value.capabilities;
+            this._count = value.count;
+            this._deviceIds = value.deviceIds;
+            this._driver = value.driver;
+            this._options = value.options;
+        }
+    }
+    // capabilities - computed: false, optional: true, required: false
+    _capabilities;
+    get capabilities() {
+        return cdktf.Fn.tolist(this.getListAttribute('capabilities'));
+    }
+    set capabilities(value) {
+        this._capabilities = value;
+    }
+    resetCapabilities() {
         this._capabilities = undefined;
-    };
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "capabilitiesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._capabilities;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "count", {
-        get: function () {
-            return this.getNumberAttribute('count');
-        },
-        set: function (value) {
-            this._count = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDeviceRequestsOutputReference.prototype.resetCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get capabilitiesInput() {
+        return this._capabilities;
+    }
+    // count - computed: false, optional: true, required: false
+    _count;
+    get count() {
+        return this.getNumberAttribute('count');
+    }
+    set count(value) {
+        this._count = value;
+    }
+    resetCount() {
         this._count = undefined;
-    };
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "countInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._count;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "deviceIds", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('device_ids'));
-        },
-        set: function (value) {
-            this._deviceIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDeviceRequestsOutputReference.prototype.resetDeviceIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get countInput() {
+        return this._count;
+    }
+    // device_ids - computed: false, optional: true, required: false
+    _deviceIds;
+    get deviceIds() {
+        return cdktf.Fn.tolist(this.getListAttribute('device_ids'));
+    }
+    set deviceIds(value) {
+        this._deviceIds = value;
+    }
+    resetDeviceIds() {
         this._deviceIds = undefined;
-    };
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "deviceIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "driver", {
-        get: function () {
-            return this.getStringAttribute('driver');
-        },
-        set: function (value) {
-            this._driver = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDeviceRequestsOutputReference.prototype.resetDriver = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceIdsInput() {
+        return this._deviceIds;
+    }
+    // driver - computed: false, optional: true, required: false
+    _driver;
+    get driver() {
+        return this.getStringAttribute('driver');
+    }
+    set driver(value) {
+        this._driver = value;
+    }
+    resetDriver() {
         this._driver = undefined;
-    };
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "driverInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driver;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "options", {
-        get: function () {
-            return this.getStringMapAttribute('options');
-        },
-        set: function (value) {
-            this._options = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDeviceRequestsOutputReference.prototype.resetOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverInput() {
+        return this._driver;
+    }
+    // options - computed: false, optional: true, required: false
+    _options;
+    get options() {
+        return this.getStringMapAttribute('options');
+    }
+    set options(value) {
+        this._options = value;
+    }
+    resetOptions() {
         this._options = undefined;
-    };
-    Object.defineProperty(ContainerDeviceRequestsOutputReference.prototype, "optionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._options;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDeviceRequestsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDeviceRequestsOutputReference = ContainerDeviceRequestsOutputReference;
-var ContainerDeviceRequestsList = /** @class */ (function (_super) {
-    __extends(ContainerDeviceRequestsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get optionsInput() {
+        return this._options;
+    }
+}
+export class ContainerDeviceRequestsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceRequestsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDeviceRequestsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDeviceRequestsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDeviceRequestsList;
-}(cdktf.ComplexList));
-exports.ContainerDeviceRequestsList = ContainerDeviceRequestsList;
-function containerDeviceWriteBpsToTerraform(struct) {
+    }
+}
+export function containerDeviceWriteBpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -902,14 +692,14 @@ function containerDeviceWriteBpsToTerraform(struct) {
         rate: cdktf.numberToTerraform(struct.rate),
     };
 }
-function containerDeviceWriteBpsToHclTerraform(struct) {
+export function containerDeviceWriteBpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -924,125 +714,103 @@ function containerDeviceWriteBpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDeviceWriteBpsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDeviceWriteBpsOutputReference, _super);
+export class ContainerDeviceWriteBpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceWriteBpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDeviceWriteBpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._rate = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._rate = value.rate;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteBpsOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteBpsOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteBpsOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getNumberAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteBpsOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDeviceWriteBpsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDeviceWriteBpsOutputReference = ContainerDeviceWriteBpsOutputReference;
-var ContainerDeviceWriteBpsList = /** @class */ (function (_super) {
-    __extends(ContainerDeviceWriteBpsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._rate = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._rate = value.rate;
+        }
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // rate - computed: false, optional: false, required: true
+    _rate;
+    get rate() {
+        return this.getNumberAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+}
+export class ContainerDeviceWriteBpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceWriteBpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDeviceWriteBpsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDeviceWriteBpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDeviceWriteBpsList;
-}(cdktf.ComplexList));
-exports.ContainerDeviceWriteBpsList = ContainerDeviceWriteBpsList;
-function containerDeviceWriteIopsToTerraform(struct) {
+    }
+}
+export function containerDeviceWriteIopsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1054,14 +822,14 @@ function containerDeviceWriteIopsToTerraform(struct) {
         rate: cdktf.numberToTerraform(struct.rate),
     };
 }
-function containerDeviceWriteIopsToHclTerraform(struct) {
+export function containerDeviceWriteIopsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -1076,125 +844,103 @@ function containerDeviceWriteIopsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDeviceWriteIopsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDeviceWriteIopsOutputReference, _super);
+export class ContainerDeviceWriteIopsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceWriteIopsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDeviceWriteIopsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._rate = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._rate = value.rate;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteIopsOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteIopsOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteIopsOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getNumberAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDeviceWriteIopsOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDeviceWriteIopsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDeviceWriteIopsOutputReference = ContainerDeviceWriteIopsOutputReference;
-var ContainerDeviceWriteIopsList = /** @class */ (function (_super) {
-    __extends(ContainerDeviceWriteIopsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._rate = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._rate = value.rate;
+        }
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // rate - computed: false, optional: false, required: true
+    _rate;
+    get rate() {
+        return this.getNumberAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+}
+export class ContainerDeviceWriteIopsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDeviceWriteIopsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDeviceWriteIopsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDeviceWriteIopsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDeviceWriteIopsList;
-}(cdktf.ComplexList));
-exports.ContainerDeviceWriteIopsList = ContainerDeviceWriteIopsList;
-function containerDevicesToTerraform(struct) {
+    }
+}
+export function containerDevicesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1207,14 +953,14 @@ function containerDevicesToTerraform(struct) {
         permissions: cdktf.stringToTerraform(struct.permissions),
     };
 }
-function containerDevicesToHclTerraform(struct) {
+export function containerDevicesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         container_path: {
             value: cdktf.stringToHclTerraform(struct.containerPath),
             isBlock: false,
@@ -1235,155 +981,127 @@ function containerDevicesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerDevicesOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerDevicesOutputReference, _super);
+export class ContainerDevicesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDevicesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._containerPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.containerPath = this._containerPath;
-            }
-            if (this._hostPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostPath = this._hostPath;
-            }
-            if (this._permissions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.permissions = this._permissions;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._containerPath = undefined;
-                this._hostPath = undefined;
-                this._permissions = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._containerPath = value.containerPath;
-                this._hostPath = value.hostPath;
-                this._permissions = value.permissions;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "containerPath", {
-        get: function () {
-            return this.getStringAttribute('container_path');
-        },
-        set: function (value) {
-            this._containerPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDevicesOutputReference.prototype.resetContainerPath = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._containerPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.containerPath = this._containerPath;
+        }
+        if (this._hostPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostPath = this._hostPath;
+        }
+        if (this._permissions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.permissions = this._permissions;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._containerPath = undefined;
+            this._hostPath = undefined;
+            this._permissions = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._containerPath = value.containerPath;
+            this._hostPath = value.hostPath;
+            this._permissions = value.permissions;
+        }
+    }
+    // container_path - computed: false, optional: true, required: false
+    _containerPath;
+    get containerPath() {
+        return this.getStringAttribute('container_path');
+    }
+    set containerPath(value) {
+        this._containerPath = value;
+    }
+    resetContainerPath() {
         this._containerPath = undefined;
-    };
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "containerPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._containerPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "hostPath", {
-        get: function () {
-            return this.getStringAttribute('host_path');
-        },
-        set: function (value) {
-            this._hostPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "hostPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "permissions", {
-        get: function () {
-            return this.getStringAttribute('permissions');
-        },
-        set: function (value) {
-            this._permissions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerDevicesOutputReference.prototype.resetPermissions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containerPathInput() {
+        return this._containerPath;
+    }
+    // host_path - computed: false, optional: false, required: true
+    _hostPath;
+    get hostPath() {
+        return this.getStringAttribute('host_path');
+    }
+    set hostPath(value) {
+        this._hostPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostPathInput() {
+        return this._hostPath;
+    }
+    // permissions - computed: false, optional: true, required: false
+    _permissions;
+    get permissions() {
+        return this.getStringAttribute('permissions');
+    }
+    set permissions(value) {
+        this._permissions = value;
+    }
+    resetPermissions() {
         this._permissions = undefined;
-    };
-    Object.defineProperty(ContainerDevicesOutputReference.prototype, "permissionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerDevicesOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerDevicesOutputReference = ContainerDevicesOutputReference;
-var ContainerDevicesList = /** @class */ (function (_super) {
-    __extends(ContainerDevicesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionsInput() {
+        return this._permissions;
+    }
+}
+export class ContainerDevicesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerDevicesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerDevicesList.prototype.get = function (index) {
+    get(index) {
         return new ContainerDevicesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerDevicesList;
-}(cdktf.ComplexList));
-exports.ContainerDevicesList = ContainerDevicesList;
-function containerHealthcheckToTerraform(struct) {
+    }
+}
+export function containerHealthcheckToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1399,14 +1117,14 @@ function containerHealthcheckToTerraform(struct) {
         timeout: cdktf.stringToTerraform(struct.timeout),
     };
 }
-function containerHealthcheckToHclTerraform(struct) {
+export function containerHealthcheckToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         interval: {
             value: cdktf.stringToHclTerraform(struct.interval),
             isBlock: false,
@@ -1445,205 +1163,158 @@ function containerHealthcheckToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerHealthcheckOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerHealthcheckOutputReference, _super);
+export class ContainerHealthcheckOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerHealthcheckOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._interval !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.interval = this._interval;
-            }
-            if (this._retries !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.retries = this._retries;
-            }
-            if (this._startInterval !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startInterval = this._startInterval;
-            }
-            if (this._startPeriod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startPeriod = this._startPeriod;
-            }
-            if (this._test !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.test = this._test;
-            }
-            if (this._timeout !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timeout = this._timeout;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._interval = undefined;
-                this._retries = undefined;
-                this._startInterval = undefined;
-                this._startPeriod = undefined;
-                this._test = undefined;
-                this._timeout = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._interval = value.interval;
-                this._retries = value.retries;
-                this._startInterval = value.startInterval;
-                this._startPeriod = value.startPeriod;
-                this._test = value.test;
-                this._timeout = value.timeout;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "interval", {
-        get: function () {
-            return this.getStringAttribute('interval');
-        },
-        set: function (value) {
-            this._interval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetInterval = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._interval !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.interval = this._interval;
+        }
+        if (this._retries !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.retries = this._retries;
+        }
+        if (this._startInterval !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startInterval = this._startInterval;
+        }
+        if (this._startPeriod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startPeriod = this._startPeriod;
+        }
+        if (this._test !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.test = this._test;
+        }
+        if (this._timeout !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timeout = this._timeout;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._interval = undefined;
+            this._retries = undefined;
+            this._startInterval = undefined;
+            this._startPeriod = undefined;
+            this._test = undefined;
+            this._timeout = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._interval = value.interval;
+            this._retries = value.retries;
+            this._startInterval = value.startInterval;
+            this._startPeriod = value.startPeriod;
+            this._test = value.test;
+            this._timeout = value.timeout;
+        }
+    }
+    // interval - computed: false, optional: true, required: false
+    _interval;
+    get interval() {
+        return this.getStringAttribute('interval');
+    }
+    set interval(value) {
+        this._interval = value;
+    }
+    resetInterval() {
         this._interval = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "intervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "retries", {
-        get: function () {
-            return this.getNumberAttribute('retries');
-        },
-        set: function (value) {
-            this._retries = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetRetries = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get intervalInput() {
+        return this._interval;
+    }
+    // retries - computed: false, optional: true, required: false
+    _retries;
+    get retries() {
+        return this.getNumberAttribute('retries');
+    }
+    set retries(value) {
+        this._retries = value;
+    }
+    resetRetries() {
         this._retries = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "retriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "startInterval", {
-        get: function () {
-            return this.getStringAttribute('start_interval');
-        },
-        set: function (value) {
-            this._startInterval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetStartInterval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retriesInput() {
+        return this._retries;
+    }
+    // start_interval - computed: false, optional: true, required: false
+    _startInterval;
+    get startInterval() {
+        return this.getStringAttribute('start_interval');
+    }
+    set startInterval(value) {
+        this._startInterval = value;
+    }
+    resetStartInterval() {
         this._startInterval = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "startIntervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startInterval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "startPeriod", {
-        get: function () {
-            return this.getStringAttribute('start_period');
-        },
-        set: function (value) {
-            this._startPeriod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetStartPeriod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startIntervalInput() {
+        return this._startInterval;
+    }
+    // start_period - computed: false, optional: true, required: false
+    _startPeriod;
+    get startPeriod() {
+        return this.getStringAttribute('start_period');
+    }
+    set startPeriod(value) {
+        this._startPeriod = value;
+    }
+    resetStartPeriod() {
         this._startPeriod = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "startPeriodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startPeriod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "test", {
-        get: function () {
-            return this.getListAttribute('test');
-        },
-        set: function (value) {
-            this._test = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetTest = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startPeriodInput() {
+        return this._startPeriod;
+    }
+    // test - computed: false, optional: true, required: false
+    _test;
+    get test() {
+        return this.getListAttribute('test');
+    }
+    set test(value) {
+        this._test = value;
+    }
+    resetTest() {
         this._test = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "testInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._test;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "timeout", {
-        get: function () {
-            return this.getStringAttribute('timeout');
-        },
-        set: function (value) {
-            this._timeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerHealthcheckOutputReference.prototype.resetTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get testInput() {
+        return this._test;
+    }
+    // timeout - computed: false, optional: true, required: false
+    _timeout;
+    get timeout() {
+        return this.getStringAttribute('timeout');
+    }
+    set timeout(value) {
+        this._timeout = value;
+    }
+    resetTimeout() {
         this._timeout = undefined;
-    };
-    Object.defineProperty(ContainerHealthcheckOutputReference.prototype, "timeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerHealthcheckOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerHealthcheckOutputReference = ContainerHealthcheckOutputReference;
-function containerHostToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timeoutInput() {
+        return this._timeout;
+    }
+}
+export function containerHostToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1655,14 +1326,14 @@ function containerHostToTerraform(struct) {
         ip: cdktf.stringToTerraform(struct.ip),
     };
 }
-function containerHostToHclTerraform(struct) {
+export function containerHostToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         host: {
             value: cdktf.stringToHclTerraform(struct.host),
             isBlock: false,
@@ -1677,125 +1348,103 @@ function containerHostToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerHostOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerHostOutputReference, _super);
+export class ContainerHostOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerHostOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerHostOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._host = undefined;
-                this._ip = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._host = value.host;
-                this._ip = value.ip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHostOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHostOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHostOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerHostOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerHostOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerHostOutputReference = ContainerHostOutputReference;
-var ContainerHostList = /** @class */ (function (_super) {
-    __extends(ContainerHostList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._host = undefined;
+            this._ip = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._host = value.host;
+            this._ip = value.ip;
+        }
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // ip - computed: false, optional: false, required: true
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+}
+export class ContainerHostList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerHostList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerHostList.prototype.get = function (index) {
+    get(index) {
         return new ContainerHostOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerHostList;
-}(cdktf.ComplexList));
-exports.ContainerHostList = ContainerHostList;
-function containerLabelsToTerraform(struct) {
+    }
+}
+export function containerLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1807,14 +1456,14 @@ function containerLabelsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function containerLabelsToHclTerraform(struct) {
+export function containerLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -1829,125 +1478,103 @@ function containerLabelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerLabelsOutputReference, _super);
+export class ContainerLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerLabelsOutputReference = ContainerLabelsOutputReference;
-var ContainerLabelsList = /** @class */ (function (_super) {
-    __extends(ContainerLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ContainerLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerLabelsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerLabelsList;
-}(cdktf.ComplexList));
-exports.ContainerLabelsList = ContainerLabelsList;
-function containerMountsBindOptionsToTerraform(struct) {
+    }
+}
+export function containerMountsBindOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1958,14 +1585,14 @@ function containerMountsBindOptionsToTerraform(struct) {
         propagation: cdktf.stringToTerraform(struct.propagation),
     };
 }
-function containerMountsBindOptionsToHclTerraform(struct) {
+export function containerMountsBindOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         propagation: {
             value: cdktf.stringToHclTerraform(struct.propagation),
             isBlock: false,
@@ -1974,70 +1601,53 @@ function containerMountsBindOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerMountsBindOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerMountsBindOptionsOutputReference, _super);
+export class ContainerMountsBindOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerMountsBindOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ContainerMountsBindOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._propagation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.propagation = this._propagation;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._propagation = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._propagation = value.propagation;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsBindOptionsOutputReference.prototype, "propagation", {
-        get: function () {
-            return this.getStringAttribute('propagation');
-        },
-        set: function (value) {
-            this._propagation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsBindOptionsOutputReference.prototype.resetPropagation = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._propagation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.propagation = this._propagation;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._propagation = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._propagation = value.propagation;
+        }
+    }
+    // propagation - computed: false, optional: true, required: false
+    _propagation;
+    get propagation() {
+        return this.getStringAttribute('propagation');
+    }
+    set propagation(value) {
+        this._propagation = value;
+    }
+    resetPropagation() {
         this._propagation = undefined;
-    };
-    Object.defineProperty(ContainerMountsBindOptionsOutputReference.prototype, "propagationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._propagation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerMountsBindOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerMountsBindOptionsOutputReference = ContainerMountsBindOptionsOutputReference;
-function containerMountsTmpfsOptionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get propagationInput() {
+        return this._propagation;
+    }
+}
+export function containerMountsTmpfsOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2049,14 +1659,14 @@ function containerMountsTmpfsOptionsToTerraform(struct) {
         size_bytes: cdktf.numberToTerraform(struct.sizeBytes),
     };
 }
-function containerMountsTmpfsOptionsToHclTerraform(struct) {
+export function containerMountsTmpfsOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         mode: {
             value: cdktf.numberToHclTerraform(struct.mode),
             isBlock: false,
@@ -2071,97 +1681,74 @@ function containerMountsTmpfsOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerMountsTmpfsOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerMountsTmpfsOptionsOutputReference, _super);
+export class ContainerMountsTmpfsOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerMountsTmpfsOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ContainerMountsTmpfsOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            if (this._sizeBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sizeBytes = this._sizeBytes;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._mode = undefined;
-                this._sizeBytes = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._mode = value.mode;
-                this._sizeBytes = value.sizeBytes;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsTmpfsOptionsOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getNumberAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsTmpfsOptionsOutputReference.prototype.resetMode = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        if (this._sizeBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sizeBytes = this._sizeBytes;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._mode = undefined;
+            this._sizeBytes = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._mode = value.mode;
+            this._sizeBytes = value.sizeBytes;
+        }
+    }
+    // mode - computed: false, optional: true, required: false
+    _mode;
+    get mode() {
+        return this.getNumberAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    resetMode() {
         this._mode = undefined;
-    };
-    Object.defineProperty(ContainerMountsTmpfsOptionsOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsTmpfsOptionsOutputReference.prototype, "sizeBytes", {
-        get: function () {
-            return this.getNumberAttribute('size_bytes');
-        },
-        set: function (value) {
-            this._sizeBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsTmpfsOptionsOutputReference.prototype.resetSizeBytes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // size_bytes - computed: false, optional: true, required: false
+    _sizeBytes;
+    get sizeBytes() {
+        return this.getNumberAttribute('size_bytes');
+    }
+    set sizeBytes(value) {
+        this._sizeBytes = value;
+    }
+    resetSizeBytes() {
         this._sizeBytes = undefined;
-    };
-    Object.defineProperty(ContainerMountsTmpfsOptionsOutputReference.prototype, "sizeBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sizeBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerMountsTmpfsOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerMountsTmpfsOptionsOutputReference = ContainerMountsTmpfsOptionsOutputReference;
-function containerMountsVolumeOptionsLabelsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sizeBytesInput() {
+        return this._sizeBytes;
+    }
+}
+export function containerMountsVolumeOptionsLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2173,14 +1760,14 @@ function containerMountsVolumeOptionsLabelsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function containerMountsVolumeOptionsLabelsToHclTerraform(struct) {
+export function containerMountsVolumeOptionsLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -2195,125 +1782,103 @@ function containerMountsVolumeOptionsLabelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerMountsVolumeOptionsLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerMountsVolumeOptionsLabelsOutputReference, _super);
+export class ContainerMountsVolumeOptionsLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerMountsVolumeOptionsLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerMountsVolumeOptionsLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerMountsVolumeOptionsLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerMountsVolumeOptionsLabelsOutputReference = ContainerMountsVolumeOptionsLabelsOutputReference;
-var ContainerMountsVolumeOptionsLabelsList = /** @class */ (function (_super) {
-    __extends(ContainerMountsVolumeOptionsLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ContainerMountsVolumeOptionsLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerMountsVolumeOptionsLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerMountsVolumeOptionsLabelsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerMountsVolumeOptionsLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerMountsVolumeOptionsLabelsList;
-}(cdktf.ComplexList));
-exports.ContainerMountsVolumeOptionsLabelsList = ContainerMountsVolumeOptionsLabelsList;
-function containerMountsVolumeOptionsToTerraform(struct) {
+    }
+}
+export function containerMountsVolumeOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2328,14 +1893,14 @@ function containerMountsVolumeOptionsToTerraform(struct) {
         labels: cdktf.listMapper(containerMountsVolumeOptionsLabelsToTerraform, true)(struct.labels),
     };
 }
-function containerMountsVolumeOptionsToHclTerraform(struct) {
+export function containerMountsVolumeOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         driver_name: {
             value: cdktf.stringToHclTerraform(struct.driverName),
             isBlock: false,
@@ -2368,181 +1933,137 @@ function containerMountsVolumeOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerMountsVolumeOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerMountsVolumeOptionsOutputReference, _super);
+export class ContainerMountsVolumeOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerMountsVolumeOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new ContainerMountsVolumeOptionsLabelsList(_this, "labels", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._driverName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverName = this._driverName;
-            }
-            if (this._driverOptions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverOptions = this._driverOptions;
-            }
-            if (this._noCopy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.noCopy = this._noCopy;
-            }
-            if (this._subpath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subpath = this._subpath;
-            }
-            if (((_a = this._labels) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.labels = (_b = this._labels) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._driverName = undefined;
-                this._driverOptions = undefined;
-                this._noCopy = undefined;
-                this._subpath = undefined;
-                this._labels.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._driverName = value.driverName;
-                this._driverOptions = value.driverOptions;
-                this._noCopy = value.noCopy;
-                this._subpath = value.subpath;
-                this._labels.internalValue = value.labels;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "driverName", {
-        get: function () {
-            return this.getStringAttribute('driver_name');
-        },
-        set: function (value) {
-            this._driverName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsVolumeOptionsOutputReference.prototype.resetDriverName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._driverName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverName = this._driverName;
+        }
+        if (this._driverOptions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverOptions = this._driverOptions;
+        }
+        if (this._noCopy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.noCopy = this._noCopy;
+        }
+        if (this._subpath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subpath = this._subpath;
+        }
+        if (this._labels?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.labels = this._labels?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._driverName = undefined;
+            this._driverOptions = undefined;
+            this._noCopy = undefined;
+            this._subpath = undefined;
+            this._labels.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._driverName = value.driverName;
+            this._driverOptions = value.driverOptions;
+            this._noCopy = value.noCopy;
+            this._subpath = value.subpath;
+            this._labels.internalValue = value.labels;
+        }
+    }
+    // driver_name - computed: false, optional: true, required: false
+    _driverName;
+    get driverName() {
+        return this.getStringAttribute('driver_name');
+    }
+    set driverName(value) {
+        this._driverName = value;
+    }
+    resetDriverName() {
         this._driverName = undefined;
-    };
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "driverNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "driverOptions", {
-        get: function () {
-            return this.getStringMapAttribute('driver_options');
-        },
-        set: function (value) {
-            this._driverOptions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsVolumeOptionsOutputReference.prototype.resetDriverOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverNameInput() {
+        return this._driverName;
+    }
+    // driver_options - computed: false, optional: true, required: false
+    _driverOptions;
+    get driverOptions() {
+        return this.getStringMapAttribute('driver_options');
+    }
+    set driverOptions(value) {
+        this._driverOptions = value;
+    }
+    resetDriverOptions() {
         this._driverOptions = undefined;
-    };
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "driverOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "noCopy", {
-        get: function () {
-            return this.getBooleanAttribute('no_copy');
-        },
-        set: function (value) {
-            this._noCopy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsVolumeOptionsOutputReference.prototype.resetNoCopy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverOptionsInput() {
+        return this._driverOptions;
+    }
+    // no_copy - computed: false, optional: true, required: false
+    _noCopy;
+    get noCopy() {
+        return this.getBooleanAttribute('no_copy');
+    }
+    set noCopy(value) {
+        this._noCopy = value;
+    }
+    resetNoCopy() {
         this._noCopy = undefined;
-    };
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "noCopyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._noCopy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "subpath", {
-        get: function () {
-            return this.getStringAttribute('subpath');
-        },
-        set: function (value) {
-            this._subpath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsVolumeOptionsOutputReference.prototype.resetSubpath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get noCopyInput() {
+        return this._noCopy;
+    }
+    // subpath - computed: false, optional: true, required: false
+    _subpath;
+    get subpath() {
+        return this.getStringAttribute('subpath');
+    }
+    set subpath(value) {
+        this._subpath = value;
+    }
+    resetSubpath() {
         this._subpath = undefined;
-    };
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "subpathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subpath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsVolumeOptionsOutputReference.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get subpathInput() {
+        return this._subpath;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new ContainerMountsVolumeOptionsLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    ContainerMountsVolumeOptionsOutputReference.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(ContainerMountsVolumeOptionsOutputReference.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerMountsVolumeOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerMountsVolumeOptionsOutputReference = ContainerMountsVolumeOptionsOutputReference;
-function containerMountsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
+}
+export function containerMountsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2559,14 +2080,14 @@ function containerMountsToTerraform(struct) {
         volume_options: containerMountsVolumeOptionsToTerraform(struct.volumeOptions),
     };
 }
-function containerMountsToHclTerraform(struct) {
+export function containerMountsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         read_only: {
             value: cdktf.booleanToHclTerraform(struct.readOnly),
             isBlock: false,
@@ -2611,267 +2132,208 @@ function containerMountsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerMountsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerMountsOutputReference, _super);
+export class ContainerMountsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerMountsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // bind_options - computed: false, optional: true, required: false
-        _this._bindOptions = new ContainerMountsBindOptionsOutputReference(_this, "bind_options");
-        // tmpfs_options - computed: false, optional: true, required: false
-        _this._tmpfsOptions = new ContainerMountsTmpfsOptionsOutputReference(_this, "tmpfs_options");
-        // volume_options - computed: false, optional: true, required: false
-        _this._volumeOptions = new ContainerMountsVolumeOptionsOutputReference(_this, "volume_options");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._readOnly !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.readOnly = this._readOnly;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            if (this._target !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = this._target;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (((_a = this._bindOptions) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bindOptions = (_b = this._bindOptions) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._tmpfsOptions) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tmpfsOptions = (_d = this._tmpfsOptions) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._volumeOptions) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.volumeOptions = (_f = this._volumeOptions) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._readOnly = undefined;
-                this._source = undefined;
-                this._target = undefined;
-                this._type = undefined;
-                this._bindOptions.internalValue = undefined;
-                this._tmpfsOptions.internalValue = undefined;
-                this._volumeOptions.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._readOnly = value.readOnly;
-                this._source = value.source;
-                this._target = value.target;
-                this._type = value.type;
-                this._bindOptions.internalValue = value.bindOptions;
-                this._tmpfsOptions.internalValue = value.tmpfsOptions;
-                this._volumeOptions.internalValue = value.volumeOptions;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsOutputReference.prototype.resetReadOnly = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._readOnly !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.readOnly = this._readOnly;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        if (this._target !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._bindOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bindOptions = this._bindOptions?.internalValue;
+        }
+        if (this._tmpfsOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tmpfsOptions = this._tmpfsOptions?.internalValue;
+        }
+        if (this._volumeOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.volumeOptions = this._volumeOptions?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._readOnly = undefined;
+            this._source = undefined;
+            this._target = undefined;
+            this._type = undefined;
+            this._bindOptions.internalValue = undefined;
+            this._tmpfsOptions.internalValue = undefined;
+            this._volumeOptions.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._readOnly = value.readOnly;
+            this._source = value.source;
+            this._target = value.target;
+            this._type = value.type;
+            this._bindOptions.internalValue = value.bindOptions;
+            this._tmpfsOptions.internalValue = value.tmpfsOptions;
+            this._volumeOptions.internalValue = value.volumeOptions;
+        }
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "bindOptions", {
-        get: function () {
-            return this._bindOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsOutputReference.prototype.putBindOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+    // target - computed: false, optional: false, required: true
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // bind_options - computed: false, optional: true, required: false
+    _bindOptions = new ContainerMountsBindOptionsOutputReference(this, "bind_options");
+    get bindOptions() {
+        return this._bindOptions;
+    }
+    putBindOptions(value) {
         this._bindOptions.internalValue = value;
-    };
-    ContainerMountsOutputReference.prototype.resetBindOptions = function () {
+    }
+    resetBindOptions() {
         this._bindOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "bindOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bindOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "tmpfsOptions", {
-        get: function () {
-            return this._tmpfsOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsOutputReference.prototype.putTmpfsOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bindOptionsInput() {
+        return this._bindOptions.internalValue;
+    }
+    // tmpfs_options - computed: false, optional: true, required: false
+    _tmpfsOptions = new ContainerMountsTmpfsOptionsOutputReference(this, "tmpfs_options");
+    get tmpfsOptions() {
+        return this._tmpfsOptions;
+    }
+    putTmpfsOptions(value) {
         this._tmpfsOptions.internalValue = value;
-    };
-    ContainerMountsOutputReference.prototype.resetTmpfsOptions = function () {
+    }
+    resetTmpfsOptions() {
         this._tmpfsOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "tmpfsOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tmpfsOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "volumeOptions", {
-        get: function () {
-            return this._volumeOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerMountsOutputReference.prototype.putVolumeOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tmpfsOptionsInput() {
+        return this._tmpfsOptions.internalValue;
+    }
+    // volume_options - computed: false, optional: true, required: false
+    _volumeOptions = new ContainerMountsVolumeOptionsOutputReference(this, "volume_options");
+    get volumeOptions() {
+        return this._volumeOptions;
+    }
+    putVolumeOptions(value) {
         this._volumeOptions.internalValue = value;
-    };
-    ContainerMountsOutputReference.prototype.resetVolumeOptions = function () {
+    }
+    resetVolumeOptions() {
         this._volumeOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ContainerMountsOutputReference.prototype, "volumeOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._volumeOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerMountsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerMountsOutputReference = ContainerMountsOutputReference;
-var ContainerMountsList = /** @class */ (function (_super) {
-    __extends(ContainerMountsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get volumeOptionsInput() {
+        return this._volumeOptions.internalValue;
+    }
+}
+export class ContainerMountsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerMountsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerMountsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerMountsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerMountsList;
-}(cdktf.ComplexList));
-exports.ContainerMountsList = ContainerMountsList;
-function containerNetworksAdvancedToTerraform(struct) {
+    }
+}
+export function containerNetworksAdvancedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2889,14 +2351,14 @@ function containerNetworksAdvancedToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function containerNetworksAdvancedToHclTerraform(struct) {
+export function containerNetworksAdvancedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aliases: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.aliases),
             isBlock: false,
@@ -2947,290 +2409,232 @@ function containerNetworksAdvancedToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerNetworksAdvancedOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerNetworksAdvancedOutputReference, _super);
+export class ContainerNetworksAdvancedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerNetworksAdvancedOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._aliases !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.aliases = this._aliases;
-            }
-            if (this._driverOpts !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverOpts = this._driverOpts;
-            }
-            if (this._gwPriority !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gwPriority = this._gwPriority;
-            }
-            if (this._ipv4Address !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipv4Address = this._ipv4Address;
-            }
-            if (this._ipv6Address !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipv6Address = this._ipv6Address;
-            }
-            if (this._linkLocalIps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.linkLocalIps = this._linkLocalIps;
-            }
-            if (this._macAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.macAddress = this._macAddress;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._aliases = undefined;
-                this._driverOpts = undefined;
-                this._gwPriority = undefined;
-                this._ipv4Address = undefined;
-                this._ipv6Address = undefined;
-                this._linkLocalIps = undefined;
-                this._macAddress = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._aliases = value.aliases;
-                this._driverOpts = value.driverOpts;
-                this._gwPriority = value.gwPriority;
-                this._ipv4Address = value.ipv4Address;
-                this._ipv6Address = value.ipv6Address;
-                this._linkLocalIps = value.linkLocalIps;
-                this._macAddress = value.macAddress;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "aliases", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('aliases'));
-        },
-        set: function (value) {
-            this._aliases = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetAliases = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._aliases !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.aliases = this._aliases;
+        }
+        if (this._driverOpts !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverOpts = this._driverOpts;
+        }
+        if (this._gwPriority !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gwPriority = this._gwPriority;
+        }
+        if (this._ipv4Address !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipv4Address = this._ipv4Address;
+        }
+        if (this._ipv6Address !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipv6Address = this._ipv6Address;
+        }
+        if (this._linkLocalIps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.linkLocalIps = this._linkLocalIps;
+        }
+        if (this._macAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.macAddress = this._macAddress;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._aliases = undefined;
+            this._driverOpts = undefined;
+            this._gwPriority = undefined;
+            this._ipv4Address = undefined;
+            this._ipv6Address = undefined;
+            this._linkLocalIps = undefined;
+            this._macAddress = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._aliases = value.aliases;
+            this._driverOpts = value.driverOpts;
+            this._gwPriority = value.gwPriority;
+            this._ipv4Address = value.ipv4Address;
+            this._ipv6Address = value.ipv6Address;
+            this._linkLocalIps = value.linkLocalIps;
+            this._macAddress = value.macAddress;
+            this._name = value.name;
+        }
+    }
+    // aliases - computed: false, optional: true, required: false
+    _aliases;
+    get aliases() {
+        return cdktf.Fn.tolist(this.getListAttribute('aliases'));
+    }
+    set aliases(value) {
+        this._aliases = value;
+    }
+    resetAliases() {
         this._aliases = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "aliasesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aliases;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "driverOpts", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('driver_opts'));
-        },
-        set: function (value) {
-            this._driverOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetDriverOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasesInput() {
+        return this._aliases;
+    }
+    // driver_opts - computed: false, optional: true, required: false
+    _driverOpts;
+    get driverOpts() {
+        return cdktf.Fn.tolist(this.getListAttribute('driver_opts'));
+    }
+    set driverOpts(value) {
+        this._driverOpts = value;
+    }
+    resetDriverOpts() {
         this._driverOpts = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "driverOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "gwPriority", {
-        get: function () {
-            return this.getNumberAttribute('gw_priority');
-        },
-        set: function (value) {
-            this._gwPriority = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetGwPriority = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverOptsInput() {
+        return this._driverOpts;
+    }
+    // gw_priority - computed: false, optional: true, required: false
+    _gwPriority;
+    get gwPriority() {
+        return this.getNumberAttribute('gw_priority');
+    }
+    set gwPriority(value) {
+        this._gwPriority = value;
+    }
+    resetGwPriority() {
         this._gwPriority = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "gwPriorityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gwPriority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "ipv4Address", {
-        get: function () {
-            return this.getStringAttribute('ipv4_address');
-        },
-        set: function (value) {
-            this._ipv4Address = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetIpv4Address = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gwPriorityInput() {
+        return this._gwPriority;
+    }
+    // ipv4_address - computed: false, optional: true, required: false
+    _ipv4Address;
+    get ipv4Address() {
+        return this.getStringAttribute('ipv4_address');
+    }
+    set ipv4Address(value) {
+        this._ipv4Address = value;
+    }
+    resetIpv4Address() {
         this._ipv4Address = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "ipv4AddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv4Address;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "ipv6Address", {
-        get: function () {
-            return this.getStringAttribute('ipv6_address');
-        },
-        set: function (value) {
-            this._ipv6Address = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetIpv6Address = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv4AddressInput() {
+        return this._ipv4Address;
+    }
+    // ipv6_address - computed: false, optional: true, required: false
+    _ipv6Address;
+    get ipv6Address() {
+        return this.getStringAttribute('ipv6_address');
+    }
+    set ipv6Address(value) {
+        this._ipv6Address = value;
+    }
+    resetIpv6Address() {
         this._ipv6Address = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "ipv6AddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv6Address;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "linkLocalIps", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('link_local_ips'));
-        },
-        set: function (value) {
-            this._linkLocalIps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetLinkLocalIps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv6AddressInput() {
+        return this._ipv6Address;
+    }
+    // link_local_ips - computed: false, optional: true, required: false
+    _linkLocalIps;
+    get linkLocalIps() {
+        return cdktf.Fn.tolist(this.getListAttribute('link_local_ips'));
+    }
+    set linkLocalIps(value) {
+        this._linkLocalIps = value;
+    }
+    resetLinkLocalIps() {
         this._linkLocalIps = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "linkLocalIpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._linkLocalIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "macAddress", {
-        get: function () {
-            return this.getStringAttribute('mac_address');
-        },
-        set: function (value) {
-            this._macAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerNetworksAdvancedOutputReference.prototype.resetMacAddress = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get linkLocalIpsInput() {
+        return this._linkLocalIps;
+    }
+    // mac_address - computed: false, optional: true, required: false
+    _macAddress;
+    get macAddress() {
+        return this.getStringAttribute('mac_address');
+    }
+    set macAddress(value) {
+        this._macAddress = value;
+    }
+    resetMacAddress() {
         this._macAddress = undefined;
-    };
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "macAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._macAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerNetworksAdvancedOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerNetworksAdvancedOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerNetworksAdvancedOutputReference = ContainerNetworksAdvancedOutputReference;
-var ContainerNetworksAdvancedList = /** @class */ (function (_super) {
-    __extends(ContainerNetworksAdvancedList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get macAddressInput() {
+        return this._macAddress;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export class ContainerNetworksAdvancedList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerNetworksAdvancedList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerNetworksAdvancedList.prototype.get = function (index) {
+    get(index) {
         return new ContainerNetworksAdvancedOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerNetworksAdvancedList;
-}(cdktf.ComplexList));
-exports.ContainerNetworksAdvancedList = ContainerNetworksAdvancedList;
-function containerPortsToTerraform(struct) {
+    }
+}
+export function containerPortsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3244,14 +2648,14 @@ function containerPortsToTerraform(struct) {
         protocol: cdktf.stringToTerraform(struct.protocol),
     };
 }
-function containerPortsToHclTerraform(struct) {
+export function containerPortsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         external: {
             value: cdktf.numberToHclTerraform(struct.external),
             isBlock: false,
@@ -3278,182 +2682,148 @@ function containerPortsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerPortsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerPortsOutputReference, _super);
+export class ContainerPortsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerPortsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._external !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.external = this._external;
-            }
-            if (this._internal !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.internal = this._internal;
-            }
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            if (this._protocol !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.protocol = this._protocol;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._external = undefined;
-                this._internal = undefined;
-                this._ip = undefined;
-                this._protocol = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._external = value.external;
-                this._internal = value.internal;
-                this._ip = value.ip;
-                this._protocol = value.protocol;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "external", {
-        get: function () {
-            return this.getNumberAttribute('external');
-        },
-        set: function (value) {
-            this._external = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerPortsOutputReference.prototype.resetExternal = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._external !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.external = this._external;
+        }
+        if (this._internal !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.internal = this._internal;
+        }
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        if (this._protocol !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.protocol = this._protocol;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._external = undefined;
+            this._internal = undefined;
+            this._ip = undefined;
+            this._protocol = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._external = value.external;
+            this._internal = value.internal;
+            this._ip = value.ip;
+            this._protocol = value.protocol;
+        }
+    }
+    // external - computed: true, optional: true, required: false
+    _external;
+    get external() {
+        return this.getNumberAttribute('external');
+    }
+    set external(value) {
+        this._external = value;
+    }
+    resetExternal() {
         this._external = undefined;
-    };
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "externalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._external;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "internal", {
-        get: function () {
-            return this.getNumberAttribute('internal');
-        },
-        set: function (value) {
-            this._internal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "internalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._internal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerPortsOutputReference.prototype.resetIp = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalInput() {
+        return this._external;
+    }
+    // internal - computed: false, optional: false, required: true
+    _internal;
+    get internal() {
+        return this.getNumberAttribute('internal');
+    }
+    set internal(value) {
+        this._internal = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get internalInput() {
+        return this._internal;
+    }
+    // ip - computed: false, optional: true, required: false
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    resetIp() {
         this._ip = undefined;
-    };
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "protocol", {
-        get: function () {
-            return this.getStringAttribute('protocol');
-        },
-        set: function (value) {
-            this._protocol = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerPortsOutputReference.prototype.resetProtocol = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+    // protocol - computed: false, optional: true, required: false
+    _protocol;
+    get protocol() {
+        return this.getStringAttribute('protocol');
+    }
+    set protocol(value) {
+        this._protocol = value;
+    }
+    resetProtocol() {
         this._protocol = undefined;
-    };
-    Object.defineProperty(ContainerPortsOutputReference.prototype, "protocolInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._protocol;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerPortsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerPortsOutputReference = ContainerPortsOutputReference;
-var ContainerPortsList = /** @class */ (function (_super) {
-    __extends(ContainerPortsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get protocolInput() {
+        return this._protocol;
+    }
+}
+export class ContainerPortsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerPortsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerPortsList.prototype.get = function (index) {
+    get(index) {
         return new ContainerPortsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerPortsList;
-}(cdktf.ComplexList));
-exports.ContainerPortsList = ContainerPortsList;
-function containerTimeoutsToTerraform(struct) {
+    }
+}
+export function containerTimeoutsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3466,14 +2836,14 @@ function containerTimeoutsToTerraform(struct) {
         update: cdktf.stringToTerraform(struct.update),
     };
 }
-function containerTimeoutsToHclTerraform(struct) {
+export function containerTimeoutsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         create: {
             value: cdktf.stringToHclTerraform(struct.create),
             isBlock: false,
@@ -3494,133 +2864,105 @@ function containerTimeoutsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerTimeoutsOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerTimeoutsOutputReference, _super);
+export class ContainerTimeoutsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ContainerTimeoutsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._create !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.create = this._create;
-            }
-            if (this._delete !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delete = this._delete;
-            }
-            if (this._update !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.update = this._update;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._create = undefined;
-                this._delete = undefined;
-                this._update = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._create = value.create;
-                this._delete = value.delete;
-                this._update = value.update;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "create", {
-        get: function () {
-            return this.getStringAttribute('create');
-        },
-        set: function (value) {
-            this._create = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerTimeoutsOutputReference.prototype.resetCreate = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._create !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.create = this._create;
+        }
+        if (this._delete !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delete = this._delete;
+        }
+        if (this._update !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.update = this._update;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._create = undefined;
+            this._delete = undefined;
+            this._update = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._create = value.create;
+            this._delete = value.delete;
+            this._update = value.update;
+        }
+    }
+    // create - computed: false, optional: true, required: false
+    _create;
+    get create() {
+        return this.getStringAttribute('create');
+    }
+    set create(value) {
+        this._create = value;
+    }
+    resetCreate() {
         this._create = undefined;
-    };
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "createInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._create;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "delete", {
-        get: function () {
-            return this.getStringAttribute('delete');
-        },
-        set: function (value) {
-            this._delete = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerTimeoutsOutputReference.prototype.resetDelete = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createInput() {
+        return this._create;
+    }
+    // delete - computed: false, optional: true, required: false
+    _delete;
+    get delete() {
+        return this.getStringAttribute('delete');
+    }
+    set delete(value) {
+        this._delete = value;
+    }
+    resetDelete() {
         this._delete = undefined;
-    };
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "deleteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delete;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "update", {
-        get: function () {
-            return this.getStringAttribute('update');
-        },
-        set: function (value) {
-            this._update = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerTimeoutsOutputReference.prototype.resetUpdate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deleteInput() {
+        return this._delete;
+    }
+    // update - computed: false, optional: true, required: false
+    _update;
+    get update() {
+        return this.getStringAttribute('update');
+    }
+    set update(value) {
+        this._update = value;
+    }
+    resetUpdate() {
         this._update = undefined;
-    };
-    Object.defineProperty(ContainerTimeoutsOutputReference.prototype, "updateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._update;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerTimeoutsOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerTimeoutsOutputReference = ContainerTimeoutsOutputReference;
-function containerUlimitToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get updateInput() {
+        return this._update;
+    }
+}
+export function containerUlimitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3633,14 +2975,14 @@ function containerUlimitToTerraform(struct) {
         soft: cdktf.numberToTerraform(struct.soft),
     };
 }
-function containerUlimitToHclTerraform(struct) {
+export function containerUlimitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         hard: {
             value: cdktf.numberToHclTerraform(struct.hard),
             isBlock: false,
@@ -3661,149 +3003,121 @@ function containerUlimitToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerUlimitOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerUlimitOutputReference, _super);
+export class ContainerUlimitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerUlimitOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._hard !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hard = this._hard;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._soft !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.soft = this._soft;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._hard = undefined;
-                this._name = undefined;
-                this._soft = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._hard = value.hard;
-                this._name = value.name;
-                this._soft = value.soft;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "hard", {
-        get: function () {
-            return this.getNumberAttribute('hard');
-        },
-        set: function (value) {
-            this._hard = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "hardInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hard;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "soft", {
-        get: function () {
-            return this.getNumberAttribute('soft');
-        },
-        set: function (value) {
-            this._soft = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUlimitOutputReference.prototype, "softInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._soft;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerUlimitOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerUlimitOutputReference = ContainerUlimitOutputReference;
-var ContainerUlimitList = /** @class */ (function (_super) {
-    __extends(ContainerUlimitList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._hard !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hard = this._hard;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._soft !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.soft = this._soft;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._hard = undefined;
+            this._name = undefined;
+            this._soft = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._hard = value.hard;
+            this._name = value.name;
+            this._soft = value.soft;
+        }
+    }
+    // hard - computed: false, optional: false, required: true
+    _hard;
+    get hard() {
+        return this.getNumberAttribute('hard');
+    }
+    set hard(value) {
+        this._hard = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hardInput() {
+        return this._hard;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // soft - computed: false, optional: false, required: true
+    _soft;
+    get soft() {
+        return this.getNumberAttribute('soft');
+    }
+    set soft(value) {
+        this._soft = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get softInput() {
+        return this._soft;
+    }
+}
+export class ContainerUlimitList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerUlimitList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerUlimitList.prototype.get = function (index) {
+    get(index) {
         return new ContainerUlimitOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerUlimitList;
-}(cdktf.ComplexList));
-exports.ContainerUlimitList = ContainerUlimitList;
-function containerUploadToTerraform(struct) {
+    }
+}
+export function containerUploadToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3820,14 +3134,14 @@ function containerUploadToTerraform(struct) {
         source_hash: cdktf.stringToTerraform(struct.sourceHash),
     };
 }
-function containerUploadToHclTerraform(struct) {
+export function containerUploadToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         content: {
             value: cdktf.stringToHclTerraform(struct.content),
             isBlock: false,
@@ -3872,263 +3186,211 @@ function containerUploadToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerUploadOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerUploadOutputReference, _super);
+export class ContainerUploadOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerUploadOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._content !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.content = this._content;
-            }
-            if (this._contentBase64 !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contentBase64 = this._contentBase64;
-            }
-            if (this._executable !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.executable = this._executable;
-            }
-            if (this._file !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.file = this._file;
-            }
-            if (this._permissions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.permissions = this._permissions;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            if (this._sourceHash !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sourceHash = this._sourceHash;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._content = undefined;
-                this._contentBase64 = undefined;
-                this._executable = undefined;
-                this._file = undefined;
-                this._permissions = undefined;
-                this._source = undefined;
-                this._sourceHash = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._content = value.content;
-                this._contentBase64 = value.contentBase64;
-                this._executable = value.executable;
-                this._file = value.file;
-                this._permissions = value.permissions;
-                this._source = value.source;
-                this._sourceHash = value.sourceHash;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "content", {
-        get: function () {
-            return this.getStringAttribute('content');
-        },
-        set: function (value) {
-            this._content = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetContent = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._content !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.content = this._content;
+        }
+        if (this._contentBase64 !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contentBase64 = this._contentBase64;
+        }
+        if (this._executable !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.executable = this._executable;
+        }
+        if (this._file !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.file = this._file;
+        }
+        if (this._permissions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.permissions = this._permissions;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        if (this._sourceHash !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sourceHash = this._sourceHash;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._content = undefined;
+            this._contentBase64 = undefined;
+            this._executable = undefined;
+            this._file = undefined;
+            this._permissions = undefined;
+            this._source = undefined;
+            this._sourceHash = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._content = value.content;
+            this._contentBase64 = value.contentBase64;
+            this._executable = value.executable;
+            this._file = value.file;
+            this._permissions = value.permissions;
+            this._source = value.source;
+            this._sourceHash = value.sourceHash;
+        }
+    }
+    // content - computed: false, optional: true, required: false
+    _content;
+    get content() {
+        return this.getStringAttribute('content');
+    }
+    set content(value) {
+        this._content = value;
+    }
+    resetContent() {
         this._content = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "contentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._content;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "contentBase64", {
-        get: function () {
-            return this.getStringAttribute('content_base64');
-        },
-        set: function (value) {
-            this._contentBase64 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetContentBase64 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentInput() {
+        return this._content;
+    }
+    // content_base64 - computed: false, optional: true, required: false
+    _contentBase64;
+    get contentBase64() {
+        return this.getStringAttribute('content_base64');
+    }
+    set contentBase64(value) {
+        this._contentBase64 = value;
+    }
+    resetContentBase64() {
         this._contentBase64 = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "contentBase64Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentBase64;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "executable", {
-        get: function () {
-            return this.getBooleanAttribute('executable');
-        },
-        set: function (value) {
-            this._executable = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetExecutable = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentBase64Input() {
+        return this._contentBase64;
+    }
+    // executable - computed: false, optional: true, required: false
+    _executable;
+    get executable() {
+        return this.getBooleanAttribute('executable');
+    }
+    set executable(value) {
+        this._executable = value;
+    }
+    resetExecutable() {
         this._executable = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "executableInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._executable;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "file", {
-        get: function () {
-            return this.getStringAttribute('file');
-        },
-        set: function (value) {
-            this._file = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "fileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._file;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "permissions", {
-        get: function () {
-            return this.getStringAttribute('permissions');
-        },
-        set: function (value) {
-            this._permissions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetPermissions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get executableInput() {
+        return this._executable;
+    }
+    // file - computed: false, optional: false, required: true
+    _file;
+    get file() {
+        return this.getStringAttribute('file');
+    }
+    set file(value) {
+        this._file = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileInput() {
+        return this._file;
+    }
+    // permissions - computed: false, optional: true, required: false
+    _permissions;
+    get permissions() {
+        return this.getStringAttribute('permissions');
+    }
+    set permissions(value) {
+        this._permissions = value;
+    }
+    resetPermissions() {
         this._permissions = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "permissionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionsInput() {
+        return this._permissions;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "sourceHash", {
-        get: function () {
-            return this.getStringAttribute('source_hash');
-        },
-        set: function (value) {
-            this._sourceHash = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerUploadOutputReference.prototype.resetSourceHash = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+    // source_hash - computed: false, optional: true, required: false
+    _sourceHash;
+    get sourceHash() {
+        return this.getStringAttribute('source_hash');
+    }
+    set sourceHash(value) {
+        this._sourceHash = value;
+    }
+    resetSourceHash() {
         this._sourceHash = undefined;
-    };
-    Object.defineProperty(ContainerUploadOutputReference.prototype, "sourceHashInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceHash;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerUploadOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerUploadOutputReference = ContainerUploadOutputReference;
-var ContainerUploadList = /** @class */ (function (_super) {
-    __extends(ContainerUploadList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceHashInput() {
+        return this._sourceHash;
+    }
+}
+export class ContainerUploadList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerUploadList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerUploadList.prototype.get = function (index) {
+    get(index) {
         return new ContainerUploadOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerUploadList;
-}(cdktf.ComplexList));
-exports.ContainerUploadList = ContainerUploadList;
-function containerVolumesToTerraform(struct) {
+    }
+}
+export function containerVolumesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4144,14 +3406,14 @@ function containerVolumesToTerraform(struct) {
         volume_name: cdktf.stringToTerraform(struct.volumeName),
     };
 }
-function containerVolumesToHclTerraform(struct) {
+export function containerVolumesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         container_path: {
             value: cdktf.stringToHclTerraform(struct.containerPath),
             isBlock: false,
@@ -4190,243 +3452,213 @@ function containerVolumesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ContainerVolumesOutputReference = /** @class */ (function (_super) {
-    __extends(ContainerVolumesOutputReference, _super);
+export class ContainerVolumesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerVolumesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._containerPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.containerPath = this._containerPath;
-            }
-            if (this._fromContainer !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fromContainer = this._fromContainer;
-            }
-            if (this._hostPath !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostPath = this._hostPath;
-            }
-            if (this._readOnly !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.readOnly = this._readOnly;
-            }
-            if (this._selinuxRelabel !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.selinuxRelabel = this._selinuxRelabel;
-            }
-            if (this._volumeName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.volumeName = this._volumeName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._containerPath = undefined;
-                this._fromContainer = undefined;
-                this._hostPath = undefined;
-                this._readOnly = undefined;
-                this._selinuxRelabel = undefined;
-                this._volumeName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._containerPath = value.containerPath;
-                this._fromContainer = value.fromContainer;
-                this._hostPath = value.hostPath;
-                this._readOnly = value.readOnly;
-                this._selinuxRelabel = value.selinuxRelabel;
-                this._volumeName = value.volumeName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "containerPath", {
-        get: function () {
-            return this.getStringAttribute('container_path');
-        },
-        set: function (value) {
-            this._containerPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetContainerPath = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._containerPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.containerPath = this._containerPath;
+        }
+        if (this._fromContainer !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fromContainer = this._fromContainer;
+        }
+        if (this._hostPath !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostPath = this._hostPath;
+        }
+        if (this._readOnly !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.readOnly = this._readOnly;
+        }
+        if (this._selinuxRelabel !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.selinuxRelabel = this._selinuxRelabel;
+        }
+        if (this._volumeName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.volumeName = this._volumeName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._containerPath = undefined;
+            this._fromContainer = undefined;
+            this._hostPath = undefined;
+            this._readOnly = undefined;
+            this._selinuxRelabel = undefined;
+            this._volumeName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._containerPath = value.containerPath;
+            this._fromContainer = value.fromContainer;
+            this._hostPath = value.hostPath;
+            this._readOnly = value.readOnly;
+            this._selinuxRelabel = value.selinuxRelabel;
+            this._volumeName = value.volumeName;
+        }
+    }
+    // container_path - computed: false, optional: true, required: false
+    _containerPath;
+    get containerPath() {
+        return this.getStringAttribute('container_path');
+    }
+    set containerPath(value) {
+        this._containerPath = value;
+    }
+    resetContainerPath() {
         this._containerPath = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "containerPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._containerPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "fromContainer", {
-        get: function () {
-            return this.getStringAttribute('from_container');
-        },
-        set: function (value) {
-            this._fromContainer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetFromContainer = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containerPathInput() {
+        return this._containerPath;
+    }
+    // from_container - computed: false, optional: true, required: false
+    _fromContainer;
+    get fromContainer() {
+        return this.getStringAttribute('from_container');
+    }
+    set fromContainer(value) {
+        this._fromContainer = value;
+    }
+    resetFromContainer() {
         this._fromContainer = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "fromContainerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fromContainer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "hostPath", {
-        get: function () {
-            return this.getStringAttribute('host_path');
-        },
-        set: function (value) {
-            this._hostPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetHostPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fromContainerInput() {
+        return this._fromContainer;
+    }
+    // host_path - computed: false, optional: true, required: false
+    _hostPath;
+    get hostPath() {
+        return this.getStringAttribute('host_path');
+    }
+    set hostPath(value) {
+        this._hostPath = value;
+    }
+    resetHostPath() {
         this._hostPath = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "hostPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetReadOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostPathInput() {
+        return this._hostPath;
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "selinuxRelabel", {
-        get: function () {
-            return this.getStringAttribute('selinux_relabel');
-        },
-        set: function (value) {
-            this._selinuxRelabel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetSelinuxRelabel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // selinux_relabel - computed: false, optional: true, required: false
+    _selinuxRelabel;
+    get selinuxRelabel() {
+        return this.getStringAttribute('selinux_relabel');
+    }
+    set selinuxRelabel(value) {
+        this._selinuxRelabel = value;
+    }
+    resetSelinuxRelabel() {
         this._selinuxRelabel = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "selinuxRelabelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selinuxRelabel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "volumeName", {
-        get: function () {
-            return this.getStringAttribute('volume_name');
-        },
-        set: function (value) {
-            this._volumeName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ContainerVolumesOutputReference.prototype.resetVolumeName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get selinuxRelabelInput() {
+        return this._selinuxRelabel;
+    }
+    // volume_name - computed: false, optional: true, required: false
+    _volumeName;
+    get volumeName() {
+        return this.getStringAttribute('volume_name');
+    }
+    set volumeName(value) {
+        this._volumeName = value;
+    }
+    resetVolumeName() {
         this._volumeName = undefined;
-    };
-    Object.defineProperty(ContainerVolumesOutputReference.prototype, "volumeNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._volumeName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ContainerVolumesOutputReference;
-}(cdktf.ComplexObject));
-exports.ContainerVolumesOutputReference = ContainerVolumesOutputReference;
-var ContainerVolumesList = /** @class */ (function (_super) {
-    __extends(ContainerVolumesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get volumeNameInput() {
+        return this._volumeName;
+    }
+}
+export class ContainerVolumesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ContainerVolumesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ContainerVolumesList.prototype.get = function (index) {
+    get(index) {
         return new ContainerVolumesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ContainerVolumesList;
-}(cdktf.ComplexList));
-exports.ContainerVolumesList = ContainerVolumesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/container docker_container}
 */
-var Container = /** @class */ (function (_super) {
-    __extends(Container, _super);
+export class Container extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_container";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Container resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Container to import
+    * @param importFromId The id of the existing Container that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/container#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Container to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_container", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -4437,8 +3669,8 @@ var Container = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ContainerConfig
     */
-    function Container(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_container',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -4451,1737 +3683,1226 @@ var Container = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // network_data - computed: true, optional: false, required: false
-        _this._networkData = new ContainerNetworkDataList(_this, "network_data", false);
-        // capabilities - computed: false, optional: true, required: false
-        _this._capabilities = new ContainerCapabilitiesOutputReference(_this, "capabilities");
-        // device_read_bps - computed: false, optional: true, required: false
-        _this._deviceReadBps = new ContainerDeviceReadBpsList(_this, "device_read_bps", true);
-        // device_read_iops - computed: false, optional: true, required: false
-        _this._deviceReadIops = new ContainerDeviceReadIopsList(_this, "device_read_iops", true);
-        // device_requests - computed: false, optional: true, required: false
-        _this._deviceRequests = new ContainerDeviceRequestsList(_this, "device_requests", true);
-        // device_write_bps - computed: false, optional: true, required: false
-        _this._deviceWriteBps = new ContainerDeviceWriteBpsList(_this, "device_write_bps", true);
-        // device_write_iops - computed: false, optional: true, required: false
-        _this._deviceWriteIops = new ContainerDeviceWriteIopsList(_this, "device_write_iops", true);
-        // devices - computed: false, optional: true, required: false
-        _this._devices = new ContainerDevicesList(_this, "devices", true);
-        // healthcheck - computed: false, optional: true, required: false
-        _this._healthcheck = new ContainerHealthcheckOutputReference(_this, "healthcheck");
-        // host - computed: false, optional: true, required: false
-        _this._host = new ContainerHostList(_this, "host", true);
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new ContainerLabelsList(_this, "labels", true);
-        // mounts - computed: false, optional: true, required: false
-        _this._mounts = new ContainerMountsList(_this, "mounts", true);
-        // networks_advanced - computed: false, optional: true, required: false
-        _this._networksAdvanced = new ContainerNetworksAdvancedList(_this, "networks_advanced", true);
-        // ports - computed: false, optional: true, required: false
-        _this._ports = new ContainerPortsList(_this, "ports", false);
-        // timeouts - computed: false, optional: true, required: false
-        _this._timeouts = new ContainerTimeoutsOutputReference(_this, "timeouts");
-        // ulimit - computed: false, optional: true, required: false
-        _this._ulimit = new ContainerUlimitList(_this, "ulimit", true);
-        // upload - computed: false, optional: true, required: false
-        _this._upload = new ContainerUploadList(_this, "upload", true);
-        // volumes - computed: false, optional: true, required: false
-        _this._volumes = new ContainerVolumesList(_this, "volumes", true);
-        _this._attach = config.attach;
-        _this._cgroupParent = config.cgroupParent;
-        _this._cgroupnsMode = config.cgroupnsMode;
-        _this._command = config.command;
-        _this._containerReadRefreshTimeoutMilliseconds = config.containerReadRefreshTimeoutMilliseconds;
-        _this._cpuPeriod = config.cpuPeriod;
-        _this._cpuQuota = config.cpuQuota;
-        _this._cpuSet = config.cpuSet;
-        _this._cpuShares = config.cpuShares;
-        _this._cpus = config.cpus;
-        _this._destroyGraceSeconds = config.destroyGraceSeconds;
-        _this._dns = config.dns;
-        _this._dnsOpts = config.dnsOpts;
-        _this._dnsSearch = config.dnsSearch;
-        _this._domainname = config.domainname;
-        _this._entrypoint = config.entrypoint;
-        _this._env = config.env;
-        _this._gpus = config.gpus;
-        _this._groupAdd = config.groupAdd;
-        _this._hostname = config.hostname;
-        _this._id = config.id;
-        _this._image = config.image;
-        _this._init = config.init;
-        _this._ipcMode = config.ipcMode;
-        _this._logDriver = config.logDriver;
-        _this._logOpts = config.logOpts;
-        _this._logs = config.logs;
-        _this._maxRetryCount = config.maxRetryCount;
-        _this._memory = config.memory;
-        _this._memoryReservation = config.memoryReservation;
-        _this._memorySwap = config.memorySwap;
-        _this._mustRun = config.mustRun;
-        _this._name = config.name;
-        _this._networkMode = config.networkMode;
-        _this._pidMode = config.pidMode;
-        _this._platform = config.platform;
-        _this._privileged = config.privileged;
-        _this._publishAllPorts = config.publishAllPorts;
-        _this._readOnly = config.readOnly;
-        _this._removeVolumes = config.removeVolumes;
-        _this._restart = config.restart;
-        _this._rm = config.rm;
-        _this._runtime = config.runtime;
-        _this._securityOpts = config.securityOpts;
-        _this._shmSize = config.shmSize;
-        _this._start = config.start;
-        _this._stdinOpen = config.stdinOpen;
-        _this._stopSignal = config.stopSignal;
-        _this._stopTimeout = config.stopTimeout;
-        _this._storageOpts = config.storageOpts;
-        _this._sysctls = config.sysctls;
-        _this._tmpfs = config.tmpfs;
-        _this._tty = config.tty;
-        _this._user = config.user;
-        _this._usernsMode = config.usernsMode;
-        _this._wait = config.wait;
-        _this._waitTimeout = config.waitTimeout;
-        _this._workingDir = config.workingDir;
-        _this._capabilities.internalValue = config.capabilities;
-        _this._deviceReadBps.internalValue = config.deviceReadBps;
-        _this._deviceReadIops.internalValue = config.deviceReadIops;
-        _this._deviceRequests.internalValue = config.deviceRequests;
-        _this._deviceWriteBps.internalValue = config.deviceWriteBps;
-        _this._deviceWriteIops.internalValue = config.deviceWriteIops;
-        _this._devices.internalValue = config.devices;
-        _this._healthcheck.internalValue = config.healthcheck;
-        _this._host.internalValue = config.host;
-        _this._labels.internalValue = config.labels;
-        _this._mounts.internalValue = config.mounts;
-        _this._networksAdvanced.internalValue = config.networksAdvanced;
-        _this._ports.internalValue = config.ports;
-        _this._timeouts.internalValue = config.timeouts;
-        _this._ulimit.internalValue = config.ulimit;
-        _this._upload.internalValue = config.upload;
-        _this._volumes.internalValue = config.volumes;
-        return _this;
+        });
+        this._attach = config.attach;
+        this._cgroupParent = config.cgroupParent;
+        this._cgroupnsMode = config.cgroupnsMode;
+        this._command = config.command;
+        this._containerReadRefreshTimeoutMilliseconds = config.containerReadRefreshTimeoutMilliseconds;
+        this._cpuPeriod = config.cpuPeriod;
+        this._cpuQuota = config.cpuQuota;
+        this._cpuSet = config.cpuSet;
+        this._cpuShares = config.cpuShares;
+        this._cpus = config.cpus;
+        this._destroyGraceSeconds = config.destroyGraceSeconds;
+        this._dns = config.dns;
+        this._dnsOpts = config.dnsOpts;
+        this._dnsSearch = config.dnsSearch;
+        this._domainname = config.domainname;
+        this._entrypoint = config.entrypoint;
+        this._env = config.env;
+        this._gpus = config.gpus;
+        this._groupAdd = config.groupAdd;
+        this._hostname = config.hostname;
+        this._id = config.id;
+        this._image = config.image;
+        this._init = config.init;
+        this._ipcMode = config.ipcMode;
+        this._logDriver = config.logDriver;
+        this._logOpts = config.logOpts;
+        this._logs = config.logs;
+        this._maxRetryCount = config.maxRetryCount;
+        this._memory = config.memory;
+        this._memoryReservation = config.memoryReservation;
+        this._memorySwap = config.memorySwap;
+        this._mustRun = config.mustRun;
+        this._name = config.name;
+        this._networkMode = config.networkMode;
+        this._pidMode = config.pidMode;
+        this._platform = config.platform;
+        this._privileged = config.privileged;
+        this._publishAllPorts = config.publishAllPorts;
+        this._readOnly = config.readOnly;
+        this._removeVolumes = config.removeVolumes;
+        this._restart = config.restart;
+        this._rm = config.rm;
+        this._runtime = config.runtime;
+        this._securityOpts = config.securityOpts;
+        this._shmSize = config.shmSize;
+        this._start = config.start;
+        this._stdinOpen = config.stdinOpen;
+        this._stopSignal = config.stopSignal;
+        this._stopTimeout = config.stopTimeout;
+        this._storageOpts = config.storageOpts;
+        this._sysctls = config.sysctls;
+        this._tmpfs = config.tmpfs;
+        this._tty = config.tty;
+        this._user = config.user;
+        this._usernsMode = config.usernsMode;
+        this._wait = config.wait;
+        this._waitTimeout = config.waitTimeout;
+        this._workingDir = config.workingDir;
+        this._capabilities.internalValue = config.capabilities;
+        this._deviceReadBps.internalValue = config.deviceReadBps;
+        this._deviceReadIops.internalValue = config.deviceReadIops;
+        this._deviceRequests.internalValue = config.deviceRequests;
+        this._deviceWriteBps.internalValue = config.deviceWriteBps;
+        this._deviceWriteIops.internalValue = config.deviceWriteIops;
+        this._devices.internalValue = config.devices;
+        this._healthcheck.internalValue = config.healthcheck;
+        this._host.internalValue = config.host;
+        this._labels.internalValue = config.labels;
+        this._mounts.internalValue = config.mounts;
+        this._networksAdvanced.internalValue = config.networksAdvanced;
+        this._ports.internalValue = config.ports;
+        this._timeouts.internalValue = config.timeouts;
+        this._ulimit.internalValue = config.ulimit;
+        this._upload.internalValue = config.upload;
+        this._volumes.internalValue = config.volumes;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Container resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Container to import
-    * @param importFromId The id of the existing Container that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/container#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Container to import is found
-    */
-    Container.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_container", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Container.prototype, "attach", {
-        get: function () {
-            return this.getBooleanAttribute('attach');
-        },
-        set: function (value) {
-            this._attach = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetAttach = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // attach - computed: false, optional: true, required: false
+    _attach;
+    get attach() {
+        return this.getBooleanAttribute('attach');
+    }
+    set attach(value) {
+        this._attach = value;
+    }
+    resetAttach() {
         this._attach = undefined;
-    };
-    Object.defineProperty(Container.prototype, "attachInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attach;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "bridge", {
-        // bridge - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bridge');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cgroupParent", {
-        get: function () {
-            return this.getStringAttribute('cgroup_parent');
-        },
-        set: function (value) {
-            this._cgroupParent = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCgroupParent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get attachInput() {
+        return this._attach;
+    }
+    // bridge - computed: true, optional: false, required: false
+    get bridge() {
+        return this.getStringAttribute('bridge');
+    }
+    // cgroup_parent - computed: false, optional: true, required: false
+    _cgroupParent;
+    get cgroupParent() {
+        return this.getStringAttribute('cgroup_parent');
+    }
+    set cgroupParent(value) {
+        this._cgroupParent = value;
+    }
+    resetCgroupParent() {
         this._cgroupParent = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cgroupParentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cgroupParent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cgroupnsMode", {
-        get: function () {
-            return this.getStringAttribute('cgroupns_mode');
-        },
-        set: function (value) {
-            this._cgroupnsMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCgroupnsMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cgroupParentInput() {
+        return this._cgroupParent;
+    }
+    // cgroupns_mode - computed: false, optional: true, required: false
+    _cgroupnsMode;
+    get cgroupnsMode() {
+        return this.getStringAttribute('cgroupns_mode');
+    }
+    set cgroupnsMode(value) {
+        this._cgroupnsMode = value;
+    }
+    resetCgroupnsMode() {
         this._cgroupnsMode = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cgroupnsModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cgroupnsMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "command", {
-        get: function () {
-            return this.getListAttribute('command');
-        },
-        set: function (value) {
-            this._command = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCommand = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cgroupnsModeInput() {
+        return this._cgroupnsMode;
+    }
+    // command - computed: true, optional: true, required: false
+    _command;
+    get command() {
+        return this.getListAttribute('command');
+    }
+    set command(value) {
+        this._command = value;
+    }
+    resetCommand() {
         this._command = undefined;
-    };
-    Object.defineProperty(Container.prototype, "commandInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._command;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "containerLogs", {
-        // container_logs - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('container_logs');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "containerReadRefreshTimeoutMilliseconds", {
-        get: function () {
-            return this.getNumberAttribute('container_read_refresh_timeout_milliseconds');
-        },
-        set: function (value) {
-            this._containerReadRefreshTimeoutMilliseconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetContainerReadRefreshTimeoutMilliseconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commandInput() {
+        return this._command;
+    }
+    // container_logs - computed: true, optional: false, required: false
+    get containerLogs() {
+        return this.getStringAttribute('container_logs');
+    }
+    // container_read_refresh_timeout_milliseconds - computed: false, optional: true, required: false
+    _containerReadRefreshTimeoutMilliseconds;
+    get containerReadRefreshTimeoutMilliseconds() {
+        return this.getNumberAttribute('container_read_refresh_timeout_milliseconds');
+    }
+    set containerReadRefreshTimeoutMilliseconds(value) {
+        this._containerReadRefreshTimeoutMilliseconds = value;
+    }
+    resetContainerReadRefreshTimeoutMilliseconds() {
         this._containerReadRefreshTimeoutMilliseconds = undefined;
-    };
-    Object.defineProperty(Container.prototype, "containerReadRefreshTimeoutMillisecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._containerReadRefreshTimeoutMilliseconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cpuPeriod", {
-        get: function () {
-            return this.getNumberAttribute('cpu_period');
-        },
-        set: function (value) {
-            this._cpuPeriod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCpuPeriod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containerReadRefreshTimeoutMillisecondsInput() {
+        return this._containerReadRefreshTimeoutMilliseconds;
+    }
+    // cpu_period - computed: false, optional: true, required: false
+    _cpuPeriod;
+    get cpuPeriod() {
+        return this.getNumberAttribute('cpu_period');
+    }
+    set cpuPeriod(value) {
+        this._cpuPeriod = value;
+    }
+    resetCpuPeriod() {
         this._cpuPeriod = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cpuPeriodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpuPeriod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cpuQuota", {
-        get: function () {
-            return this.getNumberAttribute('cpu_quota');
-        },
-        set: function (value) {
-            this._cpuQuota = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCpuQuota = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpuPeriodInput() {
+        return this._cpuPeriod;
+    }
+    // cpu_quota - computed: false, optional: true, required: false
+    _cpuQuota;
+    get cpuQuota() {
+        return this.getNumberAttribute('cpu_quota');
+    }
+    set cpuQuota(value) {
+        this._cpuQuota = value;
+    }
+    resetCpuQuota() {
         this._cpuQuota = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cpuQuotaInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpuQuota;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cpuSet", {
-        get: function () {
-            return this.getStringAttribute('cpu_set');
-        },
-        set: function (value) {
-            this._cpuSet = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCpuSet = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpuQuotaInput() {
+        return this._cpuQuota;
+    }
+    // cpu_set - computed: false, optional: true, required: false
+    _cpuSet;
+    get cpuSet() {
+        return this.getStringAttribute('cpu_set');
+    }
+    set cpuSet(value) {
+        this._cpuSet = value;
+    }
+    resetCpuSet() {
         this._cpuSet = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cpuSetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpuSet;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cpuShares", {
-        get: function () {
-            return this.getNumberAttribute('cpu_shares');
-        },
-        set: function (value) {
-            this._cpuShares = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCpuShares = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpuSetInput() {
+        return this._cpuSet;
+    }
+    // cpu_shares - computed: false, optional: true, required: false
+    _cpuShares;
+    get cpuShares() {
+        return this.getNumberAttribute('cpu_shares');
+    }
+    set cpuShares(value) {
+        this._cpuShares = value;
+    }
+    resetCpuShares() {
         this._cpuShares = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cpuSharesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpuShares;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "cpus", {
-        get: function () {
-            return this.getStringAttribute('cpus');
-        },
-        set: function (value) {
-            this._cpus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetCpus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpuSharesInput() {
+        return this._cpuShares;
+    }
+    // cpus - computed: false, optional: true, required: false
+    _cpus;
+    get cpus() {
+        return this.getStringAttribute('cpus');
+    }
+    set cpus(value) {
+        this._cpus = value;
+    }
+    resetCpus() {
         this._cpus = undefined;
-    };
-    Object.defineProperty(Container.prototype, "cpusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cpus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "destroyGraceSeconds", {
-        get: function () {
-            return this.getNumberAttribute('destroy_grace_seconds');
-        },
-        set: function (value) {
-            this._destroyGraceSeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetDestroyGraceSeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cpusInput() {
+        return this._cpus;
+    }
+    // destroy_grace_seconds - computed: false, optional: true, required: false
+    _destroyGraceSeconds;
+    get destroyGraceSeconds() {
+        return this.getNumberAttribute('destroy_grace_seconds');
+    }
+    set destroyGraceSeconds(value) {
+        this._destroyGraceSeconds = value;
+    }
+    resetDestroyGraceSeconds() {
         this._destroyGraceSeconds = undefined;
-    };
-    Object.defineProperty(Container.prototype, "destroyGraceSecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destroyGraceSeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "dns", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dns'));
-        },
-        set: function (value) {
-            this._dns = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetDns = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destroyGraceSecondsInput() {
+        return this._destroyGraceSeconds;
+    }
+    // dns - computed: false, optional: true, required: false
+    _dns;
+    get dns() {
+        return cdktf.Fn.tolist(this.getListAttribute('dns'));
+    }
+    set dns(value) {
+        this._dns = value;
+    }
+    resetDns() {
         this._dns = undefined;
-    };
-    Object.defineProperty(Container.prototype, "dnsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "dnsOpts", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dns_opts'));
-        },
-        set: function (value) {
-            this._dnsOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetDnsOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsInput() {
+        return this._dns;
+    }
+    // dns_opts - computed: false, optional: true, required: false
+    _dnsOpts;
+    get dnsOpts() {
+        return cdktf.Fn.tolist(this.getListAttribute('dns_opts'));
+    }
+    set dnsOpts(value) {
+        this._dnsOpts = value;
+    }
+    resetDnsOpts() {
         this._dnsOpts = undefined;
-    };
-    Object.defineProperty(Container.prototype, "dnsOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "dnsSearch", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('dns_search'));
-        },
-        set: function (value) {
-            this._dnsSearch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetDnsSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsOptsInput() {
+        return this._dnsOpts;
+    }
+    // dns_search - computed: false, optional: true, required: false
+    _dnsSearch;
+    get dnsSearch() {
+        return cdktf.Fn.tolist(this.getListAttribute('dns_search'));
+    }
+    set dnsSearch(value) {
+        this._dnsSearch = value;
+    }
+    resetDnsSearch() {
         this._dnsSearch = undefined;
-    };
-    Object.defineProperty(Container.prototype, "dnsSearchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsSearch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "domainname", {
-        get: function () {
-            return this.getStringAttribute('domainname');
-        },
-        set: function (value) {
-            this._domainname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetDomainname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsSearchInput() {
+        return this._dnsSearch;
+    }
+    // domainname - computed: false, optional: true, required: false
+    _domainname;
+    get domainname() {
+        return this.getStringAttribute('domainname');
+    }
+    set domainname(value) {
+        this._domainname = value;
+    }
+    resetDomainname() {
         this._domainname = undefined;
-    };
-    Object.defineProperty(Container.prototype, "domainnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domainname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "entrypoint", {
-        get: function () {
-            return this.getListAttribute('entrypoint');
-        },
-        set: function (value) {
-            this._entrypoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetEntrypoint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainnameInput() {
+        return this._domainname;
+    }
+    // entrypoint - computed: true, optional: true, required: false
+    _entrypoint;
+    get entrypoint() {
+        return this.getListAttribute('entrypoint');
+    }
+    set entrypoint(value) {
+        this._entrypoint = value;
+    }
+    resetEntrypoint() {
         this._entrypoint = undefined;
-    };
-    Object.defineProperty(Container.prototype, "entrypointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._entrypoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "env", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('env'));
-        },
-        set: function (value) {
-            this._env = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetEnv = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get entrypointInput() {
+        return this._entrypoint;
+    }
+    // env - computed: true, optional: true, required: false
+    _env;
+    get env() {
+        return cdktf.Fn.tolist(this.getListAttribute('env'));
+    }
+    set env(value) {
+        this._env = value;
+    }
+    resetEnv() {
         this._env = undefined;
-    };
-    Object.defineProperty(Container.prototype, "envInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._env;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "exitCode", {
-        // exit_code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('exit_code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "gpus", {
-        get: function () {
-            return this.getStringAttribute('gpus');
-        },
-        set: function (value) {
-            this._gpus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetGpus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get envInput() {
+        return this._env;
+    }
+    // exit_code - computed: true, optional: false, required: false
+    get exitCode() {
+        return this.getNumberAttribute('exit_code');
+    }
+    // gpus - computed: false, optional: true, required: false
+    _gpus;
+    get gpus() {
+        return this.getStringAttribute('gpus');
+    }
+    set gpus(value) {
+        this._gpus = value;
+    }
+    resetGpus() {
         this._gpus = undefined;
-    };
-    Object.defineProperty(Container.prototype, "gpusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gpus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "groupAdd", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('group_add'));
-        },
-        set: function (value) {
-            this._groupAdd = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetGroupAdd = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gpusInput() {
+        return this._gpus;
+    }
+    // group_add - computed: false, optional: true, required: false
+    _groupAdd;
+    get groupAdd() {
+        return cdktf.Fn.tolist(this.getListAttribute('group_add'));
+    }
+    set groupAdd(value) {
+        this._groupAdd = value;
+    }
+    resetGroupAdd() {
         this._groupAdd = undefined;
-    };
-    Object.defineProperty(Container.prototype, "groupAddInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupAdd;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetHostname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupAddInput() {
+        return this._groupAdd;
+    }
+    // hostname - computed: true, optional: true, required: false
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    resetHostname() {
         this._hostname = undefined;
-    };
-    Object.defineProperty(Container.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Container.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "image", {
-        get: function () {
-            return this.getStringAttribute('image');
-        },
-        set: function (value) {
-            this._image = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "imageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._image;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "init", {
-        get: function () {
-            return this.getBooleanAttribute('init');
-        },
-        set: function (value) {
-            this._init = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetInit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // image - computed: false, optional: false, required: true
+    _image;
+    get image() {
+        return this.getStringAttribute('image');
+    }
+    set image(value) {
+        this._image = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageInput() {
+        return this._image;
+    }
+    // init - computed: true, optional: true, required: false
+    _init;
+    get init() {
+        return this.getBooleanAttribute('init');
+    }
+    set init(value) {
+        this._init = value;
+    }
+    resetInit() {
         this._init = undefined;
-    };
-    Object.defineProperty(Container.prototype, "initInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._init;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "ipcMode", {
-        get: function () {
-            return this.getStringAttribute('ipc_mode');
-        },
-        set: function (value) {
-            this._ipcMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetIpcMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get initInput() {
+        return this._init;
+    }
+    // ipc_mode - computed: true, optional: true, required: false
+    _ipcMode;
+    get ipcMode() {
+        return this.getStringAttribute('ipc_mode');
+    }
+    set ipcMode(value) {
+        this._ipcMode = value;
+    }
+    resetIpcMode() {
         this._ipcMode = undefined;
-    };
-    Object.defineProperty(Container.prototype, "ipcModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipcMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "logDriver", {
-        get: function () {
-            return this.getStringAttribute('log_driver');
-        },
-        set: function (value) {
-            this._logDriver = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetLogDriver = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipcModeInput() {
+        return this._ipcMode;
+    }
+    // log_driver - computed: true, optional: true, required: false
+    _logDriver;
+    get logDriver() {
+        return this.getStringAttribute('log_driver');
+    }
+    set logDriver(value) {
+        this._logDriver = value;
+    }
+    resetLogDriver() {
         this._logDriver = undefined;
-    };
-    Object.defineProperty(Container.prototype, "logDriverInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logDriver;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "logOpts", {
-        get: function () {
-            return this.getStringMapAttribute('log_opts');
-        },
-        set: function (value) {
-            this._logOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetLogOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logDriverInput() {
+        return this._logDriver;
+    }
+    // log_opts - computed: false, optional: true, required: false
+    _logOpts;
+    get logOpts() {
+        return this.getStringMapAttribute('log_opts');
+    }
+    set logOpts(value) {
+        this._logOpts = value;
+    }
+    resetLogOpts() {
         this._logOpts = undefined;
-    };
-    Object.defineProperty(Container.prototype, "logOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "logs", {
-        get: function () {
-            return this.getBooleanAttribute('logs');
-        },
-        set: function (value) {
-            this._logs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetLogs = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logOptsInput() {
+        return this._logOpts;
+    }
+    // logs - computed: false, optional: true, required: false
+    _logs;
+    get logs() {
+        return this.getBooleanAttribute('logs');
+    }
+    set logs(value) {
+        this._logs = value;
+    }
+    resetLogs() {
         this._logs = undefined;
-    };
-    Object.defineProperty(Container.prototype, "logsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "maxRetryCount", {
-        get: function () {
-            return this.getNumberAttribute('max_retry_count');
-        },
-        set: function (value) {
-            this._maxRetryCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetMaxRetryCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logsInput() {
+        return this._logs;
+    }
+    // max_retry_count - computed: false, optional: true, required: false
+    _maxRetryCount;
+    get maxRetryCount() {
+        return this.getNumberAttribute('max_retry_count');
+    }
+    set maxRetryCount(value) {
+        this._maxRetryCount = value;
+    }
+    resetMaxRetryCount() {
         this._maxRetryCount = undefined;
-    };
-    Object.defineProperty(Container.prototype, "maxRetryCountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxRetryCount;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "memory", {
-        get: function () {
-            return this.getNumberAttribute('memory');
-        },
-        set: function (value) {
-            this._memory = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetMemory = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxRetryCountInput() {
+        return this._maxRetryCount;
+    }
+    // memory - computed: false, optional: true, required: false
+    _memory;
+    get memory() {
+        return this.getNumberAttribute('memory');
+    }
+    set memory(value) {
+        this._memory = value;
+    }
+    resetMemory() {
         this._memory = undefined;
-    };
-    Object.defineProperty(Container.prototype, "memoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._memory;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "memoryReservation", {
-        get: function () {
-            return this.getNumberAttribute('memory_reservation');
-        },
-        set: function (value) {
-            this._memoryReservation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetMemoryReservation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get memoryInput() {
+        return this._memory;
+    }
+    // memory_reservation - computed: false, optional: true, required: false
+    _memoryReservation;
+    get memoryReservation() {
+        return this.getNumberAttribute('memory_reservation');
+    }
+    set memoryReservation(value) {
+        this._memoryReservation = value;
+    }
+    resetMemoryReservation() {
         this._memoryReservation = undefined;
-    };
-    Object.defineProperty(Container.prototype, "memoryReservationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._memoryReservation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "memorySwap", {
-        get: function () {
-            return this.getNumberAttribute('memory_swap');
-        },
-        set: function (value) {
-            this._memorySwap = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetMemorySwap = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get memoryReservationInput() {
+        return this._memoryReservation;
+    }
+    // memory_swap - computed: false, optional: true, required: false
+    _memorySwap;
+    get memorySwap() {
+        return this.getNumberAttribute('memory_swap');
+    }
+    set memorySwap(value) {
+        this._memorySwap = value;
+    }
+    resetMemorySwap() {
         this._memorySwap = undefined;
-    };
-    Object.defineProperty(Container.prototype, "memorySwapInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._memorySwap;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "mustRun", {
-        get: function () {
-            return this.getBooleanAttribute('must_run');
-        },
-        set: function (value) {
-            this._mustRun = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetMustRun = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get memorySwapInput() {
+        return this._memorySwap;
+    }
+    // must_run - computed: false, optional: true, required: false
+    _mustRun;
+    get mustRun() {
+        return this.getBooleanAttribute('must_run');
+    }
+    set mustRun(value) {
+        this._mustRun = value;
+    }
+    resetMustRun() {
         this._mustRun = undefined;
-    };
-    Object.defineProperty(Container.prototype, "mustRunInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mustRun;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "networkData", {
-        get: function () {
-            return this._networkData;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "networkMode", {
-        get: function () {
-            return this.getStringAttribute('network_mode');
-        },
-        set: function (value) {
-            this._networkMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetNetworkMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mustRunInput() {
+        return this._mustRun;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // network_data - computed: true, optional: false, required: false
+    _networkData = new ContainerNetworkDataList(this, "network_data", false);
+    get networkData() {
+        return this._networkData;
+    }
+    // network_mode - computed: false, optional: true, required: false
+    _networkMode;
+    get networkMode() {
+        return this.getStringAttribute('network_mode');
+    }
+    set networkMode(value) {
+        this._networkMode = value;
+    }
+    resetNetworkMode() {
         this._networkMode = undefined;
-    };
-    Object.defineProperty(Container.prototype, "networkModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networkMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "pidMode", {
-        get: function () {
-            return this.getStringAttribute('pid_mode');
-        },
-        set: function (value) {
-            this._pidMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetPidMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkModeInput() {
+        return this._networkMode;
+    }
+    // pid_mode - computed: false, optional: true, required: false
+    _pidMode;
+    get pidMode() {
+        return this.getStringAttribute('pid_mode');
+    }
+    set pidMode(value) {
+        this._pidMode = value;
+    }
+    resetPidMode() {
         this._pidMode = undefined;
-    };
-    Object.defineProperty(Container.prototype, "pidModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pidMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "platform", {
-        get: function () {
-            return this.getStringAttribute('platform');
-        },
-        set: function (value) {
-            this._platform = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetPlatform = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pidModeInput() {
+        return this._pidMode;
+    }
+    // platform - computed: true, optional: true, required: false
+    _platform;
+    get platform() {
+        return this.getStringAttribute('platform');
+    }
+    set platform(value) {
+        this._platform = value;
+    }
+    resetPlatform() {
         this._platform = undefined;
-    };
-    Object.defineProperty(Container.prototype, "platformInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._platform;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "privileged", {
-        get: function () {
-            return this.getBooleanAttribute('privileged');
-        },
-        set: function (value) {
-            this._privileged = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetPrivileged = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get platformInput() {
+        return this._platform;
+    }
+    // privileged - computed: false, optional: true, required: false
+    _privileged;
+    get privileged() {
+        return this.getBooleanAttribute('privileged');
+    }
+    set privileged(value) {
+        this._privileged = value;
+    }
+    resetPrivileged() {
         this._privileged = undefined;
-    };
-    Object.defineProperty(Container.prototype, "privilegedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privileged;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "publishAllPorts", {
-        get: function () {
-            return this.getBooleanAttribute('publish_all_ports');
-        },
-        set: function (value) {
-            this._publishAllPorts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetPublishAllPorts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get privilegedInput() {
+        return this._privileged;
+    }
+    // publish_all_ports - computed: false, optional: true, required: false
+    _publishAllPorts;
+    get publishAllPorts() {
+        return this.getBooleanAttribute('publish_all_ports');
+    }
+    set publishAllPorts(value) {
+        this._publishAllPorts = value;
+    }
+    resetPublishAllPorts() {
         this._publishAllPorts = undefined;
-    };
-    Object.defineProperty(Container.prototype, "publishAllPortsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publishAllPorts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetReadOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get publishAllPortsInput() {
+        return this._publishAllPorts;
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(Container.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "removeVolumes", {
-        get: function () {
-            return this.getBooleanAttribute('remove_volumes');
-        },
-        set: function (value) {
-            this._removeVolumes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetRemoveVolumes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // remove_volumes - computed: false, optional: true, required: false
+    _removeVolumes;
+    get removeVolumes() {
+        return this.getBooleanAttribute('remove_volumes');
+    }
+    set removeVolumes(value) {
+        this._removeVolumes = value;
+    }
+    resetRemoveVolumes() {
         this._removeVolumes = undefined;
-    };
-    Object.defineProperty(Container.prototype, "removeVolumesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._removeVolumes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "restart", {
-        get: function () {
-            return this.getStringAttribute('restart');
-        },
-        set: function (value) {
-            this._restart = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetRestart = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get removeVolumesInput() {
+        return this._removeVolumes;
+    }
+    // restart - computed: false, optional: true, required: false
+    _restart;
+    get restart() {
+        return this.getStringAttribute('restart');
+    }
+    set restart(value) {
+        this._restart = value;
+    }
+    resetRestart() {
         this._restart = undefined;
-    };
-    Object.defineProperty(Container.prototype, "restartInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._restart;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "rm", {
-        get: function () {
-            return this.getBooleanAttribute('rm');
-        },
-        set: function (value) {
-            this._rm = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetRm = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get restartInput() {
+        return this._restart;
+    }
+    // rm - computed: false, optional: true, required: false
+    _rm;
+    get rm() {
+        return this.getBooleanAttribute('rm');
+    }
+    set rm(value) {
+        this._rm = value;
+    }
+    resetRm() {
         this._rm = undefined;
-    };
-    Object.defineProperty(Container.prototype, "rmInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rm;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "runtime", {
-        get: function () {
-            return this.getStringAttribute('runtime');
-        },
-        set: function (value) {
-            this._runtime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetRuntime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rmInput() {
+        return this._rm;
+    }
+    // runtime - computed: true, optional: true, required: false
+    _runtime;
+    get runtime() {
+        return this.getStringAttribute('runtime');
+    }
+    set runtime(value) {
+        this._runtime = value;
+    }
+    resetRuntime() {
         this._runtime = undefined;
-    };
-    Object.defineProperty(Container.prototype, "runtimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._runtime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "securityOpts", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('security_opts'));
-        },
-        set: function (value) {
-            this._securityOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetSecurityOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get runtimeInput() {
+        return this._runtime;
+    }
+    // security_opts - computed: true, optional: true, required: false
+    _securityOpts;
+    get securityOpts() {
+        return cdktf.Fn.tolist(this.getListAttribute('security_opts'));
+    }
+    set securityOpts(value) {
+        this._securityOpts = value;
+    }
+    resetSecurityOpts() {
         this._securityOpts = undefined;
-    };
-    Object.defineProperty(Container.prototype, "securityOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._securityOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "shmSize", {
-        get: function () {
-            return this.getNumberAttribute('shm_size');
-        },
-        set: function (value) {
-            this._shmSize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetShmSize = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get securityOptsInput() {
+        return this._securityOpts;
+    }
+    // shm_size - computed: true, optional: true, required: false
+    _shmSize;
+    get shmSize() {
+        return this.getNumberAttribute('shm_size');
+    }
+    set shmSize(value) {
+        this._shmSize = value;
+    }
+    resetShmSize() {
         this._shmSize = undefined;
-    };
-    Object.defineProperty(Container.prototype, "shmSizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._shmSize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "start", {
-        get: function () {
-            return this.getBooleanAttribute('start');
-        },
-        set: function (value) {
-            this._start = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetStart = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get shmSizeInput() {
+        return this._shmSize;
+    }
+    // start - computed: false, optional: true, required: false
+    _start;
+    get start() {
+        return this.getBooleanAttribute('start');
+    }
+    set start(value) {
+        this._start = value;
+    }
+    resetStart() {
         this._start = undefined;
-    };
-    Object.defineProperty(Container.prototype, "startInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._start;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "stdinOpen", {
-        get: function () {
-            return this.getBooleanAttribute('stdin_open');
-        },
-        set: function (value) {
-            this._stdinOpen = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetStdinOpen = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startInput() {
+        return this._start;
+    }
+    // stdin_open - computed: false, optional: true, required: false
+    _stdinOpen;
+    get stdinOpen() {
+        return this.getBooleanAttribute('stdin_open');
+    }
+    set stdinOpen(value) {
+        this._stdinOpen = value;
+    }
+    resetStdinOpen() {
         this._stdinOpen = undefined;
-    };
-    Object.defineProperty(Container.prototype, "stdinOpenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stdinOpen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "stopSignal", {
-        get: function () {
-            return this.getStringAttribute('stop_signal');
-        },
-        set: function (value) {
-            this._stopSignal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetStopSignal = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stdinOpenInput() {
+        return this._stdinOpen;
+    }
+    // stop_signal - computed: true, optional: true, required: false
+    _stopSignal;
+    get stopSignal() {
+        return this.getStringAttribute('stop_signal');
+    }
+    set stopSignal(value) {
+        this._stopSignal = value;
+    }
+    resetStopSignal() {
         this._stopSignal = undefined;
-    };
-    Object.defineProperty(Container.prototype, "stopSignalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stopSignal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "stopTimeout", {
-        get: function () {
-            return this.getNumberAttribute('stop_timeout');
-        },
-        set: function (value) {
-            this._stopTimeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetStopTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stopSignalInput() {
+        return this._stopSignal;
+    }
+    // stop_timeout - computed: true, optional: true, required: false
+    _stopTimeout;
+    get stopTimeout() {
+        return this.getNumberAttribute('stop_timeout');
+    }
+    set stopTimeout(value) {
+        this._stopTimeout = value;
+    }
+    resetStopTimeout() {
         this._stopTimeout = undefined;
-    };
-    Object.defineProperty(Container.prototype, "stopTimeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stopTimeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "storageOpts", {
-        get: function () {
-            return this.getStringMapAttribute('storage_opts');
-        },
-        set: function (value) {
-            this._storageOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetStorageOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stopTimeoutInput() {
+        return this._stopTimeout;
+    }
+    // storage_opts - computed: false, optional: true, required: false
+    _storageOpts;
+    get storageOpts() {
+        return this.getStringMapAttribute('storage_opts');
+    }
+    set storageOpts(value) {
+        this._storageOpts = value;
+    }
+    resetStorageOpts() {
         this._storageOpts = undefined;
-    };
-    Object.defineProperty(Container.prototype, "storageOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storageOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "sysctls", {
-        get: function () {
-            return this.getStringMapAttribute('sysctls');
-        },
-        set: function (value) {
-            this._sysctls = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetSysctls = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get storageOptsInput() {
+        return this._storageOpts;
+    }
+    // sysctls - computed: false, optional: true, required: false
+    _sysctls;
+    get sysctls() {
+        return this.getStringMapAttribute('sysctls');
+    }
+    set sysctls(value) {
+        this._sysctls = value;
+    }
+    resetSysctls() {
         this._sysctls = undefined;
-    };
-    Object.defineProperty(Container.prototype, "sysctlsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sysctls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "tmpfs", {
-        get: function () {
-            return this.getStringMapAttribute('tmpfs');
-        },
-        set: function (value) {
-            this._tmpfs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetTmpfs = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sysctlsInput() {
+        return this._sysctls;
+    }
+    // tmpfs - computed: false, optional: true, required: false
+    _tmpfs;
+    get tmpfs() {
+        return this.getStringMapAttribute('tmpfs');
+    }
+    set tmpfs(value) {
+        this._tmpfs = value;
+    }
+    resetTmpfs() {
         this._tmpfs = undefined;
-    };
-    Object.defineProperty(Container.prototype, "tmpfsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tmpfs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "tty", {
-        get: function () {
-            return this.getBooleanAttribute('tty');
-        },
-        set: function (value) {
-            this._tty = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetTty = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tmpfsInput() {
+        return this._tmpfs;
+    }
+    // tty - computed: false, optional: true, required: false
+    _tty;
+    get tty() {
+        return this.getBooleanAttribute('tty');
+    }
+    set tty(value) {
+        this._tty = value;
+    }
+    resetTty() {
         this._tty = undefined;
-    };
-    Object.defineProperty(Container.prototype, "ttyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tty;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "user", {
-        get: function () {
-            return this.getStringAttribute('user');
-        },
-        set: function (value) {
-            this._user = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetUser = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ttyInput() {
+        return this._tty;
+    }
+    // user - computed: false, optional: true, required: false
+    _user;
+    get user() {
+        return this.getStringAttribute('user');
+    }
+    set user(value) {
+        this._user = value;
+    }
+    resetUser() {
         this._user = undefined;
-    };
-    Object.defineProperty(Container.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "usernsMode", {
-        get: function () {
-            return this.getStringAttribute('userns_mode');
-        },
-        set: function (value) {
-            this._usernsMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetUsernsMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user;
+    }
+    // userns_mode - computed: false, optional: true, required: false
+    _usernsMode;
+    get usernsMode() {
+        return this.getStringAttribute('userns_mode');
+    }
+    set usernsMode(value) {
+        this._usernsMode = value;
+    }
+    resetUsernsMode() {
         this._usernsMode = undefined;
-    };
-    Object.defineProperty(Container.prototype, "usernsModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usernsMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "wait", {
-        get: function () {
-            return this.getBooleanAttribute('wait');
-        },
-        set: function (value) {
-            this._wait = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetWait = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernsModeInput() {
+        return this._usernsMode;
+    }
+    // wait - computed: false, optional: true, required: false
+    _wait;
+    get wait() {
+        return this.getBooleanAttribute('wait');
+    }
+    set wait(value) {
+        this._wait = value;
+    }
+    resetWait() {
         this._wait = undefined;
-    };
-    Object.defineProperty(Container.prototype, "waitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._wait;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "waitTimeout", {
-        get: function () {
-            return this.getNumberAttribute('wait_timeout');
-        },
-        set: function (value) {
-            this._waitTimeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetWaitTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get waitInput() {
+        return this._wait;
+    }
+    // wait_timeout - computed: false, optional: true, required: false
+    _waitTimeout;
+    get waitTimeout() {
+        return this.getNumberAttribute('wait_timeout');
+    }
+    set waitTimeout(value) {
+        this._waitTimeout = value;
+    }
+    resetWaitTimeout() {
         this._waitTimeout = undefined;
-    };
-    Object.defineProperty(Container.prototype, "waitTimeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._waitTimeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "workingDir", {
-        get: function () {
-            return this.getStringAttribute('working_dir');
-        },
-        set: function (value) {
-            this._workingDir = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.resetWorkingDir = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get waitTimeoutInput() {
+        return this._waitTimeout;
+    }
+    // working_dir - computed: false, optional: true, required: false
+    _workingDir;
+    get workingDir() {
+        return this.getStringAttribute('working_dir');
+    }
+    set workingDir(value) {
+        this._workingDir = value;
+    }
+    resetWorkingDir() {
         this._workingDir = undefined;
-    };
-    Object.defineProperty(Container.prototype, "workingDirInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workingDir;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "capabilities", {
-        get: function () {
-            return this._capabilities;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putCapabilities = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workingDirInput() {
+        return this._workingDir;
+    }
+    // capabilities - computed: false, optional: true, required: false
+    _capabilities = new ContainerCapabilitiesOutputReference(this, "capabilities");
+    get capabilities() {
+        return this._capabilities;
+    }
+    putCapabilities(value) {
         this._capabilities.internalValue = value;
-    };
-    Container.prototype.resetCapabilities = function () {
+    }
+    resetCapabilities() {
         this._capabilities.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "capabilitiesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._capabilities.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "deviceReadBps", {
-        get: function () {
-            return this._deviceReadBps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDeviceReadBps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get capabilitiesInput() {
+        return this._capabilities.internalValue;
+    }
+    // device_read_bps - computed: false, optional: true, required: false
+    _deviceReadBps = new ContainerDeviceReadBpsList(this, "device_read_bps", true);
+    get deviceReadBps() {
+        return this._deviceReadBps;
+    }
+    putDeviceReadBps(value) {
         this._deviceReadBps.internalValue = value;
-    };
-    Container.prototype.resetDeviceReadBps = function () {
+    }
+    resetDeviceReadBps() {
         this._deviceReadBps.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "deviceReadBpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceReadBps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "deviceReadIops", {
-        get: function () {
-            return this._deviceReadIops;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDeviceReadIops = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceReadBpsInput() {
+        return this._deviceReadBps.internalValue;
+    }
+    // device_read_iops - computed: false, optional: true, required: false
+    _deviceReadIops = new ContainerDeviceReadIopsList(this, "device_read_iops", true);
+    get deviceReadIops() {
+        return this._deviceReadIops;
+    }
+    putDeviceReadIops(value) {
         this._deviceReadIops.internalValue = value;
-    };
-    Container.prototype.resetDeviceReadIops = function () {
+    }
+    resetDeviceReadIops() {
         this._deviceReadIops.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "deviceReadIopsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceReadIops.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "deviceRequests", {
-        get: function () {
-            return this._deviceRequests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDeviceRequests = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceReadIopsInput() {
+        return this._deviceReadIops.internalValue;
+    }
+    // device_requests - computed: false, optional: true, required: false
+    _deviceRequests = new ContainerDeviceRequestsList(this, "device_requests", true);
+    get deviceRequests() {
+        return this._deviceRequests;
+    }
+    putDeviceRequests(value) {
         this._deviceRequests.internalValue = value;
-    };
-    Container.prototype.resetDeviceRequests = function () {
+    }
+    resetDeviceRequests() {
         this._deviceRequests.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "deviceRequestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceRequests.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "deviceWriteBps", {
-        get: function () {
-            return this._deviceWriteBps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDeviceWriteBps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceRequestsInput() {
+        return this._deviceRequests.internalValue;
+    }
+    // device_write_bps - computed: false, optional: true, required: false
+    _deviceWriteBps = new ContainerDeviceWriteBpsList(this, "device_write_bps", true);
+    get deviceWriteBps() {
+        return this._deviceWriteBps;
+    }
+    putDeviceWriteBps(value) {
         this._deviceWriteBps.internalValue = value;
-    };
-    Container.prototype.resetDeviceWriteBps = function () {
+    }
+    resetDeviceWriteBps() {
         this._deviceWriteBps.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "deviceWriteBpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceWriteBps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "deviceWriteIops", {
-        get: function () {
-            return this._deviceWriteIops;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDeviceWriteIops = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceWriteBpsInput() {
+        return this._deviceWriteBps.internalValue;
+    }
+    // device_write_iops - computed: false, optional: true, required: false
+    _deviceWriteIops = new ContainerDeviceWriteIopsList(this, "device_write_iops", true);
+    get deviceWriteIops() {
+        return this._deviceWriteIops;
+    }
+    putDeviceWriteIops(value) {
         this._deviceWriteIops.internalValue = value;
-    };
-    Container.prototype.resetDeviceWriteIops = function () {
+    }
+    resetDeviceWriteIops() {
         this._deviceWriteIops.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "deviceWriteIopsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceWriteIops.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "devices", {
-        get: function () {
-            return this._devices;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putDevices = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceWriteIopsInput() {
+        return this._deviceWriteIops.internalValue;
+    }
+    // devices - computed: false, optional: true, required: false
+    _devices = new ContainerDevicesList(this, "devices", true);
+    get devices() {
+        return this._devices;
+    }
+    putDevices(value) {
         this._devices.internalValue = value;
-    };
-    Container.prototype.resetDevices = function () {
+    }
+    resetDevices() {
         this._devices.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "devicesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._devices.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "healthcheck", {
-        get: function () {
-            return this._healthcheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putHealthcheck = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get devicesInput() {
+        return this._devices.internalValue;
+    }
+    // healthcheck - computed: false, optional: true, required: false
+    _healthcheck = new ContainerHealthcheckOutputReference(this, "healthcheck");
+    get healthcheck() {
+        return this._healthcheck;
+    }
+    putHealthcheck(value) {
         this._healthcheck.internalValue = value;
-    };
-    Container.prototype.resetHealthcheck = function () {
+    }
+    resetHealthcheck() {
         this._healthcheck.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "healthcheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._healthcheck.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "host", {
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putHost = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get healthcheckInput() {
+        return this._healthcheck.internalValue;
+    }
+    // host - computed: false, optional: true, required: false
+    _host = new ContainerHostList(this, "host", true);
+    get host() {
+        return this._host;
+    }
+    putHost(value) {
         this._host.internalValue = value;
-    };
-    Container.prototype.resetHost = function () {
+    }
+    resetHost() {
         this._host.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host.internalValue;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new ContainerLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    Container.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "mounts", {
-        get: function () {
-            return this._mounts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putMounts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
+    // mounts - computed: false, optional: true, required: false
+    _mounts = new ContainerMountsList(this, "mounts", true);
+    get mounts() {
+        return this._mounts;
+    }
+    putMounts(value) {
         this._mounts.internalValue = value;
-    };
-    Container.prototype.resetMounts = function () {
+    }
+    resetMounts() {
         this._mounts.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "mountsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mounts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "networksAdvanced", {
-        get: function () {
-            return this._networksAdvanced;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putNetworksAdvanced = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mountsInput() {
+        return this._mounts.internalValue;
+    }
+    // networks_advanced - computed: false, optional: true, required: false
+    _networksAdvanced = new ContainerNetworksAdvancedList(this, "networks_advanced", true);
+    get networksAdvanced() {
+        return this._networksAdvanced;
+    }
+    putNetworksAdvanced(value) {
         this._networksAdvanced.internalValue = value;
-    };
-    Container.prototype.resetNetworksAdvanced = function () {
+    }
+    resetNetworksAdvanced() {
         this._networksAdvanced.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "networksAdvancedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networksAdvanced.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "ports", {
-        get: function () {
-            return this._ports;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putPorts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksAdvancedInput() {
+        return this._networksAdvanced.internalValue;
+    }
+    // ports - computed: false, optional: true, required: false
+    _ports = new ContainerPortsList(this, "ports", false);
+    get ports() {
+        return this._ports;
+    }
+    putPorts(value) {
         this._ports.internalValue = value;
-    };
-    Container.prototype.resetPorts = function () {
+    }
+    resetPorts() {
         this._ports.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "portsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ports.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "timeouts", {
-        get: function () {
-            return this._timeouts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putTimeouts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portsInput() {
+        return this._ports.internalValue;
+    }
+    // timeouts - computed: false, optional: true, required: false
+    _timeouts = new ContainerTimeoutsOutputReference(this, "timeouts");
+    get timeouts() {
+        return this._timeouts;
+    }
+    putTimeouts(value) {
         this._timeouts.internalValue = value;
-    };
-    Container.prototype.resetTimeouts = function () {
+    }
+    resetTimeouts() {
         this._timeouts.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "timeoutsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timeouts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "ulimit", {
-        get: function () {
-            return this._ulimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putUlimit = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timeoutsInput() {
+        return this._timeouts.internalValue;
+    }
+    // ulimit - computed: false, optional: true, required: false
+    _ulimit = new ContainerUlimitList(this, "ulimit", true);
+    get ulimit() {
+        return this._ulimit;
+    }
+    putUlimit(value) {
         this._ulimit.internalValue = value;
-    };
-    Container.prototype.resetUlimit = function () {
+    }
+    resetUlimit() {
         this._ulimit.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "ulimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ulimit.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "upload", {
-        get: function () {
-            return this._upload;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putUpload = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ulimitInput() {
+        return this._ulimit.internalValue;
+    }
+    // upload - computed: false, optional: true, required: false
+    _upload = new ContainerUploadList(this, "upload", true);
+    get upload() {
+        return this._upload;
+    }
+    putUpload(value) {
         this._upload.internalValue = value;
-    };
-    Container.prototype.resetUpload = function () {
+    }
+    resetUpload() {
         this._upload.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "uploadInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._upload.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Container.prototype, "volumes", {
-        get: function () {
-            return this._volumes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Container.prototype.putVolumes = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get uploadInput() {
+        return this._upload.internalValue;
+    }
+    // volumes - computed: false, optional: true, required: false
+    _volumes = new ContainerVolumesList(this, "volumes", true);
+    get volumes() {
+        return this._volumes;
+    }
+    putVolumes(value) {
         this._volumes.internalValue = value;
-    };
-    Container.prototype.resetVolumes = function () {
+    }
+    resetVolumes() {
         this._volumes.internalValue = undefined;
-    };
-    Object.defineProperty(Container.prototype, "volumesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._volumes.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get volumesInput() {
+        return this._volumes.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Container.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             attach: cdktf.booleanToTerraform(this._attach),
             cgroup_parent: cdktf.stringToTerraform(this._cgroupParent),
@@ -6259,9 +4980,9 @@ var Container = /** @class */ (function (_super) {
             upload: cdktf.listMapper(containerUploadToTerraform, true)(this._upload.internalValue),
             volumes: cdktf.listMapper(containerVolumesToTerraform, true)(this._volumes.internalValue),
         };
-    };
-    Container.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             attach: {
                 value: cdktf.booleanToHclTerraform(this._attach),
                 isBlock: false,
@@ -6714,15 +5435,6 @@ var Container = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Container.tfResourceType = "docker_container";
-    return Container;
-}(cdktf.TerraformResource));
-exports.Container = Container;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

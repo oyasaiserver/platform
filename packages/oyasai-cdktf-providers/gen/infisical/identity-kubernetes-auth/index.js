@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_kubernetes_auth
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityKubernetesAuth = exports.IdentityKubernetesAuthAccessTokenTrustedIpsList = exports.IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference = void 0;
-exports.identityKubernetesAuthAccessTokenTrustedIpsToTerraform = identityKubernetesAuthAccessTokenTrustedIpsToTerraform;
-exports.identityKubernetesAuthAccessTokenTrustedIpsToHclTerraform = identityKubernetesAuthAccessTokenTrustedIpsToHclTerraform;
-var cdktf = require("cdktf");
-function identityKubernetesAuthAccessTokenTrustedIpsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function identityKubernetesAuthAccessTokenTrustedIpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function identityKubernetesAuthAccessTokenTrustedIpsToTerraform(struct) {
         ip_address: cdktf.stringToTerraform(struct.ipAddress),
     };
 }
-function identityKubernetesAuthAccessTokenTrustedIpsToHclTerraform(struct) {
+export function identityKubernetesAuthAccessTokenTrustedIpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip_address: {
             value: cdktf.stringToHclTerraform(struct.ipAddress),
             isBlock: false,
@@ -48,108 +28,108 @@ function identityKubernetesAuthAccessTokenTrustedIpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference = /** @class */ (function (_super) {
-    __extends(IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference, _super);
+export class IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ipAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipAddress = this._ipAddress;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ipAddress = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ipAddress = value.ipAddress;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddress", {
-        get: function () {
-            return this.getStringAttribute('ip_address');
-        },
-        set: function (value) {
-            this._ipAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference.prototype.resetIpAddress = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ipAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipAddress = this._ipAddress;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ipAddress = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ipAddress = value.ipAddress;
+        }
+    }
+    // ip_address - computed: true, optional: true, required: false
+    _ipAddress;
+    get ipAddress() {
+        return this.getStringAttribute('ip_address');
+    }
+    set ipAddress(value) {
+        this._ipAddress = value;
+    }
+    resetIpAddress() {
         this._ipAddress = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference;
-}(cdktf.ComplexObject));
-exports.IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference = IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference;
-var IdentityKubernetesAuthAccessTokenTrustedIpsList = /** @class */ (function (_super) {
-    __extends(IdentityKubernetesAuthAccessTokenTrustedIpsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipAddressInput() {
+        return this._ipAddress;
+    }
+}
+export class IdentityKubernetesAuthAccessTokenTrustedIpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityKubernetesAuthAccessTokenTrustedIpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    IdentityKubernetesAuthAccessTokenTrustedIpsList.prototype.get = function (index) {
+    get(index) {
         return new IdentityKubernetesAuthAccessTokenTrustedIpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return IdentityKubernetesAuthAccessTokenTrustedIpsList;
-}(cdktf.ComplexList));
-exports.IdentityKubernetesAuthAccessTokenTrustedIpsList = IdentityKubernetesAuthAccessTokenTrustedIpsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth}
 */
-var IdentityKubernetesAuth = /** @class */ (function (_super) {
-    __extends(IdentityKubernetesAuth, _super);
+export class IdentityKubernetesAuth extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_identity_kubernetes_auth";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IdentityKubernetesAuth resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IdentityKubernetesAuth to import
+    * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IdentityKubernetesAuth to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_kubernetes_auth", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -160,8 +140,8 @@ var IdentityKubernetesAuth = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IdentityKubernetesAuthConfig
     */
-    function IdentityKubernetesAuth(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_identity_kubernetes_auth',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -174,319 +154,224 @@ var IdentityKubernetesAuth = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // access_token_trusted_ips - computed: true, optional: true, required: false
-        _this._accessTokenTrustedIps = new IdentityKubernetesAuthAccessTokenTrustedIpsList(_this, "access_token_trusted_ips", false);
-        _this._accessTokenMaxTtl = config.accessTokenMaxTtl;
-        _this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
-        _this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
-        _this._accessTokenTtl = config.accessTokenTtl;
-        _this._allowedAudience = config.allowedAudience;
-        _this._allowedNamespaces = config.allowedNamespaces;
-        _this._allowedServiceAccountNames = config.allowedServiceAccountNames;
-        _this._gatewayId = config.gatewayId;
-        _this._identityId = config.identityId;
-        _this._kubernetesCaCertificate = config.kubernetesCaCertificate;
-        _this._kubernetesHost = config.kubernetesHost;
-        _this._tokenReviewerJwt = config.tokenReviewerJwt;
-        _this._tokenReviewerMode = config.tokenReviewerMode;
-        return _this;
+        });
+        this._accessTokenMaxTtl = config.accessTokenMaxTtl;
+        this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
+        this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
+        this._accessTokenTtl = config.accessTokenTtl;
+        this._allowedAudience = config.allowedAudience;
+        this._allowedNamespaces = config.allowedNamespaces;
+        this._allowedServiceAccountNames = config.allowedServiceAccountNames;
+        this._gatewayId = config.gatewayId;
+        this._identityId = config.identityId;
+        this._kubernetesCaCertificate = config.kubernetesCaCertificate;
+        this._kubernetesHost = config.kubernetesHost;
+        this._tokenReviewerJwt = config.tokenReviewerJwt;
+        this._tokenReviewerMode = config.tokenReviewerMode;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IdentityKubernetesAuth resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IdentityKubernetesAuth to import
-    * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IdentityKubernetesAuth to import is found
-    */
-    IdentityKubernetesAuth.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_kubernetes_auth", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenMaxTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_max_ttl');
-        },
-        set: function (value) {
-            this._accessTokenMaxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAccessTokenMaxTtl = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // access_token_max_ttl - computed: true, optional: true, required: false
+    _accessTokenMaxTtl;
+    get accessTokenMaxTtl() {
+        return this.getNumberAttribute('access_token_max_ttl');
+    }
+    set accessTokenMaxTtl(value) {
+        this._accessTokenMaxTtl = value;
+    }
+    resetAccessTokenMaxTtl() {
         this._accessTokenMaxTtl = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenMaxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenMaxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenNumUsesLimit", {
-        get: function () {
-            return this.getNumberAttribute('access_token_num_uses_limit');
-        },
-        set: function (value) {
-            this._accessTokenNumUsesLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAccessTokenNumUsesLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenMaxTtlInput() {
+        return this._accessTokenMaxTtl;
+    }
+    // access_token_num_uses_limit - computed: true, optional: true, required: false
+    _accessTokenNumUsesLimit;
+    get accessTokenNumUsesLimit() {
+        return this.getNumberAttribute('access_token_num_uses_limit');
+    }
+    set accessTokenNumUsesLimit(value) {
+        this._accessTokenNumUsesLimit = value;
+    }
+    resetAccessTokenNumUsesLimit() {
         this._accessTokenNumUsesLimit = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenNumUsesLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenNumUsesLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenTrustedIps", {
-        get: function () {
-            return this._accessTokenTrustedIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.putAccessTokenTrustedIps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenNumUsesLimitInput() {
+        return this._accessTokenNumUsesLimit;
+    }
+    // access_token_trusted_ips - computed: true, optional: true, required: false
+    _accessTokenTrustedIps = new IdentityKubernetesAuthAccessTokenTrustedIpsList(this, "access_token_trusted_ips", false);
+    get accessTokenTrustedIps() {
+        return this._accessTokenTrustedIps;
+    }
+    putAccessTokenTrustedIps(value) {
         this._accessTokenTrustedIps.internalValue = value;
-    };
-    IdentityKubernetesAuth.prototype.resetAccessTokenTrustedIps = function () {
+    }
+    resetAccessTokenTrustedIps() {
         this._accessTokenTrustedIps.internalValue = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenTrustedIpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTrustedIps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_ttl');
-        },
-        set: function (value) {
-            this._accessTokenTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAccessTokenTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTrustedIpsInput() {
+        return this._accessTokenTrustedIps.internalValue;
+    }
+    // access_token_ttl - computed: true, optional: true, required: false
+    _accessTokenTtl;
+    get accessTokenTtl() {
+        return this.getNumberAttribute('access_token_ttl');
+    }
+    set accessTokenTtl(value) {
+        this._accessTokenTtl = value;
+    }
+    resetAccessTokenTtl() {
         this._accessTokenTtl = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "accessTokenTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedAudience", {
-        get: function () {
-            return this.getStringAttribute('allowed_audience');
-        },
-        set: function (value) {
-            this._allowedAudience = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAllowedAudience = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTtlInput() {
+        return this._accessTokenTtl;
+    }
+    // allowed_audience - computed: true, optional: true, required: false
+    _allowedAudience;
+    get allowedAudience() {
+        return this.getStringAttribute('allowed_audience');
+    }
+    set allowedAudience(value) {
+        this._allowedAudience = value;
+    }
+    resetAllowedAudience() {
         this._allowedAudience = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedAudienceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedAudience;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedNamespaces", {
-        get: function () {
-            return this.getListAttribute('allowed_namespaces');
-        },
-        set: function (value) {
-            this._allowedNamespaces = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAllowedNamespaces = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedAudienceInput() {
+        return this._allowedAudience;
+    }
+    // allowed_namespaces - computed: true, optional: true, required: false
+    _allowedNamespaces;
+    get allowedNamespaces() {
+        return this.getListAttribute('allowed_namespaces');
+    }
+    set allowedNamespaces(value) {
+        this._allowedNamespaces = value;
+    }
+    resetAllowedNamespaces() {
         this._allowedNamespaces = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedNamespacesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedNamespaces;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedServiceAccountNames", {
-        get: function () {
-            return this.getListAttribute('allowed_service_account_names');
-        },
-        set: function (value) {
-            this._allowedServiceAccountNames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetAllowedServiceAccountNames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedNamespacesInput() {
+        return this._allowedNamespaces;
+    }
+    // allowed_service_account_names - computed: true, optional: true, required: false
+    _allowedServiceAccountNames;
+    get allowedServiceAccountNames() {
+        return this.getListAttribute('allowed_service_account_names');
+    }
+    set allowedServiceAccountNames(value) {
+        this._allowedServiceAccountNames = value;
+    }
+    resetAllowedServiceAccountNames() {
         this._allowedServiceAccountNames = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "allowedServiceAccountNamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedServiceAccountNames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "gatewayId", {
-        get: function () {
-            return this.getStringAttribute('gateway_id');
-        },
-        set: function (value) {
-            this._gatewayId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetGatewayId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedServiceAccountNamesInput() {
+        return this._allowedServiceAccountNames;
+    }
+    // gateway_id - computed: false, optional: true, required: false
+    _gatewayId;
+    get gatewayId() {
+        return this.getStringAttribute('gateway_id');
+    }
+    set gatewayId(value) {
+        this._gatewayId = value;
+    }
+    resetGatewayId() {
         this._gatewayId = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "gatewayIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gatewayId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "kubernetesCaCertificate", {
-        get: function () {
-            return this.getStringAttribute('kubernetes_ca_certificate');
-        },
-        set: function (value) {
-            this._kubernetesCaCertificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetKubernetesCaCertificate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayIdInput() {
+        return this._gatewayId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // kubernetes_ca_certificate - computed: true, optional: true, required: false
+    _kubernetesCaCertificate;
+    get kubernetesCaCertificate() {
+        return this.getStringAttribute('kubernetes_ca_certificate');
+    }
+    set kubernetesCaCertificate(value) {
+        this._kubernetesCaCertificate = value;
+    }
+    resetKubernetesCaCertificate() {
         this._kubernetesCaCertificate = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "kubernetesCaCertificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kubernetesCaCertificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "kubernetesHost", {
-        get: function () {
-            return this.getStringAttribute('kubernetes_host');
-        },
-        set: function (value) {
-            this._kubernetesHost = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetKubernetesHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get kubernetesCaCertificateInput() {
+        return this._kubernetesCaCertificate;
+    }
+    // kubernetes_host - computed: false, optional: true, required: false
+    _kubernetesHost;
+    get kubernetesHost() {
+        return this.getStringAttribute('kubernetes_host');
+    }
+    set kubernetesHost(value) {
+        this._kubernetesHost = value;
+    }
+    resetKubernetesHost() {
         this._kubernetesHost = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "kubernetesHostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kubernetesHost;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "tokenReviewerJwt", {
-        get: function () {
-            return this.getStringAttribute('token_reviewer_jwt');
-        },
-        set: function (value) {
-            this._tokenReviewerJwt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetTokenReviewerJwt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get kubernetesHostInput() {
+        return this._kubernetesHost;
+    }
+    // token_reviewer_jwt - computed: false, optional: true, required: false
+    _tokenReviewerJwt;
+    get tokenReviewerJwt() {
+        return this.getStringAttribute('token_reviewer_jwt');
+    }
+    set tokenReviewerJwt(value) {
+        this._tokenReviewerJwt = value;
+    }
+    resetTokenReviewerJwt() {
         this._tokenReviewerJwt = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "tokenReviewerJwtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenReviewerJwt;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "tokenReviewerMode", {
-        get: function () {
-            return this.getStringAttribute('token_reviewer_mode');
-        },
-        set: function (value) {
-            this._tokenReviewerMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityKubernetesAuth.prototype.resetTokenReviewerMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenReviewerJwtInput() {
+        return this._tokenReviewerJwt;
+    }
+    // token_reviewer_mode - computed: true, optional: true, required: false
+    _tokenReviewerMode;
+    get tokenReviewerMode() {
+        return this.getStringAttribute('token_reviewer_mode');
+    }
+    set tokenReviewerMode(value) {
+        this._tokenReviewerMode = value;
+    }
+    resetTokenReviewerMode() {
         this._tokenReviewerMode = undefined;
-    };
-    Object.defineProperty(IdentityKubernetesAuth.prototype, "tokenReviewerModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenReviewerMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenReviewerModeInput() {
+        return this._tokenReviewerMode;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IdentityKubernetesAuth.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             access_token_max_ttl: cdktf.numberToTerraform(this._accessTokenMaxTtl),
             access_token_num_uses_limit: cdktf.numberToTerraform(this._accessTokenNumUsesLimit),
@@ -502,9 +387,9 @@ var IdentityKubernetesAuth = /** @class */ (function (_super) {
             token_reviewer_jwt: cdktf.stringToTerraform(this._tokenReviewerJwt),
             token_reviewer_mode: cdktf.stringToTerraform(this._tokenReviewerMode),
         };
-    };
-    IdentityKubernetesAuth.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             access_token_max_ttl: {
                 value: cdktf.numberToHclTerraform(this._accessTokenMaxTtl),
                 isBlock: false,
@@ -585,15 +470,6 @@ var IdentityKubernetesAuth = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IdentityKubernetesAuth.tfResourceType = "infisical_identity_kubernetes_auth";
-    return IdentityKubernetesAuth;
-}(cdktf.TerraformResource));
-exports.IdentityKubernetesAuth = IdentityKubernetesAuth;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

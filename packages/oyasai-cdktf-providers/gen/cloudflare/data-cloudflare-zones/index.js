@@ -1,41 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zones
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZones = exports.DataCloudflareZonesResultList = exports.DataCloudflareZonesResultOutputReference = exports.DataCloudflareZonesResultTenantUnitOutputReference = exports.DataCloudflareZonesResultTenantOutputReference = exports.DataCloudflareZonesResultPlanOutputReference = exports.DataCloudflareZonesResultOwnerOutputReference = exports.DataCloudflareZonesResultMetaOutputReference = exports.DataCloudflareZonesResultAccountOutputReference = exports.DataCloudflareZonesAccountOutputReference = void 0;
-exports.dataCloudflareZonesAccountToTerraform = dataCloudflareZonesAccountToTerraform;
-exports.dataCloudflareZonesAccountToHclTerraform = dataCloudflareZonesAccountToHclTerraform;
-exports.dataCloudflareZonesResultAccountToTerraform = dataCloudflareZonesResultAccountToTerraform;
-exports.dataCloudflareZonesResultAccountToHclTerraform = dataCloudflareZonesResultAccountToHclTerraform;
-exports.dataCloudflareZonesResultMetaToTerraform = dataCloudflareZonesResultMetaToTerraform;
-exports.dataCloudflareZonesResultMetaToHclTerraform = dataCloudflareZonesResultMetaToHclTerraform;
-exports.dataCloudflareZonesResultOwnerToTerraform = dataCloudflareZonesResultOwnerToTerraform;
-exports.dataCloudflareZonesResultOwnerToHclTerraform = dataCloudflareZonesResultOwnerToHclTerraform;
-exports.dataCloudflareZonesResultPlanToTerraform = dataCloudflareZonesResultPlanToTerraform;
-exports.dataCloudflareZonesResultPlanToHclTerraform = dataCloudflareZonesResultPlanToHclTerraform;
-exports.dataCloudflareZonesResultTenantToTerraform = dataCloudflareZonesResultTenantToTerraform;
-exports.dataCloudflareZonesResultTenantToHclTerraform = dataCloudflareZonesResultTenantToHclTerraform;
-exports.dataCloudflareZonesResultTenantUnitToTerraform = dataCloudflareZonesResultTenantUnitToTerraform;
-exports.dataCloudflareZonesResultTenantUnitToHclTerraform = dataCloudflareZonesResultTenantUnitToHclTerraform;
-exports.dataCloudflareZonesResultToTerraform = dataCloudflareZonesResultToTerraform;
-exports.dataCloudflareZonesResultToHclTerraform = dataCloudflareZonesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZonesAccountToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZonesAccountToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -47,14 +13,14 @@ function dataCloudflareZonesAccountToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function dataCloudflareZonesAccountToHclTerraform(struct) {
+export function dataCloudflareZonesAccountToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -69,106 +35,84 @@ function dataCloudflareZonesAccountToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareZonesAccountOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesAccountOutputReference, _super);
+export class DataCloudflareZonesAccountOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesAccountOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesAccountOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesAccountOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZonesAccountOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+            this._name = value.name;
+        }
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareZonesAccountOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesAccountOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZonesAccountOutputReference.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflareZonesAccountOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesAccountOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesAccountOutputReference = DataCloudflareZonesAccountOutputReference;
-function dataCloudflareZonesResultAccountToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export function dataCloudflareZonesResultAccountToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -177,64 +121,48 @@ function dataCloudflareZonesResultAccountToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultAccountToHclTerraform(struct) {
+export function dataCloudflareZonesResultAccountToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultAccountOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultAccountOutputReference, _super);
+export class DataCloudflareZonesResultAccountOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultAccountOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultAccountOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultAccountOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultAccountOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultAccountOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultAccountOutputReference = DataCloudflareZonesResultAccountOutputReference;
-function dataCloudflareZonesResultMetaToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function dataCloudflareZonesResultMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -243,104 +171,68 @@ function dataCloudflareZonesResultMetaToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultMetaToHclTerraform(struct) {
+export function dataCloudflareZonesResultMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultMetaOutputReference, _super);
+export class DataCloudflareZonesResultMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "cdnOnly", {
-        // cdn_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('cdn_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "customCertificateQuota", {
-        // custom_certificate_quota - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('custom_certificate_quota');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "dnsOnly", {
-        // dns_only - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('dns_only');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "foundationDns", {
-        // foundation_dns - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('foundation_dns');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "pageRuleQuota", {
-        // page_rule_quota - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('page_rule_quota');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "phishingDetected", {
-        // phishing_detected - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('phishing_detected');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultMetaOutputReference.prototype, "step", {
-        // step - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('step');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultMetaOutputReference = DataCloudflareZonesResultMetaOutputReference;
-function dataCloudflareZonesResultOwnerToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cdn_only - computed: true, optional: false, required: false
+    get cdnOnly() {
+        return this.getBooleanAttribute('cdn_only');
+    }
+    // custom_certificate_quota - computed: true, optional: false, required: false
+    get customCertificateQuota() {
+        return this.getNumberAttribute('custom_certificate_quota');
+    }
+    // dns_only - computed: true, optional: false, required: false
+    get dnsOnly() {
+        return this.getBooleanAttribute('dns_only');
+    }
+    // foundation_dns - computed: true, optional: false, required: false
+    get foundationDns() {
+        return this.getBooleanAttribute('foundation_dns');
+    }
+    // page_rule_quota - computed: true, optional: false, required: false
+    get pageRuleQuota() {
+        return this.getNumberAttribute('page_rule_quota');
+    }
+    // phishing_detected - computed: true, optional: false, required: false
+    get phishingDetected() {
+        return this.getBooleanAttribute('phishing_detected');
+    }
+    // step - computed: true, optional: false, required: false
+    get step() {
+        return this.getNumberAttribute('step');
+    }
+}
+export function dataCloudflareZonesResultOwnerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -349,72 +241,52 @@ function dataCloudflareZonesResultOwnerToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultOwnerToHclTerraform(struct) {
+export function dataCloudflareZonesResultOwnerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultOwnerOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultOwnerOutputReference, _super);
+export class DataCloudflareZonesResultOwnerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultOwnerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultOwnerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOwnerOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOwnerOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOwnerOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultOwnerOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultOwnerOutputReference = DataCloudflareZonesResultOwnerOutputReference;
-function dataCloudflareZonesResultPlanToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export function dataCloudflareZonesResultPlanToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -423,128 +295,80 @@ function dataCloudflareZonesResultPlanToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultPlanToHclTerraform(struct) {
+export function dataCloudflareZonesResultPlanToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultPlanOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultPlanOutputReference, _super);
+export class DataCloudflareZonesResultPlanOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultPlanOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "canSubscribe", {
-        // can_subscribe - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('can_subscribe');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "currency", {
-        // currency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('currency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "externallyManaged", {
-        // externally_managed - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('externally_managed');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "frequency", {
-        // frequency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('frequency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "isSubscribed", {
-        // is_subscribed - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_subscribed');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "legacyDiscount", {
-        // legacy_discount - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('legacy_discount');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "legacyId", {
-        // legacy_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('legacy_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultPlanOutputReference.prototype, "price", {
-        // price - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('price');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultPlanOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultPlanOutputReference = DataCloudflareZonesResultPlanOutputReference;
-function dataCloudflareZonesResultTenantToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // can_subscribe - computed: true, optional: false, required: false
+    get canSubscribe() {
+        return this.getBooleanAttribute('can_subscribe');
+    }
+    // currency - computed: true, optional: false, required: false
+    get currency() {
+        return this.getStringAttribute('currency');
+    }
+    // externally_managed - computed: true, optional: false, required: false
+    get externallyManaged() {
+        return this.getBooleanAttribute('externally_managed');
+    }
+    // frequency - computed: true, optional: false, required: false
+    get frequency() {
+        return this.getStringAttribute('frequency');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_subscribed - computed: true, optional: false, required: false
+    get isSubscribed() {
+        return this.getBooleanAttribute('is_subscribed');
+    }
+    // legacy_discount - computed: true, optional: false, required: false
+    get legacyDiscount() {
+        return this.getBooleanAttribute('legacy_discount');
+    }
+    // legacy_id - computed: true, optional: false, required: false
+    get legacyId() {
+        return this.getStringAttribute('legacy_id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // price - computed: true, optional: false, required: false
+    get price() {
+        return this.getNumberAttribute('price');
+    }
+}
+export function dataCloudflareZonesResultTenantToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -553,64 +377,48 @@ function dataCloudflareZonesResultTenantToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultTenantToHclTerraform(struct) {
+export function dataCloudflareZonesResultTenantToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultTenantOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultTenantOutputReference, _super);
+export class DataCloudflareZonesResultTenantOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultTenantOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultTenantOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultTenantOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultTenantOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultTenantOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultTenantOutputReference = DataCloudflareZonesResultTenantOutputReference;
-function dataCloudflareZonesResultTenantUnitToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export function dataCloudflareZonesResultTenantUnitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -619,56 +427,44 @@ function dataCloudflareZonesResultTenantUnitToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultTenantUnitToHclTerraform(struct) {
+export function dataCloudflareZonesResultTenantUnitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultTenantUnitOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultTenantUnitOutputReference, _super);
+export class DataCloudflareZonesResultTenantUnitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZonesResultTenantUnitOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZonesResultTenantUnitOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultTenantUnitOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultTenantUnitOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultTenantUnitOutputReference = DataCloudflareZonesResultTenantUnitOutputReference;
-function dataCloudflareZonesResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+}
+export function dataCloudflareZonesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -677,267 +473,182 @@ function dataCloudflareZonesResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZonesResultToHclTerraform(struct) {
+export function dataCloudflareZonesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZonesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultOutputReference, _super);
+export class DataCloudflareZonesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZonesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // account - computed: true, optional: false, required: false
-        _this._account = new DataCloudflareZonesResultAccountOutputReference(_this, "account");
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareZonesResultMetaOutputReference(_this, "meta");
-        // owner - computed: true, optional: false, required: false
-        _this._owner = new DataCloudflareZonesResultOwnerOutputReference(_this, "owner");
-        // plan - computed: true, optional: false, required: false
-        _this._plan = new DataCloudflareZonesResultPlanOutputReference(_this, "plan");
-        // tenant - computed: true, optional: false, required: false
-        _this._tenant = new DataCloudflareZonesResultTenantOutputReference(_this, "tenant");
-        // tenant_unit - computed: true, optional: false, required: false
-        _this._tenantUnit = new DataCloudflareZonesResultTenantUnitOutputReference(_this, "tenant_unit");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "account", {
-        get: function () {
-            return this._account;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "activatedOn", {
-        // activated_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('activated_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "cnameSuffix", {
-        // cname_suffix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname_suffix');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "developmentMode", {
-        // development_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('development_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "nameServers", {
-        // name_servers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('name_servers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "originalDnshost", {
-        // original_dnshost - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('original_dnshost');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "originalNameServers", {
-        // original_name_servers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('original_name_servers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "originalRegistrar", {
-        // original_registrar - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('original_registrar');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "owner", {
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "paused", {
-        // paused - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "permissions", {
-        // permissions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('permissions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "plan", {
-        get: function () {
-            return this._plan;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "tenant", {
-        get: function () {
-            return this._tenant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "tenantUnit", {
-        get: function () {
-            return this._tenantUnit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "vanityNameServers", {
-        // vanity_name_servers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('vanity_name_servers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZonesResultOutputReference.prototype, "verificationKey", {
-        // verification_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('verification_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZonesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZonesResultOutputReference = DataCloudflareZonesResultOutputReference;
-var DataCloudflareZonesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZonesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // account - computed: true, optional: false, required: false
+    _account = new DataCloudflareZonesResultAccountOutputReference(this, "account");
+    get account() {
+        return this._account;
+    }
+    // activated_on - computed: true, optional: false, required: false
+    get activatedOn() {
+        return this.getStringAttribute('activated_on');
+    }
+    // cname_suffix - computed: true, optional: false, required: false
+    get cnameSuffix() {
+        return this.getStringAttribute('cname_suffix');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // development_mode - computed: true, optional: false, required: false
+    get developmentMode() {
+        return this.getNumberAttribute('development_mode');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareZonesResultMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // name_servers - computed: true, optional: false, required: false
+    get nameServers() {
+        return this.getListAttribute('name_servers');
+    }
+    // original_dnshost - computed: true, optional: false, required: false
+    get originalDnshost() {
+        return this.getStringAttribute('original_dnshost');
+    }
+    // original_name_servers - computed: true, optional: false, required: false
+    get originalNameServers() {
+        return this.getListAttribute('original_name_servers');
+    }
+    // original_registrar - computed: true, optional: false, required: false
+    get originalRegistrar() {
+        return this.getStringAttribute('original_registrar');
+    }
+    // owner - computed: true, optional: false, required: false
+    _owner = new DataCloudflareZonesResultOwnerOutputReference(this, "owner");
+    get owner() {
+        return this._owner;
+    }
+    // paused - computed: true, optional: false, required: false
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    // permissions - computed: true, optional: false, required: false
+    get permissions() {
+        return this.getListAttribute('permissions');
+    }
+    // plan - computed: true, optional: false, required: false
+    _plan = new DataCloudflareZonesResultPlanOutputReference(this, "plan");
+    get plan() {
+        return this._plan;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tenant - computed: true, optional: false, required: false
+    _tenant = new DataCloudflareZonesResultTenantOutputReference(this, "tenant");
+    get tenant() {
+        return this._tenant;
+    }
+    // tenant_unit - computed: true, optional: false, required: false
+    _tenantUnit = new DataCloudflareZonesResultTenantUnitOutputReference(this, "tenant_unit");
+    get tenantUnit() {
+        return this._tenantUnit;
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // vanity_name_servers - computed: true, optional: false, required: false
+    get vanityNameServers() {
+        return this.getListAttribute('vanity_name_servers');
+    }
+    // verification_key - computed: true, optional: false, required: false
+    get verificationKey() {
+        return this.getStringAttribute('verification_key');
+    }
+}
+export class DataCloudflareZonesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZonesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZonesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZonesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZonesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZonesResultList = DataCloudflareZonesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zones cloudflare_zones}
 */
-var DataCloudflareZones = /** @class */ (function (_super) {
-    __extends(DataCloudflareZones, _super);
+export class DataCloudflareZones extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zones";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZones resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZones to import
+    * @param importFromId The id of the existing DataCloudflareZones that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zones#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZones to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zones", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -948,9 +659,8 @@ var DataCloudflareZones = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZonesConfig = {}
     */
-    function DataCloudflareZones(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zones',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -963,194 +673,132 @@ var DataCloudflareZones = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // account - computed: false, optional: true, required: false
-        _this._account = new DataCloudflareZonesAccountOutputReference(_this, "account");
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareZonesResultList(_this, "result", false);
-        _this._account.internalValue = config.account;
-        _this._direction = config.direction;
-        _this._match = config.match;
-        _this._maxItems = config.maxItems;
-        _this._name = config.name;
-        _this._order = config.order;
-        _this._status = config.status;
-        return _this;
+        });
+        this._account.internalValue = config.account;
+        this._direction = config.direction;
+        this._match = config.match;
+        this._maxItems = config.maxItems;
+        this._name = config.name;
+        this._order = config.order;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZones resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZones to import
-    * @param importFromId The id of the existing DataCloudflareZones that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zones#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZones to import is found
-    */
-    DataCloudflareZones.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zones", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "account", {
-        get: function () {
-            return this._account;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.putAccount = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account - computed: false, optional: true, required: false
+    _account = new DataCloudflareZonesAccountOutputReference(this, "account");
+    get account() {
+        return this._account;
+    }
+    putAccount(value) {
         this._account.internalValue = value;
-    };
-    DataCloudflareZones.prototype.resetAccount = function () {
+    }
+    resetAccount() {
         this._account.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "accountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._account.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountInput() {
+        return this._account.internalValue;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "match", {
-        get: function () {
-            return this.getStringAttribute('match');
-        },
-        set: function (value) {
-            this._match = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // match - computed: true, optional: true, required: false
+    _match;
+    get match() {
+        return this.getStringAttribute('match');
+    }
+    set match(value) {
+        this._match = value;
+    }
+    resetMatch() {
         this._match = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "matchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._match;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get matchInput() {
+        return this._match;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZones.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZones.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareZonesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(DataCloudflareZones.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZones.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account: dataCloudflareZonesAccountToTerraform(this._account.internalValue),
             direction: cdktf.stringToTerraform(this._direction),
@@ -1160,9 +808,9 @@ var DataCloudflareZones = /** @class */ (function (_super) {
             order: cdktf.stringToTerraform(this._order),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    DataCloudflareZones.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account: {
                 value: dataCloudflareZonesAccountToHclTerraform(this._account.internalValue),
                 isBlock: true,
@@ -1207,15 +855,6 @@ var DataCloudflareZones = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZones.tfResourceType = "cloudflare_zones";
-    return DataCloudflareZones;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZones = DataCloudflareZones;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

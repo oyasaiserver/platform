@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_cookies_list
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflarePageShieldCookiesList = exports.DataCloudflarePageShieldCookiesListResultList = exports.DataCloudflarePageShieldCookiesListResultOutputReference = void 0;
-exports.dataCloudflarePageShieldCookiesListResultToTerraform = dataCloudflarePageShieldCookiesListResultToTerraform;
-exports.dataCloudflarePageShieldCookiesListResultToHclTerraform = dataCloudflarePageShieldCookiesListResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflarePageShieldCookiesListResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflarePageShieldCookiesListResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,189 +10,140 @@ function dataCloudflarePageShieldCookiesListResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePageShieldCookiesListResultToHclTerraform(struct) {
+export function dataCloudflarePageShieldCookiesListResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePageShieldCookiesListResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePageShieldCookiesListResultOutputReference, _super);
+export class DataCloudflarePageShieldCookiesListResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePageShieldCookiesListResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "domainAttribute", {
-        // domain_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('domain_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "expiresAttribute", {
-        // expires_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "firstSeenAt", {
-        // first_seen_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('first_seen_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "httpOnlyAttribute", {
-        // http_only_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('http_only_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "lastSeenAt", {
-        // last_seen_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_seen_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "maxAgeAttribute", {
-        // max_age_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_age_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "pageUrls", {
-        // page_urls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('page_urls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "pathAttribute", {
-        // path_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('path_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "sameSiteAttribute", {
-        // same_site_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('same_site_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "secureAttribute", {
-        // secure_attribute - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('secure_attribute');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesListResultOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePageShieldCookiesListResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePageShieldCookiesListResultOutputReference = DataCloudflarePageShieldCookiesListResultOutputReference;
-var DataCloudflarePageShieldCookiesListResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflarePageShieldCookiesListResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // domain_attribute - computed: true, optional: false, required: false
+    get domainAttribute() {
+        return this.getStringAttribute('domain_attribute');
+    }
+    // expires_attribute - computed: true, optional: false, required: false
+    get expiresAttribute() {
+        return this.getStringAttribute('expires_attribute');
+    }
+    // first_seen_at - computed: true, optional: false, required: false
+    get firstSeenAt() {
+        return this.getStringAttribute('first_seen_at');
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    // http_only_attribute - computed: true, optional: false, required: false
+    get httpOnlyAttribute() {
+        return this.getBooleanAttribute('http_only_attribute');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_seen_at - computed: true, optional: false, required: false
+    get lastSeenAt() {
+        return this.getStringAttribute('last_seen_at');
+    }
+    // max_age_attribute - computed: true, optional: false, required: false
+    get maxAgeAttribute() {
+        return this.getNumberAttribute('max_age_attribute');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // page_urls - computed: true, optional: false, required: false
+    get pageUrls() {
+        return this.getListAttribute('page_urls');
+    }
+    // path_attribute - computed: true, optional: false, required: false
+    get pathAttribute() {
+        return this.getStringAttribute('path_attribute');
+    }
+    // same_site_attribute - computed: true, optional: false, required: false
+    get sameSiteAttribute() {
+        return this.getStringAttribute('same_site_attribute');
+    }
+    // secure_attribute - computed: true, optional: false, required: false
+    get secureAttribute() {
+        return this.getBooleanAttribute('secure_attribute');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export class DataCloudflarePageShieldCookiesListResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePageShieldCookiesListResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflarePageShieldCookiesListResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflarePageShieldCookiesListResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflarePageShieldCookiesListResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflarePageShieldCookiesListResultList = DataCloudflarePageShieldCookiesListResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_cookies_list cloudflare_page_shield_cookies_list}
 */
-var DataCloudflarePageShieldCookiesList = /** @class */ (function (_super) {
-    __extends(DataCloudflarePageShieldCookiesList, _super);
+export class DataCloudflarePageShieldCookiesList extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_page_shield_cookies_list";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflarePageShieldCookiesList resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldCookiesList to import
+    * @param importFromId The id of the existing DataCloudflarePageShieldCookiesList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_cookies_list#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldCookiesList to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_cookies_list", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -223,9 +154,8 @@ var DataCloudflarePageShieldCookiesList = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflarePageShieldCookiesListConfig = {}
     */
-    function DataCloudflarePageShieldCookiesList(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_page_shield_cookies_list',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -238,387 +168,276 @@ var DataCloudflarePageShieldCookiesList = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflarePageShieldCookiesListResultList(_this, "result", false);
-        _this._direction = config.direction;
-        _this._domain = config.domain;
-        _this._export = config.export;
-        _this._hosts = config.hosts;
-        _this._httpOnly = config.httpOnly;
-        _this._maxItems = config.maxItems;
-        _this._name = config.name;
-        _this._orderBy = config.orderBy;
-        _this._page = config.page;
-        _this._pageUrl = config.pageUrl;
-        _this._path = config.path;
-        _this._perPage = config.perPage;
-        _this._sameSite = config.sameSite;
-        _this._secure = config.secure;
-        _this._type = config.type;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._direction = config.direction;
+        this._domain = config.domain;
+        this._export = config.export;
+        this._hosts = config.hosts;
+        this._httpOnly = config.httpOnly;
+        this._maxItems = config.maxItems;
+        this._name = config.name;
+        this._orderBy = config.orderBy;
+        this._page = config.page;
+        this._pageUrl = config.pageUrl;
+        this._path = config.path;
+        this._perPage = config.perPage;
+        this._sameSite = config.sameSite;
+        this._secure = config.secure;
+        this._type = config.type;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflarePageShieldCookiesList resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldCookiesList to import
-    * @param importFromId The id of the existing DataCloudflarePageShieldCookiesList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_cookies_list#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldCookiesList to import is found
-    */
-    DataCloudflarePageShieldCookiesList.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_cookies_list", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetDirection = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "domain", {
-        get: function () {
-            return this.getStringAttribute('domain');
-        },
-        set: function (value) {
-            this._domain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetDomain = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // domain - computed: false, optional: true, required: false
+    _domain;
+    get domain() {
+        return this.getStringAttribute('domain');
+    }
+    set domain(value) {
+        this._domain = value;
+    }
+    resetDomain() {
         this._domain = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "domainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "export", {
-        get: function () {
-            return this.getStringAttribute('export');
-        },
-        set: function (value) {
-            this._export = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetExport = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainInput() {
+        return this._domain;
+    }
+    // export - computed: false, optional: true, required: false
+    _export;
+    get export() {
+        return this.getStringAttribute('export');
+    }
+    set export(value) {
+        this._export = value;
+    }
+    resetExport() {
         this._export = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "exportInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._export;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "hosts", {
-        get: function () {
-            return this.getStringAttribute('hosts');
-        },
-        set: function (value) {
-            this._hosts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetHosts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exportInput() {
+        return this._export;
+    }
+    // hosts - computed: false, optional: true, required: false
+    _hosts;
+    get hosts() {
+        return this.getStringAttribute('hosts');
+    }
+    set hosts(value) {
+        this._hosts = value;
+    }
+    resetHosts() {
         this._hosts = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "hostsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hosts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "httpOnly", {
-        get: function () {
-            return this.getBooleanAttribute('http_only');
-        },
-        set: function (value) {
-            this._httpOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetHttpOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostsInput() {
+        return this._hosts;
+    }
+    // http_only - computed: false, optional: true, required: false
+    _httpOnly;
+    get httpOnly() {
+        return this.getBooleanAttribute('http_only');
+    }
+    set httpOnly(value) {
+        this._httpOnly = value;
+    }
+    resetHttpOnly() {
         this._httpOnly = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "httpOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._httpOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get httpOnlyInput() {
+        return this._httpOnly;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "orderBy", {
-        get: function () {
-            return this.getStringAttribute('order_by');
-        },
-        set: function (value) {
-            this._orderBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetOrderBy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // order_by - computed: false, optional: true, required: false
+    _orderBy;
+    get orderBy() {
+        return this.getStringAttribute('order_by');
+    }
+    set orderBy(value) {
+        this._orderBy = value;
+    }
+    resetOrderBy() {
         this._orderBy = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "orderByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._orderBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "page", {
-        get: function () {
-            return this.getStringAttribute('page');
-        },
-        set: function (value) {
-            this._page = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetPage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderByInput() {
+        return this._orderBy;
+    }
+    // page - computed: false, optional: true, required: false
+    _page;
+    get page() {
+        return this.getStringAttribute('page');
+    }
+    set page(value) {
+        this._page = value;
+    }
+    resetPage() {
         this._page = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "pageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._page;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "pageUrl", {
-        get: function () {
-            return this.getStringAttribute('page_url');
-        },
-        set: function (value) {
-            this._pageUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetPageUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pageInput() {
+        return this._page;
+    }
+    // page_url - computed: false, optional: true, required: false
+    _pageUrl;
+    get pageUrl() {
+        return this.getStringAttribute('page_url');
+    }
+    set pageUrl(value) {
+        this._pageUrl = value;
+    }
+    resetPageUrl() {
         this._pageUrl = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "pageUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pageUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pageUrlInput() {
+        return this._pageUrl;
+    }
+    // path - computed: false, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "perPage", {
-        get: function () {
-            return this.getNumberAttribute('per_page');
-        },
-        set: function (value) {
-            this._perPage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetPerPage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // per_page - computed: false, optional: true, required: false
+    _perPage;
+    get perPage() {
+        return this.getNumberAttribute('per_page');
+    }
+    set perPage(value) {
+        this._perPage = value;
+    }
+    resetPerPage() {
         this._perPage = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "perPageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._perPage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "sameSite", {
-        get: function () {
-            return this.getStringAttribute('same_site');
-        },
-        set: function (value) {
-            this._sameSite = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetSameSite = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get perPageInput() {
+        return this._perPage;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflarePageShieldCookiesListResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // same_site - computed: false, optional: true, required: false
+    _sameSite;
+    get sameSite() {
+        return this.getStringAttribute('same_site');
+    }
+    set sameSite(value) {
+        this._sameSite = value;
+    }
+    resetSameSite() {
         this._sameSite = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "sameSiteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sameSite;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "secure", {
-        get: function () {
-            return this.getBooleanAttribute('secure');
-        },
-        set: function (value) {
-            this._secure = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetSecure = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sameSiteInput() {
+        return this._sameSite;
+    }
+    // secure - computed: false, optional: true, required: false
+    _secure;
+    get secure() {
+        return this.getBooleanAttribute('secure');
+    }
+    set secure(value) {
+        this._secure = value;
+    }
+    resetSecure() {
         this._secure = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "secureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secure;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secureInput() {
+        return this._secure;
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldCookiesList.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldCookiesList.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflarePageShieldCookiesList.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             direction: cdktf.stringToTerraform(this._direction),
             domain: cdktf.stringToTerraform(this._domain),
@@ -637,9 +456,9 @@ var DataCloudflarePageShieldCookiesList = /** @class */ (function (_super) {
             type: cdktf.stringToTerraform(this._type),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflarePageShieldCookiesList.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             direction: {
                 value: cdktf.stringToHclTerraform(this._direction),
                 isBlock: false,
@@ -738,15 +557,6 @@ var DataCloudflarePageShieldCookiesList = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflarePageShieldCookiesList.tfResourceType = "cloudflare_page_shield_cookies_list";
-    return DataCloudflarePageShieldCookiesList;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflarePageShieldCookiesList = DataCloudflarePageShieldCookiesList;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

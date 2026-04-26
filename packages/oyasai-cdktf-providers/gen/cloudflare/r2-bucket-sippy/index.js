@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_sippy
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.R2BucketSippy = exports.R2BucketSippySourceOutputReference = exports.R2BucketSippyDestinationOutputReference = void 0;
-exports.r2BucketSippyDestinationToTerraform = r2BucketSippyDestinationToTerraform;
-exports.r2BucketSippyDestinationToHclTerraform = r2BucketSippyDestinationToHclTerraform;
-exports.r2BucketSippySourceToTerraform = r2BucketSippySourceToTerraform;
-exports.r2BucketSippySourceToHclTerraform = r2BucketSippySourceToHclTerraform;
-var cdktf = require("cdktf");
-function r2BucketSippyDestinationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function r2BucketSippyDestinationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,14 +14,14 @@ function r2BucketSippyDestinationToTerraform(struct) {
         secret_access_key: cdktf.stringToTerraform(struct.secretAccessKey),
     };
 }
-function r2BucketSippyDestinationToHclTerraform(struct) {
+export function r2BucketSippyDestinationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         access_key_id: {
             value: cdktf.stringToHclTerraform(struct.accessKeyId),
             isBlock: false,
@@ -64,133 +42,105 @@ function r2BucketSippyDestinationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var R2BucketSippyDestinationOutputReference = /** @class */ (function (_super) {
-    __extends(R2BucketSippyDestinationOutputReference, _super);
+export class R2BucketSippyDestinationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function R2BucketSippyDestinationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._accessKeyId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accessKeyId = this._accessKeyId;
-            }
-            if (this._cloudProvider !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cloudProvider = this._cloudProvider;
-            }
-            if (this._secretAccessKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretAccessKey = this._secretAccessKey;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._accessKeyId = undefined;
-                this._cloudProvider = undefined;
-                this._secretAccessKey = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._accessKeyId = value.accessKeyId;
-                this._cloudProvider = value.cloudProvider;
-                this._secretAccessKey = value.secretAccessKey;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "accessKeyId", {
-        get: function () {
-            return this.getStringAttribute('access_key_id');
-        },
-        set: function (value) {
-            this._accessKeyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippyDestinationOutputReference.prototype.resetAccessKeyId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._accessKeyId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accessKeyId = this._accessKeyId;
+        }
+        if (this._cloudProvider !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cloudProvider = this._cloudProvider;
+        }
+        if (this._secretAccessKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretAccessKey = this._secretAccessKey;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._accessKeyId = undefined;
+            this._cloudProvider = undefined;
+            this._secretAccessKey = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._accessKeyId = value.accessKeyId;
+            this._cloudProvider = value.cloudProvider;
+            this._secretAccessKey = value.secretAccessKey;
+        }
+    }
+    // access_key_id - computed: false, optional: true, required: false
+    _accessKeyId;
+    get accessKeyId() {
+        return this.getStringAttribute('access_key_id');
+    }
+    set accessKeyId(value) {
+        this._accessKeyId = value;
+    }
+    resetAccessKeyId() {
         this._accessKeyId = undefined;
-    };
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "accessKeyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessKeyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "cloudProvider", {
-        get: function () {
-            return this.getStringAttribute('cloud_provider');
-        },
-        set: function (value) {
-            this._cloudProvider = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippyDestinationOutputReference.prototype.resetCloudProvider = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessKeyIdInput() {
+        return this._accessKeyId;
+    }
+    // cloud_provider - computed: false, optional: true, required: false
+    _cloudProvider;
+    get cloudProvider() {
+        return this.getStringAttribute('cloud_provider');
+    }
+    set cloudProvider(value) {
+        this._cloudProvider = value;
+    }
+    resetCloudProvider() {
         this._cloudProvider = undefined;
-    };
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "cloudProviderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cloudProvider;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "secretAccessKey", {
-        get: function () {
-            return this.getStringAttribute('secret_access_key');
-        },
-        set: function (value) {
-            this._secretAccessKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippyDestinationOutputReference.prototype.resetSecretAccessKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cloudProviderInput() {
+        return this._cloudProvider;
+    }
+    // secret_access_key - computed: false, optional: true, required: false
+    _secretAccessKey;
+    get secretAccessKey() {
+        return this.getStringAttribute('secret_access_key');
+    }
+    set secretAccessKey(value) {
+        this._secretAccessKey = value;
+    }
+    resetSecretAccessKey() {
         this._secretAccessKey = undefined;
-    };
-    Object.defineProperty(R2BucketSippyDestinationOutputReference.prototype, "secretAccessKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretAccessKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return R2BucketSippyDestinationOutputReference;
-}(cdktf.ComplexObject));
-exports.R2BucketSippyDestinationOutputReference = R2BucketSippyDestinationOutputReference;
-function r2BucketSippySourceToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretAccessKeyInput() {
+        return this._secretAccessKey;
+    }
+}
+export function r2BucketSippySourceToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -208,14 +158,14 @@ function r2BucketSippySourceToTerraform(struct) {
         secret_access_key: cdktf.stringToTerraform(struct.secretAccessKey),
     };
 }
-function r2BucketSippySourceToHclTerraform(struct) {
+export function r2BucketSippySourceToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         access_key_id: {
             value: cdktf.stringToHclTerraform(struct.accessKeyId),
             isBlock: false,
@@ -266,272 +216,230 @@ function r2BucketSippySourceToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var R2BucketSippySourceOutputReference = /** @class */ (function (_super) {
-    __extends(R2BucketSippySourceOutputReference, _super);
+export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function R2BucketSippySourceOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._accessKeyId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.accessKeyId = this._accessKeyId;
-            }
-            if (this._bucket !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bucket = this._bucket;
-            }
-            if (this._bucketUrl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bucketUrl = this._bucketUrl;
-            }
-            if (this._clientEmail !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.clientEmail = this._clientEmail;
-            }
-            if (this._cloudProvider !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cloudProvider = this._cloudProvider;
-            }
-            if (this._privateKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.privateKey = this._privateKey;
-            }
-            if (this._region !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.region = this._region;
-            }
-            if (this._secretAccessKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretAccessKey = this._secretAccessKey;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._accessKeyId = undefined;
-                this._bucket = undefined;
-                this._bucketUrl = undefined;
-                this._clientEmail = undefined;
-                this._cloudProvider = undefined;
-                this._privateKey = undefined;
-                this._region = undefined;
-                this._secretAccessKey = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._accessKeyId = value.accessKeyId;
-                this._bucket = value.bucket;
-                this._bucketUrl = value.bucketUrl;
-                this._clientEmail = value.clientEmail;
-                this._cloudProvider = value.cloudProvider;
-                this._privateKey = value.privateKey;
-                this._region = value.region;
-                this._secretAccessKey = value.secretAccessKey;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "accessKeyId", {
-        get: function () {
-            return this.getStringAttribute('access_key_id');
-        },
-        set: function (value) {
-            this._accessKeyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetAccessKeyId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._accessKeyId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.accessKeyId = this._accessKeyId;
+        }
+        if (this._bucket !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bucket = this._bucket;
+        }
+        if (this._bucketUrl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bucketUrl = this._bucketUrl;
+        }
+        if (this._clientEmail !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.clientEmail = this._clientEmail;
+        }
+        if (this._cloudProvider !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cloudProvider = this._cloudProvider;
+        }
+        if (this._privateKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.privateKey = this._privateKey;
+        }
+        if (this._region !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.region = this._region;
+        }
+        if (this._secretAccessKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretAccessKey = this._secretAccessKey;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._accessKeyId = undefined;
+            this._bucket = undefined;
+            this._bucketUrl = undefined;
+            this._clientEmail = undefined;
+            this._cloudProvider = undefined;
+            this._privateKey = undefined;
+            this._region = undefined;
+            this._secretAccessKey = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._accessKeyId = value.accessKeyId;
+            this._bucket = value.bucket;
+            this._bucketUrl = value.bucketUrl;
+            this._clientEmail = value.clientEmail;
+            this._cloudProvider = value.cloudProvider;
+            this._privateKey = value.privateKey;
+            this._region = value.region;
+            this._secretAccessKey = value.secretAccessKey;
+        }
+    }
+    // access_key_id - computed: false, optional: true, required: false
+    _accessKeyId;
+    get accessKeyId() {
+        return this.getStringAttribute('access_key_id');
+    }
+    set accessKeyId(value) {
+        this._accessKeyId = value;
+    }
+    resetAccessKeyId() {
         this._accessKeyId = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "accessKeyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessKeyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "bucket", {
-        get: function () {
-            return this.getStringAttribute('bucket');
-        },
-        set: function (value) {
-            this._bucket = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetBucket = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessKeyIdInput() {
+        return this._accessKeyId;
+    }
+    // bucket - computed: false, optional: true, required: false
+    _bucket;
+    get bucket() {
+        return this.getStringAttribute('bucket');
+    }
+    set bucket(value) {
+        this._bucket = value;
+    }
+    resetBucket() {
         this._bucket = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "bucketInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucket;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "bucketUrl", {
-        get: function () {
-            return this.getStringAttribute('bucket_url');
-        },
-        set: function (value) {
-            this._bucketUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetBucketUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketInput() {
+        return this._bucket;
+    }
+    // bucket_url - computed: false, optional: true, required: false
+    _bucketUrl;
+    get bucketUrl() {
+        return this.getStringAttribute('bucket_url');
+    }
+    set bucketUrl(value) {
+        this._bucketUrl = value;
+    }
+    resetBucketUrl() {
         this._bucketUrl = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "bucketUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "clientEmail", {
-        get: function () {
-            return this.getStringAttribute('client_email');
-        },
-        set: function (value) {
-            this._clientEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetClientEmail = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketUrlInput() {
+        return this._bucketUrl;
+    }
+    // client_email - computed: false, optional: true, required: false
+    _clientEmail;
+    get clientEmail() {
+        return this.getStringAttribute('client_email');
+    }
+    set clientEmail(value) {
+        this._clientEmail = value;
+    }
+    resetClientEmail() {
         this._clientEmail = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "clientEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "cloudProvider", {
-        get: function () {
-            return this.getStringAttribute('cloud_provider');
-        },
-        set: function (value) {
-            this._cloudProvider = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetCloudProvider = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientEmailInput() {
+        return this._clientEmail;
+    }
+    // cloud_provider - computed: false, optional: true, required: false
+    _cloudProvider;
+    get cloudProvider() {
+        return this.getStringAttribute('cloud_provider');
+    }
+    set cloudProvider(value) {
+        this._cloudProvider = value;
+    }
+    resetCloudProvider() {
         this._cloudProvider = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "cloudProviderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cloudProvider;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "privateKey", {
-        get: function () {
-            return this.getStringAttribute('private_key');
-        },
-        set: function (value) {
-            this._privateKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetPrivateKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cloudProviderInput() {
+        return this._cloudProvider;
+    }
+    // private_key - computed: false, optional: true, required: false
+    _privateKey;
+    get privateKey() {
+        return this.getStringAttribute('private_key');
+    }
+    set privateKey(value) {
+        this._privateKey = value;
+    }
+    resetPrivateKey() {
         this._privateKey = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "privateKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privateKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "region", {
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        set: function (value) {
-            this._region = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetRegion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get privateKeyInput() {
+        return this._privateKey;
+    }
+    // region - computed: false, optional: true, required: false
+    _region;
+    get region() {
+        return this.getStringAttribute('region');
+    }
+    set region(value) {
+        this._region = value;
+    }
+    resetRegion() {
         this._region = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "regionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._region;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "secretAccessKey", {
-        get: function () {
-            return this.getStringAttribute('secret_access_key');
-        },
-        set: function (value) {
-            this._secretAccessKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippySourceOutputReference.prototype.resetSecretAccessKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get regionInput() {
+        return this._region;
+    }
+    // secret_access_key - computed: false, optional: true, required: false
+    _secretAccessKey;
+    get secretAccessKey() {
+        return this.getStringAttribute('secret_access_key');
+    }
+    set secretAccessKey(value) {
+        this._secretAccessKey = value;
+    }
+    resetSecretAccessKey() {
         this._secretAccessKey = undefined;
-    };
-    Object.defineProperty(R2BucketSippySourceOutputReference.prototype, "secretAccessKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretAccessKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return R2BucketSippySourceOutputReference;
-}(cdktf.ComplexObject));
-exports.R2BucketSippySourceOutputReference = R2BucketSippySourceOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretAccessKeyInput() {
+        return this._secretAccessKey;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_sippy cloudflare_r2_bucket_sippy}
 */
-var R2BucketSippy = /** @class */ (function (_super) {
-    __extends(R2BucketSippy, _super);
+export class R2BucketSippy extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_r2_bucket_sippy";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a R2BucketSippy resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the R2BucketSippy to import
+    * @param importFromId The id of the existing R2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the R2BucketSippy to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_sippy", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -542,8 +450,8 @@ var R2BucketSippy = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options R2BucketSippyConfig
     */
-    function R2BucketSippy(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_r2_bucket_sippy',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -556,145 +464,96 @@ var R2BucketSippy = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // destination - computed: false, optional: true, required: false
-        _this._destination = new R2BucketSippyDestinationOutputReference(_this, "destination");
-        // source - computed: false, optional: true, required: false
-        _this._source = new R2BucketSippySourceOutputReference(_this, "source");
-        _this._accountId = config.accountId;
-        _this._bucketName = config.bucketName;
-        _this._destination.internalValue = config.destination;
-        _this._jurisdiction = config.jurisdiction;
-        _this._source.internalValue = config.source;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._bucketName = config.bucketName;
+        this._destination.internalValue = config.destination;
+        this._jurisdiction = config.jurisdiction;
+        this._source.internalValue = config.source;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a R2BucketSippy resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the R2BucketSippy to import
-    * @param importFromId The id of the existing R2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the R2BucketSippy to import is found
-    */
-    R2BucketSippy.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_sippy", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(R2BucketSippy.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippy.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(R2BucketSippy.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "destination", {
-        get: function () {
-            return this._destination;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippy.prototype.putDestination = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket_name - computed: false, optional: false, required: true
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // destination - computed: false, optional: true, required: false
+    _destination = new R2BucketSippyDestinationOutputReference(this, "destination");
+    get destination() {
+        return this._destination;
+    }
+    putDestination(value) {
         this._destination.internalValue = value;
-    };
-    R2BucketSippy.prototype.resetDestination = function () {
+    }
+    resetDestination() {
         this._destination.internalValue = undefined;
-    };
-    Object.defineProperty(R2BucketSippy.prototype, "destinationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._destination.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippy.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get destinationInput() {
+        return this._destination.internalValue;
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // jurisdiction - computed: true, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(R2BucketSippy.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketSippy.prototype, "source", {
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketSippy.prototype.putSource = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
+    // source - computed: false, optional: true, required: false
+    _source = new R2BucketSippySourceOutputReference(this, "source");
+    get source() {
+        return this._source;
+    }
+    putSource(value) {
         this._source.internalValue = value;
-    };
-    R2BucketSippy.prototype.resetSource = function () {
+    }
+    resetSource() {
         this._source.internalValue = undefined;
-    };
-    Object.defineProperty(R2BucketSippy.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    R2BucketSippy.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bucket_name: cdktf.stringToTerraform(this._bucketName),
@@ -702,9 +561,9 @@ var R2BucketSippy = /** @class */ (function (_super) {
             jurisdiction: cdktf.stringToTerraform(this._jurisdiction),
             source: r2BucketSippySourceToTerraform(this._source.internalValue),
         };
-    };
-    R2BucketSippy.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -737,15 +596,6 @@ var R2BucketSippy = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    R2BucketSippy.tfResourceType = "cloudflare_r2_bucket_sippy";
-    return R2BucketSippy;
-}(cdktf.TerraformResource));
-exports.R2BucketSippy = R2BucketSippy;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

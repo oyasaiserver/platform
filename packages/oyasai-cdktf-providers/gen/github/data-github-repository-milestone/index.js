@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_milestone
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubRepositoryMilestone = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_milestone github_repository_milestone}
 */
-var DataGithubRepositoryMilestone = /** @class */ (function (_super) {
-    __extends(DataGithubRepositoryMilestone, _super);
+export class DataGithubRepositoryMilestone extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_milestone";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubRepositoryMilestone resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubRepositoryMilestone to import
+    * @param importFromId The id of the existing DataGithubRepositoryMilestone that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_milestone#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubRepositoryMilestone to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_milestone", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataGithubRepositoryMilestone = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubRepositoryMilestoneConfig
     */
-    function DataGithubRepositoryMilestone(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_milestone',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,149 +46,95 @@ var DataGithubRepositoryMilestone = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._number = config.number;
-        _this._owner = config.owner;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._id = config.id;
+        this._number = config.number;
+        this._owner = config.owner;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubRepositoryMilestone resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubRepositoryMilestone to import
-    * @param importFromId The id of the existing DataGithubRepositoryMilestone that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/repository_milestone#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubRepositoryMilestone to import is found
-    */
-    DataGithubRepositoryMilestone.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_milestone", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "description", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "dueDate", {
-        // due_date - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('due_date');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubRepositoryMilestone.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // due_date - computed: true, optional: false, required: false
+    get dueDate() {
+        return this.getStringAttribute('due_date');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "number", {
-        get: function () {
-            return this.getNumberAttribute('number');
-        },
-        set: function (value) {
-            this._number = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "numberInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._number;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "owner", {
-        get: function () {
-            return this.getStringAttribute('owner');
-        },
-        set: function (value) {
-            this._owner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "ownerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubRepositoryMilestone.prototype, "title", {
-        // title - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // number - computed: false, optional: false, required: true
+    _number;
+    get number() {
+        return this.getNumberAttribute('number');
+    }
+    set number(value) {
+        this._number = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get numberInput() {
+        return this._number;
+    }
+    // owner - computed: false, optional: false, required: true
+    _owner;
+    get owner() {
+        return this.getStringAttribute('owner');
+    }
+    set owner(value) {
+        this._owner = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ownerInput() {
+        return this._owner;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // title - computed: true, optional: false, required: false
+    get title() {
+        return this.getStringAttribute('title');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubRepositoryMilestone.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             number: cdktf.numberToTerraform(this._number),
             owner: cdktf.stringToTerraform(this._owner),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    DataGithubRepositoryMilestone.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -217,15 +161,6 @@ var DataGithubRepositoryMilestone = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubRepositoryMilestone.tfResourceType = "github_repository_milestone";
-    return DataGithubRepositoryMilestone;
-}(cdktf.TerraformDataSource));
-exports.DataGithubRepositoryMilestone = DataGithubRepositoryMilestone;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

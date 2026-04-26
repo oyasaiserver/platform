@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image_variant
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareImageVariant = exports.DataCloudflareImageVariantVariantOutputReference = exports.DataCloudflareImageVariantVariantOptionsOutputReference = void 0;
-exports.dataCloudflareImageVariantVariantOptionsToTerraform = dataCloudflareImageVariantVariantOptionsToTerraform;
-exports.dataCloudflareImageVariantVariantOptionsToHclTerraform = dataCloudflareImageVariantVariantOptionsToHclTerraform;
-exports.dataCloudflareImageVariantVariantToTerraform = dataCloudflareImageVariantVariantToTerraform;
-exports.dataCloudflareImageVariantVariantToHclTerraform = dataCloudflareImageVariantVariantToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareImageVariantVariantOptionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareImageVariantVariantOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,80 +10,56 @@ function dataCloudflareImageVariantVariantOptionsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareImageVariantVariantOptionsToHclTerraform(struct) {
+export function dataCloudflareImageVariantVariantOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareImageVariantVariantOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareImageVariantVariantOptionsOutputReference, _super);
+export class DataCloudflareImageVariantVariantOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareImageVariantVariantOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareImageVariantVariantOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOptionsOutputReference.prototype, "fit", {
-        // fit - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fit');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOptionsOutputReference.prototype, "height", {
-        // height - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('height');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOptionsOutputReference.prototype, "metadata", {
-        // metadata - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('metadata');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOptionsOutputReference.prototype, "width", {
-        // width - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('width');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareImageVariantVariantOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareImageVariantVariantOptionsOutputReference = DataCloudflareImageVariantVariantOptionsOutputReference;
-function dataCloudflareImageVariantVariantToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // fit - computed: true, optional: false, required: false
+    get fit() {
+        return this.getStringAttribute('fit');
+    }
+    // height - computed: true, optional: false, required: false
+    get height() {
+        return this.getNumberAttribute('height');
+    }
+    // metadata - computed: true, optional: false, required: false
+    get metadata() {
+        return this.getStringAttribute('metadata');
+    }
+    // width - computed: true, optional: false, required: false
+    get width() {
+        return this.getNumberAttribute('width');
+    }
+}
+export function dataCloudflareImageVariantVariantToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -114,77 +68,73 @@ function dataCloudflareImageVariantVariantToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareImageVariantVariantToHclTerraform(struct) {
+export function dataCloudflareImageVariantVariantToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareImageVariantVariantOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareImageVariantVariantOutputReference, _super);
+export class DataCloudflareImageVariantVariantOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareImageVariantVariantOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // options - computed: true, optional: false, required: false
-        _this._options = new DataCloudflareImageVariantVariantOptionsOutputReference(_this, "options");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareImageVariantVariantOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOutputReference.prototype, "neverRequireSignedUrls", {
-        // never_require_signed_urls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('never_require_signed_urls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariantVariantOutputReference.prototype, "options", {
-        get: function () {
-            return this._options;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareImageVariantVariantOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareImageVariantVariantOutputReference = DataCloudflareImageVariantVariantOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // never_require_signed_urls - computed: true, optional: false, required: false
+    get neverRequireSignedUrls() {
+        return this.getBooleanAttribute('never_require_signed_urls');
+    }
+    // options - computed: true, optional: false, required: false
+    _options = new DataCloudflareImageVariantVariantOptionsOutputReference(this, "options");
+    get options() {
+        return this._options;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image_variant cloudflare_image_variant}
 */
-var DataCloudflareImageVariant = /** @class */ (function (_super) {
-    __extends(DataCloudflareImageVariant, _super);
+export class DataCloudflareImageVariant extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_image_variant";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareImageVariant resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareImageVariant to import
+    * @param importFromId The id of the existing DataCloudflareImageVariant that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image_variant#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareImageVariant to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image_variant", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -195,8 +145,8 @@ var DataCloudflareImageVariant = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareImageVariantConfig
     */
-    function DataCloudflareImageVariant(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_image_variant',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -209,91 +159,60 @@ var DataCloudflareImageVariant = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // variant - computed: true, optional: false, required: false
-        _this._variant = new DataCloudflareImageVariantVariantOutputReference(_this, "variant");
-        _this._accountId = config.accountId;
-        _this._variantId = config.variantId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._variantId = config.variantId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareImageVariant resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareImageVariant to import
-    * @param importFromId The id of the existing DataCloudflareImageVariant that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image_variant#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareImageVariant to import is found
-    */
-    DataCloudflareImageVariant.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image_variant", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareImageVariant.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "variant", {
-        get: function () {
-            return this._variant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "variantId", {
-        get: function () {
-            return this.getStringAttribute('variant_id');
-        },
-        set: function (value) {
-            this._variantId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImageVariant.prototype, "variantIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._variantId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // variant - computed: true, optional: false, required: false
+    _variant = new DataCloudflareImageVariantVariantOutputReference(this, "variant");
+    get variant() {
+        return this._variant;
+    }
+    // variant_id - computed: false, optional: false, required: true
+    _variantId;
+    get variantId() {
+        return this.getStringAttribute('variant_id');
+    }
+    set variantId(value) {
+        this._variantId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get variantIdInput() {
+        return this._variantId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareImageVariant.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             variant_id: cdktf.stringToTerraform(this._variantId),
         };
-    };
-    DataCloudflareImageVariant.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -308,15 +227,6 @@ var DataCloudflareImageVariant = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareImageVariant.tfResourceType = "cloudflare_image_variant";
-    return DataCloudflareImageVariant;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareImageVariant = DataCloudflareImageVariant;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

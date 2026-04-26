@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_security_trusted_domains_list
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareEmailSecurityTrustedDomainsList = exports.DataCloudflareEmailSecurityTrustedDomainsListResultList = exports.DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference = void 0;
-exports.dataCloudflareEmailSecurityTrustedDomainsListResultToTerraform = dataCloudflareEmailSecurityTrustedDomainsListResultToTerraform;
-exports.dataCloudflareEmailSecurityTrustedDomainsListResultToHclTerraform = dataCloudflareEmailSecurityTrustedDomainsListResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareEmailSecurityTrustedDomainsListResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareEmailSecurityTrustedDomainsListResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,141 +10,116 @@ function dataCloudflareEmailSecurityTrustedDomainsListResultToTerraform(struct) 
     }
     return {};
 }
-function dataCloudflareEmailSecurityTrustedDomainsListResultToHclTerraform(struct) {
+export function dataCloudflareEmailSecurityTrustedDomainsListResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference, _super);
+export class DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "comments", {
-        // comments - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('comments');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "isRecent", {
-        // is_recent - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_recent');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "isRegex", {
-        // is_regex - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_regex');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "isSimilarity", {
-        // is_similarity - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_similarity');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "lastModified", {
-        // last_modified - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_modified');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference.prototype, "pattern", {
-        // pattern - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference = DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference;
-var DataCloudflareEmailSecurityTrustedDomainsListResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailSecurityTrustedDomainsListResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // comments - computed: true, optional: false, required: false
+    get comments() {
+        return this.getStringAttribute('comments');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getNumberAttribute('id');
+    }
+    // is_recent - computed: true, optional: false, required: false
+    get isRecent() {
+        return this.getBooleanAttribute('is_recent');
+    }
+    // is_regex - computed: true, optional: false, required: false
+    get isRegex() {
+        return this.getBooleanAttribute('is_regex');
+    }
+    // is_similarity - computed: true, optional: false, required: false
+    get isSimilarity() {
+        return this.getBooleanAttribute('is_similarity');
+    }
+    // last_modified - computed: true, optional: false, required: false
+    get lastModified() {
+        return this.getStringAttribute('last_modified');
+    }
+    // pattern - computed: true, optional: false, required: false
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+}
+export class DataCloudflareEmailSecurityTrustedDomainsListResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailSecurityTrustedDomainsListResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareEmailSecurityTrustedDomainsListResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareEmailSecurityTrustedDomainsListResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareEmailSecurityTrustedDomainsListResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareEmailSecurityTrustedDomainsListResultList = DataCloudflareEmailSecurityTrustedDomainsListResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_security_trusted_domains_list cloudflare_email_security_trusted_domains_list}
 */
-var DataCloudflareEmailSecurityTrustedDomainsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailSecurityTrustedDomainsList, _super);
+export class DataCloudflareEmailSecurityTrustedDomainsList extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_email_security_trusted_domains_list";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareEmailSecurityTrustedDomainsList resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareEmailSecurityTrustedDomainsList to import
+    * @param importFromId The id of the existing DataCloudflareEmailSecurityTrustedDomainsList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_security_trusted_domains_list#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareEmailSecurityTrustedDomainsList to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_email_security_trusted_domains_list", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -175,9 +130,8 @@ var DataCloudflareEmailSecurityTrustedDomainsList = /** @class */ (function (_su
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareEmailSecurityTrustedDomainsListConfig = {}
     */
-    function DataCloudflareEmailSecurityTrustedDomainsList(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_email_security_trusted_domains_list',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -190,211 +144,148 @@ var DataCloudflareEmailSecurityTrustedDomainsList = /** @class */ (function (_su
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareEmailSecurityTrustedDomainsListResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._direction = config.direction;
-        _this._isRecent = config.isRecent;
-        _this._isSimilarity = config.isSimilarity;
-        _this._maxItems = config.maxItems;
-        _this._order = config.order;
-        _this._pattern = config.pattern;
-        _this._search = config.search;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._direction = config.direction;
+        this._isRecent = config.isRecent;
+        this._isSimilarity = config.isSimilarity;
+        this._maxItems = config.maxItems;
+        this._order = config.order;
+        this._pattern = config.pattern;
+        this._search = config.search;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareEmailSecurityTrustedDomainsList resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareEmailSecurityTrustedDomainsList to import
-    * @param importFromId The id of the existing DataCloudflareEmailSecurityTrustedDomainsList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_security_trusted_domains_list#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareEmailSecurityTrustedDomainsList to import is found
-    */
-    DataCloudflareEmailSecurityTrustedDomainsList.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_email_security_trusted_domains_list", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "isRecent", {
-        get: function () {
-            return this.getBooleanAttribute('is_recent');
-        },
-        set: function (value) {
-            this._isRecent = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetIsRecent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // is_recent - computed: false, optional: true, required: false
+    _isRecent;
+    get isRecent() {
+        return this.getBooleanAttribute('is_recent');
+    }
+    set isRecent(value) {
+        this._isRecent = value;
+    }
+    resetIsRecent() {
         this._isRecent = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "isRecentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isRecent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "isSimilarity", {
-        get: function () {
-            return this.getBooleanAttribute('is_similarity');
-        },
-        set: function (value) {
-            this._isSimilarity = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetIsSimilarity = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isRecentInput() {
+        return this._isRecent;
+    }
+    // is_similarity - computed: false, optional: true, required: false
+    _isSimilarity;
+    get isSimilarity() {
+        return this.getBooleanAttribute('is_similarity');
+    }
+    set isSimilarity(value) {
+        this._isSimilarity = value;
+    }
+    resetIsSimilarity() {
         this._isSimilarity = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "isSimilarityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isSimilarity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isSimilarityInput() {
+        return this._isSimilarity;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetPattern = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // pattern - computed: false, optional: true, required: false
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    resetPattern() {
         this._pattern = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "search", {
-        get: function () {
-            return this.getStringAttribute('search');
-        },
-        set: function (value) {
-            this._search = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.resetSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareEmailSecurityTrustedDomainsListResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // search - computed: false, optional: true, required: false
+    _search;
+    get search() {
+        return this.getStringAttribute('search');
+    }
+    set search(value) {
+        this._search = value;
+    }
+    resetSearch() {
         this._search = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailSecurityTrustedDomainsList.prototype, "searchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._search;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchInput() {
+        return this._search;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             direction: cdktf.stringToTerraform(this._direction),
@@ -405,9 +296,9 @@ var DataCloudflareEmailSecurityTrustedDomainsList = /** @class */ (function (_su
             pattern: cdktf.stringToTerraform(this._pattern),
             search: cdktf.stringToTerraform(this._search),
         };
-    };
-    DataCloudflareEmailSecurityTrustedDomainsList.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -458,15 +349,6 @@ var DataCloudflareEmailSecurityTrustedDomainsList = /** @class */ (function (_su
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareEmailSecurityTrustedDomainsList.tfResourceType = "cloudflare_email_security_trusted_domains_list";
-    return DataCloudflareEmailSecurityTrustedDomainsList;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareEmailSecurityTrustedDomainsList = DataCloudflareEmailSecurityTrustedDomainsList;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

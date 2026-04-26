@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_script
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareWorkersScript = exports.DataCloudflareWorkersScriptFilterOutputReference = void 0;
-exports.dataCloudflareWorkersScriptFilterToTerraform = dataCloudflareWorkersScriptFilterToTerraform;
-exports.dataCloudflareWorkersScriptFilterToHclTerraform = dataCloudflareWorkersScriptFilterToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareWorkersScriptFilterToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareWorkersScriptFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function dataCloudflareWorkersScriptFilterToTerraform(struct) {
         tags: cdktf.stringToTerraform(struct.tags),
     };
 }
-function dataCloudflareWorkersScriptFilterToHclTerraform(struct) {
+export function dataCloudflareWorkersScriptFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         tags: {
             value: cdktf.stringToHclTerraform(struct.tags),
             isBlock: false,
@@ -48,83 +28,83 @@ function dataCloudflareWorkersScriptFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareWorkersScriptFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareWorkersScriptFilterOutputReference, _super);
+export class DataCloudflareWorkersScriptFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareWorkersScriptFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareWorkersScriptFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._tags !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tags = this._tags;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._tags = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._tags = value.tags;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersScriptFilterOutputReference.prototype, "tags", {
-        get: function () {
-            return this.getStringAttribute('tags');
-        },
-        set: function (value) {
-            this._tags = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersScriptFilterOutputReference.prototype.resetTags = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._tags !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tags = this._tags;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._tags = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._tags = value.tags;
+        }
+    }
+    // tags - computed: false, optional: true, required: false
+    _tags;
+    get tags() {
+        return this.getStringAttribute('tags');
+    }
+    set tags(value) {
+        this._tags = value;
+    }
+    resetTags() {
         this._tags = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersScriptFilterOutputReference.prototype, "tagsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tags;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareWorkersScriptFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareWorkersScriptFilterOutputReference = DataCloudflareWorkersScriptFilterOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagsInput() {
+        return this._tags;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_script cloudflare_workers_script}
 */
-var DataCloudflareWorkersScript = /** @class */ (function (_super) {
-    __extends(DataCloudflareWorkersScript, _super);
+export class DataCloudflareWorkersScript extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_script";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareWorkersScript resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareWorkersScript to import
+    * @param importFromId The id of the existing DataCloudflareWorkersScript that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_script#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareWorkersScript to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -135,9 +115,8 @@ var DataCloudflareWorkersScript = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareWorkersScriptConfig = {}
     */
-    function DataCloudflareWorkersScript(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_script',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -150,118 +129,79 @@ var DataCloudflareWorkersScript = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareWorkersScriptFilterOutputReference(_this, "filter");
-        _this._accountId = config.accountId;
-        _this._filter.internalValue = config.filter;
-        _this._scriptName = config.scriptName;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._filter.internalValue = config.filter;
+        this._scriptName = config.scriptName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareWorkersScript resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareWorkersScript to import
-    * @param importFromId The id of the existing DataCloudflareWorkersScript that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/workers_script#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareWorkersScript to import is found
-    */
-    DataCloudflareWorkersScript.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_script", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersScript.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersScript.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareWorkersScriptFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareWorkersScript.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "script", {
-        // script - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('script');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "scriptName", {
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        set: function (value) {
-            this._scriptName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareWorkersScript.prototype.resetScriptName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // script - computed: true, optional: false, required: false
+    get script() {
+        return this.getStringAttribute('script');
+    }
+    // script_name - computed: false, optional: true, required: false
+    _scriptName;
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    set scriptName(value) {
+        this._scriptName = value;
+    }
+    resetScriptName() {
         this._scriptName = undefined;
-    };
-    Object.defineProperty(DataCloudflareWorkersScript.prototype, "scriptNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scriptName;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get scriptNameInput() {
+        return this._scriptName;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareWorkersScript.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             filter: dataCloudflareWorkersScriptFilterToTerraform(this._filter.internalValue),
             script_name: cdktf.stringToTerraform(this._scriptName),
         };
-    };
-    DataCloudflareWorkersScript.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -282,15 +222,6 @@ var DataCloudflareWorkersScript = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareWorkersScript.tfResourceType = "cloudflare_workers_script";
-    return DataCloudflareWorkersScript;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareWorkersScript = DataCloudflareWorkersScript;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

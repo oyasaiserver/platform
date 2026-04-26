@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_custom_properties
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationCustomProperties = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_custom_properties github_organization_custom_properties}
 */
-var OrganizationCustomProperties = /** @class */ (function (_super) {
-    __extends(OrganizationCustomProperties, _super);
+export class OrganizationCustomProperties extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_custom_properties";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a OrganizationCustomProperties resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the OrganizationCustomProperties to import
+    * @param importFromId The id of the existing OrganizationCustomProperties that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_custom_properties#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the OrganizationCustomProperties to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_custom_properties", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var OrganizationCustomProperties = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationCustomPropertiesConfig
     */
-    function OrganizationCustomProperties(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_custom_properties',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,199 +46,140 @@ var OrganizationCustomProperties = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._allowedValues = config.allowedValues;
-        _this._defaultValue = config.defaultValue;
-        _this._description = config.description;
-        _this._id = config.id;
-        _this._propertyName = config.propertyName;
-        _this._required = config.required;
-        _this._valueType = config.valueType;
-        _this._valuesEditableBy = config.valuesEditableBy;
-        return _this;
+        });
+        this._allowedValues = config.allowedValues;
+        this._defaultValue = config.defaultValue;
+        this._description = config.description;
+        this._id = config.id;
+        this._propertyName = config.propertyName;
+        this._required = config.required;
+        this._valueType = config.valueType;
+        this._valuesEditableBy = config.valuesEditableBy;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a OrganizationCustomProperties resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the OrganizationCustomProperties to import
-    * @param importFromId The id of the existing OrganizationCustomProperties that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_custom_properties#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the OrganizationCustomProperties to import is found
-    */
-    OrganizationCustomProperties.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_custom_properties", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "allowedValues", {
-        get: function () {
-            return this.getListAttribute('allowed_values');
-        },
-        set: function (value) {
-            this._allowedValues = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetAllowedValues = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // allowed_values - computed: true, optional: true, required: false
+    _allowedValues;
+    get allowedValues() {
+        return this.getListAttribute('allowed_values');
+    }
+    set allowedValues(value) {
+        this._allowedValues = value;
+    }
+    resetAllowedValues() {
         this._allowedValues = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "allowedValuesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedValues;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "defaultValue", {
-        get: function () {
-            return this.getStringAttribute('default_value');
-        },
-        set: function (value) {
-            this._defaultValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetDefaultValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedValuesInput() {
+        return this._allowedValues;
+    }
+    // default_value - computed: true, optional: true, required: false
+    _defaultValue;
+    get defaultValue() {
+        return this.getStringAttribute('default_value');
+    }
+    set defaultValue(value) {
+        this._defaultValue = value;
+    }
+    resetDefaultValue() {
         this._defaultValue = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "defaultValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultValueInput() {
+        return this._defaultValue;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "propertyName", {
-        get: function () {
-            return this.getStringAttribute('property_name');
-        },
-        set: function (value) {
-            this._propertyName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "propertyNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._propertyName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "required", {
-        get: function () {
-            return this.getBooleanAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // property_name - computed: false, optional: false, required: true
+    _propertyName;
+    get propertyName() {
+        return this.getStringAttribute('property_name');
+    }
+    set propertyName(value) {
+        this._propertyName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get propertyNameInput() {
+        return this._propertyName;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getBooleanAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "valueType", {
-        get: function () {
-            return this.getStringAttribute('value_type');
-        },
-        set: function (value) {
-            this._valueType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetValueType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+    // value_type - computed: false, optional: true, required: false
+    _valueType;
+    get valueType() {
+        return this.getStringAttribute('value_type');
+    }
+    set valueType(value) {
+        this._valueType = value;
+    }
+    resetValueType() {
         this._valueType = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "valueTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._valueType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationCustomProperties.prototype, "valuesEditableBy", {
-        get: function () {
-            return this.getStringAttribute('values_editable_by');
-        },
-        set: function (value) {
-            this._valuesEditableBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationCustomProperties.prototype.resetValuesEditableBy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueTypeInput() {
+        return this._valueType;
+    }
+    // values_editable_by - computed: true, optional: true, required: false
+    _valuesEditableBy;
+    get valuesEditableBy() {
+        return this.getStringAttribute('values_editable_by');
+    }
+    set valuesEditableBy(value) {
+        this._valuesEditableBy = value;
+    }
+    resetValuesEditableBy() {
         this._valuesEditableBy = undefined;
-    };
-    Object.defineProperty(OrganizationCustomProperties.prototype, "valuesEditableByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._valuesEditableBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get valuesEditableByInput() {
+        return this._valuesEditableBy;
+    }
     // =========
     // SYNTHESIS
     // =========
-    OrganizationCustomProperties.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             allowed_values: cdktf.listMapper(cdktf.stringToTerraform, false)(this._allowedValues),
             default_value: cdktf.stringToTerraform(this._defaultValue),
@@ -251,9 +190,9 @@ var OrganizationCustomProperties = /** @class */ (function (_super) {
             value_type: cdktf.stringToTerraform(this._valueType),
             values_editable_by: cdktf.stringToTerraform(this._valuesEditableBy),
         };
-    };
-    OrganizationCustomProperties.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             allowed_values: {
                 value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(this._allowedValues),
                 isBlock: false,
@@ -304,15 +243,6 @@ var OrganizationCustomProperties = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    OrganizationCustomProperties.tfResourceType = "github_organization_custom_properties";
-    return OrganizationCustomProperties;
-}(cdktf.TerraformResource));
-exports.OrganizationCustomProperties = OrganizationCustomProperties;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}
